@@ -1,1 +1,7 @@
 # PROLEAD - A Probing-Based Hardware Leakage Detection Tool
+
+## Contact and Support
+Please contact Nicolai Müller (nicolai.mueller@rub.de) if you have any questions, comments, if you found a bug that should be corrected, or if you want to reuse PROLEAD or parts of it for your own research projects.
+
+## Installation 
+Please follow the installation guide in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Installation">Wiki</a>.
