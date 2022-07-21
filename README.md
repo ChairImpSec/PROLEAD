@@ -11,4 +11,4 @@ The <a href="https://github.com/ChairImpSec/PROLEAD/wiki/User-Manual">User Manua
 
 ## Examples
 
-Some selected examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/tree/main/examples">examples</a> folder. We will provide more examples soon.
+Some selected examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/tree/main/examples">examples</a> folder. More information regarding the examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Examples">wiki</a>. We will provide more examples soon.
