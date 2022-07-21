@@ -8,3 +8,7 @@ Please follow the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Installat
 
 ## Usage
 The <a href="https://github.com/ChairImpSec/PROLEAD/wiki/User-Manual">User Manual</a> is given in the wiki.
+
+## Examples
+
+Some selected examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/tree/main/examples">examples</a> folder. We will provide more examples soon.
