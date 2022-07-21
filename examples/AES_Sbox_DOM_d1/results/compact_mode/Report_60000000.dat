@@ -1,0 +1,26 @@
+Report file after 60000000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 2: @[mul_y0y1_FFxDN[5](2)] ==> [Y1xD[0](2), Y1xD[1](2), Y1xD[2](2), Y1xD[3](2), Zmul1xDI[1](2), Y0xD[4](2), Y0xD[5](2), Y0xD[6](2), Y0xD[7](2), Y1xD[0](1), Y1xD[1](1), Y1xD[2](1), Y1xD[3](1), Zmul1xDI[1](1), Y0xD[4](1), Y0xD[5](1), Y0xD[6](1), Y0xD[7](1)] -log10(p) = 1.41363 --> OKAY
+Cycle 3: @[Y0_0xDP[7](3)] ==> [Y0_0xDP[7](3), Y0_0xDP[7](2)] -log10(p) = 1.76373 --> OKAY
+Cycle 4: @[Y0_1xDP[7](4)] ==> [Y0_1xDP[7](4), Y0_1xDP[7](3)] -log10(p) = 1.76373 --> OKAY
+Cycle 5: @[Y0_2xDP[7](5)] ==> [Y0_2xDP[7](5), Y0_2xDP[7](4)] -log10(p) = 1.76373 --> OKAY
+Cycle 6: @[Y0_3xDP[7](6)] ==> [Y0_3xDP[7](6), Y0_3xDP[7](5)] -log10(p) = 1.76373 --> OKAY
+Cycle 7: @[Y0_3xDP[7](7)] ==> [Y0_3xDP[7](7), Y0_3xDP[7](6)] -log10(p) = 1.76373 --> OKAY
+Cycle 8: @[mul_y0y1_FFxDN[4](8)] ==> [Y1xD[0](8), Y1xD[1](8), Y1xD[2](8), Y1xD[3](8), Zmul1xDI[0](8), Y0xD[4](8), Y0xD[5](8), Y0xD[6](8), Y0xD[7](8), Y1xD[0](7), Y1xD[1](7), Y1xD[2](7), Y1xD[3](7), Zmul1xDI[0](7), Y0xD[4](7), Y0xD[5](7), Y0xD[6](7), Y0xD[7](7)] -log10(p) = 2.07538 --> OKAY
+Cycle 9: @[Y0_3xDP[7](9)] ==> [Y0_3xDP[7](9), Y0_3xDP[7](8)] -log10(p) = 1.76373 --> OKAY
+Cycle 10: @[Y0_3xDP[7](10)] ==> [Y0_3xDP[7](10), Y0_3xDP[7](9)] -log10(p) = 1.76373 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[mul_y0y1_FFxDN[4](8)] ==> [Y1xD[0](8), Y1xD[1](8), Y1xD[2](8), Y1xD[3](8), Zmul1xDI[0](8), Y0xD[4](8), Y0xD[5](8), Y0xD[6](8), Y0xD[7](8), Y1xD[0](7), Y1xD[1](7), Y1xD[2](7), Y1xD[3](7), Zmul1xDI[0](7), Y0xD[4](7), Y0xD[5](7), Y0xD[6](7), Y0xD[7](7)] -log10(p) = 2.07538 --> OKAY
+@[Y0_3xDP[7](10)] ==> [Y0_3xDP[7](10), Y0_3xDP[7](9)] -log10(p) = 1.76373 --> OKAY
+@[Y0_2xDP[7](10)] ==> [Y0_2xDP[7](10), Y0_2xDP[7](9)] -log10(p) = 1.76373 --> OKAY
+@[Y0_1xDP[7](10)] ==> [Y0_1xDP[7](10), Y0_1xDP[7](9)] -log10(p) = 1.76373 --> OKAY
+@[Y0_0xDP[7](10)] ==> [Y0_0xDP[7](10), Y0_0xDP[7](9)] -log10(p) = 1.76373 --> OKAY
+@[Y0_3xDP[7](9)] ==> [Y0_3xDP[7](9), Y0_3xDP[7](8)] -log10(p) = 1.76373 --> OKAY
+@[Y0_2xDP[7](9)] ==> [Y0_2xDP[7](9), Y0_2xDP[7](8)] -log10(p) = 1.76373 --> OKAY
+@[Y0_1xDP[7](9)] ==> [Y0_1xDP[7](9), Y0_1xDP[7](8)] -log10(p) = 1.76373 --> OKAY
+@[Y0_0xDP[7](9)] ==> [Y0_0xDP[7](9), Y0_0xDP[7](8)] -log10(p) = 1.76373 --> OKAY
+@[Y0_3xDP[7](8)] ==> [Y0_3xDP[7](8), Y0_3xDP[7](7)] -log10(p) = 1.76373 --> OKAY

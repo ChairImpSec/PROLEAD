@@ -1,0 +1,34 @@
+Report file after 1280000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 2: @[SBOX_s4_refreshed[7](2)] ==> [SBOX_stage3Out[4](2), SBOX_stage3Out[5](2), SBOX_s3_regOut_1__4__1_(2), SBOX_s3_regOut_1__4__0_(2), SBOX_s3_regOut_1__3__1_(2), SBOX_s3_regOut_1__3__0_(2), randomS4[7](2), SBOX_stage3Out[4](1), SBOX_stage3Out[5](1), SBOX_s3_regOut_1__4__1_(1), SBOX_s3_regOut_1__4__0_(1), SBOX_s3_regOut_1__3__1_(1), SBOX_s3_regOut_1__3__0_(1), randomS4[7](1)] -log10(p) = 2.56791 --> OKAY
+Cycle 3: @[SBOX_s4_refreshed[13](3)] ==> [SBOX_stage3Out[18](3), SBOX_stage3Out[19](3), randomS4[1](3), randomS4[5](3), randomS4[9](3), SBOX_s3_regOut_1__4__1_(3), SBOX_s3_regOut_1__4__0_(3), SBOX_s3_regOut_1__3__1_(3), SBOX_s3_regOut_1__3__0_(3), SBOX_stage3Out[18](2), SBOX_stage3Out[19](2), randomS4[1](2), randomS4[5](2), randomS4[9](2), SBOX_s3_regOut_1__4__1_(2), SBOX_s3_regOut_1__4__0_(2), SBOX_s3_regOut_1__3__1_(2), SBOX_s3_regOut_1__3__0_(2)] -log10(p) = 2.15059 --> OKAY
+Cycle 4: @[SBOX_s2_refreshed[15](4)] ==> [SBOX_stage1Out[8](4), SBOX_stage1Out[9](4), SBOX_stage1Out[10](4), SBOX_stage1Out[11](4), SBOX_stage1Out[12](4), SBOX_stage1Out[13](4), SBOX_stage1Out[14](4), SBOX_stage1Out[15](4), randomS2[3](4), randomS2[7](4), randomS2[11](4), 1'b0(4), SBOX_stage1Out[8](3), SBOX_stage1Out[9](3), SBOX_stage1Out[10](3), SBOX_stage1Out[11](3), SBOX_stage1Out[12](3), SBOX_stage1Out[13](3), SBOX_stage1Out[14](3), SBOX_stage1Out[15](3), randomS2[3](3), randomS2[7](3), randomS2[11](3), 1'b0(3)] -log10(p) = 1.93036 --> OKAY
+Cycle 5: @[SBOX_s4_refreshed[3](5)] ==> [SBOX_stage3Out[4](5), SBOX_stage3Out[5](5), SBOX_s3_regOut_0__4__1_(5), SBOX_s3_regOut_0__4__0_(5), SBOX_s3_regOut_0__3__1_(5), SBOX_s3_regOut_0__3__0_(5), randomS4[3](5), SBOX_stage3Out[4](4), SBOX_stage3Out[5](4), SBOX_s3_regOut_0__4__1_(4), SBOX_s3_regOut_0__4__0_(4), SBOX_s3_regOut_0__3__1_(4), SBOX_s3_regOut_0__3__0_(4), randomS4[3](4)] -log10(p) = 2.62018 --> OKAY
+Cycle 6: @[SBOX_regOut1[5](6)] ==> [SBOX_regOut1[5](6), SBOX_regOut1[5](5)] -log10(p) = 2.17337 --> OKAY
+Cycle 7: @[SBOX_s4_refreshed[1](7)] ==> [SBOX_stage3Out[6](7), SBOX_stage3Out[7](7), SBOX_s3_regOut_0__4__1_(7), SBOX_s3_regOut_0__4__0_(7), SBOX_s3_regOut_0__3__1_(7), SBOX_s3_regOut_0__3__0_(7), randomS4[1](7), SBOX_stage3Out[6](6), SBOX_stage3Out[7](6), SBOX_s3_regOut_0__4__1_(6), SBOX_s3_regOut_0__4__0_(6), SBOX_s3_regOut_0__3__1_(6), SBOX_s3_regOut_0__3__0_(6), randomS4[1](6)] -log10(p) = 2.78502 --> OKAY
+Cycle 8: @[aes_state_regs_0_S23xDP_5_(8)] ==> [aes_state_regs_0_S23xDP_5_(8), aes_state_regs_0_S23xDP_5_(7)] -log10(p) = 2.27055 --> OKAY
+Cycle 9: @[aes_state_regs_0_S03xDN[5](9)] ==> [aes_state_regs_0_S03xDN[5](9), aes_state_regs_0_S03xDN[5](8)] -log10(p) = 2.27055 --> OKAY
+Cycle 10: @[aes_state_regs_0_n159(10)] ==> [aes_state_regs_0_n159(10), aes_state_regs_0_n159(9)] -log10(p) = 2.27055 --> OKAY
+Cycle 11: @[SBOX_s4_refreshed[7](11)] ==> [SBOX_stage3Out[4](11), SBOX_stage3Out[5](11), SBOX_s3_regOut_1__4__1_(11), SBOX_s3_regOut_1__4__0_(11), SBOX_s3_regOut_1__3__1_(11), SBOX_s3_regOut_1__3__0_(11), randomS4[7](11), SBOX_stage3Out[4](10), SBOX_stage3Out[5](10), SBOX_s3_regOut_1__4__1_(10), SBOX_s3_regOut_1__4__0_(10), SBOX_s3_regOut_1__3__1_(10), SBOX_s3_regOut_1__3__0_(10), randomS4[7](10)] -log10(p) = 2.77223 --> OKAY
+Cycle 12: @[SBOX_stage2Out[21](12)] ==> [SBOX_stage2Out[21](12), SBOX_stage2Out[21](11)] -log10(p) = 3.02366 --> OKAY
+Cycle 13: @[SBOX_stage3Out[21](13)] ==> [SBOX_stage3Out[21](13), SBOX_stage3Out[21](12)] -log10(p) = 3.02366 --> OKAY
+Cycle 14: @[SBOX_stage3Out[21](14)] ==> [SBOX_stage3Out[21](14), SBOX_stage3Out[21](13)] -log10(p) = 2.71381 --> OKAY
+Cycle 15: @[randomS5[24](15)] ==> [randomS5[24](15), randomS5[24](14)] -log10(p) = 2.52863 --> OKAY
+Cycle 16: @[aes_state_regs_0_S21xDP[5](16)] ==> [aes_state_regs_0_S21xDP[5](16), aes_state_regs_0_S21xDP[5](15)] -log10(p) = 2.27055 --> OKAY
+Cycle 17: @[aes_state_regs_0_S01xDN[5](17)] ==> [aes_state_regs_0_S01xDN[5](17), aes_state_regs_0_S01xDN[5](16)] -log10(p) = 2.27055 --> OKAY
+Cycle 18: @[aes_state_regs_0_S01xDO_5_(18)] ==> [aes_state_regs_0_S01xDO_5_(18), aes_state_regs_0_S01xDO_5_(17)] -log10(p) = 2.27055 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[SBOX_stage3Out[21](13)] ==> [SBOX_stage3Out[21](13), SBOX_stage3Out[21](12)] -log10(p) = 3.02366 --> OKAY
+@[SBOX_stage2Out[21](12)] ==> [SBOX_stage2Out[21](12), SBOX_stage2Out[21](11)] -log10(p) = 3.02366 --> OKAY
+@[SBOX_s4_refreshed[1](7)] ==> [SBOX_stage3Out[6](7), SBOX_stage3Out[7](7), SBOX_s3_regOut_0__4__1_(7), SBOX_s3_regOut_0__4__0_(7), SBOX_s3_regOut_0__3__1_(7), SBOX_s3_regOut_0__3__0_(7), randomS4[1](7), SBOX_stage3Out[6](6), SBOX_stage3Out[7](6), SBOX_s3_regOut_0__4__1_(6), SBOX_s3_regOut_0__4__0_(6), SBOX_s3_regOut_0__3__1_(6), SBOX_s3_regOut_0__3__0_(6), randomS4[1](6)] -log10(p) = 2.78502 --> OKAY
+@[SBOX_s4_refreshed[7](11)] ==> [SBOX_stage3Out[4](11), SBOX_stage3Out[5](11), SBOX_s3_regOut_1__4__1_(11), SBOX_s3_regOut_1__4__0_(11), SBOX_s3_regOut_1__3__1_(11), SBOX_s3_regOut_1__3__0_(11), randomS4[7](11), SBOX_stage3Out[4](10), SBOX_stage3Out[5](10), SBOX_s3_regOut_1__4__1_(10), SBOX_s3_regOut_1__4__0_(10), SBOX_s3_regOut_1__3__1_(10), SBOX_s3_regOut_1__3__0_(10), randomS4[7](10)] -log10(p) = 2.77223 --> OKAY
+@[SBOX_stage3Out[21](14)] ==> [SBOX_stage3Out[21](14), SBOX_stage3Out[21](13)] -log10(p) = 2.71381 --> OKAY
+@[SBOX_stage2Out[21](13)] ==> [SBOX_stage2Out[21](13), SBOX_stage2Out[21](12)] -log10(p) = 2.71381 --> OKAY
+@[SBOX_s4_refreshed[3](5)] ==> [SBOX_stage3Out[4](5), SBOX_stage3Out[5](5), SBOX_s3_regOut_0__4__1_(5), SBOX_s3_regOut_0__4__0_(5), SBOX_s3_regOut_0__3__1_(5), SBOX_s3_regOut_0__3__0_(5), randomS4[3](5), SBOX_stage3Out[4](4), SBOX_stage3Out[5](4), SBOX_s3_regOut_0__4__1_(4), SBOX_s3_regOut_0__4__0_(4), SBOX_s3_regOut_0__3__1_(4), SBOX_s3_regOut_0__3__0_(4), randomS4[3](4)] -log10(p) = 2.62018 --> OKAY
+@[SBOX_s4_refreshed[7](2)] ==> [SBOX_stage3Out[4](2), SBOX_stage3Out[5](2), SBOX_s3_regOut_1__4__1_(2), SBOX_s3_regOut_1__4__0_(2), SBOX_s3_regOut_1__3__1_(2), SBOX_s3_regOut_1__3__0_(2), randomS4[7](2), SBOX_stage3Out[4](1), SBOX_stage3Out[5](1), SBOX_s3_regOut_1__4__1_(1), SBOX_s3_regOut_1__4__0_(1), SBOX_s3_regOut_1__3__1_(1), SBOX_s3_regOut_1__3__0_(1), randomS4[7](1)] -log10(p) = 2.56791 --> OKAY
+@[randomS5[24](15)] ==> [randomS5[24](15), randomS5[24](14)] -log10(p) = 2.52863 --> OKAY
+@[randomS5[24](14)] ==> [randomS5[24](14), randomS5[24](13)] -log10(p) = 2.3434 --> OKAY

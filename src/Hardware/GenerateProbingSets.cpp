@@ -67,6 +67,7 @@ void Hardware::GenerateProbingSets::GenerateProbes(Hardware::SimulationStruct& S
 }
 
 void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
+    std::cout << "Generate multivariate probing sets..." << std::flush;
     int CombinationIndex = 0;
     size_t ProbeIndex = 0;
 
@@ -76,6 +77,8 @@ void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Setti
 	std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);    
 
     do{
+        CombinationIndex = 0;
+
         for (ProbeIndex = 0; ProbeIndex < Test.StandardProbes.size(); ProbeIndex++){
             if (CombinationBitmask.at(ProbeIndex)){
                 Combination.at(CombinationIndex) = ProbeIndex;
@@ -91,7 +94,9 @@ void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Setti
         if (Hardware::GenerateProbingSets::InDistance(Settings, Test, Combination)){
             Test.ProbingSet.emplace_back(Combination);
         }
-    } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end()));     
+    } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end()));   
+
+    std::cout << "done!" << std::endl;  
 }
 
 bool Hardware::GenerateProbingSets::InDistance(Hardware::SettingsStruct& Settings, Hardware::TestStruct& Test, std::vector<unsigned int>& ProbingSet){
@@ -117,17 +122,21 @@ bool Hardware::GenerateProbingSets::InDistance(Hardware::SettingsStruct& Setting
 }
 
 void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
+    std::cout << "Generate univariate probing sets..." << std::flush;
 	int CycleIndex = 0, CombinationIndex = 0;
     size_t ProbeIndex = 0;
 
     // Fast variant for first order
     if (Simulation.TestOrder == 1){
+        std::cout << "Setting first-order variant..." <<std::flush;
         for (ProbeIndex = 0; ProbeIndex < Test.StandardProbes.size(); ProbeIndex++){
             Test.ProbingSet.emplace_back(ProbeIndex);    
         }
 
     // Slower variant for higher orders    
     }else{
+        std::cout << "Setting higher-order variant..." <<std::flush;
+
         // Set the bitmask to the first possible probe combination
         std::vector<unsigned int> Combination(Simulation.TestOrder);
 
@@ -136,6 +145,8 @@ void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simul
 	        std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);
 
             do{
+                CombinationIndex = 0;
+
                 for (ProbeIndex = 0; ProbeIndex < (size_t)Simulation.NumberOfProbes; ProbeIndex++){
                     if (CombinationBitmask.at(ProbeIndex)){
                         Combination.at(CombinationIndex) = CycleIndex * Simulation.NumberOfProbes + ProbeIndex;
@@ -151,6 +162,8 @@ void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simul
             } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end())); 
         }
     }
+
+    std::cout << "done!" << std::endl;
 }
 
 void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int Start, unsigned int End){

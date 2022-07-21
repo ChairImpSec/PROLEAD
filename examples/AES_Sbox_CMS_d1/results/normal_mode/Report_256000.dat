@@ -1,0 +1,26 @@
+Report file after 256000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 2: @[randomS3[6](2)] ==> [randomS3[6](2), randomS3[6](1)] -log10(p) = 1.71352 --> OKAY
+Cycle 3: @[stage6Out[0](3)] ==> [s5_regOut[1](3), s5_regOut[9](3), s5_regOut[4](3), s5_regOut[6](3), s5_regOut[12](3), s5_regOut[14](3), s5_regOut[1](2), s5_regOut[9](2), s5_regOut[4](2), s5_regOut[6](2), s5_regOut[12](2), s5_regOut[14](2)] -log10(p) = 2.52166 --> OKAY
+Cycle 4: @[stage3Out[8](4)] ==> [stage3Out[8](4), stage3Out[8](3)] -log10(p) = 1.05807 --> OKAY
+Cycle 5: @[randomS4[15](5)] ==> [randomS4[15](5), randomS4[15](4)] -log10(p) = 1.39518 --> OKAY
+Cycle 6: @[randomS2[14](6)] ==> [randomS2[14](6), randomS2[14](5)] -log10(p) = 1.24603 --> OKAY
+Cycle 7: @[regOut1[5](7)] ==> [regOut1[5](7), regOut1[5](6)] -log10(p) = 1.5118 --> OKAY
+Cycle 8: @[sboxOut[5](8)] ==> [sboxOut[5](8), sboxOut[5](7)] -log10(p) = 1.5118 --> OKAY
+Cycle 9: @[randomS2[14](9)] ==> [randomS2[14](9), randomS2[14](8)] -log10(p) = 1.84027 --> OKAY
+Cycle 10: @[randomS5[29](10)] ==> [randomS5[29](10), randomS5[29](9)] -log10(p) = 2.54873 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[randomS5[29](10)] ==> [randomS5[29](10), randomS5[29](9)] -log10(p) = 2.54873 --> OKAY
+@[stage6Out[0](3)] ==> [s5_regOut[1](3), s5_regOut[9](3), s5_regOut[4](3), s5_regOut[6](3), s5_regOut[12](3), s5_regOut[14](3), s5_regOut[1](2), s5_regOut[9](2), s5_regOut[4](2), s5_regOut[6](2), s5_regOut[12](2), s5_regOut[14](2)] -log10(p) = 2.52166 --> OKAY
+@[randomS2[14](9)] ==> [randomS2[14](9), randomS2[14](8)] -log10(p) = 1.84027 --> OKAY
+@[randomS5[27](9)] ==> [randomS5[27](9), randomS5[27](8)] -log10(p) = 1.77493 --> OKAY
+@[randomS5[29](9)] ==> [randomS5[29](9), randomS5[29](8)] -log10(p) = 1.74909 --> OKAY
+@[randomS3[6](2)] ==> [randomS3[6](2), randomS3[6](1)] -log10(p) = 1.71352 --> OKAY
+@[regOut1[11](10)] ==> [regOut1[11](10), regOut1[11](9)] -log10(p) = 1.70664 --> OKAY
+@[stage6Out[3](2)] ==> [s5_regOut[4](2), s5_regOut[5](2), s5_regOut[6](2), s5_regOut[12](2), s5_regOut[13](2), s5_regOut[14](2), s5_regOut[3](2), s5_regOut[7](2), s5_regOut[11](2), s5_regOut[15](2), s5_regOut[4](1), s5_regOut[5](1), s5_regOut[6](1), s5_regOut[12](1), s5_regOut[13](1), s5_regOut[14](1), s5_regOut[3](1), s5_regOut[7](1), s5_regOut[11](1), s5_regOut[15](1)] -log10(p) = 1.64082 --> OKAY
+@[sboxOut[11](10)] ==> [sboxOut[11](10), sboxOut[11](9)] -log10(p) = 1.5646 --> OKAY
+@[regOut1[11](9)] ==> [regOut1[11](9), regOut1[11](8)] -log10(p) = 1.5646 --> OKAY

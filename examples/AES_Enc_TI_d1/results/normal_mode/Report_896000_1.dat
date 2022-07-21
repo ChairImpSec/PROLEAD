@@ -1,0 +1,28 @@
+Report file after 896000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 31: @[aes_state_regs_0_S02xDN[4](31)] ==> [aes_state_regs_0_S02xDN[4](31), aes_state_regs_0_S02xDN[4](30)] -log10(p) = 2.187 --> OKAY
+Cycle 32: @[SBOX_PL_2_n138(32)] ==> [SBOX_Zh_f2[5](32), SBOX_PL_2_n90(32), 1'b1(32), SBOX_Zh_f2[5](31), SBOX_PL_2_n90(31), 1'b1(31)] -log10(p) = 3.06389 --> OKAY
+Cycle 33: @[SBOX_PL_3_n115(33)] ==> [SBOX_Zh_f3[5](33), SBOX_PL_3_n151(33), 1'b1(33), SBOX_Zh_f3[5](32), SBOX_PL_3_n151(32), 1'b1(32)] -log10(p) = 3.06389 --> OKAY
+Cycle 34: @[SBOX_PL_2_n121(34)] ==> [SBOX_Zl_f2[0](34), SBOX_PL_2_n73(34), 1'b1(34), SBOX_Zl_f2[0](33), SBOX_PL_2_n73(33), 1'b1(33)] -log10(p) = 2.90717 --> OKAY
+Cycle 35: @[SBOX_PL_3_n132(35)] ==> [SBOX_Zl_f3[0](35), SBOX_PL_3_n168(35), 1'b1(35), SBOX_Zl_f3[0](34), SBOX_PL_3_n168(34), 1'b1(34)] -log10(p) = 2.90717 --> OKAY
+Cycle 36: @[aes_state_regs_2_S03xDN[6](36)] ==> [aes_state_regs_2_S03xDN[6](36), aes_state_regs_2_S03xDN[6](35)] -log10(p) = 2.78741 --> OKAY
+Cycle 37: @[aes_state_regs_2_n10(37)] ==> [aes_state_regs_2_n10(37), aes_state_regs_2_n10(36)] -log10(p) = 2.78741 --> OKAY
+Cycle 38: @[aes_state_regs_2_S02xDN[2](38)] ==> [aes_state_regs_2_S02xDN[2](38), aes_state_regs_2_S02xDN[2](37)] -log10(p) = 2.69479 --> OKAY
+Cycle 39: @[SBOX_PL_2_n99(39)] ==> [SBOX_PL_2_n51(39), SBOX_FF1_out[2](39), SBOX_FF1_out[22](39), SBOX_FF1_out[9](39), SBOX_Inst_f2_abmul_pw2_3_(39), 1'b1(39), SBOX_PL_2_n51(38), SBOX_FF1_out[2](38), SBOX_FF1_out[22](38), SBOX_FF1_out[9](38), SBOX_Inst_f2_abmul_pw2_3_(38), 1'b1(38)] -log10(p) = 3.5089 --> OKAY
+Cycle 40: @[aes_state_regs_2_S02xDN[6](40)] ==> [aes_state_regs_2_S02xDN[6](40), aes_state_regs_2_S02xDN[6](39)] -log10(p) = 2.78741 --> OKAY
+Cycle 41: @[SBOX_PL_2_n124(41)] ==> [SBOX_Zl_f2[3](41), SBOX_PL_2_n76(41), 1'b1(41), SBOX_Zl_f2[3](40), SBOX_PL_2_n76(40), 1'b1(40)] -log10(p) = 3.68263 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[SBOX_PL_2_n124(41)] ==> [SBOX_Zl_f2[3](41), SBOX_PL_2_n76(41), 1'b1(41), SBOX_Zl_f2[3](40), SBOX_PL_2_n76(40), 1'b1(40)] -log10(p) = 3.68263 --> OKAY
+@[SBOX_PL_2_n99(39)] ==> [SBOX_PL_2_n51(39), SBOX_FF1_out[2](39), SBOX_FF1_out[22](39), SBOX_FF1_out[9](39), SBOX_Inst_f2_abmul_pw2_3_(39), 1'b1(39), SBOX_PL_2_n51(38), SBOX_FF1_out[2](38), SBOX_FF1_out[22](38), SBOX_FF1_out[9](38), SBOX_Inst_f2_abmul_pw2_3_(38), 1'b1(38)] -log10(p) = 3.5089 --> OKAY
+@[SBOX_PL_3_n115(33)] ==> [SBOX_Zh_f3[5](33), SBOX_PL_3_n151(33), 1'b1(33), SBOX_Zh_f3[5](32), SBOX_PL_3_n151(32), 1'b1(32)] -log10(p) = 3.06389 --> OKAY
+@[SBOX_PL_2_n138(32)] ==> [SBOX_Zh_f2[5](32), SBOX_PL_2_n90(32), 1'b1(32), SBOX_Zh_f2[5](31), SBOX_PL_2_n90(31), 1'b1(31)] -log10(p) = 3.06389 --> OKAY
+@[SBOX_PL_2_n118(33)] ==> [SBOX_FF1_out[15](33), SBOX_FF1_out[25](33), SBOX_PL_2_n70(33), SBOX_Inst_f2_abmul_pw2_3_(33), 1'b1(33), SBOX_FF1_out[15](32), SBOX_FF1_out[25](32), SBOX_PL_2_n70(32), SBOX_Inst_f2_abmul_pw2_3_(32), 1'b1(32)] -log10(p) = 3.04534 --> OKAY
+@[aes_state_regs_0_S20xDN[1](32)] ==> [aes_state_regs_0_n141(32), aes_state_regs_0_n42(32), aes_state_regs_0_S00xDP[0](32), aes_state_regs_0_S00xDP[1](32), aes_state_regs_0_S00xDP[7](32), aes_state_regs_0_S10xDP_1_(32), aes_state_regs_0_S20xDP_1_(32), aes_state_regs_0_S30xDP_7_(32), aes_state_regs_0_S30xDP_0_(32), aes_ctrl_lsfr_23_cycles_1_n9(32), aes_ctrl_lsfr_23_cycles_1_n7(32), rcon_1_n28(32), rcon_1_n31(32), aes_ctrl_lsfr_23_cycles_1_n4(32), aes_ctrl_lsfr_23_cycles_1_n12(32), aes_ctrl_lsfr_23_cycles_1_n5(32), aes_ctrl_lsfr_23_cycles_1_n10(32), aes_state_regs_0_n141(31), aes_state_regs_0_n42(31), aes_state_regs_0_S00xDP[0](31), aes_state_regs_0_S00xDP[1](31), aes_state_regs_0_S00xDP[7](31), aes_state_regs_0_S10xDP_1_(31), aes_state_regs_0_S20xDP_1_(31), aes_state_regs_0_S30xDP_7_(31), aes_state_regs_0_S30xDP_0_(31), aes_ctrl_lsfr_23_cycles_1_n9(31), aes_ctrl_lsfr_23_cycles_1_n7(31), rcon_1_n28(31), rcon_1_n31(31), aes_ctrl_lsfr_23_cycles_1_n4(31), aes_ctrl_lsfr_23_cycles_1_n12(31), aes_ctrl_lsfr_23_cycles_1_n5(31), aes_ctrl_lsfr_23_cycles_1_n10(31)] -log10(p) = 2.92311 --> OKAY
+@[SBOX_PL_3_n132(35)] ==> [SBOX_Zl_f3[0](35), SBOX_PL_3_n168(35), 1'b1(35), SBOX_Zl_f3[0](34), SBOX_PL_3_n168(34), 1'b1(34)] -log10(p) = 2.90717 --> OKAY
+@[SBOX_PL_2_n121(34)] ==> [SBOX_Zl_f2[0](34), SBOX_PL_2_n73(34), 1'b1(34), SBOX_Zl_f2[0](33), SBOX_PL_2_n73(33), 1'b1(33)] -log10(p) = 2.90717 --> OKAY
+@[aes_state_regs_1_S10xDN[6](33)] ==> [aes_state_regs_1_n126(33), aes_state_regs_1_n45(33), aes_state_regs_1_S00xDP[6](33), aes_state_regs_1_S10xDP_6_(33), aes_state_regs_1_S20xDP_5_(33), aes_state_regs_1_S30xDP_6_(33), aes_state_regs_1_S30xDP_5_(33), aes_ctrl_lsfr_23_cycles_1_n9(33), aes_ctrl_lsfr_23_cycles_1_n7(33), rcon_1_n28(33), rcon_1_n31(33), aes_ctrl_lsfr_23_cycles_1_n4(33), aes_ctrl_lsfr_23_cycles_1_n12(33), aes_ctrl_lsfr_23_cycles_1_n5(33), aes_ctrl_lsfr_23_cycles_1_n10(33), aes_state_regs_1_n126(32), aes_state_regs_1_n45(32), aes_state_regs_1_S00xDP[6](32), aes_state_regs_1_S10xDP_6_(32), aes_state_regs_1_S20xDP_5_(32), aes_state_regs_1_S30xDP_6_(32), aes_state_regs_1_S30xDP_5_(32), aes_ctrl_lsfr_23_cycles_1_n9(32), aes_ctrl_lsfr_23_cycles_1_n7(32), rcon_1_n28(32), rcon_1_n31(32), aes_ctrl_lsfr_23_cycles_1_n4(32), aes_ctrl_lsfr_23_cycles_1_n12(32), aes_ctrl_lsfr_23_cycles_1_n5(32), aes_ctrl_lsfr_23_cycles_1_n10(32)] -log10(p) = 2.86278 --> OKAY
+@[aes_state_regs_2_S02xDN[6](40)] ==> [aes_state_regs_2_S02xDN[6](40), aes_state_regs_2_S02xDN[6](39)] -log10(p) = 2.78741 --> OKAY

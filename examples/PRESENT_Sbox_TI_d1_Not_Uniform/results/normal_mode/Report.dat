@@ -1,0 +1,52 @@
+Start Hardware Leakage Evaluation
+
+Library file:   library.lib
+Library name:   NANG45
+Design file:    design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  res
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 4 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate all possible probing sets for order 1...
+Generate list of standard probes...done!
+Generate list of extended probes...done!
+done! 105 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 105 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|               21 |               25 |              1 |       10 |                 10 |           105 |                       9 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         0.043394s |        3.493536GB |           3200 / 20325 |                                share2[3] (5) |  13.231661 | LEAKAGE |
+|         0.049940s |        3.493536GB |           6400 / 20325 |                                share2[3] (5) |  30.332198 | LEAKAGE |
+|         0.055782s |        3.493536GB |           9600 / 20325 |                                share2[3] (5) |  48.067421 | LEAKAGE |
+|         0.062074s |        3.493536GB |          12800 / 20325 |                                share2[3] (5) |  77.031589 | LEAKAGE |
+|         0.068069s |        3.493536GB |          16000 / 20325 |                                share2[3] (5) | 101.139453 | LEAKAGE |
+|         0.074287s |        3.493536GB |          19200 / 20325 |                                share2[3] (5) | 119.911847 | LEAKAGE |
+|         0.080156s |        3.493536GB |          22400 / 20325 |                                share2[3] (5) | 139.584510 | LEAKAGE |
+|         0.086239s |        3.493536GB |          25600 / 20325 |                                share2[3] (5) | 148.602732 | LEAKAGE |
+|         0.092756s |        3.493536GB |          28800 / 20325 |                                share2[3] (5) | 169.747542 | LEAKAGE |
+|         0.098697s |        3.493536GB |          32000 / 20325 |                                share2[3] (5) | 195.220555 | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 0.101514 seconds!
+done!

@@ -2689,52 +2689,52 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
  	if (!(SettingsFileCheckList & (1 << 0))){
         Settings->Max_no_of_Threads = 1;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
+        Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
     }
 
  	if (!(SettingsFileCheckList & (1 << 12))){
         Settings->TestMultivariate = 0;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"multivariate_test\" is not specified. Default \"multivariate_test\" = no is taken!");
+        Warnings.push_back("Warning \"multivariate_test\" is not specified. Default \"multivariate_test\" = no is taken!");
 	}  
 
  	if (!(SettingsFileCheckList & (1 << 13))){
         Settings->TestTransitional = 0;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"transitional_leakage\" is not specified. Default \"transitional_leakage\" = no is taken!");
+        Warnings.push_back("Warning \"transitional_leakage\" is not specified. Default \"transitional_leakage\" = no is taken!");
 	}   
 
 	if (!(SettingsFileCheckList & (1 << 18))){
 		Settings->CompactDistributions = 0;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"compact_distributions\" is not specified. Default \"compact_distributions\" = no is taken!");
+        Warnings.push_back("Warning \"compact_distributions\" is not specified. Default \"compact_distributions\" = no is taken!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 19))){
 		Settings->MinimizeProbeSets = 0;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"minimize_probe_sets\" is not specified. Default \"minimize_probe_sets\" = no is taken!");
+        Warnings.push_back("Warning \"minimize_probe_sets\" is not specified. Default \"minimize_probe_sets\" = no is taken!");
     }
 
 	if (!(SettingsFileCheckList & (1 << 20))){
 		Settings->Max_No_ReportEntries = 10;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"remove_full_probing_sets\" is not specified. Default \"remove_full_probing_sets\" = no is taken!");
+        Warnings.push_back("Warning \"remove_full_probing_sets\" is not specified. Default \"remove_full_probing_sets\" = no is taken!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 21))){
 		Settings->Max_No_ReportEntries = 10;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"no_of_entries_in_report\" is not specified. Default \"no_of_entries_in_report\" = 10 is taken!");
+        Warnings.push_back("Warning \"no_of_entries_in_report\" is not specified. Default \"no_of_entries_in_report\" = 10 is taken!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 22))){
 		Settings->MaxDistanceMultivariet = 10;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"max_distance_multivariate\" is not specified. Default \"max_distance_multivariate\" = 10 is taken!");
+        Warnings.push_back("Warning \"max_distance_multivariate\" is not specified. Default \"max_distance_multivariate\" = 10 is taken!");
 	}
 
     if (!(SettingsFileCheckList & (1 << 23))){
         Settings->NumberOfProbeSteps = 1;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"no_of_probe_steps\" is not specified. Default \"no_of_probe_steps\" = 1 is taken!");
+        Warnings.push_back("Warning \"no_of_probe_steps\" is not specified. Default \"no_of_probe_steps\" = 1 is taken!");
     }
 
     if (!(SettingsFileCheckList & (1 << 24))){
         Settings->EffectSize = 0.1;
-        Warnings.push_back("\033[1;33m Warning\033[0m \"effect_size\" is not specified. Default \"effect_size\" = 0.1 is taken!");
+        Warnings.push_back("Warning \"effect_size\" is not specified. Default \"effect_size\" = 0.1 is taken!");
     }
 
 	std::cout << "done with " << Warnings.size() << " warnings!" << std::endl;

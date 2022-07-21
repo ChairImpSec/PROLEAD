@@ -482,9 +482,9 @@ unsigned int Hardware::Print::EvaluationSettings(Hardware::SimulationStruct& Sim
 
     // Print the settings
     unsigned int Index = 0;
-    int TableWidth = 103 + Maximum;
-	std::array<std::string, 7> Headers{{ "Elapsed Time", "Required Ram", "Processed Simulations", "Probing Set with highest Information Leakage", "-log10(p)", "Effect Size", "Status"}};
-	std::array<unsigned int, 7> Widths{{20, 20, 25, Maximum, 13, 14, 10}};
+    int TableWidth = 89 + Maximum;
+	std::array<std::string, 6> Headers{{ "Elapsed Time", "Required Ram", "Processed Simulations", "Probing Set with highest Information Leakage", "-log10(p)", "Status"}};
+	std::array<unsigned int, 6> Widths{{20, 20, 25, Maximum, 13, 10}};
 
     std::cout.width(TableWidth);
     std::cout.fill('-');
@@ -493,7 +493,7 @@ unsigned int Hardware::Print::EvaluationSettings(Hardware::SimulationStruct& Sim
 	std::cout.setf(std::ios::right, std::ios::adjustfield);
 	std::cout << '|';
 
-    for (Index = 0; Index < 7; Index++){
+    for (Index = 0; Index < 6; Index++){
         std::cout.width(Widths.at(Index));
         std::cout << (Headers.at(Index) + " |");        
     }
@@ -529,7 +529,7 @@ unsigned int Hardware::Print::MemoryConsumption(){
 }
 
 void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, double& DeletedAlpha, std::string& DeletedProbingSet, double ElapsedTimePeriod, unsigned int ProbeStepSize, unsigned int Space){
-    std::array<std::string, 7> TableColumn;
+    std::array<std::string, 6> TableColumn;
     std::string Probe, Cycle, ProbingSet = "";
     double MaximumAlpha = DeletedAlpha;
     unsigned int MaximumTraces = 0;
@@ -565,9 +565,9 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
         TableColumn.at(4) = std::to_string(MaximumAlpha);
 
         if (MaximumAlpha < 5.0){
-            TableColumn.at(6) = "\033[1;32m    OKAY\033[0m";
+            TableColumn.at(5) = "OKAY";
         }else{
-            TableColumn.at(6) = "\033[1;31m LEAKAGE\033[0m";
+            TableColumn.at(5) = "LEAKAGE";
         }
 
     }else{
@@ -575,9 +575,9 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
         TableColumn.at(4) = std::to_string(DeletedAlpha);
 
         if (DeletedAlpha < 5.0){
-            TableColumn.at(6) = "\033[1;32m    OKAY\033[0m";
+            TableColumn.at(5) = "OKAY";
         }else{
-            TableColumn.at(6) = "\033[1;31m LEAKAGE\033[0m";
+            TableColumn.at(5) = "LEAKAGE";
         }        
     }
 
@@ -601,10 +601,8 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
     std::cout << (TableColumn.at(3) + " |");
     std::cout.width(13);
     std::cout << (TableColumn.at(4) + " |");
-    std::cout.width(14);
-    std::cout << (TableColumn.at(5) + " |");
     std::cout.width(10);
-    std::cout << (TableColumn.at(6) + " |");
+    std::cout << (TableColumn.at(5) + " |");
     std::cout << std::endl;
 
     Hardware::Print::MemoryConsumption();

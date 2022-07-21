@@ -1,0 +1,22 @@
+Report file after 32000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 1: @[y1_n15(1)] ==> [sboxIn2[1](1), sboxIn2[2](1), en(1), g1Reg[2](1)] -log10(p) = 1.15023 --> OKAY
+Cycle 2: @[share2[3](2)] ==> [g1Reg[0](2), g1Reg[3](2), g3Reg[2](2), g3Reg[1](2), g3Reg[0](2), g3Reg[3](2)] -log10(p) = 195.221 --> LEAKAGE
+Cycle 3: @[share2[3](3)] ==> [g1Reg[0](3), g1Reg[3](3), g3Reg[2](3), g3Reg[1](3), g3Reg[0](3), g3Reg[3](3)] -log10(p) = 195.221 --> LEAKAGE
+Cycle 4: @[share2[3](4)] ==> [g1Reg[0](4), g1Reg[3](4), g3Reg[2](4), g3Reg[1](4), g3Reg[0](4), g3Reg[3](4)] -log10(p) = 195.221 --> LEAKAGE
+Cycle 5: @[share2[3](5)] ==> [g1Reg[0](5), g1Reg[3](5), g3Reg[2](5), g3Reg[1](5), g3Reg[0](5), g3Reg[3](5)] -log10(p) = 195.221 --> LEAKAGE
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[share2[3](5)] ==> [g1Reg[0](5), g1Reg[3](5), g3Reg[2](5), g3Reg[1](5), g3Reg[0](5), g3Reg[3](5)] -log10(p) = 195.221 --> LEAKAGE
+@[share2[3](4)] ==> [g1Reg[0](4), g1Reg[3](4), g3Reg[2](4), g3Reg[1](4), g3Reg[0](4), g3Reg[3](4)] -log10(p) = 195.221 --> LEAKAGE
+@[share2[3](3)] ==> [g1Reg[0](3), g1Reg[3](3), g3Reg[2](3), g3Reg[1](3), g3Reg[0](3), g3Reg[3](3)] -log10(p) = 195.221 --> LEAKAGE
+@[share2[3](2)] ==> [g1Reg[0](2), g1Reg[3](2), g3Reg[2](2), g3Reg[1](2), g3Reg[0](2), g3Reg[3](2)] -log10(p) = 195.221 --> LEAKAGE
+@[share3[2](5)] ==> [g1Reg[1](5), g1Reg[0](5), g1Reg[3](5), g2Reg[0](5), g2Reg[1](5)] -log10(p) = 95.9881 --> LEAKAGE
+@[share3[2](4)] ==> [g1Reg[1](4), g1Reg[0](4), g1Reg[3](4), g2Reg[0](4), g2Reg[1](4)] -log10(p) = 95.9881 --> LEAKAGE
+@[share3[2](3)] ==> [g1Reg[1](3), g1Reg[0](3), g1Reg[3](3), g2Reg[0](3), g2Reg[1](3)] -log10(p) = 95.9881 --> LEAKAGE
+@[share3[2](2)] ==> [g1Reg[1](2), g1Reg[0](2), g1Reg[3](2), g2Reg[0](2), g2Reg[1](2)] -log10(p) = 95.9881 --> LEAKAGE
+@[share1[3](5)] ==> [g2Reg[0](5), g2Reg[1](5), g2Reg[2](5), g2Reg[3](5), g3Reg[0](5), g3Reg[3](5)] -log10(p) = 26.519 --> LEAKAGE
+@[share1[3](4)] ==> [g2Reg[0](4), g2Reg[1](4), g2Reg[2](4), g2Reg[3](4), g3Reg[0](4), g3Reg[3](4)] -log10(p) = 26.519 --> LEAKAGE

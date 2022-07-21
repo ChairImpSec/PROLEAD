@@ -1,0 +1,21 @@
+Report file after 11000000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 2: @[y2_n17(2)] ==> [sboxIn3[0](2), sboxIn3[1](2), sboxIn3[2](2), sboxIn3[3](2), sboxIn1[3](2), en(2), sboxIn1[1](2), sboxIn1[2](2), g2Reg[0](2), sboxIn3[0](1), sboxIn3[1](1), sboxIn3[2](1), sboxIn3[3](1), sboxIn1[3](1), en(1), sboxIn1[1](1), sboxIn1[2](1), g2Reg[0](1)] -log10(p) = 1.29601 --> OKAY
+Cycle 3: @[y3_n12(3)] ==> [en(3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[2](3), en(2), sboxIn1[1](2), sboxIn1[2](2), g3Reg[2](2)] -log10(p) = 1.02672 --> OKAY
+Cycle 4: @[y3_n12(4)] ==> [en(4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[2](4), en(3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[2](3)] -log10(p) = 1.02672 --> OKAY
+Cycle 5: @[y3_n12(5)] ==> [en(5), sboxIn1[1](5), sboxIn1[2](5), g3Reg[2](5), en(4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[2](4)] -log10(p) = 1.02672 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[y2_n17(2)] ==> [sboxIn3[0](2), sboxIn3[1](2), sboxIn3[2](2), sboxIn3[3](2), sboxIn1[3](2), en(2), sboxIn1[1](2), sboxIn1[2](2), g2Reg[0](2), sboxIn3[0](1), sboxIn3[1](1), sboxIn3[2](1), sboxIn3[3](1), sboxIn1[3](1), en(1), sboxIn1[1](1), sboxIn1[2](1), g2Reg[0](1)] -log10(p) = 1.29601 --> OKAY
+@[y1_n17(2)] ==> [sboxIn3[1](2), sboxIn3[2](2), sboxIn3[3](2), sboxIn2[0](2), sboxIn2[1](2), sboxIn2[2](2), sboxIn2[3](2), en(2), g1Reg[0](2), sboxIn3[1](1), sboxIn3[2](1), sboxIn3[3](1), sboxIn2[0](1), sboxIn2[1](1), sboxIn2[2](1), sboxIn2[3](1), en(1), g1Reg[0](1)] -log10(p) = 1.13418 --> OKAY
+@[y3_n12(5)] ==> [en(5), sboxIn1[1](5), sboxIn1[2](5), g3Reg[2](5), en(4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[2](4)] -log10(p) = 1.02672 --> OKAY
+@[y3_n12(4)] ==> [en(4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[2](4), en(3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[2](3)] -log10(p) = 1.02672 --> OKAY
+@[y3_n12(3)] ==> [en(3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[2](3), en(2), sboxIn1[1](2), sboxIn1[2](2), g3Reg[2](2)] -log10(p) = 1.02672 --> OKAY
+@[y3_n13(5)] ==> [en(5), sboxIn1[0](5), sboxIn1[1](5), sboxIn1[2](5), g3Reg[3](5), en(4), sboxIn1[0](4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[3](4)] -log10(p) = 0.79729 --> OKAY
+@[y3_n13(4)] ==> [en(4), sboxIn1[0](4), sboxIn1[1](4), sboxIn1[2](4), g3Reg[3](4), en(3), sboxIn1[0](3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[3](3)] -log10(p) = 0.79729 --> OKAY
+@[y3_n13(3)] ==> [en(3), sboxIn1[0](3), sboxIn1[1](3), sboxIn1[2](3), g3Reg[3](3), en(2), sboxIn1[0](2), sboxIn1[1](2), sboxIn1[2](2), g3Reg[3](2)] -log10(p) = 0.79729 --> OKAY
+@[y3_n11(2)] ==> [sboxIn2[0](2), sboxIn2[1](2), sboxIn2[2](2), sboxIn2[3](2), en(2), sboxIn1[0](2), sboxIn1[1](2), sboxIn1[2](2), g3Reg[1](2), sboxIn2[0](1), sboxIn2[1](1), sboxIn2[2](1), sboxIn2[3](1), en(1), sboxIn1[0](1), sboxIn1[1](1), sboxIn1[2](1), g3Reg[1](1)] -log10(p) = 0.680653 --> OKAY
+@[y1_n17(5)] ==> [sboxIn3[1](5), sboxIn3[2](5), sboxIn3[3](5), sboxIn2[0](5), sboxIn2[1](5), sboxIn2[2](5), sboxIn2[3](5), en(5), g1Reg[0](5), sboxIn3[1](4), sboxIn3[2](4), sboxIn3[3](4), sboxIn2[0](4), sboxIn2[1](4), sboxIn2[2](4), sboxIn2[3](4), en(4), g1Reg[0](4)] -log10(p) = 0.657488 --> OKAY

@@ -1,0 +1,58 @@
+Start Hardware Leakage Evaluation
+
+Library file:   library.lib
+Library name:   NANG45
+Design file:    design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  res
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 5 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "no_of_entries_in_report" is not specified. Default "no_of_entries_in_report" = 10 is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate all possible probing sets for order 1...
+Generate list of standard probes...done!
+Generate list of extended probes...done!
+done! 15648 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 14942 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|              489 |             1039 |              1 |       10 |                 10 |         14942 |                      30 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|        27.282869s |        4.950604GB |         32000 / 180253 |                 stateFF_state_gff_7_n31 (32) |   3.896557 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|        54.314195s |        5.592520GB |         64000 / 210091 |                   md1FF_state_gff_7_n29 (32) |   3.941165 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|        82.243138s |        5.592520GB |         96000 / 219973 |                   md2FF_state_gff_11_n32 (7) |   3.680010 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       109.544409s |        5.593972GB |        128000 / 223619 |                    md1FF_state_gff_2_n30 (3) |   4.141705 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       136.916808s |        5.594632GB |        160000 / 224903 |                   md2FF_state_gff_2_n28 (18) |   3.136200 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       164.093660s |        5.594764GB |        192000 / 225347 |                   md1FF_state_gff_3_n28 (28) |   3.563847 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       191.547542s |        5.594896GB |        224000 / 225497 |                   md1FF_state_gff_7_n32 (15) |   3.494179 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       218.659001s |        5.595032GB |        256000 / 225557 |                  md1FF_state_gff_15_n28 (20) |   3.343400 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 220.457 seconds!
+done!
