@@ -1,0 +1,62 @@
+Start Hardware Leakage Evaluation
+
+Library file:   library.lib
+Library name:   NANG45
+Design file:    design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  res
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 4 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate all possible probing sets for order 1...
+Generate list of standard probes...done!
+Generate list of extended probes...done!
+Generate univariate probing sets...Setting first-order variant...done!
+done! 1540 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 1248 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|              110 |              192 |              1 |       10 |                 10 |          1248 |                     136 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations |            Probing Set with highest Information Leakage |  -log10(p) |  Status |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|         4.899587s |        6.495324GB |                1000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[11] (2) |  11.769704 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|         9.760293s |        6.495324GB |                2000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) |  27.471147 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        14.635647s |        6.495324GB |                3000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) |  46.741506 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        19.486495s |        6.495324GB |                4000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) |  61.401058 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        24.268130s |        6.495324GB |                5000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) |  73.580422 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        29.188329s |        6.495324GB |                6000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) |  91.583387 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        34.101969s |        6.495324GB |                7000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) | 109.207589 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        39.006594s |        6.495324GB |                8000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[10] (2) | 125.285816 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        43.904514s |        6.495324GB |                9000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[11] (2) | 136.804540 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|        48.797943s |        6.495324GB |               10000000 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[12] (2) | 160.890598 | LEAKAGE |
+---------------------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 48.8001 seconds!
+done!
