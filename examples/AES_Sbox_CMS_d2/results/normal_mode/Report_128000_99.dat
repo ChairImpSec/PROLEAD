@@ -1,0 +1,18 @@
+Report file after 128000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[sboxOut[23](10), sboxOut[20](10)] ==> [sboxOut[20](10), sboxOut[23](10), sboxOut[20](9), sboxOut[23](9)] -log10(p) = 2.74189 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[sboxOut[23](10), sboxOut[20](10)] ==> [sboxOut[20](10), sboxOut[23](10), sboxOut[20](9), sboxOut[23](9)] -log10(p) = 2.74189 --> OKAY
+@[sboxOut[12](10), s1_linMapOut_0__0_(10)] ==> [sboxIn[0](10), sboxIn[1](10), sboxIn[2](10), sboxIn[3](10), sboxIn[6](10), sboxOut[12](10), sboxIn[0](9), sboxIn[1](9), sboxIn[2](9), sboxIn[3](9), sboxIn[6](9), sboxOut[12](9)] -log10(p) = 2.19057 --> OKAY
+@[sboxOut[14](10), sboxOut[12](10)] ==> [sboxOut[12](10), sboxOut[14](10), sboxOut[12](9), sboxOut[14](9)] -log10(p) = 2.06287 --> OKAY
+@[sboxOut[12](10), s1_linMapOut_1__0_(10)] ==> [sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[11](10), sboxIn[14](10), sboxOut[12](10), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[11](9), sboxIn[14](9), sboxOut[12](9)] -log10(p) = 2.0488 --> OKAY
+@[sboxOut[21](10), sboxOut[14](10)] ==> [sboxOut[14](10), sboxOut[21](10), sboxOut[14](9), sboxOut[21](9)] -log10(p) = 1.74205 --> OKAY
+@[sboxOut[19](10), sboxOut[14](10)] ==> [sboxOut[14](10), sboxOut[19](10), sboxOut[14](9), sboxOut[19](9)] -log10(p) = 1.72032 --> OKAY
+@[sboxOut[11](10), s1_linMapOut_0__3_(10)] ==> [sboxIn[4](10), sboxIn[7](10), sboxIn[0](10), sboxIn[1](10), sboxIn[3](10), sboxOut[11](10), sboxIn[4](9), sboxIn[7](9), sboxIn[0](9), sboxIn[1](9), sboxIn[3](9), sboxOut[11](9)] -log10(p) = 1.68915 --> OKAY
+@[sboxOut[20](10), s1_linMapOut_1__0_(10)] ==> [sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[11](10), sboxIn[14](10), sboxOut[20](10), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[11](9), sboxIn[14](9), sboxOut[20](9)] -log10(p) = 1.68857 --> OKAY
+@[sboxOut[20](10), sboxOut[17](10)] ==> [sboxOut[17](10), sboxOut[20](10), sboxOut[17](9), sboxOut[20](9)] -log10(p) = 1.68481 --> OKAY
+@[sboxOut[14](10), sboxOut[1](10)] ==> [sboxOut[1](10), sboxOut[14](10), sboxOut[1](9), sboxOut[14](9)] -log10(p) = 1.53518 --> OKAY

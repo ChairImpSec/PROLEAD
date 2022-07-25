@@ -1,0 +1,62 @@
+Start Hardware Leakage Evaluation
+
+Library file:   library.lib
+Library name:   NANG45
+Design file:    design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  res
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 4 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate all possible probing sets for order 1...
+Generate list of standard probes...done!
+Generate list of extended probes...done!
+Generate univariate probing sets...Setting first-order variant...done!
+done! 9930 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 8990 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|              331 |              564 |              1 |       10 |                 10 |          8990 |                      30 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         0.946189s |        3.758728GB |           6400 / 34041 |            stateFF_state_gff_1_SFF_1_n7 (24) |  80.636032 | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         1.823733s |        3.758728GB |          12800 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (24) | 258.662218 | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         2.674998s |        3.758728GB |          19200 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (24) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         3.527976s |        3.758728GB |          25600 / 34175 |            stateFF_state_gff_1_SFF_1_n7 (29) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         4.354345s |        3.758728GB |          32000 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         5.214206s |        3.758728GB |          38400 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         6.065212s |        3.758728GB |          44800 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         6.910556s |        3.758728GB |          51200 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         7.779798s |        3.758728GB |          57600 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         8.668294s |        3.758728GB |          64000 / 34175 |              md1FF_state_gff_1_SFF_1_n7 (30) |        inf | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 8.69502 seconds!
+done!

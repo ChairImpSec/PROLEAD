@@ -1,0 +1,18 @@
+Report file after 128000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[sboxOut[18](10), stage3Out[32](10)] ==> [stage3Out[32](10), sboxOut[18](10), stage3Out[32](9), sboxOut[18](9)] -log10(p) = 2.18151 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[sboxOut[18](10), stage3Out[32](10)] ==> [stage3Out[32](10), sboxOut[18](10), stage3Out[32](9), sboxOut[18](9)] -log10(p) = 2.18151 --> OKAY
+@[sboxOut[18](10), stage2Out[1](10)] ==> [stage2Out[1](10), sboxOut[18](10), stage2Out[1](9), sboxOut[18](9)] -log10(p) = 1.87805 --> OKAY
+@[sboxOut[18](10), stage3Out[34](10)] ==> [stage3Out[34](10), sboxOut[18](10), stage3Out[34](9), sboxOut[18](9)] -log10(p) = 1.61436 --> OKAY
+@[stage2Out[2](10), stage3Out[35](10)] ==> [stage3Out[35](10), stage2Out[2](10), stage3Out[35](9), stage2Out[2](9)] -log10(p) = 1.58391 --> OKAY
+@[stage2Out[35](10), stage2Out[2](10)] ==> [stage2Out[2](10), stage2Out[35](10), stage2Out[2](9), stage2Out[35](9)] -log10(p) = 1.58391 --> OKAY
+@[sboxOut[20](10), stage3Out[34](10)] ==> [stage3Out[34](10), sboxOut[20](10), stage3Out[34](9), sboxOut[20](9)] -log10(p) = 1.5229 --> OKAY
+@[sboxOut[13](10), stage3Out[35](10)] ==> [stage3Out[35](10), sboxOut[13](10), stage3Out[35](9), sboxOut[13](9)] -log10(p) = 1.38326 --> OKAY
+@[sboxOut[18](10), stage2Out[0](10)] ==> [stage2Out[0](10), sboxOut[18](10), stage2Out[0](9), sboxOut[18](9)] -log10(p) = 1.33428 --> OKAY
+@[sboxOut[20](10), stage2Out[1](10)] ==> [stage2Out[1](10), sboxOut[20](10), stage2Out[1](9), sboxOut[20](9)] -log10(p) = 1.30325 --> OKAY
+@[sboxOut[18](10), stage3Out[35](10)] ==> [stage3Out[35](10), sboxOut[18](10), stage3Out[35](9), sboxOut[18](9)] -log10(p) = 1.21161 --> OKAY

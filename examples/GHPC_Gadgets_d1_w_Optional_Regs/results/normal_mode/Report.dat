@@ -1,0 +1,66 @@
+Start Hardware Leakage Evaluation
+
+Library file:   library.lib
+Library name:   NANG45
+Design file:    design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  res
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 4 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate all possible probing sets for order 1...
+Generate list of standard probes...done!
+Generate list of extended probes...done!
+Generate univariate probing sets...Setting first-order variant...done!
+done! 240 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 162 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|               24 |               32 |              1 |       10 |                 10 |           162 |                       8 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         1.157381s |        4.037124GB |         128000 / 13275 |                 inst1_Step1_ins_Step1[0] (6) |   1.670879 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         1.830302s |        4.037124GB |         256000 / 13275 |     inst2_Step2_inst_step2_ins_0_3_value (6) |   1.596744 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         2.530266s |        4.037124GB |         384000 / 13275 |     inst2_Step2_inst_step2_ins_0_1_value (5) |   2.050568 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         3.233636s |        4.037124GB |         512000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   2.805497 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         3.923000s |        4.037124GB |         640000 / 13275 |                                     d[1] (7) |   2.368568 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         4.625523s |        4.037124GB |         768000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   2.753922 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         5.333186s |        4.037124GB |         896000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   2.495226 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         6.042877s |        4.037124GB |        1024000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   2.846647 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         6.731219s |        4.037124GB |        1152000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   2.076974 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         7.433264s |        4.037124GB |        1280000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   1.708433 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         8.123687s |        4.037124GB |        1408000 / 13275 |                                     t[1] (7) |   1.465318 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         8.816749s |        4.037124GB |        1536000 / 13275 |                 inst2_Step1_ins_Step1[0] (4) |   1.449227 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 8.81802 seconds!
+done!

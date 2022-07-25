@@ -1,0 +1,18 @@
+Report file after 128000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[sboxOut[1](10), stage2Out[14](10)] ==> [stage2Out[14](10), sboxOut[1](10), stage2Out[14](9), sboxOut[1](9)] -log10(p) = 2.79014 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[sboxOut[1](10), stage2Out[14](10)] ==> [stage2Out[14](10), sboxOut[1](10), stage2Out[14](9), sboxOut[1](9)] -log10(p) = 2.79014 --> OKAY
+@[sboxOut[6](10), stage2Out[14](10)] ==> [stage2Out[14](10), sboxOut[6](10), stage2Out[14](9), sboxOut[6](9)] -log10(p) = 2.34785 --> OKAY
+@[s1_linMapOut_1__7_(10), stage2Out[27](10)] ==> [stage2Out[27](10), sboxIn[13](10), sboxIn[15](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[14](10), stage2Out[27](9), sboxIn[13](9), sboxIn[15](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[14](9)] -log10(p) = 2.32705 --> OKAY
+@[sboxOut[0](10), stage2Out[22](10)] ==> [stage2Out[22](10), sboxOut[0](10), stage2Out[22](9), sboxOut[0](9)] -log10(p) = 2.07661 --> OKAY
+@[s1_linMapOut_1__0_(10), stage2Out[24](10)] ==> [stage2Out[24](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[11](10), sboxIn[14](10), stage2Out[24](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[11](9), sboxIn[14](9)] -log10(p) = 1.9939 --> OKAY
+@[sboxOut[5](10), stage2Out[15](10)] ==> [stage2Out[15](10), sboxOut[5](10), stage2Out[15](9), sboxOut[5](9)] -log10(p) = 1.98127 --> OKAY
+@[sboxOut[23](10), stage2Out[24](10)] ==> [stage2Out[24](10), sboxOut[23](10), stage2Out[24](9), sboxOut[23](9)] -log10(p) = 1.97763 --> OKAY
+@[s1_linMapOut_1__0_(10), stage2Out[25](10)] ==> [stage2Out[25](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[11](10), sboxIn[14](10), stage2Out[25](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[11](9), sboxIn[14](9)] -log10(p) = 1.93228 --> OKAY
+@[sboxOut[15](10), stage2Out[15](10)] ==> [stage2Out[15](10), sboxOut[15](10), stage2Out[15](9), sboxOut[15](9)] -log10(p) = 1.84729 --> OKAY
+@[sboxOut[1](10), stage2Out[15](10)] ==> [stage2Out[15](10), sboxOut[1](10), stage2Out[15](9), sboxOut[1](9)] -log10(p) = 1.70228 --> OKAY

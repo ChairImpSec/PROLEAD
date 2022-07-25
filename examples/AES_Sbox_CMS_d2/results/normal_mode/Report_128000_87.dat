@@ -1,0 +1,18 @@
+Report file after 128000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[s1_linMapOut_1__7_(10), regOut1[20](10)] ==> [regOut1[20](10), sboxIn[13](10), sboxIn[15](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[14](10), regOut1[20](9), sboxIn[13](9), sboxIn[15](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[14](9)] -log10(p) = 1.63333 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[s1_linMapOut_1__7_(10), regOut1[20](10)] ==> [regOut1[20](10), sboxIn[13](10), sboxIn[15](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[14](10), regOut1[20](9), sboxIn[13](9), sboxIn[15](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[14](9)] -log10(p) = 1.63333 --> OKAY
+@[sboxOut[10](10), regOut1[20](10)] ==> [regOut1[20](10), sboxOut[10](10), regOut1[20](9), sboxOut[10](9)] -log10(p) = 1.54123 --> OKAY
+@[s1_linMapOut_0__6_(10), regOut1[18](10)] ==> [regOut1[18](10), sboxIn[5](10), sboxIn[4](10), sboxIn[0](10), sboxIn[6](10), regOut1[18](9), sboxIn[5](9), sboxIn[4](9), sboxIn[0](9), sboxIn[6](9)] -log10(p) = 1.50725 --> OKAY
+@[sboxOut[14](10), regOut1[17](10)] ==> [regOut1[17](10), sboxOut[14](10), regOut1[17](9), sboxOut[14](9)] -log10(p) = 1.46208 --> OKAY
+@[regOut1[21](10), regOut1[20](10)] ==> [regOut1[20](10), regOut1[21](10), regOut1[20](9), regOut1[21](9)] -log10(p) = 1.39327 --> OKAY
+@[s1_linMapOut_1__7_(10), regOut1[18](10)] ==> [regOut1[18](10), sboxIn[13](10), sboxIn[15](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[14](10), regOut1[18](9), sboxIn[13](9), sboxIn[15](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[14](9)] -log10(p) = 1.33943 --> OKAY
+@[stage3Out[21](10), regOut1[20](10)] ==> [regOut1[20](10), stage3Out[21](10), regOut1[20](9), stage3Out[21](9)] -log10(p) = 1.27775 --> OKAY
+@[stage2Out[21](10), regOut1[20](10)] ==> [regOut1[20](10), stage2Out[21](10), regOut1[20](9), stage2Out[21](9)] -log10(p) = 1.27775 --> OKAY
+@[s1_linMapOut_0__3_(10), regOut1[20](10)] ==> [regOut1[20](10), sboxIn[4](10), sboxIn[7](10), sboxIn[0](10), sboxIn[1](10), sboxIn[3](10), regOut1[20](9), sboxIn[4](9), sboxIn[7](9), sboxIn[0](9), sboxIn[1](9), sboxIn[3](9)] -log10(p) = 1.24977 --> OKAY
+@[s1_linMapOut_1__7_(10), regOut1[21](10)] ==> [regOut1[21](10), sboxIn[13](10), sboxIn[15](10), sboxIn[8](10), sboxIn[9](10), sboxIn[10](10), sboxIn[14](10), regOut1[21](9), sboxIn[13](9), sboxIn[15](9), sboxIn[8](9), sboxIn[9](9), sboxIn[10](9), sboxIn[14](9)] -log10(p) = 1.19457 --> OKAY
