@@ -98,14 +98,6 @@ void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& Simulation, H
 
     std::sort(TableEntries.begin(), TableEntries.end(), [](const Hardware::TableEntryStruct& lhs, const Hardware::TableEntryStruct& rhs){return lhs.Key < rhs.Key;});
 
-    /*std::cout << "START" << std::endl;
-
-    std::cout << TableEntries.at(0).Count.at(0) << ": ";
-    for (size_t i = 0; i < TableEntries.at(0).Key.size(); i++){
-        std::cout << (int) TableEntries.at(0).Key.at(i) << ", ";
-    }
-    std::cout << std::endl;*/
-
     // Search if an entry exists in the list of entries that occur multiple times
     EntryIndex = ProbingSet.FindEntry(TableEntries.at(0), 0);
     
@@ -153,61 +145,7 @@ void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& Simulation, H
         ProbingSet.ContingencyTable.at(EntryIndex).Count.at(TableEntries.at(0).Count.at(0))++; 
     }
 
-    /*for (size_t i = 0; i < ProbingSet.ContingencyTable.size(); i++){
-        for (size_t j = 0; j < ProbingSet.ContingencyTable.at(i).Key.size(); j++){
-            std::cout << (int) ProbingSet.ContingencyTable.at(i).Key.at(j) << ", ";
-        }
-
-        std::cout << ": ";
-
-        for (size_t j = 0; j < ProbingSet.ContingencyTable.at(i).Count.size(); j++){
-            std::cout << (int) ProbingSet.ContingencyTable.at(i).Count.at(j) << ", ";
-        }        
-
-        std::cout << std::endl;
-    }
-    
-    std::cout << "Fix: " << std::endl;
-    for (size_t i = 0; i < ProbingSet.OnlyOneEntry.at(0).size(); i++){
-        if (ProbingSet.OnlyOneEntry.at(0).at(i).size()){
-            std::cout << i << ": ";
-            for (size_t j = 0; j < ProbingSet.OnlyOneEntry.at(0).at(i).size(); j++){
-                std::cout << "(";
-                for (size_t l = 0; l < ProbingSet.OnlyOneEntry.at(0).at(i).at(j).size(); l++){
-                    std::cout << (int)ProbingSet.OnlyOneEntry.at(0).at(i).at(j).at(l) << ", ";
-                }
-                std::cout << "), ";            
-            }       
-            std::cout << std::endl;
-        }
-    }  
-
-    std::cout << "Rand: " << std::endl;
-    for (size_t i = 0; i < ProbingSet.OnlyOneEntry.at(1).size(); i++){
-        if (ProbingSet.OnlyOneEntry.at(1).at(i).size()){
-            std::cout << i << ": ";
-            for (size_t j = 0; j < ProbingSet.OnlyOneEntry.at(1).at(i).size(); j++){
-                std::cout << "(";
-                for (size_t l = 0; l < ProbingSet.OnlyOneEntry.at(1).at(i).at(j).size(); l++){
-                    std::cout << (int)ProbingSet.OnlyOneEntry.at(1).at(i).at(j).at(l) << ", ";
-                }
-                std::cout << "), ";            
-            }       
-            std::cout << std::endl;
-        }
-    }         
-
-    getchar();*/
-
     for (SimulationIndex = 1; SimulationIndex < Simulation.NumberOfStepSimulations; SimulationIndex++){ 
-
-        /*std::cout << TableEntries.at(SimulationIndex).Count.at(0) << ": ";
-        for (size_t i = 0; i < TableEntries.at(SimulationIndex).Key.size(); i++){
-            std::cout << (int) TableEntries.at(SimulationIndex).Key.at(i) << ", ";
-        }
-        std::cout << std::endl;*/
-
-
         Subkey = {TableEntries.at(SimulationIndex).Key.begin(), TableEntries.at(SimulationIndex).Key.end() - 1};
 
         if (ProbingSet.ContingencyTable.size() && TableEntries.at(SimulationIndex).Key == ProbingSet.ContingencyTable.back().Key){
@@ -272,52 +210,6 @@ void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& Simulation, H
                 }
             }  
         }
-
-        /*for (size_t i = 0; i < ProbingSet.ContingencyTable.size(); i++){
-            for (size_t j = 0; j < ProbingSet.ContingencyTable.at(i).Key.size(); j++){
-                std::cout << (int) ProbingSet.ContingencyTable.at(i).Key.at(j) << ", ";
-            }
-
-            std::cout << ": ";
-
-            for (size_t j = 0; j < ProbingSet.ContingencyTable.at(i).Count.size(); j++){
-                std::cout << (int) ProbingSet.ContingencyTable.at(i).Count.at(j) << ", ";
-            }        
-
-            std::cout << std::endl;
-        }
-        
-        std::cout << "Fix: " << std::endl;
-        for (size_t i = 0; i < ProbingSet.OnlyOneEntry.at(0).size(); i++){
-            if (ProbingSet.OnlyOneEntry.at(0).at(i).size()){
-                std::cout << i << ": ";
-                for (size_t j = 0; j < ProbingSet.OnlyOneEntry.at(0).at(i).size(); j++){
-                    std::cout << "(";
-                    for (size_t l = 0; l < ProbingSet.OnlyOneEntry.at(0).at(i).at(j).size(); l++){
-                        std::cout << (int)ProbingSet.OnlyOneEntry.at(0).at(i).at(j).at(l) << ", ";
-                    }
-                    std::cout << "), ";            
-                }       
-                std::cout << std::endl;
-            }
-        }  
-
-        std::cout << "Rand: " << std::endl;
-        for (size_t i = 0; i < ProbingSet.OnlyOneEntry.at(1).size(); i++){
-            if (ProbingSet.OnlyOneEntry.at(1).at(i).size()){
-                std::cout << i << ": ";
-                for (size_t j = 0; j < ProbingSet.OnlyOneEntry.at(1).at(i).size(); j++){
-                    std::cout << "(";
-                    for (size_t l = 0; l < ProbingSet.OnlyOneEntry.at(1).at(i).at(j).size(); l++){
-                        std::cout << (int)ProbingSet.OnlyOneEntry.at(1).at(i).at(j).at(l) << ", ";
-                    }
-                    std::cout << "), ";            
-                }       
-                std::cout << std::endl;
-            }
-        }         
-
-        getchar();*/
     }
 
     for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
