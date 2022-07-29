@@ -1,4 +1,5 @@
 # PROLEAD - A Probing-Based Hardware Leakage Detection Tool
+This repository contains the source code for the paper <a href="https://eprint.iacr.org/2022/965">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a>.
 
 ## Contact and Support
 Please contact Nicolai Müller (nicolai.mueller@rub.de) if you have any questions, comments, if you found a bug that should be corrected, or if you want to reuse PROLEAD or parts of it for your own research projects.
