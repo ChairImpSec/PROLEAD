@@ -2713,7 +2713,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
     }
 
 	if (!(SettingsFileCheckList & (1 << 20))){
-		Settings->Max_No_ReportEntries = 10;
+        Settings->RemoveProbingSets = 0;
         Warnings.push_back("Warning \"remove_full_probing_sets\" is not specified. Default \"remove_full_probing_sets\" = no is taken!");
 	}
 
