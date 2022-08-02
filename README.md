@@ -8,7 +8,7 @@ Please contact Nicolai Müller (nicolai.mueller@rub.de) if you have any question
 Please follow the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Installation">Installation Guide</a> in the wiki.
 
 ## Usage
-The <a href="https://github.com/ChairImpSec/PROLEAD/wiki/User-Manual">User Manual</a> is given in the wiki.
+The <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Usage">User Manual</a> is given in the wiki.
 
 ## Examples
 
