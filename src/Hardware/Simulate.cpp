@@ -30,25 +30,28 @@ uint64_t Hardware::Simulate::EvaluateOperation(Hardware::OperationStruct Operati
 
 void Hardware::Simulate::All(Hardware::LibraryStruct& Library, Hardware::CircuitStruct& Circuit, Hardware::SettingsStruct& Settings, Hardware::SharedDataStruct* SharedData, Hardware::SimulationStruct& Simulation, int SimulationIndex, boost::mt19937& ThreadRng)
 {
-    int       i;
-    int       InputIndex;
-    int       OutputIndex;
-    int       SignalIndex;
-    int       RegIndex;
-    int       DepthIndex;
-    int       CellIndex;
-    int       ClockCycle;
-    uint64_t  Value;
-    int       NumberOfWaitedClockCycles;
-    uint64_t  InputVector[100];
-    uint64_t  Active;
-    int       BitIndex;
+    int         i;
+    int         InputIndex;
+    int         OutputIndex;
+    int         SignalIndex;
+    int         RegIndex;
+    int         DepthIndex;
+    int         CellIndex;
+    int         ClockCycle;
+    uint64_t    Value;
+    uint64_t    Mask;
+	uint64_t    ExpectedValue;
+	int         NumberOfWaitedClockCycles;
+    uint64_t    InputVector[100];
+    uint64_t    Active;
+    int         BitIndex;
 	//int       ClockCyclesTook;
-	int		  GroupIndex;
-	int		  ValueIndex;
-	int		  ShareIndex;
-	uint64_t  Select[100];
-	int		  ProbeIndex;
+	int		    GroupIndex;
+	int		    ValueIndex;
+	int		    ShareIndex;
+	uint64_t    Select[100];
+	int		    ProbeIndex;
+	std::string ErrorMessage;
 
 	// assigning inputs (fixed/random/etc)
     boost::uniform_int<uint64_t> ThreadDist(0,std::numeric_limits<uint64_t>::max());
@@ -213,4 +216,35 @@ void Hardware::Simulate::All(Hardware::LibraryStruct& Library, Hardware::Circuit
             }
         }
     }
+
+	for (SignalIndex = 0; SignalIndex < Settings.NumberOfOutputSignals; SignalIndex++)
+	{
+		Value = 0;
+		for (ShareIndex = 0; ShareIndex < Settings.NumberOfOutputShares; ShareIndex++)
+			Value ^= SharedData->SignalValues[Settings.OutputSignals[ShareIndex][SignalIndex]];
+
+		Mask = 0;
+		ExpectedValue = 0;
+		for (GroupIndex = 0; GroupIndex < Settings.NumberOfGroups; GroupIndex++)
+		{
+			if (Settings.ExpectedOutputValues[GroupIndex][SignalIndex] >= 0)
+			{
+				Mask |= Select[GroupIndex];
+				if (Settings.ExpectedOutputValues[GroupIndex][SignalIndex] == 1)
+					ExpectedValue |= Select[GroupIndex];
+			}
+		}
+
+		if ((Value & Mask) != ExpectedValue)
+		{
+			ErrorMessage = "Error in simulation. Value of signal(s)\n";
+			for (ShareIndex = 0; ShareIndex < Settings.NumberOfOutputShares; ShareIndex++)
+				ErrorMessage += "  \"" + (std::string)Circuit.Signals[Settings.OutputSignals[ShareIndex][SignalIndex]]->Name + "\"\n";
+
+			ErrorMessage += "do not match to the expected output!";
+			
+			#pragma omp critical
+			throw std::runtime_error(ErrorMessage);
+		}
+	}
 }

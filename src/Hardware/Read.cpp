@@ -2618,6 +2618,266 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
             Settings->EffectSize = Effect;
 			SettingsFileCheckList |= (1 << 24);
 		}
+		else if (!strcmp(Str1, "no_of_outputs"))
+		{
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+			templl = strtoll(Str1, &tmptr, 10);
+			if ((*tmptr) || (templl < 0))
+			{
+				ErrorMessage = "Given \"no_of_outputs\" (" + (std::string)Str1 + " >= 0) in settings file is not valid!";
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				throw std::runtime_error(ErrorMessage);
+			}
+
+			Settings->NumberOfOutputShares = templl;
+			Settings->OutputSignals = (int**)malloc(Settings->NumberOfOutputShares * sizeof(int*));
+
+			for (ShareIndex = 0; ShareIndex < Settings->NumberOfOutputShares; ShareIndex++)
+			{
+				Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+				if ((Str1[0] == '[') && (Str1[strlen(Str1) - 1] == ']'))
+				{
+					strncpy(Str2, Str1 + 1, Max_Name_Length);
+					Str2[strlen(Str2) - 1] = 0;
+					str_ptr = strchr(Str2, ':');
+					if (str_ptr != NULL)
+					{
+						*str_ptr = 0;
+						templ = strtol(Str2, &tmptr, 10);
+						if ((*tmptr) || (templ < 0))
+						{
+							ErrorMessage = "Given statement (" + (std::string)Str2 + " >= 0) in settings file is not valid!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+
+						IndexH = templ;
+
+						templ = strtol(str_ptr + 1, &tmptr, 10);
+						if ((*tmptr) || (templ < 0))
+						{
+							ErrorMessage = "Given statement (" + (std::string)str_ptr + " >= 0) in settings file is not valid!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+
+						IndexL = templ;
+					}
+					else
+					{
+						templ = strtol(Str2, &tmptr, 10);
+						if ((*tmptr) || (templ < 0))
+						{
+							ErrorMessage = "Given statement (" + (std::string)Str2 + " >= 0) in settings file is not valid!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+
+						IndexH = templ;
+						IndexL = IndexH;
+					}
+
+					Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+				}
+				else
+				{
+					IndexL = -1;
+					IndexH = -1;
+				}
+
+				if (!ShareIndex)
+					Settings->NumberOfOutputSignals = IndexH - IndexL + 1;
+				else
+					if (Settings->NumberOfOutputSignals != IndexH - IndexL + 1)	{
+						ErrorMessage = "Number of output signals given in line no. " + std::to_string(ShareIndex + 1) + " of \"no_of_outputs\" in settings file does not match with other given output signals!";
+						fclose(SettingsFile);
+						free(Str1);
+						free(Str2);
+						free(Str3);
+						throw std::runtime_error(ErrorMessage);
+					}
+
+				Settings->OutputSignals[ShareIndex] = (int*)malloc(Settings->NumberOfOutputSignals * sizeof(int));
+
+				for (j = IndexL; j <= IndexH; j++)
+				{
+					if (IndexL != -1)
+						sprintf(Str2, "%s[%d]", Str1, j);
+					else
+						sprintf(Str2, "%s", Str1);
+
+					for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+						if (!strcmp(Circuit->Signals[SignalIndex]->Name, Str2))
+							break;
+
+					if (SignalIndex >= Circuit->NumberOfSignals)
+					{
+						ErrorMessage = "Signal " + (std::string)Str2 + " in settings file as output signal not found!";
+						fclose(SettingsFile);
+						free(Str1);
+						free(Str2);
+						free(Str3);
+						throw std::runtime_error(ErrorMessage);
+					}
+
+					Settings->OutputSignals[ShareIndex][j - IndexL] = SignalIndex;
+				}
+			}
+
+			SettingsFileCheckList |= (1 << 25);
+		}
+		else if (!strcmp(Str1, "expected_output"))
+		{
+			if (!(SettingsFileCheckList & (1 << 25)))
+			{
+				ErrorMessage = "\"no_of_outputs\" should be defined before \"expected_output\" in settings file!";
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				throw std::runtime_error(ErrorMessage);
+			}
+				
+			if (Settings->NumberOfOutputShares == 0)
+			{
+				ErrorMessage = "To define \"expected_output\", \"no_of_outputs\" should be > 0 in settings file!";
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				throw std::runtime_error(ErrorMessage);
+			}
+
+			Settings->ExpectedOutputValues = (int**)malloc(Settings->NumberOfGroups * sizeof(int*));
+
+			for (GroupIndex = 0; GroupIndex < Settings->NumberOfGroups; GroupIndex++)
+			{
+				NumberOfBuffer_char = 0;
+				Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+				strncpy(Str2, Str1, Max_Name_Length);
+				str_ptr = strchr(Str2, '\'');
+				*str_ptr = 0;
+
+				templ = strtol(Str2, &tmptr, 10);
+				if ((*tmptr) ||
+					(templ < 1))
+				{
+					ErrorMessage = "Given length (" + (std::string)Str2 + " > 0) for " + (std::string)Str1 + " in settings file is not valid!";
+					fclose(SettingsFile);
+					free(Str1);
+					free(Str2);
+					free(Str3);
+					throw std::runtime_error(ErrorMessage);
+				}
+
+				j = templ;
+				if (j != Settings->NumberOfOutputSignals)
+				{
+					ErrorMessage = "Length " + (std::string)Str1 + " in settings file does not match to the size of given output signals!";
+					fclose(SettingsFile);
+					free(Str1);
+					free(Str2);
+					free(Str3);
+					throw std::runtime_error(ErrorMessage);
+				}
+
+				Settings->ExpectedOutputValues[GroupIndex] = (int*)malloc(Settings->NumberOfOutputSignals * sizeof(int));
+
+				strncpy(Str3, str_ptr + 1, Max_Name_Length);
+				strncpy(Str2, Str3, Max_Name_Length);
+				strncpy(Str3, Str1, Max_Name_Length);
+				strncpy(Str1, Str2 + 1, Max_Name_Length);
+
+				if (Str2[0] == 'h')
+				{
+					for (j = 0; j < Settings->NumberOfOutputSignals; j += 4)
+					{
+						if (!strlen(Str1))
+						{
+							ErrorMessage = "Length " + (std::string)Str3 + " in settings file does not match to the given size!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+						Str2[0] = Str1[strlen(Str1) - 1];
+						Str2[1] = 0;
+						Str1[strlen(Str1) - 1] = 0;
+
+						v = strtol(Str2, NULL, 16);
+						for (i = 0; i < 4; i++)
+						{
+							if (Str2[0] == '$')
+								Settings->ExpectedOutputValues[GroupIndex][NumberOfBuffer_char] = -1;
+							else
+								Settings->ExpectedOutputValues[GroupIndex][NumberOfBuffer_char] = (v & (1 << i)) ? 1 : 0;
+							NumberOfBuffer_char++;
+						}
+					}
+				}
+				else if (Str2[0] == 'b')
+				{
+					for (j = 0; j < Settings->NumberOfOutputSignals; j += 1)
+					{
+						if (!strlen(Str1))
+						{
+							ErrorMessage = "Length " + (std::string)Str3 + " in settings file does not match to the given size!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+						Str2[0] = Str1[strlen(Str1) - 1];
+						Str2[1] = 0;
+						Str1[strlen(Str1) - 1] = 0;
+
+						v = strtol(Str2, NULL, 2);
+						if (Str2[0] == '$')
+							Settings->ExpectedOutputValues[GroupIndex][NumberOfBuffer_char] = -1;
+						else
+							Settings->ExpectedOutputValues[GroupIndex][NumberOfBuffer_char] = v;
+						NumberOfBuffer_char++;
+					}
+				}
+				else
+				{
+					ErrorMessage = "Base in settings file not known in " + (std::string)Str3 + "!";
+					fclose(SettingsFile);
+					free(Str1);
+					free(Str2);
+					free(Str3);
+					throw std::runtime_error(ErrorMessage);
+				}
+
+				if (strlen(Str1))
+				{
+					ErrorMessage = "Length " + (std::string)Str3 + " in settings file does not match to the given size!";
+					fclose(SettingsFile);
+					free(Str1);
+					free(Str2);
+					free(Str3);
+					throw std::runtime_error(ErrorMessage);
+				}
+			}
+
+			SettingsFileCheckList |= (1 << 26);
+		}
 		else if ((strlen(Str1) > 0) && (Str1[0] != '%'))
 		{
             ErrorMessage = "Given statement \"" + (std::string)Str1 + "\" in settings file is not known!";
@@ -2634,60 +2894,82 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
     free(Str2);
 	free(Str3);
 
-    if ((SettingsFileCheckList & ((1 << 23) - 1)) != ((1 << 23) - 1))
-    {
-        if (!(SettingsFileCheckList & (1 << 1)))
-        	throw std::runtime_error("\"no_of_groups\" is not given!");
+	//---------------------------------------------------------------------
+	// check the essential inputs
 
-        if (!(SettingsFileCheckList & (1 << 2)))
-        	throw std::runtime_error("\"order_of_test\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 1))) {
+		throw std::runtime_error("\"no_of_groups\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 3)))
-        	throw std::runtime_error("\"clock_signal_name\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 2))) {
+		throw std::runtime_error("\"order_of_test\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 4)))
-        	throw std::runtime_error("\"max_clock_cycle\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 3))) {
+		throw std::runtime_error("\"clock_signal_name\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 5)))
-        	throw std::runtime_error("\"no_of_always_random_inputs\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 4))) {
+		throw std::runtime_error("\"max_clock_cycle\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 6)))
-        	throw std::runtime_error("\"no_of_initial_inputs\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 5))) {
+		throw std::runtime_error("\"no_of_always_random_inputs\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 7)))
-        	throw std::runtime_error("\"no_of_initial_clock_cycles\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 6))) {
+		throw std::runtime_error("\"no_of_initial_inputs\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 8)))
-        	throw std::runtime_error("\"end_condition\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 7))) {
+		throw std::runtime_error("\"no_of_initial_clock_cycles\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 9)))
-        	throw std::runtime_error("\"end_wait_cycles\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 8))) {
+		throw std::runtime_error("\"end_condition\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 10)))
-        	throw std::runtime_error("\"probes_include\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 9))) {
+		throw std::runtime_error("\"end_wait_cycles\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 11)))
-        	throw std::runtime_error("\"probes_exclude\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 10))) {
+		throw std::runtime_error("\"probes_include\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 14)))
-        	throw std::runtime_error("\"no_of_test_clock_cycles\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 11))) {
+		throw std::runtime_error("\"probes_exclude\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 15)))
-        	throw std::runtime_error("\"no_of_simulations\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 14))) {
+		throw std::runtime_error("\"no_of_test_clock_cycles\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 16)))
-        	throw std::runtime_error("\"no_of_step_simulations\" is not given!");
+	if (!(SettingsFileCheckList & (1 << 15))) {
+		throw std::runtime_error("\"no_of_simulations\" is not given!");
+	}
 
-        if (!(SettingsFileCheckList & (1 << 17)))
-        	throw std::runtime_error("\"no_of_step_write_results\" is not given!");
-    }
+	if (!(SettingsFileCheckList & (1 << 16))) {
+		throw std::runtime_error("\"no_of_step_simulations\" is not given!");
+	}
 
-	if ((Settings->NumberOfAlwaysRandomInputs + Settings->InitialSim_NumberOfInputs + 1) != Circuit->NumberOfInputs)
-	{
+	if (!(SettingsFileCheckList & (1 << 17))) {
+		throw std::runtime_error("\"no_of_step_write_results\" is not given!");
+	}
+
+	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) &&
+		(Settings->NumberOfOutputShares > 0)) {
+		throw std::runtime_error("\"expected_output\" is not given!");
+	}
+
+	if ((Settings->NumberOfAlwaysRandomInputs + Settings->InitialSim_NumberOfInputs + 1) != Circuit->NumberOfInputs) {
 		throw std::runtime_error("Number of always random inputs + initial sim number of inputs in settings file does not match with the circuit's number of inputs!");
 	}
 
- 	if (!(SettingsFileCheckList & (1 << 0))){
+	//---------------------------------------------------------------------
+	// check optional inputs
+	
+	if (!(SettingsFileCheckList & (1 << 0))){
         Settings->Max_no_of_Threads = 1;
         Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
     }
@@ -2732,10 +3014,16 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
         Warnings.push_back("Warning \"no_of_probe_steps\" is not specified. Default \"no_of_probe_steps\" = 1 is taken!");
     }
 
-    if (!(SettingsFileCheckList & (1 << 24))){
-        Settings->EffectSize = 0.1;
-        Warnings.push_back("Warning \"effect_size\" is not specified. Default \"effect_size\" = 0.1 is taken!");
-    }
+	if (!(SettingsFileCheckList & (1 << 24))) {
+		Settings->EffectSize = 0.1;
+		Warnings.push_back("Warning \"effect_size\" is not specified. Default \"effect_size\" = 0.1 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 25))) {
+		Settings->NumberOfOutputShares = 0;
+		Settings->NumberOfOutputSignals = 0;
+		Warnings.push_back("Warning \"no_of_outputs\" is not specified. Default \"no_of_outputs\" = 0 is taken!");
+	}
 
 	std::cout << "done with " << Warnings.size() << " warnings!" << std::endl;
 

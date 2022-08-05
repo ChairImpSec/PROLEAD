@@ -145,6 +145,11 @@ namespace Hardware
         uint64_t*  EndSimCondition_Values = NULL;
         int        EndSim_NumberOfWaitCycles = 0;
 
+		int        NumberOfOutputShares = 0;
+		int        NumberOfOutputSignals = 0;
+		int**      OutputSignals = NULL;
+		int**      ExpectedOutputValues = NULL;
+
         int        TestOrder = 0;
         int        TestMultivariate = 0;
         int        MaxDistanceMultivariet = 0;
