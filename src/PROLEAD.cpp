@@ -25,29 +25,18 @@ int main(int argc, char *argv[])
     while (i < argc - 1)
     {
         if ((CommandLineArguments.at(i) == "-lf") || (CommandLineArguments.at(i) == "-libraryfile")){
-            CommandLineParameters.LibraryFileName = argv[i + 1];
+            CommandLineParameters.LibraryFileName = CommandLineArguments.at(i + 1);
             i += 2;
         }
 		else
         if ((CommandLineArguments.at(i) == "-ln") || (CommandLineArguments.at(i) == "-libraryname")){
-            CommandLineParameters.LibraryName = argv[i + 1];
+            CommandLineParameters.LibraryName = CommandLineArguments.at(i + 1);
             i += 2;
         }  
         else
         if ((CommandLineArguments.at(i) == "-df") || (CommandLineArguments.at(i) == "-designfile")){
-            CommandLineParameters.DesignFileName.clear();
-
-            //be able to read in multiple desing files in Software case
-            i += 1;
-            while(i < argc){
-                if (CommandLineArguments.at(i).at(0) != '-'){
-                    CommandLineParameters.DesignFileName += CommandLineArguments.at(i) + " ";
-                    i += 1;
-                }
-                else{
-                    break;
-                }
-            }
+            CommandLineParameters.DesignFileName = CommandLineArguments.at(i + 1);
+            i += 2;
         }
         else
         if ((CommandLineArguments.at(i) == "-mn") || (CommandLineArguments.at(i) == "-modulename")){
