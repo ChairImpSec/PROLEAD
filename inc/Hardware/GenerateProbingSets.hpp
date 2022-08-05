@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cinttypes>
 #include <vector>
+#include <omp.h>
 
 #include "Hardware/Operators.hpp"
 
