@@ -138,15 +138,25 @@ void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simul
         std::cout << "Setting higher-order variant..." <<std::flush;
 
         // Set the bitmask to the first possible probe combination
-        std::vector<unsigned int> Combination(Simulation.TestOrder);
+        std::vector<unsigned int> Combination;
+        if (Simulation.TestOrder > Simulation.NumberOfProbes){
+            Combination.resize(Simulation.NumberOfProbes);
+        }else{
+            Combination.resize(Simulation.TestOrder);
+        }
 
         for (CycleIndex = 0; CycleIndex < Simulation.NumberOfTestClockCycles; CycleIndex++){
             std::vector<bool> CombinationBitmask(Simulation.NumberOfProbes, false);
-	        std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);
+
+            if (Simulation.TestOrder > Simulation.NumberOfProbes){
+                std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.NumberOfProbes, true);
+            }else{
+                std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);
+            }
 
             do{
                 CombinationIndex = 0;
-
+                    
                 for (ProbeIndex = 0; ProbeIndex < (size_t)Simulation.NumberOfProbes; ProbeIndex++){
                     if (CombinationBitmask.at(ProbeIndex)){
                         Combination.at(CombinationIndex) = CycleIndex * Simulation.NumberOfProbes + ProbeIndex;
