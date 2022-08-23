@@ -43,6 +43,10 @@ Hardware::TestStruct::TestStruct(Hardware::SimulationStruct& Simulation){
 	SumOverGroup.resize(Simulation.NumberOfGroups, 0.0);
 }
 
+int Hardware::TestStruct::GetNumberOfStandardProbes(unsigned int SetIndex){
+	return ProbingSet.at(SetIndex).Standard.size();
+}
+
 Hardware::ProbePositionStruct Hardware::TestStruct::GetStandardProbe(unsigned int SetIndex, unsigned int ProbeIndex){
 	return StandardProbes.at(ProbingSet.at(SetIndex).Standard.at(ProbeIndex));
 }

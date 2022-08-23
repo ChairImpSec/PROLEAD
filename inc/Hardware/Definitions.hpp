@@ -282,6 +282,7 @@ namespace Hardware
         std::vector<Hardware::ProbePositionStruct> ExtendedProbes;
 
         TestStruct(Hardware::SimulationStruct&);
+        int GetNumberOfStandardProbes(unsigned int);
         Hardware::ProbePositionStruct GetStandardProbe(unsigned int, unsigned int);
         Hardware::ProbePositionStruct GetExtendedProbe(unsigned int, unsigned int);
         Hardware::ProbePositionStruct GetStandardProbe(Hardware::ProbingSetStruct&, unsigned int);

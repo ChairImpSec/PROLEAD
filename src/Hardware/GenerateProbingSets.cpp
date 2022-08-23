@@ -41,15 +41,15 @@ void Hardware::GenerateProbingSets::All(Hardware::SettingsStruct& Settings, Hard
 void Hardware::GenerateProbingSets::GenerateProbes(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
     int CycleIndex = 0, GlitchIndex = 0, ProbeIndex = 0;
 
-    std::cout << "Generate list of standard probes..." << std::flush;
+    std::cout << "Generate list of standard probes from " << Simulation.NumberOfProbes << " standard probe locations..." << std::flush;
     for (CycleIndex = 0; CycleIndex < Simulation.NumberOfTestClockCycles; CycleIndex++){ 
         for (ProbeIndex = 0; ProbeIndex < Simulation.NumberOfProbes; ProbeIndex++){
             Test.StandardProbes.emplace_back(ProbeIndex, Simulation.TestClockCycles[CycleIndex] - 1);
         }
     }
-    std::cout << "done!" << std::endl;
+    std::cout << Test.StandardProbes.size() << " standard probes found...done!" << std::endl;
 
-    std::cout << "Generate list of extended probes..." << std::flush;
+    std::cout << "Generate list of extended probes from " << Simulation.NumberOfAllGlitchExtendedProbes << " extended probe locations..." << std::flush;
     for (CycleIndex = 0; CycleIndex < Simulation.NumberOfTestClockCycles; CycleIndex++){ 
         for (ProbeIndex = 0; ProbeIndex < Simulation.NumberOfProbes; ProbeIndex++){
             for (GlitchIndex = 0; GlitchIndex < Simulation.GlitchExtendedProbes[ProbeIndex].NumberOfProbes; GlitchIndex++){
@@ -63,7 +63,7 @@ void Hardware::GenerateProbingSets::GenerateProbes(Hardware::SimulationStruct& S
             }  
         }
     }
-    std::cout << "done!" << std::endl;
+    std::cout << Test.ExtendedProbes.size() << " extended probes found...done!" << std::endl;
 }
 
 void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
@@ -72,9 +72,16 @@ void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Setti
     size_t ProbeIndex = 0;
 
 	// Set the bitmask to the first possible probe combination
-    std::vector<unsigned int> Combination(Simulation.TestOrder);
-	std::vector<bool> CombinationBitmask(Test.StandardProbes.size(), false);
-	std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);    
+    std::vector<unsigned int> Combination;
+    std::vector<bool> CombinationBitmask(Test.StandardProbes.size(), false);
+
+    if (Simulation.TestOrder > (int)Test.StandardProbes.size()){
+        Combination.resize(Test.StandardProbes.size());
+        std::fill(CombinationBitmask.begin(), CombinationBitmask.end(), true);   
+    }else{
+        Combination.resize(Simulation.TestOrder);
+        std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);    
+    }
 
     do{
         CombinationIndex = 0;
@@ -123,8 +130,8 @@ bool Hardware::GenerateProbingSets::InDistance(Hardware::SettingsStruct& Setting
 
 void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
     std::cout << "Generate univariate probing sets..." << std::flush;
-	int CycleIndex = 0, CombinationIndex = 0;
-    size_t ProbeIndex = 0;
+	int CycleIndex = 0;
+    size_t CombinationIndex = 0, ProbeIndex = 0;
 
     // Fast variant for first order
     if (Simulation.TestOrder == 1){
@@ -163,7 +170,7 @@ void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simul
                         CombinationIndex++;
                     }
 
-                    if (CombinationIndex == Simulation.TestOrder){
+                    if (CombinationIndex == Combination.size()){
                         break;
                     }
                 }
@@ -191,7 +198,7 @@ void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulatio
 
     // Extend all standard probes of a probing set
     for (SetIndex = Start; SetIndex < End; SetIndex++){
-        for (ProbeIndex = 0; ProbeIndex < Simulation.TestOrder; ProbeIndex++){
+        for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
             for (GlitchIndex = 0; GlitchIndex < Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex, ProbeIndex).Probe].NumberOfProbes; GlitchIndex++){
                 ExtendedProbe.Probe = Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex, ProbeIndex).Probe].Probes[GlitchIndex];
                 ExtendedProbe.Cycle = Test.GetStandardProbe(SetIndex, ProbeIndex).Cycle;
@@ -252,6 +259,8 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
         std::cout << "Remove subsets of probing sets..." << std::flush;
 
         if ((Simulation.TestMultivariate != 0) && (Simulation.NumberOfTestClockCycles > 1) && (Simulation.TestOrder != 1)){
+            std::cout << "Setting multivariate case..." << std::flush;
+
             for (LargerIndex = Start; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
                 if (!Test.ProbingSet.at(LargerIndex).Traces){      
                     for (SmallerIndex = LargerIndex + 1; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
@@ -264,6 +273,8 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
                 }
             }   
         }else{
+            std::cout << "Setting univariate case..." << std::flush;
+
             // In the univariate case we only compare probing sets with the same clock cycle
             size_t Index = 0;
 
@@ -293,28 +304,30 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
                     }
                 }
             }else{
-                std::vector<std::vector<unsigned int>> ThreadList(Settings.Max_no_of_Threads, std::vector<unsigned int>(Test.ProbingSet.size(),0));
-                int ThreadIndex;
+                if (Test.ProbingSet.size() > 1){
+                    std::vector<std::vector<unsigned int>> ThreadList(Settings.Max_no_of_Threads, std::vector<unsigned int>(Test.ProbingSet.size(),0));
+                    int ThreadIndex;
 
-                #pragma omp parallel for schedule(guided) private(ThreadIndex)
-                for (LargerIndex = 0; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
-                    ThreadIndex = omp_get_thread_num();
+                    #pragma omp parallel for schedule(guided) private(ThreadIndex)
+                    for (LargerIndex = 0; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
+                        ThreadIndex = omp_get_thread_num();
 
-                    if (!ThreadList.at(ThreadIndex).at(LargerIndex)){ 
-                        for (SmallerIndex = LargerIndex + 1; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
-                            if ((Test.ProbingSet.at(LargerIndex).Extension.size() > Test.ProbingSet.at(SmallerIndex).Extension.size()) && (Test.ProbingSet.at(LargerIndex).Extension.back() <= Test.ProbingSet.at(SmallerIndex).Extension.back()) && (!ThreadList.at(ThreadIndex).at(SmallerIndex))){
-                                if (std::includes(Test.ProbingSet.at(LargerIndex).Extension.begin(), Test.ProbingSet.at(LargerIndex).Extension.end(), Test.ProbingSet.at(SmallerIndex).Extension.begin(), Test.ProbingSet.at(SmallerIndex).Extension.end(), std::greater<unsigned int>())){
-                                    ThreadList.at(ThreadIndex).at(SmallerIndex) |= 1;
+                        if (!ThreadList.at(ThreadIndex).at(LargerIndex)){ 
+                            for (SmallerIndex = LargerIndex + 1; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
+                                if ((Test.ProbingSet.at(LargerIndex).Extension.size() > Test.ProbingSet.at(SmallerIndex).Extension.size()) && (Test.ProbingSet.at(LargerIndex).Extension.back() <= Test.ProbingSet.at(SmallerIndex).Extension.back()) && (!ThreadList.at(ThreadIndex).at(SmallerIndex))){
+                                    if (std::includes(Test.ProbingSet.at(LargerIndex).Extension.begin(), Test.ProbingSet.at(LargerIndex).Extension.end(), Test.ProbingSet.at(SmallerIndex).Extension.begin(), Test.ProbingSet.at(SmallerIndex).Extension.end(), std::greater<unsigned int>())){
+                                        ThreadList.at(ThreadIndex).at(SmallerIndex) |= 1;
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                for (LargerIndex = 0; LargerIndex < (size_t)Settings.Max_no_of_Threads; LargerIndex++){
-                    for (SmallerIndex = 0; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
-                        if (ThreadList.at(LargerIndex).at(SmallerIndex)){
-                            Test.ProbingSet.at(SmallerIndex).Traces |= 1;
+                    for (LargerIndex = 0; LargerIndex < (size_t)Settings.Max_no_of_Threads; LargerIndex++){
+                        for (SmallerIndex = 0; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
+                            if (ThreadList.at(LargerIndex).at(SmallerIndex)){
+                                Test.ProbingSet.at(SmallerIndex).Traces |= 1;
+                            }
                         }
                     }
                 }

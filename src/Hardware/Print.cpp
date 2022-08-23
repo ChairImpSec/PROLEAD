@@ -398,8 +398,8 @@ void Hardware::Print::ProbeGenerationSettings(Hardware::SettingsStruct& Settings
     // Standard, Extended, Order, Distance, Report, ProbingSet, Probes
     std::array<std::string, 7> TableColumn;
 
-    TableColumn.at(0) = std::to_string(Simulation.NumberOfProbes);
-    TableColumn.at(1) = std::to_string(Simulation.NumberOfAllGlitchExtendedProbes);
+    TableColumn.at(0) = std::to_string(Test.StandardProbes.size());
+    TableColumn.at(1) = std::to_string(Test.ExtendedProbes.size());
     TableColumn.at(2) = std::to_string(Simulation.TestOrder);
     TableColumn.at(3) = std::to_string(Settings.MaxDistanceMultivariet);
     TableColumn.at(4) = std::to_string(Settings.Max_No_ReportEntries);
@@ -465,8 +465,8 @@ unsigned int Hardware::Print::EvaluationSettings(Hardware::SimulationStruct& Sim
 	for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
         Space = 1;
 
-        for (ProbeIndex = 0; ProbeIndex < Simulation.TestOrder; ProbeIndex++){
-            if (ProbeIndex == (Simulation.TestOrder - 1)){
+        for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
+            if (ProbeIndex == (Test.GetNumberOfStandardProbes(SetIndex) - 1)){
 				std::sprintf(cycle, " (%d)  ", Test.GetStandardProbe(SetIndex, ProbeIndex).Cycle + 1);
             }else{
 				std::sprintf(cycle, " (%d),  ", Test.GetStandardProbe(SetIndex, ProbeIndex).Cycle + 1);
@@ -550,11 +550,11 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
     }
 
     if (MaximumAlpha > DeletedAlpha){
-        for (ProbeIndex = 0; ProbeIndex < Simulation.TestOrder; ProbeIndex++){
+        for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(MaximumSetIndex); ProbeIndex++){
             Probe = Simulation.ProbeName[Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Probe];
             Cycle = std::to_string(Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Cycle + 1);
 
-            if (ProbeIndex == (Simulation.TestOrder-1)){
+            if (ProbeIndex == (Test.GetNumberOfStandardProbes(MaximumSetIndex) - 1)){
                 ProbingSet += Probe + " (" + Cycle + ")";
             }else{
                 ProbingSet += Probe + " (" + Cycle + "), ";
@@ -652,8 +652,8 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
         if (MaximumProbingSetPerCycleSet.at(Simulation.TestClockCycles[CycleIndex] - 1)){
             Report << "Cycle " << Simulation.TestClockCycles[CycleIndex] << ": @[";
 
-            for (ProbeIndex = 0; ProbeIndex < (unsigned int)Simulation.TestOrder; ProbeIndex++){
-                if (ProbeIndex == (unsigned int)(Simulation.TestOrder - 1)){
+            for (ProbeIndex = 0; ProbeIndex < (unsigned int)Test.GetNumberOfStandardProbes(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)); ProbeIndex++){
+                if (ProbeIndex == (unsigned int)(Test.GetNumberOfStandardProbes(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)) - 1)){
                     Report << Simulation.ProbeName[Test.GetStandardProbe(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1), ProbeIndex).Probe] << "(" << (Test.GetStandardProbe(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1), ProbeIndex).Cycle + 1) << ")]";
                 }else{
                     Report << Simulation.ProbeName[Test.GetStandardProbe(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1), ProbeIndex).Probe] << "(" << (Test.GetStandardProbe(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1), ProbeIndex).Cycle + 1) << "), ";
@@ -689,8 +689,8 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
         
         Report << "@[";
 
-	    for (ProbeIndex = 0; ProbeIndex < (unsigned int)Simulation.TestOrder; ProbeIndex++){
-            if (ProbeIndex == (unsigned int)(Simulation.TestOrder - 1)){
+	    for (ProbeIndex = 0; ProbeIndex < (unsigned int)Test.GetNumberOfStandardProbes(MaximumSetIndex); ProbeIndex++){
+            if (ProbeIndex == (unsigned int)(Test.GetNumberOfStandardProbes(MaximumSetIndex) - 1)){
                 Report << Simulation.ProbeName[Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Probe] << "(" << (Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Cycle + 1) << ")]";
             }else{
                 Report << Simulation.ProbeName[Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Probe] << "(" << (Test.GetStandardProbe(MaximumSetIndex, ProbeIndex).Cycle + 1) << "), ";

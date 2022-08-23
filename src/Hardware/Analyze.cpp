@@ -89,11 +89,11 @@ void Hardware::Analyze::RobustProbingSecurity(Hardware::LibraryStruct& Library, 
                             Alpha = Test.ProbingSet.at(SetIndex).Probability;
                             ProbingSet = "";
 
-                            for (ProbeIndex = 0; ProbeIndex < Simulation.TestOrder; ProbeIndex++){
+                            for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
                                 Probe = Simulation.ProbeName[Test.GetStandardProbe(SetIndex, ProbeIndex).Probe];
                                 Cycle = std::to_string(Test.GetStandardProbe(SetIndex, ProbeIndex).Cycle + 1);
 
-                                if (ProbeIndex == (Simulation.TestOrder-1)){
+                                if (ProbeIndex == (Test.GetNumberOfStandardProbes(SetIndex) - 1)){
                                     ProbingSet += Probe + " (" + Cycle + ")";
                                 }else{
                                     ProbingSet += Probe + " (" + Cycle + "), ";
