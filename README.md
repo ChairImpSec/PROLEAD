@@ -2,7 +2,9 @@
 This repository contains the source code for the paper <a href="https://eprint.iacr.org/2022/965">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a>.
 For a quick start, we recommend to watch the quick start guide below:
 
-[![Video](https://img.youtube.com/vi/xzhVpo0fbNY/0.jpg)](https://www.youtube.com/watch?v=xzhVpo0fbNY)
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=xzhVpo0fbNY"><img src="https://img.youtube.com/vi/xzhVpo0fbNY/0.jpg" alt="PROLEAD#1 - Quick Start Guide"></a>
+</div>
 
 ## Documentation
 All information about the features and use of PROLEAD can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki">Wiki</a>.
