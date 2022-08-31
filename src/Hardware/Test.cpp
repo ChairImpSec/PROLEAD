@@ -1,6 +1,6 @@
 #include "Hardware/Test.hpp"
 
-void Hardware::Test::All(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, char CompactDistributions, unsigned int ProbeStepSize){
+void Hardware::Test::All(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, char CompactDistributions){
     uint64_t     StepSimulationIndex = 0;
 
     for (StepSimulationIndex = 0; StepSimulationIndex < Simulation.NumberOfStepSimulations; StepSimulationIndex++){
@@ -10,7 +10,7 @@ void Hardware::Test::All(Hardware::SettingsStruct& Settings, Hardware::Simulatio
 	if (CompactDistributions){
         Hardware::Test::CompactTest(Simulation, Test);
 	}else{
-        Hardware::Test::NormalTest(Settings, Simulation, Test, ProbeStepSize);
+        Hardware::Test::NormalTest(Settings, Simulation, Test);
 	}
 }
 
@@ -52,12 +52,12 @@ void Hardware::Test::CompactTableUpdate(Hardware::SimulationStruct& Simulation, 
 	}
 }
 
-void Hardware::Test::NormalTest(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int ProbeStepSize){
+void Hardware::Test::NormalTest(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
 	size_t SetIndex = 0;
     int ThreadIndex;
 
     #pragma omp parallel for schedule(guided) private(ThreadIndex)
-	for (SetIndex = 0; SetIndex < ProbeStepSize; SetIndex++){
+	for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
         ThreadIndex = omp_get_thread_num();
 		Hardware::Test::NormalTableUpdate(Simulation, Test, Test.ProbingSet.at(SetIndex), Test.TableEntries.at(ThreadIndex));
         Hardware::Test::GTest(Simulation, Test.ProbingSet.at(SetIndex), Test.SumOverGroup);
@@ -123,6 +123,7 @@ void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& Simulation, H
                 ProbingSet.OnlyOneEntry.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back()).push_back(Subkey);
                 NewGroupElements.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back())++;
             }
+
         }else{
             for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
                 if (ProbingSet.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(0).Key.back()).size()){

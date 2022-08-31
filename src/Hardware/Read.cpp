@@ -2584,7 +2584,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 			SettingsFileCheckList |= (1 << 22);
 		}
-		else if (!strcmp(Str1, "no_of_probe_steps"))
+		else if (!strcmp(Str1, "no_of_probing_sets_per_step"))
 		{
 			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 			templl = strtoll(Str1, &tmptr, 10);
@@ -2594,10 +2594,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				free(Str1);
 				free(Str2);
 				free(Str3);
-                throw std::runtime_error("Given value for \"no_of_probe_steps\" is not valid, should be greater than zero!");
+                throw std::runtime_error("Given value for \"no_of_probing_sets_per_step\" is not valid, should be greater than zero!");
 			}
 
-            Settings->NumberOfProbeSteps = templl;
+            Settings->ProbeStepSize = templl;
 			SettingsFileCheckList |= (1 << 23);
 		}
 		else if (!strcmp(Str1, "effect_size"))
@@ -3010,8 +3010,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 	}
 
     if (!(SettingsFileCheckList & (1 << 23))){
-        Settings->NumberOfProbeSteps = 1;
-        Warnings.push_back("Warning \"no_of_probe_steps\" is not specified. Default \"no_of_probe_steps\" = 1 is taken!");
+        Settings->ProbeStepSize = UINT_MAX;
+        Warnings.push_back("Warning \"no_of_probing_sets_per_step\" is not specified. Default \"no_of_probing_sets_per_step\" = all is taken!");
     }
 
 	if (!(SettingsFileCheckList & (1 << 24))) {

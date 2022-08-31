@@ -17,11 +17,11 @@ namespace Hardware
         void CompactTableUpdate(Hardware::SimulationStruct&, unsigned int, Hardware::TestStruct&, std::vector<int>&);
         void CompactTest(Hardware::SimulationStruct&, Hardware::TestStruct&);
         void NormalTableUpdate(Hardware::SimulationStruct&, Hardware::TestStruct&, Hardware::ProbingSetStruct&, std::vector<TableEntryStruct>&);
-        void NormalTest(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::TestStruct&, unsigned int);
+        void NormalTest(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::TestStruct&);
         double GetGValue(Hardware::SimulationStruct&, Hardware::ProbingSetStruct&, std::vector<double>, unsigned int, unsigned int&);
         void Traces(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::ProbingSetStruct&);
         void GTest(Hardware::SimulationStruct&, Hardware::ProbingSetStruct&, std::vector<double>);
         int SearchKey(std::vector<std::vector<unsigned char>>&, std::vector<unsigned char>&, unsigned int);
-        void All(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::TestStruct&, char, unsigned int);
+        void All(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::TestStruct&, char);
     }
 }

@@ -123,7 +123,7 @@ namespace Hardware
         char       CompactDistributions;
         char       MinimizeProbeSets;
         char       RemoveProbingSets;
-        int        NumberOfProbeSteps;
+        unsigned int ProbeStepSize;
         int**      Group_Values = NULL;
         int*       MaxNumberOfSharesGroupValues;
 
@@ -255,9 +255,10 @@ namespace Hardware
         double                           Probability;
         unsigned int                     Traces;
 
+
         ProbingSetStruct(unsigned int);
         ProbingSetStruct(std::vector<unsigned int>&);
-
+        bool Covers(Hardware::ProbingSetStruct&);
         int FindEntry(Hardware::TableEntryStruct&, unsigned int);
     };
 

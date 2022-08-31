@@ -1,40 +1,25 @@
 #include "Hardware/GenerateProbingSets.hpp"
 
 void Hardware::GenerateProbingSets::All(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
-	// Generate all possible probing sets
-    std::cout << "Generate all possible probing sets for order " << Simulation.TestOrder << "..." << std::endl;
-    Hardware::GenerateProbingSets::GenerateProbes(Simulation, Test);
+    Hardware::GenerateProbingSets::Extend(Simulation, Test);
 
-    if ((Simulation.TestMultivariate != 0) && (Simulation.NumberOfTestClockCycles > 1) && (Simulation.TestOrder != 1)){
-        Hardware::GenerateProbingSets::Multivariate(Settings, Simulation, Test);
-    }else{
-        Hardware::GenerateProbingSets::Univariate(Simulation, Test);
-    }
+    // If the same probe occurs multiple times in one probing set, we remove it.
+    // This leads to smaller contingency tables.
+    Hardware::GenerateProbingSets::RemoveDuplicatedProbes(Test);
 
-    std::cout << "done! " << Test.ProbingSet.size() << " probing sets generated!" << std::endl;
-
-    if (Settings.NumberOfProbeSteps == 1 || Settings.MinimizeProbeSets || Settings.CompactDistributions){
-        std::cout << "Extend all probing sets..." << std::flush;
-        Hardware::GenerateProbingSets::Extend(Simulation, Test, 0, Test.ProbingSet.size());
-        std::cout << "done!" << std::endl;
-        
-        std::cout << "Remove duplicated probes in the sets..." << std::flush;
-        Hardware::GenerateProbingSets::RemoveDuplicatedProbes(Test, 0, Test.ProbingSet.size());
-        std::cout << "done!" << std::endl;
-
-        Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Settings, Simulation, Test, 0, Test.ProbingSet.size());
-
-        if (Settings.NumberOfProbeSteps > 1 && Settings.MinimizeProbeSets && !Settings.CompactDistributions){
-            for (size_t SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-                Test.ProbingSet.at(SetIndex).Extension.clear();
-            }
-        }
-    }
+    // Moreover, we remove probing sets which are fully convered by another probing set.
+    Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Settings, Simulation, Test);
 
     if (Settings.CompactDistributions){
+        // We assume, that the contingency tables in compact mode encompass a small number of entries
+        // Therefore, we pre-allocate memory for all entries of the table. This leads to a faster evaluation. 
         Hardware::GenerateProbingSets::InitializeCompactDistributions(Settings, Simulation, Test);
     }else{
         Test.TableEntries.resize(Settings.Max_no_of_Threads, std::vector<Hardware::TableEntryStruct>(Simulation.NumberOfStepSimulations, TableEntryStruct(1)));
+        
+        for (size_t SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
+            Test.ProbingSet.at(SetIndex).OnlyOneEntry.resize(Simulation.NumberOfGroups, std::vector<std::vector<std::vector<unsigned char>>>(256));
+        }
     }
 }
 
@@ -66,15 +51,9 @@ void Hardware::GenerateProbingSets::GenerateProbes(Hardware::SimulationStruct& S
     std::cout << Test.ExtendedProbes.size() << " extended probes found...done!" << std::endl;
 }
 
-void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
-    std::cout << "Generate multivariate probing sets..." << std::flush;
-    int CombinationIndex = 0;
-    size_t ProbeIndex = 0;
-
-	// Set the bitmask to the first possible probe combination
-    std::vector<unsigned int> Combination;
-    std::vector<bool> CombinationBitmask(Test.StandardProbes.size(), false);
-
+void Hardware::GenerateProbingSets::InitializeMultivariateProbeCombinations(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, std::vector<unsigned int>& Combination, std::vector<bool>& CombinationBitmask){
+    // Cover the case that the order is higher than the number of standard probes
+    // In this case, only one probing set including all standard probes is generated
     if (Simulation.TestOrder > (int)Test.StandardProbes.size()){
         Combination.resize(Test.StandardProbes.size());
         std::fill(CombinationBitmask.begin(), CombinationBitmask.end(), true);   
@@ -82,28 +61,18 @@ void Hardware::GenerateProbingSets::Multivariate(Hardware::SettingsStruct& Setti
         Combination.resize(Simulation.TestOrder);
         std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);    
     }
+}
 
-    do{
-        CombinationIndex = 0;
-
-        for (ProbeIndex = 0; ProbeIndex < Test.StandardProbes.size(); ProbeIndex++){
-            if (CombinationBitmask.at(ProbeIndex)){
-                Combination.at(CombinationIndex) = ProbeIndex;
-                CombinationIndex++;
-            }
-
-            if (CombinationIndex == Simulation.TestOrder){
-                break;
-            }
-        }
-
-        // Check if the maximum distance over time is in the allowed range
-        if (Hardware::GenerateProbingSets::InDistance(Settings, Test, Combination)){
-            Test.ProbingSet.emplace_back(Combination);
-        }
-    } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end()));   
-
-    std::cout << "done!" << std::endl;  
+void Hardware::GenerateProbingSets::InitializeUnivariateProbeCombinations(Hardware::SimulationStruct& Simulation, std::vector<unsigned int>& Combination, std::vector<bool>& CombinationBitmask){
+    // Cover the case that the order is higher than the number of different probe positions
+    // In this case, multiple probing set with probes on all positions are generated
+    if (Simulation.TestOrder > Simulation.NumberOfProbes){
+        Combination.resize(Simulation.NumberOfProbes);
+        std::fill(CombinationBitmask.begin(), CombinationBitmask.end(), true);
+    }else{
+        Combination.resize(Simulation.TestOrder);
+        std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);
+    }
 }
 
 bool Hardware::GenerateProbingSets::InDistance(Hardware::SettingsStruct& Settings, Hardware::TestStruct& Test, std::vector<unsigned int>& ProbingSet){
@@ -128,62 +97,7 @@ bool Hardware::GenerateProbingSets::InDistance(Hardware::SettingsStruct& Setting
 	}
 }
 
-void Hardware::GenerateProbingSets::Univariate(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
-    std::cout << "Generate univariate probing sets..." << std::flush;
-	int CycleIndex = 0;
-    size_t CombinationIndex = 0, ProbeIndex = 0;
-
-    // Fast variant for first order
-    if (Simulation.TestOrder == 1){
-        std::cout << "Setting first-order variant..." <<std::flush;
-        for (ProbeIndex = 0; ProbeIndex < Test.StandardProbes.size(); ProbeIndex++){
-            Test.ProbingSet.emplace_back(ProbeIndex);    
-        }
-
-    // Slower variant for higher orders    
-    }else{
-        std::cout << "Setting higher-order variant..." <<std::flush;
-
-        // Set the bitmask to the first possible probe combination
-        std::vector<unsigned int> Combination;
-        if (Simulation.TestOrder > Simulation.NumberOfProbes){
-            Combination.resize(Simulation.NumberOfProbes);
-        }else{
-            Combination.resize(Simulation.TestOrder);
-        }
-
-        for (CycleIndex = 0; CycleIndex < Simulation.NumberOfTestClockCycles; CycleIndex++){
-            std::vector<bool> CombinationBitmask(Simulation.NumberOfProbes, false);
-
-            if (Simulation.TestOrder > Simulation.NumberOfProbes){
-                std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.NumberOfProbes, true);
-            }else{
-                std::fill(CombinationBitmask.begin(), CombinationBitmask.begin() + Simulation.TestOrder, true);
-            }
-
-            do{
-                CombinationIndex = 0;
-                    
-                for (ProbeIndex = 0; ProbeIndex < (size_t)Simulation.NumberOfProbes; ProbeIndex++){
-                    if (CombinationBitmask.at(ProbeIndex)){
-                        Combination.at(CombinationIndex) = CycleIndex * Simulation.NumberOfProbes + ProbeIndex;
-                        CombinationIndex++;
-                    }
-
-                    if (CombinationIndex == Combination.size()){
-                        break;
-                    }
-                }
-
-                Test.ProbingSet.emplace_back(Combination);
-            } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end())); 
-        }
-    }
-
-    std::cout << "done!" << std::endl;
-}
-
-void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int Start, unsigned int End){
+void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
     int GlitchIndex = 0, ProbeIndex = 0;
     size_t SetIndex = 0;
 
@@ -192,12 +106,14 @@ void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulatio
     std::iterator_traits<std::vector<ProbePositionStruct>::iterator>::difference_type Index; 
     std::string ErrorMessage;
 
+    std::cout << "Extend all probing sets..." << std::flush;
+
     // Sort in a way that the smallest element has the smallest index
     std::sort(Test.ExtendedProbes.begin(), Test.ExtendedProbes.end(), [](Hardware::ProbePositionStruct& lhs, Hardware::ProbePositionStruct& rhs){return lhs < rhs;});
     Test.ExtendedProbes.erase(std::unique(Test.ExtendedProbes.begin(), Test.ExtendedProbes.end(), [](Hardware::ProbePositionStruct& lhs, Hardware::ProbePositionStruct& rhs){return lhs == rhs;}), Test.ExtendedProbes.end());
 
     // Extend all standard probes of a probing set
-    for (SetIndex = Start; SetIndex < End; SetIndex++){
+    for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
         for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
             for (GlitchIndex = 0; GlitchIndex < Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex, ProbeIndex).Probe].NumberOfProbes; GlitchIndex++){
                 ExtendedProbe.Probe = Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex, ProbeIndex).Probe].Probes[GlitchIndex];
@@ -231,27 +147,47 @@ void Hardware::GenerateProbingSets::Extend(Hardware::SimulationStruct& Simulatio
             }
         }     
     }
+
+    std::cout << "done!" << std::endl;
 }
 
-void Hardware::GenerateProbingSets::RemoveDuplicatedProbes(Hardware::TestStruct& Test, unsigned int Start, unsigned int End){
-    unsigned int SetIndex = 0;
+void Hardware::GenerateProbingSets::RemoveDuplicatedProbes(Hardware::TestStruct& Test){
+    std::cout << "Remove duplicated probes in the sets..." << std::flush;   
 
-    // Remove all probes that occur twice
-    for (SetIndex = Start; SetIndex < End; SetIndex++){
-        // Sort in a way that the smallest probe index gets the smallest index in the probing set
+    for (size_t SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
         std::sort(Test.ProbingSet.at(SetIndex).Extension.begin(), Test.ProbingSet.at(SetIndex).Extension.end(), std::greater<unsigned int>());
         Test.ProbingSet.at(SetIndex).Extension.erase(std::unique(Test.ProbingSet.at(SetIndex).Extension.begin(), Test.ProbingSet.at(SetIndex).Extension.end()), Test.ProbingSet.at(SetIndex).Extension.end());
+    } 
+
+    std::cout << "done!" << std::endl;
+}
+
+void Hardware::GenerateProbingSets::CoverWithOneProbingSet(Hardware::TestStruct& Test, unsigned int SetIndex, unsigned int Start, unsigned int End){
+    // Iterate through all probing set that should be covered by another probing set
+    for (unsigned int Index = Start; Index < End; Index++){
+        if ((SetIndex != Index) && Test.ProbingSet.at(SetIndex).Covers(Test.ProbingSet.at(Index))){
+            if (std::includes(Test.ProbingSet.at(SetIndex).Extension.begin(), Test.ProbingSet.at(SetIndex).Extension.end(), Test.ProbingSet.at(Index).Extension.begin(), Test.ProbingSet.at(Index).Extension.end(), std::greater<unsigned int>())){
+                // Traces equals one means that the probing set should be removed
+                Test.ProbingSet.at(Index).Traces = 1;
+            }
+        }
     }    
 }
 
-void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int Start, unsigned int End){
+void Hardware::GenerateProbingSets::RemoveCoveredProbingSets(Hardware::TestStruct& Test, unsigned int Start, unsigned int End){    
+    // Iterate through all probing set that should cover another probing set
+    for (unsigned int Index = Start; Index < End; Index++){
+        Hardware::GenerateProbingSets::CoverWithOneProbingSet(Test, Index, Start, End);
+    }    
+}
+
+void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
     std::cout << "Remove duplicated probing sets..." << std::flush;
-    size_t LargerIndex = 0, SmallerIndex = 0;
-    
-    std::sort(Test.ProbingSet.begin() + Start, Test.ProbingSet.begin() + End, [](Hardware::ProbingSetStruct& lhs, Hardware::ProbingSetStruct& rhs){return lhs > rhs;});
+    size_t Index = 0;
     
     // Remove all probing sets that occur twice
-    Test.ProbingSet.erase(std::unique(Test.ProbingSet.begin() + Start, Test.ProbingSet.begin() + End, [](Hardware::ProbingSetStruct& lhs, Hardware::ProbingSetStruct& rhs){return lhs == rhs;}), Test.ProbingSet.begin() + End);
+    std::sort(Test.ProbingSet.begin(), Test.ProbingSet.end(), [](Hardware::ProbingSetStruct& lhs, Hardware::ProbingSetStruct& rhs){return lhs < rhs;});
+    Test.ProbingSet.erase(std::unique(Test.ProbingSet.begin(), Test.ProbingSet.end(), [](Hardware::ProbingSetStruct& lhs, Hardware::ProbingSetStruct& rhs){return lhs == rhs;}), Test.ProbingSet.end());
     std::cout << "done! " << Test.ProbingSet.size() << " probing sets remain!" << std::endl;
 
     // Remove all probing sets that are completely covered by another probing set
@@ -260,76 +196,29 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
 
         if ((Simulation.TestMultivariate != 0) && (Simulation.NumberOfTestClockCycles > 1) && (Simulation.TestOrder != 1)){
             std::cout << "Setting multivariate case..." << std::flush;
-
-            for (LargerIndex = Start; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
-                if (!Test.ProbingSet.at(LargerIndex).Traces){      
-                    for (SmallerIndex = LargerIndex + 1; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
-                        if ((!Test.ProbingSet.at(SmallerIndex).Traces) && (Test.ProbingSet.at(LargerIndex).Extension.size() > Test.ProbingSet.at(SmallerIndex).Extension.size()) && (Test.ProbingSet.at(LargerIndex).Extension.back() <= Test.ProbingSet.at(SmallerIndex).Extension.back())){
-                            if (std::includes(Test.ProbingSet.at(LargerIndex).Extension.begin(), Test.ProbingSet.at(LargerIndex).Extension.end(), Test.ProbingSet.at(SmallerIndex).Extension.begin(), Test.ProbingSet.at(SmallerIndex).Extension.end(), std::greater<unsigned int>())){
-                                Test.ProbingSet.at(SmallerIndex).Traces |= 1;
-                            }
-                        }
-                    } 
-                }
-            }   
+            Hardware::GenerateProbingSets::RemoveCoveredProbingSets(Test, 0, Test.ProbingSet.size()); 
         }else{
             std::cout << "Setting univariate case..." << std::flush;
-
-            // In the univariate case we only compare probing sets with the same clock cycle
-            size_t Index = 0;
-
             if (Simulation.NumberOfTestClockCycles != 1){
                 std::vector<unsigned int> StartIndices(1,0), EndIndices;
 
-                for (LargerIndex = Start + 1; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
-                    if (Test.ExtendedProbes.at(Test.ProbingSet.at(LargerIndex - 1).Extension.back()).Cycle != Test.ExtendedProbes.at(Test.ProbingSet.at(LargerIndex).Extension.back()).Cycle){
-                        StartIndices.push_back(LargerIndex);
-                        EndIndices.push_back(LargerIndex);
+                for (Index = 1; Index < Test.ProbingSet.size(); Index++){
+                    if (Test.ExtendedProbes.at(Test.ProbingSet.at(Index - 1).Extension.back()).Cycle != Test.ExtendedProbes.at(Test.ProbingSet.at(Index).Extension.back()).Cycle){                        
+                        StartIndices.push_back(Index);
+                        EndIndices.push_back(Index);
                     }
                 }
                 EndIndices.push_back(Test.ProbingSet.size());
 
+                // Each set of probing sets with the same clock cycle can be minimized in parallel
+                // As they are independend, the runtime is decreased
                 #pragma omp parallel for schedule(guided)
                 for (Index = 0; Index < StartIndices.size(); Index++){
-                    for (LargerIndex = StartIndices.at(Index); LargerIndex < EndIndices.at(Index); LargerIndex++){
-                        if (!Test.ProbingSet.at(LargerIndex).Traces){ 
-                            for (SmallerIndex = LargerIndex + 1; SmallerIndex < EndIndices.at(Index); SmallerIndex++){
-                                if ((Test.ProbingSet.at(LargerIndex).Extension.size() > Test.ProbingSet.at(SmallerIndex).Extension.size()) && (Test.ProbingSet.at(LargerIndex).Extension.back() <= Test.ProbingSet.at(SmallerIndex).Extension.back()) && (!Test.ProbingSet.at(SmallerIndex).Traces)){
-                                    if (std::includes(Test.ProbingSet.at(LargerIndex).Extension.begin(), Test.ProbingSet.at(LargerIndex).Extension.end(), Test.ProbingSet.at(SmallerIndex).Extension.begin(), Test.ProbingSet.at(SmallerIndex).Extension.end(), std::greater<unsigned int>())){
-                                        Test.ProbingSet.at(SmallerIndex).Traces |= 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    Hardware::GenerateProbingSets::RemoveCoveredProbingSets(Test, StartIndices.at(Index), EndIndices.at(Index));
                 }
             }else{
                 if (Test.ProbingSet.size() > 1){
-                    std::vector<std::vector<unsigned int>> ThreadList(Settings.Max_no_of_Threads, std::vector<unsigned int>(Test.ProbingSet.size(),0));
-                    int ThreadIndex;
-
-                    #pragma omp parallel for schedule(guided) private(ThreadIndex)
-                    for (LargerIndex = 0; LargerIndex < Test.ProbingSet.size(); LargerIndex++){
-                        ThreadIndex = omp_get_thread_num();
-
-                        if (!ThreadList.at(ThreadIndex).at(LargerIndex)){ 
-                            for (SmallerIndex = LargerIndex + 1; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
-                                if ((Test.ProbingSet.at(LargerIndex).Extension.size() > Test.ProbingSet.at(SmallerIndex).Extension.size()) && (Test.ProbingSet.at(LargerIndex).Extension.back() <= Test.ProbingSet.at(SmallerIndex).Extension.back()) && (!ThreadList.at(ThreadIndex).at(SmallerIndex))){
-                                    if (std::includes(Test.ProbingSet.at(LargerIndex).Extension.begin(), Test.ProbingSet.at(LargerIndex).Extension.end(), Test.ProbingSet.at(SmallerIndex).Extension.begin(), Test.ProbingSet.at(SmallerIndex).Extension.end(), std::greater<unsigned int>())){
-                                        ThreadList.at(ThreadIndex).at(SmallerIndex) |= 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    for (LargerIndex = 0; LargerIndex < (size_t)Settings.Max_no_of_Threads; LargerIndex++){
-                        for (SmallerIndex = 0; SmallerIndex < Test.ProbingSet.size(); SmallerIndex++){
-                            if (ThreadList.at(LargerIndex).at(SmallerIndex)){
-                                Test.ProbingSet.at(SmallerIndex).Traces |= 1;
-                            }
-                        }
-                    }
+                    Hardware::GenerateProbingSets::RemoveCoveredProbingSets(Test, 0, Test.ProbingSet.size()); 
                 }
             }
         }
@@ -355,10 +244,8 @@ void Hardware::GenerateProbingSets::InitializeCompactDistributions(Hardware::Set
 		}
 	}
 
-	//----------------------
     Test.TempProbeValue.resize(Settings.Max_no_of_Threads, std::vector<int>(Test.ProbingSet.size(), 0));
 
-	//-------------------
 	TempClockProbeTable = (int**)malloc(Simulation.NumberOfClockCycles * sizeof(int*));
 	for (ClockCycle = 0;ClockCycle < Simulation.NumberOfClockCycles; ClockCycle++)
 	{

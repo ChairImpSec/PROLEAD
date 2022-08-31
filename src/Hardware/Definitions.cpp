@@ -21,11 +21,29 @@ Hardware::TableEntryStruct::TableEntryStruct(Hardware::SimulationStruct& Simulat
 Hardware::ProbingSetStruct::ProbingSetStruct(unsigned int p){
 	Standard.push_back(p);
 	Probability = 0.0;
+	Traces = 0;
 }
 
 Hardware::ProbingSetStruct::ProbingSetStruct(std::vector<unsigned int>& Probe){
 	Standard = {Probe.begin(), Probe.end()};
 	Probability = 0.0;
+	Traces = 0;
+}
+
+bool Hardware::ProbingSetStruct::Covers(Hardware::ProbingSetStruct& ProbingSet){
+	if (this->Traces || ProbingSet.Traces){
+		return false;
+	}else{
+		if (this->Extension.size() <= ProbingSet.Extension.size()){
+			return false;
+		}else{
+			if ((this->Extension.front() >= ProbingSet.Extension.front()) && (this->Extension.back() <= ProbingSet.Extension.back())){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
 }
 
 int Hardware::ProbingSetStruct::FindEntry(Hardware::TableEntryStruct& Entry, unsigned int IgnoredEntries){

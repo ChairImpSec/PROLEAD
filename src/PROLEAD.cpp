@@ -4,7 +4,6 @@
 #include <string>
 #include <cinttypes>
 
-#include "Util/pch.h"
 #include "Util/CommandLineParameter.hpp"
 #include "Hardware/Execute.hpp"
 

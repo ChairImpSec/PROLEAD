@@ -528,7 +528,7 @@ unsigned int Hardware::Print::MemoryConsumption(){
     return ram;
 }
 
-void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, double& DeletedAlpha, std::string& DeletedProbingSet, double ElapsedTimePeriod, unsigned int ProbeStepSize, unsigned int Space){
+void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, double& DeletedAlpha, std::string& DeletedProbingSet, double ElapsedTimePeriod, unsigned int Space){
     std::array<std::string, 6> TableColumn;
     std::string Probe, Cycle, ProbingSet = "";
     double MaximumAlpha = DeletedAlpha;
@@ -538,7 +538,7 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
     size_t SetIndex;
 
     // Find the most leaking probing set and required number of traces
-	for (SetIndex = 0; SetIndex < ProbeStepSize; SetIndex++){
+	for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
 		if (Test.ProbingSet.at(SetIndex).Probability > MaximumAlpha){
             MaximumAlpha = Test.ProbingSet.at(SetIndex).Probability;
             MaximumSetIndex = SetIndex;
@@ -608,13 +608,13 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
     Hardware::Print::MemoryConsumption();
 }
 
-void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int ProbeStepIndex, unsigned int ProbeStepSize, unsigned int TableWidth){
+void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int ProbeStepIndex, unsigned int TableWidth){
     std::string ReportName;
     
-    if (Settings.NumberOfProbeSteps == 1){
+    if (Settings.ProbeStepSize == UINT_MAX){
         ReportName = (std::string)Simulation.EvaluationResultFolderName + "/Report_" + std::to_string(Simulation.NumberOfProcessedSimulations) + ".dat"; 
     }else{
-        ReportName = (std::string)Simulation.EvaluationResultFolderName + "/Report_" + std::to_string(Simulation.NumberOfProcessedSimulations) + "_" + std::to_string(ProbeStepIndex) + ".dat"; 
+        ReportName = (std::string)Simulation.EvaluationResultFolderName + "/Report_" + std::to_string(Simulation.NumberOfProcessedSimulations) + "_Step_" + std::to_string(ProbeStepIndex) + ".dat"; 
     }
 
     std::ofstream Report(ReportName);
@@ -631,7 +631,7 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
     Report << "Report file after " << Simulation.NumberOfProcessedSimulations << " simulations:" << std::endl << std::endl;
     Report << "1.) Summary of most leaking (and already active) probing sets per clock cycle: " << std::endl << std::endl;
 
-    for (SetIndex = 0; SetIndex < ProbeStepSize; SetIndex++){
+    for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
         // Get the probe with the latest clock cycle of the set
         LatestClockCycle = 0;
 
@@ -682,9 +682,9 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
     Report << std::endl;
     Report << "2.) Summary of the most leakging (and already active) probing sets: " << std::endl << std::endl;
 
-    while((Counter < (unsigned int)Settings.Max_No_ReportEntries) && (Counter < ProbeStepSize))
+    while((Counter < (unsigned int)Settings.Max_No_ReportEntries) && (Counter < Test.ProbingSet.size()))
 	{
-		Maximum = std::max_element(Test.ProbingSet.begin(), Test.ProbingSet.begin() + ProbeStepSize, [](const Hardware::ProbingSetStruct& lhs, const Hardware::ProbingSetStruct& rhs){return lhs.Probability < rhs.Probability;});
+		Maximum = std::max_element(Test.ProbingSet.begin(), Test.ProbingSet.end(), [](const Hardware::ProbingSetStruct& lhs, const Hardware::ProbingSetStruct& rhs){return lhs.Probability < rhs.Probability;});
 		MaximumSetIndex = std::distance(Test.ProbingSet.begin(), Maximum);
         
         Report << "@[";

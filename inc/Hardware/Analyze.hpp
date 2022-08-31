@@ -21,5 +21,8 @@ namespace Hardware
     {
         void All(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, Hardware::TestStruct&);
         void RobustProbingSecurity(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, Hardware::TestStruct&);
+        void UnivariateRobustProbingSecurity(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, Hardware::TestStruct&, timespec&);
+        void MultivariateRobustProbingSecurity(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, Hardware::TestStruct&, timespec&);
+        void RobustProbingSecurityForSomeProbingSets(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, Hardware::TestStruct&, timespec&, unsigned int&);
     }
 }
