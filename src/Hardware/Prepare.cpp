@@ -223,7 +223,8 @@ void Hardware::Prepare::Simulation(CircuitStruct* Circuit, SettingsStruct* Setti
 	uint64_t SimulationIndex;
 
 	Simulation->EvaluationResultFolderName = (char*)malloc(Max_Name_Length);
-	strncpy(Simulation->EvaluationResultFolderName, EvaluationResultFolderName, Max_Name_Length);
+	strncpy(Simulation->EvaluationResultFolderName, EvaluationResultFolderName, Max_Name_Length - 1);
+	Simulation->EvaluationResultFolderName[Max_Name_Length - 1] = '\0';
 
 	Simulation->NumberOfProbes = Probes->NumberOfProbes;
 	Simulation->ProbeName = (char**)malloc(Probes->NumberOfProbes * sizeof(char*));
@@ -237,7 +238,8 @@ void Hardware::Prepare::Simulation(CircuitStruct* Circuit, SettingsStruct* Setti
 	for (ProbeIndex = 0;ProbeIndex < Probes->NumberOfProbes;ProbeIndex++)
 	{
 		Simulation->ProbeName[ProbeIndex] = (char*)malloc(Max_Name_Length);
-		strncpy(Simulation->ProbeName[ProbeIndex], Circuit->Signals[Probes->Probes[ProbeIndex]]->Name, Max_Name_Length);
+		strncpy(Simulation->ProbeName[ProbeIndex], Circuit->Signals[Probes->Probes[ProbeIndex]]->Name, Max_Name_Length - 1);
+		Simulation->ProbeName[ProbeIndex][Max_Name_Length - 1] = '\0';
 
 		for (ItemIndex = 0;ItemIndex < Probes->GlitchExtendedProbes[ProbeIndex].NumberOfProbes;ItemIndex++)
 			if (Simulation->GlitchExtendedProbeIndex_of_Signal[Probes->GlitchExtendedProbes[ProbeIndex].Probes[ItemIndex]] == -1)
@@ -256,7 +258,8 @@ void Hardware::Prepare::Simulation(CircuitStruct* Circuit, SettingsStruct* Setti
 			ItemIndex = Simulation->GlitchExtendedProbeIndex_of_Signal[SignalIndex];
 			Simulation->SignalIndex_of_GlitchExtendedProbe[ItemIndex] = SignalIndex;
 			Simulation->GlitchExtendedProbeName[ItemIndex] = (char*)malloc(Max_Name_Length);
-			strncpy(Simulation->GlitchExtendedProbeName[ItemIndex], Circuit->Signals[SignalIndex]->Name, Max_Name_Length);
+			strncpy(Simulation->GlitchExtendedProbeName[ItemIndex], Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
+			Simulation->GlitchExtendedProbeName[ItemIndex][Max_Name_Length - 1] = '\0';
 			//ItemIndex++;
 		}
 

@@ -51,7 +51,8 @@ int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
         CellType->Operations[i].NumberOfOperandsInClause = NULL;
         CellType->Operations[i].OperandsInClause = NULL;
 
-        strncpy(MyStr, CellType->Expresions[i], Max_Name_Length);
+        strncpy(MyStr, CellType->Expresions[i], Max_Name_Length - 1);
+        MyStr[Max_Name_Length - 1] = '\0';
 
         do
         {
@@ -86,7 +87,10 @@ int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
                 Str2[End - Start - 1] = 0;
             }
             else
-                strncpy(Str2, MyStr, Max_Name_Length);
+            {
+                strncpy(Str2, MyStr, Max_Name_Length - 1);
+                Str2[Max_Name_Length - 1] = '\0';
+	    }
 
             if (strstr(Str2, " and "))
                 OperationIndex = Operation_AND;
@@ -150,7 +154,8 @@ int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
             if (*pos != 0)
             {
                 sprintf(Start, "I%d", Intermediate + CellType->Operations[i].NumberOfClauses + 1);
-				strncpy(TempStr, End + 1, Max_Name_Length);
+				strncpy(TempStr, End + 1, Max_Name_Length - 1);
+				TempStr[Max_Name_Length - 1] = '\0';
 				strcat(MyStr, TempStr);
             }
 
@@ -233,7 +238,9 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
                     {
                         Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
 						Library->CellTypes[Library->NumberOfCellTypes]->Cases[i] = (char*)malloc(Max_Name_Length);
-                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Cases[i], Str1, Max_Name_Length);
+                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Cases[i], Str1, Max_Name_Length - 1);
+                        Library->CellTypes[Library->NumberOfCellTypes]->Cases[i][Max_Name_Length - 1] = '\0';
+                        
                     }
 
                     Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
@@ -244,7 +251,8 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
                     {
                         Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
 						Library->CellTypes[Library->NumberOfCellTypes]->Inputs[i] = (char*)malloc(Max_Name_Length);
-                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Inputs[i], Str1, Max_Name_Length);
+                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Inputs[i], Str1, Max_Name_Length - 1);
+                        Library->CellTypes[Library->NumberOfCellTypes]->Inputs[i][Max_Name_Length - 1] = '\0';
                     }
 
                     Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
@@ -255,7 +263,8 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
                     {
                         Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
 						Library->CellTypes[Library->NumberOfCellTypes]->Outputs[i] = (char*)malloc(Max_Name_Length);
-                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Outputs[i], Str1, Max_Name_Length);
+                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Outputs[i], Str1, Max_Name_Length - 1);
+                        Library->CellTypes[Library->NumberOfCellTypes]->Outputs[i][Max_Name_Length - 1] = '\0';
                     }
 
 					Library->CellTypes[Library->NumberOfCellTypes]->Expresions = (char**)malloc(Library->CellTypes[Library->NumberOfCellTypes]->NumberOfOutputs * sizeof(char*));
@@ -273,7 +282,8 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
 
                         Str1[j] = 0;
 						Library->CellTypes[Library->NumberOfCellTypes]->Expresions[i] = (char *)malloc(Max_Name_Length);
-                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Expresions[i], Str1, Max_Name_Length);
+                        strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Expresions[i], Str1, Max_Name_Length - 1);
+                        Library->CellTypes[Library->NumberOfCellTypes]->Expresions[i][Max_Name_Length - 1] = '\0';
                     }
 
                     if (Hardware::Read::MakeFormulaForCellInLibrary(Library->CellTypes[Library->NumberOfCellTypes]))
@@ -471,7 +481,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     char *Phrase = (char *)malloc(Max_Name_Length * sizeof(char));
     char Task;
-    char IO_port_found;
+    char IO_port_found = 0;
 
     Circuit->NumberOfCells = 0;
     Circuit->NumberOfGates = 0;
@@ -486,7 +496,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[0] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[0]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[0]->Name, "1'b0", Max_Name_Length);
+    strncpy(Circuit->Signals[0]->Name, "1'b0", Max_Name_Length - 1);
+    Circuit->Signals[0]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[0]->Type = SignalType_wire;
     Circuit->Signals[0]->NumberOfInputs = 0;
     Circuit->Signals[0]->Inputs = NULL;
@@ -497,7 +508,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[1] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[1]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[1]->Name, "1'b1", Max_Name_Length);
+    strncpy(Circuit->Signals[1]->Name, "1'b1", Max_Name_Length - 1);
+    Circuit->Signals[1]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[1]->Type = SignalType_wire;
     Circuit->Signals[1]->NumberOfInputs = 0;
     Circuit->Signals[1]->Inputs = NULL;
@@ -508,7 +520,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[2] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[2]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[2]->Name, "1'h0", Max_Name_Length);
+    strncpy(Circuit->Signals[2]->Name, "1'h0", Max_Name_Length - 1);
+    Circuit->Signals[2]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[2]->Type = SignalType_wire;
     Circuit->Signals[2]->NumberOfInputs = 0;
     Circuit->Signals[2]->Inputs = NULL;
@@ -519,7 +532,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[3] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[3]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[3]->Name, "1'h1", Max_Name_Length);
+    strncpy(Circuit->Signals[3]->Name, "1'h1", Max_Name_Length - 1);
+    Circuit->Signals[3]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[3]->Type = SignalType_wire;
     Circuit->Signals[3]->NumberOfInputs = 0;
     Circuit->Signals[3]->Inputs = NULL;
@@ -530,7 +544,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[4] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[4]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[4]->Name, "1'bx", Max_Name_Length);
+    strncpy(Circuit->Signals[4]->Name, "1'bx", Max_Name_Length - 1);
+    Circuit->Signals[4]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[4]->Type = SignalType_wire;
     Circuit->Signals[4]->NumberOfInputs = 0;
     Circuit->Signals[4]->Inputs = NULL;
@@ -541,7 +556,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
     Circuit->Signals[5] = (SignalStruct *)malloc(sizeof(SignalStruct));
     Circuit->Signals[5]->Name = (char *)malloc(Max_Name_Length);
-    strncpy(Circuit->Signals[5]->Name, "1'hx", Max_Name_Length);
+    strncpy(Circuit->Signals[5]->Name, "1'hx", Max_Name_Length - 1);
+    Circuit->Signals[5]->Name[Max_Name_Length - 1] = '\0';
     Circuit->Signals[5]->Type = SignalType_wire;
     Circuit->Signals[5]->NumberOfInputs = 0;
     Circuit->Signals[5]->Inputs = NULL;
@@ -600,7 +616,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
                     if ((!strcmp(Str1, "input")) || (!strcmp(Str1, "output")) || (!strcmp(Str1, "wire")))
                     {
-                        strncpy(Phrase, Str1, Max_Name_Length);
+                        strncpy(Phrase, Str1, Max_Name_Length - 1);
+                        Phrase[Max_Name_Length - 1] = '\0';
                         i = 0;
                         Index1 = -1;
                         Index2 = -1;
@@ -641,7 +658,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
                                     Circuit->Signals[Circuit->NumberOfSignals] = (SignalStruct *)malloc(sizeof(SignalStruct));
                                     Circuit->Signals[Circuit->NumberOfSignals]->Name = (char *)malloc(Max_Name_Length);
-                                    strncpy(Circuit->Signals[Circuit->NumberOfSignals]->Name, Str2, Max_Name_Length);
+                                    strncpy(Circuit->Signals[Circuit->NumberOfSignals]->Name, Str2, Max_Name_Length - 1);
+                                    Circuit->Signals[Circuit->NumberOfSignals]->Name[Max_Name_Length - 1] = '\0';
                                     Circuit->Signals[Circuit->NumberOfSignals]->NumberOfInputs = 0;
                                     Circuit->Signals[Circuit->NumberOfSignals]->Inputs = NULL;
                                     Circuit->Signals[Circuit->NumberOfSignals]->Output = -1;
@@ -701,7 +719,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
                 if (!feof(DesignFile))
                 {
-                    strncpy(Str2, Str1, Max_Name_Length);
+                    strncpy(Str2, Str1, Max_Name_Length - 1);
+                    Str2[Max_Name_Length - 1] = '\0';
 
                     do
                     {
@@ -796,8 +815,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                 {
                                                     sprintf(Str1, "assign_%d", Circuit->NumberOfCells);
                                                     Circuit->Cells[Circuit->NumberOfCells]->Name = (char *)malloc(Max_Name_Length);
-                                                    strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length); // Str1 = "assign_%d"
-
+                                                    strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length - 1); // Str1 = "assign_%d"
+						    Circuit->Cells[Circuit->NumberOfCells]->Name[Max_Name_Length - 1] = '\0';
                                                     Task = Task_find_assign_signal_name1;
                                                     InputIndex = -1;
                                                     OutputIndex = 0;
@@ -822,8 +841,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         else if (Task == Task_find_module_name)
                                         {
                                             Circuit->Cells[Circuit->NumberOfCells]->Name = (char *)malloc(Max_Name_Length);
-                                            strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length);
-
+                                            strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length - 1);
+					    Circuit->Cells[Circuit->NumberOfCells]->Name[Max_Name_Length - 1] = '\0';
                                             Task = Task_find_open_bracket;
                                             IO_port_found = 0;
                                         }
@@ -1146,8 +1165,10 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
     }
 
     // turn '1bx' and '1hx' to constant 0
-    strncpy(Circuit->Signals[4]->Name, "1'b0", Max_Name_Length);
-    strncpy(Circuit->Signals[5]->Name, "1'h0", Max_Name_Length);
+    strncpy(Circuit->Signals[4]->Name, "1'b0", Max_Name_Length - 1);
+    Circuit->Signals[4]->Name[Max_Name_Length - 1] = '\0';
+    strncpy(Circuit->Signals[5]->Name, "1'h0", Max_Name_Length - 1);
+    Circuit->Signals[5]->Name[Max_Name_Length - 1] = '\0';
 
     std::cout << "done!" << std::endl;;
 }
@@ -1243,7 +1264,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				NumberOfBuffer_char = 0;
 				Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
-				strncpy(Str2, Str1, Max_Name_Length);
+				strncpy(Str2, Str1, Max_Name_Length - 1);
+				Str2[Max_Name_Length - 1] = '\0';
 				str_ptr = strchr(Str2, '\'');
 				*str_ptr = 0;
 
@@ -1275,11 +1297,15 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                     throw std::runtime_error(ErrorMessage);
 				}
 
-				strncpy(Str3, str_ptr + 1, Max_Name_Length);
-				strncpy(Str2, Str3, Max_Name_Length);
-				strncpy(Str3, Str1, Max_Name_Length);
-				strncpy(Str1, Str2 + 1, Max_Name_Length);
-
+				strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
+				Str3[Max_Name_Length - 1] = '\0';
+				strncpy(Str2, Str3, Max_Name_Length - 1);
+				Str2[Max_Name_Length - 1] = '\0';
+				strncpy(Str3, Str1, Max_Name_Length - 1);
+				Str3[Max_Name_Length - 1] = '\0';
+				strncpy(Str1, Str2 + 1, Max_Name_Length - 1);
+				Str1[Max_Name_Length - 1] = '\0';
+				
 				if (Str2[0] == 'h')
 				{
 					for (j = 0; j < Settings->NumberOfGroupValues; j += 4)
@@ -1446,7 +1472,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 				if ((Str1[0] == '[') && (Str1[strlen(Str1) - 1] == ']'))
 				{
-					strncpy(Str2, Str1 + 1, Max_Name_Length);
+					strncpy(Str2, Str1 + 1, Max_Name_Length - 1);
+					Str2[Max_Name_Length - 1] = '\0';
 					Str2[strlen(Str2) - 1] = 0;
 					str_ptr = strchr(Str2, ':');
 					if (str_ptr != NULL)
@@ -1585,7 +1612,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
                     if ((Str1[0] == '[') && (Str1[strlen(Str1) - 1] == ']'))
                     {
-                        strncpy(Str2, Str1 + 1, Max_Name_Length);
+                        strncpy(Str2, Str1 + 1, Max_Name_Length - 1);
+                        Str2[Max_Name_Length - 1] = '\0';
                         Str2[strlen(Str2) - 1] = 0;
                         str_ptr = strchr(Str2, ':');
 						if (str_ptr != NULL)
@@ -1680,7 +1708,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 					if (strstr(Str1, "group_in") != Str1)
 					{
-						strncpy(Str2, Str1, Max_Name_Length);
+						strncpy(Str2, Str1, Max_Name_Length - 1);
+						Str2[Max_Name_Length - 1] = '\0';
 						str_ptr = strchr(Str2, '\'');
 						*str_ptr = 0;
 						templ = strtol(Str2, &tmptr, 10);
@@ -1705,8 +1734,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                             throw std::runtime_error(ErrorMessage);
 						}
 
-						strncpy(Str3, str_ptr + 1, Max_Name_Length);
-						strncpy(Str2, Str3, Max_Name_Length);
+						strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
+						Str3[Max_Name_Length - 1] = '\0';
+						strncpy(Str2, Str3, Max_Name_Length - 1);
+						Str2[Max_Name_Length - 1] = '\0';
 
 						if (Str2[0] == 'h')
 						{
@@ -1759,7 +1790,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 					}
 					else
 					{
-						strncpy(Str2, &Str1[8], Max_Name_Length);
+						strncpy(Str2, &Str1[8], Max_Name_Length - 1);
+						Str2[Max_Name_Length - 1] = '\0';
 						str_ptr = strchr(Str2, '[');
 						if (str_ptr == NULL)
 						{
@@ -1787,7 +1819,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 						ShareIndex = templ;
 
 						str_ptr = strchr(Str1, '[');
-						strncpy(Str2, str_ptr, Max_Name_Length);
+						strncpy(Str2, str_ptr, Max_Name_Length - 1);
+						Str2[Max_Name_Length - 1] = '\0';
 
 						if ((Str2[0] == '[') && (Str2[strlen(Str2) - 1] == ']'))
 						{
@@ -1918,7 +1951,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
                 if ((Str1[0] == '[') && (Str1[strlen(Str1) - 1] == ']'))
                 {
-                    strncpy(Str2, Str1 + 1, Max_Name_Length);
+                    strncpy(Str2, Str1 + 1, Max_Name_Length - 1);
+                    Str2[Max_Name_Length - 1] = '\0';
                     Str2[strlen(Str2) - 1] = 0;
                     str_ptr = strchr(Str2, ':');
 
@@ -2013,7 +2047,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
                 Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
-                strncpy(Str2, Str1, Max_Name_Length);
+                strncpy(Str2, Str1, Max_Name_Length - 1);
+                Str2[Max_Name_Length - 1] = '\0';
                 str_ptr = strchr(Str2, '\'');
                 *str_ptr = 0;
 
@@ -2039,8 +2074,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                     throw std::runtime_error(ErrorMessage);
                 }
 
-                strncpy(Str3, str_ptr + 1, Max_Name_Length);
-				strncpy(Str2, Str3, Max_Name_Length);
+                strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
+                Str3[Max_Name_Length - 1] = '\0';
+		strncpy(Str2, Str3, Max_Name_Length - 1);
+		Str2[Max_Name_Length - 1] = '\0';
 
                 if (Str2[0] == 'h')
                 {
@@ -2156,8 +2193,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                     if ((Str1[0] == '{') && (Str1[strlen(Str1)-1] == '}'))
                     {
 						Str1[strlen(Str1)-1] = 0;
-						strncpy(Str2, &Str1[1], Max_Name_Length);
-						strncpy(Str1, Str2, Max_Name_Length);
+						strncpy(Str2, &Str1[1], Max_Name_Length - 1);
+						Str2[Max_Name_Length - 1] = '\0';
+						strncpy(Str1, Str2, Max_Name_Length - 1);
+						Str1[Max_Name_Length - 1] = '\0';
 						Str2[0] = 2;
 					}
 					else
@@ -2380,8 +2419,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				}
 				else
 				{
-					strncpy(Str3, Str1, Max_Name_Length);
-					strncpy(Str2, str_ptr + 1, Max_Name_Length);
+					strncpy(Str3, Str1, Max_Name_Length - 1);
+					Str3[Max_Name_Length - 1] = '\0';
+					strncpy(Str2, str_ptr + 1, Max_Name_Length - 1);
+					Str2[Max_Name_Length - 1] = '\0';
 					*str_ptr = 0;
 
 					templ = strtol(Str1, &tmptr, 10);
@@ -2641,7 +2682,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 				if ((Str1[0] == '[') && (Str1[strlen(Str1) - 1] == ']'))
 				{
-					strncpy(Str2, Str1 + 1, Max_Name_Length);
+					strncpy(Str2, Str1 + 1, Max_Name_Length - 1);
+					Str2[Max_Name_Length - 1] = '\0';
 					Str2[strlen(Str2) - 1] = 0;
 					str_ptr = strchr(Str2, ':');
 					if (str_ptr != NULL)
@@ -2768,7 +2810,8 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				NumberOfBuffer_char = 0;
 				Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
-				strncpy(Str2, Str1, Max_Name_Length);
+				strncpy(Str2, Str1, Max_Name_Length - 1);
+				Str2[Max_Name_Length - 1] = '\0';
 				str_ptr = strchr(Str2, '\'');
 				*str_ptr = 0;
 
@@ -2797,10 +2840,14 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 				Settings->ExpectedOutputValues[GroupIndex] = (int*)malloc(Settings->NumberOfOutputSignals * sizeof(int));
 
-				strncpy(Str3, str_ptr + 1, Max_Name_Length);
-				strncpy(Str2, Str3, Max_Name_Length);
-				strncpy(Str3, Str1, Max_Name_Length);
-				strncpy(Str1, Str2 + 1, Max_Name_Length);
+				strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
+				Str3[Max_Name_Length - 1] = '\0';
+				strncpy(Str2, Str3, Max_Name_Length - 1);
+				Str2[Max_Name_Length - 1] = '\0';
+				strncpy(Str3, Str1, Max_Name_Length - 1);
+				Str3[Max_Name_Length - 1] = '\0';
+				strncpy(Str1, Str2 + 1, Max_Name_Length - 1);
+				Str1[Max_Name_Length - 1] = '\0';
 
 				if (Str2[0] == 'h')
 				{
