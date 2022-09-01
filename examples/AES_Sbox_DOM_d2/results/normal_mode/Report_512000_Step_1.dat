@@ -1,0 +1,18 @@
+Report file after 512000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[Y0_0xDP[6](10), inverter_gf24_a_mul_b_FFxDN[6](10)] ==> [Zinv1xDI[0](10), Y0_0xDP[6](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[0](9), Y0_0xDP[6](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.71484 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[Y0_0xDP[6](10), inverter_gf24_a_mul_b_FFxDN[6](10)] ==> [Zinv1xDI[0](10), Y0_0xDP[6](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[0](9), Y0_0xDP[6](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.71484 --> OKAY
+@[Y0_1xDP[6](10), inverter_gf24_a_mul_b_FFxDN[6](10)] ==> [Zinv1xDI[0](10), Y0_1xDP[6](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[0](9), Y0_1xDP[6](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.71484 --> OKAY
+@[Y0_0xDP[3](10), Y0xorY12xD[9](10)] ==> [n14(10), n13(10), n16(10), n15(10), Y0_0xDP[3](10), n14(9), n13(9), n16(9), n15(9), Y0_0xDP[3](9)] -log10(p) = 3.6424 --> OKAY
+@[Y0_0xDP[6](10), inverter_gf24_a_mul_e_FFxDN[8](10)] ==> [inverter_gf24_pipelinedAxDP[2](10), inverter_gf24_pipelinedAxDP[3](10), inverter_gf24_ExDP_1__1_(10), inverter_gf24_ExDP_1__0_(10), Y0_0xDP[6](10), inverter_gf24_pipelinedAxDP[2](9), inverter_gf24_pipelinedAxDP[3](9), inverter_gf24_ExDP_1__1_(9), inverter_gf24_ExDP_1__0_(9), Y0_0xDP[6](9)] -log10(p) = 3.15854 --> OKAY
+@[Y0_0xDP[8](10), inverter_gf24_a_mul_b_FFxDN[7](10)] ==> [Zinv1xDI[1](10), Y0_0xDP[8](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[1](9), Y0_0xDP[8](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.03415 --> OKAY
+@[Y0_1xDP[8](10), inverter_gf24_a_mul_b_FFxDN[7](10)] ==> [Zinv1xDI[1](10), Y0_1xDP[8](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[1](9), Y0_1xDP[8](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.03415 --> OKAY
+@[inverter_gf24_n11(10), inverter_gf24_a_mul_b_FFxDN[7](10)] ==> [Zinv1xDI[1](10), InverterInxDP[4](10), InverterInxDP[5](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[1](9), InverterInxDP[4](9), InverterInxDP[5](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.02645 --> OKAY
+@[Y0_0xDP[9](10), inverter_gf24_a_mul_b_FFxDN[7](10)] ==> [Zinv1xDI[1](10), Y0_0xDP[9](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[1](9), Y0_0xDP[9](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.00004 --> OKAY
+@[Y0_1xDP[9](10), inverter_gf24_a_mul_b_FFxDN[7](10)] ==> [Zinv1xDI[1](10), Y0_1xDP[9](10), InverterInxDP[6](10), InverterInxDP[7](10), InverterInxDP[0](10), InverterInxDP[1](10), Zinv1xDI[1](9), Y0_1xDP[9](9), InverterInxDP[6](9), InverterInxDP[7](9), InverterInxDP[0](9), InverterInxDP[1](9)] -log10(p) = 3.00004 --> OKAY
+@[InverterInxD[9](10), InverterInxD[2](10)] ==> [mul_y0y1_n40(10), mul_y0y1_n41(10), mul_y0y1_n42(10), n42(10), mul_y0y1_n19(10), mul_y0y1_n20(10), mul_y0y1_n21(10), n35(10), mul_y0y1_n40(9), mul_y0y1_n41(9), mul_y0y1_n42(9), n42(9), mul_y0y1_n19(9), mul_y0y1_n20(9), mul_y0y1_n21(9), n35(9)] -log10(p) = 2.9968 --> OKAY

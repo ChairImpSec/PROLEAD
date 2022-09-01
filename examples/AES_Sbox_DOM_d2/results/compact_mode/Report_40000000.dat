@@ -1,0 +1,18 @@
+Report file after 40000000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[Y0_0xDP[6](10), Y1_0xDP[2](10)] ==> [Y1_0xDP[2](10), Y0_0xDP[6](10), Y1_0xDP[2](9), Y0_0xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[Y0_0xDP[6](10), Y1_0xDP[2](10)] ==> [Y1_0xDP[2](10), Y0_0xDP[6](10), Y1_0xDP[2](9), Y0_0xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_1xDP[6](10), Y1_0xDP[2](10)] ==> [Y1_0xDP[2](10), Y0_1xDP[6](10), Y1_0xDP[2](9), Y0_1xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_2xDP[6](10), Y1_0xDP[2](10)] ==> [Y1_0xDP[2](10), Y0_2xDP[6](10), Y1_0xDP[2](9), Y0_2xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_3xDP[6](10), Y1_0xDP[2](10)] ==> [Y1_0xDP[2](10), Y0_3xDP[6](10), Y1_0xDP[2](9), Y0_3xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_0xDP[6](10), Y1_1xDP[2](10)] ==> [Y1_1xDP[2](10), Y0_0xDP[6](10), Y1_1xDP[2](9), Y0_0xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_1xDP[6](10), Y1_1xDP[2](10)] ==> [Y1_1xDP[2](10), Y0_1xDP[6](10), Y1_1xDP[2](9), Y0_1xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_2xDP[6](10), Y1_1xDP[2](10)] ==> [Y1_1xDP[2](10), Y0_2xDP[6](10), Y1_1xDP[2](9), Y0_2xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_3xDP[6](10), Y1_1xDP[2](10)] ==> [Y1_1xDP[2](10), Y0_3xDP[6](10), Y1_1xDP[2](9), Y0_3xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_0xDP[6](10), Y1_2xDP[2](10)] ==> [Y1_2xDP[2](10), Y0_0xDP[6](10), Y1_2xDP[2](9), Y0_0xDP[6](9)] -log10(p) = 4.92045 --> OKAY
+@[Y0_1xDP[6](10), Y1_2xDP[2](10)] ==> [Y1_2xDP[2](10), Y0_1xDP[6](10), Y1_2xDP[2](9), Y0_1xDP[6](9)] -log10(p) = 4.92045 --> OKAY
