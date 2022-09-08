@@ -1,0 +1,18 @@
+Report file after 1024000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 10: @[s1_linMapOut_2__6_(10), stage2Out[9](10)] ==> [stage2Out[9](10), sboxIn[21](10), sboxIn[20](10), sboxIn[16](10), sboxIn[22](10), stage2Out[9](9), sboxIn[21](9), sboxIn[20](9), sboxIn[16](9), sboxIn[22](9)] -log10(p) = 3.49878 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[s1_linMapOut_2__6_(10), stage2Out[9](10)] ==> [stage2Out[9](10), sboxIn[21](10), sboxIn[20](10), sboxIn[16](10), sboxIn[22](10), stage2Out[9](9), sboxIn[21](9), sboxIn[20](9), sboxIn[16](9), sboxIn[22](9)] -log10(p) = 3.49878 --> OKAY
+@[s1_linMapOut_2__6_(10), stage3Out[9](10)] ==> [stage3Out[9](10), sboxIn[21](10), sboxIn[20](10), sboxIn[16](10), sboxIn[22](10), stage3Out[9](9), sboxIn[21](9), sboxIn[20](9), sboxIn[16](9), sboxIn[22](9)] -log10(p) = 3.49878 --> OKAY
+@[s1_linMapOut_2__6_(10), s2_refreshed[21](10)] ==> [randomS2[17](10), stage1Out[12](10), stage1Out[13](10), stage1Out[14](10), stage1Out[15](10), randomS2[13](10), stage1Out[16](10), stage1Out[17](10), stage1Out[18](10), stage1Out[19](10), sboxIn[21](10), sboxIn[20](10), sboxIn[16](10), sboxIn[22](10), randomS2[17](9), stage1Out[12](9), stage1Out[13](9), stage1Out[14](9), stage1Out[15](9), randomS2[13](9), stage1Out[16](9), stage1Out[17](9), stage1Out[18](9), stage1Out[19](9), sboxIn[21](9), sboxIn[20](9), sboxIn[16](9), sboxIn[22](9)] -log10(p) = 2.85604 --> OKAY
+@[stage2Out[15](10), regOut1[1](10)] ==> [regOut1[1](10), stage2Out[15](10), regOut1[1](9), stage2Out[15](9)] -log10(p) = 2.75941 --> OKAY
+@[stage2Out[14](10), s2_refreshed[9](10)] ==> [randomS2[29](10), stage1Out[4](10), stage1Out[5](10), stage1Out[6](10), stage1Out[7](10), randomS2[25](10), stage1Out[16](10), stage1Out[17](10), stage1Out[18](10), stage1Out[19](10), stage2Out[14](10), randomS2[29](9), stage1Out[4](9), stage1Out[5](9), stage1Out[6](9), stage1Out[7](9), randomS2[25](9), stage1Out[16](9), stage1Out[17](9), stage1Out[18](9), stage1Out[19](9), stage2Out[14](9)] -log10(p) = 2.59843 --> OKAY
+@[stage2Out[33](10), s2_refreshed[5](10)] ==> [randomS2[33](10), randomS2[29](10), stage1Out[4](10), stage1Out[5](10), stage1Out[6](10), stage1Out[7](10), stage1Out[8](10), stage1Out[9](10), stage1Out[10](10), stage1Out[11](10), stage2Out[33](10), randomS2[33](9), randomS2[29](9), stage1Out[4](9), stage1Out[5](9), stage1Out[6](9), stage1Out[7](9), stage1Out[8](9), stage1Out[9](9), stage1Out[10](9), stage1Out[11](9), stage2Out[33](9)] -log10(p) = 2.39197 --> OKAY
+@[stage2Out[12](10), regOut1[19](10)] ==> [regOut1[19](10), stage2Out[12](10), regOut1[19](9), stage2Out[12](9)] -log10(p) = 2.33638 --> OKAY
+@[stage2Out[14](10), stage2Out[9](10)] ==> [stage2Out[9](10), stage2Out[14](10), stage2Out[9](9), stage2Out[14](9)] -log10(p) = 2.33245 --> OKAY
+@[stage2Out[14](10), stage3Out[9](10)] ==> [stage3Out[9](10), stage2Out[14](10), stage3Out[9](9), stage2Out[14](9)] -log10(p) = 2.33245 --> OKAY
+@[stage2Out[22](10), s2_refreshed[4](10)] ==> [randomS2[32](10), randomS2[28](10), stage1Out[4](10), stage1Out[5](10), stage1Out[6](10), stage1Out[7](10), stage1Out[8](10), stage1Out[9](10), stage1Out[10](10), stage1Out[11](10), stage2Out[22](10), randomS2[32](9), randomS2[28](9), stage1Out[4](9), stage1Out[5](9), stage1Out[6](9), stage1Out[7](9), stage1Out[8](9), stage1Out[9](9), stage1Out[10](9), stage1Out[11](9), stage2Out[22](9)] -log10(p) = 2.28729 --> OKAY

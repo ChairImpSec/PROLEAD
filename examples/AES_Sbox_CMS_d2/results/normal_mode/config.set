@@ -57,13 +57,9 @@ minimize_probe_sets   % yes/no: whether it should be tried to find equivalent pr
                       % it is recommended to use 'yes' only for small circuits and low security orders
 yes
 
-no_of_probe_steps
+no_of_probing_sets_per_step
 
-100
-
-remove_full_probing_sets
-
-yes
+5000
 
 no_of_test_clock_cycles % number of blocks to define clock cycles which should be covered in the tests
 1
