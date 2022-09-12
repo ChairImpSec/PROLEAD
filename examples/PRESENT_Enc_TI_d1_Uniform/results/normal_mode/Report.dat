@@ -1,58 +1,59 @@
 Start Hardware Leakage Evaluation
 
-Library file:   library.lib
+Library file:   ../../../../library.lib
 Library name:   NANG45
-Design file:    design.v
+Design file:    ../../gate/design.v
 Module name:    circuit
 Linker file:    linker.ld
 Settings file:  config.set
-Result folder:  res
+Result folder:  ../normal_mode
 
 Read library file...done!
 Read design file...done!
 Make circuit depth...done!
-Read settings file...done with 5 warnings!
+Read settings file...done with 6 warnings!
     Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
     Warning "no_of_entries_in_report" is not specified. Default "no_of_entries_in_report" = 10 is taken!
     Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
-    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
     Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
 Construct probes...done!
 Prepare simulation memory...done!
 Prepare shared data for 48 threads ...done!
 
-Generate all possible probing sets for order 1...
-Generate list of standard probes...done!
-Generate list of extended probes...done!
-done! 15648 probing sets generated!
+Generate list of standard probes from 489 standard probe locations...15648 standard probes found...done!
+Generate list of extended probes from 1039 extended probe locations...218673 extended probes found...done!
+Generate univariate probing sets...done (last step)! 15648 probing sets generated!
 Extend all probing sets...done!
 Remove duplicated probes in the sets...done!
-Remove duplicated probing sets...done! 14942 probing sets remain!
+Remove duplicated probing sets...done! 15648 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 14942 probing sets remain!
 ----------------------------------------------------------------------------------------------------------------------------------
 | #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
 ----------------------------------------------------------------------------------------------------------------------------------
-|              489 |             1039 |              1 |       10 |                 10 |         14942 |                      30 |
+|            15648 |            33248 |              1 |       10 |                 10 |         14942 |                      30 |
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Evaluate security under the robust probing model!
 ----------------------------------------------------------------------------------------------------------------------------------------
 |      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        27.282869s |        4.950604GB |         32000 / 180253 |                 stateFF_state_gff_7_n31 (32) |   3.896557 |    OKAY |
+|        16.316527s |        4.922116GB |         32000 / 180239 |                   md1FF_state_gff_15_n30 (7) |   3.733554 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        54.314195s |        5.592520GB |         64000 / 210091 |                   md1FF_state_gff_7_n29 (32) |   3.941165 |    OKAY |
+|        33.344205s |        5.567992GB |         64000 / 210123 |                   md2FF_state_gff_9_n30 (16) |   3.738724 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        82.243138s |        5.592520GB |         96000 / 219973 |                   md2FF_state_gff_11_n32 (7) |   3.680010 |    OKAY |
+|        50.175114s |        5.573140GB |         96000 / 219979 |                 stateFF_state_gff_1_n24 (14) |   3.477336 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|       109.544409s |        5.593972GB |        128000 / 223619 |                    md1FF_state_gff_2_n30 (3) |   4.141705 |    OKAY |
+|        67.258715s |        5.574988GB |        128000 / 223623 |                    md1FF_state_gff_2_n30 (3) |   3.960894 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|       136.916808s |        5.594632GB |        160000 / 224903 |                   md2FF_state_gff_2_n28 (18) |   3.136200 |    OKAY |
+|        84.482445s |        5.575384GB |        160000 / 224903 |                   md2FF_state_gff_2_n28 (18) |   3.332314 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|       164.093660s |        5.594764GB |        192000 / 225347 |                   md1FF_state_gff_3_n28 (28) |   3.563847 |    OKAY |
+|       101.663450s |        5.575780GB |        192000 / 225341 |                   md1FF_state_gff_3_n28 (28) |   3.485046 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|       191.547542s |        5.594896GB |        224000 / 225497 |                   md1FF_state_gff_7_n32 (15) |   3.494179 |    OKAY |
+|       118.418744s |        5.576044GB |        224000 / 225501 |                 stateFF_state_gff_1_n26 (24) |   3.808319 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|       218.659001s |        5.595032GB |        256000 / 225557 |                  md1FF_state_gff_15_n28 (20) |   3.343400 |    OKAY |
+|       135.437210s |        5.576044GB |        256000 / 225557 |                    md1FF_state_gff_5_n29 (6) |   3.178154 |    OKAY |
 ----------------------------------------------------------------------------------------------------------------------------------------
-Evaluation done in 220.457 seconds!
+Evaluation done in 137.46 seconds!
 done!

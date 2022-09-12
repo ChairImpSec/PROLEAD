@@ -202,7 +202,7 @@ end_condition    % the condition to check to terminate the simulation (e.g., don
                  % or a numer of clock cycles, e.g., ClockCycles 5
 %DONE 1'b1
 %[31:0]  y    32'h89ABCE00
-ClockCycles 100
+ClockCycles 50
 
 end_wait_cycles   % number of clock cycles to wait after the end_condition 
 0
@@ -224,9 +224,9 @@ minimize_probe_sets   % yes/no: whether it should be tried to find equivalent pr
                       % it is recommended to use 'yes' only for small circuits and low security orders
 yes
 
-no_of_probe_steps
+no_of_probing_sets_per_step
 
-5
+25000
 
 no_of_test_clock_cycles % number of blocks to define clock cycles which should be covered in the tests
 1

@@ -1,0 +1,41 @@
+Report file after 512000 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 27: @[aes_state_regs_1_S02xDN[0](27)] ==> [aes_state_regs_1_S02xDN[0](27), aes_state_regs_1_S02xDN[0](26)] -log10(p) = 2.28745 --> OKAY
+Cycle 28: @[aes_state_regs_2_n12(28)] ==> [aes_state_regs_2_n12(28), aes_state_regs_2_n12(27)] -log10(p) = 3.66407 --> OKAY
+Cycle 29: @[aes_state_regs_2_S02xDN[5](29)] ==> [aes_state_regs_2_S02xDN[5](29), aes_state_regs_2_S02xDN[5](28)] -log10(p) = 3.66407 --> OKAY
+Cycle 30: @[aes_state_regs_2_S02xDP_5_(30)] ==> [aes_state_regs_2_S02xDP_5_(30), aes_state_regs_2_S02xDP_5_(29)] -log10(p) = 3.66407 --> OKAY
+Cycle 31: @[aes_state_regs_2_n11(31)] ==> [aes_state_regs_2_n11(31), aes_state_regs_2_n11(30)] -log10(p) = 3.66407 --> OKAY
+Cycle 32: @[aes_state_regs_2_S21xDP[5](32)] ==> [aes_state_regs_2_S21xDP[5](32), aes_state_regs_2_S21xDP[5](31)] -log10(p) = 3.66407 --> OKAY
+Cycle 33: @[aes_state_regs_2_S01xDN[5](33)] ==> [aes_state_regs_2_S01xDN[5](33), aes_state_regs_2_S01xDN[5](32)] -log10(p) = 3.66407 --> OKAY
+Cycle 34: @[aes_state_regs_2_S01xDO_5_(34)] ==> [aes_state_regs_2_S01xDO_5_(34), aes_state_regs_2_S01xDO_5_(33)] -log10(p) = 3.66407 --> OKAY
+Cycle 35: @[aes_state_regs_0_S02xDP_0_(35)] ==> [aes_state_regs_0_S02xDP_0_(35), aes_state_regs_0_S02xDP_0_(34)] -log10(p) = 2.85442 --> OKAY
+Cycle 36: @[aes_state_regs_0_S31xDP_0_(36)] ==> [aes_state_regs_0_S31xDP_0_(36), aes_state_regs_0_S31xDP_0_(35)] -log10(p) = 2.85442 --> OKAY
+Cycle 37: @[aes_state_regs_1_S03xDN[5](37)] ==> [aes_state_regs_1_S03xDN[5](37), aes_state_regs_1_S03xDN[5](36)] -log10(p) = 2.67222 --> OKAY
+Cycle 38: @[aes_state_regs_0_S01xDN[0](38)] ==> [aes_state_regs_0_S01xDN[0](38), aes_state_regs_0_S01xDN[0](37)] -log10(p) = 2.85442 --> OKAY
+Cycle 39: @[aes_state_regs_0_S01xDO_0_(39)] ==> [aes_state_regs_0_S01xDO_0_(39), aes_state_regs_0_S01xDO_0_(38)] -log10(p) = 2.85442 --> OKAY
+Cycle 40: @[aes_state_regs_1_n162(40)] ==> [aes_state_regs_1_n162(40), aes_state_regs_1_n162(39)] -log10(p) = 2.67222 --> OKAY
+Cycle 41: @[aes_state_regs_1_S02xDN[5](41)] ==> [aes_state_regs_1_S02xDN[5](41), aes_state_regs_1_S02xDN[5](40)] -log10(p) = 2.67222 --> OKAY
+Cycle 42: @[SBOX_PL_2_n110(42)] ==> [SBOX_FF1_out[1](42), SBOX_FF1_out[19](42), SBOX_PL_2_n62(42), PRNGQ[17](42), SBOX_FF1_out[13](42), SBOX_FF1_out[21](42), SBOX_Inst_f2_abmul_pw2_1_(42), 1'b1(42), SBOX_FF1_out[1](41), SBOX_FF1_out[19](41), SBOX_PL_2_n62(41), PRNGQ[17](41), SBOX_FF1_out[13](41), SBOX_FF1_out[21](41), SBOX_Inst_f2_abmul_pw2_1_(41), 1'b1(41)] -log10(p) = 2.71899 --> OKAY
+Cycle 43: @[aes_state_regs_1_n163(43)] ==> [aes_state_regs_1_n163(43), aes_state_regs_1_n163(42)] -log10(p) = 2.67222 --> OKAY
+Cycle 44: @[aes_state_regs_1_S21xDP[5](44)] ==> [aes_state_regs_1_S21xDP[5](44), aes_state_regs_1_S21xDP[5](43)] -log10(p) = 2.67222 --> OKAY
+Cycle 45: @[aes_state_regs_1_S01xDN[5](45)] ==> [aes_state_regs_1_S01xDN[5](45), aes_state_regs_1_S01xDN[5](44)] -log10(p) = 2.67222 --> OKAY
+Cycle 46: @[aes_state_regs_1_S10xDN[6](46)] ==> [aes_state_regs_1_n126(46), aes_state_regs_1_n45(46), aes_state_regs_1_S00xDP[6](46), aes_state_regs_1_S10xDP_6_(46), aes_state_regs_1_S20xDP_5_(46), aes_state_regs_1_S30xDP_6_(46), aes_state_regs_1_S30xDP_5_(46), aes_ctrl_lsfr_23_cycles_1_n9(46), aes_ctrl_lsfr_23_cycles_1_n7(46), rcon_1_n28(46), rcon_1_n31(46), aes_ctrl_lsfr_23_cycles_1_n4(46), aes_ctrl_lsfr_23_cycles_1_n12(46), aes_ctrl_lsfr_23_cycles_1_n5(46), aes_ctrl_lsfr_23_cycles_1_n10(46), aes_state_regs_1_n126(45), aes_state_regs_1_n45(45), aes_state_regs_1_S00xDP[6](45), aes_state_regs_1_S10xDP_6_(45), aes_state_regs_1_S20xDP_5_(45), aes_state_regs_1_S30xDP_6_(45), aes_state_regs_1_S30xDP_5_(45), aes_ctrl_lsfr_23_cycles_1_n9(45), aes_ctrl_lsfr_23_cycles_1_n7(45), rcon_1_n28(45), rcon_1_n31(45), aes_ctrl_lsfr_23_cycles_1_n4(45), aes_ctrl_lsfr_23_cycles_1_n12(45), aes_ctrl_lsfr_23_cycles_1_n5(45), aes_ctrl_lsfr_23_cycles_1_n10(45)] -log10(p) = 3.38437 --> OKAY
+Cycle 47: @[aes_state_regs_0_S01xDN[1](47)] ==> [aes_state_regs_0_S01xDN[1](47), aes_state_regs_0_S01xDN[1](46)] -log10(p) = 2.54698 --> OKAY
+Cycle 48: @[aes_state_regs_0_S01xDO_1_(48)] ==> [aes_state_regs_0_S01xDO_1_(48), aes_state_regs_0_S01xDO_1_(47)] -log10(p) = 2.54698 --> OKAY
+Cycle 49: @[aes_state_regs_0_S23xDP_4_(49)] ==> [aes_state_regs_0_S23xDP_4_(49), aes_state_regs_0_S23xDP_4_(48)] -log10(p) = 2.90777 --> OKAY
+Cycle 50: @[aes_state_regs_0_S03xDN[4](50)] ==> [aes_state_regs_0_S03xDN[4](50), aes_state_regs_0_S03xDN[4](49)] -log10(p) = 2.90777 --> OKAY
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[aes_state_regs_2_n12(28)] ==> [aes_state_regs_2_n12(28), aes_state_regs_2_n12(27)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_S02xDN[5](29)] ==> [aes_state_regs_2_S02xDN[5](29), aes_state_regs_2_S02xDN[5](28)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_S02xDP_5_(30)] ==> [aes_state_regs_2_S02xDP_5_(30), aes_state_regs_2_S02xDP_5_(29)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_n11(31)] ==> [aes_state_regs_2_n11(31), aes_state_regs_2_n11(30)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_S21xDP[5](32)] ==> [aes_state_regs_2_S21xDP[5](32), aes_state_regs_2_S21xDP[5](31)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_S01xDN[5](33)] ==> [aes_state_regs_2_S01xDN[5](33), aes_state_regs_2_S01xDN[5](32)] -log10(p) = 3.66407 --> OKAY
+@[aes_state_regs_2_S01xDO_5_(34)] ==> [aes_state_regs_2_S01xDO_5_(34), aes_state_regs_2_S01xDO_5_(33)] -log10(p) = 3.66407 --> OKAY
+@[SBOX_PL_2_n129(29)] ==> [SBOX_Zl_f2[8](29), SBOX_PL_2_n81(29), 1'b1(29), SBOX_Zl_f2[8](28), SBOX_PL_2_n81(28), 1'b1(28)] -log10(p) = 3.4039 --> OKAY
+@[SBOX_PL_3_n124(30)] ==> [SBOX_Zl_f3[8](30), SBOX_PL_3_n160(30), 1'b1(30), SBOX_Zl_f3[8](29), SBOX_PL_3_n160(29), 1'b1(29)] -log10(p) = 3.4039 --> OKAY
+@[aes_state_regs_1_S10xDN[6](46)] ==> [aes_state_regs_1_n126(46), aes_state_regs_1_n45(46), aes_state_regs_1_S00xDP[6](46), aes_state_regs_1_S10xDP_6_(46), aes_state_regs_1_S20xDP_5_(46), aes_state_regs_1_S30xDP_6_(46), aes_state_regs_1_S30xDP_5_(46), aes_ctrl_lsfr_23_cycles_1_n9(46), aes_ctrl_lsfr_23_cycles_1_n7(46), rcon_1_n28(46), rcon_1_n31(46), aes_ctrl_lsfr_23_cycles_1_n4(46), aes_ctrl_lsfr_23_cycles_1_n12(46), aes_ctrl_lsfr_23_cycles_1_n5(46), aes_ctrl_lsfr_23_cycles_1_n10(46), aes_state_regs_1_n126(45), aes_state_regs_1_n45(45), aes_state_regs_1_S00xDP[6](45), aes_state_regs_1_S10xDP_6_(45), aes_state_regs_1_S20xDP_5_(45), aes_state_regs_1_S30xDP_6_(45), aes_state_regs_1_S30xDP_5_(45), aes_ctrl_lsfr_23_cycles_1_n9(45), aes_ctrl_lsfr_23_cycles_1_n7(45), rcon_1_n28(45), rcon_1_n31(45), aes_ctrl_lsfr_23_cycles_1_n4(45), aes_ctrl_lsfr_23_cycles_1_n12(45), aes_ctrl_lsfr_23_cycles_1_n5(45), aes_ctrl_lsfr_23_cycles_1_n10(45)] -log10(p) = 3.38437 --> OKAY
