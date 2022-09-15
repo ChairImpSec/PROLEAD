@@ -1,0 +1,66 @@
+Start Hardware Leakage Evaluation
+
+Library file:   ../../../../library.lib
+Library name:   NANG45
+Design file:    ../../gate/design.v
+Module name:    circuit
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  ../normal_mode
+
+Read library file...done!
+Read design file...done!
+Make circuit depth...done!
+Read settings file...done with 5 warnings!
+    Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
+    Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
+    Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
+Construct probes...done!
+Prepare simulation memory...done!
+Prepare shared data for 48 threads ...done!
+
+Generate list of standard probes from 638 standard probe locations...31900 standard probes found...done!
+Generate list of extended probes from 881 extended probe locations...285021 extended probes found...done!
+Generate univariate probing sets...done (last step)! 31900 probing sets generated!
+Extend all probing sets...done!
+Remove duplicated probes in the sets...done!
+Remove duplicated probing sets...done! 30550 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 28420 probing sets remain!
+----------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
+----------------------------------------------------------------------------------------------------------------------------------
+|            31900 |            44050 |              1 |       10 |                 10 |         28420 |                     188 |
+----------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       111.837443s |       23.669876GB |        128000 / 438815 |                aes_sbox_InverterInxD[4] (22) |   4.508850 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       230.132096s |       37.592984GB |        256000 / 617591 |          aes_sbox_inverter_gf24_AxDP[2] (32) |   4.305992 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       349.918944s |       51.366776GB |        384000 / 754767 |  aes_sbox_inverter_gf24_a_mul_b_FFxDN[5] (3) |   3.286158 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       471.367882s |       58.169780GB |        512000 / 870411 |              aes_state_regs_0_S10xDN[3] (13) |   4.080075 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       597.217923s |       70.812028GB |        640000 / 972293 |              aes_state_regs_0_S20xDN[6] (44) |   4.922935 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       723.243530s |       85.453420GB |       768000 / 1064403 |              aes_state_regs_0_S20xDN[6] (44) |   4.275840 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       849.302608s |       91.205484GB |       896000 / 1149105 |              aes_state_regs_0_S20xDN[6] (44) |   4.149172 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|       976.829947s |       97.189896GB |      1024000 / 1227945 |                            aes_sbox_n37 (43) |   4.503363 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|      1105.687396s |      112.754696GB |      1152000 / 1301993 |                            aes_sbox_n37 (43) |   4.572276 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|      1235.933722s |      115.834888GB |      1280000 / 1372029 |                            aes_sbox_n37 (43) |   4.491265 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|      1368.574267s |      125.087632GB |      1408000 / 1438641 |                            aes_sbox_n37 (43) |   4.624273 |    OKAY |
+----------------------------------------------------------------------------------------------------------------------------------------
+|      1501.216642s |      143.133380GB |      1536000 / 1502291 |              aes_state_regs_1_S10xDN[3] (49) |   5.412929 | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 1705.28 seconds!
+done!
