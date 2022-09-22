@@ -1,66 +1,66 @@
 Start Hardware Leakage Evaluation
 
-Library file:   library.lib
+Library file:   ../../../../library.lib
 Library name:   NANG45
-Design file:    design.v
+Design file:    ../../gate/design.v
 Module name:    circuit
 Linker file:    linker.ld
 Settings file:  config.set
-Result folder:  res
+Result folder:  ../normal_mode
 
 Read library file...done!
 Read design file...done!
 Make circuit depth...done!
-Read settings file...done with 4 warnings!
+Read settings file...done with 5 warnings!
     Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
     Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
-    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
     Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
 Construct probes...done!
 Prepare simulation memory...done!
 Prepare shared data for 48 threads ...done!
 
-Generate all possible probing sets for order 1...
-Generate list of standard probes...done!
-Generate list of extended probes...done!
-Generate univariate probing sets...Setting first-order variant...done!
-done! 10080 probing sets generated!
+Generate list of standard probes from 630 standard probe locations...10080 standard probes found...done!
+Generate list of extended probes from 840 extended probe locations...230392 extended probes found...done!
+Generate univariate probing sets...done (last step)! 10080 probing sets generated!
 Extend all probing sets...done!
 Remove duplicated probes in the sets...done!
-Remove duplicated probing sets...done! 3855 probing sets remain!
+Remove duplicated probing sets...done! 5472 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 3855 probing sets remain!
 ----------------------------------------------------------------------------------------------------------------------------------
 | #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
 ----------------------------------------------------------------------------------------------------------------------------------
-|              630 |              840 |              1 |       10 |                 10 |          3855 |                     122 |
+|            10080 |            13440 |              1 |       10 |                 10 |          3855 |                     122 |
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Evaluate security under the robust probing model!
 -------------------------------------------------------------------------------------------------------------------------------------------------
 |      Elapsed Time |      Required Ram |  Processed Simulations |          Probing Set with highest Information Leakage |  -log10(p) |  Status |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|        56.860759s |       17.070056GB |        128000 / 438815 |  Midori_rounds_roundResult_Reg1_SFF_46_SFFInst_N3 (8) |   2.140664 |    OKAY |
+|        55.574681s |       17.221860GB |        128000 / 438815 |  Midori_rounds_roundResult_Reg2_SFF_18_SFFInst_N3 (2) |   2.055135 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       111.901602s |       28.810792GB |        256000 / 617591 |             Midori_rounds_sub_sBox_PRINCE_12_f[3] (3) |   3.510868 |    OKAY |
+|       109.736319s |       28.424492GB |        256000 / 617591 |             Midori_rounds_sub_sBox_PRINCE_12_h[6] (2) |   3.295855 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       156.300842s |       42.148700GB |        384000 / 754765 |            Midori_rounds_sub_sBox_PRINCE_15_g[5] (16) |   3.238195 |    OKAY |
+|       149.998826s |       42.182440GB |        384000 / 754765 |            Midori_rounds_sub_sBox_PRINCE_15_e[5] (16) |   3.523969 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       203.924902s |       49.292992GB |        512000 / 870409 |              Midori_rounds_sub_sBox_PRINCE_1_e[6] (5) |   2.953508 |    OKAY |
+|       192.927270s |       49.444024GB |        512000 / 870409 |              Midori_rounds_sub_sBox_PRINCE_1_h[6] (4) |   2.992957 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       255.651168s |       61.691136GB |        640000 / 972291 |             Midori_rounds_sub_sBox_PRINCE_8_e[1] (11) |   3.297683 |    OKAY |
+|       240.092737s |       62.274412GB |        640000 / 972291 |             Midori_rounds_sub_sBox_PRINCE_8_e[1] (10) |   3.406833 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       309.160830s |       73.045516GB |       768000 / 1064397 | Midori_rounds_roundResult_Reg1_SFF_44_SFFInst_N3 (10) |   3.199526 |    OKAY |
+|       288.595075s |       73.293984GB |       768000 / 1064397 |  Midori_rounds_roundResult_Reg1_SFF_44_SFFInst_N3 (9) |   3.212318 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       367.163253s |       80.006156GB |       896000 / 1149099 |             Midori_rounds_sub_sBox_PRINCE_3_e[3] (16) |   3.401123 |    OKAY |
+|       342.181026s |       79.952892GB |       896000 / 1149099 |             Midori_rounds_sub_sBox_PRINCE_3_g[3] (16) |   3.519484 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       427.273609s |       86.140564GB |      1024000 / 1227935 |             Midori_rounds_sub_sBox_PRINCE_3_e[3] (16) |   3.760103 |    OKAY |
+|       397.364705s |       86.013280GB |      1024000 / 1227935 |             Midori_rounds_sub_sBox_PRINCE_3_h[5] (16) |   3.586901 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       492.872510s |      102.000292GB |      1152000 / 1301979 | Midori_rounds_roundResult_Reg2_SFF_49_SFFInst_N3 (16) |   4.030085 |    OKAY |
+|       455.612428s |      101.932620GB |      1152000 / 1301979 | Midori_rounds_roundResult_Reg2_SFF_49_SFFInst_N3 (16) |   4.193257 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       558.814850s |      114.372180GB |      1280000 / 1372011 | Midori_rounds_roundResult_Reg2_SFF_49_SFFInst_N3 (16) |   4.237465 |    OKAY |
+|       515.677335s |      114.291320GB |      1280000 / 1372013 | Midori_rounds_roundResult_Reg2_SFF_49_SFFInst_N3 (16) |   4.295515 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       629.938166s |      120.269796GB |      1408000 / 1438621 |             Midori_rounds_sub_sBox_PRINCE_3_e[2] (16) |   3.620315 |    OKAY |
+|       579.942620s |      120.208288GB |      1408000 / 1438621 |             Midori_rounds_sub_sBox_PRINCE_3_g[2] (16) |   3.740058 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-|       703.779122s |      128.229324GB |      1536000 / 1502267 |  Midori_rounds_roundResult_Reg2_SFF_1_SFFInst_N3 (16) |   3.558717 |    OKAY |
+|       646.597413s |      127.944060GB |      1536000 / 1502267 | Midori_rounds_roundResult_Reg2_SFF_49_SFFInst_N3 (16) |   3.571048 |    OKAY |
 -------------------------------------------------------------------------------------------------------------------------------------------------
-Evaluation done in 864.143 seconds!
+Evaluation done in 799.436 seconds!
 done!

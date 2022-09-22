@@ -1,52 +1,52 @@
 Start Hardware Leakage Evaluation
 
-Library file:   library.lib
+Library file:   ../../../../library.lib
 Library name:   NANG45
-Design file:    design.v
+Design file:    ../../gate/design.v
 Module name:    circuit
 Linker file:    linker.ld
 Settings file:  config.set
-Result folder:  res
+Result folder:  ../compact_mode
 
 Read library file...done!
 Read design file...done!
 Make circuit depth...done!
-Read settings file...done with 4 warnings!
+Read settings file...done with 5 warnings!
     Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
     Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
-    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
     Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
 Construct probes...done!
 Prepare simulation memory...done!
 Prepare shared data for 48 threads ...done!
 
-Generate all possible probing sets for order 1...
-Generate list of standard probes...done!
-Generate list of extended probes...done!
-Generate univariate probing sets...Setting first-order variant...done!
-done! 9930 probing sets generated!
+Generate list of standard probes from 331 standard probe locations...9930 standard probes found...done!
+Generate list of extended probes from 564 extended probe locations...98176 extended probes found...done!
+Generate univariate probing sets...done (last step)! 9930 probing sets generated!
 Extend all probing sets...done!
 Remove duplicated probes in the sets...done!
-Remove duplicated probing sets...done! 8990 probing sets remain!
+Remove duplicated probing sets...done! 9480 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 8990 probing sets remain!
 ----------------------------------------------------------------------------------------------------------------------------------
 | #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
 ----------------------------------------------------------------------------------------------------------------------------------
-|              331 |              564 |              1 |       10 |                 10 |          8990 |                      30 |
+|             9930 |            16920 |              1 |       10 |                 10 |          8990 |                      30 |
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Evaluate security under the robust probing model!
 ----------------------------------------------------------------------------------------------------------------------------------------
 |      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|         4.065114s |        6.955304GB |                 200000 |              md1FF_state_gff_1_SFF_1_n7 (24) |  71.491275 | LEAKAGE |
+|         3.352736s |        6.956184GB |                 200000 |              md1FF_state_gff_1_SFF_1_n7 (24) |  70.558972 | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|         8.155802s |        6.955304GB |                 400000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 134.044482 | LEAKAGE |
+|         6.749275s |        6.956184GB |                 400000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 135.176940 | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        12.212229s |        6.955304GB |                 600000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 206.259787 | LEAKAGE |
+|         9.995603s |        6.956184GB |                 600000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 206.513316 | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        16.210854s |        6.955304GB |                 800000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 300.976607 | LEAKAGE |
+|        13.298495s |        6.956184GB |                 800000 |              md1FF_state_gff_1_SFF_1_n7 (24) | 304.780668 | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------
-|        20.237458s |        6.955304GB |                1000000 |              md1FF_state_gff_1_SFF_1_n7 (24) |        inf | LEAKAGE |
+|        16.609840s |        6.956184GB |                1000000 |              md1FF_state_gff_1_SFF_1_n7 (24) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------
-Evaluation done in 20.2396 seconds!
+Evaluation done in 16.6256 seconds!
 done!

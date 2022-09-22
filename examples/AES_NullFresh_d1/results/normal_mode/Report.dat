@@ -1,67 +1,67 @@
 Start Hardware Leakage Evaluation
 
-Library file:   library.lib
+Library file:   ../../../../library.lib
 Library name:   NANG45
-Design file:    design.v
+Design file:    ../../gate/design.v
 Module name:    circuit
 Linker file:    linker.ld
 Settings file:  config.set
-Result folder:  res
+Result folder:  ../normal_mode
 
 Read library file...done!
 Read design file...done!
 Make circuit depth...done!
-Read settings file...done with 5 warnings!
+Read settings file...done with 6 warnings!
     Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
     Warning "no_of_entries_in_report" is not specified. Default "no_of_entries_in_report" = 10 is taken!
     Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
-    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
     Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
 Construct probes...done!
 Prepare simulation memory...done!
 Prepare shared data for 48 threads ...done!
 
-Generate all possible probing sets for order 1...
-Generate list of standard probes...done!
-Generate list of extended probes...done!
-Generate univariate probing sets...Setting first-order variant...done!
-done! 28320 probing sets generated!
+Generate list of standard probes from 708 standard probe locations...28320 standard probes found...done!
+Generate list of extended probes from 1173 extended probe locations...187760 extended probes found...done!
+Generate univariate probing sets...done (last step)! 28320 probing sets generated!
 Extend all probing sets...done!
 Remove duplicated probes in the sets...done!
-Remove duplicated probing sets...done! 23560 probing sets remain!
+Remove duplicated probing sets...done! 24840 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 23560 probing sets remain!
 ----------------------------------------------------------------------------------------------------------------------------------
 | #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
 ----------------------------------------------------------------------------------------------------------------------------------
-|              708 |             1173 |              1 |       10 |                 10 |         23560 |                      73 |
+|            28320 |            46920 |              1 |       10 |                 10 |         23560 |                      73 |
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Evaluate security under the robust probing model!
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |      Elapsed Time |      Required Ram |  Processed Simulations |                                        Probing Set with highest Information Leakage |  -log10(p) |  Status |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       101.993092s |       18.095584GB |        128000 / 438767 |                                                                  OutputReg_n40 (23) |        inf | LEAKAGE |
+|        84.469616s |       17.918456GB |        128000 / 438767 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       209.230157s |       26.766672GB |        256000 / 617461 |                                                                  OutputReg_n40 (37) |        inf | LEAKAGE |
+|       176.086836s |       26.355892GB |        256000 / 617461 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       318.381414s |       35.645932GB |        384000 / 754521 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       268.443856s |       34.281656GB |        384000 / 754521 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       428.236170s |       39.168912GB |        512000 / 870019 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       361.514467s |       38.670556GB |        512000 / 870017 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       542.632240s |       49.562768GB |        640000 / 971745 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       455.830570s |       47.958372GB |        640000 / 971745 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       655.225725s |       52.610276GB |       768000 / 1063653 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       550.825636s |       50.550996GB |       768000 / 1063653 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       771.893394s |       56.648936GB |       896000 / 1148163 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       647.455498s |       55.036428GB |       896000 / 1148157 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       889.254203s |       59.755716GB |      1024000 / 1226801 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       745.154969s |       58.476912GB |      1024000 / 1226799 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|      1011.422175s |       67.751108GB |      1152000 / 1300617 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       843.961912s |       66.013552GB |      1152000 / 1300619 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|      1132.272840s |       74.964516GB |      1280000 / 1370419 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|       944.020873s |       71.715548GB |      1280000 / 1370419 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|      1254.329644s |       77.123116GB |      1408000 / 1436791 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|      1044.804510s |       73.771744GB |      1408000 / 1436787 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|      1377.614333s |       81.886332GB |      1536000 / 1500151 |                                                  DataPath_Registers_Inst2_n286 (37) |        inf | LEAKAGE |
+|      1146.692066s |       78.768888GB |      1536000 / 1500149 |                                                                  OutputReg_n48 (20) |        inf | LEAKAGE |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Evaluation done in 1485.81 seconds!
+Evaluation done in 1254.22 seconds!
 done!

@@ -1,66 +1,60 @@
 Start Hardware Leakage Evaluation
 
-Library file:   library.lib
+Library file:   ../../../../library.lib
 Library name:   NANG45
-Design file:    design.v
+Design file:    ../../gate/design.v
 Module name:    circuit
 Linker file:    linker.ld
 Settings file:  config.set
-Result folder:  res
+Result folder:  ../normal_mode
 
 Read library file...done!
 Read design file...done!
 Make circuit depth...done!
-Read settings file...done with 4 warnings!
+Read settings file...done with 5 warnings!
     Warning "remove_full_probing_sets" is not specified. Default "remove_full_probing_sets" = no is taken!
     Warning "max_distance_multivariate" is not specified. Default "max_distance_multivariate" = 10 is taken!
-    Warning "no_of_probe_steps" is not specified. Default "no_of_probe_steps" = 1 is taken!
+    Warning "no_of_probing_sets_per_step" is not specified. Default "no_of_probing_sets_per_step" = all is taken!
     Warning "effect_size" is not specified. Default "effect_size" = 0.1 is taken!
+    Warning "no_of_outputs" is not specified. Default "no_of_outputs" = 0 is taken!
 Construct probes...done!
 Prepare simulation memory...done!
 Prepare shared data for 48 threads ...done!
 
-Generate all possible probing sets for order 1...
-Generate list of standard probes...done!
-Generate list of extended probes...done!
-Generate univariate probing sets...Setting first-order variant...done!
-done! 11792 probing sets generated!
+Generate list of standard probes from 737 standard probe locations...11792 standard probes found...done!
+Generate list of extended probes from 928 extended probe locations...211760 extended probes found...done!
+Generate univariate probing sets...done (last step)! 11792 probing sets generated!
 Extend all probing sets...done!
 Remove duplicated probes in the sets...done!
-Remove duplicated probing sets...done! 4736 probing sets remain!
+Remove duplicated probing sets...done! 5568 probing sets remain!
+Remove subsets of probing sets...Setting univariate case...done! 4736 probing sets remain!
 ----------------------------------------------------------------------------------------------------------------------------------
 | #Standard Probes | #Extended Probes | Security Order | Distance | #Entries in Report | #Probing Sets | Maximum #Probes per Set |
 ----------------------------------------------------------------------------------------------------------------------------------
-|              737 |              928 |              1 |       10 |                 10 |          4736 |                      36 |
+|            11792 |            14848 |              1 |       10 |                 10 |          4736 |                      36 |
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Evaluate security under the robust probing model!
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |      Elapsed Time |      Required Ram |  Processed Simulations |                               Probing Set with highest Information Leakage |  -log10(p) |  Status |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|        28.513579s |        8.734400GB |        128000 / 430097 |                    prince_rounds_roundResult_Reg_s1_SFF_14_SFFInst_N3 (13) |  84.522574 | LEAKAGE |
+|        23.965333s |        8.919920GB |        128000 / 430103 |                    prince_rounds_roundResult_Reg_s1_SFF_14_SFFInst_N3 (13) |  83.632049 | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|        60.380162s |       10.787616GB |        256000 / 593413 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|        49.608883s |       10.863524GB |        256000 / 593405 |                      prince_rounds_roundResult_Reg_s2_SFF_7_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|        92.669725s |       12.182700GB |        384000 / 711747 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|        75.788057s |       12.233420GB |        384000 / 711783 |                      prince_rounds_roundResult_Reg_s1_SFF_7_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       125.285467s |       12.639488GB |        512000 / 806387 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       101.359114s |       12.487452GB |        512000 / 806371 |                      prince_rounds_roundResult_Reg_s1_SFF_7_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       158.552933s |       13.556992GB |        640000 / 885617 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       127.236395s |       13.417252GB |        640000 / 885611 |                      prince_rounds_roundResult_Reg_s1_SFF_7_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       191.917263s |       14.433536GB |        768000 / 953751 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       153.234509s |       13.966116GB |        768000 / 953773 |                      prince_rounds_roundResult_Reg_s1_SFF_7_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       225.653454s |       14.712112GB |       896000 / 1013631 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       179.151459s |       14.261224GB |       896000 / 1013643 |                      prince_rounds_roundResult_Reg_s1_SFF_2_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       259.336933s |       14.930912GB |      1024000 / 1067037 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       205.185312s |       14.510628GB |      1024000 / 1067051 |                      prince_rounds_roundResult_Reg_s1_SFF_2_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       293.385473s |       15.217616GB |      1152000 / 1115051 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
+|       232.479362s |       14.765624GB |      1152000 / 1115075 |                      prince_rounds_roundResult_Reg_s1_SFF_2_SFFInst_N3 (7) |        inf | LEAKAGE |
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       328.152287s |       15.426512GB |      1280000 / 1158703 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       364.201887s |       15.741904GB |      1408000 / 1198605 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|       399.322918s |       15.872976GB |      1536000 / 1235371 |                    prince_rounds_roundResult_Reg_s2_SFF_14_SFFInst_N3 (13) |        inf | LEAKAGE |
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Evaluation done in 411.895 seconds!
+Evaluation done in 244.532 seconds!
 done!
