@@ -2,25 +2,25 @@ Report file after 56000000 simulations:
 
 1.) Summary of most leaking (and already active) probing sets per clock cycle: 
 
-Cycle 2: @[inst2_Step1_ins_Step1[2](2)] ==> [t[0](2), r[1](2), c[0](2), t[0](1), r[1](1), c[0](1)] -log10(p) = 1.44844 --> OKAY
-Cycle 3: @[inst2_out0_mid_0_(3)] ==> [inst2_out0_mid_0_(3), inst2_out0_mid_0_(2)] -log10(p) = 2.14073 --> OKAY
-Cycle 4: @[d[0](4)] ==> [d[0](4), d[0](3)] -log10(p) = 2.14073 --> OKAY
-Cycle 5: @[d[0](5)] ==> [d[0](5), d[0](4)] -log10(p) = 2.09577 --> OKAY
-Cycle 6: @[c[1](6)] ==> [c[1](6), c[1](5)] -log10(p) = 0.681433 --> OKAY
-Cycle 7: @[inst2_Step2_inst_step2_ins_0_0_value(7)] ==> [inst2_in1_reg[0](7), inst2_in1_reg[1](7), inst2_Step1_reg[0](7), inst2_in1_reg[0](6), inst2_in1_reg[1](6), inst2_Step1_reg[0](6)] -log10(p) = 1.09335 --> OKAY
-Cycle 8: @[inst2_Step2_inst_step2_ins_0_2_value(8)] ==> [inst2_Step1_reg[2](8), inst2_in1_reg[0](8), inst2_in1_reg[1](8), inst2_Step1_reg[2](7), inst2_in1_reg[0](7), inst2_in1_reg[1](7)] -log10(p) = 1.30836 --> OKAY
-Cycle 9: @[inst1_Step2_inst_step2_ins_0_1_value(9)] ==> [inst1_Step1_reg[1](9), inst1_in1_reg[0](9), inst1_in1_reg[1](9), inst1_Step1_reg[1](8), inst1_in1_reg[0](8), inst1_in1_reg[1](8)] -log10(p) = 1.47102 --> OKAY
-Cycle 10: @[inst2_out0_mid_0_(10)] ==> [inst2_out0_mid_0_(10), inst2_out0_mid_0_(9)] -log10(p) = 1.62934 --> OKAY
+Cycle 2: @[inst2_Step1_ins_Step1[3](2)] ==> [t[0](2), r[1](2), c[0](2), t[0](1), r[1](1), c[0](1)] -log10(p) = 1.39279 --> OKAY
+Cycle 3: @[inst2_out0_mid_0_(3)] ==> [inst2_out0_mid_0_(3), inst2_out0_mid_0_(2)] -log10(p) = 2.15419 --> OKAY
+Cycle 4: @[d[1](4)] ==> [inst2_Step2_inst_Step2_reg[0](4), inst2_Step2_inst_Step2_reg[1](4), inst2_Step2_inst_Step2_reg[2](4), inst2_Step2_inst_Step2_reg[3](4), inst2_Step2_inst_Step2_reg[0](3), inst2_Step2_inst_Step2_reg[1](3), inst2_Step2_inst_Step2_reg[2](3), inst2_Step2_inst_Step2_reg[3](3)] -log10(p) = 2.15419 --> OKAY
+Cycle 5: @[d[0](5)] ==> [d[0](5), d[0](4)] -log10(p) = 2.10823 --> OKAY
+Cycle 6: @[inst1_Step2_inst_step2_ins_0_0_value(6)] ==> [inst1_in1_reg[0](6), inst1_in1_reg[1](6), inst1_Step1_reg[0](6), inst1_in1_reg[0](5), inst1_in1_reg[1](5), inst1_Step1_reg[0](5)] -log10(p) = 0.784504 --> OKAY
+Cycle 7: @[inst2_Step2_inst_step2_ins_0_0_value(7)] ==> [inst2_in1_reg[0](7), inst2_in1_reg[1](7), inst2_Step1_reg[0](7), inst2_in1_reg[0](6), inst2_in1_reg[1](6), inst2_Step1_reg[0](6)] -log10(p) = 0.914161 --> OKAY
+Cycle 8: @[inst2_Step2_inst_step2_ins_0_2_value(8)] ==> [inst2_Step1_reg[2](8), inst2_in1_reg[0](8), inst2_in1_reg[1](8), inst2_Step1_reg[2](7), inst2_in1_reg[0](7), inst2_in1_reg[1](7)] -log10(p) = 1.29504 --> OKAY
+Cycle 9: @[inst1_Step2_inst_step2_ins_0_1_value(9)] ==> [inst1_Step1_reg[1](9), inst1_in1_reg[0](9), inst1_in1_reg[1](9), inst1_Step1_reg[1](8), inst1_in1_reg[0](8), inst1_in1_reg[1](8)] -log10(p) = 1.79386 --> OKAY
+Cycle 10: @[inst2_out0_mid_0_(10)] ==> [inst2_out0_mid_0_(10), inst2_out0_mid_0_(9)] -log10(p) = 1.66574 --> OKAY
 
 2.) Summary of the most leakging (and already active) probing sets: 
 
-@[d[0](4)] ==> [d[0](4), d[0](3)] -log10(p) = 2.14073 --> OKAY
-@[d[1](4)] ==> [inst2_Step2_inst_Step2_reg[0](4), inst2_Step2_inst_Step2_reg[1](4), inst2_Step2_inst_Step2_reg[2](4), inst2_Step2_inst_Step2_reg[3](4), inst2_Step2_inst_Step2_reg[0](3), inst2_Step2_inst_Step2_reg[1](3), inst2_Step2_inst_Step2_reg[2](3), inst2_Step2_inst_Step2_reg[3](3)] -log10(p) = 2.14073 --> OKAY
-@[inst2_out0_mid_0_(3)] ==> [inst2_out0_mid_0_(3), inst2_out0_mid_0_(2)] -log10(p) = 2.14073 --> OKAY
-@[d[0](5)] ==> [d[0](5), d[0](4)] -log10(p) = 2.09577 --> OKAY
-@[inst2_out0_mid_0_(4)] ==> [inst2_out0_mid_0_(4), inst2_out0_mid_0_(3)] -log10(p) = 2.09577 --> OKAY
-@[inst2_Step2_inst_step2_ins_0_2_value(3)] ==> [inst2_Step1_reg[2](3), inst2_in1_reg[0](3), inst2_in1_reg[1](3), inst2_Step1_reg[2](2), inst2_in1_reg[0](2), inst2_in1_reg[1](2)] -log10(p) = 2.09064 --> OKAY
-@[inst2_Step2_inst_step2_ins_0_0_value(3)] ==> [inst2_in1_reg[0](3), inst2_in1_reg[1](3), inst2_Step1_reg[0](3), inst2_in1_reg[0](2), inst2_in1_reg[1](2), inst2_Step1_reg[0](2)] -log10(p) = 2.09064 --> OKAY
-@[d[1](5)] ==> [inst2_Step2_inst_Step2_reg[0](5), inst2_Step2_inst_Step2_reg[1](5), inst2_Step2_inst_Step2_reg[2](5), inst2_Step2_inst_Step2_reg[3](5), inst2_Step2_inst_Step2_reg[0](4), inst2_Step2_inst_Step2_reg[1](4), inst2_Step2_inst_Step2_reg[2](4), inst2_Step2_inst_Step2_reg[3](4)] -log10(p) = 1.84199 --> OKAY
-@[inst2_Step2_inst_step2_ins_0_0_value(5)] ==> [inst2_in1_reg[0](5), inst2_in1_reg[1](5), inst2_Step1_reg[0](5), inst2_in1_reg[0](4), inst2_in1_reg[1](4), inst2_Step1_reg[0](4)] -log10(p) = 1.71438 --> OKAY
-@[inst2_out0_mid_0_(10)] ==> [inst2_out0_mid_0_(10), inst2_out0_mid_0_(9)] -log10(p) = 1.62934 --> OKAY
+@[inst2_out0_mid_0_(3)] ==> [inst2_out0_mid_0_(3), inst2_out0_mid_0_(2)] -log10(p) = 2.15419 --> OKAY
+@[d[1](4)] ==> [inst2_Step2_inst_Step2_reg[0](4), inst2_Step2_inst_Step2_reg[1](4), inst2_Step2_inst_Step2_reg[2](4), inst2_Step2_inst_Step2_reg[3](4), inst2_Step2_inst_Step2_reg[0](3), inst2_Step2_inst_Step2_reg[1](3), inst2_Step2_inst_Step2_reg[2](3), inst2_Step2_inst_Step2_reg[3](3)] -log10(p) = 2.15419 --> OKAY
+@[d[0](4)] ==> [d[0](4), d[0](3)] -log10(p) = 2.15419 --> OKAY
+@[inst2_out0_mid_0_(4)] ==> [inst2_out0_mid_0_(4), inst2_out0_mid_0_(3)] -log10(p) = 2.10823 --> OKAY
+@[d[0](5)] ==> [d[0](5), d[0](4)] -log10(p) = 2.10823 --> OKAY
+@[inst2_Step2_inst_step2_ins_0_0_value(3)] ==> [inst2_in1_reg[0](3), inst2_in1_reg[1](3), inst2_Step1_reg[0](3), inst2_in1_reg[0](2), inst2_in1_reg[1](2), inst2_Step1_reg[0](2)] -log10(p) = 2.0419 --> OKAY
+@[inst2_Step2_inst_step2_ins_0_2_value(3)] ==> [inst2_Step1_reg[2](3), inst2_in1_reg[0](3), inst2_in1_reg[1](3), inst2_Step1_reg[2](2), inst2_in1_reg[0](2), inst2_in1_reg[1](2)] -log10(p) = 2.0419 --> OKAY
+@[inst2_Step2_inst_step2_ins_0_0_value(5)] ==> [inst2_in1_reg[0](5), inst2_in1_reg[1](5), inst2_Step1_reg[0](5), inst2_in1_reg[0](4), inst2_in1_reg[1](4), inst2_Step1_reg[0](4)] -log10(p) = 1.81605 --> OKAY
+@[d[1](5)] ==> [inst2_Step2_inst_Step2_reg[0](5), inst2_Step2_inst_Step2_reg[1](5), inst2_Step2_inst_Step2_reg[2](5), inst2_Step2_inst_Step2_reg[3](5), inst2_Step2_inst_Step2_reg[0](4), inst2_Step2_inst_Step2_reg[1](4), inst2_Step2_inst_Step2_reg[2](4), inst2_Step2_inst_Step2_reg[3](4)] -log10(p) = 1.80823 --> OKAY
+@[inst1_Step2_inst_step2_ins_0_1_value(9)] ==> [inst1_Step1_reg[1](9), inst1_in1_reg[0](9), inst1_in1_reg[1](9), inst1_Step1_reg[1](8), inst1_in1_reg[0](8), inst1_in1_reg[1](8)] -log10(p) = 1.79386 --> OKAY

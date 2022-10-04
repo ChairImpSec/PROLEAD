@@ -66,15 +66,15 @@ no_of_test_clock_cycles % number of blocks to define clock cycles which should b
 
 
 no_of_simulations % total number of simulations (traces) in the tests, should be a factor of 64
-1536000
-
+14080
+ 
 no_of_step_simulations % number of simulations in each step, should be a factor of 64, and a divisor of no_of_simulations
-128000
+1280
 
 no_of_step_write_results % number of simulations in each step that result files are written, 
                          % should be a factor of 64, and a divisor of no_of_simulations and
                          % should be a factor of no_of_step_simulations
-128000
+1280
 
 no_of_entries_in_report
 10

@@ -1,5 +1,5 @@
 max_no_of_threads   % maximum number of threads *for parallel operation*
-47
+48
 
 no_of_groups % number of groups to conduct the test, e.g., fixed vs. fixed, fixed vs. random, etc.
 2
@@ -11,7 +11,7 @@ clock_signal_name    % name of the clock signal
 Clock
 
 max_clock_cycle   % maximum number of clock cycles per run before checking the end_condition
-3
+14
 
 no_of_always_random_inputs % number of inputs which are fed randomly at every clock cycle  
 1
@@ -39,7 +39,7 @@ end_condition    % the condition to check to terminate the simulation (e.g., don
                  % or a numer of clock cycles, e.g., ClockCycles 5
 %Ready 1'b1
 %[31:0]  y    32'h89ABCE00
-ClockCycles 100
+ClockCycles 14
 
 end_wait_cycles   % number of clock cycles to wait after the end_condition 
 0
@@ -64,36 +64,24 @@ yes
 no_of_test_clock_cycles % number of blocks to define clock cycles which should be covered in the tests
 1
 
-2    % clock cycle 19-24
+1-14    % clock cycle 19-24
 
 no_of_simulations % total number of simulations (traces) in the tests, should be a factor of 64
-1024000000
+100000000
 
 no_of_step_simulations % number of simulations in each step, should be a factor of 64, and a divisor of no_of_simulations
-1024000
+1000000
 
 no_of_step_write_results % number of simulations in each step that result files are written, 
                          % should be a factor of 64, and a divisor of no_of_simulations and
                          % should be a factor of no_of_step_simulations
-1024000
+1000000
 
 no_of_entries_in_report
 10
 
-probes_exclude   % those wires which should be exclused for probing (all : to exclude them all, 0 : to exclude none, e.g., 2 : to exclude two and name them) 
+probes_include   % those wires which should be included for probing (all : to include them all, 0 : to include none, e.g., 2 : to inlcude two and name them)  
 all
 
-probes_include   % those wires which should be included for probing (all : to include them all, 0 : to include none, e.g., 2 : to inlcude two and name them)  
-9
-
-{all_mux_linear_0__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_1__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_2__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_3__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_4__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_5__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_6__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_7__MUX_theta_state_inst_StateIn[3]}
-{all_mux_linear_8__MUX_theta_state_inst_StateIn[3]}
-
-
+probes_exclude   % those wires which should be exclused for probing (all : to exclude them all, 0 : to exclude none, e.g., 2 : to exclude two and name them) 
+0
