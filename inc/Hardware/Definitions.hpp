@@ -8,6 +8,8 @@
 
 #define FullOne     0xffffffffffffffff
 #define GroupInput  0x8000000000000000
+#define RandomInput 0x4000000000000000
+#define SameInput   0x2000000000000000
 #define GroupInMask 0xf000000000000000
 
 #define CellType_Gate 0
@@ -162,7 +164,7 @@ namespace Hardware
 
         // By default, we set the allowed false-positive probability to 10^-5
         // If necessary, please change the false-positive probability here.
-        // Important: Give probability as negative logarithmic value 
+        // Important: Give probability as negative logarithmic value
         double AlphaThreshold = 5.0;
 
         // By default, we set the allowed false-negative probability to 10^-5
@@ -186,7 +188,7 @@ namespace Hardware
         char**     ProbeName = NULL;
 
         Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes = NULL;
-    };  
+    };
 
     struct SharedDataStruct
     {
@@ -196,7 +198,8 @@ namespace Hardware
         uint64_t*   RegValues = NULL;
         uint64_t**  GroupValues = NULL;
         uint64_t**  SelectedGroupValues = NULL;
-    };  
+        uint64_t*   LastInitialSimValues = NULL;
+    };
 
     struct SimulationStruct
     {
@@ -227,7 +230,7 @@ namespace Hardware
 
         int*       SelectedGroups = NULL;   // NumberOfStepSimulations
         char***    ProbeValues;             // [0...NumberOfStepSimulations-1][0...NumberOfClockCycles-1][0...NumberOfAllGlitchExtendedProbes-1]
-    };    
+    };
 
     struct TableEntryStruct
     {

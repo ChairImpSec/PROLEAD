@@ -240,7 +240,7 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
 						Library->CellTypes[Library->NumberOfCellTypes]->Cases[i] = (char*)malloc(Max_Name_Length);
                         strncpy(Library->CellTypes[Library->NumberOfCellTypes]->Cases[i], Str1, Max_Name_Length - 1);
                         Library->CellTypes[Library->NumberOfCellTypes]->Cases[i][Max_Name_Length - 1] = '\0';
-                        
+
                     }
 
                     Hardware::Read::NonCommentFromFile(LibraryFile, Str1, "%");
@@ -868,7 +868,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                     {
                                                         printf("\nIO port \"%s\" not found in cell type \"%s\"\n", Str1 + 1, Library->CellTypes[CellTypeIndex]->Cases[CaseIndex]);
                                                         ErrorMessage = Str1 + 1;
-                                                        ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[CaseIndex] + "\"!";                                                          
+                                                        ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[CaseIndex] + "\"!";
                                                         fclose(DesignFile);
                                                         free(Str1);
                                                         free(Str2);
@@ -885,7 +885,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             else
                                             {
                                                 ErrorMessage = Str1;
-                                                ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";                                                          
+                                                ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";
                                                 fclose(DesignFile);
                                                 free(Str1);
                                                 free(Str2);
@@ -932,7 +932,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             else
                                             {
                                                 ErrorMessage = Str1;
-                                                ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";                                                          
+                                                ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
                                                 fclose(DesignFile);
                                                 free(Str1);
                                                 free(Str2);
@@ -1009,7 +1009,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                 if (OutputIndex >= Library->CellTypes[CellTypeIndex]->NumberOfOutputs) // the IO port NOT found in the Circuit->Outputs
                                                 {
                                                     ErrorMessage = Str1 + 1;
-                                                    ErrorMessage = "IO port \"" + ErrorMessage + "\" did not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[0] + "\"!";                                                          
+                                                    ErrorMessage = "IO port \"" + ErrorMessage + "\" did not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[0] + "\"!";
                                                     fclose(DesignFile);
                                                     free(Str1);
                                                     free(Str2);
@@ -1025,7 +1025,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         else
                                         {
                                             ErrorMessage = Str1;
-                                            ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";                                                          
+                                            ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";
                                             fclose(DesignFile);
                                             free(Str1);
                                             free(Str2);
@@ -1036,7 +1036,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                     {
                                         ErrorMessage = Task;
-                                        ErrorMessage = "Error1! Taskid: " + ErrorMessage + "!";                                                          
+                                        ErrorMessage = "Error1! Taskid: " + ErrorMessage + "!";
                                         fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
@@ -1095,7 +1095,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         else
                                         {
                                             ErrorMessage = Str1;
-                                            ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";                                                          
+                                            ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
                                             fclose(DesignFile);
                                             free(Str1);
                                             free(Str2);
@@ -1188,7 +1188,14 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
     FILE*     SettingsFile;
     int       SettingsFileCheckList = 0;
     int       ClockCycle;
-    int       InitialSim_NumberOfInputBlocks = 0;
+    int       InitialSim_NumberOfInputBlocksGeneral = -1;
+    int       InitialSim_NumberOfInputBlocksLocal = -1;
+    int       InitialSim_NumberOfInputBlocks = -1;
+    int       TempIndex;
+    int*      InitialInputList = NULL;
+    int       LocalCounter = 0;
+    int       Repeat = 0;
+    int       Repeated = 0;
     int*      Buffer_int;
     uint64_t* Buffer_U64;
     int       NumberOfBuffer_char;
@@ -1305,7 +1312,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				Str3[Max_Name_Length - 1] = '\0';
 				strncpy(Str1, Str2 + 1, Max_Name_Length - 1);
 				Str1[Max_Name_Length - 1] = '\0';
-				
+
 				if (Str2[0] == 'h')
 				{
 					for (j = 0; j < Settings->NumberOfGroupValues; j += 4)
@@ -1578,6 +1585,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			}
 
 			InitialSim_NumberOfInputBlocks = templ;
+			InitialSim_NumberOfInputBlocksGeneral = InitialSim_NumberOfInputBlocks;
 			SettingsFileCheckList |= (1 << 6);
 		}
 		else if (!strcmp(Str1, "no_of_initial_clock_cycles"))
@@ -1599,14 +1607,115 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			Settings->InitialSim_Inputs = (int**)malloc(Settings->InitialSim_NumberOfClockCycles * sizeof(int*));
 			Settings->InitialSim_Values = (uint64_t**)malloc(Settings->InitialSim_NumberOfClockCycles * sizeof(uint64_t*));
 
+            Repeat = 0;
+            Repeated = 0;
+
             for (ClockCycle = 0; ClockCycle < Settings->InitialSim_NumberOfClockCycles; ClockCycle++)
             {
-				Settings->InitialSim_Inputs[ClockCycle] = NULL;
-				Settings->InitialSim_NumberOfInputs = 0;
-				Settings->InitialSim_Values[ClockCycle] = NULL;
+				if (Repeated >= Repeat)
+				{
+					if (InitialSim_NumberOfInputBlocksGeneral == -1)
+					{
+						Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+						str_ptr = strchr(Str1, '*');
+						if (str_ptr == NULL)
+						{
+							templ = strtol(Str1, &tmptr, 10);
+							if ((*tmptr) || (templ < 0))
+							{
+								ErrorMessage = "Given \"no_of_initial_inputs\" (" + (std::string)Str1 + " >= 0) after \"no_of_initial_clock_cycles\" in settings file is not valid!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+							Repeat = 1;
+							Repeated = 0;
+						}
+						else
+						{
+							strncpy(Str2, str_ptr + 1, Max_Name_Length - 1);
+							Str2[Max_Name_Length - 1] = '\0';
+							*str_ptr = 0;
+
+							templ = strtol(Str1, &tmptr, 10);
+							if ((*tmptr) || (templ <= 0))
+							{
+								ErrorMessage = "Given \"no_of_initial_inputs\" (" + (std::string)Str1 + "*" + (std::string)Str2 + ") after \"no_of_initial_clock_cycles\" in settings file is not valid!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+							Repeat = templ;
+							Repeated = 0;
+
+							templ = strtol(Str2, &tmptr, 10);
+							if ((*tmptr) || (templ < 0))
+							{
+								ErrorMessage = "Given \"no_of_initial_inputs\" (" + (std::string)Str1 + "*" + (std::string)Str2 + ") after \"no_of_initial_clock_cycles\" in settings file is not valid!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+						}
+
+						InitialSim_NumberOfInputBlocksLocal = templ;
+						if (InitialSim_NumberOfInputBlocks < 0)
+						{
+							InitialSim_NumberOfInputBlocks = InitialSim_NumberOfInputBlocksLocal;
+							SettingsFileCheckList |= (1 << 6);
+						}
+
+						if (InitialSim_NumberOfInputBlocksLocal > InitialSim_NumberOfInputBlocks)
+						{
+							ErrorMessage = "Given \"no_of_initial_inputs\" (" + (std::string)Str1 + ") after \"no_of_initial_clock_cycles\" in settings file cannot be larger than (" + std::to_string(InitialSim_NumberOfInputBlocks) + ")!";
+							fclose(SettingsFile);
+							free(Str1);
+							free(Str2);
+							free(Str3);
+							throw std::runtime_error(ErrorMessage);
+						}
+					}
+					else
+					{
+						InitialSim_NumberOfInputBlocksLocal = InitialSim_NumberOfInputBlocks;
+						Repeat = 1;
+						Repeated = 0;
+					}
+				}
+
+				if (!ClockCycle)
+				{
+					Settings->InitialSim_Inputs[ClockCycle] = NULL;
+					Settings->InitialSim_NumberOfInputs = 0;
+					Settings->InitialSim_Values[ClockCycle] = NULL;
+				}
+				else
+				{
+					Settings->InitialSim_Inputs[ClockCycle] = (int*)malloc(Settings->InitialSim_NumberOfInputs * sizeof(int));
+					Settings->InitialSim_Values[ClockCycle] = (uint64_t*)malloc(Settings->InitialSim_NumberOfInputs * sizeof(uint64_t));
+
+					memcpy(Settings->InitialSim_Inputs[ClockCycle], Settings->InitialSim_Inputs[ClockCycle - 1], Settings->InitialSim_NumberOfInputs * sizeof(int));
+					if (Repeated)
+						memcpy(Settings->InitialSim_Values[ClockCycle], Settings->InitialSim_Values[ClockCycle - 1], Settings->InitialSim_NumberOfInputs * sizeof(uint64_t));
+					else
+						for (LocalCounter = 0; LocalCounter < Settings->InitialSim_NumberOfInputs; LocalCounter++)
+							Settings->InitialSim_Values[ClockCycle][LocalCounter] = SameInput;
+
+					if (InitialInputList == NULL)
+						InitialInputList = (int*)malloc(Settings->InitialSim_NumberOfInputs * sizeof(int));
+
+					LocalCounter = 0;
+				}
+
                 NumberOfBuffer_char = 0;
 
-                for (InputIndex = 0; InputIndex < InitialSim_NumberOfInputBlocks; InputIndex++)
+                for (InputIndex = 0; (InputIndex < InitialSim_NumberOfInputBlocksLocal) && (!Repeated); InputIndex++)
                 {
                     Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
@@ -1695,13 +1804,35 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                             throw std::runtime_error(ErrorMessage);
                         }
 
-                        Buffer_int = (int*)malloc((Settings->InitialSim_NumberOfInputs + 1) * sizeof(int));
-                        memcpy(Buffer_int, Settings->InitialSim_Inputs[ClockCycle], Settings->InitialSim_NumberOfInputs * sizeof(int));
-						free(Settings->InitialSim_Inputs[ClockCycle]);
-						Settings->InitialSim_Inputs[ClockCycle] = Buffer_int;
+                        if (!ClockCycle)
+						{
+							Buffer_int = (int*)malloc((Settings->InitialSim_NumberOfInputs + 1) * sizeof(int));
+							memcpy(Buffer_int, Settings->InitialSim_Inputs[ClockCycle], Settings->InitialSim_NumberOfInputs * sizeof(int));
+							free(Settings->InitialSim_Inputs[ClockCycle]);
+							Settings->InitialSim_Inputs[ClockCycle] = Buffer_int;
 
-						Settings->InitialSim_Inputs[ClockCycle][Settings->InitialSim_NumberOfInputs] = SignalIndex;
-						Settings->InitialSim_NumberOfInputs++;
+							Settings->InitialSim_Inputs[ClockCycle][Settings->InitialSim_NumberOfInputs] = SignalIndex;
+							Settings->InitialSim_NumberOfInputs++;
+						}
+						else
+						{
+							for (TempIndex = 0; TempIndex < Settings->InitialSim_NumberOfInputs; TempIndex++)
+								if (Settings->InitialSim_Inputs[0][TempIndex] == SignalIndex)
+									break;
+
+							if (TempIndex >= Settings->InitialSim_NumberOfInputs)
+							{
+								ErrorMessage = "Signal " + (std::string)Str2 + " in settings file as initial input signal not found in the main initial input list!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+
+							InitialInputList[LocalCounter] = TempIndex;
+							LocalCounter++;
+						}
                     }
 
                     Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
@@ -1710,82 +1841,181 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 					{
 						strncpy(Str2, Str1, Max_Name_Length - 1);
 						Str2[Max_Name_Length - 1] = '\0';
-						str_ptr = strchr(Str2, '\'');
-						*str_ptr = 0;
-						templ = strtol(Str2, &tmptr, 10);
-						if ((*tmptr) || (templ < 1))
-						{
-                            ErrorMessage = "Given length (" + (std::string)Str2 + " > 0) for " +  (std::string)Str1 + " in settings file is not valid!";
-                            fclose(SettingsFile);
-                            free(Str1);
-                            free(Str2);
-                            free(Str3);
-                            throw std::runtime_error(ErrorMessage);
-						}
-
-						j = templ;
-						if (j != (IndexH - IndexL + 1))
-						{
-                            ErrorMessage = "Given length " + (std::string)Str1 + " in settings file does not match to the given size!";
-                            fclose(SettingsFile);
-                            free(Str1);
-                            free(Str2);
-                            free(Str3);
-                            throw std::runtime_error(ErrorMessage);
-						}
-
-						strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
-						Str3[Max_Name_Length - 1] = '\0';
-						strncpy(Str2, Str3, Max_Name_Length - 1);
-						Str2[Max_Name_Length - 1] = '\0';
-
-						if (Str2[0] == 'h')
-						{
-							for (j = IndexL; j <= IndexH; j += 4)
-							{
-								Str2[0] = Str1[strlen(Str1) - 1];
-								Str2[1] = 0;
-								Str1[strlen(Str1) - 1] = 0;
-
-								Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 4) * sizeof(uint64_t));
-								memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
-								free(Settings->InitialSim_Values[ClockCycle]);
-								Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
-
-								v = strtol(Str2, NULL, 16);
-								for (i = 0; i < 4; i++)
-								{
-									Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char] = (v & (1 << i)) ? FullOne : 0;
-									NumberOfBuffer_char++;
-								}
-							}
-						}
-						else if (Str2[0] == 'b')
+						if (!strcmp(Str2, "$"))
 						{
 							for (j = IndexL; j <= IndexH; j += 1)
 							{
-								Str2[0] = Str1[strlen(Str1) - 1];
-								Str2[1] = 0;
-								Str1[strlen(Str1) - 1] = 0;
+								if (!ClockCycle)
+								{
+									Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
+									memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
+									free(Settings->InitialSim_Values[ClockCycle]);
+									Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
+									TempIndex = NumberOfBuffer_char;
+								}
+								else
+									TempIndex = InitialInputList[NumberOfBuffer_char];
 
-								Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
-								memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
-								free(Settings->InitialSim_Values[ClockCycle]);
-								Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
-
-								v = strtol(Str2, NULL, 2);
-								Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char] = v ? FullOne : 0;
+								Settings->InitialSim_Values[ClockCycle][TempIndex] = RandomInput;
 								NumberOfBuffer_char++;
 							}
 						}
 						else
 						{
-                            ErrorMessage = "Base in settings file not known in " + (std::string)Str1 + "!";
-                            fclose(SettingsFile);
-                            free(Str1);
-                            free(Str2);
-                            free(Str3);
-                            throw std::runtime_error(ErrorMessage);
+							str_ptr = strchr(Str2, '\'');
+							if (str_ptr == NULL)
+							{
+								ErrorMessage = "Given statement " + (std::string)Str1 + " in settings file is not valid!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+
+							*str_ptr = 0;
+							templ = strtol(Str2, &tmptr, 10);
+							if ((*tmptr) || (templ < 1))
+							{
+								ErrorMessage = "Given length (" + (std::string)Str2 + " > 0) for " +  (std::string)Str1 + " in settings file is not valid!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+
+							j = templ;
+							if (j != (IndexH - IndexL + 1))
+							{
+								ErrorMessage = "Given length " + (std::string)Str1 + " in settings file does not match to the given size!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+
+							strncpy(Str3, str_ptr + 1, Max_Name_Length - 1);
+							Str3[Max_Name_Length - 1] = '\0';
+							strncpy(Str2, Str3, Max_Name_Length - 1);
+							Str2[Max_Name_Length - 1] = '\0';
+
+							if (Str2[0] == 'h')
+							{
+								if ((strlen(&Str2[1]) * 4) != (unsigned int) (1+ IndexH - IndexL))
+								{
+									ErrorMessage = "Given string for " +  (std::string)Str1 + " in settings file is not valid!";
+									fclose(SettingsFile);
+									free(Str1);
+									free(Str2);
+									free(Str3);
+									throw std::runtime_error(ErrorMessage);
+								}
+
+								for (j = IndexL; j <= IndexH; j += 4)
+								{
+									Str2[0] = Str1[strlen(Str1) - 1];
+									Str2[1] = 0;
+
+									if (!(((Str2[0] >= '0') && (Str2[0] <= '9')) ||
+										  ((Str2[0] >= 'a') && (Str2[0] <= 'f')) ||
+										  ((Str2[0] >= 'A') && (Str2[0] <= 'F')) ||
+										   (Str2[0] == '$')))
+									{
+										ErrorMessage = "Given string for " +  (std::string)Str1 + " in settings file is not valid!";
+										fclose(SettingsFile);
+										free(Str1);
+										free(Str2);
+										free(Str3);
+										throw std::runtime_error(ErrorMessage);
+									}
+
+									Str1[strlen(Str1) - 1] = 0;
+
+									if (!ClockCycle)
+									{
+										Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 4) * sizeof(uint64_t));
+										memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
+										free(Settings->InitialSim_Values[ClockCycle]);
+										Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
+									}
+
+									v = strtol(Str2, NULL, 16);
+									for (i = 0; i < 4; i++)
+									{
+										if (!ClockCycle)
+											TempIndex = NumberOfBuffer_char;
+										else
+											TempIndex = InitialInputList[NumberOfBuffer_char];
+
+										if (Str2[0] != '$')
+											Settings->InitialSim_Values[ClockCycle][TempIndex] = (v & (1 << i)) ? FullOne : 0;
+										else
+											Settings->InitialSim_Values[ClockCycle][TempIndex] = RandomInput;
+
+										NumberOfBuffer_char++;
+									}
+								}
+							}
+							else if (Str2[0] == 'b')
+							{
+								if (strlen(&Str2[1]) != (unsigned int)(1 + IndexH - IndexL))
+								{
+									ErrorMessage = "Given string for " +  (std::string)Str1 + " in settings file is not valid!";
+									fclose(SettingsFile);
+									free(Str1);
+									free(Str2);
+									free(Str3);
+									throw std::runtime_error(ErrorMessage);
+								}
+
+								for (j = IndexL; j <= IndexH; j += 1)
+								{
+									Str2[0] = Str1[strlen(Str1) - 1];
+									Str2[1] = 0;
+
+									if ((Str2[0] != '0') && (Str2[0] != '1') && (Str2[0] != '$'))
+									{
+										ErrorMessage = "Given string for " +  (std::string)Str1 + " in settings file is not valid!";
+										fclose(SettingsFile);
+										free(Str1);
+										free(Str2);
+										free(Str3);
+										throw std::runtime_error(ErrorMessage);
+									}
+
+									Str1[strlen(Str1) - 1] = 0;
+
+									if (!ClockCycle)
+									{
+										Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
+										memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
+										free(Settings->InitialSim_Values[ClockCycle]);
+										Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
+										TempIndex = NumberOfBuffer_char;
+									}
+									else
+										TempIndex = InitialInputList[NumberOfBuffer_char];
+
+									v = strtol(Str2, NULL, 2);
+									if (Str2[0] != '$')
+										Settings->InitialSim_Values[ClockCycle][TempIndex] = v ? FullOne : 0;
+									else
+										Settings->InitialSim_Values[ClockCycle][TempIndex] = RandomInput;
+
+									NumberOfBuffer_char++;
+								}
+							}
+							else
+							{
+								ErrorMessage = "Base in settings file not known in " + (std::string)Str1 + "!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
 						}
 					}
 					else
@@ -1895,15 +2125,21 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 						for (j = IndexL; j <= IndexH; j += 1)
 						{
-							Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
-							memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
-							free(Settings->InitialSim_Values[ClockCycle]);
-							Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
+							if (!ClockCycle)
+							{
+								Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
+								memcpy(Buffer_U64, Settings->InitialSim_Values[ClockCycle], NumberOfBuffer_char * sizeof(uint64_t));
+								free(Settings->InitialSim_Values[ClockCycle]);
+								Settings->InitialSim_Values[ClockCycle] = Buffer_U64;
+								TempIndex = NumberOfBuffer_char;
+							}
+							else
+								TempIndex = InitialInputList[NumberOfBuffer_char];
 
-							Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char]   = ShareIndex;
-							Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char] <<= 32;
-							Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char]  |= IndexL2 + (j - IndexL);
-							Settings->InitialSim_Values[ClockCycle][NumberOfBuffer_char]  |= GroupInput;
+							Settings->InitialSim_Values[ClockCycle][TempIndex]   = ShareIndex;
+							Settings->InitialSim_Values[ClockCycle][TempIndex] <<= 32;
+							Settings->InitialSim_Values[ClockCycle][TempIndex]  |= IndexL2 + (j - IndexL);
+							Settings->InitialSim_Values[ClockCycle][TempIndex]  |= GroupInput;
 							NumberOfBuffer_char++;
 
 							if (ShareIndex > Settings->MaxNumberOfSharesGroupValues[IndexL2 + (j - IndexL)])
@@ -1912,15 +2148,34 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 					}
                 }
 
-                if (NumberOfBuffer_char != Settings->InitialSim_NumberOfInputs)
-                {
-                    fclose(SettingsFile);
-                    free(Str1);
-                    free(Str2);
-					free(Str3);
-                    throw std::runtime_error("Something is wrong in given initial inputs in settings file!");
-                }
+                if (!Repeated)
+				{
+					if (!ClockCycle)
+						TempIndex = Settings->InitialSim_NumberOfInputs;
+					else
+						TempIndex = LocalCounter;
+
+					if (NumberOfBuffer_char != TempIndex)
+					{
+						fclose(SettingsFile);
+						free(Str1);
+						free(Str2);
+						free(Str3);
+						throw std::runtime_error("Something is wrong in given initial inputs in settings file!");
+					}
+				}
+
+               	Repeated++;
             }
+
+            if (Repeated < Repeat)
+			{
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				throw std::runtime_error("The given cycles for the initial inputs is more than \"no_of_initial_clock_cycles\" in settings file!");
+			}
 
             SettingsFileCheckList |= (1 << 7);
         }
@@ -2645,7 +2900,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		{
 			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
             double Effect = std::stod((std::string)Str1);
- 
+
 			if (Effect < 0.0)
 			{
                 ErrorMessage = "Given \"effect_size\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
@@ -2792,7 +3047,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				free(Str3);
 				throw std::runtime_error(ErrorMessage);
 			}
-				
+
 			if (Settings->NumberOfOutputShares == 0)
 			{
 				ErrorMessage = "To define \"expected_output\", \"no_of_outputs\" should be > 0 in settings file!";
@@ -3015,7 +3270,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 	//---------------------------------------------------------------------
 	// check optional inputs
-	
+
 	if (!(SettingsFileCheckList & (1 << 0))){
         Settings->Max_no_of_Threads = 1;
         Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
@@ -3024,12 +3279,12 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
  	if (!(SettingsFileCheckList & (1 << 12))){
         Settings->TestMultivariate = 0;
         Warnings.push_back("Warning \"multivariate_test\" is not specified. Default \"multivariate_test\" = no is taken!");
-	}  
+	}
 
  	if (!(SettingsFileCheckList & (1 << 13))){
         Settings->TestTransitional = 0;
         Warnings.push_back("Warning \"transitional_leakage\" is not specified. Default \"transitional_leakage\" = no is taken!");
-	}   
+	}
 
 	if (!(SettingsFileCheckList & (1 << 18))){
 		Settings->CompactDistributions = 0;
@@ -3076,5 +3331,5 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
     for (size_t WarningIndex = 0; WarningIndex < Warnings.size(); WarningIndex++){
         std::cout << "    " << Warnings.at(WarningIndex) << std::endl;
-    }  
+    }
 }

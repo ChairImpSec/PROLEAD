@@ -1,5 +1,5 @@
 #include <cinttypes>
-#include <filesystem> 
+#include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     if (argc > 1){
  		if ((CommandLineArguments.at(1) ==  "-h") || (CommandLineArguments.at(1) == "-?") || (CommandLineArguments.at(1) == "/?") || (CommandLineArguments.at(1) == "-help")){
-            Hardware::Print::Help(); 
+            Hardware::Print::Help();
             return 0;
         }
     }
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         if ((CommandLineArguments.at(i) == "-ln") || (CommandLineArguments.at(i) == "-libraryname")){
             CommandLineParameters.LibraryName = CommandLineArguments.at(i + 1);
             i += 2;
-        }  
+        }
         else
         if ((CommandLineArguments.at(i) == "-df") || (CommandLineArguments.at(i) == "-designfile")){
             CommandLineParameters.DesignFileName = CommandLineArguments.at(i + 1);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         if ((CommandLineArguments.at(i) == "-mn") || (CommandLineArguments.at(i) == "-modulename")){
             CommandLineParameters.MainModuleName = CommandLineArguments.at(i + 1);
             i += 2;
-        }     
+        }
 		else
         if ((CommandLineArguments.at(i) == "-cf") || (CommandLineArguments.at(i) == "-configfile")){
             CommandLineParameters.SettingsFileName = CommandLineArguments.at(i + 1);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
                 throw std::runtime_error("Config file path points to a directory!");
             }
             i += 2;
-        } 
+        }
 		else
         if ((CommandLineArguments.at(i) == "-rf") || (CommandLineArguments.at(i) == "-resultfolder")){
             CommandLineParameters.EvaluationResultFolderName = CommandLineArguments.at(i + 1);
@@ -73,24 +73,24 @@ int main(int argc, char *argv[])
             }
             i += 2;
         }
-        else    
+        else
         if ((CommandLineArguments.at(i) == "-pf") || (CommandLineArguments.at(i) == "-platform")){
-            CommandLineParameters.HardwareOrSoftwareCase = CommandLineArguments.at(i + 1);           
+            CommandLineParameters.HardwareOrSoftwareCase = CommandLineArguments.at(i + 1);
             i += 2;
-        }  
-        else    
+        }
+        else
         if ((CommandLineArguments.at(i) == "-ldf") || (CommandLineArguments.at(i) == "-linkerfile")){
             CommandLineParameters.LinkerFileName = CommandLineArguments.at(i + 1);
-            std::filesystem::path path(CommandLineParameters.LinkerFileName);  
+            std::filesystem::path path(CommandLineParameters.LinkerFileName);
 
             if (std::filesystem::is_directory(path, ec)){
                 throw std::runtime_error("Linker file path points to a directory!");
-            }          
+            }
             i += 2;
-        }  
+        }
         else
         {
-            Hardware::Print::Help(); 
+            Hardware::Print::Help();
             return 0;
         }
     }

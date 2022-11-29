@@ -130,15 +130,23 @@ void Hardware::Simulate::All(Hardware::LibraryStruct& Library, Hardware::Circuit
         if (ClockCycle < Settings.InitialSim_NumberOfClockCycles)
         {
             for (InputIndex = 0; InputIndex < Settings.InitialSim_NumberOfInputs; InputIndex++)
-				if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) != GroupInput)
-					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = Settings.InitialSim_Values[ClockCycle][InputIndex];
-				else
+            {
+				if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) == GroupInput)
 				{
 					ValueIndex = Settings.InitialSim_Values[ClockCycle][InputIndex]         & 0xffffffff;
 					ShareIndex = (Settings.InitialSim_Values[ClockCycle][InputIndex] >> 32) & 0xff;
 
 					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = SharedData->SelectedGroupValues[ValueIndex][ShareIndex];
 				}
+				else if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) == SameInput)
+					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = SharedData->LastInitialSimValues[InputIndex];
+				else if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) == RandomInput)
+					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = ThreadPrng();
+				else
+					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = Settings.InitialSim_Values[ClockCycle][InputIndex];
+
+				SharedData->LastInitialSimValues[InputIndex] = SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]];
+			}
 		}
 
         // ----------- applying the register outputs to the output signals
@@ -242,7 +250,7 @@ void Hardware::Simulate::All(Hardware::LibraryStruct& Library, Hardware::Circuit
 				ErrorMessage += "  \"" + (std::string)Circuit.Signals[Settings.OutputSignals[ShareIndex][SignalIndex]]->Name + "\"\n";
 
 			ErrorMessage += "do not match to the expected output!";
-			
+
 			#pragma omp critical
 			throw std::runtime_error(ErrorMessage);
 		}

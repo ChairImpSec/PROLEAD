@@ -138,7 +138,7 @@ void Hardware::Prepare::ExtendProbe(LibraryStruct* Library, CircuitStruct* Circu
 void Hardware::Prepare::Probes(Hardware::LibraryStruct* Library, Hardware::CircuitStruct* Circuit, Hardware::SettingsStruct* Settings, Hardware::ProbesStruct* Probes)
 {
     std::cout << "Construct probes..." << std::flush;
-	int     SignalIndex; 
+	int     SignalIndex;
 	int     InputIndex;
 	int     ProbeIndex;
 	int*    Buffer_int;
@@ -335,6 +335,8 @@ void Hardware::Prepare::SharedData(CircuitStruct* Circuit, SettingsStruct* Setti
 	SharedData->SelectedGroupValues = (uint64_t**)malloc(Settings->NumberOfGroupValues * sizeof(uint64_t*));
 	for (i = 0;i < Settings->NumberOfGroupValues;i++)
 		SharedData->SelectedGroupValues[i] = (uint64_t*)calloc(Settings->MaxNumberOfSharesGroupValues[i] + 1, sizeof(uint64_t));
+
+	SharedData->LastInitialSimValues = (uint64_t*)calloc(Settings->InitialSim_NumberOfInputs, sizeof(uint64_t));
 }
 
 void Hardware::Prepare::All(CommandLineParameterStruct& Parameter, Hardware::CircuitStruct& Circuit, Hardware::LibraryStruct& Library, Hardware::SettingsStruct& Settings, Hardware::ProbesStruct& Probes, Hardware::SimulationStruct& Simulation, Hardware::SharedDataStruct*& SharedData){

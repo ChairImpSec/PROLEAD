@@ -8,8 +8,8 @@ struct CommandLineParameterStruct
     std::string LibraryName = "NANG45";
     std::string DesignFileName = "design.v";
     std::string SettingsFileName = "config.set";
-    std::string MainModuleName = "circuit"; 
-    std::string EvaluationResultFolderName = "res";
+    std::string MainModuleName = "circuit";
+    std::string EvaluationResultFolderName = ".";
     std::string HardwareOrSoftwareCase = "hardware";
-    std::string LinkerFileName = "linker.ld";         
+    std::string LinkerFileName = "linker.ld";
 };
