@@ -356,7 +356,9 @@ void Hardware::Prepare::All(CommandLineParameterStruct& Parameter, Hardware::Cir
     strcpy(EvaluationResultFolderName, Parameter.EvaluationResultFolderName.c_str());
 
     Hardware::Read::LibraryFile(LibraryFileName, LibraryName, &Library);
-    Hardware::Read::DesignFile(DesignFileName, MainModuleName, &Library, &Circuit);
+    std::cout << "Read design file..." << std::flush;
+    Hardware::Read::DesignFile(DesignFileName, MainModuleName, &Library, &Circuit, 0, 0, 0);
+    std::cout << "done!" << std::endl;
     Hardware::Prepare::MakeCircuitDepth(&Library, &Circuit);
 	Hardware::Read::SettingsFile(SettingsFileName, &Circuit, &Settings);
     Hardware::Prepare::Probes(&Library, &Circuit, &Settings, &Probes);
