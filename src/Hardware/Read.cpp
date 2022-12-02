@@ -624,10 +624,14 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
                                                  int NumberOfInputPorts, int NumberOfOutputPorts, int* IOPorts, int &CurrentIO)
 {
 	int          SignalIndex;
+	int          SignalIndexWithOffset;
+	int          SignalIndex2;
+	int          SignalIndex2WithOffset;
+	int          CellIndex;
+	int          InputIndex2;
+	int          OutputIndex2;
 	int          TempIndex;
     int*         Buffer_int;
-    CellStruct** TempCells;
-    int*         TempGates;
     char*        Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
     int          Index1, Index2, IndexUpwards;
     int          j;
@@ -813,9 +817,6 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			}
 		}
 
-		if (Library->BufferCellType == -1)
-			throw std::runtime_error("Buffer cell is not defined in the library to connect submodules!");
-
 		if (NumberOfIOSignals != (NumberOfInputPorts + NumberOfOutputPorts))
 		{
 			ErrorMessage = Str1;
@@ -825,87 +826,59 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 		for (TempIndex = 0; TempIndex < (NumberOfInputPorts + NumberOfOutputPorts); TempIndex++)
 		{
-			TempCells = (CellStruct **)malloc((Circuit->NumberOfCells + 1) * sizeof(CellStruct *));
-			memcpy(TempCells, Circuit->Cells, Circuit->NumberOfCells * sizeof(CellStruct *));
-			free(Circuit->Cells);
-			Circuit->Cells = TempCells;
-
-			CellTypeIndex = Library->BufferCellType;
-			Circuit->Cells[Circuit->NumberOfCells] = (CellStruct *)malloc(sizeof(CellStruct));
-			Circuit->Cells[Circuit->NumberOfCells]->Type = CellTypeIndex;
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = Library->CellTypes[CellTypeIndex]->NumberOfInputs;
-			Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(Library->CellTypes[CellTypeIndex]->NumberOfInputs * sizeof(int));
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = Library->CellTypes[CellTypeIndex]->NumberOfOutputs;
-			Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(Library->CellTypes[CellTypeIndex]->NumberOfOutputs * sizeof(int));
-			Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
-			Circuit->Cells[Circuit->NumberOfCells]->Depth = -1;
-
-			sprintf(Str1, "PROLEAD_buf_%d", Circuit->NumberOfCells + NumberOfCellsOffset);
-			Circuit->Cells[Circuit->NumberOfCells]->Name = (char *)malloc(Max_Name_Length);
-			strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length - 1);
-			Circuit->Cells[Circuit->NumberOfCells]->Name[Max_Name_Length - 1] = '\0';
-
-			TempGates = (int *)malloc((Circuit->NumberOfGates + 1) * sizeof(int));
-			memcpy(TempGates, Circuit->Gates, Circuit->NumberOfGates * sizeof(int));
-			free(Circuit->Gates);
-			Circuit->Gates = TempGates;
-
-			Circuit->Gates[Circuit->NumberOfGates] = Circuit->NumberOfCells + NumberOfCellsOffset;
-			Circuit->NumberOfGates++;
+			SignalIndex = IOSignals[TempIndex];
+			SignalIndexWithOffset = SignalIndex;
+			if (SignalIndexWithOffset >= Circuit->NumberOfConstants)
+				SignalIndexWithOffset += NumberOfSignalsOffset;
 
 			if (NumberOfInputPorts != 0)
-			{
-				SignalIndex = IOSignals[TempIndex];
-				Circuit->Cells[Circuit->NumberOfCells]->Inputs[0] = SignalIndex;
-				if (SignalIndex >= Circuit->NumberOfConstants)
-					Circuit->Cells[Circuit->NumberOfCells]->Inputs[0] += NumberOfSignalsOffset;
-
-				Buffer_int = (int *)malloc((Circuit->Signals[SignalIndex]->NumberOfInputs + 1) * sizeof(int));
-				memcpy(Buffer_int, Circuit->Signals[SignalIndex]->Inputs, Circuit->Signals[SignalIndex]->NumberOfInputs * sizeof(int));
-				free(Circuit->Signals[SignalIndex]->Inputs);
-				Circuit->Signals[SignalIndex]->Inputs = Buffer_int;
-
-				Circuit->Signals[SignalIndex]->Inputs[Circuit->Signals[SignalIndex]->NumberOfInputs] = Circuit->NumberOfCells + NumberOfCellsOffset;
-				Circuit->Signals[SignalIndex]->NumberOfInputs++;
-
-				//------------------
-
-				SignalIndex = SubCircuit->Inputs[IOPorts[TempIndex]];
-				Circuit->Cells[Circuit->NumberOfCells]->Outputs[0] = SignalIndex;
-
-				if (SignalIndex >= Circuit->NumberOfConstants)
-					SignalIndex -= NumberOfSignalsOffset;
-
-				Circuit->Signals[SignalIndex]->Output = Circuit->NumberOfCells + NumberOfCellsOffset;
-			}
+				SignalIndex2WithOffset = SubCircuit->Inputs[IOPorts[TempIndex]];
 			else
+				SignalIndex2WithOffset = SubCircuit->Outputs[IOPorts[TempIndex]];
+
+			SignalIndex2 = SignalIndex2WithOffset;
+			if (SignalIndex2 >= Circuit->NumberOfConstants)
+				SignalIndex2 -= NumberOfSignalsOffset;
+
+			if (SignalIndex != 0)
 			{
-				SignalIndex = IOSignals[TempIndex];
-				Circuit->Cells[Circuit->NumberOfCells]->Outputs[0] = SignalIndex;
-				if (SignalIndex >= Circuit->NumberOfConstants)
-					Circuit->Cells[Circuit->NumberOfCells]->Outputs[0] += NumberOfSignalsOffset;
-
-				if (SignalIndex != -1)
-					Circuit->Signals[SignalIndex]->Output = Circuit->NumberOfCells + NumberOfCellsOffset;
-
-				//------------------
-
-				SignalIndex = SubCircuit->Outputs[IOPorts[TempIndex]];
-				Circuit->Cells[Circuit->NumberOfCells]->Inputs[0] = SignalIndex;
-
-				if (SignalIndex >= Circuit->NumberOfConstants)
-					SignalIndex -= NumberOfSignalsOffset;
-
-				Buffer_int = (int *)malloc((Circuit->Signals[SignalIndex]->NumberOfInputs + 1) * sizeof(int));
+				Buffer_int = (int *)malloc((Circuit->Signals[SignalIndex]->NumberOfInputs + Circuit->Signals[SignalIndex2]->NumberOfInputs) * sizeof(int));
 				memcpy(Buffer_int, Circuit->Signals[SignalIndex]->Inputs, Circuit->Signals[SignalIndex]->NumberOfInputs * sizeof(int));
 				free(Circuit->Signals[SignalIndex]->Inputs);
 				Circuit->Signals[SignalIndex]->Inputs = Buffer_int;
 
-				Circuit->Signals[SignalIndex]->Inputs[Circuit->Signals[SignalIndex]->NumberOfInputs] = Circuit->NumberOfCells + NumberOfCellsOffset;
-				Circuit->Signals[SignalIndex]->NumberOfInputs++;
+				for (InputIndex = 0; InputIndex < Circuit->Signals[SignalIndex2]->NumberOfInputs; InputIndex++)
+				{
+					CellIndex = Circuit->Signals[SignalIndex2]->Inputs[InputIndex];
+					Circuit->Signals[SignalIndex]->Inputs[Circuit->Signals[SignalIndex]->NumberOfInputs] = CellIndex;
+					Circuit->Signals[SignalIndex]->NumberOfInputs++;
+
+					CellIndex -= NumberOfCellsOffset;
+					for (InputIndex2 = 0; InputIndex2 < Circuit->Cells[CellIndex]->NumberOfInputs; InputIndex2++)
+						if (Circuit->Cells[CellIndex]->Inputs[InputIndex2] == SignalIndex2WithOffset)
+							Circuit->Cells[CellIndex]->Inputs[InputIndex2] = SignalIndexWithOffset;
+				}
+
+				if (NumberOfOutputPorts != 0)
+				{
+					CellIndex = Circuit->Signals[SignalIndex2]->Output;
+					Circuit->Signals[SignalIndex]->Output = CellIndex;
+					if (CellIndex != 0)
+					{
+						CellIndex -= NumberOfCellsOffset;
+
+						for (OutputIndex2 = 0; OutputIndex2 < Circuit->Cells[CellIndex]->NumberOfOutputs; OutputIndex2++)
+							if (Circuit->Cells[CellIndex]->Outputs[OutputIndex2] == SignalIndex2WithOffset)
+								Circuit->Cells[CellIndex]->Outputs[OutputIndex2] = SignalIndexWithOffset;
+					}
+				}
+
+				free(Circuit->Signals[SignalIndex2]->Inputs);
+				Circuit->Signals[SignalIndex2]->Inputs = NULL;
+				Circuit->Signals[SignalIndex2]->NumberOfInputs = 0;
+				Circuit->Signals[SignalIndex2]->Deleted = 1;
 			}
 
-			Circuit->NumberOfCells++;
 			CurrentIO++;
 		}
 	}
