@@ -312,7 +312,7 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
 void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
 {
     //reset Buffer
-	memset(Buffer, 0, Max_Name_Length);
+	memset(Buffer, 0, 10); //Max_Name_Length
 
     static char Lastch = 0;
     char        ch = 0;
@@ -334,17 +334,11 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
         {
             Lastch = 0;
 
-            if (ch == 32)
+            if ((ch == 32) || (ch == 13) || (ch == 10) || (ch == 9))
             {
 				if (i && (!BracketOpened))
 					break;
 			}
-			else
-			if ((ch == 13) || (ch == 10) || (ch == 9))
-            {
-                if (i)
-                    break;
-            }
             else if ((ch == '(') || (ch == ')'))
             {
                 if (i)
@@ -633,6 +627,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 	int          TempIndex;
     int*         Buffer_int;
     char*        Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
+    char*        Str3 = (char*)malloc(Max_Name_Length * sizeof(char));
     int          Index1, Index2, IndexUpwards;
     int          j;
     int*         IOSignals = NULL;
@@ -781,10 +776,10 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 					for (j = Index1; ((IndexUpwards == 1) && (j <= Index2)) || ((IndexUpwards == -1) && (j >= Index2)); j += IndexUpwards)
 					{
-						sprintf(Str1, "%s[%d]", Str2, j);
+						sprintf(Str3, "%s[%d]", Str2, j);
 
 						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-							if (!strcmp(Str1, Circuit->Signals[SignalIndex]->Name))
+							if (!strcmp(Str3, Circuit->Signals[SignalIndex]->Name))
 								break;
 
 						if (SignalIndex < Circuit->NumberOfSignals)
@@ -840,7 +835,9 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			if (SignalIndex2 >= Circuit->NumberOfConstants)
 				SignalIndex2 -= NumberOfSignalsOffset;
 
-			if (SignalIndex != 0)
+			Circuit->Signals[SignalIndex2]->Type = SignalType_wire;
+
+			if (SignalIndex != -1)
 			{
 				Buffer_int = (int *)malloc((Circuit->Signals[SignalIndex]->NumberOfInputs + Circuit->Signals[SignalIndex2]->NumberOfInputs) * sizeof(int));
 				memcpy(Buffer_int, Circuit->Signals[SignalIndex]->Inputs, Circuit->Signals[SignalIndex]->NumberOfInputs * sizeof(int));
@@ -863,7 +860,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 				{
 					CellIndex = Circuit->Signals[SignalIndex2]->Output;
 					Circuit->Signals[SignalIndex]->Output = CellIndex;
-					if (CellIndex != 0)
+					if (CellIndex != -1)
 					{
 						CellIndex -= NumberOfCellsOffset;
 
