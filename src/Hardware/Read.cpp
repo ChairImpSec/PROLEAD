@@ -795,7 +795,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 						}
 						else
 						{
-							ErrorMessage = Str1;
+							ErrorMessage = Str3;
 							ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
 							throw std::runtime_error(ErrorMessage);
 						}
