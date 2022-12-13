@@ -1228,6 +1228,12 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                 Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(Library->CellTypes[CellTypeIndex]->NumberOfOutputs * sizeof(int));
                                                 Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
 
+                                                for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
+                                                	Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] = -1;
+
+                                                for (OutputIndex = 0;OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
+                                                	Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] = -1;
+
                                                 if (Library->CellTypes[CellTypeIndex]->GateOrReg == CellType_Gate)
                                                 {
                                                     Circuit->Cells[Circuit->NumberOfCells]->Depth = -1;
@@ -1478,7 +1484,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     }
                                     else
                                     {
-                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!";
+                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\"(\" is placed in a wrong position.";
                                         fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
@@ -1509,9 +1515,15 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         else
                                             Task = Task_find_close_bracket;
                                     }
+                                    else if (Task == Task_find_comma)
+                                    {
+										// ignore at the moment. It shoudl be reworked.
+
+
+									}
                                     else
                                     {
-                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!";
+                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\")\" is placed in a wrong position.";
                                         fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
@@ -1525,11 +1537,24 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                 }
                                 else if ((ch == ',') && (Str1[0] != '{'))
                                 {
-                                    IO_port_found = 0;
-                                    Task = Task_find_IO_port;
+                                    if (Task == Task_find_comma)
+                                    {
+										IO_port_found = 0;
+										Task = Task_find_IO_port;
 
-                                    j = 0;
-                                    Str1[0] = 0;
+										j = 0;
+										Str1[0] = 0;
+									}
+									else
+									{
+                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\".\" is placed in a wrong position.";
+                                        fclose(DesignFile);
+                                        free(Str1);
+                                        free(Str2);
+                                        free(Phrase);
+                                        free(SubCircuitInstanceName);
+                                        throw std::runtime_error(ErrorMessage);
+									}
                                 }
                                 else
                                 {
