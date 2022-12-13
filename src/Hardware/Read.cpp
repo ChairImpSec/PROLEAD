@@ -497,86 +497,120 @@ int Hardware::Read::TrimSignalName(char* SignalName, int* k = NULL)
 void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
                                              LibraryStruct* Library, CircuitStruct* Circuit, int NumberOfSignalsOffset,
                                              char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
-                                             int &InputIndex, int &OutputIndex,
-                                             int &NumberOfInputPorts, int &NumberOfOutputPorts, int* &IOPorts)
+                                             int* &InputPorts, int &NumberOfInputPorts, int* &OutputPorts, int &NumberOfOutputPorts)
 {
 	int          SignalIndex;
+	int 		 InputIndex;
+	int 		 OutputIndex;
 	int          TempIndex;
 	int          i;
     char*        Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
     int*         Buffer_int;
     std::string  ErrorMessage;
 
+	NumberOfInputPorts = 0;
+	NumberOfOutputPorts = 0;
+	free(InputPorts);
+	free(OutputPorts);
+	InputPorts = NULL;
+	OutputPorts = NULL;
+
 	if (!SubCircuitRead)
 	{
-		for (InputIndex = 0; InputIndex < Library->CellTypes[CellTypeIndex]->NumberOfInputs; InputIndex++)
-			if (!strcmp(Str1 + 1, Library->CellTypes[CellTypeIndex]->Inputs[InputIndex]))
-				break;
-
-		if (InputIndex >= Library->CellTypes[CellTypeIndex]->NumberOfInputs) // the IO port NOT found in the Circuit->Inputs
+		if (strlen(Str1))
 		{
-			for (OutputIndex = 0; OutputIndex < Library->CellTypes[CellTypeIndex]->NumberOfOutputs; OutputIndex++)
-				if (!strcmp(Str1 + 1, Library->CellTypes[CellTypeIndex]->Outputs[OutputIndex]))
-					break;
-
-			if (OutputIndex >= Library->CellTypes[CellTypeIndex]->NumberOfOutputs) // the IO port NOT found in the Circuit->Outputs
+			for (InputIndex = 0; InputIndex < Library->CellTypes[CellTypeIndex]->NumberOfInputs; InputIndex++)
 			{
-				ErrorMessage = Str1 + 1;
-				ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[CaseIndex] + "\"!";
-				throw std::runtime_error(ErrorMessage);
+				strncpy(Str2, Library->CellTypes[CellTypeIndex]->Inputs[InputIndex], Max_Name_Length - 1);
+				i = TrimSignalName(Str2);
+
+				if ((!strcmp(Str1 + 1, Library->CellTypes[CellTypeIndex]->Inputs[InputIndex])) ||
+					(!strcmp(Str1 + 1, Str2)))
+				{
+					Buffer_int = (int *)malloc((NumberOfInputPorts + 1) * sizeof(int));
+					memcpy(Buffer_int, InputPorts, NumberOfInputPorts * sizeof(int));
+					free(InputPorts);
+					InputPorts = Buffer_int;
+
+					InputPorts[NumberOfInputPorts] = InputIndex;
+					NumberOfInputPorts++;
+
+					if (i < 0) // means the signal name was found not its trimmed
+						break;
+				}
 			}
 
-			InputIndex = -1;
+			if (!NumberOfInputPorts) // the IO port NOT found in the Circuit->Inputs
+			{
+				for (OutputIndex = 0; OutputIndex < Library->CellTypes[CellTypeIndex]->NumberOfOutputs; OutputIndex++)
+				{
+					strncpy(Str2, Library->CellTypes[CellTypeIndex]->Outputs[OutputIndex], Max_Name_Length - 1);
+					i = TrimSignalName(Str2);
+
+					if ((!strcmp(Str1 + 1, Library->CellTypes[CellTypeIndex]->Outputs[OutputIndex])) ||
+						(!strcmp(Str1 + 1, Str2)))
+					{
+						Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
+						memcpy(Buffer_int, OutputPorts, NumberOfOutputPorts * sizeof(int));
+						free(OutputPorts);
+						OutputPorts = Buffer_int;
+
+						OutputPorts[NumberOfOutputPorts] = OutputIndex;
+						NumberOfOutputPorts++;
+
+						if (i < 0) // means the signal name was found not its trimmed
+							break;
+					}
+				}
+
+				if (!NumberOfOutputPorts) // the IO port NOT found in the Circuit->Outputs
+				{
+					ErrorMessage = Str1 + 1;
+					ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[CaseIndex] + "\"!";
+					throw std::runtime_error(ErrorMessage);
+				}
+			}
+		}
+		else
+		{
+			for (InputIndex = 0; InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
+				if (Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] == -1)
+				{
+					ErrorMessage = "Input port \"" + (std::string)Library->CellTypes[CellTypeIndex]->Inputs[InputIndex] + "\" of cell \"" + (std::string)Circuit->Cells[Circuit->NumberOfCells]->Name + "\" cannot be left unconnected!";
+					throw std::runtime_error(ErrorMessage);
+				}
+
+			for (OutputIndex = 0; OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
+				if (Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] == -1)
+				{
+					Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
+					memcpy(Buffer_int, OutputPorts, NumberOfOutputPorts * sizeof(int));
+					free(OutputPorts);
+					OutputPorts = Buffer_int;
+
+					OutputPorts[NumberOfOutputPorts] = OutputIndex;
+					NumberOfOutputPorts++;
+				}
 		}
 	}
 	else
 	{
-		NumberOfInputPorts = 0;
-		NumberOfOutputPorts = 0;
-		free(IOPorts);
-		IOPorts = NULL;
-
-		TempIndex = strlen(SubCircuitInstanceName);
-		strncat(SubCircuitInstanceName, ".", Max_Name_Length - 1);
-		if (Str1[1] == '\\')
-			strncat(SubCircuitInstanceName, Str1 + 2, Max_Name_Length - 1);
-		else
-			strncat(SubCircuitInstanceName, Str1 + 1, Max_Name_Length - 1);
-
-		strncpy(Str1, "\\", Max_Name_Length - 1);
-		strncat(Str1, SubCircuitInstanceName, Max_Name_Length - 1);
-		SubCircuitInstanceName[TempIndex] = '\0';
-
-		for (InputIndex = 0; InputIndex < SubCircuit->NumberOfInputs; InputIndex++)
+		if (strlen(Str1))
 		{
-			SignalIndex = SubCircuit->Inputs[InputIndex];
-			if (SignalIndex > Circuit->NumberOfConstants)
-				SignalIndex -= NumberOfSignalsOffset;
+			TempIndex = strlen(SubCircuitInstanceName);
+			strncat(SubCircuitInstanceName, ".", Max_Name_Length - 1);
+			if (Str1[1] == '\\')
+				strncat(SubCircuitInstanceName, Str1 + 2, Max_Name_Length - 1);
+			else
+				strncat(SubCircuitInstanceName, Str1 + 1, Max_Name_Length - 1);
 
-			strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
-			i = TrimSignalName(Str2);
+			strncpy(Str1, "\\", Max_Name_Length - 1);
+			strncat(Str1, SubCircuitInstanceName, Max_Name_Length - 1);
+			SubCircuitInstanceName[TempIndex] = '\0';
 
-			if ((!strcmp(Str1, Circuit->Signals[SignalIndex]->Name)) ||
-			    (!strcmp(Str1, Str2)))
+			for (InputIndex = 0; InputIndex < SubCircuit->NumberOfInputs; InputIndex++)
 			{
-				Buffer_int = (int *)malloc((NumberOfInputPorts + 1) * sizeof(int));
-				memcpy(Buffer_int, IOPorts, NumberOfInputPorts * sizeof(int));
-				free(IOPorts);
-				IOPorts = Buffer_int;
-
-				IOPorts[NumberOfInputPorts] = InputIndex;
-				NumberOfInputPorts++;
-
-				if (i < 0) // means the signal name was found not its trimmed
-					break;
-			}
-		}
-
-		if (!NumberOfInputPorts) // the IO port NOT found in the SubCircuit.Inputs
-		{
-			for (OutputIndex = 0; OutputIndex < SubCircuit->NumberOfOutputs; OutputIndex++)
-			{
-				SignalIndex = SubCircuit->Outputs[OutputIndex];
+				SignalIndex = SubCircuit->Inputs[InputIndex];
 				if (SignalIndex > Circuit->NumberOfConstants)
 					SignalIndex -= NumberOfSignalsOffset;
 
@@ -586,24 +620,85 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 				if ((!strcmp(Str1, Circuit->Signals[SignalIndex]->Name)) ||
 					(!strcmp(Str1, Str2)))
 				{
-					Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
-					memcpy(Buffer_int, IOPorts, NumberOfOutputPorts * sizeof(int));
-					free(IOPorts);
-					IOPorts = Buffer_int;
+					Buffer_int = (int *)malloc((NumberOfInputPorts + 1) * sizeof(int));
+					memcpy(Buffer_int, InputPorts, NumberOfInputPorts * sizeof(int));
+					free(InputPorts);
+					InputPorts = Buffer_int;
 
-					IOPorts[NumberOfOutputPorts] = OutputIndex;
-					NumberOfOutputPorts++;
+					InputPorts[NumberOfInputPorts] = InputIndex;
+					NumberOfInputPorts++;
 
 					if (i < 0) // means the signal name was found not its trimmed
 						break;
 				}
 			}
 
-			if (!NumberOfOutputPorts) // the IO port NOT found in the subCircuit.Outputs
+			if (!NumberOfInputPorts) // the IO port NOT found in the SubCircuit.Inputs
 			{
-				ErrorMessage = Str1;
-				ErrorMessage = "IO port " + ErrorMessage + " not found in the module \"" + SubCircuitInstanceName + "\"!";
-				throw std::runtime_error(ErrorMessage);
+				for (OutputIndex = 0; OutputIndex < SubCircuit->NumberOfOutputs; OutputIndex++)
+				{
+					SignalIndex = SubCircuit->Outputs[OutputIndex];
+					if (SignalIndex > Circuit->NumberOfConstants)
+						SignalIndex -= NumberOfSignalsOffset;
+
+					strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
+					i = TrimSignalName(Str2);
+
+					if ((!strcmp(Str1, Circuit->Signals[SignalIndex]->Name)) ||
+						(!strcmp(Str1, Str2)))
+					{
+						Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
+						memcpy(Buffer_int, OutputPorts, NumberOfOutputPorts * sizeof(int));
+						free(OutputPorts);
+						OutputPorts = Buffer_int;
+
+						OutputPorts[NumberOfOutputPorts] = OutputIndex;
+						NumberOfOutputPorts++;
+
+						if (i < 0) // means the signal name was found not its trimmed
+							break;
+					}
+				}
+
+				if (!NumberOfOutputPorts) // the IO port NOT found in the subCircuit.Outputs
+				{
+					ErrorMessage = Str1;
+					ErrorMessage = "IO port " + ErrorMessage + " not found in module \"" + (std::string)SubCircuitInstanceName + "\"!";
+					throw std::runtime_error(ErrorMessage);
+				}
+			}
+		}
+		else
+		{
+			for (InputIndex = 0; InputIndex < SubCircuit->NumberOfInputs; InputIndex++)
+			{
+				SignalIndex = SubCircuit->Inputs[InputIndex];
+				if (SignalIndex > Circuit->NumberOfConstants)
+					SignalIndex -= NumberOfSignalsOffset;
+
+				if (!Circuit->Signals[SignalIndex]->Deleted)
+				{
+					ErrorMessage = "Input port \"" + (std::string)Circuit->Signals[SignalIndex]->Name + "\" of module \"" + (std::string)SubCircuitInstanceName + "\" cannot be left unconnected!";
+					throw std::runtime_error(ErrorMessage);
+				}
+			}
+
+			for (OutputIndex = 0; OutputIndex < SubCircuit->NumberOfOutputs; OutputIndex++)
+			{
+				SignalIndex = SubCircuit->Outputs[OutputIndex];
+				if (SignalIndex > Circuit->NumberOfConstants)
+					SignalIndex -= NumberOfSignalsOffset;
+
+				if (!Circuit->Signals[SignalIndex]->Deleted)
+				{
+					Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
+					memcpy(Buffer_int, OutputPorts, NumberOfOutputPorts * sizeof(int));
+					free(OutputPorts);
+					OutputPorts = Buffer_int;
+
+					OutputPorts[NumberOfOutputPorts] = OutputIndex;
+					NumberOfOutputPorts++;
+				}
 			}
 		}
 	}
@@ -611,16 +706,17 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 	free(Str2);
 }
 
-void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead, int CellTypeIndex,
-                                                 LibraryStruct* Library, CircuitStruct* Circuit,
-                                                 int NumberOfSignalsOffset, int NumberOfCellsOffset,
-                                                 CircuitStruct* SubCircuit, int InputIndex, int OutputIndex,
-                                                 int NumberOfInputPorts, int NumberOfOutputPorts, int* IOPorts, int &CurrentIO)
+void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
+                                                 LibraryStruct* Library, CircuitStruct* Circuit, int NumberOfSignalsOffset, int NumberOfCellsOffset,
+                                                 char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
+                                                 int* InputPorts, int NumberOfInputPorts, int* OutputPorts, int NumberOfOutputPorts, int &CurrentIO)
 {
 	int          SignalIndex;
 	int          SignalIndexWithOffset;
 	int          SignalIndex2;
 	int          SignalIndex2WithOffset;
+	int 		 InputIndex;
+	int 		 OutputIndex;
 	int          CellIndex;
 	int          InputIndex2;
 	int          OutputIndex2;
@@ -637,21 +733,154 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
     char         doneone;
     std::string  ErrorMessage;
 
+	if (strlen(Str1))
+	{
+		strptr = Str1;
+		if (strptr[0] == '{')
+			strptr++;
+
+		if (strptr[strlen(strptr) - 1] == '}')
+			strptr[strlen(strptr) - 1]  = 0;
+
+		strptr[strlen(strptr) + 1] = 0;
+
+		while (strlen(strptr))
+		{
+			strptr2 = strchr(strptr, ',');
+			if (strptr2)
+				*strptr2 = 0;
+
+			strncpy(Str2, strptr, Max_Name_Length - 1);
+			Index1 = TrimSignalName(Str2, &Index2);
+			doneone = 0;
+
+			if (Index1 < 0) // the given signal name does not have any index (without [])
+			{
+				for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+				{
+					strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
+					TrimSignalName(Str2);
+
+					if (!strcmp(strptr, Str2))
+					{
+						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+						free(IOSignals);
+						IOSignals = Buffer_int;
+
+						IOSignals[NumberOfIOSignals] = SignalIndex;
+						NumberOfIOSignals++;
+						doneone = 1;
+					}
+				}
+			}
+			else if ((Index1 >= 0) && (Index2 < 0)) // the given signal name has one index (with [ ])
+			{
+				for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+				{
+					if (!strcmp(strptr, Circuit->Signals[SignalIndex]->Name))
+					{
+						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+						free(IOSignals);
+						IOSignals = Buffer_int;
+
+						IOSignals[NumberOfIOSignals] = SignalIndex;
+						NumberOfIOSignals++;
+						doneone = 1;
+					}
+				}
+			}
+			else if ((Index1 >= 0) && (Index2 >= 0)) // the given signal name has two indices (with [ : ])
+			{
+				IndexUpwards = (Index1 < Index2) ? 1 : -1;
+
+				for (j = Index1; ((IndexUpwards == 1) && (j <= Index2)) || ((IndexUpwards == -1) && (j >= Index2)); j += IndexUpwards)
+				{
+					sprintf(Str3, "%s[%d]", Str2, j);
+
+					for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+						if (!strcmp(Str3, Circuit->Signals[SignalIndex]->Name))
+							break;
+
+					if (SignalIndex < Circuit->NumberOfSignals)
+					{
+						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+						free(IOSignals);
+						IOSignals = Buffer_int;
+
+						IOSignals[NumberOfIOSignals] = SignalIndex;
+						NumberOfIOSignals++;
+						doneone = 1;
+					}
+					else
+					{
+						ErrorMessage = Str3;
+						ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
+						throw std::runtime_error(ErrorMessage);
+					}
+				}
+			}
+
+			if (!doneone)
+			{
+				ErrorMessage = "Signal \"" + (std::string)strptr + "\" not found!";
+				throw std::runtime_error(ErrorMessage);
+			}
+
+			strptr += strlen(strptr) + 1;
+		}
+	}
+	else
+	{
+		if (NumberOfInputPorts > 0)
+		{
+			if (!SubCircuitRead)
+			{
+				ErrorMessage = "Input port \"" + (std::string)Library->CellTypes[CellTypeIndex]->Inputs[InputPorts[0]] + "\" of cell type \"" + Library->CellTypes[CellTypeIndex]->Cases[CaseIndex] + "\" cannot be left unconnected!";
+				throw std::runtime_error(ErrorMessage);
+			}
+			else
+			{
+				SignalIndex = SubCircuit->Inputs[InputPorts[0]];
+				if (SignalIndex >= Circuit->NumberOfConstants)
+					SignalIndex -= NumberOfSignalsOffset;
+
+				ErrorMessage = "Input port \"" + (std::string)Circuit->Signals[SignalIndex]->Name + "\" of module \"" + (std::string)SubCircuitInstanceName + "\" cannot be left unconnected!";
+				throw std::runtime_error(ErrorMessage);
+			}
+		}
+
+		for (TempIndex = 0; TempIndex < NumberOfOutputPorts; TempIndex++)
+		{
+			Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+			memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+			free(IOSignals);
+			IOSignals = Buffer_int;
+
+			IOSignals[NumberOfIOSignals] = -1;
+			NumberOfIOSignals++;
+		}
+	}
+
+	//**********************************************//
+
+	if (NumberOfIOSignals != (NumberOfInputPorts + NumberOfOutputPorts))
+	{
+		ErrorMessage = Str1;
+		ErrorMessage = "The size of the signal \"" + ErrorMessage + "\" does not match to the connected port!";
+		throw std::runtime_error(ErrorMessage);
+	}
+
 	if (!SubCircuitRead)
 	{
-		if (strlen(Str1))
+		for (TempIndex = 0; TempIndex < (NumberOfInputPorts + NumberOfOutputPorts); TempIndex++)
 		{
-			for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-				if (!strcmp(Str1, Circuit->Signals[SignalIndex]->Name))
-					break;
-		}
-		else
-			SignalIndex = -1;
-
-		if (SignalIndex < Circuit->NumberOfSignals)
-		{
-			if (InputIndex != -1)
+			SignalIndex = IOSignals[TempIndex];
+			if (TempIndex < NumberOfInputPorts)
 			{
+				InputIndex = InputPorts[TempIndex];
 				Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] = SignalIndex;
 				if (SignalIndex >= Circuit->NumberOfConstants)
 					Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] += NumberOfSignalsOffset;
@@ -666,6 +895,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			}
 			else
 			{
+				OutputIndex = OutputPorts[TempIndex - NumberOfInputPorts];
 				Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] = SignalIndex;
 				if (SignalIndex >= Circuit->NumberOfConstants)
 					Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] += NumberOfSignalsOffset;
@@ -680,145 +910,9 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 			CurrentIO++;
 		}
-		else
-		{
-			ErrorMessage = Str1;
-			ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
-			throw std::runtime_error(ErrorMessage);
-		}
 	}
 	else
 	{
-		if (strlen(Str1) == 0)
-		{
-			if (NumberOfInputPorts)
-			{
-				SignalIndex = SubCircuit->Inputs[IOPorts[0]];
-				if (SignalIndex >= Circuit->NumberOfConstants)
-					SignalIndex -= NumberOfSignalsOffset;
-
-				ErrorMessage = "Input port \"" + (std::string)Circuit->Signals[SignalIndex]->Name + "\" cannot be left unconnected!";
-				throw std::runtime_error(ErrorMessage);
-			}
-
-			for (TempIndex = 0; TempIndex < NumberOfOutputPorts; TempIndex++)
-			{
-				Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-				memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-				free(IOSignals);
-				IOSignals = Buffer_int;
-
-				IOSignals[NumberOfIOSignals] = -1;
-				NumberOfIOSignals++;
-			}
-		}
-		else
-		{
-			strptr = Str1;
-			if (strptr[0] == '{')
-				strptr++;
-
-			if (strptr[strlen(strptr) - 1] == '}')
-				strptr[strlen(strptr) - 1]  = 0;
-
-			strptr[strlen(strptr) + 1] = 0;
-
-			while (strlen(strptr))
-			{
-				strptr2 = strchr(strptr, ',');
-				if (strptr2)
-					*strptr2 = 0;
-
-				strncpy(Str2, strptr, Max_Name_Length - 1);
-				Index1 = TrimSignalName(Str2, &Index2);
-				doneone = 0;
-
-				if (Index1 < 0) // the given signal name does not have any index (without [])
-				{
-					for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-					{
-						strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
-						TrimSignalName(Str2);
-
-						if (!strcmp(strptr, Str2))
-						{
-							Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-							memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-							free(IOSignals);
-							IOSignals = Buffer_int;
-
-							IOSignals[NumberOfIOSignals] = SignalIndex;
-							NumberOfIOSignals++;
-							doneone = 1;
-						}
-					}
-				}
-				else if ((Index1 >= 0) && (Index2 < 0)) // the given signal name has one index (with [ ])
-				{
-					for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-					{
-						if (!strcmp(strptr, Circuit->Signals[SignalIndex]->Name))
-						{
-							Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-							memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-							free(IOSignals);
-							IOSignals = Buffer_int;
-
-							IOSignals[NumberOfIOSignals] = SignalIndex;
-							NumberOfIOSignals++;
-							doneone = 1;
-						}
-					}
-				}
-				else if ((Index1 >= 0) && (Index2 >= 0)) // the given signal name has two indices (with [ : ])
-				{
-					IndexUpwards = (Index1 < Index2) ? 1 : -1;
-
-					for (j = Index1; ((IndexUpwards == 1) && (j <= Index2)) || ((IndexUpwards == -1) && (j >= Index2)); j += IndexUpwards)
-					{
-						sprintf(Str3, "%s[%d]", Str2, j);
-
-						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-							if (!strcmp(Str3, Circuit->Signals[SignalIndex]->Name))
-								break;
-
-						if (SignalIndex < Circuit->NumberOfSignals)
-						{
-							Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-							memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-							free(IOSignals);
-							IOSignals = Buffer_int;
-
-							IOSignals[NumberOfIOSignals] = SignalIndex;
-							NumberOfIOSignals++;
-							doneone = 1;
-						}
-						else
-						{
-							ErrorMessage = Str3;
-							ErrorMessage = "Signal \"" + ErrorMessage + "\" not found!";
-							throw std::runtime_error(ErrorMessage);
-						}
-					}
-				}
-
-				if (!doneone)
-				{
-					ErrorMessage = "Signal \"" + (std::string)strptr + "\" not found!";
-					throw std::runtime_error(ErrorMessage);
-				}
-
-				strptr += strlen(strptr) + 1;
-			}
-		}
-
-		if (NumberOfIOSignals != (NumberOfInputPorts + NumberOfOutputPorts))
-		{
-			ErrorMessage = Str1;
-			ErrorMessage = "The size of the signal \"" + ErrorMessage + "\" does not match to the connected port!";
-			throw std::runtime_error(ErrorMessage);
-		}
-
 		for (TempIndex = 0; TempIndex < (NumberOfInputPorts + NumberOfOutputPorts); TempIndex++)
 		{
 			SignalIndex = IOSignals[TempIndex];
@@ -826,10 +920,10 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			if (SignalIndexWithOffset >= Circuit->NumberOfConstants)
 				SignalIndexWithOffset += NumberOfSignalsOffset;
 
-			if (NumberOfInputPorts != 0)
-				SignalIndex2WithOffset = SubCircuit->Inputs[IOPorts[TempIndex]];
+			if (TempIndex < NumberOfInputPorts)
+				SignalIndex2WithOffset = SubCircuit->Inputs[InputPorts[TempIndex]];
 			else
-				SignalIndex2WithOffset = SubCircuit->Outputs[IOPorts[TempIndex]];
+				SignalIndex2WithOffset = SubCircuit->Outputs[OutputPorts[TempIndex - NumberOfInputPorts]];
 
 			SignalIndex2 = SignalIndex2WithOffset;
 			if (SignalIndex2 >= Circuit->NumberOfConstants)
@@ -856,7 +950,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 							Circuit->Cells[CellIndex]->Inputs[InputIndex2] = SignalIndexWithOffset;
 				}
 
-				if (NumberOfOutputPorts != 0)
+				if (TempIndex >= NumberOfInputPorts)
 				{
 					CellIndex = Circuit->Signals[SignalIndex2]->Output;
 					Circuit->Signals[SignalIndex]->Output = CellIndex;
@@ -913,8 +1007,9 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 	CircuitStruct  SubCircuit;
 	char           SubCircuitRead = 0;
     char*          SubCircuitInstanceName = (char*)malloc(Max_Name_Length * sizeof(char));
-    int*           IOPorts = NULL;
+    int*           InputPorts = NULL;
     int            NumberOfInputPorts = 0;
+    int*           OutputPorts = NULL;
     int            NumberOfOutputPorts = 0;
 
     std::cout << "\"" << MainModuleName << "\"..." << std::flush;
@@ -1268,9 +1363,16 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                     Circuit->Cells[Circuit->NumberOfCells]->Name = (char *)malloc(Max_Name_Length);
                                                     strncpy(Circuit->Cells[Circuit->NumberOfCells]->Name, Str1, Max_Name_Length - 1); // Str1 = "assign_%d"
                                                     Circuit->Cells[Circuit->NumberOfCells]->Name[Max_Name_Length - 1] = '\0';
+
+                                                    NumberOfInputPorts = 0;
+                                                    free(InputPorts);
+                                                    InputPorts = NULL;
+                                                    NumberOfOutputPorts = 1;
+                                                    free(OutputPorts);
+                                                    OutputPorts = (int*)malloc(1 * sizeof(int));
+                                                    OutputPorts[0] = 0;
+
                                                     Task = Task_find_assign_signal_name1;
-                                                    InputIndex = -1;
-                                                    OutputIndex = 0;
                                                 }
                                                 else
                                                     Task = Task_find_module_name;
@@ -1387,8 +1489,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             if (Str1[0] == '.')
                                             {
 												DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, NumberOfSignalsOffset,
-                                                                        SubCircuitInstanceName, &SubCircuit, InputIndex, OutputIndex,
-                                                                        NumberOfInputPorts, NumberOfOutputPorts, IOPorts);
+                                                                        SubCircuitInstanceName, &SubCircuit,
+                                                                        InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
                                                 IO_port_found = 1;
                                                 Task = Task_find_open_bracket;
@@ -1409,17 +1511,22 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                  (Task == Task_find_assign_signal_name1) ||
                                                  (Task == Task_find_assign_signal_name2))
                                         {
-											DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, Library, Circuit,
-																		NumberOfSignalsOffset, NumberOfCellsOffset,
-																		&SubCircuit, InputIndex, OutputIndex,
-																		NumberOfInputPorts, NumberOfOutputPorts, IOPorts, CurrentIO);
+											DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit,
+																		NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
+																		InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
                                             if (Task == Task_find_assign_signal_name1)
                                                 if (ch == '=')
                                                 {
+                                                    NumberOfInputPorts = 1;
+                                                    free(InputPorts);
+                                                    InputPorts = (int*)malloc(1 * sizeof(int));
+                                                    InputPorts[0] = 0;
+                                                    NumberOfOutputPorts = 0;
+                                                    free(OutputPorts);
+                                                    OutputPorts = NULL;
+
                                                     Task = Task_find_assign_signal_name2;
-                                                    InputIndex = 0;
-                                                    OutputIndex = -1;
                                                 }
                                                 else
                                                     Task = Task_find_equal;
@@ -1436,9 +1543,15 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     {
                                         if (Task == Task_find_equal)
                                         {
+											NumberOfInputPorts = 1;
+											free(InputPorts);
+											InputPorts = (int*)malloc(1 * sizeof(int));
+											InputPorts[0] = 0;
+											NumberOfOutputPorts = 0;
+											free(OutputPorts);
+											OutputPorts = NULL;
+
                                             Task = Task_find_assign_signal_name2;
-                                            InputIndex = 0;
-                                            OutputIndex = -1;
                                         }
                                         else
                                         {
@@ -1447,7 +1560,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             free(Str2);
                                             free(Phrase);
                                             free(SubCircuitInstanceName);
-                                            throw std::runtime_error("Error2!");
+	                                        ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\"=\" is placed in a wrong position.";
+	                                        throw std::runtime_error(ErrorMessage);
                                         }
                                     }
                                 }
@@ -1465,8 +1579,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         if (Str1[0] == '.')
                                         {
 											DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, NumberOfSignalsOffset,
-                                                                    SubCircuitInstanceName, &SubCircuit, InputIndex, OutputIndex,
-                                                                    NumberOfInputPorts, NumberOfOutputPorts, IOPorts);
+                                                                    SubCircuitInstanceName, &SubCircuit,
+                                                                    InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
                                             Task = Task_find_signal_name;
                                         }
@@ -1505,10 +1619,9 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     }
                                     else if (Task == Task_find_signal_name)
                                     {
-										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, Library, Circuit,
-                                                                    NumberOfSignalsOffset, NumberOfCellsOffset,
-                                                                    &SubCircuit, InputIndex, OutputIndex,
-                                                                    NumberOfInputPorts, NumberOfOutputPorts, IOPorts, CurrentIO);
+										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit,
+																	NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
+																	InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
                                         if (CurrentIO < MyNumberofIO)
                                             Task = Task_find_comma;
@@ -1517,9 +1630,17 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     }
                                     else if (Task == Task_find_comma)
                                     {
-										// ignore at the moment. It shoudl be reworked.
+										Str1[0] = 0;
+										DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, NumberOfSignalsOffset,
+																SubCircuitInstanceName, &SubCircuit,
+																InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
+										Str1[0] = 0;
+										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit,
+																	NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
+																	InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
+										Task = Task_find_close_bracket;
 									}
                                     else
                                     {

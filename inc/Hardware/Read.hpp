@@ -16,8 +16,8 @@ namespace Hardware
         int  MakeFormulaForCellInLibrary(Hardware::CellTypeStruct *);
         void LibraryFile(char *, char *, Hardware::LibraryStruct *);
         int  TrimSignalName(char*, int*);
-        void DesignFile_Find_IO_Port(char*, char, int, int, Hardware::LibraryStruct*, Hardware::CircuitStruct*, int, char*, Hardware::CircuitStruct*, int&, int&, int&, int&, int*&);
-        void DesignFile_Find_Signal_Name(char*, char, int, Hardware::LibraryStruct*, CircuitStruct*, int, int, Hardware::CircuitStruct*, int, int, int, int, int*, int&);
+        void DesignFile_Find_IO_Port(char*, char, int, int, Hardware::LibraryStruct*, Hardware::CircuitStruct*, int, char*, Hardware::CircuitStruct*, int*&, int&, int*&, int&);
+        void DesignFile_Find_Signal_Name(char*, char, int, int, Hardware::LibraryStruct*, CircuitStruct*, int, int, char*, Hardware::CircuitStruct*, int*, int, int*, int, int&);
         void DesignFile(char *, char *, Hardware::LibraryStruct *, Hardware::CircuitStruct *, int, int, int);
         void SettingsFile(char *, Hardware::CircuitStruct *, Hardware::SettingsStruct *);
     }
