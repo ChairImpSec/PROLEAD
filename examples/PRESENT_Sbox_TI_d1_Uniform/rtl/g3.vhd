@@ -1,7 +1,5 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
-Library UNISIM;
-use UNISIM.vcomponents.all;
 
 entity g3BOOM is
 	Port ( x : in  STD_LOGIC_VECTOR (7 downto 0);
