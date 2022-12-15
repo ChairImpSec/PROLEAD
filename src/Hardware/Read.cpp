@@ -1169,7 +1169,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                             {
                                 // do nothing
                             }
-                            else if (ch == ':')
+                            else if ((ch == ':') && (Str1[0] != '\\'))
                             {
                                 Index1 = atoi(Str1);
                                 i = 0;
@@ -1190,54 +1190,114 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                         sprintf(Str2, "%s", Str1);
 
-                                    TempSignals = (SignalStruct **)malloc((Circuit->NumberOfSignals + 1) * sizeof(SignalStruct *));
-                                    memcpy(TempSignals, Circuit->Signals, Circuit->NumberOfSignals * sizeof(SignalStruct *));
-                                    free(Circuit->Signals);
-                                    Circuit->Signals = TempSignals;
+									for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+										if (!strcmp(Str2, Circuit->Signals[SignalIndex]->Name))
+											break;
 
-                                    Circuit->Signals[Circuit->NumberOfSignals] = (SignalStruct *)malloc(sizeof(SignalStruct));
-                                    Circuit->Signals[Circuit->NumberOfSignals]->Name = (char *)malloc(Max_Name_Length);
-                                    strncpy(Circuit->Signals[Circuit->NumberOfSignals]->Name, Str2, Max_Name_Length - 1);
-                                    Circuit->Signals[Circuit->NumberOfSignals]->Name[Max_Name_Length - 1] = '\0';
-                                    Circuit->Signals[Circuit->NumberOfSignals]->NumberOfInputs = 0;
-                                    Circuit->Signals[Circuit->NumberOfSignals]->Inputs = NULL;
-                                    Circuit->Signals[Circuit->NumberOfSignals]->Output = -1;
-									Circuit->Signals[Circuit->NumberOfSignals]->ProbeAllowed = 1;
-									Circuit->Signals[Circuit->NumberOfSignals]->Deleted = 0;
+									if (SignalIndex < Circuit->NumberOfSignals)
+									{
+										if (!strcmp(Phrase, "input"))
+										{
+											if (Circuit->Signals[SignalIndex]->Type == SignalType_wire)
+											{
+												Circuit->Signals[SignalIndex]->Type = SignalType_input;
+												Circuit->Signals[SignalIndex]->Depth = 0;
 
-                                    if (!strcmp(Phrase, "input"))
-                                    {
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_input;
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Depth = 0;
+												TempInputs = (int *)malloc((Circuit->NumberOfInputs + 1) * sizeof(int));
+												memcpy(TempInputs, Circuit->Inputs, Circuit->NumberOfInputs * sizeof(int));
+												free(Circuit->Inputs);
+												Circuit->Inputs = TempInputs;
 
-                                        TempInputs = (int *)malloc((Circuit->NumberOfInputs + 1) * sizeof(int));
-                                        memcpy(TempInputs, Circuit->Inputs, Circuit->NumberOfInputs * sizeof(int));
-                                        free(Circuit->Inputs);
-                                        Circuit->Inputs = TempInputs;
+												Circuit->Inputs[Circuit->NumberOfInputs] = SignalIndex + NumberOfSignalsOffset;
+												Circuit->NumberOfInputs++;
+											}
+											else
+											{
+												ErrorMessage = "Signal \"" + (std::string)Str2 + "\" is defined multiple times!";
+												throw std::runtime_error(ErrorMessage);
+											}
+										}
+										else if (!strcmp(Phrase, "output"))
+										{
+											if (Circuit->Signals[SignalIndex]->Type == SignalType_wire)
+											{
+												Circuit->Signals[SignalIndex]->Type = SignalType_output;
+												Circuit->Signals[SignalIndex]->Depth = -1;
 
-                                        Circuit->Inputs[Circuit->NumberOfInputs] = Circuit->NumberOfSignals + NumberOfSignalsOffset;
-                                        Circuit->NumberOfInputs++;
-                                    }
-                                    else if (!strcmp(Phrase, "output"))
-                                    {
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_output;
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Depth = -1;
+												TempOutputs = (int *)malloc((Circuit->NumberOfOutputs + 1) * sizeof(int));
+												memcpy(TempOutputs, Circuit->Outputs, Circuit->NumberOfOutputs * sizeof(int));
+												free(Circuit->Outputs);
+												Circuit->Outputs = TempOutputs;
 
-                                        TempOutputs = (int *)malloc((Circuit->NumberOfOutputs + 1) * sizeof(int));
-                                        memcpy(TempOutputs, Circuit->Outputs, Circuit->NumberOfOutputs * sizeof(int));
-                                        free(Circuit->Outputs);
-                                        Circuit->Outputs = TempOutputs;
+												Circuit->Outputs[Circuit->NumberOfOutputs] = SignalIndex + NumberOfSignalsOffset;
+												Circuit->NumberOfOutputs++;
+											}
+											else
+											{
+												ErrorMessage = "Signal \"" + (std::string)Str2 + "\" is defined multiple times!";
+												throw std::runtime_error(ErrorMessage);
+											}
+										}
+										else // if (!strcmp(Phrase, "wire"))
+										{
+											if (Circuit->Signals[SignalIndex]->Type == SignalType_wire)
+											{
+												ErrorMessage = "Signal \"" + (std::string)Str2 + "\" is defined multiple times!";
+												throw std::runtime_error(ErrorMessage);
+											}
+										}
+									}
+									else
+									{
+										TempSignals = (SignalStruct **)malloc((Circuit->NumberOfSignals + 1) * sizeof(SignalStruct *));
+										memcpy(TempSignals, Circuit->Signals, Circuit->NumberOfSignals * sizeof(SignalStruct *));
+										free(Circuit->Signals);
+										Circuit->Signals = TempSignals;
 
-                                        Circuit->Outputs[Circuit->NumberOfOutputs] = Circuit->NumberOfSignals + NumberOfSignalsOffset;
-                                        Circuit->NumberOfOutputs++;
-                                    }
-                                    else // if (!strcmp(Phrase, "wire"))
-                                    {
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_wire;
-                                        Circuit->Signals[Circuit->NumberOfSignals]->Depth = -1;
-                                    }
+										Circuit->Signals[Circuit->NumberOfSignals] = (SignalStruct *)malloc(sizeof(SignalStruct));
+										Circuit->Signals[Circuit->NumberOfSignals]->Name = (char *)malloc(Max_Name_Length);
+										strncpy(Circuit->Signals[Circuit->NumberOfSignals]->Name, Str2, Max_Name_Length - 1);
+										Circuit->Signals[Circuit->NumberOfSignals]->Name[Max_Name_Length - 1] = '\0';
+										Circuit->Signals[Circuit->NumberOfSignals]->NumberOfInputs = 0;
+										Circuit->Signals[Circuit->NumberOfSignals]->Inputs = NULL;
+										Circuit->Signals[Circuit->NumberOfSignals]->Output = -1;
+										Circuit->Signals[Circuit->NumberOfSignals]->ProbeAllowed = 1;
+										Circuit->Signals[Circuit->NumberOfSignals]->Deleted = 0;
 
-                                    Circuit->NumberOfSignals++;
+										if (!strcmp(Phrase, "input"))
+										{
+											Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_input;
+											Circuit->Signals[Circuit->NumberOfSignals]->Depth = 0;
+
+											TempInputs = (int *)malloc((Circuit->NumberOfInputs + 1) * sizeof(int));
+											memcpy(TempInputs, Circuit->Inputs, Circuit->NumberOfInputs * sizeof(int));
+											free(Circuit->Inputs);
+											Circuit->Inputs = TempInputs;
+
+											Circuit->Inputs[Circuit->NumberOfInputs] = Circuit->NumberOfSignals + NumberOfSignalsOffset;
+											Circuit->NumberOfInputs++;
+										}
+										else if (!strcmp(Phrase, "output"))
+										{
+											Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_output;
+											Circuit->Signals[Circuit->NumberOfSignals]->Depth = -1;
+
+											TempOutputs = (int *)malloc((Circuit->NumberOfOutputs + 1) * sizeof(int));
+											memcpy(TempOutputs, Circuit->Outputs, Circuit->NumberOfOutputs * sizeof(int));
+											free(Circuit->Outputs);
+											Circuit->Outputs = TempOutputs;
+
+											Circuit->Outputs[Circuit->NumberOfOutputs] = Circuit->NumberOfSignals + NumberOfSignalsOffset;
+											Circuit->NumberOfOutputs++;
+										}
+										else // if (!strcmp(Phrase, "wire"))
+										{
+											Circuit->Signals[Circuit->NumberOfSignals]->Type = SignalType_wire;
+											Circuit->Signals[Circuit->NumberOfSignals]->Depth = -1;
+										}
+
+										Circuit->NumberOfSignals++;
+									}
                                 }
 
                                 i = 0;
