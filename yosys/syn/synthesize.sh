@@ -15,9 +15,3 @@ then
 else
     echo "Command " $1 " is not supported.";
 fi
-
-# Yosys creates signal names with ':' inside. This can not be parsed by PROLEAD.
-# Hence, we remove ':' from signal names
-sed -i -r 's/\[([0-9]+):([0-9]+)\]/\[\1~\2\]/g' design.v
-sed -i 's/://g' design.v
-sed -i 's/~/:/g' design.v
