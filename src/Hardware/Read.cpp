@@ -921,6 +921,13 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			if (SignalIndex >= Circuit->NumberOfConstants)
 				Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] += NumberOfSignalsOffset;
 
+			if (Circuit->Signals[SignalIndex]->Output != -1)
+			{
+				ErrorMessage = Circuit->Signals[SignalIndex]->Name;
+				ErrorMessage = "signal \"" + ErrorMessage + "\" cannot be the output of more than one cell!";
+				throw std::runtime_error(ErrorMessage);
+			}
+
 			Circuit->Signals[SignalIndex]->Output = Circuit->NumberOfCells + NumberOfCellsOffset;
 
 			InputPorts[TempIndex] = Circuit->NumberOfCells;
@@ -992,6 +999,13 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 					if (SignalIndex != -1)
 					{
+						if (Circuit->Signals[SignalIndex]->Output != -1)
+						{
+							ErrorMessage = Circuit->Signals[SignalIndex]->Name;
+							ErrorMessage = "signal \"" + ErrorMessage + "\" cannot be the output of more than one cell!";
+							throw std::runtime_error(ErrorMessage);
+						}
+
 						Circuit->Signals[SignalIndex]->Output = Circuit->NumberOfCells + NumberOfCellsOffset;
 						if (Library->CellTypes[CellTypeIndex]->GateOrReg == CellType_Reg)
 							Circuit->Signals[SignalIndex]->Depth = 0;
@@ -1042,6 +1056,13 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 					if (TempIndex >= NumberOfInputPorts)
 					{
+						if (Circuit->Signals[SignalIndex]->Output != -1)
+						{
+							ErrorMessage = Circuit->Signals[SignalIndex]->Name;
+							ErrorMessage = "signal \"" + ErrorMessage + "\" cannot be the output of more than one cell!";
+							throw std::runtime_error(ErrorMessage);
+						}
+
 						CellIndex = Circuit->Signals[SignalIndex2]->Output;
 						Circuit->Signals[SignalIndex]->Output = CellIndex;
 						if (CellIndex != -1)
@@ -1524,7 +1545,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 													Hardware::Read::DesignFile(InputVerilogFileName, Str1, Library, &SubCircuit,
 																			   NumberOfSignalsOffset + Circuit->NumberOfSignals - Circuit->NumberOfConstants,
 																			   NumberOfCellsOffset + Circuit->NumberOfCells,
-																			   Circuit->NumberOfRegValues);
+																			   NumberOfRegValuesOffset + Circuit->NumberOfRegValues);
 
 													TempSignals = (SignalStruct **)malloc((Circuit->NumberOfSignals + SubCircuit.NumberOfSignals - SubCircuit.NumberOfConstants) * sizeof(SignalStruct *));
 													memcpy(TempSignals, Circuit->Signals, Circuit->NumberOfSignals * sizeof(SignalStruct *));
