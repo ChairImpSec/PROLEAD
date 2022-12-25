@@ -42,8 +42,6 @@ DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl
 # Output file name
 OUTPUT = PROLEAD
 
-ENABLE_LIBYOSYS = 1
-
 # Compilers. Change only if you need to
 # CC  = clang
 # CXX = clang++
