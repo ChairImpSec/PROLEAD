@@ -2794,6 +2794,16 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 						for (j = IndexL; j <= IndexH; j += 1)
 						{
+							if ((IndexL2 + (j - IndexL)) >= Settings->NumberOfGroupValues)
+							{
+								ErrorMessage = "Wrong given input in settings file in " + (std::string)Str1 + "!";
+								fclose(SettingsFile);
+								free(Str1);
+								free(Str2);
+								free(Str3);
+								throw std::runtime_error(ErrorMessage);
+							}
+
 							if (!ClockCycle)
 							{
 								Buffer_U64 = (uint64_t*)malloc((NumberOfBuffer_char + 1) * sizeof(uint64_t));
