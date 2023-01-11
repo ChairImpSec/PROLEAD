@@ -6,6 +6,11 @@ For a quick start, we recommend to watch the quick start guide below:
   <a href="https://www.youtube.com/watch?v=xzhVpo0fbNY"><img src="https://img.youtube.com/vi/xzhVpo0fbNY/0.jpg" alt="PROLEAD#1 - Quick Start Guide"></a>
 </div>
 
+## Features
+PROLEAD allows to analyze the robust probing security of masked implementations provided as a verilog netlist or arm binary. In particular, PROLEAD supports the following features:
+- Consideration of glitches and transitions (simultaneously) 
+- Univariate and multivariate adversaries
+
 ## Documentation
 All information about the features and use of PROLEAD can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki">Wiki</a>.
 
