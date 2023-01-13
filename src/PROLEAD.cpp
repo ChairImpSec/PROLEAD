@@ -6,6 +6,7 @@
 
 #include "Util/CommandLineParameter.hpp"
 #include "Hardware/Execute.hpp"
+#include "Software/Execute.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -40,13 +41,45 @@ int main(int argc, char *argv[])
         }
         else
         if ((CommandLineArguments.at(i) == "-df") || (CommandLineArguments.at(i) == "-designfile")){
-            CommandLineParameters.DesignFileName = CommandLineArguments.at(i + 1);
-            std::filesystem::path path(CommandLineParameters.DesignFileName);
-
-            if (std::filesystem::is_directory(path, ec)){
-                throw std::runtime_error("Design file path points to a directory!");
+            CommandLineParameters.DesignFileName.clear();
+            i += 1;
+            while(i < argc){
+                if (CommandLineArguments.at(i).at(0) != '-'){
+                    CommandLineParameters.DesignFileName += CommandLineArguments.at(i);
+                    std::filesystem::path path(CommandLineArguments.at(i));
+                    if(std::filesystem::is_directory(path, ec)){
+                        throw std::runtime_error("Design file path points to a directory!");
+                    }
+                    i += 1;
+                    if((i < argc) && (CommandLineArguments.at(i).at(0) != '-')){
+                        CommandLineParameters.DesignFileName += " ";
+                    }
+                }
+                else{
+                    break;
+                }
             }
-            i += 2;
+        }
+        else
+        if ((CommandLineArguments.at(i) == "-b") || (CommandLineArguments.at(i) == "-binary")){
+            CommandLineParameters.BinaryInformationNames.clear();
+            i += 1;
+            while(i < argc){
+                if (CommandLineArguments.at(i).at(0) != '-'){
+                    CommandLineParameters.BinaryInformationNames += CommandLineArguments.at(i);
+                    std::filesystem::path path(CommandLineArguments.at(i));
+                    if(std::filesystem::is_directory(path, ec)){
+                        throw std::runtime_error("Design file path points to a directory!");
+                    }
+                    i += 1;
+                    if((i < argc) && (CommandLineArguments.at(i).at(0) != '-')){
+                        CommandLineParameters.BinaryInformationNames += " ";
+                    }
+                }
+                else{
+                    break;
+                }
+            }
         }
         else
         if ((CommandLineArguments.at(i) == "-mn") || (CommandLineArguments.at(i) == "-modulename")){
@@ -108,7 +141,7 @@ int main(int argc, char *argv[])
         if (Hardware){
             Hardware::Execute(CommandLineParameters);
         }else{
-            throw std::logic_error("Software is not implemented yet!");
+            Software::Execute(CommandLineParameters);
         }
     }
 }

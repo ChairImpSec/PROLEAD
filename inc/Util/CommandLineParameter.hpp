@@ -12,4 +12,5 @@ struct CommandLineParameterStruct
     std::string EvaluationResultFolderName = ".";
     std::string HardwareOrSoftwareCase = "hardware";
     std::string LinkerFileName = "linker.ld";
+    std::string BinaryInformationNames = "";
 };
