@@ -539,13 +539,13 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
 
     // Find the most leaking probing set and required number of traces
 	for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-		if (Test.ProbingSet.at(SetIndex).Probability > MaximumAlpha){
-            MaximumAlpha = Test.ProbingSet.at(SetIndex).Probability;
+		if (Test.ProbingSet.at(SetIndex).ContingencyTable.Probability > MaximumAlpha){
+            MaximumAlpha = Test.ProbingSet.at(SetIndex).ContingencyTable.Probability;
             MaximumSetIndex = SetIndex;
         }
 
-        if (Test.ProbingSet.at(SetIndex).Traces > MaximumTraces){
-            MaximumTraces = Test.ProbingSet.at(SetIndex).Traces; 
+        if (Test.ProbingSet.at(SetIndex).ContingencyTable.Traces > MaximumTraces){
+            MaximumTraces = Test.ProbingSet.at(SetIndex).ContingencyTable.Traces; 
         }
     }
 
@@ -641,8 +641,8 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
             }
         }
 
-        if (Test.ProbingSet.at(SetIndex).Probability > MaximumGPerCycle.at(LatestClockCycle)){
-            MaximumGPerCycle.at(LatestClockCycle) = Test.ProbingSet.at(SetIndex).Probability;
+        if (Test.ProbingSet.at(SetIndex).ContingencyTable.Probability > MaximumGPerCycle.at(LatestClockCycle)){
+            MaximumGPerCycle.at(LatestClockCycle) = Test.ProbingSet.at(SetIndex).ContingencyTable.Probability;
             MaximumProbingSetPerCycle.at(LatestClockCycle) = SetIndex;
             MaximumProbingSetPerCycleSet.at(LatestClockCycle) = true;
         }
@@ -670,8 +670,8 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
                 }
             }
 
-            Report << " -log10(p) = " << Test.ProbingSet.at(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)).Probability;
-            if(Test.ProbingSet.at(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)).Probability > Settings.AlphaThreshold){
+            Report << " -log10(p) = " << Test.ProbingSet.at(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)).ContingencyTable.Probability;
+            if(Test.ProbingSet.at(MaximumProbingSetPerCycle.at(Simulation.TestClockCycles[CycleIndex] - 1)).ContingencyTable.Probability > Settings.AlphaThreshold){
                 Report << " --> LEAKAGE" << std::endl;
             }else{
                 Report << " --> OKAY" << std::endl;
@@ -684,7 +684,7 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
 
     while((Counter < (unsigned int)Settings.Max_No_ReportEntries) && (Counter < Test.ProbingSet.size()))
 	{
-		Maximum = std::max_element(Test.ProbingSet.begin(), Test.ProbingSet.end(), [](const Hardware::ProbingSetStruct& lhs, const Hardware::ProbingSetStruct& rhs){return lhs.Probability < rhs.Probability;});
+		Maximum = std::max_element(Test.ProbingSet.begin(), Test.ProbingSet.end(), [](const Hardware::ProbingSetStruct& lhs, const Hardware::ProbingSetStruct& rhs){return lhs.ContingencyTable.Probability < rhs.ContingencyTable.Probability;});
 		MaximumSetIndex = std::distance(Test.ProbingSet.begin(), Maximum);
         
         Report << "@[";
@@ -707,14 +707,14 @@ void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::Simul
             }
         }
 
-	    Report << " -log10(p) = " << Test.ProbingSet.at(MaximumSetIndex).Probability;
-        if(Test.ProbingSet.at(MaximumSetIndex).Probability > 5.0){
+	    Report << " -log10(p) = " << Test.ProbingSet.at(MaximumSetIndex).ContingencyTable.Probability;
+        if(Test.ProbingSet.at(MaximumSetIndex).ContingencyTable.Probability > 5.0){
             Report << " --> LEAKAGE" << std::endl;
         }else{
             Report << " --> OKAY" << std::endl;
         }
 
-        Test.ProbingSet.at(MaximumSetIndex).Probability = 0;
+        Test.ProbingSet.at(MaximumSetIndex).ContingencyTable.Probability = 0;
 		Counter++;
 	}
 

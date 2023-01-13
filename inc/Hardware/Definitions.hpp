@@ -3,6 +3,7 @@
 #include <cinttypes>
 #include <vector>
 #include <bits/stdc++.h>
+#include "Util/Util.hpp"
 
 #define Max_Name_Length 10000
 
@@ -232,14 +233,6 @@ namespace Hardware
         char***    ProbeValues;             // [0...NumberOfStepSimulations-1][0...NumberOfClockCycles-1][0...NumberOfAllGlitchExtendedProbes-1]
     };
 
-    struct TableEntryStruct
-    {
-        std::vector<unsigned char> Key;
-	    std::vector<unsigned int> Count;
-        TableEntryStruct(unsigned int);
-        TableEntryStruct(Hardware::SimulationStruct&, std::vector<unsigned char>&, int, unsigned int);
-    };
-
     struct ProbePositionStruct
     {
         unsigned int Probe;
@@ -253,16 +246,12 @@ namespace Hardware
     {
         std::vector<unsigned int> Standard;
         std::vector<unsigned int> Extension;
-        std::vector<Hardware::TableEntryStruct> ContingencyTable;
-        std::vector<std::vector<std::vector<std::vector<unsigned char>>>> OnlyOneEntry; // [GroupIndex][ByteIndex][KeyIndex][KeyByteIndex]
-        double                           Probability;
-        unsigned int                     Traces;
-
+        Util::ContingencyTableStruct ContingencyTable;
 
         ProbingSetStruct(unsigned int);
         ProbingSetStruct(std::vector<unsigned int>&);
         bool Covers(Hardware::ProbingSetStruct&);
-        int FindEntry(Hardware::TableEntryStruct&, unsigned int);
+        int FindEntry(Util::TableEntryStruct&, unsigned int);
     };
 
     struct UniqueProbeStruct
@@ -278,7 +267,7 @@ namespace Hardware
         std::vector<double>           SumOverGroup;
         std::vector<Hardware::ProbingSetStruct> ProbingSet;
         std::vector<std::vector<int>> TempProbeValue; // [NumberOfThreads][NumberOfSets]
-        std::vector<std::vector<Hardware::TableEntryStruct>> TableEntries; // [NumberOfThreads][NumberOfStepSimulations]
+        std::vector<std::vector<Util::TableEntryStruct>> TableEntries; // [NumberOfThreads][NumberOfStepSimulations]
         int				              NumberOfUniqueProbes = 0;
         Hardware::UniqueProbeStruct** UniqueProbe = NULL;
 

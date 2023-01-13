@@ -159,9 +159,9 @@ void Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Hardware::Librar
 
         if(Settings.RemoveProbingSets && !Settings.CompactDistributions){ // Remove probing set if enough traces are processed
             for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-                if (Simulation.NumberOfProcessedSimulations > Test.ProbingSet.at(SetIndex).Traces){
-                    if (Test.ProbingSet.at(SetIndex).Probability > Alpha){
-                        Alpha = Test.ProbingSet.at(SetIndex).Probability;
+                if (Simulation.NumberOfProcessedSimulations > Test.ProbingSet.at(SetIndex).ContingencyTable.Traces){
+                    if (Test.ProbingSet.at(SetIndex).ContingencyTable.Probability > Alpha){
+                        Alpha = Test.ProbingSet.at(SetIndex).ContingencyTable.Probability;
                         ProbingSet = "";
 
                         for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
@@ -178,7 +178,7 @@ void Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Hardware::Librar
                 }
             }
 
-            Test.ProbingSet.erase(std::remove_if(Test.ProbingSet.begin(), Test.ProbingSet.end(), [&Simulation](const ProbingSetStruct& Ps){return (Simulation.NumberOfProcessedSimulations > Ps.Traces);}), Test.ProbingSet.end());
+            Test.ProbingSet.erase(std::remove_if(Test.ProbingSet.begin(), Test.ProbingSet.end(), [&Simulation](const ProbingSetStruct& Ps){return (Simulation.NumberOfProcessedSimulations > Ps.ContingencyTable.Traces);}), Test.ProbingSet.end());
 
             if (Test.ProbingSet.size() == 0){
                 if ((Simulation.NumberOfProcessedSimulations % Settings.NumberOfStepSimulationsToWrite) != 0){

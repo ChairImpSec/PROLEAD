@@ -15,10 +15,10 @@ void Hardware::GenerateProbingSets::All(Hardware::SettingsStruct& Settings, Hard
         // Therefore, we pre-allocate memory for all entries of the table. This leads to a faster evaluation. 
         Hardware::GenerateProbingSets::InitializeCompactDistributions(Settings, Simulation, Test);
     }else{
-        Test.TableEntries.resize(Settings.Max_no_of_Threads, std::vector<Hardware::TableEntryStruct>(Simulation.NumberOfStepSimulations, TableEntryStruct(1)));
+        Test.TableEntries.resize(Settings.Max_no_of_Threads, std::vector<Util::TableEntryStruct>(Simulation.NumberOfStepSimulations, Util::TableEntryStruct(1)));
         
         for (size_t SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-            Test.ProbingSet.at(SetIndex).OnlyOneEntry.resize(Simulation.NumberOfGroups, std::vector<std::vector<std::vector<unsigned char>>>(256));
+            Test.ProbingSet.at(SetIndex).ContingencyTable.OnlyOneEntry.resize(Simulation.NumberOfGroups, std::vector<std::vector<std::vector<unsigned char>>>(256));
         }
     }
 }
@@ -168,7 +168,7 @@ void Hardware::GenerateProbingSets::CoverWithOneProbingSet(Hardware::TestStruct&
         if ((SetIndex != Index) && Test.ProbingSet.at(SetIndex).Covers(Test.ProbingSet.at(Index))){
             if (std::includes(Test.ProbingSet.at(SetIndex).Extension.begin(), Test.ProbingSet.at(SetIndex).Extension.end(), Test.ProbingSet.at(Index).Extension.begin(), Test.ProbingSet.at(Index).Extension.end(), std::greater<unsigned int>())){
                 // Traces equals one means that the probing set should be removed
-                Test.ProbingSet.at(Index).Traces = 1;
+                Test.ProbingSet.at(Index).ContingencyTable.Traces = 1;
             }
         }
     }    
@@ -229,18 +229,18 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
 }
 
 bool Hardware::GenerateProbingSets::Remove(ProbingSetStruct& ProbingSet){
-    return ProbingSet.Traces == 1;
+    return ProbingSet.ContingencyTable.Traces == 1;
 }
 
 void Hardware::GenerateProbingSets::InitializeCompactDistributions(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
-    Hardware::TableEntryStruct emptyTableEntry(Simulation.NumberOfGroups);
+    Util::TableEntryStruct emptyTableEntry(Simulation.NumberOfGroups);
     unsigned int          setIndex = 0, ProbeIndex = 0;
 	int                   TempIndex = 0, ClockCycle;
 	int**                 TempClockProbeTable = NULL;
 
     for (setIndex = 0; setIndex < Test.ProbingSet.size(); setIndex++){
         for (ProbeIndex = 0; ProbeIndex <= Test.ProbingSet.at(setIndex).Extension.size(); ProbeIndex++){
-			Test.ProbingSet.at(setIndex).ContingencyTable.push_back(emptyTableEntry);
+			Test.ProbingSet.at(setIndex).ContingencyTable.Entries.push_back(emptyTableEntry);
 		}
 	}
 
