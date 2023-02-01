@@ -1,0 +1,63 @@
+\hypertarget{namespace_util}{}\doxysection{Util Namespace Reference}
+\label{namespace_util}\index{Util@{Util}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Contingency\+Table\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Table\+Entry\+Struct}}
+\begin{DoxyCompactList}\small\item\em Defines one entry of a contingency table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{namespace_util_ad34641bfae3e10e69ca5d1782cba2663}{Get\+GValue}} (unsigned int, unsigned int, \mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Contingency\+Table\+Struct}} \&, std\+::vector$<$ double $>$, unsigned int, unsigned int \&)
+\item 
+void \mbox{\hyperlink{namespace_util_a8af79953252d000884143ce364714ea6}{GTest}} (unsigned int, unsigned int, \mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Contingency\+Table\+Struct}} \&, std\+::vector$<$ double $>$)
+\item 
+void \mbox{\hyperlink{namespace_util_a92553be959abdd48c9fcb9208fe8e76f}{Start\+Clock}} (timespec \&)
+\item 
+double \mbox{\hyperlink{namespace_util_a378cbdca53cd3ec455a6d596a6d62116}{End\+Clock}} (timespec \&)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_util_a378cbdca53cd3ec455a6d596a6d62116}\label{namespace_util_a378cbdca53cd3ec455a6d596a6d62116}} 
+\index{Util@{Util}!EndClock@{EndClock}}
+\index{EndClock@{EndClock}!Util@{Util}}
+\doxysubsubsection{\texorpdfstring{EndClock()}{EndClock()}}
+{\footnotesize\ttfamily double Util\+::\+End\+Clock (\begin{DoxyParamCaption}\item[{timespec \&}]{Begin }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00198}{198}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_util_ad34641bfae3e10e69ca5d1782cba2663}\label{namespace_util_ad34641bfae3e10e69ca5d1782cba2663}} 
+\index{Util@{Util}!GetGValue@{GetGValue}}
+\index{GetGValue@{GetGValue}!Util@{Util}}
+\doxysubsubsection{\texorpdfstring{GetGValue()}{GetGValue()}}
+{\footnotesize\ttfamily double Util\+::\+Get\+GValue (\begin{DoxyParamCaption}\item[{unsigned int}]{Number\+Of\+Groups,  }\item[{unsigned int}]{Number\+Of\+Simulations,  }\item[{\mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Util\+::\+Contingency\+Table\+Struct}} \&}]{Table,  }\item[{std\+::vector$<$ double $>$}]{Frequency,  }\item[{unsigned int}]{Table\+Size,  }\item[{unsigned int \&}]{Df }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00076}{76}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_util_a8af79953252d000884143ce364714ea6}\label{namespace_util_a8af79953252d000884143ce364714ea6}} 
+\index{Util@{Util}!GTest@{GTest}}
+\index{GTest@{GTest}!Util@{Util}}
+\doxysubsubsection{\texorpdfstring{GTest()}{GTest()}}
+{\footnotesize\ttfamily void Util\+::\+GTest (\begin{DoxyParamCaption}\item[{unsigned int}]{Number\+Of\+Groups,  }\item[{unsigned int}]{Number\+Of\+Simulations,  }\item[{\mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Util\+::\+Contingency\+Table\+Struct}} \&}]{Table,  }\item[{std\+::vector$<$ double $>$}]{Frequency }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00172}{172}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_util_a92553be959abdd48c9fcb9208fe8e76f}\label{namespace_util_a92553be959abdd48c9fcb9208fe8e76f}} 
+\index{Util@{Util}!StartClock@{StartClock}}
+\index{StartClock@{StartClock}!Util@{Util}}
+\doxysubsubsection{\texorpdfstring{StartClock()}{StartClock()}}
+{\footnotesize\ttfamily void Util\+::\+Start\+Clock (\begin{DoxyParamCaption}\item[{timespec \&}]{Begin }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00194}{194}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+

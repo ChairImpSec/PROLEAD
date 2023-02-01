@@ -1,0 +1,70 @@
+\hypertarget{registers_8cpp_source}{}\doxysection{registers.\+cpp}
+\label{registers_8cpp_source}\index{Projects/PROLEAD/src/Software/mulator/registers.cpp@{Projects/PROLEAD/src/Software/mulator/registers.cpp}}
+\mbox{\hyperlink{registers_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{registers_8h}{Software/mulator/registers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00003}00003\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemulator}{mulator}}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00004}00004\ \{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00005}\mbox{\hyperlink{namespacemulator_aaaab34fec3fe2186aa9164f30a47b5a2}{00005}}\ \ \ \ \ uint32\_t\ \mbox{\hyperlink{namespacemulator_aaaab34fec3fe2186aa9164f30a47b5a2}{to\_int}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\&\ x)}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00006}00006\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00007}00007\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}uint32\_t\textcolor{keyword}{>}(x);}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00008}00008\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00010}\mbox{\hyperlink{namespacemulator_a90555d2f2bf25000af70678629561b33}{00010}}\ \ \ \ \ std::string\ \mbox{\hyperlink{namespacemulator_a90555d2f2bf25000af70678629561b33}{to\_string\_probe}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\&\ x)}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00011}00011\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00012}00012\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(x)\{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00013}00013\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R0"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00014}00014\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R1"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00015}00015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R2"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R3"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00017}00017\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 4:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R4"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 5:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R5"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 6:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R6"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 7:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R7"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 8:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R8"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 9:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R9"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 10:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R10"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 11:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R11"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 12:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R12"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00026}00026\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 13:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R13"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00027}00027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 14:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R14"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 15:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R15"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 16:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R16"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<unknown\ register\ "{}}\ +\ std::to\_string(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(x))\ +\ \textcolor{stringliteral}{"{}>"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00033}00033\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00035}\mbox{\hyperlink{namespacemulator_a53ed1fabaaf1fd89fbb799f36a887491}{00035}}\ \ \ \ \ std::string\ \mbox{\hyperlink{namespacemulator_a184043802829cd6702f6e66d1c4c2857}{to\_string}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\&\ x)}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00036}00036\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(x)\{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R0"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R1"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 2:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R2"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 3:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R3"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 4:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R4"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 5:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R5"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 6:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R6"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 7:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R7"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 8:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R8"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 9:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R9"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 10:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R10"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 11:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R11"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 12:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R12"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 13:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}R13"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 14:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}LR"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 15:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}PC"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 16:\textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}XPSR"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}<unknown\ register\ "{}}\ +\ std::to\_string(\textcolor{keyword}{static\_cast<}\textcolor{keywordtype}{int}\textcolor{keyword}{>}(x))\ +\ \textcolor{stringliteral}{"{}>"{}};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00057}00057\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00060}\mbox{\hyperlink{namespacemulator_a430ff7455b4e2c1ffd56d669face52c1}{00060}}\ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{namespacemulator_ac68ad4f32cfea423915a7169f19a09cb}{operator<<}}(std::ostream\&\ os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\&\ x)}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00061}00061\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ os\ <<\ \mbox{\hyperlink{namespacemulator_a184043802829cd6702f6e66d1c4c2857}{to\_string}}(x);}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{registers_8cpp_source_l00064}00064\ \}}
+
+\end{DoxyCode}

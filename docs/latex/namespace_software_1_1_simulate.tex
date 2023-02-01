@@ -1,0 +1,44 @@
+\hypertarget{namespace_software_1_1_simulate}{}\doxysection{Software\+::Simulate Namespace Reference}
+\label{namespace_software_1_1_simulate}\index{Software::Simulate@{Software::Simulate}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_simulate_a46aef0a8f37a74d3799f91eb6376933a}{Instantiate\+\_\+\+Emulator}} (\mbox{\hyperlink{classmulator_1_1_emulator}{mulator\+::\+Emulator}} \&, \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&, int, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_shared_data_struct}{\+::\+Software\+::\+Shared\+Data\+Struct}} \&, uint32\+\_\+t, \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&, std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_simulate_aa57c9df85cee953886a4cb226c0bdc8a}{Run}} (\mbox{\hyperlink{classmulator_1_1_emulator}{mulator\+::\+Emulator}} \&, \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&, std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&, uint64\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_simulate_af2217dbc24677ea0062d4735ac8cbf10}{Generate\+Inputs}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_shared_data_struct}{Software\+::\+Shared\+Data\+Struct}} $>$ \&Shared\+Input\+Data, std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{Software\+::\+Thread\+Simulation\+Struct}} $>$ \&Thread\+Simulation, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&Settings, boost\+::variate\+\_\+generator$<$ boost\+::mt19937 \&, boost\+::uniform\+\_\+int$<$ uint64\+\_\+t $>$ $>$ \&Input\+Prng)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_software_1_1_simulate_af2217dbc24677ea0062d4735ac8cbf10}\label{namespace_software_1_1_simulate_af2217dbc24677ea0062d4735ac8cbf10}} 
+\index{Software::Simulate@{Software::Simulate}!GenerateInputs@{GenerateInputs}}
+\index{GenerateInputs@{GenerateInputs}!Software::Simulate@{Software::Simulate}}
+\doxysubsubsection{\texorpdfstring{GenerateInputs()}{GenerateInputs()}}
+{\footnotesize\ttfamily void Software\+::\+Simulate\+::\+Generate\+Inputs (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_shared_data_struct}{Software\+::\+Shared\+Data\+Struct}} $>$ \&}]{Shared\+Input\+Data,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{Software\+::\+Thread\+Simulation\+Struct}} $>$ \&}]{Thread\+Simulation,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&}]{Settings,  }\item[{boost\+::variate\+\_\+generator$<$ boost\+::mt19937 \&, boost\+::uniform\+\_\+int$<$ uint64\+\_\+t $>$ $>$ \&}]{Input\+Prng }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_software_2_simulate_8cpp_source_l00003}{3}} of file \mbox{\hyperlink{_software_2_simulate_8cpp_source}{Simulate.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_simulate_a46aef0a8f37a74d3799f91eb6376933a}\label{namespace_software_1_1_simulate_a46aef0a8f37a74d3799f91eb6376933a}} 
+\index{Software::Simulate@{Software::Simulate}!Instantiate\_Emulator@{Instantiate\_Emulator}}
+\index{Instantiate\_Emulator@{Instantiate\_Emulator}!Software::Simulate@{Software::Simulate}}
+\doxysubsubsection{\texorpdfstring{Instantiate\_Emulator()}{Instantiate\_Emulator()}}
+{\footnotesize\ttfamily void Software\+::\+Simulate\+::\+Instantiate\+\_\+\+Emulator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmulator_1_1_emulator}{mulator\+::\+Emulator}} \&}]{emu,  }\item[{\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&}]{Thread\+Simulation,  }\item[{int}]{simulation\+\_\+idx,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&}]{Settings,  }\item[{\mbox{\hyperlink{struct_software_1_1_shared_data_struct}{\+::\+Software\+::\+Shared\+Data\+Struct}} \&}]{Shared\+Data,  }\item[{uint32\+\_\+t}]{Cycle\+Start,  }\item[{\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&}]{Probe\+Tracker,  }\item[{\mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&}]{Helper,  }\item[{std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&}]{Probe\+Values }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_software_2_simulate_8cpp_source_l00082}{82}} of file \mbox{\hyperlink{_software_2_simulate_8cpp_source}{Simulate.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_simulate_aa57c9df85cee953886a4cb226c0bdc8a}\label{namespace_software_1_1_simulate_aa57c9df85cee953886a4cb226c0bdc8a}} 
+\index{Software::Simulate@{Software::Simulate}!Run@{Run}}
+\index{Run@{Run}!Software::Simulate@{Software::Simulate}}
+\doxysubsubsection{\texorpdfstring{Run()}{Run()}}
+{\footnotesize\ttfamily void Software\+::\+Simulate\+::\+Run (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classmulator_1_1_emulator}{mulator\+::\+Emulator}} \&}]{Emu,  }\item[{\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&}]{Thread\+Simulation,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&}]{Settings,  }\item[{\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&}]{Probe\+Tracker,  }\item[{\mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&}]{Helper,  }\item[{std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&}]{Probe\+Values,  }\item[{uint64\+\_\+t}]{Simulation\+Idx,  }\item[{uint32\+\_\+t}]{Cycle\+Split }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_software_2_simulate_8cpp_source_l00129}{129}} of file \mbox{\hyperlink{_software_2_simulate_8cpp_source}{Simulate.\+cpp}}.
+

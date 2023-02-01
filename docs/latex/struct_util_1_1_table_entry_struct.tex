@@ -1,0 +1,133 @@
+\hypertarget{struct_util_1_1_table_entry_struct}{}\doxysection{Util\+::Table\+Entry\+Struct Struct Reference}
+\label{struct_util_1_1_table_entry_struct}\index{Util::TableEntryStruct@{Util::TableEntryStruct}}
+
+
+Defines one entry of a contingency table.  
+
+
+
+
+{\ttfamily \#include $<$Util.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_util_1_1_table_entry_struct_a15b51d7fae14599314278215ca13ba58}{Table\+Entry\+Struct}} (unsigned int)
+\begin{DoxyCompactList}\small\item\em Initializes a new entry without fixed state and zero counts. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_util_1_1_table_entry_struct_ac9f82893b7141e3a241f21987deb7dfb}{Table\+Entry\+Struct}} (unsigned int, std\+::vector$<$ unsigned char $>$ \&, unsigned int, unsigned int)
+\begin{DoxyCompactList}\small\item\em Initializes a new entry with fixed state and counts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ unsigned char $>$ \mbox{\hyperlink{struct_util_1_1_table_entry_struct_a1bed7bb5ef3b4ba7c0f1ab6700d04c77}{Key}}
+\begin{DoxyCompactList}\small\item\em The probed state of the cell, i.\+e. a byte-\/wise n-\/bit value recorded by n probes of a probing set. \end{DoxyCompactList}\item 
+std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{struct_util_1_1_table_entry_struct_a1e67ec10401f545d43d682eeac625272}{Count}}
+\begin{DoxyCompactList}\small\item\em Counts how often state state was probed for each user-\/defined group. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines one entry of a contingency table. 
+
+Defines one entry, i.\+e. one column, of a contingency table.
+
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
+
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00019}{19}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{struct_util_1_1_table_entry_struct_a15b51d7fae14599314278215ca13ba58}\label{struct_util_1_1_table_entry_struct_a15b51d7fae14599314278215ca13ba58}} 
+\index{Util::TableEntryStruct@{Util::TableEntryStruct}!TableEntryStruct@{TableEntryStruct}}
+\index{TableEntryStruct@{TableEntryStruct}!Util::TableEntryStruct@{Util::TableEntryStruct}}
+\doxysubsubsection{\texorpdfstring{TableEntryStruct()}{TableEntryStruct()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Util\+::\+Table\+Entry\+Struct\+::\+Table\+Entry\+Struct (\begin{DoxyParamCaption}\item[{unsigned int}]{Group\+Size }\end{DoxyParamCaption})}
+
+
+
+Initializes a new entry without fixed state and zero counts. 
+
+Initializes a new entry without a predefined state but with a specified number of groups. All counters are set to zero.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Group\+Size} & Number of user-\/defined groups. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00003}{3}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+
+\mbox{\Hypertarget{struct_util_1_1_table_entry_struct_ac9f82893b7141e3a241f21987deb7dfb}\label{struct_util_1_1_table_entry_struct_ac9f82893b7141e3a241f21987deb7dfb}} 
+\index{Util::TableEntryStruct@{Util::TableEntryStruct}!TableEntryStruct@{TableEntryStruct}}
+\index{TableEntryStruct@{TableEntryStruct}!Util::TableEntryStruct@{Util::TableEntryStruct}}
+\doxysubsubsection{\texorpdfstring{TableEntryStruct()}{TableEntryStruct()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Util\+::\+Table\+Entry\+Struct\+::\+Table\+Entry\+Struct (\begin{DoxyParamCaption}\item[{unsigned int}]{Group\+Size,  }\item[{std\+::vector$<$ unsigned char $>$ \&}]{New\+Key,  }\item[{unsigned int}]{Group\+Index1,  }\item[{unsigned int}]{Group\+Index2 }\end{DoxyParamCaption})}
+
+
+
+Initializes a new entry with fixed state and counts. 
+
+Initializes a new entry with a predefined state and predefined counts. All counters are set to zero.
+
+While initializing the entry, all counts are set to zero but the user can define up to two counts to increment, i.\+e. two group counters can be set to one. 
+\begin{DoxyParams}{Parameters}
+{\em Group\+Size} & Number of user-\/defined groups. \\
+\hline
+{\em New\+Key} & The fixed state of the entry. \\
+\hline
+{\em Group\+Index1} & The index of the first group. \\
+\hline
+{\em Group\+Index2} & The index of the second group. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
+
+
+Definition at line \mbox{\hyperlink{_util_8cpp_source_l00007}{7}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{struct_util_1_1_table_entry_struct_a1e67ec10401f545d43d682eeac625272}\label{struct_util_1_1_table_entry_struct_a1e67ec10401f545d43d682eeac625272}} 
+\index{Util::TableEntryStruct@{Util::TableEntryStruct}!Count@{Count}}
+\index{Count@{Count}!Util::TableEntryStruct@{Util::TableEntryStruct}}
+\doxysubsubsection{\texorpdfstring{Count}{Count}}
+{\footnotesize\ttfamily std\+::vector$<$unsigned int$>$ Util\+::\+Table\+Entry\+Struct\+::\+Count}
+
+
+
+Counts how often state state was probed for each user-\/defined group. 
+
+
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00021}{21}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+
+\mbox{\Hypertarget{struct_util_1_1_table_entry_struct_a1bed7bb5ef3b4ba7c0f1ab6700d04c77}\label{struct_util_1_1_table_entry_struct_a1bed7bb5ef3b4ba7c0f1ab6700d04c77}} 
+\index{Util::TableEntryStruct@{Util::TableEntryStruct}!Key@{Key}}
+\index{Key@{Key}!Util::TableEntryStruct@{Util::TableEntryStruct}}
+\doxysubsubsection{\texorpdfstring{Key}{Key}}
+{\footnotesize\ttfamily std\+::vector$<$unsigned char$>$ Util\+::\+Table\+Entry\+Struct\+::\+Key}
+
+
+
+The probed state of the cell, i.\+e. a byte-\/wise n-\/bit value recorded by n probes of a probing set. 
+
+
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00020}{20}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Projects/\+PROLEAD/inc/\+Util/\mbox{\hyperlink{_util_8hpp}{Util.\+hpp}}\item 
+Projects/\+PROLEAD/src/\+Util/\mbox{\hyperlink{_util_8cpp}{Util.\+cpp}}\end{DoxyCompactItemize}

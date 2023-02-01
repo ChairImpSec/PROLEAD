@@ -1,0 +1,43 @@
+\hypertarget{return__codes_8h_source}{}\doxysection{return\+\_\+codes.\+h}
+\label{return__codes_8h_source}\index{Projects/PROLEAD/inc/Software/mulator/return\_codes.h@{Projects/PROLEAD/inc/Software/mulator/return\_codes.h}}
+\mbox{\hyperlink{return__codes_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <ostream>}}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00006}00006\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemulator}{mulator}}}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00007}00007\ \{}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00009}\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{00009}}\ \ \ \ \ \textcolor{keyword}{enum\ class}\ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00010}00010\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00011}00011\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ae0aa021e21dddbd6d8cecec71e9cf564}{OK}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00013}00013\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893afe86a785751d9dadfbc240db1b97d0a4}{INCOMPLETE\_DATA}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00014}00014\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a0db45d2a4141101bdfe48e3314cfbca3}{UNDEFINED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00015}00015\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893add8a06e3107ac54c2758856e8f967767}{UNPREDICTABLE}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00016}00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a40aa75f8e8cfdf7b660c5620e953229f}{UNSUPPORTED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00017}00017\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ac80d0cf86d8af108a52a091b7e84b0dd}{UNEXPECTED\_ENCODING}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00018}00018\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a3e860a081575fc82cc7b6ed2ca602947}{NOT\_IMPLEMENTED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00019}00019\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2e10ea30d9a94f2c5e30e767eab5fa18}{UNKNOWN\_INSTRUCTION}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00020}00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ae1b0ba36bd640cb2081a4b665a8765bf}{INVALID\_IMMEDIATE}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00022}00022\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a7277cc675779f41d6cd80f43a8ec702f}{INVALID\_REGISTER}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00023}00023\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a0424fdc56d55cece95217ff1340c17bc}{INVALID\_ALIGNMENT}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00024}00024\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a6b8bd6e8f524735990d8f3bcab7de266}{INVALID\_MEMORY\_ACCESS}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00025}00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2062fe4cf7fd0583b45fb1b1ab1b82bd}{INVALID\_SHIFT\_ARGUMENT}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a5d33ae2a08bcd5ebee0273a47446e127}{HARD\_FAULT}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00028}00028\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893add652546039b18970b8dcf2cff824268}{UNINITIALIZED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2e7bc6abb7402af25da9561bfc96d9b6}{MAX\_INSTRUCTIONS\_REACHED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893adcb3b89d3fcd3585f40e25be995c1f76}{END\_ADDRESS\_REACHED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893aa40ced999efb4e71ba6a14cc7aa5e7a3}{STOP\_EMULATION\_CALLED}},}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00032}00032\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00034}00034\ \ \ \ \ std::string\ \mbox{\hyperlink{namespacemulator_a184043802829cd6702f6e66d1c4c2857}{to\_string}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\&\ x);}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00035}00035\ \ \ \ \ std::ostream\&\ \mbox{\hyperlink{namespacemulator_ac68ad4f32cfea423915a7169f19a09cb}{operator<<}}(std::ostream\&\ os,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\&\ x);}
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{return__codes_8h_source_l00037}00037\ \}}
+
+\end{DoxyCode}

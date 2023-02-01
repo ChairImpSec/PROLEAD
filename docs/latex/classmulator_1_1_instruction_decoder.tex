@@ -1,0 +1,79 @@
+\hypertarget{classmulator_1_1_instruction_decoder}{}\doxysection{mulator\+::Instruction\+Decoder Class Reference}
+\label{classmulator_1_1_instruction_decoder}\index{mulator::InstructionDecoder@{mulator::InstructionDecoder}}
+
+
+{\ttfamily \#include $<$instruction\+\_\+decoder.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmulator_1_1_instruction_decoder_a6482bab50f70d579e6aa7a458c93c18d}{Instruction\+Decoder}} (\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} arch)
+\item 
+\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} \mbox{\hyperlink{classmulator_1_1_instruction_decoder_af786c1c89ca5fcce3638cb383129c698}{get\+\_\+architecture}} () const
+\item 
+std\+::pair$<$ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}}, \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}} $>$ \mbox{\hyperlink{classmulator_1_1_instruction_decoder_a5db41d82dd7ccc3f141769d2097c34fc}{decode\+\_\+instruction}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} address, const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$bytes, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} code\+\_\+size, bool in\+\_\+\+IT\+\_\+block, bool last\+\_\+in\+\_\+\+IT\+\_\+block)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} \mbox{\hyperlink{classmulator_1_1_instruction_decoder_a7d475b49493f8df0cd6c76fd3c7e90bc}{get\+\_\+instruction\+\_\+size}} (const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$bytes)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{instruction__decoder_8h_source_l00010}{10}} of file \mbox{\hyperlink{instruction__decoder_8h_source}{instruction\+\_\+decoder.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmulator_1_1_instruction_decoder_a6482bab50f70d579e6aa7a458c93c18d}\label{classmulator_1_1_instruction_decoder_a6482bab50f70d579e6aa7a458c93c18d}} 
+\index{mulator::InstructionDecoder@{mulator::InstructionDecoder}!InstructionDecoder@{InstructionDecoder}}
+\index{InstructionDecoder@{InstructionDecoder}!mulator::InstructionDecoder@{mulator::InstructionDecoder}}
+\doxysubsubsection{\texorpdfstring{InstructionDecoder()}{InstructionDecoder()}}
+{\footnotesize\ttfamily Instruction\+Decoder\+::\+Instruction\+Decoder (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}}]{arch }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{instruction__decoder_8cpp_source_l00027}{27}} of file \mbox{\hyperlink{instruction__decoder_8cpp_source}{instruction\+\_\+decoder.\+cpp}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmulator_1_1_instruction_decoder_a5db41d82dd7ccc3f141769d2097c34fc}\label{classmulator_1_1_instruction_decoder_a5db41d82dd7ccc3f141769d2097c34fc}} 
+\index{mulator::InstructionDecoder@{mulator::InstructionDecoder}!decode\_instruction@{decode\_instruction}}
+\index{decode\_instruction@{decode\_instruction}!mulator::InstructionDecoder@{mulator::InstructionDecoder}}
+\doxysubsubsection{\texorpdfstring{decode\_instruction()}{decode\_instruction()}}
+{\footnotesize\ttfamily std\+::pair$<$ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}}, \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}} $>$ Instruction\+Decoder\+::decode\+\_\+instruction (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{address,  }\item[{const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$}]{bytes,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{code\+\_\+size,  }\item[{bool}]{in\+\_\+\+IT\+\_\+block,  }\item[{bool}]{last\+\_\+in\+\_\+\+IT\+\_\+block }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{instruction__decoder_8cpp_source_l00049}{49}} of file \mbox{\hyperlink{instruction__decoder_8cpp_source}{instruction\+\_\+decoder.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_instruction_decoder_af786c1c89ca5fcce3638cb383129c698}\label{classmulator_1_1_instruction_decoder_af786c1c89ca5fcce3638cb383129c698}} 
+\index{mulator::InstructionDecoder@{mulator::InstructionDecoder}!get\_architecture@{get\_architecture}}
+\index{get\_architecture@{get\_architecture}!mulator::InstructionDecoder@{mulator::InstructionDecoder}}
+\doxysubsubsection{\texorpdfstring{get\_architecture()}{get\_architecture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} Instruction\+Decoder\+::get\+\_\+architecture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{instruction__decoder_8cpp_source_l00032}{32}} of file \mbox{\hyperlink{instruction__decoder_8cpp_source}{instruction\+\_\+decoder.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_instruction_decoder_a7d475b49493f8df0cd6c76fd3c7e90bc}\label{classmulator_1_1_instruction_decoder_a7d475b49493f8df0cd6c76fd3c7e90bc}} 
+\index{mulator::InstructionDecoder@{mulator::InstructionDecoder}!get\_instruction\_size@{get\_instruction\_size}}
+\index{get\_instruction\_size@{get\_instruction\_size}!mulator::InstructionDecoder@{mulator::InstructionDecoder}}
+\doxysubsubsection{\texorpdfstring{get\_instruction\_size()}{get\_instruction\_size()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} Instruction\+Decoder\+::get\+\_\+instruction\+\_\+size (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$}]{bytes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line \mbox{\hyperlink{instruction__decoder_8cpp_source_l00037}{37}} of file \mbox{\hyperlink{instruction__decoder_8cpp_source}{instruction\+\_\+decoder.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Projects/\+PROLEAD/inc/\+Software/mulator/\mbox{\hyperlink{instruction__decoder_8h}{instruction\+\_\+decoder.\+h}}\item 
+Projects/\+PROLEAD/src/\+Software/mulator/\mbox{\hyperlink{instruction__decoder_8cpp}{instruction\+\_\+decoder.\+cpp}}\end{DoxyCompactItemize}

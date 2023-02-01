@@ -1,0 +1,405 @@
+\hypertarget{classmulator_1_1_emulator}{}\doxysection{mulator\+::Emulator Class Reference}
+\label{classmulator_1_1_emulator}\index{mulator::Emulator@{mulator::Emulator}}
+
+
+{\ttfamily \#include $<$emulator.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmulator_1_1_emulator_a3182dc7cd5b2884c45b766f1d6dfcf09}{Emulator}} ()
+\item 
+\mbox{\hyperlink{classmulator_1_1_emulator_ad93ed28ef536cd1538ef79a6b079fc66}{Emulator}} (\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} arch)
+\item 
+\mbox{\hyperlink{classmulator_1_1_emulator_a838e0fb780c21bf93fe00363af7ea77a}{Emulator}} (\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} arch, boost\+::variate\+\_\+generator$<$ boost\+::mt19937 \&, boost\+::uniform\+\_\+int$<$ uint64\+\_\+t $>$ $>$ Thread\+Prng)
+\item 
+\mbox{\hyperlink{classmulator_1_1_emulator_a3f0fa90b2605c01eefab54d609ae1069}{Emulator}} (const \mbox{\hyperlink{classmulator_1_1_emulator}{Emulator}} \&other)
+\item 
+\mbox{\hyperlink{classmulator_1_1_emulator_a57bf3e602724d4ac35ca45e9ddc0c9aa}{$\sim$\+Emulator}} ()
+\item 
+\mbox{\hyperlink{classmulator_1_1_instruction_decoder}{Instruction\+Decoder}} \mbox{\hyperlink{classmulator_1_1_emulator_a9cb829cbe56ce0fc2263fa8c9ae56def}{get\+\_\+decoder}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} \mbox{\hyperlink{classmulator_1_1_emulator_a064d591d460824d6e07da20a4b40f0ef}{get\+\_\+architecture}} () const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_adedf258d058a5391647de2aa653aa04d}{set\+\_\+flash\+\_\+region}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} offset, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} size)
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a7674f9e42f1aacaaa0a40c4f29e61ec0}{get\+\_\+flash\+\_\+offset}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a07fd0f7392364348c23f98d82e0f8618}{get\+\_\+flash\+\_\+size}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$ \mbox{\hyperlink{classmulator_1_1_emulator_a68532f8cd27f4cfa289173c412c0e475}{get\+\_\+flash}} () const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_aa926fb1ed0877fa58d77a5a69793dc9d}{set\+\_\+ram\+\_\+region}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} offset, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} size)
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_ad91e1046bcad185d8e3863bdba2aac42}{get\+\_\+ram\+\_\+offset}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a9132c90c47eba31a48e5d7b362c1373a}{get\+\_\+ram\+\_\+size}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$ \mbox{\hyperlink{classmulator_1_1_emulator_aedbd58615a25aa794ff3aa3ac002b017}{get\+\_\+ram}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_ade827b9e22d60479ee261f88447c3eed}{read\+\_\+register}} (\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} reg) const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_aed8708d4b55b216a5b35c4ea9b5e9771}{write\+\_\+register}} (\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} reg, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} value)
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_ac9433677c3eedd8b4034c24ca6bfaf17}{read\+\_\+memory}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} address, \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$buffer, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} len) const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_a0778c104d21f7b2643b3d4720201f709}{write\+\_\+memory}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} dst\+\_\+address, const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$buffer, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} len)
+\item 
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} \mbox{\hyperlink{classmulator_1_1_emulator_aceae653b0aa54d594e97b40823477b2f}{emulate}} (\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}} max\+\_\+instructions, uint32\+\_\+t randomness\+\_\+start\+\_\+addr, uint32\+\_\+t randomness\+\_\+end\+\_\+addr)
+\item 
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} \mbox{\hyperlink{classmulator_1_1_emulator_a309fe28baaf3e3e5094cbdbaebe55a27}{emulate}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} end\+\_\+address, \mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}} max\+\_\+instructions, uint32\+\_\+t randomness\+\_\+start\+\_\+addr, uint32\+\_\+t randomness\+\_\+end\+\_\+addr)
+\item 
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} \mbox{\hyperlink{classmulator_1_1_emulator_a26efe92eddbfe314df92e382fe8f000c}{emulate\+Instantiation}} (\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}} max\+\_\+isntructions, \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&Thread\+Simulation, \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&Probe\+Tracker, \mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&Helper, std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&Probe\+Values, uint32\+\_\+t randomness\+\_\+start\+\_\+addr, uint32\+\_\+t randomness\+\_\+end\+\_\+addr, uint32\+\_\+t Simulation\+Index)
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_ac0c7692658ce879a3b1d7ff9af359682}{emulate\+\_\+\+PROLEAD}} (\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&, std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&, const int, const uint64\+\_\+t, const uint32\+\_\+t, const uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_ac8fee1b54826e6834b3fd96127103703}{stop\+\_\+emulation}} ()
+\item 
+bool \mbox{\hyperlink{classmulator_1_1_emulator_a9387e4c7ab3aeca51c41f47310cbaf3c}{is\+\_\+running}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a113a6dae9459a1a5222fe666319fa9c1}{get\+\_\+time}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a946b4f2d63ff5f3fd8aa5f3b73d966ed}{get\+\_\+\+PRNG\+\_\+randomness}} ()
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{classmulator_1_1_emulator_a050139a55bb0b023670ebc0321a66882}{get\+\_\+emulated\+\_\+time}} () const
+\item 
+bool \mbox{\hyperlink{classmulator_1_1_emulator_ae7edd802c88c835c8a0382f1dbc35796}{in\+\_\+\+IT\+\_\+block}} () const
+\item 
+bool \mbox{\hyperlink{classmulator_1_1_emulator_a7239a34b3cdfdc871a2ae8560159ff72}{last\+\_\+in\+\_\+\+IT\+\_\+block}} () const
+\item 
+\mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\+\_\+\+State}} \mbox{\hyperlink{classmulator_1_1_emulator_aeb6d365bbfead9e9a9bc8e07038b433b}{get\+\_\+cpu\+\_\+state}} () const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_emulator_aa09e1694c63c8db7843edc9981c6f219}{set\+\_\+cpu\+\_\+state}} (const \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\+\_\+\+State}} \&state)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{emulator_8h_source_l00055}{55}} of file \mbox{\hyperlink{emulator_8h_source}{emulator.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmulator_1_1_emulator_a3182dc7cd5b2884c45b766f1d6dfcf09}\label{classmulator_1_1_emulator_a3182dc7cd5b2884c45b766f1d6dfcf09}} 
+\index{mulator::Emulator@{mulator::Emulator}!Emulator@{Emulator}}
+\index{Emulator@{Emulator}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{Emulator()}{Emulator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily mulator\+::\+Emulator\+::\+Emulator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ad93ed28ef536cd1538ef79a6b079fc66}\label{classmulator_1_1_emulator_ad93ed28ef536cd1538ef79a6b079fc66}} 
+\index{mulator::Emulator@{mulator::Emulator}!Emulator@{Emulator}}
+\index{Emulator@{Emulator}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{Emulator()}{Emulator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily mulator\+::\+Emulator\+::\+Emulator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}}]{arch }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a838e0fb780c21bf93fe00363af7ea77a}\label{classmulator_1_1_emulator_a838e0fb780c21bf93fe00363af7ea77a}} 
+\index{mulator::Emulator@{mulator::Emulator}!Emulator@{Emulator}}
+\index{Emulator@{Emulator}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{Emulator()}{Emulator()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily Emulator\+::\+Emulator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}}]{arch,  }\item[{boost\+::variate\+\_\+generator$<$ boost\+::mt19937 \&, boost\+::uniform\+\_\+int$<$ uint64\+\_\+t $>$ $>$}]{Thread\+Prng }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00015}{15}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a3f0fa90b2605c01eefab54d609ae1069}\label{classmulator_1_1_emulator_a3f0fa90b2605c01eefab54d609ae1069}} 
+\index{mulator::Emulator@{mulator::Emulator}!Emulator@{Emulator}}
+\index{Emulator@{Emulator}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{Emulator()}{Emulator()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily Emulator\+::\+Emulator (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classmulator_1_1_emulator}{Emulator}} \&}]{other }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00029}{29}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a57bf3e602724d4ac35ca45e9ddc0c9aa}\label{classmulator_1_1_emulator_a57bf3e602724d4ac35ca45e9ddc0c9aa}} 
+\index{mulator::Emulator@{mulator::Emulator}!````~Emulator@{$\sim$Emulator}}
+\index{````~Emulator@{$\sim$Emulator}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{$\sim$Emulator()}{~Emulator()}}
+{\footnotesize\ttfamily Emulator\+::$\sim$\+Emulator (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00048}{48}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmulator_1_1_emulator_a309fe28baaf3e3e5094cbdbaebe55a27}\label{classmulator_1_1_emulator_a309fe28baaf3e3e5094cbdbaebe55a27}} 
+\index{mulator::Emulator@{mulator::Emulator}!emulate@{emulate}}
+\index{emulate@{emulate}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{emulate()}{emulate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} Emulator\+::emulate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{end\+\_\+address,  }\item[{\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}}]{max\+\_\+instructions,  }\item[{uint32\+\_\+t}]{randomness\+\_\+start\+\_\+addr,  }\item[{uint32\+\_\+t}]{randomness\+\_\+end\+\_\+addr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00780}{780}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aceae653b0aa54d594e97b40823477b2f}\label{classmulator_1_1_emulator_aceae653b0aa54d594e97b40823477b2f}} 
+\index{mulator::Emulator@{mulator::Emulator}!emulate@{emulate}}
+\index{emulate@{emulate}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{emulate()}{emulate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} Emulator\+::emulate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}}]{max\+\_\+instructions,  }\item[{uint32\+\_\+t}]{randomness\+\_\+start\+\_\+addr,  }\item[{uint32\+\_\+t}]{randomness\+\_\+end\+\_\+addr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00744}{744}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ac0c7692658ce879a3b1d7ff9af359682}\label{classmulator_1_1_emulator_ac0c7692658ce879a3b1d7ff9af359682}} 
+\index{mulator::Emulator@{mulator::Emulator}!emulate\_PROLEAD@{emulate\_PROLEAD}}
+\index{emulate\_PROLEAD@{emulate\_PROLEAD}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{emulate\_PROLEAD()}{emulate\_PROLEAD()}}
+{\footnotesize\ttfamily void Emulator\+::emulate\+\_\+\+PROLEAD (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&}]{Thread\+Simulation,  }\item[{\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&}]{Probe\+Tracker,  }\item[{\mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&}]{Helper,  }\item[{std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&}]{Probe\+Values,  }\item[{const int}]{Instr\+Nr,  }\item[{const uint64\+\_\+t}]{Simulation\+Idx,  }\item[{const uint32\+\_\+t}]{randomness\+\_\+start\+\_\+addr,  }\item[{const uint32\+\_\+t}]{randomness\+\_\+end\+\_\+addr }\end{DoxyParamCaption})}
+
+Probe all specified combinations
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00201}{201}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a26efe92eddbfe314df92e382fe8f000c}\label{classmulator_1_1_emulator_a26efe92eddbfe314df92e382fe8f000c}} 
+\index{mulator::Emulator@{mulator::Emulator}!emulateInstantiation@{emulateInstantiation}}
+\index{emulateInstantiation@{emulateInstantiation}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{emulateInstantiation()}{emulateInstantiation()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} Emulator\+::emulate\+Instantiation (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}}]{max\+\_\+isntructions,  }\item[{\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{\+::\+Software\+::\+Thread\+Simulation\+Struct}} \&}]{Thread\+Simulation,  }\item[{\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{\+::\+Software\+::\+Probe\+Tracking\+Struct}} \&}]{Probe\+Tracker,  }\item[{\mbox{\hyperlink{struct_software_1_1_helper_struct}{\+::\+Software\+::\+Helper\+Struct}} \&}]{Helper,  }\item[{std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ $>$ \&}]{Probe\+Values,  }\item[{uint32\+\_\+t}]{randomness\+\_\+start\+\_\+addr,  }\item[{uint32\+\_\+t}]{randomness\+\_\+end\+\_\+addr,  }\item[{uint32\+\_\+t}]{Simulation\+Index }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00749}{749}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a064d591d460824d6e07da20a4b40f0ef}\label{classmulator_1_1_emulator_a064d591d460824d6e07da20a4b40f0ef}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_architecture@{get\_architecture}}
+\index{get\_architecture@{get\_architecture}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_architecture()}{get\_architecture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} Emulator\+::get\+\_\+architecture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00059}{59}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aeb6d365bbfead9e9a9bc8e07038b433b}\label{classmulator_1_1_emulator_aeb6d365bbfead9e9a9bc8e07038b433b}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_cpu\_state@{get\_cpu\_state}}
+\index{get\_cpu\_state@{get\_cpu\_state}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_cpu\_state()}{get\_cpu\_state()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\+\_\+\+State}} Emulator\+::get\+\_\+cpu\+\_\+state (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00836}{836}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a9cb829cbe56ce0fc2263fa8c9ae56def}\label{classmulator_1_1_emulator_a9cb829cbe56ce0fc2263fa8c9ae56def}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_decoder@{get\_decoder}}
+\index{get\_decoder@{get\_decoder}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_decoder()}{get\_decoder()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{Instruction\+Decoder}} Emulator\+::get\+\_\+decoder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00054}{54}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a050139a55bb0b023670ebc0321a66882}\label{classmulator_1_1_emulator_a050139a55bb0b023670ebc0321a66882}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_emulated\_time@{get\_emulated\_time}}
+\index{get\_emulated\_time@{get\_emulated\_time}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_emulated\_time()}{get\_emulated\_time()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+emulated\+\_\+time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00815}{815}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a68532f8cd27f4cfa289173c412c0e475}\label{classmulator_1_1_emulator_a68532f8cd27f4cfa289173c412c0e475}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_flash@{get\_flash}}
+\index{get\_flash@{get\_flash}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_flash()}{get\_flash()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$ Emulator\+::get\+\_\+flash (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00087}{87}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a7674f9e42f1aacaaa0a40c4f29e61ec0}\label{classmulator_1_1_emulator_a7674f9e42f1aacaaa0a40c4f29e61ec0}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_flash\_offset@{get\_flash\_offset}}
+\index{get\_flash\_offset@{get\_flash\_offset}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_flash\_offset()}{get\_flash\_offset()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+flash\+\_\+offset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00079}{79}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a07fd0f7392364348c23f98d82e0f8618}\label{classmulator_1_1_emulator_a07fd0f7392364348c23f98d82e0f8618}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_flash\_size@{get\_flash\_size}}
+\index{get\_flash\_size@{get\_flash\_size}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_flash\_size()}{get\_flash\_size()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+flash\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00083}{83}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a946b4f2d63ff5f3fd8aa5f3b73d966ed}\label{classmulator_1_1_emulator_a946b4f2d63ff5f3fd8aa5f3b73d966ed}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_PRNG\_randomness@{get\_PRNG\_randomness}}
+\index{get\_PRNG\_randomness@{get\_PRNG\_randomness}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_PRNG\_randomness()}{get\_PRNG\_randomness()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+\+PRNG\+\_\+randomness (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00820}{820}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aedbd58615a25aa794ff3aa3ac002b017}\label{classmulator_1_1_emulator_aedbd58615a25aa794ff3aa3ac002b017}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_ram@{get\_ram}}
+\index{get\_ram@{get\_ram}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_ram()}{get\_ram()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$ Emulator\+::get\+\_\+ram (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00116}{116}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ad91e1046bcad185d8e3863bdba2aac42}\label{classmulator_1_1_emulator_ad91e1046bcad185d8e3863bdba2aac42}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_ram\_offset@{get\_ram\_offset}}
+\index{get\_ram\_offset@{get\_ram\_offset}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_ram\_offset()}{get\_ram\_offset()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+ram\+\_\+offset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00108}{108}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a9132c90c47eba31a48e5d7b362c1373a}\label{classmulator_1_1_emulator_a9132c90c47eba31a48e5d7b362c1373a}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_ram\_size@{get\_ram\_size}}
+\index{get\_ram\_size@{get\_ram\_size}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_ram\_size()}{get\_ram\_size()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+ram\+\_\+size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00112}{112}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a113a6dae9459a1a5222fe666319fa9c1}\label{classmulator_1_1_emulator_a113a6dae9459a1a5222fe666319fa9c1}} 
+\index{mulator::Emulator@{mulator::Emulator}!get\_time@{get\_time}}
+\index{get\_time@{get\_time}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{get\_time()}{get\_time()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::get\+\_\+time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00810}{810}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ae7edd802c88c835c8a0382f1dbc35796}\label{classmulator_1_1_emulator_ae7edd802c88c835c8a0382f1dbc35796}} 
+\index{mulator::Emulator@{mulator::Emulator}!in\_IT\_block@{in\_IT\_block}}
+\index{in\_IT\_block@{in\_IT\_block}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{in\_IT\_block()}{in\_IT\_block()}}
+{\footnotesize\ttfamily bool Emulator\+::in\+\_\+\+IT\+\_\+block (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00041}{41}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a9387e4c7ab3aeca51c41f47310cbaf3c}\label{classmulator_1_1_emulator_a9387e4c7ab3aeca51c41f47310cbaf3c}} 
+\index{mulator::Emulator@{mulator::Emulator}!is\_running@{is\_running}}
+\index{is\_running@{is\_running}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{is\_running()}{is\_running()}}
+{\footnotesize\ttfamily bool Emulator\+::is\+\_\+running (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00831}{831}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a7239a34b3cdfdc871a2ae8560159ff72}\label{classmulator_1_1_emulator_a7239a34b3cdfdc871a2ae8560159ff72}} 
+\index{mulator::Emulator@{mulator::Emulator}!last\_in\_IT\_block@{last\_in\_IT\_block}}
+\index{last\_in\_IT\_block@{last\_in\_IT\_block}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{last\_in\_IT\_block()}{last\_in\_IT\_block()}}
+{\footnotesize\ttfamily bool Emulator\+::last\+\_\+in\+\_\+\+IT\+\_\+block (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00051}{51}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ac9433677c3eedd8b4034c24ca6bfaf17}\label{classmulator_1_1_emulator_ac9433677c3eedd8b4034c24ca6bfaf17}} 
+\index{mulator::Emulator@{mulator::Emulator}!read\_memory@{read\_memory}}
+\index{read\_memory@{read\_memory}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{read\_memory()}{read\_memory()}}
+{\footnotesize\ttfamily void Emulator\+::read\+\_\+memory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{address,  }\item[{\mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$}]{buffer,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{len }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00169}{169}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ade827b9e22d60479ee261f88447c3eed}\label{classmulator_1_1_emulator_ade827b9e22d60479ee261f88447c3eed}} 
+\index{mulator::Emulator@{mulator::Emulator}!read\_register@{read\_register}}
+\index{read\_register@{read\_register}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{read\_register()}{read\_register()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} Emulator\+::read\+\_\+register (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}}]{reg }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00121}{121}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aa09e1694c63c8db7843edc9981c6f219}\label{classmulator_1_1_emulator_aa09e1694c63c8db7843edc9981c6f219}} 
+\index{mulator::Emulator@{mulator::Emulator}!set\_cpu\_state@{set\_cpu\_state}}
+\index{set\_cpu\_state@{set\_cpu\_state}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{set\_cpu\_state()}{set\_cpu\_state()}}
+{\footnotesize\ttfamily void Emulator\+::set\+\_\+cpu\+\_\+state (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\+\_\+\+State}} \&}]{state }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00841}{841}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_adedf258d058a5391647de2aa653aa04d}\label{classmulator_1_1_emulator_adedf258d058a5391647de2aa653aa04d}} 
+\index{mulator::Emulator@{mulator::Emulator}!set\_flash\_region@{set\_flash\_region}}
+\index{set\_flash\_region@{set\_flash\_region}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{set\_flash\_region()}{set\_flash\_region()}}
+{\footnotesize\ttfamily void Emulator\+::set\+\_\+flash\+\_\+region (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{offset,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00064}{64}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aa926fb1ed0877fa58d77a5a69793dc9d}\label{classmulator_1_1_emulator_aa926fb1ed0877fa58d77a5a69793dc9d}} 
+\index{mulator::Emulator@{mulator::Emulator}!set\_ram\_region@{set\_ram\_region}}
+\index{set\_ram\_region@{set\_ram\_region}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{set\_ram\_region()}{set\_ram\_region()}}
+{\footnotesize\ttfamily void Emulator\+::set\+\_\+ram\+\_\+region (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{offset,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{size }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00092}{92}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_ac8fee1b54826e6834b3fd96127103703}\label{classmulator_1_1_emulator_ac8fee1b54826e6834b3fd96127103703}} 
+\index{mulator::Emulator@{mulator::Emulator}!stop\_emulation@{stop\_emulation}}
+\index{stop\_emulation@{stop\_emulation}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{stop\_emulation()}{stop\_emulation()}}
+{\footnotesize\ttfamily void Emulator\+::stop\+\_\+emulation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00826}{826}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_a0778c104d21f7b2643b3d4720201f709}\label{classmulator_1_1_emulator_a0778c104d21f7b2643b3d4720201f709}} 
+\index{mulator::Emulator@{mulator::Emulator}!write\_memory@{write\_memory}}
+\index{write\_memory@{write\_memory}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{write\_memory()}{write\_memory()}}
+{\footnotesize\ttfamily void Emulator\+::write\+\_\+memory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{dst\+\_\+address,  }\item[{const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$}]{buffer,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{len }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00185}{185}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+\mbox{\Hypertarget{classmulator_1_1_emulator_aed8708d4b55b216a5b35c4ea9b5e9771}\label{classmulator_1_1_emulator_aed8708d4b55b216a5b35c4ea9b5e9771}} 
+\index{mulator::Emulator@{mulator::Emulator}!write\_register@{write\_register}}
+\index{write\_register@{write\_register}!mulator::Emulator@{mulator::Emulator}}
+\doxysubsubsection{\texorpdfstring{write\_register()}{write\_register()}}
+{\footnotesize\ttfamily void Emulator\+::write\+\_\+register (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}}]{reg,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{value }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__base_8cpp_source_l00136}{136}} of file \mbox{\hyperlink{emulator__base_8cpp_source}{emulator\+\_\+base.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Projects/\+PROLEAD/inc/\+Software/mulator/\mbox{\hyperlink{emulator_8h}{emulator.\+h}}\item 
+Projects/\+PROLEAD/src/\+Software/mulator/\mbox{\hyperlink{emulator__base_8cpp}{emulator\+\_\+base.\+cpp}}\item 
+Projects/\+PROLEAD/src/\+Software/mulator/\mbox{\hyperlink{emulator__execution_8cpp}{emulator\+\_\+execution.\+cpp}}\end{DoxyCompactItemize}

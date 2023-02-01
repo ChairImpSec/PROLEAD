@@ -1,0 +1,245 @@
+\hypertarget{_hardware_2_test_8cpp_source}{}\doxysection{Test.\+cpp}
+\label{_hardware_2_test_8cpp_source}\index{Projects/PROLEAD/src/Hardware/Test.cpp@{Projects/PROLEAD/src/Hardware/Test.cpp}}
+\mbox{\hyperlink{_hardware_2_test_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_hardware_2_test_8hpp}{Hardware/Test.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00003}\mbox{\hyperlink{namespace_hardware_1_1_test_a444e1d1b4b73af3859040b56771aa228}{00003}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_test_a444e1d1b4b73af3859040b56771aa228}{Hardware::Test::All}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ \textcolor{keywordtype}{char}\ CompactDistributions)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00004}00004\ \ \ \ \ uint64\_t\ \ \ \ \ StepSimulationIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00006}00006\ \ \ \ \ \textcolor{keywordflow}{for}\ (StepSimulationIndex\ =\ 0;\ StepSimulationIndex\ <\ Simulation.NumberOfStepSimulations;\ StepSimulationIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00007}00007\ \ \ \ \ \ \ \ \ Test.SumOverGroup.at(Simulation.SelectedGroups[StepSimulationIndex])\ +=\ 1.0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00008}00008\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00010}00010\ \ \ \ \ \textcolor{keywordflow}{if}\ (CompactDistributions)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00011}00011\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_test_a4268ab88f6b8e62002535331aad8d071}{Hardware::Test::CompactTest}}(Simulation,\ Test);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00012}00012\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00013}00013\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_test_a637a4ca24caf5f3b0cfca32acfc80a52}{Hardware::Test::NormalTest}}(Settings,\ Simulation,\ Test);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00014}00014\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00015}00015\ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00017}\mbox{\hyperlink{namespace_hardware_1_1_test_a4268ab88f6b8e62002535331aad8d071}{00017}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_test_a4268ab88f6b8e62002535331aad8d071}{Hardware::Test::CompactTest}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00018}00018\ \ \ \ \ uint64\_t\ \ \ \ \ StepSimulationIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00019}00019\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ ThreadIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00020}00020\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \ \ \ \ \ \ SetIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00022}00022\ \textcolor{preprocessor}{\ \ \ \ \#pragma\ omp\ parallel\ for\ schedule(guided)\ private(ThreadIndex)}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00023}00023\ \ \ \ \ \textcolor{keywordflow}{for}\ (StepSimulationIndex\ =\ 0;\ StepSimulationIndex\ <\ Simulation.NumberOfStepSimulations;\ StepSimulationIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00024}00024\ \ \ \ \ \ \ \ \ ThreadIndex\ =\ omp\_get\_thread\_num();}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00025}00025\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_test_a13f4b725ac4719f7f6061588b16197aa}{Hardware::Test::CompactTableUpdate}}(Simulation,\ StepSimulationIndex,\ Test,\ Test.TempProbeValue.at(ThreadIndex));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00026}00026\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00028}00028\ \textcolor{preprocessor}{\ \ \ \ \#pragma\ omp\ parallel\ for\ schedule(guided)}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{for}\ (SetIndex\ =\ 0;\ SetIndex\ <\ Test.ProbingSet.size();\ SetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_util_a8af79953252d000884143ce364714ea6}{Util::GTest}}(Simulation.NumberOfGroups,\ Simulation.NumberOfProcessedSimulations,\ Test.ProbingSet.at(SetIndex).ContingencyTable,\ Test.SumOverGroup);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00031}00031\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00034}\mbox{\hyperlink{namespace_hardware_1_1_test_a13f4b725ac4719f7f6061588b16197aa}{00034}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_test_a13f4b725ac4719f7f6061588b16197aa}{Hardware::Test::CompactTableUpdate}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SimulationIndex,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ std::vector<int>\&\ TempProbeValue)}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00035}00035\ \{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ProbeSetIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ ProbeIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00039}00039\ \ \ \ \ std::fill(TempProbeValue.begin(),\ TempProbeValue.end(),\ 0);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Test.NumberOfUniqueProbes;\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.ProbeValues[SimulationIndex][Test.UniqueProbe[ProbeIndex]-\/>Cycle][Test.UniqueProbe[ProbeIndex]-\/>Probe])\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeSetIndex\ =\ 0;\ ProbeSetIndex\ <\ Test.UniqueProbe[ProbeIndex]-\/>NumberOfProbeSets;\ ProbeSetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TempProbeValue.at(Test.UniqueProbe[ProbeIndex]-\/>ProbeSetIndexes[ProbeSetIndex])++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00047}00047\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00049}00049\ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeSetIndex\ =\ 0;\ ProbeSetIndex\ <\ (\textcolor{keywordtype}{unsigned}\ int)Test.ProbingSet.size();\ ProbeSetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00050}00050\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#pragma\ omp\ atomic}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ Test.ProbingSet.at(ProbeSetIndex).ContingencyTable.Entries.at(TempProbeValue.at(ProbeSetIndex)).Count.at(Simulation.SelectedGroups[SimulationIndex])++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00052}00052\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00053}00053\ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00055}\mbox{\hyperlink{namespace_hardware_1_1_test_a637a4ca24caf5f3b0cfca32acfc80a52}{00055}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_test_a637a4ca24caf5f3b0cfca32acfc80a52}{Hardware::Test::NormalTest}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ SetIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{keywordtype}{int}\ ThreadIndex;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00059}00059\ \textcolor{preprocessor}{\ \ \ \ \#pragma\ omp\ parallel\ for\ schedule(guided)\ private(ThreadIndex)}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{for}\ (SetIndex\ =\ 0;\ SetIndex\ <\ Test.ProbingSet.size();\ SetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ ThreadIndex\ =\ omp\_get\_thread\_num();}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_test_a05c136e06dd3316cebd3ba2f67f2082c}{Hardware::Test::NormalTableUpdate}}(Simulation,\ Test,\ Test.ProbingSet.at(SetIndex),\ Test.TableEntries.at(ThreadIndex));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_util_a8af79953252d000884143ce364714ea6}{Util::GTest}}(Simulation.NumberOfGroups,\ Simulation.NumberOfProcessedSimulations,\ Test.ProbingSet.at(SetIndex).ContingencyTable,\ Test.SumOverGroup);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ Test.ProbingSet.at(SetIndex).ContingencyTable.CalculateTraces(Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a8d08eb84cd06bbb0896a0ae0d92b4acc}{NumberOfGroups}},\ Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a3ece2c7c5d1ee8c9615108410e6113bb}{BetaThreshold}},\ Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a48c3b864b7235f00433abe8c88f695cb}{EffectSize}});}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00065}00065\ \ \ \ \ \}\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00066}00066\ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00068}\mbox{\hyperlink{namespace_hardware_1_1_test_a05c136e06dd3316cebd3ba2f67f2082c}{00068}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_test_a05c136e06dd3316cebd3ba2f67f2082c}{Hardware::Test::NormalTableUpdate}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware::ProbingSetStruct}}\&\ ProbingSet,\ std::vector<Util::TableEntryStruct>\&\ TableEntries)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00069}00069\ \ \ \ \ uint64\_t\ SimulationIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keywordtype}{int}\ KeySizeFull\ =\ ProbingSet.Extension.size()\ >>\ 3;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00071}00071\ \ \ \ \ \textcolor{keywordtype}{int}\ KeySize\ =\ KeySizeFull\ +\ 1;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{int}\ KeyRemainder\ =\ ProbingSet.Extension.size()\ \&\ 0b111;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00073}00073\ \ \ \ \ \textcolor{keywordtype}{int}\ BitIndex\ =\ 0,\ GroupIndex\ =\ 0,\ EntryIndex\ =\ 0,\ KeyIndex\ =\ 0,\ TempIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00074}00074\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ NewTableElements\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00075}00075\ \ \ \ \ std::vector<std::vector<unsigned\ int>>\ NewGroupElements(Simulation.NumberOfGroups,\ std::vector<unsigned\ int>(256,\ 0));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00076}00076\ \ \ \ \ std::vector<std::vector<std::vector<int>>>\ RemovedElementIndices(Simulation.NumberOfGroups,\ std::vector<std::vector<int>>(256));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00077}00077\ \ \ \ \ std::vector<unsigned\ char>\ Subkey;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00078}00078\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{keywordflow}{for}\ (SimulationIndex\ =\ 0;\ SimulationIndex\ <\ Simulation.NumberOfStepSimulations;\ SimulationIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Key.resize(KeySize,\ 0);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ std::fill(TableEntries.at(SimulationIndex).Key.begin(),\ TableEntries.at(SimulationIndex).Key.end(),\ 0);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (KeyIndex\ =\ 0;\ KeyIndex\ <\ KeySizeFull;\ KeyIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ TempIndex\ =\ KeySizeFull\ -\/\ KeyIndex;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (BitIndex\ =\ KeyIndex\ <<\ 3;\ BitIndex\ <\ (KeyIndex\ +\ 1)\ <<\ 3;\ BitIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Key.at(TempIndex)\ <<=\ 1;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Key.at(TempIndex)\ |=\ Simulation.ProbeValues[SimulationIndex][Test.GetExtendedProbe(ProbingSet,\ BitIndex).Cycle][Test.GetExtendedProbe(ProbingSet,\ BitIndex).Probe];}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (BitIndex\ =\ KeySizeFull\ <<\ 3;\ BitIndex\ <\ (KeySizeFull\ <<\ 3)\ +\ KeyRemainder;\ BitIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Key.at(0)\ <<=\ 1;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Key.at(0)\ |=\ Simulation.ProbeValues[SimulationIndex][Test.GetExtendedProbe(ProbingSet,\ BitIndex).Cycle][Test.GetExtendedProbe(ProbingSet,\ BitIndex).Probe];}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ TableEntries.at(SimulationIndex).Count.at(0)\ =\ Simulation.SelectedGroups[SimulationIndex];\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00097}00097\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00099}00099\ \ \ \ \ std::sort(TableEntries.begin(),\ TableEntries.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}\&\ lhs,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}\&\ rhs)\{return\ lhs.Key\ <\ rhs.Key;\});}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{comment}{//\ Search\ if\ an\ entry\ exists\ in\ the\ list\ of\ entries\ that\ occur\ multiple\ times}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00102}00102\ \ \ \ \ EntryIndex\ =\ ProbingSet.FindEntry(TableEntries.at(0),\ 0);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00103}00103\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00104}00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (EntryIndex\ ==\ -\/1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ did\ not\ already\ occur\ multiple\ times,\ we\ check\ if\ entry\ occured\ at\ least\ once}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (KeySize\ >\ 1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ Subkey\ =\ \{TableEntries.at(0).Key.begin(),\ TableEntries.at(0).Key.end()\ -\/\ 1\};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KeyIndex\ =\ \mbox{\hyperlink{namespace_hardware_1_1_test_ae1e14449b9e6ab1882d7dd4e10e6ef60}{Hardware::Test::SearchKey}}(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(0).Key.back()),\ Subkey,\ 0);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (KeyIndex\ !=\ -\/1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ once,\ we\ add\ it\ to\ the\ table\ and\ remove\ the\ other\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.emplace\_back(Simulation.NumberOfGroups,\ TableEntries.at(0).Key,\ GroupIndex,\ TableEntries.at(0).Count.at(0));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewTableElements++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RemovedElementIndices.at(GroupIndex).at(TableEntries.at(0).Key.back()).push\_back(KeyIndex);\ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GroupIndex\ ==\ Simulation.NumberOfGroups)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ occurs\ for\ the\ first\ time,\ create\ a\ new\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00123}00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back()).push\_back(Subkey);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewGroupElements.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back())++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00127}00127\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(0).Key.back()).size())\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ once,\ we\ add\ it\ to\ the\ table\ and\ remove\ the\ other\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.emplace\_back(Simulation.NumberOfGroups,\ TableEntries.at(0).Key,\ GroupIndex,\ TableEntries.at(0).Count.at(0));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewTableElements++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RemovedElementIndices.at(GroupIndex).at(TableEntries.at(0).Key.back()).push\_back(0);\ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GroupIndex\ ==\ Simulation.NumberOfGroups)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ occurs\ for\ the\ first\ time,\ create\ a\ new\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back()).push\_back(TableEntries.at(0).Key);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewGroupElements.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back())++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00144}00144\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ multiple\ times,\ we\ just\ increment\ the\ existing\ bin}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.at(EntryIndex).Count.at(TableEntries.at(0).Count.at(0))++;\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00147}00147\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00149}00149\ \ \ \ \ \textcolor{keywordflow}{for}\ (SimulationIndex\ =\ 1;\ SimulationIndex\ <\ Simulation.NumberOfStepSimulations;\ SimulationIndex++)\{\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ Subkey\ =\ \{TableEntries.at(SimulationIndex).Key.begin(),\ TableEntries.at(SimulationIndex).Key.end()\ -\/\ 1\};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ProbingSet.ContingencyTable.Entries.size()\ \&\&\ TableEntries.at(SimulationIndex).Key\ ==\ ProbingSet.ContingencyTable.Entries.back().Key)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00153}00153\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Increment\ the\ existing\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.back().Count.at(TableEntries.at(SimulationIndex).Count.at(0))++;\ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00155}00155\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00156}00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00157}00157\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size()\ \&\&\ Subkey\ ==\ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).back())\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ the\ entry\ to\ the\ table\ and\ clear\ the\ entry\ in\ the\ group\ table}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.emplace\_back(Simulation.NumberOfGroups,\ TableEntries.at(SimulationIndex).Key,\ GroupIndex,\ TableEntries.at(SimulationIndex).Count.at(0));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewTableElements++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push\_back(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size()\ -\/\ 1);\ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00163}00163\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GroupIndex\ ==\ Simulation.NumberOfGroups)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Search\ if\ an\ entry\ exists\ in\ the\ list\ of\ entries\ that\ occur\ multiple\ times}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EntryIndex\ =\ ProbingSet.FindEntry(TableEntries.at(SimulationIndex),\ NewTableElements);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (EntryIndex\ ==\ -\/1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (KeySize\ >\ 1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ did\ not\ already\ occur\ multiple\ times,\ we\ check\ if\ entry\ occured\ at\ least\ once}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00174}00174\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ KeyIndex\ =\ \mbox{\hyperlink{namespace_hardware_1_1_test_ae1e14449b9e6ab1882d7dd4e10e6ef60}{Hardware::Test::SearchKey}}(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()),\ Subkey,\ NewGroupElements.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (KeyIndex\ !=\ -\/1)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ once,\ we\ add\ it\ to\ the\ table\ and\ remove\ the\ other\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.emplace\_back(Simulation.NumberOfGroups,\ TableEntries.at(SimulationIndex).Key,\ GroupIndex,\ TableEntries.at(SimulationIndex).Count.at(0));\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewTableElements++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push\_back(KeyIndex);\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00184}00184\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GroupIndex\ ==\ Simulation.NumberOfGroups)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ occurs\ for\ the\ first\ time,\ create\ a\ new\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back()).push\_back(Subkey);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewGroupElements.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back())++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ did\ not\ already\ occur\ multiple\ times,\ we\ check\ if\ entry\ occured\ at\ least\ once}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size())\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ once,\ we\ add\ it\ to\ the\ table\ and\ remove\ the\ other\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.emplace\_back(Simulation.NumberOfGroups,\ TableEntries.at(SimulationIndex).Key,\ GroupIndex,\ TableEntries.at(SimulationIndex).Count.at(0));}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewTableElements++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push\_back(0);\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (GroupIndex\ ==\ Simulation.NumberOfGroups)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ occurs\ for\ the\ first\ time,\ create\ a\ new\ entry}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back()).push\_back(TableEntries.at(SimulationIndex).Key);}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ NewGroupElements.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back())++;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ If\ the\ entry\ already\ occured\ multiple\ times,\ we\ just\ increment\ the\ existing\ bin}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.Entries.at(EntryIndex).Count.at(TableEntries.at(SimulationIndex).Count.at(0))++;\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00212}00212\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00213}00213\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00214}00214\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{keywordflow}{for}\ (GroupIndex\ =\ 0;\ GroupIndex\ <\ Simulation.NumberOfGroups;\ GroupIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (BitIndex\ =\ 0;\ BitIndex\ <\ 256;\ BitIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (EntryIndex\ =\ 0;\ EntryIndex\ <\ (int)RemovedElementIndices.at(GroupIndex).at(BitIndex).size();\ EntryIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).at(RemovedElementIndices.at(GroupIndex).at(BitIndex).at(EntryIndex)).clear();}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ std::sort(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).begin(),\ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end(),\ [](\textcolor{keyword}{const}\ std::vector<unsigned\ char>\&\ lhs,\ \textcolor{keyword}{const}\ std::vector<unsigned\ char>\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).erase(std::remove\_if(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).begin(),\ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end(),\ [](\textcolor{keyword}{const}\ std::vector<unsigned\ char>\&\ x)\{return\ (x.size()\ ==\ 0);\}),\ ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end());}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00225}00225\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00227}00227\ \ \ \ \ std::sort(ProbingSet.ContingencyTable.Entries.begin(),\ ProbingSet.ContingencyTable.Entries.end(),\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}\&\ lhs,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}\&\ rhs)\{return\ lhs.Key\ <\ rhs.Key;\});}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00228}00228\ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00229}00229\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00230}\mbox{\hyperlink{namespace_hardware_1_1_test_ae1e14449b9e6ab1882d7dd4e10e6ef60}{00230}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{namespace_hardware_1_1_test_ae1e14449b9e6ab1882d7dd4e10e6ef60}{Hardware::Test::SearchKey}}(std::vector<std::vector<unsigned\ char>>\&\ Table,\ std::vector<unsigned\ char>\&\ Entry,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IgnoredEntries)\{\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00231}00231\ \ \ \ \ std::vector<std::vector<unsigned\ char>>::iterator\ it\ =\ std::lower\_bound(Table.begin(),\ Table.end()\ -\/\ IgnoredEntries,\ Entry,\ [](\textcolor{keyword}{const}\ std::vector<unsigned\ char>\&\ lhs,\ \textcolor{keyword}{const}\ std::vector<unsigned\ char>\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00232}00232\ \ \ \ \ std::iterator\_traits<std::vector<std::vector<unsigned\ char>>::iterator>::difference\_type\ Position\ =\ std::distance(Table.begin(),\ it);\ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00233}00233\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{keywordflow}{if}\ ((it\ ==\ Table.end())\ ||\ (Table.at(Position)\ !=\ Entry))\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00235}00235\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00236}00236\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00237}00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{int})Position;}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00238}00238\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_hardware_2_test_8cpp_source_l00239}00239\ \}}
+
+\end{DoxyCode}

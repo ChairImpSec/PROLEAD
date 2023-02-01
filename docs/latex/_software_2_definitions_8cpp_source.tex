@@ -1,0 +1,57 @@
+\hypertarget{_software_2_definitions_8cpp_source}{}\doxysection{Definitions.\+cpp}
+\label{_software_2_definitions_8cpp_source}\index{Projects/PROLEAD/src/Software/Definitions.cpp@{Projects/PROLEAD/src/Software/Definitions.cpp}}
+\mbox{\hyperlink{_software_2_definitions_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{_software_2_definitions_8hpp}{Software/Definitions.hpp}}>}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00003}\mbox{\hyperlink{struct_software_1_1_helper_struct_aae5ac14a6d04b6427e862338e2b8288b}{00003}}\ \mbox{\hyperlink{struct_software_1_1_helper_struct_aae5ac14a6d04b6427e862338e2b8288b}{Software::HelperStruct::HelperStruct}}()\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00004}00004\ \ \ \ \ \textcolor{comment}{//\ NormalProbesExcluded.resize(19);}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00005}00005\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a982f619ed4e2b0dd6c68403e5ab1cdea}{NormalProbesIncluded}}.resize(17);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00006}00006\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a87b32f5727ac11512c4dcdb2ebb7a34c}{HorizontalBitsIncluded}}.resize(18);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00007}00007\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a7736ab01fadf8582613008390dc8a2c1}{VerticalProbesIncluded}}.resize(17);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00008}00008\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_ac0f180c73e2f26f18a2f7cebf0765c9b}{FullVerticalProbesIncluded}}.resize(32);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00009}00009\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a45c2c6adc91316ccfa16b328a8330f63}{FULLHRProbesIncluded}}.resize(17);\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00010}00010\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a5f2bbc2c2495c1356777ed70033441ad}{HorizontalProbesExcluded}}.resize(18,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00012}00012\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a92b471c6e53bba365b15abd14d4a4065}{ProbeMemory}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00013}00013\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_aeaf424de12c8a4e6c9c9cb65aa80aa79}{ProbeMemoryShadowRegister}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00014}00014\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_af1f7d009c457bbcce481611c615a4e50}{ProbeFullHorizontal}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00015}00015\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a3be3d7fe45004e3b4c9ac7bd8601a107}{ProbeFullVertical}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_ab3bcb1612663ec0c7df106273b470139}{VerticalProbesSize}}.resize(17);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a27aacb15941212a7eae4d2a5856ad7ec}{FullHorizontalProbesSize}}.resize(17);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00019}00019\ \ \ \ \ \textcolor{keywordflow}{for}(uint8\_t\ idx\ =\ 0;\ idx\ <\ 17;\ ++idx)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_ab3bcb1612663ec0c7df106273b470139}{VerticalProbesSize}}.at(idx).resize(18,0);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct_a27aacb15941212a7eae4d2a5856ad7ec}{FullHorizontalProbesSize}}.at(idx).resize(18,0);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00022}00022\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00024}00024\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00025}00025\ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00026}00026\ \mbox{\hyperlink{struct_software_1_1_probing_set_struct_a96ce917a2ae37cda73b49bad468fdfcc}{Software::ProbingSetStruct::ProbingSetStruct}}(std::vector<Software::ProbesStruct>\&\ Probe)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00027}00027\ \ \ \ \ StandardProbe\ =\ \{Probe.begin(),\ Probe.end()\};}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00028}00028\ \ \ \ \ ContingencyTable.Probability\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00029}00029\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ item:\ Probe)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ NumberOfProbesInSet\ +=\ (item.ProbeInfo\ \&\ 0xff);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00031}00031\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00034}00034\ \mbox{\hyperlink{struct_software_1_1_probing_set_struct_a96ce917a2ae37cda73b49bad468fdfcc}{Software::ProbingSetStruct::ProbingSetStruct}}(\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software::ProbesStruct}}\&\ Probe)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00035}00035\ \ \ \ \ StandardProbe.push\_back(Probe);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00036}00036\ \ \ \ \ ContingencyTable.Probability\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00037}00037\ \ \ \ \ NumberOfProbesInSet\ +=\ (Probe.\mbox{\hyperlink{struct_software_1_1_probes_struct_a2a3e8f1c77e6e5de855410b49b23398a}{ProbeInfo}}\ \&\ 0x0ff);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00038}00038\ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00040}\mbox{\hyperlink{struct_software_1_1_probing_set_struct_a01545d892651975c448964b931d7a227}{00040}}\ \mbox{\hyperlink{struct_software_1_1_probing_set_struct_a96ce917a2ae37cda73b49bad468fdfcc}{Software::ProbingSetStruct::ProbingSetStruct}}(uint32\_t\ TestOrder)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00041}00041\ \ \ \ \ StandardProbe.resize(TestOrder);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00042}00042\ \ \ \ \ ContingencyTable.Probability\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00043}00043\ \ \ \ \ NumberOfProbesInSet\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00044}00044\ \}}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00046}\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct_adaea5d9126dca757aa800d69b0c348ae}{00046}}\ \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct_adaea5d9126dca757aa800d69b0c348ae}{Software::ProbeTrackingStruct::ProbeTrackingStruct}}()\{}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00047}00047\ \ \ \ \ RegisterLatestValue.resize(17,\ 0);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00048}00048\ \ \ \ \ RegisterLatestClockCycle.resize(17,\ 0);\ }
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00049}00049\ \ \ \ \ VerticalLatestClockCycle.resize(17,\ 0);}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00050}00050\ \ \ \ \ MemoryLatestClockCycle\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_software_2_definitions_8cpp_source_l00051}00051\ \}}
+
+\end{DoxyCode}

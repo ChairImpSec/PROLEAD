@@ -1,0 +1,153 @@
+\hypertarget{_p_r_o_l_e_a_d_8cpp_source}{}\doxysection{PROLEAD.\+cpp}
+\label{_p_r_o_l_e_a_d_8cpp_source}\index{Projects/PROLEAD/src/PROLEAD.cpp@{Projects/PROLEAD/src/PROLEAD.cpp}}
+\mbox{\hyperlink{_p_r_o_l_e_a_d_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <cinttypes>}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_command_line_parameter_8hpp}{Util/CommandLineParameter.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_hardware_2_execute_8hpp}{Hardware/Execute.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_software_2_execute_8hpp}{Software/Execute.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00011}\mbox{\hyperlink{_p_r_o_l_e_a_d_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{00011}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{_p_r_o_l_e_a_d_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[])}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00012}00012\ \{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00013}00013\ \ \ \ \ std::vector<std::string>\ CommandLineArguments(argv,\ argv\ +\ argc);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00014}00014\ \ \ \ \ \mbox{\hyperlink{struct_command_line_parameter_struct}{CommandLineParameterStruct}}\ CommandLineParameters;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00015}00015\ \ \ \ \ uint8\_t\ i\ =\ 1,\ res\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00016}00016\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespace_hardware}{Hardware}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00017}00017\ \ \ \ \ std::error\_code\ ec;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00019}00019\ \ \ \ \ \textcolor{keywordflow}{if}\ (argc\ >\ 1)\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(1)\ ==\ \ \textcolor{stringliteral}{"{}-\/h"{}})\ ||\ (CommandLineArguments.at(1)\ ==\ \textcolor{stringliteral}{"{}-\/?"{}})\ ||\ (CommandLineArguments.at(1)\ ==\ \textcolor{stringliteral}{"{}/?"{}})\ ||\ (CommandLineArguments.at(1)\ ==\ \textcolor{stringliteral}{"{}-\/help"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_print_a6a313e09e6182879b706b11b3d8024ba}{Hardware::Print::Help}}();}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00023}00023\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00024}00024\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00026}00026\ \ \ \ \ \textcolor{keywordflow}{while}\ (i\ <\ argc\ -\/\ 1)}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00027}00027\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00028}00028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/lf"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/libraryfile"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_ae5b2f3a9519fdf1b4680ca437424ba86}{LibraryFileName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_ae5b2f3a9519fdf1b4680ca437424ba86}{LibraryFileName}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::filesystem::is\_directory(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Library\ file\ path\ points\ to\ a\ directory!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00036}00036\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00038}00038\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/ln"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/libraryname"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a328a437670bfdf5b938d16a8b2da21e2}{LibraryName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00043}00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/df"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/designfile"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a1ae38943505ca44c41d5c1d0c5139eae}{DesignFileName}}.clear();}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 1;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(i\ <\ argc)\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (CommandLineArguments.at(i).at(0)\ !=\ \textcolor{charliteral}{'-\/'})\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a1ae38943505ca44c41d5c1d0c5139eae}{DesignFileName}}\ +=\ CommandLineArguments.at(i);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineArguments.at(i));}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(std::filesystem::is\_directory(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Design\ file\ path\ points\ to\ a\ directory!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 1;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((i\ <\ argc)\ \&\&\ (CommandLineArguments.at(i).at(0)\ !=\ \textcolor{charliteral}{'-\/'}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a1ae38943505ca44c41d5c1d0c5139eae}{DesignFileName}}\ +=\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/b"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/binary"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00065}00065\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a65ccb371fb2e1370853b93e6318a1be5}{BinaryInformationNames}}.clear();}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 1;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00067}00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(i\ <\ argc)\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00068}00068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (CommandLineArguments.at(i).at(0)\ !=\ \textcolor{charliteral}{'-\/'})\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00069}00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a65ccb371fb2e1370853b93e6318a1be5}{BinaryInformationNames}}\ +=\ CommandLineArguments.at(i);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineArguments.at(i));}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(std::filesystem::is\_directory(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Design\ file\ path\ points\ to\ a\ directory!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 1;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((i\ <\ argc)\ \&\&\ (CommandLineArguments.at(i).at(0)\ !=\ \textcolor{charliteral}{'-\/'}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a65ccb371fb2e1370853b93e6318a1be5}{BinaryInformationNames}}\ +=\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00081}00081\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00084}00084\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/mn"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/modulename"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a2d309bebc916db9f5921987b16e862d5}{MainModuleName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00089}00089\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00090}00090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/cf"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/configfile"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a15056654090c3189b5625e2c96c18d21}{SettingsFileName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a15056654090c3189b5625e2c96c18d21}{SettingsFileName}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::filesystem::is\_directory(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00095}00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Config\ file\ path\ points\ to\ a\ directory!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00098}00098\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00099}00099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00100}00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/rf"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/resultfolder"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a92e6e36c1fe357844eb2d88a0d390963}{EvaluationResultFolderName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a92e6e36c1fe357844eb2d88a0d390963}{EvaluationResultFolderName}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::filesystem::is\_regular\_file(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Result\ folder\ path\ points\ to\ a\ file!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00107}00107\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00108}00108\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/pf"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/platform"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00113}00113\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00114}00114\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00115}00115\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/ldf"{}})\ ||\ (CommandLineArguments.at(i)\ ==\ \textcolor{stringliteral}{"{}-\/linkerfile"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a338c05bcef67a5d8c7f1b2fef0f01e8c}{LinkerFileName}}\ =\ CommandLineArguments.at(i\ +\ 1);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ std::filesystem::path\ path(CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a338c05bcef67a5d8c7f1b2fef0f01e8c}{LinkerFileName}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::filesystem::is\_directory(path,\ ec))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(\textcolor{stringliteral}{"{}Linker\ file\ path\ points\ to\ a\ directory!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00121}00121\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ i\ +=\ 2;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00123}00123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_print_a6a313e09e6182879b706b11b3d8024ba}{Hardware::Print::Help}}();}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00128}00128\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00129}00129\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00131}00131\ \ \ \ \ \textcolor{keywordflow}{if}\ ((CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}hardware"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}Hardware"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}hw"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}Hw"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}HW"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware}{Hardware}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00133}00133\ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}((CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}software"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}Software"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}sw"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}Sw"{}})\ ||\ (CommandLineParameters.\mbox{\hyperlink{struct_command_line_parameter_struct_a5fe156dc39dfc86da292fa9c8fdf945f}{HardwareOrSoftwareCase}}\ ==\ \textcolor{stringliteral}{"{}SW"{}}))\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware}{Hardware}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00135}00135\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Error:\ Platform\ is\ not\ specified\ correctly!"{}});}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ res\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00138}00138\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00140}00140\ \ \ \ \ \textcolor{keywordflow}{if}\ (!res)\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{namespace_hardware}{Hardware}})\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_a402ad9a8b8b655ce13db4d8f1ff98365}{Hardware::Execute}}(CommandLineParameters);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_software_ad24339e9e5a187a204cc69e843ef980c}{Software::Execute}}(CommandLineParameters);}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00146}00146\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_p_r_o_l_e_a_d_8cpp_source_l00147}00147\ \}}
+
+\end{DoxyCode}

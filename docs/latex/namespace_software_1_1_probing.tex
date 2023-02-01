@@ -1,0 +1,388 @@
+\hypertarget{namespace_software_1_1_probing}{}\doxysection{Software\+::Probing Namespace Reference}
+\label{namespace_software_1_1_probing}\index{Software::Probing@{Software::Probing}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a6b7b77ed388a725bd9af5d88f7af9264}{Get\+Probing\+Sets}} (\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{Software\+::\+Thread\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_test_struct}{Software\+::\+Test\+Struct}} \&, std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, uint64\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a305002cf6c67a9b98ac69ac30c3d4578}{Get\+Multivariate\+Probing\+Sets}} (std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ $>$ \&One\+Simulation\+Standard\+Probes, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&Settings, \mbox{\hyperlink{struct_software_1_1_test_struct}{Software\+::\+Test\+Struct}} \&Test, std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&Order\+Over\+Two\+Combination, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&Probe\+Info\+To\+Standard\+Probe, uint32\+\_\+t Thread\+Index, uint32\+\_\+t Simulation\+Index)
+\item 
+bool \mbox{\hyperlink{namespace_software_1_1_probing_a96cf78c811338609a3d597d932164bad}{In\+Distance}} (\mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&)
+\item 
+uint32\+\_\+t \mbox{\hyperlink{namespace_software_1_1_probing_ad75a590aaf10502d4736ae880b8b2c10}{Memory\+Consumption}} ()
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a558a8d91395cd7dcf622cb6be2060093}{Create\+Normal\+Probe}} (std\+::vector$<$ uint8\+\_\+t $>$ \&, std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ \&, uint32\+\_\+t \&, uint64\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t, uint64\+\_\+t, uint32\+\_\+t, uint8\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ad4563c96005c88c0d01f4229451caac8}{Create\+Horizontal\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, uint32\+\_\+t, uint8\+\_\+t, uint32\+\_\+t \&, uint32\+\_\+t, uint8\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ad9a53081b6937d34c17011c7892058c9}{Create\+Large\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, uint64\+\_\+t \&, uint32\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ac681ddfb5a536c3e506e0d090e481a82}{Create\+Small\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, uint64\+\_\+t \&, uint32\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a79e13c07086d1ae57d2cc2a3a751f68f}{Create\+Large\+Full\+Horizontal\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, uint64\+\_\+t \&, uint32\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ab5cc29266aeb33634adf14913fc57e91}{Create\+Small\+Full\+Horizontal\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, uint64\+\_\+t \&, uint32\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a7e3f10f9de3d54dd20b9070dbe6ea373}{Create\+Large\+Full\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, std\+::vector$<$ uint8\+\_\+t $>$ \&Full\+Vertical\+Probes, uint8\+\_\+t Bit\+Idx, uint8\+\_\+t Reg\+Nr, uint32\+\_\+t \&Probe\+Index, uint64\+\_\+t Probe\+Info, std\+::vector$<$ uint32\+\_\+t $>$ \&Register\+Values, uint32\+\_\+t Trans\+Value\+Reg\+Nr, uint32\+\_\+t Trans\+Value\+PC, uint32\+\_\+t Trans\+Value\+PSR)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a1fd0b61714d9117abb6385e19d3f7cfc}{Create\+Small\+Full\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, std\+::vector$<$ uint8\+\_\+t $>$ \&Full\+Vertical\+Probes, uint8\+\_\+t Bit\+Idx, uint8\+\_\+t Reg\+Nr1, uint8\+\_\+t Reg\+Nr2, uint32\+\_\+t \&Probe\+Index, uint64\+\_\+t Probe\+Info, std\+::vector$<$ uint32\+\_\+t $>$ \&Register\+Values, uint32\+\_\+t Trans\+Value\+Reg1, uint32\+\_\+t Trans\+Value\+Reg2)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_abf70e1c557b531e99093bcd9b9e2b4a2}{Create\+One\+Register\+Only\+Full\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, std\+::vector$<$ uint8\+\_\+t $>$ \&Full\+Vertical\+Probes, uint8\+\_\+t Bit\+Idx, uint8\+\_\+t Reg\+Nr1, uint32\+\_\+t \&Probe\+Index, uint64\+\_\+t Probe\+Info, std\+::vector$<$ uint32\+\_\+t $>$ \&Register\+Values, uint32\+\_\+t Trans\+Value\+Reg\+Nr)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a6e2887fe3a1928d007a1dd98c6afa343}{Create\+DSPLarge\+Full\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, std\+::vector$<$ uint8\+\_\+t $>$ \&Full\+Vertical\+Probes, uint8\+\_\+t Bit\+Idx, uint8\+\_\+t low\+\_\+\+Reg\+Nr, uint8\+\_\+t high\+\_\+\+Reg\+Nr, uint32\+\_\+t \&Probe\+Index, uint64\+\_\+t Probe\+Info, std\+::vector$<$ uint32\+\_\+t $>$ \&Register\+Values, uint32\+\_\+t Trans\+Value\+Low\+Reg\+Nr, uint32\+\_\+t Trans\+Value\+High\+Reg\+Nr, uint32\+\_\+t Trans\+Value\+PC, uint32\+\_\+t Trans\+Value\+PSR)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a2e27cd3af34b79eccf8052855c073c2f}{Create\+DSPSmall\+Full\+Vertical\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, std\+::vector$<$ uint8\+\_\+t $>$ \&Full\+Vertical\+Probes, uint8\+\_\+t Bit\+Idx, uint8\+\_\+t low\+\_\+\+Reg\+Nr, uint8\+\_\+t high\+\_\+\+Reg\+Nr, uint32\+\_\+t \&Probe\+Index, uint64\+\_\+t Probe\+Info, std\+::vector$<$ uint32\+\_\+t $>$ \&Register\+Values, uint32\+\_\+t Trans\+Value\+Low\+Reg\+Nr, uint32\+\_\+t Trans\+Value\+High\+Reg\+Nr, uint32\+\_\+t Trans\+Value\+PC)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a20293a34d2e48f8d6c3bfab417196bec}{Create\+Memory\+Probe}} ()
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a92007d4860d13f18ef5dc88a59310067}{Create\+Mem\+Shadow\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, std\+::vector$<$ uint8\+\_\+t $>$ \&, uint64\+\_\+t, uint32\+\_\+t \&, uint32\+\_\+t, uint32\+\_\+t, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ad1533fb1be3cddb57461896f6ab9a1bb}{Create\+Horizontal\+Mem\+Shadow\+Probe}} (std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&Standard\+Probes, uint32\+\_\+t Instr\+Nr, uint32\+\_\+t \&Probe\+Index, uint8\+\_\+t Reg\+Nr, uint32\+\_\+t memory\+\_\+shadow\+\_\+register, uint32\+\_\+t next\+\_\+shadow\+\_\+register\+\_\+value, uint32\+\_\+t Transition\+Cycle, uint32\+\_\+t Extension\+Size)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a1cd36e8eec22d3b597dc1b3039ad767e}{Extract\+All\+Probe\+Info}} (uint8\+\_\+t \&, uint8\+\_\+t \&, uint8\+\_\+t \&, uint32\+\_\+t \&, uint8\+\_\+t \&, uint16\+\_\+t \&, uint8\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a43bd821fc85dc477feda736c346a3fb1}{Extract\+Bit\+Probe\+Info}} (uint8\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a27d63b3a7662f62baf169f0634b806e3}{Extract\+Cycle\+Probe\+Info}} (uint32\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a7b58129daafae96390f3337521b1aff6}{Extract\+Id\+Probe\+Info}} (uint8\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ab2670b05dc9d585fd12c7da4a7563b38}{Extract\+Register\+Probe\+Info}} (uint8\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a83d68edd72f06e026930c243c45bcd64}{Extract\+Dependency\+Probe\+Info}} (uint8\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a4571ddef558291a476806c8fada465a7}{Extract\+Extension\+Size\+Probe\+Info}} (uint16\+\_\+t \&, \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a320e7355a20380dd1b4289155c033852}{Fill\+Higher\+Order\+Redundant\+Cases}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a8ff7bc1b698394b66fc1484b4964b1e1}{Redundancy\+Normal\+Probe}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a826e836fb57d83aa7cd88aa9e690e444}{Redundancy\+Horizontal\+Probe}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_adfd6577bb983b1d06e0449555dc1b290}{Redundancy\+Vertical\+Probe}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a81937532330474aff9869e57566ffb45}{Redundancy\+Full\+Horizontal\+Probe}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ac471dbda75158dcdf85d1949f62046e8}{Redundancy\+Full\+Vertical\+Probe}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ab36337725949e9d968e74004321f4b0a}{Probe\+Info\+To\+Standard\+Probe\+Mapping}} (std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, \mbox{\hyperlink{struct_software_1_1_helper_struct}{Software\+::\+Helper\+Struct}} \&, \mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_ae3a23b7a4e640c6fa53f7bac213c30dc}{Univariate\+\_\+\+Add\+Combination\+To\+Probing\+Set}} (\mbox{\hyperlink{struct_software_1_1_probing_set_struct}{Software\+::\+Probing\+Set\+Struct}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, uint32\+\_\+t)
+\item 
+void \mbox{\hyperlink{namespace_software_1_1_probing_a2dc187e15c9c52a5641c5f426af8762d}{Multivariate\+\_\+\+Add\+Combination\+To\+Probing\+Set}} (\mbox{\hyperlink{struct_software_1_1_probing_set_struct}{Software\+::\+Probing\+Set\+Struct}} \&, std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&, std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&, uint32\+\_\+t)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_software_1_1_probing_a6e2887fe3a1928d007a1dd98c6afa343}\label{namespace_software_1_1_probing_a6e2887fe3a1928d007a1dd98c6afa343}} 
+\index{Software::Probing@{Software::Probing}!CreateDSPLargeFullVerticalProbe@{CreateDSPLargeFullVerticalProbe}}
+\index{CreateDSPLargeFullVerticalProbe@{CreateDSPLargeFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateDSPLargeFullVerticalProbe()}{CreateDSPLargeFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+DSPLarge\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Full\+Vertical\+Probes,  }\item[{uint8\+\_\+t}]{Bit\+Idx,  }\item[{uint8\+\_\+t}]{low\+\_\+\+Reg\+Nr,  }\item[{uint8\+\_\+t}]{high\+\_\+\+Reg\+Nr,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{Register\+Values,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Low\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Value\+High\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Value\+PC,  }\item[{uint32\+\_\+t}]{Trans\+Value\+PSR }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00110}{110}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a2e27cd3af34b79eccf8052855c073c2f}\label{namespace_software_1_1_probing_a2e27cd3af34b79eccf8052855c073c2f}} 
+\index{Software::Probing@{Software::Probing}!CreateDSPSmallFullVerticalProbe@{CreateDSPSmallFullVerticalProbe}}
+\index{CreateDSPSmallFullVerticalProbe@{CreateDSPSmallFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateDSPSmallFullVerticalProbe()}{CreateDSPSmallFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+DSPSmall\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Full\+Vertical\+Probes,  }\item[{uint8\+\_\+t}]{Bit\+Idx,  }\item[{uint8\+\_\+t}]{low\+\_\+\+Reg\+Nr,  }\item[{uint8\+\_\+t}]{high\+\_\+\+Reg\+Nr,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{Register\+Values,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Low\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Value\+High\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Value\+PC }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00128}{128}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ad1533fb1be3cddb57461896f6ab9a1bb}\label{namespace_software_1_1_probing_ad1533fb1be3cddb57461896f6ab9a1bb}} 
+\index{Software::Probing@{Software::Probing}!CreateHorizontalMemShadowProbe@{CreateHorizontalMemShadowProbe}}
+\index{CreateHorizontalMemShadowProbe@{CreateHorizontalMemShadowProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateHorizontalMemShadowProbe()}{CreateHorizontalMemShadowProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Horizontal\+Mem\+Shadow\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint32\+\_\+t}]{Instr\+Nr,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint8\+\_\+t}]{Reg\+Nr,  }\item[{uint32\+\_\+t}]{memory\+\_\+shadow\+\_\+register,  }\item[{uint32\+\_\+t}]{next\+\_\+shadow\+\_\+register\+\_\+value,  }\item[{uint32\+\_\+t}]{Transition\+Cycle,  }\item[{uint32\+\_\+t}]{Extension\+Size }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00156}{156}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ad4563c96005c88c0d01f4229451caac8}\label{namespace_software_1_1_probing_ad4563c96005c88c0d01f4229451caac8}} 
+\index{Software::Probing@{Software::Probing}!CreateHorizontalProbe@{CreateHorizontalProbe}}
+\index{CreateHorizontalProbe@{CreateHorizontalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateHorizontalProbe()}{CreateHorizontalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Horizontal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint32\+\_\+t}]{Register\+Transition\+Cycle,  }\item[{uint8\+\_\+t}]{Extension\+Size,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{Instr\+Nr,  }\item[{uint8\+\_\+t}]{Register\+Number }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00015}{15}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a79e13c07086d1ae57d2cc2a3a751f68f}\label{namespace_software_1_1_probing_a79e13c07086d1ae57d2cc2a3a751f68f}} 
+\index{Software::Probing@{Software::Probing}!CreateLargeFullHorizontalProbe@{CreateLargeFullHorizontalProbe}}
+\index{CreateLargeFullHorizontalProbe@{CreateLargeFullHorizontalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateLargeFullHorizontalProbe()}{CreateLargeFullHorizontalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Large\+Full\+Horizontal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint64\+\_\+t \&}]{Probe\+Info,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Partner\+Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00041}{41}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a7e3f10f9de3d54dd20b9070dbe6ea373}\label{namespace_software_1_1_probing_a7e3f10f9de3d54dd20b9070dbe6ea373}} 
+\index{Software::Probing@{Software::Probing}!CreateLargeFullVerticalProbe@{CreateLargeFullVerticalProbe}}
+\index{CreateLargeFullVerticalProbe@{CreateLargeFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateLargeFullVerticalProbe()}{CreateLargeFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Large\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Full\+Vertical\+Probes,  }\item[{uint8\+\_\+t}]{Bit\+Idx,  }\item[{uint8\+\_\+t}]{Reg\+Nr,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{Register\+Values,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Value\+PC,  }\item[{uint32\+\_\+t}]{Trans\+Value\+PSR }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00059}{59}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ad9a53081b6937d34c17011c7892058c9}\label{namespace_software_1_1_probing_ad9a53081b6937d34c17011c7892058c9}} 
+\index{Software::Probing@{Software::Probing}!CreateLargeVerticalProbe@{CreateLargeVerticalProbe}}
+\index{CreateLargeVerticalProbe@{CreateLargeVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateLargeVerticalProbe()}{CreateLargeVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Large\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint64\+\_\+t \&}]{Probe\+Info,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Partner\+Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00024}{24}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a20293a34d2e48f8d6c3bfab417196bec}\label{namespace_software_1_1_probing_a20293a34d2e48f8d6c3bfab417196bec}} 
+\index{Software::Probing@{Software::Probing}!CreateMemoryProbe@{CreateMemoryProbe}}
+\index{CreateMemoryProbe@{CreateMemoryProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateMemoryProbe()}{CreateMemoryProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Memory\+Probe (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a92007d4860d13f18ef5dc88a59310067}\label{namespace_software_1_1_probing_a92007d4860d13f18ef5dc88a59310067}} 
+\index{Software::Probing@{Software::Probing}!CreateMemShadowProbe@{CreateMemShadowProbe}}
+\index{CreateMemShadowProbe@{CreateMemShadowProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateMemShadowProbe()}{CreateMemShadowProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Mem\+Shadow\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Memory\+Shadow\+Register\+Probes\+Included,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{memory\+\_\+shadow\+\_\+register,  }\item[{uint32\+\_\+t}]{next\+\_\+shadow\+\_\+register\+\_\+value,  }\item[{uint32\+\_\+t}]{Transition\+Cycle }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00145}{145}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a558a8d91395cd7dcf622cb6be2060093}\label{namespace_software_1_1_probing_a558a8d91395cd7dcf622cb6be2060093}} 
+\index{Software::Probing@{Software::Probing}!CreateNormalProbe@{CreateNormalProbe}}
+\index{CreateNormalProbe@{CreateNormalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateNormalProbe()}{CreateNormalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Normal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Normal\+Probes\+Register,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ std\+::vector$<$ uint8\+\_\+t $>$ $>$ \&}]{Probe\+Value\+Register,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t \&}]{Probe\+Info,  }\item[{uint32\+\_\+t}]{Register\+Transition\+Cycle,  }\item[{uint32\+\_\+t}]{Instr\+Nr,  }\item[{uint64\+\_\+t}]{Simulation\+Idx,  }\item[{uint32\+\_\+t}]{Destination\+Register\+Value,  }\item[{uint8\+\_\+t}]{Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00006}{6}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_abf70e1c557b531e99093bcd9b9e2b4a2}\label{namespace_software_1_1_probing_abf70e1c557b531e99093bcd9b9e2b4a2}} 
+\index{Software::Probing@{Software::Probing}!CreateOneRegisterOnlyFullVerticalProbe@{CreateOneRegisterOnlyFullVerticalProbe}}
+\index{CreateOneRegisterOnlyFullVerticalProbe@{CreateOneRegisterOnlyFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateOneRegisterOnlyFullVerticalProbe()}{CreateOneRegisterOnlyFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+One\+Register\+Only\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Full\+Vertical\+Probes,  }\item[{uint8\+\_\+t}]{Bit\+Idx,  }\item[{uint8\+\_\+t}]{Reg\+Nr1,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{Register\+Values,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00094}{94}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ab5cc29266aeb33634adf14913fc57e91}\label{namespace_software_1_1_probing_ab5cc29266aeb33634adf14913fc57e91}} 
+\index{Software::Probing@{Software::Probing}!CreateSmallFullHorizontalProbe@{CreateSmallFullHorizontalProbe}}
+\index{CreateSmallFullHorizontalProbe@{CreateSmallFullHorizontalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateSmallFullHorizontalProbe()}{CreateSmallFullHorizontalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Small\+Full\+Horizontal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint64\+\_\+t \&}]{Probe\+Info,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Cycle\+Partner\+Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00050}{50}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a1fd0b61714d9117abb6385e19d3f7cfc}\label{namespace_software_1_1_probing_a1fd0b61714d9117abb6385e19d3f7cfc}} 
+\index{Software::Probing@{Software::Probing}!CreateSmallFullVerticalProbe@{CreateSmallFullVerticalProbe}}
+\index{CreateSmallFullVerticalProbe@{CreateSmallFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateSmallFullVerticalProbe()}{CreateSmallFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Small\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{std\+::vector$<$ uint8\+\_\+t $>$ \&}]{Full\+Vertical\+Probes,  }\item[{uint8\+\_\+t}]{Bit\+Idx,  }\item[{uint8\+\_\+t}]{Reg\+Nr1,  }\item[{uint8\+\_\+t}]{Reg\+Nr2,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint64\+\_\+t}]{Probe\+Info,  }\item[{std\+::vector$<$ uint32\+\_\+t $>$ \&}]{Register\+Values,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Reg1,  }\item[{uint32\+\_\+t}]{Trans\+Value\+Reg2 }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00076}{76}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ac681ddfb5a536c3e506e0d090e481a82}\label{namespace_software_1_1_probing_ac681ddfb5a536c3e506e0d090e481a82}} 
+\index{Software::Probing@{Software::Probing}!CreateSmallVerticalProbe@{CreateSmallVerticalProbe}}
+\index{CreateSmallVerticalProbe@{CreateSmallVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{CreateSmallVerticalProbe()}{CreateSmallVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Create\+Small\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Standard\+Probes,  }\item[{uint64\+\_\+t \&}]{Probe\+Info,  }\item[{uint32\+\_\+t \&}]{Probe\+Index,  }\item[{uint32\+\_\+t}]{Trans\+Cycle\+Reg\+Nr,  }\item[{uint32\+\_\+t}]{Cycle\+Partner\+Reg\+Nr }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00033}{33}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a1cd36e8eec22d3b597dc1b3039ad767e}\label{namespace_software_1_1_probing_a1cd36e8eec22d3b597dc1b3039ad767e}} 
+\index{Software::Probing@{Software::Probing}!ExtractAllProbeInfo@{ExtractAllProbeInfo}}
+\index{ExtractAllProbeInfo@{ExtractAllProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractAllProbeInfo()}{ExtractAllProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+All\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \&}]{Register,  }\item[{uint8\+\_\+t \&}]{Id,  }\item[{uint8\+\_\+t \&}]{Partner\+Register,  }\item[{uint32\+\_\+t \&}]{Cycle,  }\item[{uint8\+\_\+t \&}]{Bit,  }\item[{uint16\+\_\+t \&}]{Extension\+Size,  }\item[{uint8\+\_\+t \&}]{Dependency,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00164}{164}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a43bd821fc85dc477feda736c346a3fb1}\label{namespace_software_1_1_probing_a43bd821fc85dc477feda736c346a3fb1}} 
+\index{Software::Probing@{Software::Probing}!ExtractBitProbeInfo@{ExtractBitProbeInfo}}
+\index{ExtractBitProbeInfo@{ExtractBitProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractBitProbeInfo()}{ExtractBitProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Bit\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \&}]{Bit,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00180}{180}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a27d63b3a7662f62baf169f0634b806e3}\label{namespace_software_1_1_probing_a27d63b3a7662f62baf169f0634b806e3}} 
+\index{Software::Probing@{Software::Probing}!ExtractCycleProbeInfo@{ExtractCycleProbeInfo}}
+\index{ExtractCycleProbeInfo@{ExtractCycleProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractCycleProbeInfo()}{ExtractCycleProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Cycle\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint32\+\_\+t \&}]{Cycle,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00184}{184}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a83d68edd72f06e026930c243c45bcd64}\label{namespace_software_1_1_probing_a83d68edd72f06e026930c243c45bcd64}} 
+\index{Software::Probing@{Software::Probing}!ExtractDependencyProbeInfo@{ExtractDependencyProbeInfo}}
+\index{ExtractDependencyProbeInfo@{ExtractDependencyProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractDependencyProbeInfo()}{ExtractDependencyProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Dependency\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \&}]{Dependency,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00192}{192}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a4571ddef558291a476806c8fada465a7}\label{namespace_software_1_1_probing_a4571ddef558291a476806c8fada465a7}} 
+\index{Software::Probing@{Software::Probing}!ExtractExtensionSizeProbeInfo@{ExtractExtensionSizeProbeInfo}}
+\index{ExtractExtensionSizeProbeInfo@{ExtractExtensionSizeProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractExtensionSizeProbeInfo()}{ExtractExtensionSizeProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Extension\+Size\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint16\+\_\+t \&}]{Extension\+Size,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00196}{196}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a7b58129daafae96390f3337521b1aff6}\label{namespace_software_1_1_probing_a7b58129daafae96390f3337521b1aff6}} 
+\index{Software::Probing@{Software::Probing}!ExtractIdProbeInfo@{ExtractIdProbeInfo}}
+\index{ExtractIdProbeInfo@{ExtractIdProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractIdProbeInfo()}{ExtractIdProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Id\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \&}]{Id,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00188}{188}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ab2670b05dc9d585fd12c7da4a7563b38}\label{namespace_software_1_1_probing_ab2670b05dc9d585fd12c7da4a7563b38}} 
+\index{Software::Probing@{Software::Probing}!ExtractRegisterProbeInfo@{ExtractRegisterProbeInfo}}
+\index{ExtractRegisterProbeInfo@{ExtractRegisterProbeInfo}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ExtractRegisterProbeInfo()}{ExtractRegisterProbeInfo()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Extract\+Register\+Probe\+Info (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \&}]{Register,  }\item[{\mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} \&}]{Probe\+From\+Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00176}{176}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a320e7355a20380dd1b4289155c033852}\label{namespace_software_1_1_probing_a320e7355a20380dd1b4289155c033852}} 
+\index{Software::Probing@{Software::Probing}!FillHigherOrderRedundantCases@{FillHigherOrderRedundantCases}}
+\index{FillHigherOrderRedundantCases@{FillHigherOrderRedundantCases}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{FillHigherOrderRedundantCases()}{FillHigherOrderRedundantCases()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Fill\+Higher\+Order\+Redundant\+Cases (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a305002cf6c67a9b98ac69ac30c3d4578}\label{namespace_software_1_1_probing_a305002cf6c67a9b98ac69ac30c3d4578}} 
+\index{Software::Probing@{Software::Probing}!GetMultivariateProbingSets@{GetMultivariateProbingSets}}
+\index{GetMultivariateProbingSets@{GetMultivariateProbingSets}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{GetMultivariateProbingSets()}{GetMultivariateProbingSets()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Get\+Multivariate\+Probing\+Sets (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ $>$ \&}]{One\+Simulation\+Standard\+Probes,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Settings\+Struct}} \&}]{Settings,  }\item[{\mbox{\hyperlink{struct_software_1_1_test_struct}{Software\+::\+Test\+Struct}} \&}]{Test,  }\item[{std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&}]{Order\+Over\+Two\+Combination,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Probe\+Info\+To\+Standard\+Probe,  }\item[{uint32\+\_\+t}]{Thread\+Index,  }\item[{uint32\+\_\+t}]{Simulation\+Index }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00696}{696}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a6b7b77ed388a725bd9af5d88f7af9264}\label{namespace_software_1_1_probing_a6b7b77ed388a725bd9af5d88f7af9264}} 
+\index{Software::Probing@{Software::Probing}!GetProbingSets@{GetProbingSets}}
+\index{GetProbingSets@{GetProbingSets}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{GetProbingSets()}{GetProbingSets()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Get\+Probing\+Sets (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{Software\+::\+Thread\+Simulation\+Struct}} \&}]{Thread\+Simulation,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&}]{Settings,  }\item[{\mbox{\hyperlink{struct_software_1_1_test_struct}{Software\+::\+Test\+Struct}} \&}]{Test,  }\item[{std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&}]{Order\+Over\+Two\+Combination,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Probe\+Info\+To\+Standard\+Probe,  }\item[{uint64\+\_\+t}]{Simulation\+Index }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00588}{588}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a96cf78c811338609a3d597d932164bad}\label{namespace_software_1_1_probing_a96cf78c811338609a3d597d932164bad}} 
+\index{Software::Probing@{Software::Probing}!InDistance@{InDistance}}
+\index{InDistance@{InDistance}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{InDistance()}{InDistance()}}
+{\footnotesize\ttfamily bool Software\+::\+Probing\+::\+In\+Distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&}]{Settings,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Probing\+Set }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00760}{760}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ad75a590aaf10502d4736ae880b8b2c10}\label{namespace_software_1_1_probing_ad75a590aaf10502d4736ae880b8b2c10}} 
+\index{Software::Probing@{Software::Probing}!MemoryConsumption@{MemoryConsumption}}
+\index{MemoryConsumption@{MemoryConsumption}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{MemoryConsumption()}{MemoryConsumption()}}
+{\footnotesize\ttfamily uint32\+\_\+t Software\+::\+Probing\+::\+Memory\+Consumption (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00784}{784}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a2dc187e15c9c52a5641c5f426af8762d}\label{namespace_software_1_1_probing_a2dc187e15c9c52a5641c5f426af8762d}} 
+\index{Software::Probing@{Software::Probing}!Multivariate\_AddCombinationToProbingSet@{Multivariate\_AddCombinationToProbingSet}}
+\index{Multivariate\_AddCombinationToProbingSet@{Multivariate\_AddCombinationToProbingSet}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{Multivariate\_AddCombinationToProbingSet()}{Multivariate\_AddCombinationToProbingSet()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Multivariate\+\_\+\+Add\+Combination\+To\+Probing\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_software_1_1_probing_set_struct}{Software\+::\+Probing\+Set\+Struct}} \&}]{Probing\+Set,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Combination,  }\item[{std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&}]{Order\+Over\+Two\+Combination,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Probe\+Mapping,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Resolved\+Probes,  }\item[{uint32\+\_\+t}]{Test\+Order }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00543}{543}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ab36337725949e9d968e74004321f4b0a}\label{namespace_software_1_1_probing_ab36337725949e9d968e74004321f4b0a}} 
+\index{Software::Probing@{Software::Probing}!ProbeInfoToStandardProbeMapping@{ProbeInfoToStandardProbeMapping}}
+\index{ProbeInfoToStandardProbeMapping@{ProbeInfoToStandardProbeMapping}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{ProbeInfoToStandardProbeMapping()}{ProbeInfoToStandardProbeMapping()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Probe\+Info\+To\+Standard\+Probe\+Mapping (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Probe\+Mapping,  }\item[{\mbox{\hyperlink{struct_software_1_1_helper_struct}{Software\+::\+Helper\+Struct}} \&}]{Helper,  }\item[{\mbox{\hyperlink{struct_software_1_1_settings_struct}{Software\+::\+Settings\+Struct}} \&}]{Setting }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00201}{201}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a81937532330474aff9869e57566ffb45}\label{namespace_software_1_1_probing_a81937532330474aff9869e57566ffb45}} 
+\index{Software::Probing@{Software::Probing}!RedundancyFullHorizontalProbe@{RedundancyFullHorizontalProbe}}
+\index{RedundancyFullHorizontalProbe@{RedundancyFullHorizontalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{RedundancyFullHorizontalProbe()}{RedundancyFullHorizontalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Redundancy\+Full\+Horizontal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ac471dbda75158dcdf85d1949f62046e8}\label{namespace_software_1_1_probing_ac471dbda75158dcdf85d1949f62046e8}} 
+\index{Software::Probing@{Software::Probing}!RedundancyFullVerticalProbe@{RedundancyFullVerticalProbe}}
+\index{RedundancyFullVerticalProbe@{RedundancyFullVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{RedundancyFullVerticalProbe()}{RedundancyFullVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Redundancy\+Full\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a826e836fb57d83aa7cd88aa9e690e444}\label{namespace_software_1_1_probing_a826e836fb57d83aa7cd88aa9e690e444}} 
+\index{Software::Probing@{Software::Probing}!RedundancyHorizontalProbe@{RedundancyHorizontalProbe}}
+\index{RedundancyHorizontalProbe@{RedundancyHorizontalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{RedundancyHorizontalProbe()}{RedundancyHorizontalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Redundancy\+Horizontal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_a8ff7bc1b698394b66fc1484b4964b1e1}\label{namespace_software_1_1_probing_a8ff7bc1b698394b66fc1484b4964b1e1}} 
+\index{Software::Probing@{Software::Probing}!RedundancyNormalProbe@{RedundancyNormalProbe}}
+\index{RedundancyNormalProbe@{RedundancyNormalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{RedundancyNormalProbe()}{RedundancyNormalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Redundancy\+Normal\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_adfd6577bb983b1d06e0449555dc1b290}\label{namespace_software_1_1_probing_adfd6577bb983b1d06e0449555dc1b290}} 
+\index{Software::Probing@{Software::Probing}!RedundancyVerticalProbe@{RedundancyVerticalProbe}}
+\index{RedundancyVerticalProbe@{RedundancyVerticalProbe}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{RedundancyVerticalProbe()}{RedundancyVerticalProbe()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Redundancy\+Vertical\+Probe (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_software_1_1_probing_ae3a23b7a4e640c6fa53f7bac213c30dc}\label{namespace_software_1_1_probing_ae3a23b7a4e640c6fa53f7bac213c30dc}} 
+\index{Software::Probing@{Software::Probing}!Univariate\_AddCombinationToProbingSet@{Univariate\_AddCombinationToProbingSet}}
+\index{Univariate\_AddCombinationToProbingSet@{Univariate\_AddCombinationToProbingSet}!Software::Probing@{Software::Probing}}
+\doxysubsubsection{\texorpdfstring{Univariate\_AddCombinationToProbingSet()}{Univariate\_AddCombinationToProbingSet()}}
+{\footnotesize\ttfamily void Software\+::\+Probing\+::\+Univariate\+\_\+\+Add\+Combination\+To\+Probing\+Set (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_software_1_1_probing_set_struct}{Software\+::\+Probing\+Set\+Struct}} \&}]{Probing\+Set,  }\item[{std\+::vector$<$ \mbox{\hyperlink{struct_software_1_1_probes_struct}{Software\+::\+Probes\+Struct}} $>$ \&}]{Combination,  }\item[{std\+::vector$<$ std\+::tuple$<$ uint32\+\_\+t, uint32\+\_\+t $>$ $>$ \&}]{Order\+Over\+Two\+Combination,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Probe\+Mapping,  }\item[{std\+::vector$<$ std\+::vector$<$ uint32\+\_\+t $>$ $>$ \&}]{Resolved\+Probes,  }\item[{uint32\+\_\+t}]{Test\+Order }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{_probing_8cpp_source_l00498}{498}} of file \mbox{\hyperlink{_probing_8cpp_source}{Probing.\+cpp}}.
+
