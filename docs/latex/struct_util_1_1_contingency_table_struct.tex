@@ -2,30 +2,42 @@
 \label{struct_util_1_1_contingency_table_struct}\index{Util::ContingencyTableStruct@{Util::ContingencyTableStruct}}
 
 
+Defines a contingency table.  
+
+
+
+
 {\ttfamily \#include $<$Util.\+hpp$>$}
 
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{struct_util_1_1_contingency_table_struct_afcd2cb1350fb4c99feea9bcd538ab71e}{Calculate\+Traces}} (int, double, double)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Computes the required number of traces. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::vector$<$ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Table\+Entry\+Struct}} $>$ \mbox{\hyperlink{struct_util_1_1_contingency_table_struct_add4f1f24ade0abd7f48bb177809a3001}{Entries}}
-\item 
+\begin{DoxyCompactList}\small\item\em Different entries of a contingency table, i.\+e. one entry per sample. \end{DoxyCompactList}\item 
 std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ std\+::vector$<$ unsigned char $>$ $>$ $>$ $>$ \mbox{\hyperlink{struct_util_1_1_contingency_table_struct_ad72ea07ed32b05b01de704860dedb39c}{Only\+One\+Entry}}
-\item 
+\begin{DoxyCompactList}\small\item\em Stores all entires that occurred only once. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{struct_util_1_1_contingency_table_struct_a39ed06c51d7eab2ebe519a1236c9e643}{Probability}}
-\item 
+\begin{DoxyCompactList}\small\item\em The false-\/positive probability computed with the G-\/test. \end{DoxyCompactList}\item 
 unsigned int \mbox{\hyperlink{struct_util_1_1_contingency_table_struct_aa67c90a730b86e01bb1fa1bbfc8c980c}{Traces}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The number of traces required to achieve a desired confidence level computed via statistical power analysis. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Defines a contingency table. 
+
+Defines the contingency table related to a probing set. Every contingency table encompasses a list of contingency table entries.
+
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 
 
-Definition at line \mbox{\hyperlink{_util_8hpp_source_l00048}{48}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00058}{58}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
 
 
 
@@ -34,12 +46,29 @@ Definition at line \mbox{\hyperlink{_util_8hpp_source_l00048}{48}} of file \mbox
 \index{Util::ContingencyTableStruct@{Util::ContingencyTableStruct}!CalculateTraces@{CalculateTraces}}
 \index{CalculateTraces@{CalculateTraces}!Util::ContingencyTableStruct@{Util::ContingencyTableStruct}}
 \doxysubsubsection{\texorpdfstring{CalculateTraces()}{CalculateTraces()}}
-{\footnotesize\ttfamily void Util\+::\+Contingency\+Table\+Struct\+::\+Calculate\+Traces (\begin{DoxyParamCaption}\item[{int}]{Number\+Of\+Groups,  }\item[{double}]{Beta\+Threshold,  }\item[{double}]{Effect\+Size }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void Util\+::\+Contingency\+Table\+Struct\+::\+Calculate\+Traces (\begin{DoxyParamCaption}\item[{int}]{,  }\item[{double}]{,  }\item[{double}]{ }\end{DoxyParamCaption})}
 
 
 
-Definition at line \mbox{\hyperlink{_util_8cpp_source_l00014}{14}} of file \mbox{\hyperlink{_util_8cpp_source}{Util.\+cpp}}.
+Computes the required number of traces. 
 
+Computes the number of traces required to achieve a pre-\/defined confidence level, i.\+e. false-\/negative probability.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Number\+Of\+Groups} & Number of user-\/defined groups. \\
+\hline
+{\em Beta\+Threshold} & The pre-\/defined false-\/negative probability to achieve. \\
+\hline
+{\em Effect\+Size} & The statistical effect size for which the false-\/negative probability should be achieved. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Traces Number of traces required to satisfy the effect size and false-\/negative probability. 
+\end{DoxyReturn}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 
 
 \doxysubsection{Member Data Documentation}
@@ -51,7 +80,11 @@ Definition at line \mbox{\hyperlink{_util_8cpp_source_l00014}{14}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_util_8hpp_source_l00049}{49}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+Different entries of a contingency table, i.\+e. one entry per sample. 
+
+
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00059}{59}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
 
 \mbox{\Hypertarget{struct_util_1_1_contingency_table_struct_ad72ea07ed32b05b01de704860dedb39c}\label{struct_util_1_1_contingency_table_struct_ad72ea07ed32b05b01de704860dedb39c}} 
 \index{Util::ContingencyTableStruct@{Util::ContingencyTableStruct}!OnlyOneEntry@{OnlyOneEntry}}
@@ -61,7 +94,17 @@ Definition at line \mbox{\hyperlink{_util_8hpp_source_l00049}{49}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_util_8hpp_source_l00050}{50}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+Stores all entires that occurred only once. 
+
+Temporary storage for all samples that occurred only once. To save memory, we create a new entry in the table only if the sample occurres multiple times. Hence, only the sample itself must be stored without corresponding counters. The structure is as follows\+:
+\begin{DoxyEnumerate}
+\item Dimension\+: The underlying group in which the sample occurred once.
+\item Dimension\+: The last byte of the sample vector. This only accelerates searching for samples.
+\item Dimension\+: The particular sample vector.
+\item Dimension\+: The specific byte of a particular sample vector. 
+\end{DoxyEnumerate}
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00071}{71}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
 
 \mbox{\Hypertarget{struct_util_1_1_contingency_table_struct_a39ed06c51d7eab2ebe519a1236c9e643}\label{struct_util_1_1_contingency_table_struct_a39ed06c51d7eab2ebe519a1236c9e643}} 
 \index{Util::ContingencyTableStruct@{Util::ContingencyTableStruct}!Probability@{Probability}}
@@ -71,7 +114,11 @@ Definition at line \mbox{\hyperlink{_util_8hpp_source_l00050}{50}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_util_8hpp_source_l00051}{51}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+The false-\/positive probability computed with the G-\/test. 
+
+
+
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00072}{72}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
 
 \mbox{\Hypertarget{struct_util_1_1_contingency_table_struct_aa67c90a730b86e01bb1fa1bbfc8c980c}\label{struct_util_1_1_contingency_table_struct_aa67c90a730b86e01bb1fa1bbfc8c980c}} 
 \index{Util::ContingencyTableStruct@{Util::ContingencyTableStruct}!Traces@{Traces}}
@@ -81,11 +128,14 @@ Definition at line \mbox{\hyperlink{_util_8hpp_source_l00051}{51}} of file \mbox
 
 
 
-Definition at line \mbox{\hyperlink{_util_8hpp_source_l00052}{52}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+The number of traces required to achieve a desired confidence level computed via statistical power analysis. 
 
 
 
-The documentation for this struct was generated from the following files\+:\begin{DoxyCompactItemize}
+Definition at line \mbox{\hyperlink{_util_8hpp_source_l00073}{73}} of file \mbox{\hyperlink{_util_8hpp_source}{Util.\+hpp}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Projects/\+PROLEAD/inc/\+Util/\mbox{\hyperlink{_util_8hpp}{Util.\+hpp}}\item 
-Projects/\+PROLEAD/src/\+Util/\mbox{\hyperlink{_util_8cpp}{Util.\+cpp}}\end{DoxyCompactItemize}
+Projects/\+PROLEAD/inc/\+Util/\mbox{\hyperlink{_util_8hpp}{Util.\+hpp}}\end{DoxyCompactItemize}

@@ -23,7 +23,7 @@
   <td id="projectalign">
    <div id="projectname">PROLEAD
    </div>
-   <div id="projectbrief">PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software</div>
+   <div id="projectbrief">A Probing-Based Leakage Detection Tool for Hardware and Software</div>
   </td>
  </tr>
  </tbody>
@@ -80,6 +80,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a contingency table.  <a href="struct_util_1_1_contingency_table_struct.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_table_entry_struct.html">TableEntryStruct</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines one entry of a contingency table.  <a href="struct_util_1_1_table_entry_struct.html#details">More...</a><br /></td></tr>
@@ -88,15 +89,19 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ad34641bfae3e10e69ca5d1782cba2663"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#ad34641bfae3e10e69ca5d1782cba2663">GetGValue</a> (unsigned int, unsigned int, <a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;, std::vector&lt; double &gt;, unsigned int, unsigned int &amp;)</td></tr>
+<tr class="memdesc:ad34641bfae3e10e69ca5d1782cba2663"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the G-value.  <br /></td></tr>
 <tr class="separator:ad34641bfae3e10e69ca5d1782cba2663"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8af79953252d000884143ce364714ea6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a8af79953252d000884143ce364714ea6">GTest</a> (unsigned int, unsigned int, <a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;, std::vector&lt; double &gt;)</td></tr>
+<tr class="memdesc:a8af79953252d000884143ce364714ea6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the p-value.  <br /></td></tr>
 <tr class="separator:a8af79953252d000884143ce364714ea6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92553be959abdd48c9fcb9208fe8e76f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a92553be959abdd48c9fcb9208fe8e76f">StartClock</a> (timespec &amp;)</td></tr>
 <tr class="separator:a92553be959abdd48c9fcb9208fe8e76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a378cbdca53cd3ec455a6d596a6d62116"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a378cbdca53cd3ec455a6d596a6d62116">EndClock</a> (timespec &amp;)</td></tr>
 <tr class="separator:a378cbdca53cd3ec455a6d596a6d62116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Generic functions required for hard- and software evaluations, e.g. all statistical procedures. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a378cbdca53cd3ec455a6d596a6d62116" name="a378cbdca53cd3ec455a6d596a6d62116"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a378cbdca53cd3ec455a6d596a6d62116">&#9670;&#160;</a></span>EndClock()</h2>
 
@@ -107,13 +112,11 @@ Functions</h2></td></tr>
           <td class="memname">double Util::EndClock </td>
           <td>(</td>
           <td class="paramtype">timespec &amp;&#160;</td>
-          <td class="paramname"><em>Begin</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_util_8cpp_source.html#l00198">198</a> of file <a class="el" href="_util_8cpp_source.html">Util.cpp</a>.</p>
 
 </div>
 </div>
@@ -127,37 +130,37 @@ Functions</h2></td></tr>
           <td class="memname">double Util::GetGValue </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>NumberOfGroups</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>NumberOfSimulations</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">Util::ContingencyTableStruct</a> &amp;&#160;</td>
-          <td class="paramname"><em>Table</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
-          <td class="paramname"><em>Frequency</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>TableSize</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int &amp;&#160;</td>
-          <td class="paramname"><em>Df</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -167,7 +170,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8cpp_source.html#l00076">76</a> of file <a class="el" href="_util_8cpp_source.html">Util.cpp</a>.</p>
+<p>Computes the G-value. </p>
+<p>Compute the statistical G-value from a given contingency table.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NumberOfGroups</td><td>Number of user-defined groups. </td></tr>
+    <tr><td class="paramname">NumberOfSimulations</td><td>The number of simulated executions so far. </td></tr>
+    <tr><td class="paramname">Table</td><td>The contingency table. </td></tr>
+    <tr><td class="paramname">Frequency</td><td>Precomputed number of simulations per group. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gValue The G-value. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -181,25 +196,25 @@ Functions</h2></td></tr>
           <td class="memname">void Util::GTest </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>NumberOfGroups</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>NumberOfSimulations</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">Util::ContingencyTableStruct</a> &amp;&#160;</td>
-          <td class="paramname"><em>Table</em>, </td>
+          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
-          <td class="paramname"><em>Frequency</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -209,7 +224,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8cpp_source.html#l00172">172</a> of file <a class="el" href="_util_8cpp_source.html">Util.cpp</a>.</p>
+<p>Computes the p-value. </p>
+<p>Compute the false-positive probability from a given contingency table.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NumberOfGroups</td><td>Number of user-defined groups. </td></tr>
+    <tr><td class="paramname">NumberOfSimulations</td><td>The number of simulated executions so far. </td></tr>
+    <tr><td class="paramname">Table</td><td>The contingency table. </td></tr>
+    <tr><td class="paramname">Frequency</td><td>Precomputed number of simulations per group. </td></tr>
+    <tr><td class="paramname">TableSize</td><td>The number of entries in a contingency table. </td></tr>
+    <tr><td class="paramname">df</td><td>The degree of freedom. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>gValue The G-value. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -223,13 +252,11 @@ Functions</h2></td></tr>
           <td class="memname">void Util::StartClock </td>
           <td>(</td>
           <td class="paramtype">timespec &amp;&#160;</td>
-          <td class="paramname"><em>Begin</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="_util_8cpp_source.html#l00194">194</a> of file <a class="el" href="_util_8cpp_source.html">Util.cpp</a>.</p>
 
 </div>
 </div>

@@ -23,7 +23,7 @@
   <td id="projectalign">
    <div id="projectname">PROLEAD
    </div>
-   <div id="projectbrief">PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software</div>
+   <div id="projectbrief">A Probing-Based Leakage Detection Tool for Hardware and Software</div>
   </td>
  </tr>
  </tbody>
@@ -82,27 +82,38 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a contingency table.  
+ <a href="struct_util_1_1_contingency_table_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_util_8hpp_source.html">Util.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afcd2cb1350fb4c99feea9bcd538ab71e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html#afcd2cb1350fb4c99feea9bcd538ab71e">CalculateTraces</a> (int, double, double)</td></tr>
+<tr class="memdesc:afcd2cb1350fb4c99feea9bcd538ab71e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the required number of traces.  <br /></td></tr>
 <tr class="separator:afcd2cb1350fb4c99feea9bcd538ab71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:add4f1f24ade0abd7f48bb177809a3001"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_util_1_1_table_entry_struct.html">TableEntryStruct</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html#add4f1f24ade0abd7f48bb177809a3001">Entries</a></td></tr>
+<tr class="memdesc:add4f1f24ade0abd7f48bb177809a3001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Different entries of a contingency table, i.e. one entry per sample.  <br /></td></tr>
 <tr class="separator:add4f1f24ade0abd7f48bb177809a3001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad72ea07ed32b05b01de704860dedb39c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::vector&lt; std::vector&lt; unsigned char &gt; &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html#ad72ea07ed32b05b01de704860dedb39c">OnlyOneEntry</a></td></tr>
+<tr class="memdesc:ad72ea07ed32b05b01de704860dedb39c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores all entires that occurred only once.  <br /></td></tr>
 <tr class="separator:ad72ea07ed32b05b01de704860dedb39c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39ed06c51d7eab2ebe519a1236c9e643"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html#a39ed06c51d7eab2ebe519a1236c9e643">Probability</a></td></tr>
+<tr class="memdesc:a39ed06c51d7eab2ebe519a1236c9e643"><td class="mdescLeft">&#160;</td><td class="mdescRight">The false-positive probability computed with the G-test.  <br /></td></tr>
 <tr class="separator:a39ed06c51d7eab2ebe519a1236c9e643"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa67c90a730b86e01bb1fa1bbfc8c980c"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_util_1_1_contingency_table_struct.html#aa67c90a730b86e01bb1fa1bbfc8c980c">Traces</a></td></tr>
+<tr class="memdesc:aa67c90a730b86e01bb1fa1bbfc8c980c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of traces required to achieve a desired confidence level computed via statistical power analysis.  <br /></td></tr>
 <tr class="separator:aa67c90a730b86e01bb1fa1bbfc8c980c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00048">48</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
+<div class="textblock"><p>Defines a contingency table. </p>
+<p>Defines the contingency table related to a probing set. Every contingency table encompasses a list of contingency table entries.</p>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00058">58</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="afcd2cb1350fb4c99feea9bcd538ab71e" name="afcd2cb1350fb4c99feea9bcd538ab71e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afcd2cb1350fb4c99feea9bcd538ab71e">&#9670;&#160;</a></span>CalculateTraces()</h2>
@@ -114,19 +125,19 @@ Public Attributes</h2></td></tr>
           <td class="memname">void Util::ContingencyTableStruct::CalculateTraces </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>NumberOfGroups</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>BetaThreshold</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>EffectSize</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -136,7 +147,18 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8cpp_source.html#l00014">14</a> of file <a class="el" href="_util_8cpp_source.html">Util.cpp</a>.</p>
+<p>Computes the required number of traces. </p>
+<p>Computes the number of traces required to achieve a pre-defined confidence level, i.e. false-negative probability.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NumberOfGroups</td><td>Number of user-defined groups. </td></tr>
+    <tr><td class="paramname">BetaThreshold</td><td>The pre-defined false-negative probability to achieve. </td></tr>
+    <tr><td class="paramname">EffectSize</td><td>The statistical effect size for which the false-negative probability should be achieved. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Traces Number of traces required to satisfy the effect size and false-negative probability. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -153,7 +175,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00049">49</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
+<p>Different entries of a contingency table, i.e. one entry per sample. </p>
+
+<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00059">59</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
 
 </div>
 </div>
@@ -169,7 +193,15 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00050">50</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
+<p>Stores all entires that occurred only once. </p>
+<p>Temporary storage for all samples that occurred only once. To save memory, we create a new entry in the table only if the sample occurres multiple times. Hence, only the sample itself must be stored without corresponding counters. The structure is as follows:</p><ol type="1">
+<li>Dimension: The underlying group in which the sample occurred once.</li>
+<li>Dimension: The last byte of the sample vector. This only accelerates searching for samples.</li>
+<li>Dimension: The particular sample vector.</li>
+<li>Dimension: The specific byte of a particular sample vector. </li>
+</ol>
+
+<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00071">71</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
 
 </div>
 </div>
@@ -185,7 +217,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00051">51</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
+<p>The false-positive probability computed with the G-test. </p>
+
+<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00072">72</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
 
 </div>
 </div>
@@ -201,13 +235,14 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00052">52</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
+<p>The number of traces required to achieve a desired confidence level computed via statistical power analysis. </p>
+
+<p class="definition">Definition at line <a class="el" href="_util_8hpp_source.html#l00073">73</a> of file <a class="el" href="_util_8hpp_source.html">Util.hpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following files:<ul>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>Projects/PROLEAD/inc/Util/<a class="el" href="_util_8hpp_source.html">Util.hpp</a></li>
-<li>Projects/PROLEAD/src/Util/<a class="el" href="_util_8cpp_source.html">Util.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['dependency_5fmask_0',['DEPENDENCY_MASK',['../_probing_8hpp.html#a3cb0f8c22781f8fbeb0f090da283011c',1,'Probing.hpp']]],
-  ['dependency_5foffset_1',['DEPENDENCY_OFFSET',['../_probing_8hpp.html#ae6032640441919fd9ace37c55e2c67bb',1,'Probing.hpp']]]
+  ['extension_5fmask_0',['EXTENSION_MASK',['../_probing_8hpp.html#a27a16176e8db2b3ba430b74e940d4dfc',1,'Probing.hpp']]]
 ];

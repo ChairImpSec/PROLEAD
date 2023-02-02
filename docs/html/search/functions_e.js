@@ -1,8 +1,8 @@
 var searchData=
 [
   ['read_5ffile_0',['read_file',['../namespace_software_1_1_read.html#ae5bd3bb011279256133506ba6445efd5',1,'Software::Read']]],
-  ['read_5fmemory_1',['read_memory',['../classmulator_1_1_emulator.html#ac9433677c3eedd8b4034c24ca6bfaf17',1,'mulator::Emulator']]],
-  ['read_5fregister_2',['read_register',['../classmulator_1_1_emulator.html#ade827b9e22d60479ee261f88447c3eed',1,'mulator::Emulator']]],
+  ['read_5fmemory_1',['read_memory',['../classmulator_1_1_emulator.html#a6da8176840f786f1f8b793bf851aae7f',1,'mulator::Emulator']]],
+  ['read_5fregister_2',['read_register',['../classmulator_1_1_emulator.html#a10550debedc7948917c0f2c5fd3a6bad',1,'mulator::Emulator']]],
   ['readnoncommentfromfile_3',['ReadNonCommentFromFile',['../namespace_software_1_1_read.html#a67f7969f2cbb6b8af22d3ede3932bdaa',1,'Software::Read']]],
   ['redundancyfullhorizontalprobe_4',['RedundancyFullHorizontalProbe',['../namespace_software_1_1_probing.html#a81937532330474aff9869e57566ffb45',1,'Software::Probing']]],
   ['redundancyfullverticalprobe_5',['RedundancyFullVerticalProbe',['../namespace_software_1_1_probing.html#ac471dbda75158dcdf85d1949f62046e8',1,'Software::Probing']]],
@@ -16,7 +16,7 @@ var searchData=
   ['removeduplicatedprobingsetsbucket_13',['RemoveDuplicatedProbingSetsBucket',['../namespace_hardware_1_1_generate_probing_sets.html#a329fe90975352ab0382ae8619c893244',1,'Hardware::GenerateProbingSets']]],
   ['report_14',['Report',['../namespace_hardware_1_1_print.html#a4af8774e4b10dfdc919dce22596fbacc',1,'Hardware::Print']]],
   ['reset_15',['Reset',['../struct_software_1_1_test_struct.html#af3b20b36caa8f45364be11cbfca0f586',1,'Software::TestStruct']]],
-  ['reset_16',['reset',['../classmulator_1_1_disassembler.html#af4c6e5f1e7af4224b989d732d2de1168',1,'mulator::Disassembler']]],
+  ['reset_16',['reset',['../classmulator_1_1_disassembler.html#abddce35bf678296447779ed15582d399',1,'mulator::Disassembler']]],
   ['robustprobingsecurity_17',['RobustProbingSecurity',['../namespace_hardware_1_1_analyze.html#a91a39630c70b2786666d85d6b7ae0295',1,'Hardware::Analyze']]],
   ['robustprobingsecurityforsomeprobingsets_18',['RobustProbingSecurityForSomeProbingSets',['../namespace_hardware_1_1_analyze.html#ad67405767297d4c2385b1b15d25c6127',1,'Hardware::Analyze']]],
   ['ror_19',['ROR',['../namespacemulator_1_1arm__functions.html#abf1bbe328b610ace3f41f840be3758d1',1,'mulator::arm_functions']]],

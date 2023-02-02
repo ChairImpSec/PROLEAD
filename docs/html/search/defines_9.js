@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['max_5fname_5flength_0',['Max_Name_Length',['../_hardware_2_definitions_8hpp.html#acf1dedd66aae8103a70f1250179b8f1f',1,'Max_Name_Length():&#160;Definitions.hpp'],['../_software_2_definitions_8hpp.html#acf1dedd66aae8103a70f1250179b8f1f',1,'Max_Name_Length():&#160;Definitions.hpp']]],
-  ['max_5fnum_5fregister_1',['Max_Num_Register',['../_software_2_definitions_8hpp.html#a336115ddc9a26282d1ad9bdb289ec668',1,'Definitions.hpp']]]
+  ['operation_5fand_0',['Operation_AND',['../_hardware_2_definitions_8hpp.html#a48f940116524884f41adaadc36c2dec5',1,'Definitions.hpp']]],
+  ['operation_5fnot_1',['Operation_NOT',['../_hardware_2_definitions_8hpp.html#aac317fe6e8ec0e20669e4017e35ca9e7',1,'Definitions.hpp']]],
+  ['operation_5for_2',['Operation_OR',['../_hardware_2_definitions_8hpp.html#abdd7f272f72ef7c2136fe6564a7fee00',1,'Definitions.hpp']]],
+  ['operation_5fxor_3',['Operation_XOR',['../_hardware_2_definitions_8hpp.html#a9b978e28990f94e78c1ac2c655ca76a3',1,'Definitions.hpp']]]
 ];

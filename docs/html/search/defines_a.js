@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['operation_5fand_0',['Operation_AND',['../_hardware_2_definitions_8hpp.html#a48f940116524884f41adaadc36c2dec5',1,'Definitions.hpp']]],
-  ['operation_5fnot_1',['Operation_NOT',['../_hardware_2_definitions_8hpp.html#aac317fe6e8ec0e20669e4017e35ca9e7',1,'Definitions.hpp']]],
-  ['operation_5for_2',['Operation_OR',['../_hardware_2_definitions_8hpp.html#abdd7f272f72ef7c2136fe6564a7fee00',1,'Definitions.hpp']]],
-  ['operation_5fxor_3',['Operation_XOR',['../_hardware_2_definitions_8hpp.html#a9b978e28990f94e78c1ac2c655ca76a3',1,'Definitions.hpp']]]
+  ['randominput_0',['RandomInput',['../_hardware_2_definitions_8hpp.html#a37a5fa5b817d7d50b992f8dc8c666b08',1,'Definitions.hpp']]],
+  ['reg1_5fmask_1',['REG1_MASK',['../_probing_8hpp.html#a3c727b9a3f647ce99f043be5a8f5cb9b',1,'Probing.hpp']]],
+  ['reg1_5foffset_2',['REG1_OFFSET',['../_probing_8hpp.html#acf82524b0f323c481128f3ce7611845d',1,'Probing.hpp']]],
+  ['reg2_5fmask_3',['REG2_MASK',['../_probing_8hpp.html#a75d7fcfca028c52b79bbd73ed4df5e2d',1,'Probing.hpp']]],
+  ['reg2_5foffset_4',['REG2_OFFSET',['../_probing_8hpp.html#a49d2288e1de284418c738dd763f8ae72',1,'Probing.hpp']]]
 ];
