@@ -1,0 +1,17 @@
+Start Software Leakage Evaluation
+
+Source file(s): ../../source/main.c
+Linker file:    ../../source/linker.ld
+Settings file:  config.set
+Result folder:  .
+config file: all required information are not given
+
+default "no_of_entries_in_report" = 10 is taken
+Prepare shared data for 6 threads ...done!
+
+Start software evaluation...
+---------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |     Memory Consumption |        #Sets |       Simulations | Probing Set with highest Information Leakage |  -log10(p) |
+---------------------------------------------------------------------------------------------------------------------------------------------
+|         5.455818s |             1.704200GB |       703552 |            32 / 1 |                                     R9[0](2) |   0.000000 |
+|        10.511261s |             1.709092GB |       703552 |         64 / 7537 |                                  R8[0](9474) |   3.847205 |

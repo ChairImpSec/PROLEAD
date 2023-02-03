@@ -2052,7 +2052,7 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 
 }
 void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruct* Settings, char* Linkerfile){
-    char pyscript_filename[] = "inc/Software/compile_sw.py"; 
+    char pyscript_filename[] = "../../../../../inc/Software/compile_sw.py"; 
     FILE *fp;
     
 	std::string ErrorMessage;
@@ -2124,12 +2124,13 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
 
 
     // initiate c to python communication
+
     Py_SetProgramName(argv[0]);
 
     Py_Initialize();
 
     PySys_SetArgvEx(additonal_info_ctr + str_ctr, argv, 0);
-    
+
     fp = _Py_fopen(pyscript_filename, "r");
 
     if(fp == NULL){
@@ -2150,10 +2151,32 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
     }
     free(tmp_str);
 
+	Py_Finalize();
+
+	
     /*
     *   second step: parse arguments
     */
-   
+	Py_Initialize();
+  	/* This is to add the path in the code */
+	PyObject *os_module = PyImport_ImportModule("os");
+	if (os_module == NULL) { //error handling
+		throw std::runtime_error("in read binaryfile: os module error");
+	}
+	PyObject* cwd = PyObject_CallMethod(os_module, "getcwd", NULL);
+	if (cwd == NULL) { //error handling
+		throw std::runtime_error("in read binaryfile: getcwd error");
+	}
+
+	PyObject* result = PyUnicode_AsEncodedString(cwd, "utf-8", "~E~");
+	const char *bytes = PyBytes_AS_STRING(result);
+	std::string path_of_example(bytes);
+	std::string path_of_directory = path_of_example.substr(0, path_of_example.rfind("PROLEAD") + strlen("PROLEAD"));
+
+	PyObject *sys_path = PySys_GetObject("path");
+	PyList_Append(sys_path, PyUnicode_FromString(path_of_directory.c_str()));
+
+
     /* create parameter array for compilation step*/
     argv = new wchar_t*[Settings->InitialSim_NumberOfInputs+1]; //inputs and name of function containing cipher
     argv[0] = new wchar_t[strlen(Settings->funcContainingCipher.c_str())+1];
@@ -2163,20 +2186,35 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
         argv[i+1] = new wchar_t[strlen(Settings->InitialSim_InputName[i])+1];
         mbstowcs(argv[i+1], Settings->InitialSim_InputName[i], strlen(Settings->InitialSim_InputName[i]) + 1);
     }
-
-    PySys_SetArgvEx(Settings->InitialSim_NumberOfInputs+1, argv, 0);
-    
+    PySys_SetArgv(Settings->InitialSim_NumberOfInputs+1, argv);
+	PyObject* pName = NULL;
+	PyObject* pModule = NULL;
+	PyObject* pDict = NULL;
+	PyObject* pFunc  = NULL;
+	PyObject* pArgs  = NULL;
+	PyObject* pValue = NULL;
     //import python module for argument parsing
-    PyObject* pName = PyUnicode_FromString("inc.Software.parse_args");
-    PyObject* pModule = PyImport_Import(pName);
-    PyObject* pDict = PyModule_GetDict(pModule);
-    
-    PyObject* pFunc = PyDict_GetItemString(pDict, "extract_args");
-    PyObject* pArgs = PyTuple_New(1);
-    PyObject* pValue = PyUnicode_FromString("./"); 
+    if((pName = PyUnicode_FromString("inc.Software.parse_args"))){
+		if((pModule = PyImport_Import(pName))){
+			if((pDict = PyModule_GetDict(pModule))){
+				pFunc = PyDict_GetItemString(pDict, "extract_args");
+				pArgs = PyTuple_New(1);
+				pValue = PyUnicode_FromString(path_of_example.c_str()); 
+			}
+			else{
+				throw std::runtime_error("in read binaryfile: PyModule_GetDict error");
+			}
+		}
+		else{
+			throw std::runtime_error("in read binaryfile: PyImport_Import error");
+		}
+
+	}
+	else{
+		throw std::runtime_error("in read binaryfile: PyUnicode_FromString error");
+	}
 
 	PyTuple_SetItem(pArgs, 0, pValue);
-    
 
     //run required function form module and return as PyObject*
     if(pModule){
@@ -2189,7 +2227,7 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
     else{
         throw std::runtime_error("ERROR: Python module not imported!");
     }
-    
+
     //free allocated array
     for(int i = 0; i < Settings->InitialSim_NumberOfInputs; ++i){
         delete[] argv[i];
@@ -2233,7 +2271,7 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
     Settings->ram              = {0,0};
     Settings->arch             = mulator::Architecture::ARMv7M;
     Settings->num_threads      = 0;
-
+	
     for(uint32_t i = 0; i < n_spaces; ++i){
         if(!strcmp(args[i],"--start")){
             Settings->start_address = (uint32_t)strtol(args[++i], NULL, 16);

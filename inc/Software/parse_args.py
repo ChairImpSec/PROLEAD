@@ -36,7 +36,6 @@ def num(s):
 
 def extract_args(FolderName):    
 
-
     args = ""
 
     input_parameter_list = list()
@@ -48,15 +47,16 @@ def extract_args(FolderName):
     for i in range(len(argv)):
         input_parameter_list.append(str(argv[i]))
 
-    if str(FolderName).rpartition("/")[0]:
-        RELATIVE_PATH = str(FolderName).rpartition("/")[0] + str(FolderName).rpartition("/")[1]#"../example_sw/"
-    else:
-        RELATIVE_PATH = "./"
+    # if str(FolderName).rpartition("/")[0]:
+    #     RELATIVE_PATH = str(FolderName).rpartition("/")[0] + str(FolderName).rpartition("/")[1]#"../example_sw/"
+    # else:
+    #     RELATIVE_PATH = "./"
 
+    RELATIVE_PATH = str(FolderName).rpartition("results")[0] + "binary"
 
     armV = None
-    out,err = run("arm-none-eabi-readelf -A " + RELATIVE_PATH + "tmp_data/binary.elf")
-    tmp,err = run("arm-none-eabi-readelf -A " + RELATIVE_PATH + "tmp_data/binary.elf")
+    out,err = run("arm-none-eabi-readelf -A " + RELATIVE_PATH + "/binary.elf")
+    tmp,err = run("arm-none-eabi-readelf -A " + RELATIVE_PATH + "/binary.elf")
     # extract/verify supported architecture
     if "Tag_CPU_name:" in out:
         out = out[out.find("Tag_CPU_name:"):]
@@ -89,7 +89,7 @@ def extract_args(FolderName):
 
     # extract addresses of symbols
 
-    with open(RELATIVE_PATH + "tmp_data/binary.map", "rt") as file:
+    with open(RELATIVE_PATH + "/binary.map", "rt") as file:
         lines = file.readlines()
 
     flash = (0,0)
@@ -144,7 +144,7 @@ def extract_args(FolderName):
 
     begin_ignore = None
     sections = list()
-    out,err = run("arm-none-eabi-objdump " + RELATIVE_PATH + "tmp_data/binary.elf -t")
+    out,err = run("arm-none-eabi-objdump " + RELATIVE_PATH + "/binary.elf -t")
     lines = sorted([l for l in out.split("\n")])
     for l in lines:
         parts = l.split()
@@ -197,7 +197,7 @@ def extract_args(FolderName):
     #extract all sections to binary files
 
     sections = list()
-    out,err = run("arm-none-eabi-objdump " + RELATIVE_PATH + "tmp_data/binary.elf -h")
+    out,err = run("arm-none-eabi-objdump " + RELATIVE_PATH + "/binary.elf -h")
     lines = [l for l in out.split("\n")]
     while len(lines) > 0:
         l = lines.pop(0)
@@ -209,13 +209,13 @@ def extract_args(FolderName):
                 sections.append((parts[1], num(parts[3]))) # name, offset
 
     for name, _ in sections:
-        run("arm-none-eabi-objcopy -O binary --only-section="+name+" " + RELATIVE_PATH + "tmp_data/binary.elf " + RELATIVE_PATH + "tmp_data/code_section"+name)
+        run("arm-none-eabi-objcopy -O binary --only-section="+name+" " + RELATIVE_PATH + "/binary.elf " + RELATIVE_PATH + "/code_section"+name)
 
 
     # check if compiler optimizations removed call to cipher from main (e.g replacing it with cipher.constprop.0)
     # if so set --start to start address of modified label
 
-    with open(RELATIVE_PATH + "tmp_data/disassembled.txt", "r") as f:
+    with open(RELATIVE_PATH + "/disassembled.txt", "r") as f:
         lines = f.readlines()
         sanitised_lines = []
         for line in lines:
@@ -287,7 +287,7 @@ def extract_args(FolderName):
         args += " --armv7e-m"
 
     for name, offset in sections:
-        args += " --section " + RELATIVE_PATH + "tmp_data/code_section{} {}".format(name, offset)
+        args += " --section " + RELATIVE_PATH + "/code_section{} {}".format(name, offset)
 
     args += " --inputs"
     for key, val in input_parameter_addresses.items():

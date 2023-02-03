@@ -1,0 +1,1 @@
+./../../../../../release/PROLEAD -pf sw -ldf ../../source/linker.ld -df ../../source/main.c ../../source/present.s -cf config.set 2>&1 | tee Report.dat

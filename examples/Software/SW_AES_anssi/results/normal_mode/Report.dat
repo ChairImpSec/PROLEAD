@@ -1,0 +1,25 @@
+Start Software Leakage Evaluation
+
+Source file(s): design.v
+Linker file:    linker.ld
+Settings file:  config.set
+Result folder:  .
+Binary information path:  ../../build/firmware.elf ../../firmware.map ../../disassembled.txt
+config file: all required information are not given
+
+default "no_of_entries_in_report" = 10 is taken
+Prepare shared data for 6 threads ...done!
+
+Start software evaluation...
+---------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |     Memory Consumption |        #Sets |       Simulations | Probing Set with highest Information Leakage |  -log10(p) |
+---------------------------------------------------------------------------------------------------------------------------------------------
+|         0.417930s |             0.762824GB |        99264 |                32 |                                  R2[0](2854) |   0.000000 |
+|         0.730558s |             0.762824GB |        99264 |                64 |                                 R11[4](4784) |   3.371680 |
+|         1.009763s |             0.762824GB |        99264 |                96 |                                  R8[4](5664) |   3.800391 |
+|         1.297359s |             0.762824GB |        99264 |               128 |                                  R6[0](5100) |   4.018020 |
+|         1.579824s |             0.762824GB |        99264 |               160 |                                  R6[0](5100) |   4.472367 |
+|         1.860907s |             0.762824GB |        99264 |               192 |                                  R6[0](5100) |   3.121475 |
+|         2.136857s |             0.762824GB |        99264 |               224 |                                  R4[7](5227) |   3.773644 |
+|         2.428669s |             0.762824GB |        99264 |               256 |                                  R4[7](5227) |   3.227257 |
+|         2.708294s |             0.762824GB |        99264 |               288 |                                 R6[28](5100) |   3.663225 |

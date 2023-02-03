@@ -1,0 +1,75 @@
+max_no_of_threads   % maximum number of threads *for parallel operation*
+1
+
+no_of_groups % number of groups to conduct the test, e.g., fixed vs. fixed, fixed vs. random, etc.
+2
+
+800'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ %800'h96E9EF117080B287760E0A93F3EF1941981A003415104BE7688DABAF879665AB1F0A97A31A9E599A91FA66610EFCF41B54D05CB18458689F1527178824247A224CF35ABF643697AFA7800BF078F539E542D0FF512F45F8F199BFA023FBC604F45DD431E5
+800'h96E9EF117080B287760E0A93F3EF1941981A003415104BE7688DABAF879665AB1F0A97A39A599E1A91FA66610EFCF41B54D05CB18458689F1527178824247A224CF35ABF643697AFA7800BF078F539E542D0FF512F45F8F199BFA023FBC604F45DD431E5 %800'hE531D45DF404C6FB23A0BF99F1F8452F51FFD042E539F578F00B80A7AF973664BF5AF34C227A2424881727159F685884B15CD0541BF4FC0E6166FA911A9E599AA3970A1FAB659687AFAB8D68E74B101534001A984119EFF3930A0E7687B2807011EFE996 800'h5DD431E5FBC604F499BFA0232F45F8F142D0FF5178F539E5A7800BF0643697AF4CF35ABF24247A22152717888458689F54D05CB10EFCF41B91FA66619A599E1A1F0A9703879665AB688DABAF15104BE7981A0034F3EF1941760E0A937080B28796E9EF11
+
+max_clock_cycle   % maximum number of clock cycles per run before checking the end_condition
+2040
+
+no_of_initial_inputs   % number of primary inputs during the initialization -> in SOFTWARE: defines number of inputs passed to main function
+2
+
+%length of parameter | parameter name | either: group_inX[length:length] or fix value in form 128'h00000000000000000000000000000000 / 1'b0
+%for software case: parameter name has to be paramX where X represents the x-th input
+[799:0] arr input_s1 group_in0[799:0]
+[799:0] arr input_s2 group_in1[799:0]
+
+end_condition    % the condition to check to terminate the simulation (e.g., done signal is high)
+                 % or a numer of clock cycles, e.g., ClockCycles 5
+%done 1'b1
+%[31:0] R1 32'h000000CD
+ClockCycles 2040
+
+
+order_of_test % maximum number of probes, i.e., order of test
+1
+
+multivariate_test % no: only univariate test should be done, yes: univariate + multivariate
+no
+
+transitional_leakage % yes/no: whether transitional leakage should be considered in the tests
+no
+
+compact_distributions % yes/no: whether distributions (of probes) should be considered as compact. 
+                      % it is recommended to use 'no' only for small circuits and low security orders
+yes
+
+no_of_test_clock_cycles % number of blocks to define clock cycles which should be covered in the tests
+1
+
+1-2035 %11520    % clock cycles 4, 5, 6 14122
+
+no_of_simulations % total number of simulations (traces) in the tests, should be a factor of 64
+50048 %100000000
+
+no_of_step_simulations % number of simulations in each step, should be a factor of 64, and a divisor of no_of_simulations
+32 %1000000
+
+no_of_step_write_results % number of simulations in each step that result files are written, 
+                         % should be a factor of 64, and a divisor of no_of_simulations and
+                         % should be a factor of no_of_step_simulations
+32 %1000000
+
+compiler_flags % define compiler flags, passed to compile source file(s)
+
+-march=armv7-m -O3
+
+location_of_cipher % which function calls cipher function, important to find start for probing due to compiler optimizations
+main
+
+probes_include   % those wires which should be included for probing (all : to include them all, 0 : to include none, e.g., 2 : to inlcude two and name them)  
+all
+
+probes_exclude   % those wires which should be exclused for probing (all : to exclude them all, 0 : to exclude none, e.g., 2 : to exclude two and name them) 
+6
+
+PC
+VR
+HR
+FULLVR
+MEM
+MEMSHADOW

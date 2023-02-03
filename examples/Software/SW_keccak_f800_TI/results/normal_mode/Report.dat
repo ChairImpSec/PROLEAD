@@ -1,0 +1,16 @@
+Start Software Leakage Evaluation
+
+Source file(s): ../../source/main.c ../../source/keccak_f800.s
+Linker file:    ../../source/linker.ld
+Settings file:  config.set
+Result folder:  .
+config file: all required information are not given
+
+default "no_of_entries_in_report" = 10 is taken
+Prepare shared data for 1 threads ...done!
+
+Start software evaluation...
+---------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |     Memory Consumption |        #Sets |       Simulations | Probing Set with highest Information Leakage |  -log10(p) |
+---------------------------------------------------------------------------------------------------------------------------------------------
+|         4.905166s |             0.301684GB |        77550 |            32 / 1 |                                    R13[0](3) |   0.000000 |

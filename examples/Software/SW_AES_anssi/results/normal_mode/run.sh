@@ -1,0 +1,1 @@
+./../../../../../release/PROLEAD -pf sw -b ../../build/firmware.elf ../../firmware.map ../../disassembled.txt -cf config.set 2>&1 | tee Report.dat

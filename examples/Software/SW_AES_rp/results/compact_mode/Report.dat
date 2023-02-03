@@ -1,0 +1,26 @@
+Start Software Leakage Evaluation
+
+Source file(s): ../../source/main.c
+Linker file:    ../../source/linker.ld
+Settings file:  config.set
+Result folder:  .
+config file: all required information are not given
+
+default "no_of_entries_in_report" = 10 is taken
+/home/jannik/PROLEAD_FINAL_FINAL_GIT/PROLEAD/examples/Software/SW_AES_rp/results/compact_mode
+/home/jannik/PROLEAD_FINAL_FINAL_GIT/PROLEAD
+asdfasdf
+asdfasdf
+/home/jannik/PROLEAD_FINAL_FINAL_GIT/PROLEAD/examples/Software/SW_AES_rp/results/compact_mode
+/home/jannik/PROLEAD_FINAL_FINAL_GIT/PROLEAD/examples/Software/SW_AES_rp/binary
+Prepare shared data for 6 threads ...done!
+
+Start software evaluation...
+---------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |     Memory Consumption |        #Sets |       Simulations | Probing Set with highest Information Leakage |  -log10(p) |
+---------------------------------------------------------------------------------------------------------------------------------------------
+|         3.242055s |             0.571764GB |       703552 |                32 |                                     R9[0](2) |   0.000000 |
+|         6.676120s |             0.658568GB |       703552 |                64 |                                   R3[2](610) |   3.841554 |
+|        10.145498s |             0.684316GB |       703552 |                96 |                                   R9[7](923) |   4.642846 |
+|        13.575806s |             0.703312GB |       703552 |               128 |                                 R12[5](7452) |   5.188460 |
+|        17.050488s |             0.688172GB |       703552 |               160 |                                  R7[6](6166) |   4.419745 |
