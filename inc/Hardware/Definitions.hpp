@@ -233,24 +233,76 @@ namespace Hardware
         char***    ProbeValues;             // [0...NumberOfStepSimulations-1][0...NumberOfClockCycles-1][0...NumberOfAllGlitchExtendedProbes-1]
     };
 
+	/**
+	* @brief Defines a single probe.
+	* @author Nicolai Müller
+	*/
     struct ProbePositionStruct
     {
-        unsigned int Probe;
-        unsigned int Cycle;
+        unsigned int Probe; ///< The position of a probe, i.e. the probed signal, given by the index of the signal.
+        unsigned int Cycle; ///< The clock cycle in which the signal driven by a wire is recorded.
 
+		/**
+		* The default constructor of a single probe.
+		*
+		* @brief Initializes a new probe. 
+		* @author Nicolai Müller
+		*/
         ProbePositionStruct();
+		
+		/**
+		* @brief Initializes a single probe with a specific position and clock cycle.
+		* @param p The probed wire index.
+		* @param c The clock cycle to probe.
+		* @author Nicolai Müller
+		*/
         ProbePositionStruct(unsigned int, unsigned int);
     };
 
+	/**
+	* Stores all information belonging to a probing set, i.e. the indices of all involved probes and the contingency table.
+	*
+	* @brief Defines a probing set.
+	* @author Nicolai Müller
+	*/
     struct ProbingSetStruct
     {
-        std::vector<unsigned int> Standard;
-        std::vector<unsigned int> Extension;
-        Util::ContingencyTableStruct ContingencyTable;
+        std::vector<unsigned int> Standard; ///< The standard probes placed by an adversary.
+        std::vector<unsigned int> Extension; ///< The extensions of the standard probes, i.e. glitch- and transition-extended probes.
+        Util::ContingencyTableStruct ContingencyTable; ///< The contingency table storing the occurences of values probed by the extended probes.
 
+		/**
+		* @brief Initializes a probing set with a single standard probe.
+		* @param p The standard probe index.
+		* @author Nicolai Müller
+		*/
         ProbingSetStruct(unsigned int);
+		
+		/**
+		* @brief Initializes a probing set with a list of standard probes.
+		* @param Probe The list of standard probe indices.
+		* @author Nicolai Müller
+		*/		
         ProbingSetStruct(std::vector<unsigned int>&);
+		
+		/**
+		* Checks if the probing set can theoretically contain all extended probes of a given probing set.
+		* This leads to a higher efficiency as we can reject probing sets before comparing all extended probes.
+		* This pre-checking step proves if all extended probes of the robing set to cover are in the range of the covering probing set.
+		*
+		* @brief Checks if the probing set covers another probing set.
+		* @param ProbingSet The probing set that should be covered.
+		* @author Nicolai Müller
+		*/	
         bool Covers(Hardware::ProbingSetStruct&);
+		
+		/**
+		* @brief Checks if the contingency table contains a particular entry.
+		* @param Entry The contingency table entry to search.
+		* @param IgnoredEntries Number of entries at the end of the contingency table to ignore during search.
+		* @return The position of the entry in the table or -1 if the entry was not found.
+		* @author Nicolai Müller
+		*/			
         int FindEntry(Util::TableEntryStruct&, unsigned int);
     };
 

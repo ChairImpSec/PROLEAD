@@ -84,6 +84,6 @@ var searchData=
   ['rrx_81',['RRX',['../namespacemulator_1_1arm__functions.html#a675a88bbb30c046c50f66ac0501f8679',1,'mulator::arm_functions::RRX()'],['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05ea3c8a75733982db2a2b5b411a31a816a8',1,'mulator::RRX()'],['../namespacemulator.html#a1a547d928c44738ef9cd0dbb8675f4e6a3c8a75733982db2a2b5b411a31a816a8',1,'mulator::RRX()']]],
   ['rrx_5fc_82',['RRX_C',['../namespacemulator_1_1arm__functions.html#ae2353c40be27958178ae27720091fe38',1,'mulator::arm_functions']]],
   ['rsb_83',['RSB',['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05ea65ee5638681c84119413c9bedeec7de3',1,'mulator']]],
-  ['run_84',['Run',['../namespace_software_1_1_simulate.html#aa57c9df85cee953886a4cb226c0bdc8a',1,'Software::Simulate']]],
-  ['run_85',['run',['../namespaceparse__args.html#a49ce0a9283620508632a34e2bc9e3c4c',1,'parse_args']]]
+  ['run_84',['run',['../namespaceparse__args.html#a49ce0a9283620508632a34e2bc9e3c4c',1,'parse_args']]],
+  ['run_85',['Run',['../namespace_software_1_1_simulate.html#aa57c9df85cee953886a4cb226c0bdc8a',1,'Software::Simulate']]]
 ];

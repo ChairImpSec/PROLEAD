@@ -2,34 +2,46 @@
 \label{struct_hardware_1_1_probing_set_struct}\index{Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}}
 
 
+Defines a probing set.  
+
+
+
+
 {\ttfamily \#include $<$Definitions.\+hpp$>$}
 
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_a168bc5d26a27fcaaed5cec4ccf5a0953}{Probing\+Set\+Struct}} (unsigned int)
-\item 
+\begin{DoxyCompactList}\small\item\em Initializes a probing set with a single standard probe. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_a4ccdfc54655fc7846a3729932827db6e}{Probing\+Set\+Struct}} (std\+::vector$<$ unsigned int $>$ \&)
-\item 
+\begin{DoxyCompactList}\small\item\em Initializes a probing set with a list of standard probes. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_a147eda3b431ddde0b594ce21be21a184}{Covers}} (\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware\+::\+Probing\+Set\+Struct}} \&)
-\item 
+\begin{DoxyCompactList}\small\item\em Checks if the probing set covers another probing set. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_aec0c5c427d99057b447ba7c8e4a356d8}{Find\+Entry}} (\mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util\+::\+Table\+Entry\+Struct}} \&, unsigned int)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Checks if the contingency table contains a particular entry. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_ae88de7a2eec6b79fa787e28af5cd8318}{Standard}}
-\item 
+\begin{DoxyCompactList}\small\item\em The standard probes placed by an adversary. \end{DoxyCompactList}\item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_aaef8b83980867b7ce5fa5ee0293a5012}{Extension}}
-\item 
+\begin{DoxyCompactList}\small\item\em The extensions of the standard probes, i.\+e. glitch-\/ and transition-\/extended probes. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Util\+::\+Contingency\+Table\+Struct}} \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct_ac888c6ea93d3d7ad783e283335bf2cae}{Contingency\+Table}}
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em The contingency table storing the occurences of values probed by the extended probes. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
+Defines a probing set. 
+
+Stores all information belonging to a probing set, i.\+e. the indices of all involved probes and the contingency table.
+
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 
 
-Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00245}{245}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00268}{268}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
 
 
 
@@ -40,12 +52,36 @@ Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00245}{
 \doxysubsubsection{\texorpdfstring{ProbingSetStruct()}{ProbingSetStruct()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily Hardware\+::\+Probing\+Set\+Struct\+::\+Probing\+Set\+Struct (\begin{DoxyParamCaption}\item[{unsigned int}]{ }\end{DoxyParamCaption})}
 
+
+
+Initializes a probing set with a single standard probe. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The standard probe index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 \mbox{\Hypertarget{struct_hardware_1_1_probing_set_struct_a4ccdfc54655fc7846a3729932827db6e}\label{struct_hardware_1_1_probing_set_struct_a4ccdfc54655fc7846a3729932827db6e}} 
 \index{Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}!ProbingSetStruct@{ProbingSetStruct}}
 \index{ProbingSetStruct@{ProbingSetStruct}!Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}}
 \doxysubsubsection{\texorpdfstring{ProbingSetStruct()}{ProbingSetStruct()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily Hardware\+::\+Probing\+Set\+Struct\+::\+Probing\+Set\+Struct (\begin{DoxyParamCaption}\item[{std\+::vector$<$ unsigned int $>$ \&}]{ }\end{DoxyParamCaption})}
 
+
+
+Initializes a probing set with a list of standard probes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Probe} & The list of standard probe indices. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 
 
 \doxysubsection{Member Function Documentation}
@@ -55,12 +91,43 @@ Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00245}{
 \doxysubsubsection{\texorpdfstring{Covers()}{Covers()}}
 {\footnotesize\ttfamily bool Hardware\+::\+Probing\+Set\+Struct\+::\+Covers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware\+::\+Probing\+Set\+Struct}} \&}]{ }\end{DoxyParamCaption})}
 
+
+
+Checks if the probing set covers another probing set. 
+
+Checks if the probing set can theoretically contain all extended probes of a given probing set. This leads to a higher efficiency as we can reject probing sets before comparing all extended probes. This pre-\/checking step proves if all extended probes of the robing set to cover are in the range of the covering probing set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Probing\+Set} & The probing set that should be covered. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 \mbox{\Hypertarget{struct_hardware_1_1_probing_set_struct_aec0c5c427d99057b447ba7c8e4a356d8}\label{struct_hardware_1_1_probing_set_struct_aec0c5c427d99057b447ba7c8e4a356d8}} 
 \index{Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}!FindEntry@{FindEntry}}
 \index{FindEntry@{FindEntry}!Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}}
 \doxysubsubsection{\texorpdfstring{FindEntry()}{FindEntry()}}
 {\footnotesize\ttfamily int Hardware\+::\+Probing\+Set\+Struct\+::\+Find\+Entry (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util\+::\+Table\+Entry\+Struct}} \&}]{,  }\item[{unsigned int}]{ }\end{DoxyParamCaption})}
 
+
+
+Checks if the contingency table contains a particular entry. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Entry} & The contingency table entry to search. \\
+\hline
+{\em Ignored\+Entries} & Number of entries at the end of the contingency table to ignore during search. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The position of the entry in the table or -\/1 if the entry was not found. 
+\end{DoxyReturn}
+\begin{DoxyAuthor}{Author}
+Nicolai Müller 
+\end{DoxyAuthor}
 
 
 \doxysubsection{Member Data Documentation}
@@ -72,7 +139,11 @@ Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00245}{
 
 
 
-Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00249}{249}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+The contingency table storing the occurences of values probed by the extended probes. 
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00272}{272}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
 
 \mbox{\Hypertarget{struct_hardware_1_1_probing_set_struct_aaef8b83980867b7ce5fa5ee0293a5012}\label{struct_hardware_1_1_probing_set_struct_aaef8b83980867b7ce5fa5ee0293a5012}} 
 \index{Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}!Extension@{Extension}}
@@ -82,7 +153,11 @@ Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00249}{
 
 
 
-Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00248}{248}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+The extensions of the standard probes, i.\+e. glitch-\/ and transition-\/extended probes. 
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00271}{271}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
 
 \mbox{\Hypertarget{struct_hardware_1_1_probing_set_struct_ae88de7a2eec6b79fa787e28af5cd8318}\label{struct_hardware_1_1_probing_set_struct_ae88de7a2eec6b79fa787e28af5cd8318}} 
 \index{Hardware::ProbingSetStruct@{Hardware::ProbingSetStruct}!Standard@{Standard}}
@@ -92,7 +167,11 @@ Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00248}{
 
 
 
-Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00247}{247}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+The standard probes placed by an adversary. 
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00270}{270}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
 
 
 

@@ -38,27 +38,27 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00036}00036\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00037}\mbox{\hyperlink{namespaceparse__args_a8b349ca76185221405e8a8eb01268d2b}{00037}}\ \textcolor{keyword}{def\ }\mbox{\hyperlink{namespaceparse__args_a8b349ca76185221405e8a8eb01268d2b}{extract\_args}}(FolderName):\ \ \ \ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00038}00038\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00039}00039\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00040}00040\ \ \ \ \ args\ =\ \textcolor{stringliteral}{"{}"{}}}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00041}00041\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00042}00042\ \ \ \ \ input\_parameter\_list\ =\ list()}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00043}00043\ \ \ \ \ functionContainingCipher\ =\ sys.argv[0]}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00039}00039\ \ \ \ \ args\ =\ \textcolor{stringliteral}{"{}"{}}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00041}00041\ \ \ \ \ input\_parameter\_list\ =\ list()}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00042}00042\ \ \ \ \ functionContainingCipher\ =\ sys.argv[0]}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00043}00043\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00044}00044\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00045}00045\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00046}00046\ \ \ \ \ argv\ =\ sys.argv[1:]\ \textcolor{comment}{\#remove\ function\ name,\ inputs\ remain}}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00047}00047\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00048}00048\ \ \ \ \ \textcolor{keywordflow}{for}\ i\ \textcolor{keywordflow}{in}\ range(len(argv)):}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00049}00049\ \ \ \ \ \ \ \ \ input\_parameter\_list.append(str(argv[i]))}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00050}00050\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00051}00051\ \ \ \ \ \textcolor{keywordflow}{if}\ str(FolderName).rpartition(\textcolor{stringliteral}{"{}/"{}})[0]:}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00052}00052\ \ \ \ \ \ \ \ \ RELATIVE\_PATH\ =\ str(FolderName).rpartition(\textcolor{stringliteral}{"{}/"{}})[0]\ +\ str(FolderName).rpartition(\textcolor{stringliteral}{"{}/"{}})[1]\textcolor{comment}{\#"{}../example\_sw/"{}}}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{else}:}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00054}00054\ \ \ \ \ \ \ \ \ RELATIVE\_PATH\ =\ \textcolor{stringliteral}{"{}./"{}}}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00045}00045\ \ \ \ \ argv\ =\ sys.argv[1:]\ \textcolor{comment}{\#remove\ function\ name,\ inputs\ remain}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00047}00047\ \ \ \ \ \textcolor{keywordflow}{for}\ i\ \textcolor{keywordflow}{in}\ range(len(argv)):}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00048}00048\ \ \ \ \ \ \ \ \ input\_parameter\_list.append(str(argv[i]))}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00050}00050\ \ \ \ \ \textcolor{comment}{\#\ if\ str(FolderName).rpartition("{}/"{})[0]:}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00051}00051\ \ \ \ \ \textcolor{comment}{\#\ \ \ \ \ RELATIVE\_PATH\ =\ str(FolderName).rpartition("{}/"{})[0]\ +\ str(FolderName).rpartition("{}/"{})[1]\#"{}../example\_sw/"{}}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00052}00052\ \ \ \ \ \textcolor{comment}{\#\ else:}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00053}00053\ \ \ \ \ \textcolor{comment}{\#\ \ \ \ \ RELATIVE\_PATH\ =\ "{}./"{}}}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00055}00055\ \ \ \ \ RELATIVE\_PATH\ =\ str(FolderName).rpartition(\textcolor{stringliteral}{"{}results"{}})[0]\ +\ \textcolor{stringliteral}{"{}binary"{}}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00056}00056\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00057}00057\ \ \ \ \ armV\ =\ \textcolor{keywordtype}{None}}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00058}00058\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/readelf\ -\/A\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.elf"{}})}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00059}00059\ \ \ \ \ tmp,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/readelf\ -\/A\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.elf"{}})}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00058}00058\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/readelf\ -\/A\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.elf"{}})}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00059}00059\ \ \ \ \ tmp,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/readelf\ -\/A\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.elf"{}})}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00060}00060\ \ \ \ \ \textcolor{comment}{\#\ extract/verify\ supported\ architecture}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00061}00061\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{stringliteral}{"{}Tag\_CPU\_name:"{}}\ \textcolor{keywordflow}{in}\ out:}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00062}00062\ \ \ \ \ \ \ \ \ out\ =\ out[out.find(\textcolor{stringliteral}{"{}Tag\_CPU\_name:"{}}):]}
@@ -91,7 +91,7 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00089}00089\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00090}00090\ \ \ \ \ \textcolor{comment}{\#\ extract\ addresses\ of\ symbols}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00091}00091\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00092}00092\ \ \ \ \ \textcolor{keyword}{with}\ open(RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.map"{}},\ \textcolor{stringliteral}{"{}rt"{}})\ \textcolor{keyword}{as}\ file:}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00092}00092\ \ \ \ \ \textcolor{keyword}{with}\ open(RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.map"{}},\ \textcolor{stringliteral}{"{}rt"{}})\ \textcolor{keyword}{as}\ file:}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00093}00093\ \ \ \ \ \ \ \ \ lines\ =\ file.readlines()}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00094}00094\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00095}00095\ \ \ \ \ flash\ =\ (0,0)}
@@ -146,7 +146,7 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00144}00144\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00145}00145\ \ \ \ \ begin\_ignore\ =\ \textcolor{keywordtype}{None}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00146}00146\ \ \ \ \ sections\ =\ list()}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00147}00147\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objdump\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.elf\ -\/t"{}})}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00147}00147\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objdump\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.elf\ -\/t"{}})}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00148}00148\ \ \ \ \ lines\ =\ sorted([l\ \textcolor{keywordflow}{for}\ l\ \textcolor{keywordflow}{in}\ out.split(\textcolor{stringliteral}{"{}\(\backslash\)n"{}})])}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00149}00149\ \ \ \ \ \textcolor{keywordflow}{for}\ l\ \textcolor{keywordflow}{in}\ lines:}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00150}00150\ \ \ \ \ \ \ \ \ parts\ =\ l.split()}
@@ -199,7 +199,7 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00197}00197\ \ \ \ \ \textcolor{comment}{\#extract\ all\ sections\ to\ binary\ files}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00198}00198\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00199}00199\ \ \ \ \ sections\ =\ list()}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00200}00200\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objdump\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.elf\ -\/h"{}})}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00200}00200\ \ \ \ \ out,err\ =\ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objdump\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.elf\ -\/h"{}})}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00201}00201\ \ \ \ \ lines\ =\ [l\ \textcolor{keywordflow}{for}\ l\ \textcolor{keywordflow}{in}\ out.split(\textcolor{stringliteral}{"{}\(\backslash\)n"{}})]}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00202}00202\ \ \ \ \ \textcolor{keywordflow}{while}\ len(lines)\ >\ 0:}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00203}00203\ \ \ \ \ \ \ \ \ l\ =\ lines.pop(0)}
@@ -211,13 +211,13 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sections.append((parts[1],\ \mbox{\hyperlink{namespaceparse__args_a5d3ae023516a2ed753a342111b5e9260}{num}}(parts[3])))\ \textcolor{comment}{\#\ name,\ offset}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00210}00210\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00211}00211\ \ \ \ \ \textcolor{keywordflow}{for}\ name,\ \_\ \textcolor{keywordflow}{in}\ sections:}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00212}00212\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objcopy\ -\/O\ binary\ -\/-\/only-\/section="{}}+name+\textcolor{stringliteral}{"{}\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/binary.elf\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/code\_section"{}}+name)}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00212}00212\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespaceparse__args_a49ce0a9283620508632a34e2bc9e3c4c}{run}}(\textcolor{stringliteral}{"{}arm-\/none-\/eabi-\/objcopy\ -\/O\ binary\ -\/-\/only-\/section="{}}+name+\textcolor{stringliteral}{"{}\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/binary.elf\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/code\_section"{}}+name)}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00213}00213\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00214}00214\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00215}00215\ \ \ \ \ \textcolor{comment}{\#\ check\ if\ compiler\ optimizations\ removed\ call\ to\ cipher\ from\ main\ (e.g\ replacing\ it\ with\ cipher.constprop.0)}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00216}00216\ \ \ \ \ \textcolor{comment}{\#\ if\ so\ set\ -\/-\/start\ to\ start\ address\ of\ modified\ label}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00217}00217\ }
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00218}00218\ \ \ \ \ \textcolor{keyword}{with}\ open(RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/disassembled.txt"{}},\ \textcolor{stringliteral}{"{}r"{}})\ \textcolor{keyword}{as}\ f:}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00218}00218\ \ \ \ \ \textcolor{keyword}{with}\ open(RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/disassembled.txt"{}},\ \textcolor{stringliteral}{"{}r"{}})\ \textcolor{keyword}{as}\ f:}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00219}00219\ \ \ \ \ \ \ \ \ lines\ =\ f.readlines()}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00220}00220\ \ \ \ \ \ \ \ \ sanitised\_lines\ =\ []}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00221}00221\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ line\ \textcolor{keywordflow}{in}\ lines:}
@@ -289,7 +289,7 @@
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00287}00287\ \ \ \ \ \ \ \ \ args\ +=\ \textcolor{stringliteral}{"{}\ -\/-\/armv7e-\/m"{}}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00288}00288\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00289}00289\ \ \ \ \ \textcolor{keywordflow}{for}\ name,\ offset\ \textcolor{keywordflow}{in}\ sections:}
-\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00290}00290\ \ \ \ \ \ \ \ \ args\ +=\ \textcolor{stringliteral}{"{}\ -\/-\/section\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}tmp\_data/code\_section\{\}\ \{\}"{}}.format(name,\ offset)}
+\DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00290}00290\ \ \ \ \ \ \ \ \ args\ +=\ \textcolor{stringliteral}{"{}\ -\/-\/section\ "{}}\ +\ RELATIVE\_PATH\ +\ \textcolor{stringliteral}{"{}/code\_section\{\}\ \{\}"{}}.format(name,\ offset)}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00291}00291\ }
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00292}00292\ \ \ \ \ args\ +=\ \textcolor{stringliteral}{"{}\ -\/-\/inputs"{}}}
 \DoxyCodeLine{\Hypertarget{parse__args_8py_source_l00293}00293\ \ \ \ \ \textcolor{keywordflow}{for}\ key,\ val\ \textcolor{keywordflow}{in}\ input\_parameter\_addresses.items():}

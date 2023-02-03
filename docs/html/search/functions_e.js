@@ -23,6 +23,6 @@ var searchData=
   ['ror_5fc_20',['ROR_C',['../namespacemulator_1_1arm__functions.html#a22429a31d2aff625cff2c555aa68cdea',1,'mulator::arm_functions']]],
   ['rrx_21',['RRX',['../namespacemulator_1_1arm__functions.html#a675a88bbb30c046c50f66ac0501f8679',1,'mulator::arm_functions']]],
   ['rrx_5fc_22',['RRX_C',['../namespacemulator_1_1arm__functions.html#ae2353c40be27958178ae27720091fe38',1,'mulator::arm_functions']]],
-  ['run_23',['Run',['../namespace_software_1_1_simulate.html#aa57c9df85cee953886a4cb226c0bdc8a',1,'Software::Simulate']]],
-  ['run_24',['run',['../namespaceparse__args.html#a49ce0a9283620508632a34e2bc9e3c4c',1,'parse_args']]]
+  ['run_23',['run',['../namespaceparse__args.html#a49ce0a9283620508632a34e2bc9e3c4c',1,'parse_args']]],
+  ['run_24',['Run',['../namespace_software_1_1_simulate.html#aa57c9df85cee953886a4cb226c0bdc8a',1,'Software::Simulate']]]
 ];

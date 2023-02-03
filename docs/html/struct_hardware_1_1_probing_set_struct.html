@@ -82,31 +82,44 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a probing set.  
+ <a href="struct_hardware_1_1_probing_set_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a168bc5d26a27fcaaed5cec4ccf5a0953"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#a168bc5d26a27fcaaed5cec4ccf5a0953">ProbingSetStruct</a> (unsigned int)</td></tr>
+<tr class="memdesc:a168bc5d26a27fcaaed5cec4ccf5a0953"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a probing set with a single standard probe.  <br /></td></tr>
 <tr class="separator:a168bc5d26a27fcaaed5cec4ccf5a0953"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ccdfc54655fc7846a3729932827db6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#a4ccdfc54655fc7846a3729932827db6e">ProbingSetStruct</a> (std::vector&lt; unsigned int &gt; &amp;)</td></tr>
+<tr class="memdesc:a4ccdfc54655fc7846a3729932827db6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes a probing set with a list of standard probes.  <br /></td></tr>
 <tr class="separator:a4ccdfc54655fc7846a3729932827db6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a147eda3b431ddde0b594ce21be21a184"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#a147eda3b431ddde0b594ce21be21a184">Covers</a> (<a class="el" href="struct_hardware_1_1_probing_set_struct.html">Hardware::ProbingSetStruct</a> &amp;)</td></tr>
+<tr class="memdesc:a147eda3b431ddde0b594ce21be21a184"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the probing set covers another probing set.  <br /></td></tr>
 <tr class="separator:a147eda3b431ddde0b594ce21be21a184"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec0c5c427d99057b447ba7c8e4a356d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#aec0c5c427d99057b447ba7c8e4a356d8">FindEntry</a> (<a class="el" href="struct_util_1_1_table_entry_struct.html">Util::TableEntryStruct</a> &amp;, unsigned int)</td></tr>
+<tr class="memdesc:aec0c5c427d99057b447ba7c8e4a356d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the contingency table contains a particular entry.  <br /></td></tr>
 <tr class="separator:aec0c5c427d99057b447ba7c8e4a356d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ae88de7a2eec6b79fa787e28af5cd8318"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#ae88de7a2eec6b79fa787e28af5cd8318">Standard</a></td></tr>
+<tr class="memdesc:ae88de7a2eec6b79fa787e28af5cd8318"><td class="mdescLeft">&#160;</td><td class="mdescRight">The standard probes placed by an adversary.  <br /></td></tr>
 <tr class="separator:ae88de7a2eec6b79fa787e28af5cd8318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaef8b83980867b7ce5fa5ee0293a5012"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#aaef8b83980867b7ce5fa5ee0293a5012">Extension</a></td></tr>
+<tr class="memdesc:aaef8b83980867b7ce5fa5ee0293a5012"><td class="mdescLeft">&#160;</td><td class="mdescRight">The extensions of the standard probes, i.e. glitch- and transition-extended probes.  <br /></td></tr>
 <tr class="separator:aaef8b83980867b7ce5fa5ee0293a5012"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac888c6ea93d3d7ad783e283335bf2cae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_util_1_1_contingency_table_struct.html">Util::ContingencyTableStruct</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_probing_set_struct.html#ac888c6ea93d3d7ad783e283335bf2cae">ContingencyTable</a></td></tr>
+<tr class="memdesc:ac888c6ea93d3d7ad783e283335bf2cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The contingency table storing the occurences of values probed by the extended probes.  <br /></td></tr>
 <tr class="separator:ac888c6ea93d3d7ad783e283335bf2cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00245">245</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<div class="textblock"><p>Defines a probing set. </p>
+<p>Stores all information belonging to a probing set, i.e. the indices of all involved probes and the contingency table.</p>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00268">268</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a168bc5d26a27fcaaed5cec4ccf5a0953" name="a168bc5d26a27fcaaed5cec4ccf5a0953"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a168bc5d26a27fcaaed5cec4ccf5a0953">&#9670;&#160;</a></span>ProbingSetStruct() <span class="overload">[1/2]</span></h2>
@@ -123,6 +136,15 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Initializes a probing set with a single standard probe. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>The standard probe index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -142,6 +164,15 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initializes a probing set with a list of standard probes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Probe</td><td>The list of standard probe indices. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -160,6 +191,16 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Checks if the probing set covers another probing set. </p>
+<p>Checks if the probing set can theoretically contain all extended probes of a given probing set. This leads to a higher efficiency as we can reject probing sets before comparing all extended probes. This pre-checking step proves if all extended probes of the robing set to cover are in the range of the covering probing set.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ProbingSet</td><td>The probing set that should be covered. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -189,6 +230,17 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Checks if the contingency table contains a particular entry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Entry</td><td>The contingency table entry to search. </td></tr>
+    <tr><td class="paramname">IgnoredEntries</td><td>Number of entries at the end of the contingency table to ignore during search. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The position of the entry in the table or -1 if the entry was not found. </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -204,7 +256,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00249">249</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The contingency table storing the occurences of values probed by the extended probes. </p>
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00272">272</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -220,7 +274,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00248">248</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The extensions of the standard probes, i.e. glitch- and transition-extended probes. </p>
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00271">271</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -236,7 +292,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00247">247</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The standard probes placed by an adversary. </p>
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00270">270</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
