@@ -1,10 +1,6 @@
-# PROLEAD - A Probing-Based Hardware Leakage Detection Tool
-This repository contains the source code for the paper <a href="https://tches.iacr.org/index.php/TCHES/article/view/9822">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a>.
-For a quick start, we recommend to watch the quick start guide below:
-
-<div align="center">
-  <a href="https://www.youtube.com/watch?v=xzhVpo0fbNY"><img src="https://img.youtube.com/vi/xzhVpo0fbNY/0.jpg" alt="PROLEAD#1 - Quick Start Guide"></a>
-</div>
+# PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software
+This repository contains the source code for the papers <a href="https://tches.iacr.org/index.php/TCHES/article/view/9822">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a> and <a href="https://eprint.iacr.org/2023/034.pdf">PROLEAD_SW - Probing-Based Software Leakage Detection for ARM Binaries</a>.
+For a quick start, we recommend to watch the quick start guides on our <a href="https://www.youtube.com/channel/UCTCuC2NMxaFPtDb4yGHHwTg">Youtube Channel</a>
 
 ## Features
 PROLEAD allows to analyze the robust probing security of masked implementations provided as a verilog netlist or arm binary. In particular, PROLEAD supports the following features:
