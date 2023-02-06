@@ -20,7 +20,7 @@ var searchData=
   ['start_5fsymbol_17',['START_SYMBOL',['../namespaceparse__args.html#a1db358526deadbae711c6e19515446e2',1,'parse_args']]],
   ['startaddrinram_18',['StartaddrInRAM',['../struct_software_1_1_shared_data_struct.html#aec8c25d0809e35cc139284636f515acb',1,'Software::SharedDataStruct']]],
   ['startram_5fendram_5femulatorinputs_19',['StartRAM_EndRAM_EmulatorInputs',['../struct_software_1_1_thread_simulation_struct.html#a19ed67ff3f9b900d88f1ddd5a22fc7aa',1,'Software::ThreadSimulationStruct']]],
-  ['stepsimulationindex_20',['StepSimulationIndex',['../struct_hardware_1_1_simulation_struct.html#af31080116422814169151c6cafaa84d2',1,'Hardware::SimulationStruct::StepSimulationIndex()'],['../struct_software_1_1_simulation_struct.html#a32bac560ec790c279f8caf6e0c376cbf',1,'Software::SimulationStruct::StepSimulationIndex()']]],
+  ['stepsimulationindex_20',['StepSimulationIndex',['../struct_software_1_1_simulation_struct.html#a32bac560ec790c279f8caf6e0c376cbf',1,'Software::SimulationStruct']]],
   ['sumovergroup_21',['SumOverGroup',['../struct_hardware_1_1_test_struct.html#a405e27ba474bcc4a215d41af5f9d0eb0',1,'Hardware::TestStruct']]],
   ['symbol_5faddresses_22',['symbol_addresses',['../struct_software_1_1_settings_struct.html#a397b943ab1829b3cf1c8bf58c4a56141',1,'Software::SettingsStruct']]],
   ['symbol_5fnames_23',['symbol_names',['../struct_software_1_1_settings_struct.html#a706a00ccbb4cbdbccd0f2233ea315050',1,'Software::SettingsStruct']]]

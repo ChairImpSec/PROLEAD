@@ -176,19 +176,27 @@ namespace Hardware
         double EffectSize;
     };
 
+	/**
+	* @brief Defines an already extended probe, i.e. a set of glitch extended probes.
+	* @author Amir Moradi
+	*/
     struct GlitchExtendedProbesStruct
     {
-        int        NumberOfProbes = 0;
-        int*       Probes = NULL;
+        int        NumberOfProbes = 0; ///< The number of glitch-extended probes.
+        int*       Probes = NULL; ///< A list of glitch-extended probes.
     };
 
+	/**
+	* @brief Defines a probing set, i.e. a set of standard probes with their corresponding glitch extensions.
+	* @author Amir Moradi
+	*/
     struct ProbesStruct
     {
-        int        NumberOfProbes = 0;
-        int*       Probes = NULL;
-        char**     ProbeName = NULL;
+        int        NumberOfProbes = 0; ///< The number of standard probes.
+        int*       Probes = NULL; ///< A list of the standard probe indices.
+        char**     ProbeName = NULL; ///< A list of the standard probe names.
 
-        Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes = NULL;
+        Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes = NULL; ///< A list of glitch-extensions per standard probe.
     };
 
     struct SharedDataStruct
@@ -202,35 +210,38 @@ namespace Hardware
         uint64_t*   LastInitialSimValues = NULL;
     };
 
+	/**
+	* @brief Defines all settings regarding simulations.
+	* @author Amir Moradi
+	*/
     struct SimulationStruct
     {
-        int        NumberOfGroups;
-        char*      EvaluationResultFolderName = NULL;   // result_1000000.txt, result_2000000.txt, ...
+        int        NumberOfGroups; ///< The number of user-defined groups.
+        char*      EvaluationResultFolderName = NULL; ///< Name and path of the generated reports.
 
-        int        NumberOfProbes = 0; // 13
-        char**     ProbeName = NULL;   //  Probe[0], Probe[1], ...
-        Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes; // 13 times
+        int        NumberOfProbes = 0; ///< The total number of standard probes. 
+        char**     ProbeName = NULL; ///< The names of the standard probes, i.e. the name of the probed wire.
+        Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes; ///< The glitch-extended probes belonging to the standard probes.
 
-        int        NumberOfAllGlitchExtendedProbes = 0;
+        int        NumberOfAllGlitchExtendedProbes = 0; ///< The total number of glitch-extended probes.
         int*       SignalIndex_of_GlitchExtendedProbe = NULL;
         int*       GlitchExtendedProbeIndex_of_Signal = NULL;
-        char**     GlitchExtendedProbeName = NULL;
+        char**     GlitchExtendedProbeName = NULL; ///< The names of the glitch-extended probes, i.e. the name of the probed wire.
 
-        int        TestOrder = 0;
-        int        TestMultivariate = 0;
-        int        TestTransitional = 0;
-        int        NumberOfTestClockCycles = 0;
-        int*       TestClockCycles = NULL;
+        int        TestOrder = 0; ///< The security order to test.
+        int        TestMultivariate = 0; ///< Decision regarding univariate and multivariate attackers.
+        int        TestTransitional = 0; ///< Decision regarding transitional leakage.
+        int        NumberOfTestClockCycles = 0; ///< Number of clock cycles in which standard probes can record
+        int*       TestClockCycles = NULL; ///< The list of clock cycles to test.
 
-        int        NumberOfClockCycles = 0;
-        uint64_t   NumberOfSimulations = 0;            // 100000000
-        uint64_t   NumberOfStepSimulations = 0;        // 1000000
-        uint64_t   NumberOfStepSimulationsToWrite = 0; // 5000000
-        uint64_t   NumberOfProcessedSimulations = 0;
-        int        StepSimulationIndex = 0;
+        int        NumberOfClockCycles = 0; ///< Number of clock cycles to simulate, i.e. the duration of one simulation.
+        uint64_t   NumberOfSimulations = 0; ///< The total number of simulations.
+        uint64_t   NumberOfStepSimulations = 0; ///< The number of simulations per step. After each step the contingency tables are updated.
+        uint64_t   NumberOfStepSimulationsToWrite = 0; ///< The number of simulations after which reports are written.
+        uint64_t   NumberOfProcessedSimulations = 0; ///< The number of currently processed simulations.
 
-        int*       SelectedGroups = NULL;   // NumberOfStepSimulations
-        char***    ProbeValues;             // [0...NumberOfStepSimulations-1][0...NumberOfClockCycles-1][0...NumberOfAllGlitchExtendedProbes-1]
+        int*       SelectedGroups = NULL; ///< The chosen group for each simulation.
+        char***    ProbeValues; ///< The simulated states of all wires during different simulations and clock cycles.
     };
 
 	/**
@@ -305,32 +316,84 @@ namespace Hardware
 		*/			
         int FindEntry(Util::TableEntryStruct&, unsigned int);
     };
-
+		
+    /** 
+	* @brief Defines a unique probe for the compact mode.
+	* @author Amir Moradi
+	*/	
     struct UniqueProbeStruct
     {
-        unsigned int  Probe = 0;
-        unsigned int  Cycle = 0;
-        unsigned int  NumberOfProbeSets = 0;
-        unsigned int* ProbeSetIndexes = NULL;
+        unsigned int  Probe = 0; ///< The position of a probe, i.e. the probed signal, given by the index of the signal.
+        unsigned int  Cycle = 0; ///< The clock cycle in which the signal driven by a wire is recorded.
+        unsigned int  NumberOfProbeSets = 0; ///< The number of probing sets in which this standard probe occurs.
+        unsigned int* ProbeSetIndexes = NULL; ///< The indices of all probing sets in which this standard probe occurs.
     };
 
+	/**
+	* @brief Defines all settings belonging to the test prodecure.
+	* @author Nicolai Müller
+	*/
     struct TestStruct
     {
-        std::vector<double>           SumOverGroup;
-        std::vector<Hardware::ProbingSetStruct> ProbingSet;
-        std::vector<std::vector<int>> TempProbeValue; // [NumberOfThreads][NumberOfSets]
-        std::vector<std::vector<Util::TableEntryStruct>> TableEntries; // [NumberOfThreads][NumberOfStepSimulations]
+        std::vector<double>           SumOverGroup; ///< Stores the number of simulations per group.
+        std::vector<Hardware::ProbingSetStruct> ProbingSet; ///< A list of all probing sets to evaluate.
+        std::vector<std::vector<int>> TempProbeValue; ///< A list of table entries which will be added to the contingency tables in compact mode.
+        std::vector<std::vector<Util::TableEntryStruct>> TableEntries; ///< A list of table entries which will be added to the contingency tables in normal mode.
         int				              NumberOfUniqueProbes = 0;
         Hardware::UniqueProbeStruct** UniqueProbe = NULL;
 
-        std::vector<Hardware::ProbePositionStruct> StandardProbes;
-        std::vector<Hardware::ProbePositionStruct> ExtendedProbes;
+        std::vector<Hardware::ProbePositionStruct> StandardProbes; ///< A list of all standard probes. 
+        std::vector<Hardware::ProbePositionStruct> ExtendedProbes; ///< A list of all glitch-extended probes.
 
+		/**
+		* @brief Initializes the test settings.
+		* @param Simulation The simulation settings.
+		* @author Nicolai Müller
+		*/	
         TestStruct(Hardware::SimulationStruct&);
+
+		/**
+		* @brief Computes the number of standard probes in a probing set.
+		* @param SetIndex The index of the probing set in the list.
+        * @return The number of standard probes.
+		* @author Nicolai Müller
+		*/	
         int GetNumberOfStandardProbes(unsigned int);
+
+		/**
+		* @brief Gives a particular standard probe inside a probing set.
+		* @param SetIndex The index of the probing set in the list.
+		* @param ProbeIndex The index of the standard probe in the probing set.
+        * @return The standard probe.
+		* @author Nicolai Müller
+		*/	
         Hardware::ProbePositionStruct GetStandardProbe(unsigned int, unsigned int);
+
+		/**
+		* @brief Gives a particular (glitch or transition)-extended probe inside a probing set.
+		* @param SetIndex The index of the probing set in the list.
+		* @param ProbeIndex The index of the (glitch or transition)-extended probe in the probing set.
+        * @return The (glitch or transition)-extended probe.
+		* @author Nicolai Müller
+		*/	
         Hardware::ProbePositionStruct GetExtendedProbe(unsigned int, unsigned int);
+
+		/**
+		* @brief Gives a particular standard probe inside a probing set.
+		* @param Ps The considered probing set.
+		* @param ProbeIndex The index of the standard probe in the probing set.
+        * @return The standard probe.
+		* @author Nicolai Müller
+		*/	
         Hardware::ProbePositionStruct GetStandardProbe(Hardware::ProbingSetStruct&, unsigned int);
+
+		/**
+		* @brief Gives a particular (glitch or transition)-extended probe inside a probing set.
+		* @param Ps The considered probing set.
+		* @param ProbeIndex The index of the (glitch or transition)-extended probe in the probing set.
+        * @return The (glitch or transition)-extended probe.
+		* @author Nicolai Müller
+		*/
         Hardware::ProbePositionStruct GetExtendedProbe(Hardware::ProbingSetStruct&, unsigned int);
     };
 }
