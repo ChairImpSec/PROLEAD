@@ -2131,7 +2131,7 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
 
     PySys_SetArgvEx(additonal_info_ctr + str_ctr, argv, 0);
 
-    fp = _Py_fopen(pyscript_filename, "r");
+    fp = fopen(pyscript_filename, "r");
 
     if(fp == NULL){
 		ErrorMessage = "could not open python file!";
