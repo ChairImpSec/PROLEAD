@@ -29,15 +29,17 @@ RELEASE_DIR = release
 DEBUG_DIR = debug
 
 # Compiler options
-C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c11 -I/usr/include/python3.8
-C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 -I/usr/include/python3.8
+INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
+C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
+C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 
-CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c++17 -I/usr/include/python3.8
-CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 -I/usr/include/python3.8
+CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
+CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
 
 # Linker options. Add libraries you want to link against here.
-RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl -lpython3.8
-DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl -lpython3.8
+LINK_PYTHON3=`pkg-config --libs python3-embed`
+RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3)
+DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3)
 
 # Output file name
 OUTPUT = PROLEAD
