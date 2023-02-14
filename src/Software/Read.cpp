@@ -2161,10 +2161,12 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
   	/* This is to add the path in the code */
 	PyObject *os_module = PyImport_ImportModule("os");
 	if (os_module == NULL) { //error handling
+        PyErr_Print();
 		throw std::runtime_error("in read binaryfile: os module error");
 	}
 	PyObject* cwd = PyObject_CallMethod(os_module, "getcwd", NULL);
 	if (cwd == NULL) { //error handling
+        PyErr_Print();
 		throw std::runtime_error("in read binaryfile: getcwd error");
 	}
 
@@ -2202,15 +2204,18 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
 				pValue = PyUnicode_FromString(path_of_example.c_str()); 
 			}
 			else{
+                PyErr_Print();
 				throw std::runtime_error("in read binaryfile: PyModule_GetDict error");
 			}
 		}
 		else{
+            PyErr_Print();
 			throw std::runtime_error("in read binaryfile: PyImport_Import error");
 		}
 
 	}
 	else{
+        PyErr_Print();
 		throw std::runtime_error("in read binaryfile: PyUnicode_FromString error");
 	}
 
@@ -2220,11 +2225,13 @@ void Software::Read::BinaryFile(char* ProgramFolderName, Software::SettingsStruc
     if(pModule){
         pValue = PyObject_CallObject(pFunc, pArgs); //
         if(pValue == NULL){
+            PyErr_Print();
 			throw std::runtime_error("ERROR: unable to execute python function to parse arguments!");
         }
 
     }
     else{
+        PyErr_Print();
         throw std::runtime_error("ERROR: Python module not imported!");
     }
 
