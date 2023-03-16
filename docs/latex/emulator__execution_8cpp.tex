@@ -1,0 +1,135 @@
+\hypertarget{emulator__execution_8cpp}{}\doxysection{Projects/\+PROLEAD/src/\+Software/mulator/emulator\+\_\+execution.cpp File Reference}
+\label{emulator__execution_8cpp}\index{Projects/PROLEAD/src/Software/mulator/emulator\_execution.cpp@{Projects/PROLEAD/src/Software/mulator/emulator\_execution.cpp}}
+{\ttfamily \#include \char`\"{}Software/mulator/arm\+\_\+functions.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Software/mulator/emulator.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Software/mulator/mnemonics.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Software/\+Operators.\+hpp\char`\"{}}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$omp.\+h$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{emulator__execution_8cpp_a3ca4885d0b5f941e7778c1605c1aada4}{cpu}}~m\+\_\+cpu\+\_\+state
+\item 
+\#define \mbox{\hyperlink{emulator__execution_8cpp_a9855797a91f785ef812621d6b2aea6c5}{ADVANCE\+\_\+\+PC}}
+\item 
+\#define \mbox{\hyperlink{emulator__execution_8cpp_a88555c5c27fcb6fd501f4bc52910f8b6}{UPDATE\+\_\+\+PSR}}~m\+\_\+psr\+\_\+updated = true;
+\item 
+\#define \mbox{\hyperlink{emulator__execution_8cpp_aaccf13f36bad74c34e14d811d9000215}{CHECK\+\_\+\+SHIFT}}(X)
+\item 
+\#define \mbox{\hyperlink{emulator__execution_8cpp_ab878923cc1b282a8e3d6b379cd457978}{CHECK\+\_\+\+IMM}}(X)
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{emulator__execution_8cpp_a81abc64c7a8dbecedadc9358c731adde}{Operand\+Type}} = \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{Instruction\+::\+Operand\+Type}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{emulator__execution_8cpp_a3e68ec1a839c452d59bead757ad29a9f}{mixed\+\_\+sign\+\_\+equals}} (const int64\+\_\+t a, const uint64\+\_\+t b)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{emulator__execution_8cpp_a9855797a91f785ef812621d6b2aea6c5}\label{emulator__execution_8cpp_a9855797a91f785ef812621d6b2aea6c5}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!ADVANCE\_PC@{ADVANCE\_PC}}
+\index{ADVANCE\_PC@{ADVANCE\_PC}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{ADVANCE\_PC}{ADVANCE\_PC}}
+{\footnotesize\ttfamily \#define ADVANCE\+\_\+\+PC}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (increment\_pc\ \&\&\ m\_return\_code\ ==\ ReturnCode::OK)\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ write\_register\_internal(Register::PC,\ \mbox{\hyperlink{emulator__execution_8cpp_a3ca4885d0b5f941e7778c1605c1aada4}{cpu}}.registers[\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4dabce521dd6bd3e069fea4ac851d06ad50}{PC}}]\ +\ instr.size);}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00015}{15}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{emulator__execution_8cpp_ab878923cc1b282a8e3d6b379cd457978}\label{emulator__execution_8cpp_ab878923cc1b282a8e3d6b379cd457978}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!CHECK\_IMM@{CHECK\_IMM}}
+\index{CHECK\_IMM@{CHECK\_IMM}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECK\_IMM}{CHECK\_IMM}}
+{\footnotesize\ttfamily \#define CHECK\+\_\+\+IMM(\begin{DoxyParamCaption}\item[{}]{X }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!X)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ m\_return\_code\ =\ ReturnCode::INVALID\_IMMEDIATE;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00027}{27}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{emulator__execution_8cpp_aaccf13f36bad74c34e14d811d9000215}\label{emulator__execution_8cpp_aaccf13f36bad74c34e14d811d9000215}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!CHECK\_SHIFT@{CHECK\_SHIFT}}
+\index{CHECK\_SHIFT@{CHECK\_SHIFT}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{CHECK\_SHIFT}{CHECK\_SHIFT}}
+{\footnotesize\ttfamily \#define CHECK\+\_\+\+SHIFT(\begin{DoxyParamCaption}\item[{}]{X }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{if}\ (!X)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ m\_return\_code\ =\ ReturnCode::INVALID\_SHIFT\_ARGUMENT;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00021}{21}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{emulator__execution_8cpp_a3ca4885d0b5f941e7778c1605c1aada4}\label{emulator__execution_8cpp_a3ca4885d0b5f941e7778c1605c1aada4}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!cpu@{cpu}}
+\index{cpu@{cpu}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{cpu}{cpu}}
+{\footnotesize\ttfamily \#define cpu~m\+\_\+cpu\+\_\+state}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00014}{14}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+\mbox{\Hypertarget{emulator__execution_8cpp_a88555c5c27fcb6fd501f4bc52910f8b6}\label{emulator__execution_8cpp_a88555c5c27fcb6fd501f4bc52910f8b6}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!UPDATE\_PSR@{UPDATE\_PSR}}
+\index{UPDATE\_PSR@{UPDATE\_PSR}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{UPDATE\_PSR}{UPDATE\_PSR}}
+{\footnotesize\ttfamily \#define UPDATE\+\_\+\+PSR~m\+\_\+psr\+\_\+updated = true;}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00019}{19}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{emulator__execution_8cpp_a81abc64c7a8dbecedadc9358c731adde}\label{emulator__execution_8cpp_a81abc64c7a8dbecedadc9358c731adde}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!OperandType@{OperandType}}
+\index{OperandType@{OperandType}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{OperandType}{OperandType}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{Operand\+Type}} =  \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{Instruction\+::\+Operand\+Type}}}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00039}{39}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{emulator__execution_8cpp_a3e68ec1a839c452d59bead757ad29a9f}\label{emulator__execution_8cpp_a3e68ec1a839c452d59bead757ad29a9f}} 
+\index{emulator\_execution.cpp@{emulator\_execution.cpp}!mixed\_sign\_equals@{mixed\_sign\_equals}}
+\index{mixed\_sign\_equals@{mixed\_sign\_equals}!emulator\_execution.cpp@{emulator\_execution.cpp}}
+\doxysubsubsection{\texorpdfstring{mixed\_sign\_equals()}{mixed\_sign\_equals()}}
+{\footnotesize\ttfamily bool mixed\+\_\+sign\+\_\+equals (\begin{DoxyParamCaption}\item[{const int64\+\_\+t}]{a,  }\item[{const uint64\+\_\+t}]{b }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{emulator__execution_8cpp_source_l00034}{34}} of file \mbox{\hyperlink{emulator__execution_8cpp_source}{emulator\+\_\+execution.\+cpp}}.
+

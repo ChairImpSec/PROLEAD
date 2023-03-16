@@ -1,0 +1,409 @@
+\hypertarget{structmulator_1_1_instruction}{}\doxysection{mulator\+::Instruction Struct Reference}
+\label{structmulator_1_1_instruction}\index{mulator::Instruction@{mulator::Instruction}}
+
+
+{\ttfamily \#include $<$instruction.\+h$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{Operand\+Type}} \{ \newline
+\mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ab50339a10e1de285ac99d4c3990b8693}{NONE}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0add7536794b63bf90eccfd37f9b147d7f}{I}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae1e1d3d40573127e9ee0480caf1283d6}{R}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a2cffb802c2aa988d1e7f2c2c78284d62}{RI}}
+, \newline
+\mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0acb95449a94688af33f6e9bb090cf2936}{RR}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ac3c1d1ce1ed08cca1a1301cef1ef91d9}{RRI}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae0d03ccdf693ee6b34cb1dc577c1eb99}{RRR}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a4122f63f94ca90b71b92873cc7936d63}{RRII}}
+, \newline
+\mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a6b5b865bdd55276b5f034d9898cf20e2}{RRRI}}
+, \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a91a9bcf1a2353197505d7e505a4432f1}{RRRR}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structmulator_1_1_instruction_a5c51424f8ad3a01b8de5299b5745e76c}{Instruction}} ()
+\item 
+\mbox{\hyperlink{structmulator_1_1_instruction_a9ac17820f282f3f468920b6e23287c7c}{$\sim$\+Instruction}} ()=default
+\item 
+bool \mbox{\hyperlink{structmulator_1_1_instruction_a36ee6299f4ddb868239cd0b97f00b7b8}{uses\+\_\+immediate}} () const
+\item 
+bool \mbox{\hyperlink{structmulator_1_1_instruction_aae7f70563283113183bf3c3b9beae711}{uses\+\_\+only\+\_\+registers}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_a54eefc464e35eeedbc25b90fac520ee0}{get\+\_\+register\+\_\+count}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_a9e44618f4e02075850d3995a3e77e815}{get\+\_\+immediate\+\_\+count}} () const
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_a64397be99a35df2afcb9d4b9d1e510c0}{address}}
+\item 
+\mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} \mbox{\hyperlink{structmulator_1_1_instruction_a26054045e9572e2f6ff0db4e61f1622e}{size}}
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_aee8af2cb9fb4e78a47f944f723376f6b}{encoding}}
+\item 
+\mbox{\hyperlink{namespacemulator_aa4991949c68b2149e932f87a885fa05e}{Mnemonic}} \mbox{\hyperlink{structmulator_1_1_instruction_ab1e9d92bc2eb91ea2430b5bf17ede107}{name}}
+\item 
+\mbox{\hyperlink{namespacemulator_a06762be93ad251be4943b6a8797a6df4}{Condition}} \mbox{\hyperlink{structmulator_1_1_instruction_a40557e9534f571d521bd30e2dbb95014}{condition}}
+\item 
+\mbox{\hyperlink{namespacemulator_a1a547d928c44738ef9cd0dbb8675f4e6}{Shift\+Type}} \mbox{\hyperlink{structmulator_1_1_instruction_ac32d9821582effd5fa6926a43ea29757}{shift\+\_\+type}}
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_a80566b0d64c2b5018a36770c4bca01b8}{shift\+\_\+amount}}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+struct \{\\
+\>bool \mbox{\hyperlink{structmulator_1_1_instruction_a15e434c43998a84544f34ebbe4211c23}{S}}\\
+\>bool \mbox{\hyperlink{structmulator_1_1_instruction_a0eba1a15d59eedebfdaae7e5e99d9abb}{wback}}\\
+\>bool \mbox{\hyperlink{structmulator_1_1_instruction_a4bdaca5910127e9dfd5b45274342b1f5}{index}}\\
+\>bool \mbox{\hyperlink{structmulator_1_1_instruction_a740ab678179d6dc402783f9d5241f4e0}{add}}\\
+\>bool \mbox{\hyperlink{structmulator_1_1_instruction_a206c57940b87c203d63bdd14419a2fc0}{unaligned\+\_\+allowed}}\\
+\} \mbox{\hyperlink{structmulator_1_1_instruction_a24a698f2de7887e9ee4336e021252419}{flags}}\\
+
+\end{tabbing}\item 
+enum \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{mulator\+::\+Instruction\+::\+Operand\+Type}} \mbox{\hyperlink{structmulator_1_1_instruction_ae991515f2b2b77a32921a6d32c4caeeb}{operand\+\_\+type}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_a822669bde70d9212fdd3cb16abf7f3d5}{Rd}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_aa5990d194cd8638b54e7e46b63a4e010}{Rn}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_ae53d5404c9c7ab22394bd7d0a01a55b7}{Rm}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_a5d932cae9d5124477b3dfa9a2c7febc2}{Ra}}
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_ad940af8da9dd13fe2cfbb2054c38e44c}{imm}}
+\item 
+\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} \mbox{\hyperlink{structmulator_1_1_instruction_a3e050b30b0b7cfefd26c79b0baab920f}{imm2}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_ada675e07fad9fdd53d4837949719a305}{Rd\+Lo}}
+\item 
+\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} \mbox{\hyperlink{structmulator_1_1_instruction_ac11dd9d5568632cca8c3f1e40def02cd}{Rd\+Hi}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00013}{13}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}} 
+\index{mulator::Instruction@{mulator::Instruction}!OperandType@{OperandType}}
+\index{OperandType@{OperandType}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{OperandType}{OperandType}}
+{\footnotesize\ttfamily enum class \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{mulator\+::\+Instruction\+::\+Operand\+Type}}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NONE@{NONE}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!NONE@{NONE}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ab50339a10e1de285ac99d4c3990b8693}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ab50339a10e1de285ac99d4c3990b8693}} 
+NONE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{I@{I}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!I@{I}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0add7536794b63bf90eccfd37f9b147d7f}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0add7536794b63bf90eccfd37f9b147d7f}} 
+I&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{R@{R}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!R@{R}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae1e1d3d40573127e9ee0480caf1283d6}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae1e1d3d40573127e9ee0480caf1283d6}} 
+R&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RI@{RI}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RI@{RI}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a2cffb802c2aa988d1e7f2c2c78284d62}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a2cffb802c2aa988d1e7f2c2c78284d62}} 
+RI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RR@{RR}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RR@{RR}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0acb95449a94688af33f6e9bb090cf2936}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0acb95449a94688af33f6e9bb090cf2936}} 
+RR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RRI@{RRI}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RRI@{RRI}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ac3c1d1ce1ed08cca1a1301cef1ef91d9}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ac3c1d1ce1ed08cca1a1301cef1ef91d9}} 
+RRI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RRR@{RRR}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RRR@{RRR}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae0d03ccdf693ee6b34cb1dc577c1eb99}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0ae0d03ccdf693ee6b34cb1dc577c1eb99}} 
+RRR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RRII@{RRII}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RRII@{RRII}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a4122f63f94ca90b71b92873cc7936d63}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a4122f63f94ca90b71b92873cc7936d63}} 
+RRII&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RRRI@{RRRI}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RRRI@{RRRI}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a6b5b865bdd55276b5f034d9898cf20e2}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a6b5b865bdd55276b5f034d9898cf20e2}} 
+RRRI&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RRRR@{RRRR}!mulator::Instruction@{mulator::Instruction}}\index{mulator::Instruction@{mulator::Instruction}!RRRR@{RRRR}}}\mbox{\Hypertarget{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a91a9bcf1a2353197505d7e505a4432f1}\label{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0a91a9bcf1a2353197505d7e505a4432f1}} 
+RRRR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00038}{38}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structmulator_1_1_instruction_a5c51424f8ad3a01b8de5299b5745e76c}\label{structmulator_1_1_instruction_a5c51424f8ad3a01b8de5299b5745e76c}} 
+\index{mulator::Instruction@{mulator::Instruction}!Instruction@{Instruction}}
+\index{Instruction@{Instruction}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{Instruction()}{Instruction()}}
+{\footnotesize\ttfamily mulator\+::\+Instruction\+::\+Instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a9ac17820f282f3f468920b6e23287c7c}\label{structmulator_1_1_instruction_a9ac17820f282f3f468920b6e23287c7c}} 
+\index{mulator::Instruction@{mulator::Instruction}!````~Instruction@{$\sim$Instruction}}
+\index{````~Instruction@{$\sim$Instruction}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{$\sim$Instruction()}{~Instruction()}}
+{\footnotesize\ttfamily mulator\+::\+Instruction\+::$\sim$\+Instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structmulator_1_1_instruction_a9e44618f4e02075850d3995a3e77e815}\label{structmulator_1_1_instruction_a9e44618f4e02075850d3995a3e77e815}} 
+\index{mulator::Instruction@{mulator::Instruction}!get\_immediate\_count@{get\_immediate\_count}}
+\index{get\_immediate\_count@{get\_immediate\_count}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{get\_immediate\_count()}{get\_immediate\_count()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::get\+\_\+immediate\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a54eefc464e35eeedbc25b90fac520ee0}\label{structmulator_1_1_instruction_a54eefc464e35eeedbc25b90fac520ee0}} 
+\index{mulator::Instruction@{mulator::Instruction}!get\_register\_count@{get\_register\_count}}
+\index{get\_register\_count@{get\_register\_count}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{get\_register\_count()}{get\_register\_count()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::get\+\_\+register\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a36ee6299f4ddb868239cd0b97f00b7b8}\label{structmulator_1_1_instruction_a36ee6299f4ddb868239cd0b97f00b7b8}} 
+\index{mulator::Instruction@{mulator::Instruction}!uses\_immediate@{uses\_immediate}}
+\index{uses\_immediate@{uses\_immediate}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{uses\_immediate()}{uses\_immediate()}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::uses\+\_\+immediate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_aae7f70563283113183bf3c3b9beae711}\label{structmulator_1_1_instruction_aae7f70563283113183bf3c3b9beae711}} 
+\index{mulator::Instruction@{mulator::Instruction}!uses\_only\_registers@{uses\_only\_registers}}
+\index{uses\_only\_registers@{uses\_only\_registers}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{uses\_only\_registers()}{uses\_only\_registers()}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::uses\+\_\+only\+\_\+registers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structmulator_1_1_instruction_a740ab678179d6dc402783f9d5241f4e0}\label{structmulator_1_1_instruction_a740ab678179d6dc402783f9d5241f4e0}} 
+\index{mulator::Instruction@{mulator::Instruction}!add@{add}}
+\index{add@{add}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{add}{add}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::add}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00034}{34}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a64397be99a35df2afcb9d4b9d1e510c0}\label{structmulator_1_1_instruction_a64397be99a35df2afcb9d4b9d1e510c0}} 
+\index{mulator::Instruction@{mulator::Instruction}!address@{address}}
+\index{address@{address}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::address}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00018}{18}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a40557e9534f571d521bd30e2dbb95014}\label{structmulator_1_1_instruction_a40557e9534f571d521bd30e2dbb95014}} 
+\index{mulator::Instruction@{mulator::Instruction}!condition@{condition}}
+\index{condition@{condition}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{condition}{condition}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a06762be93ad251be4943b6a8797a6df4}{Condition}} mulator\+::\+Instruction\+::condition}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00024}{24}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_aee8af2cb9fb4e78a47f944f723376f6b}\label{structmulator_1_1_instruction_aee8af2cb9fb4e78a47f944f723376f6b}} 
+\index{mulator::Instruction@{mulator::Instruction}!encoding@{encoding}}
+\index{encoding@{encoding}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{encoding}{encoding}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::encoding}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00020}{20}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a24a698f2de7887e9ee4336e021252419}\label{structmulator_1_1_instruction_a24a698f2de7887e9ee4336e021252419}} 
+\index{mulator::Instruction@{mulator::Instruction}!flags@{flags}}
+\index{flags@{flags}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{}{}}
+{\footnotesize\ttfamily struct  \{ ... \}  mulator\+::\+Instruction\+::flags}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ad940af8da9dd13fe2cfbb2054c38e44c}\label{structmulator_1_1_instruction_ad940af8da9dd13fe2cfbb2054c38e44c}} 
+\index{mulator::Instruction@{mulator::Instruction}!imm@{imm}}
+\index{imm@{imm}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{imm}{imm}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::imm}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00056}{56}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a3e050b30b0b7cfefd26c79b0baab920f}\label{structmulator_1_1_instruction_a3e050b30b0b7cfefd26c79b0baab920f}} 
+\index{mulator::Instruction@{mulator::Instruction}!imm2@{imm2}}
+\index{imm2@{imm2}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{imm2}{imm2}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::imm2}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00057}{57}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a4bdaca5910127e9dfd5b45274342b1f5}\label{structmulator_1_1_instruction_a4bdaca5910127e9dfd5b45274342b1f5}} 
+\index{mulator::Instruction@{mulator::Instruction}!index@{index}}
+\index{index@{index}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{index}{index}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::index}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00033}{33}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ab1e9d92bc2eb91ea2430b5bf17ede107}\label{structmulator_1_1_instruction_ab1e9d92bc2eb91ea2430b5bf17ede107}} 
+\index{mulator::Instruction@{mulator::Instruction}!name@{name}}
+\index{name@{name}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_aa4991949c68b2149e932f87a885fa05e}{Mnemonic}} mulator\+::\+Instruction\+::name}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00022}{22}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ae991515f2b2b77a32921a6d32c4caeeb}\label{structmulator_1_1_instruction_ae991515f2b2b77a32921a6d32c4caeeb}} 
+\index{mulator::Instruction@{mulator::Instruction}!operand\_type@{operand\_type}}
+\index{operand\_type@{operand\_type}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{operand\_type}{operand\_type}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{structmulator_1_1_instruction_ad4ba7dc99793133e0af33c62b12373a0}{mulator\+::\+Instruction\+::\+Operand\+Type}} mulator\+::\+Instruction\+::operand\+\_\+type}
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a5d932cae9d5124477b3dfa9a2c7febc2}\label{structmulator_1_1_instruction_a5d932cae9d5124477b3dfa9a2c7febc2}} 
+\index{mulator::Instruction@{mulator::Instruction}!Ra@{Ra}}
+\index{Ra@{Ra}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{Ra}{Ra}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Ra}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00055}{55}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a822669bde70d9212fdd3cb16abf7f3d5}\label{structmulator_1_1_instruction_a822669bde70d9212fdd3cb16abf7f3d5}} 
+\index{mulator::Instruction@{mulator::Instruction}!Rd@{Rd}}
+\index{Rd@{Rd}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{Rd}{Rd}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Rd}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00052}{52}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ac11dd9d5568632cca8c3f1e40def02cd}\label{structmulator_1_1_instruction_ac11dd9d5568632cca8c3f1e40def02cd}} 
+\index{mulator::Instruction@{mulator::Instruction}!RdHi@{RdHi}}
+\index{RdHi@{RdHi}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{RdHi}{RdHi}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Rd\+Hi}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00061}{61}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ada675e07fad9fdd53d4837949719a305}\label{structmulator_1_1_instruction_ada675e07fad9fdd53d4837949719a305}} 
+\index{mulator::Instruction@{mulator::Instruction}!RdLo@{RdLo}}
+\index{RdLo@{RdLo}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{RdLo}{RdLo}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Rd\+Lo}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00060}{60}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ae53d5404c9c7ab22394bd7d0a01a55b7}\label{structmulator_1_1_instruction_ae53d5404c9c7ab22394bd7d0a01a55b7}} 
+\index{mulator::Instruction@{mulator::Instruction}!Rm@{Rm}}
+\index{Rm@{Rm}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{Rm}{Rm}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Rm}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00054}{54}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_aa5990d194cd8638b54e7e46b63a4e010}\label{structmulator_1_1_instruction_aa5990d194cd8638b54e7e46b63a4e010}} 
+\index{mulator::Instruction@{mulator::Instruction}!Rn@{Rn}}
+\index{Rn@{Rn}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{Rn}{Rn}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}} mulator\+::\+Instruction\+::\+Rn}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00053}{53}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a15e434c43998a84544f34ebbe4211c23}\label{structmulator_1_1_instruction_a15e434c43998a84544f34ebbe4211c23}} 
+\index{mulator::Instruction@{mulator::Instruction}!S@{S}}
+\index{S@{S}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{S}{S}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::S}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00031}{31}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a80566b0d64c2b5018a36770c4bca01b8}\label{structmulator_1_1_instruction_a80566b0d64c2b5018a36770c4bca01b8}} 
+\index{mulator::Instruction@{mulator::Instruction}!shift\_amount@{shift\_amount}}
+\index{shift\_amount@{shift\_amount}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{shift\_amount}{shift\_amount}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} mulator\+::\+Instruction\+::shift\+\_\+amount}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00027}{27}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_ac32d9821582effd5fa6926a43ea29757}\label{structmulator_1_1_instruction_ac32d9821582effd5fa6926a43ea29757}} 
+\index{mulator::Instruction@{mulator::Instruction}!shift\_type@{shift\_type}}
+\index{shift\_type@{shift\_type}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{shift\_type}{shift\_type}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1a547d928c44738ef9cd0dbb8675f4e6}{Shift\+Type}} mulator\+::\+Instruction\+::shift\+\_\+type}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00026}{26}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a26054045e9572e2f6ff0db4e61f1622e}\label{structmulator_1_1_instruction_a26054045e9572e2f6ff0db4e61f1622e}} 
+\index{mulator::Instruction@{mulator::Instruction}!size@{size}}
+\index{size@{size}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} mulator\+::\+Instruction\+::size}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00019}{19}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a206c57940b87c203d63bdd14419a2fc0}\label{structmulator_1_1_instruction_a206c57940b87c203d63bdd14419a2fc0}} 
+\index{mulator::Instruction@{mulator::Instruction}!unaligned\_allowed@{unaligned\_allowed}}
+\index{unaligned\_allowed@{unaligned\_allowed}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{unaligned\_allowed}{unaligned\_allowed}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::unaligned\+\_\+allowed}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00035}{35}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+\mbox{\Hypertarget{structmulator_1_1_instruction_a0eba1a15d59eedebfdaae7e5e99d9abb}\label{structmulator_1_1_instruction_a0eba1a15d59eedebfdaae7e5e99d9abb}} 
+\index{mulator::Instruction@{mulator::Instruction}!wback@{wback}}
+\index{wback@{wback}!mulator::Instruction@{mulator::Instruction}}
+\doxysubsubsection{\texorpdfstring{wback}{wback}}
+{\footnotesize\ttfamily bool mulator\+::\+Instruction\+::wback}
+
+
+
+Definition at line \mbox{\hyperlink{instruction_8h_source_l00032}{32}} of file \mbox{\hyperlink{instruction_8h_source}{instruction.\+h}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Projects/\+PROLEAD/inc/\+Software/mulator/\mbox{\hyperlink{instruction_8h}{instruction.\+h}}\end{DoxyCompactItemize}

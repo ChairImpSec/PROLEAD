@@ -1,0 +1,77 @@
+\hypertarget{disassembler_8h_source}{}\doxysection{disassembler.\+h}
+\label{disassembler_8h_source}\index{Projects/PROLEAD/inc/Software/mulator/disassembler.h@{Projects/PROLEAD/inc/Software/mulator/disassembler.h}}
+\mbox{\hyperlink{disassembler_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{instruction__decoder_8h}{Software/mulator/instruction\_decoder.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00007}00007\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemulator}{mulator}}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00008}00008\ \{}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00009}\mbox{\hyperlink{classmulator_1_1_disassembler}{00009}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classmulator_1_1_disassembler}{Disassembler}}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00010}00010\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00011}00011\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00012}\mbox{\hyperlink{classmulator_1_1_disassembler_a5fe4420b1fceb7c2cd2e202d246b2e51}{00012}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_disassembler_a5fe4420b1fceb7c2cd2e202d246b2e51}{Disassembler}}(\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}\ arch);}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00013}\mbox{\hyperlink{classmulator_1_1_disassembler_a83e0f60b8d3e6cc2fb649008ced28b3f}{00013}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_disassembler_a83e0f60b8d3e6cc2fb649008ced28b3f}{\string~Disassembler}}();}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00015}00015\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00016}00016\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Getters\ for\ internals.}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00017}00017\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00018}\mbox{\hyperlink{classmulator_1_1_disassembler_ae5e700e7aac63d8132b814e0b5aa42a3}{00018}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{InstructionDecoder}}\ \mbox{\hyperlink{classmulator_1_1_disassembler_ae5e700e7aac63d8132b814e0b5aa42a3}{get\_decoder}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00019}\mbox{\hyperlink{classmulator_1_1_disassembler_a1e6810ed50c9ed8a04d1e9470e66e460}{00019}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}\ \mbox{\hyperlink{classmulator_1_1_disassembler_a1e6810ed50c9ed8a04d1e9470e66e460}{get\_architecture}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00021}00021\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00022}00022\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Resets\ the\ disassembler\ by\ clearing\ the\ IT\ state.}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00023}00023\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00024}\mbox{\hyperlink{classmulator_1_1_disassembler_abddce35bf678296447779ed15582d399}{00024}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_disassembler_abddce35bf678296447779ed15582d399}{reset}}();}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00026}00026\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00027}00027\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Decode\ and\ disassemble\ a\ single\ instruction\ from\ a\ byte\ array.}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00028}00028\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00029}00029\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ address\ -\/\ current\ address}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00030}00030\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ code\ -\/\ pointer\ to\ the\ first\ byte\ of\ the\ instruction}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00031}00031\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ code\_size\ -\/\ length\ of\ the\ remaining\ bytes\ in\ byte\ array}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00032}00032\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00033}\mbox{\hyperlink{classmulator_1_1_disassembler_a3f2c5485278fc511ef32dbb506663753}{00033}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ \mbox{\hyperlink{classmulator_1_1_disassembler_a3f2c5485278fc511ef32dbb506663753}{disassemble}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ code,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ code\_size);}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00036}00036\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Disassemble\ a\ single\ already\ decoded\ instruction.}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00037}00037\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00038}00038\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ instr\ -\/\ the\ instruction\ to\ disassemble}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00039}00039\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00040}\mbox{\hyperlink{classmulator_1_1_disassembler_a48ec0377a24e012342c8a5875e311516}{00040}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ \mbox{\hyperlink{classmulator_1_1_disassembler_a48ec0377a24e012342c8a5875e311516}{disassemble}}(\mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\ instr);}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00042}00042\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00043}00043\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Getters\ for\ disassembled\ data.}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00044}00044\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00045}\mbox{\hyperlink{classmulator_1_1_disassembler_a2b3b0d993b82c0866907981ed984e5b1}{00045}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\ \mbox{\hyperlink{classmulator_1_1_disassembler_a2b3b0d993b82c0866907981ed984e5b1}{get\_instruction}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00046}\mbox{\hyperlink{classmulator_1_1_disassembler_a03985569ac359cda672459217e30c99d}{00046}}\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classmulator_1_1_disassembler_a03985569ac359cda672459217e30c99d}{get\_mnemonic}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00047}\mbox{\hyperlink{classmulator_1_1_disassembler_adac2d0b6258e0e11de0c24abcc070890}{00047}}\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classmulator_1_1_disassembler_adac2d0b6258e0e11de0c24abcc070890}{get\_operands}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00048}\mbox{\hyperlink{classmulator_1_1_disassembler_ab12bc8d139bfeb814af9f8aae0ea97d1}{00048}}\ \ \ \ \ \ \ \ \ std::string\ \mbox{\hyperlink{classmulator_1_1_disassembler_ab12bc8d139bfeb814af9f8aae0ea97d1}{get\_string}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00050}00050\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{InstructionDecoder}}\ m\_decoder;}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ m\_it\_state;}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00054}00054\ \ \ \ \ \ \ \ \ std::string\ format\_name(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ std::string\ format\_shift(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ std::string\ format\_immediate(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ value,\ \textcolor{keywordtype}{bool}\ add\_flag\ =\ \textcolor{keyword}{true},\ \textcolor{keywordtype}{bool}\ decimal\ =\ \textcolor{keyword}{false},\ \textcolor{keywordtype}{bool}\ print\_signed\ =\ \textcolor{keyword}{false})\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_load\_operation(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_aa4991949c68b2149e932f87a885fa05e}{Mnemonic}}\&\ mnemonic)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00059}00059\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_store\_operation(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_aa4991949c68b2149e932f87a885fa05e}{Mnemonic}}\&\ mnemonic)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_shift\_operation(\textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_aa4991949c68b2149e932f87a885fa05e}{Mnemonic}}\&\ mnemonic)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\ m\_instruction;}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ std::string\ m\_mnemonic;}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ std::string\ m\_operands;}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ in\_IT\_block()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ last\_in\_IT\_block()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00068}00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a06762be93ad251be4943b6a8797a6df4}{Condition}}\ pop\_IT\_condition();}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00069}00069\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{disassembler_8h_source_l00071}00071\ \}\ \textcolor{comment}{//\ namespace\ mulator}}
+
+\end{DoxyCode}

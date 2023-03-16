@@ -1,0 +1,44 @@
+\hypertarget{return__codes_8h}{}\doxysection{Projects/\+PROLEAD/inc/\+Software/mulator/return\+\_\+codes.h File Reference}
+\label{return__codes_8h}\index{Projects/PROLEAD/inc/Software/mulator/return\_codes.h@{Projects/PROLEAD/inc/Software/mulator/return\_codes.h}}
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$ostream$>$}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacemulator}{mulator}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{mulator\+::\+Return\+Code}} \{ \newline
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ae0aa021e21dddbd6d8cecec71e9cf564}{mulator\+::\+OK}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893afe86a785751d9dadfbc240db1b97d0a4}{mulator\+::\+INCOMPLETE\+\_\+\+DATA}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a0db45d2a4141101bdfe48e3314cfbca3}{mulator\+::\+UNDEFINED}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893add8a06e3107ac54c2758856e8f967767}{mulator\+::\+UNPREDICTABLE}}
+, \newline
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a40aa75f8e8cfdf7b660c5620e953229f}{mulator\+::\+UNSUPPORTED}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ac80d0cf86d8af108a52a091b7e84b0dd}{mulator\+::\+UNEXPECTED\+\_\+\+ENCODING}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a3e860a081575fc82cc7b6ed2ca602947}{mulator\+::\+NOT\+\_\+\+IMPLEMENTED}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2e10ea30d9a94f2c5e30e767eab5fa18}{mulator\+::\+UNKNOWN\+\_\+\+INSTRUCTION}}
+, \newline
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893ae1b0ba36bd640cb2081a4b665a8765bf}{mulator\+::\+INVALID\+\_\+\+IMMEDIATE}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a7277cc675779f41d6cd80f43a8ec702f}{mulator\+::\+INVALID\+\_\+\+REGISTER}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a0424fdc56d55cece95217ff1340c17bc}{mulator\+::\+INVALID\+\_\+\+ALIGNMENT}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a6b8bd6e8f524735990d8f3bcab7de266}{mulator\+::\+INVALID\+\_\+\+MEMORY\+\_\+\+ACCESS}}
+, \newline
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2062fe4cf7fd0583b45fb1b1ab1b82bd}{mulator\+::\+INVALID\+\_\+\+SHIFT\+\_\+\+ARGUMENT}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a5d33ae2a08bcd5ebee0273a47446e127}{mulator\+::\+HARD\+\_\+\+FAULT}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893add652546039b18970b8dcf2cff824268}{mulator\+::\+UNINITIALIZED}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893a2e7bc6abb7402af25da9561bfc96d9b6}{mulator\+::\+MAX\+\_\+\+INSTRUCTIONS\+\_\+\+REACHED}}
+, \newline
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893adcb3b89d3fcd3585f40e25be995c1f76}{mulator\+::\+END\+\_\+\+ADDRESS\+\_\+\+REACHED}}
+, \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893aa40ced999efb4e71ba6a14cc7aa5e7a3}{mulator\+::\+STOP\+\_\+\+EMULATION\+\_\+\+CALLED}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{namespacemulator_ab0caabf655df450decaef96629886c5c}{mulator\+::to\+\_\+string}} (const Return\+Code \&x)
+\item 
+std\+::ostream \& \mbox{\hyperlink{namespacemulator_a4a441be4bc0fd46ab201445332df664a}{mulator\+::operator$<$$<$}} (std\+::ostream \&os, const Return\+Code \&x)
+\end{DoxyCompactItemize}

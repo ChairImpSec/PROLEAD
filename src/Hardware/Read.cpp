@@ -3528,6 +3528,25 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 			SettingsFileCheckList |= (1 << 20);
 		}
+		else if (!strcmp(Str1, "waveform_simulation"))
+		{
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+			if (!strcmp(Str1, "no"))
+                Settings->WaveformSimulation = false;
+			else if (!strcmp(Str1, "yes"))
+                Settings->WaveformSimulation = true;
+			else
+			{
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				throw std::runtime_error("Given value for \"waveform_simulation\" is not valid, can be only no or yes!");
+			}
+
+			SettingsFileCheckList |= (1 << 26);
+		}
+
 		else if (!strcmp(Str1, "no_of_entries_in_report"))
 		{
 			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
@@ -3938,8 +3957,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		throw std::runtime_error("\"no_of_step_write_results\" is not given!");
 	}
 
-	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) &&
-		(Settings->NumberOfOutputShares > 0)) {
+	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) && (Settings->NumberOfOutputShares > 0)) {
 		throw std::runtime_error("\"expected_output\" is not given!");
 	}
 
@@ -4004,6 +4022,11 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		Settings->NumberOfOutputShares = 0;
 		Settings->NumberOfOutputSignals = 0;
 		Warnings.push_back("Warning \"no_of_outputs\" is not specified. Default \"no_of_outputs\" = 0 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 26))) {
+		Settings->WaveformSimulation = false;
+		Warnings.push_back("Warning \"waveform_simulation\" is not specified. Default \"waveform_simulation\" = false is taken!");
 	}
 
 	std::cout << "done with " << Warnings.size() << " warnings!" << std::endl;

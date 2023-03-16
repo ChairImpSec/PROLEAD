@@ -1,0 +1,22 @@
+\hypertarget{_software_2_execute_8cpp_source}{}\doxysection{Execute.\+cpp}
+\label{_software_2_execute_8cpp_source}\index{Projects/PROLEAD/src/Software/Execute.cpp@{Projects/PROLEAD/src/Software/Execute.cpp}}
+\mbox{\hyperlink{_software_2_execute_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_software_2_execute_8hpp}{Software/Execute.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00003}\mbox{\hyperlink{namespace_software_ad24339e9e5a187a204cc69e843ef980c}{00003}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_software_ad24339e9e5a187a204cc69e843ef980c}{Software::Execute}}(\mbox{\hyperlink{struct_command_line_parameter_struct}{CommandLineParameterStruct}}\&\ CommandLineParameters)\{}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00005}00005\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_config_probes_struct}{Software::ConfigProbesStruct}}\ Probes;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00006}00006\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_settings_struct}{Software::SettingsStruct}}\ Settings;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00007}00007\ \ \ \ \ \mbox{\hyperlink{struct_software_1_1_helper_struct}{Software::HelperStruct}}\ GlobalHelper;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00008}00008\ \ \ \ \ std::vector<Software::SharedDataStruct>\ SharedData;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00009}00009\ \ \ \ \ std::vector<Software::ThreadSimulationStruct>\ GlobalThreadSimulations;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00011}00011\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Start\ Software\ Leakage\ Evaluation"{}}\ <<\ std::endl\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00012}00012\ \ \ \ \ \mbox{\hyperlink{namespace_software_1_1_print_a0373ebf24409dfb09916e75011eae5f6}{Software::Print::CommandLineSettings}}(CommandLineParameters);}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00013}00013\ \ \ \ \ \mbox{\hyperlink{namespace_software_1_1_prepare_aedf764cae0cb2eb4496af1a36f3a37cf}{Software::Prepare::All}}(CommandLineParameters,\ \&Probes,\ \&Settings,\ SharedData,\ GlobalHelper,\ GlobalThreadSimulations);}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00014}00014\ \ \ \ \ \mbox{\hyperlink{namespace_software_1_1_analyze_a17fc27d9ecbae77c1d92cee919140d7b}{Software::Analyze::All}}(Settings,\ SharedData,\ GlobalHelper,\ GlobalThreadSimulations);}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00015}00015\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}done!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_software_2_execute_8cpp_source_l00016}00016\ \}}
+
+\end{DoxyCode}

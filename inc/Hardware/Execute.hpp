@@ -12,10 +12,5 @@
 
 namespace Hardware
 {
-	/**
-	* @brief Executes PROLEAD. 
-	* @param CommandLineParameters The given command line parameters.
-	* @author Nicolai Müller
-	*/
     void Execute(CommandLineParameterStruct&);
 }

@@ -1,0 +1,318 @@
+\hypertarget{_generate_probing_sets_8cpp_source}{}\doxysection{Generate\+Probing\+Sets.\+cpp}
+\label{_generate_probing_sets_8cpp_source}\index{Projects/PROLEAD/src/Hardware/GenerateProbingSets.cpp@{Projects/PROLEAD/src/Hardware/GenerateProbingSets.cpp}}
+\mbox{\hyperlink{_generate_probing_sets_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_generate_probing_sets_8hpp}{Hardware/GenerateProbingSets.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00003}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ab4b952e03d053fcc77c58ca2c024caa7}{00003}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ab4b952e03d053fcc77c58ca2c024caa7}{Hardware::GenerateProbingSets::All}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00004}00004\ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a79adc9d7368fa04e1970897fdeb8e070}{Hardware::GenerateProbingSets::Extend}}(Simulation,\ Test);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00006}00006\ \ \ \ \ \textcolor{comment}{//\ If\ the\ same\ probe\ occurs\ multiple\ times\ in\ one\ probing\ set,\ we\ remove\ it.}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00007}00007\ \ \ \ \ \textcolor{comment}{//\ This\ leads\ to\ smaller\ contingency\ tables.}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00008}00008\ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa2449b9229e683bf3e1a9f41847978f6}{Hardware::GenerateProbingSets::RemoveDuplicatedProbes}}(Test);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00010}00010\ \ \ \ \ \textcolor{comment}{//\ Moreover,\ we\ remove\ probing\ sets\ which\ are\ fully\ convered\ by\ another\ probing\ set.}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00011}00011\ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a46b98a86fd9820e6738d2bb956dd2c9e}{Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets}}(Settings,\ Simulation,\ Test);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{keywordflow}{if}\ (Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a048ac3007b902753bc5165a4dfd6bd99}{CompactDistributions}})\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00014}00014\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ We\ assume,\ that\ the\ contingency\ tables\ in\ compact\ mode\ encompass\ a\ small\ number\ of\ entries}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00015}00015\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Therefore,\ we\ pre-\/allocate\ memory\ for\ all\ entries\ of\ the\ table.\ This\ leads\ to\ a\ faster\ evaluation.\ }}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00016}00016\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a4eb28bb290b44d98f9589e9fb1df50b6}{Hardware::GenerateProbingSets::InitializeCompactDistributions}}(Settings,\ Simulation,\ Test);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00017}00017\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00018}00018\ \ \ \ \ \ \ \ \ Test.TableEntries.resize(Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a941d1c6f15ce6607adb2b036a7709b71}{Max\_no\_of\_Threads}},\ std::vector<Util::TableEntryStruct>(Simulation.NumberOfStepSimulations,\ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}(1)));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ SetIndex\ =\ 0;\ SetIndex\ <\ Test.ProbingSet.size();\ SetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ Test.ProbingSet.at(SetIndex).ContingencyTable.OnlyOneEntry.resize(Simulation.NumberOfGroups,\ std::vector<std::vector<std::vector<unsigned\ char>>>(256));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00023}00023\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00026}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a88c456d61d065fce375616951b8e2e7f}{00026}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a88c456d61d065fce375616951b8e2e7f}{Hardware::GenerateProbingSets::GenerateProbes}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00027}00027\ \ \ \ \ \textcolor{keywordtype}{int}\ CycleIndex\ =\ 0,\ GlitchIndex\ =\ 0,\ ProbeIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00029}00029\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Generate\ list\ of\ standard\ probes\ from\ "{}}\ <<\ Simulation.NumberOfProbes\ <<\ \textcolor{stringliteral}{"{}\ standard\ probe\ locations..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00030}00030\ \ \ \ \ \textcolor{keywordflow}{for}\ (CycleIndex\ =\ 0;\ CycleIndex\ <\ Simulation.NumberOfTestClockCycles;\ CycleIndex++)\{\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00031}00031\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Simulation.NumberOfProbes;\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ Test.StandardProbes.emplace\_back(ProbeIndex,\ Simulation.TestClockCycles[CycleIndex]\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00033}00033\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00034}00034\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00035}00035\ \ \ \ \ std::cout\ <<\ Test.StandardProbes.size()\ <<\ \textcolor{stringliteral}{"{}\ standard\ probes\ found...done!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00037}00037\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Generate\ list\ of\ extended\ probes\ from\ "{}}\ <<\ Simulation.NumberOfAllGlitchExtendedProbes\ <<\ \textcolor{stringliteral}{"{}\ extended\ probe\ locations..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{keywordflow}{for}\ (CycleIndex\ =\ 0;\ CycleIndex\ <\ Simulation.NumberOfTestClockCycles;\ CycleIndex++)\{\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00039}00039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Simulation.NumberOfProbes;\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00040}00040\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GlitchIndex\ =\ 0;\ GlitchIndex\ <\ Simulation.GlitchExtendedProbes[ProbeIndex].NumberOfProbes;\ GlitchIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ glitch-\/extended\ probes}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00042}00042\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.ExtendedProbes.emplace\_back(Simulation.GlitchExtendedProbes[ProbeIndex].Probes[GlitchIndex],\ Simulation.TestClockCycles[CycleIndex]\ -\/\ 1);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00044}00044\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.TestTransitional\ \&\&\ ((Simulation.TestClockCycles[CycleIndex]\ -\/\ 1)\ !=\ 0))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00045}00045\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Add\ transition-\/extended\ probes}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.ExtendedProbes.emplace\_back(Simulation.GlitchExtendedProbes[ProbeIndex].Probes[GlitchIndex],\ Simulation.TestClockCycles[CycleIndex]\ -\/\ 2);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00049}00049\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00050}00050\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00051}00051\ \ \ \ \ std::cout\ <<\ Test.ExtendedProbes.size()\ <<\ \textcolor{stringliteral}{"{}\ extended\ probes\ found...done!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00052}00052\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00054}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa6363789184cc3ecc630d7ac954b4a80}{00054}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa6363789184cc3ecc630d7ac954b4a80}{Hardware::GenerateProbingSets::InitializeMultivariateProbeCombinations}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ std::vector<unsigned\ int>\&\ Combination,\ std::vector<bool>\&\ CombinationBitmask)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00055}00055\ \ \ \ \ \textcolor{comment}{//\ Cover\ the\ case\ that\ the\ order\ is\ higher\ than\ the\ number\ of\ standard\ probes}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{comment}{//\ In\ this\ case,\ only\ one\ probing\ set\ including\ all\ standard\ probes\ is\ generated}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00057}00057\ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.TestOrder\ >\ (\textcolor{keywordtype}{int})Test.StandardProbes.size())\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00058}00058\ \ \ \ \ \ \ \ \ Combination.resize(Test.StandardProbes.size());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00059}00059\ \ \ \ \ \ \ \ \ std::fill(CombinationBitmask.begin(),\ CombinationBitmask.end(),\ \textcolor{keyword}{true});\ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00060}00060\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00061}00061\ \ \ \ \ \ \ \ \ Combination.resize(Simulation.TestOrder);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00062}00062\ \ \ \ \ \ \ \ \ std::fill(CombinationBitmask.begin(),\ CombinationBitmask.begin()\ +\ Simulation.TestOrder,\ \textcolor{keyword}{true});\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00066}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a76f61edb15974c9a3b97e1076bc2944b}{00066}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a76f61edb15974c9a3b97e1076bc2944b}{Hardware::GenerateProbingSets::InitializeUnivariateProbeCombinations}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ std::vector<unsigned\ int>\&\ Combination,\ std::vector<bool>\&\ CombinationBitmask)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00067}00067\ \ \ \ \ \textcolor{comment}{//\ Cover\ the\ case\ that\ the\ order\ is\ higher\ than\ the\ number\ of\ different\ probe\ positions}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00068}00068\ \ \ \ \ \textcolor{comment}{//\ In\ this\ case,\ multiple\ probing\ set\ with\ probes\ on\ all\ positions\ are\ generated}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00069}00069\ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.TestOrder\ >\ Simulation.NumberOfProbes)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00070}00070\ \ \ \ \ \ \ \ \ Combination.resize(Simulation.NumberOfProbes);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ std::fill(CombinationBitmask.begin(),\ CombinationBitmask.end(),\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00072}00072\ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00073}00073\ \ \ \ \ \ \ \ \ Combination.resize(Simulation.TestOrder);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00074}00074\ \ \ \ \ \ \ \ \ std::fill(CombinationBitmask.begin(),\ CombinationBitmask.begin()\ +\ Simulation.TestOrder,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00075}00075\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00078}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a3a8235ec7b2b0de69c3899f80db662a0}{00078}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a3a8235ec7b2b0de69c3899f80db662a0}{Hardware::GenerateProbingSets::InDistance}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ std::vector<unsigned\ int>\&\ ProbingSet)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00079}00079\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ ProbeIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00080}00080\ \ \ \ \ \textcolor{keywordtype}{int}\ Distance\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00082}00082\ \ \ \ \ std::vector<unsigned\ int>\ Cycles(ProbingSet.size());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ ProbingSet.size();\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00085}00085\ \ \ \ \ \ \ \ \ Cycles.at(ProbeIndex)\ =\ Test.StandardProbes.at(ProbingSet.at(ProbeIndex)).Cycle;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00086}00086\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00088}00088\ \ \ \ \ std::sort(Cycles.begin(),\ Cycles.end());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00089}00089\ \ \ \ \ Distance\ =\ Cycles.back()\ -\/\ Cycles.front();}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00091}00091\ \ \ \ \ \textcolor{keywordflow}{if}\ (Distance\ >\ Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_ae1b032bf3f6953e2687bc7ecb53fff5d}{MaxDistanceMultivariet}})\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00093}00093\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ ((Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a10d0c623a3f1f2275c3de4655ceb3999}{TestMultivariate}}\ ==\ 2)\ \&\&\ Distance\ ==\ 0)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00095}00095\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00096}00096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00097}00097\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00098}00098\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00100}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a79adc9d7368fa04e1970897fdeb8e070}{00100}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a79adc9d7368fa04e1970897fdeb8e070}{Hardware::GenerateProbingSets::Extend}}(\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{keywordtype}{int}\ GlitchIndex\ =\ 0,\ ProbeIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ SetIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{ProbePositionStruct}}\ ExtendedProbe;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00105}00105\ \ \ \ \ std::vector<ProbePositionStruct>::iterator\ it;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00106}00106\ \ \ \ \ std::iterator\_traits<std::vector<ProbePositionStruct>::iterator>::difference\_type\ Index;\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00107}00107\ \ \ \ \ std::string\ ErrorMessage;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00109}00109\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Extend\ all\ probing\ sets..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00111}00111\ \ \ \ \ \textcolor{comment}{//\ Sort\ in\ a\ way\ that\ the\ smallest\ element\ has\ the\ smallest\ index}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00112}00112\ \ \ \ \ std::sort(Test.ExtendedProbes.begin(),\ Test.ExtendedProbes.end(),\ [](\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ lhs,\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00113}00113\ \ \ \ \ Test.ExtendedProbes.erase(std::unique(Test.ExtendedProbes.begin(),\ Test.ExtendedProbes.end(),\ [](\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ lhs,\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ rhs)\{return\ lhs\ ==\ rhs;\}),\ Test.ExtendedProbes.end());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{comment}{//\ Extend\ all\ standard\ probes\ of\ a\ probing\ set}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00116}00116\ \ \ \ \ \textcolor{keywordflow}{for}\ (SetIndex\ =\ 0;\ SetIndex\ <\ Test.ProbingSet.size();\ SetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Test.GetNumberOfStandardProbes(SetIndex);\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00118}00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (GlitchIndex\ =\ 0;\ GlitchIndex\ <\ Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex,\ ProbeIndex).Probe].NumberOfProbes;\ GlitchIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00119}00119\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_af4d1080b80693fc8e0cdc7f7465d6b34}{Probe}}\ =\ Simulation.GlitchExtendedProbes[Test.GetStandardProbe(SetIndex,\ ProbeIndex).Probe].Probes[GlitchIndex];}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00120}00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_a5d19e133c6634b0854281a2f75d0c07e}{Cycle}}\ =\ Test.GetStandardProbe(SetIndex,\ ProbeIndex).Cycle;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00122}00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ glitch-\/extended\ probe\ is\ in\ the\ list\ of\ extended\ probes}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00123}00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ std::lower\_bound(Test.ExtendedProbes.begin(),\ Test.ExtendedProbes.end(),\ ExtendedProbe,\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ lhs,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Index\ =\ std::distance(Test.ExtendedProbes.begin(),\ it);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00126}00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((it\ ==\ Test.ExtendedProbes.end())\ ||\ (Test.ExtendedProbes.at(Index)\ !=\ ExtendedProbe))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00127}00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ErrorMessage\ =\ \textcolor{stringliteral}{"{}The\ glitch-\/extended\ probe\ p"{}}\ +\ std::to\_string(ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_af4d1080b80693fc8e0cdc7f7465d6b34}{Probe}})\ +\ \textcolor{stringliteral}{"{}("{}}\ +\ std::to\_string(ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_a5d19e133c6634b0854281a2f75d0c07e}{Cycle}})\ +\ \textcolor{stringliteral}{"{})\ is\ not\ known\ as\ a\ probe\ extension!"{}};}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00128}00128\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(ErrorMessage);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00129}00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.ProbingSet.at(SetIndex).Extension.push\_back(Index);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00131}00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00133}00133\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.TestTransitional\ \&\&\ (ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_a5d19e133c6634b0854281a2f75d0c07e}{Cycle}}\ !=\ 0))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Check\ if\ the\ transition-\/extended\ probe\ is\ in\ the\ list\ of\ extended\ probes}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_a5d19e133c6634b0854281a2f75d0c07e}{Cycle}}-\/-\/;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ it\ =\ std::lower\_bound(Test.ExtendedProbes.begin(),\ Test.ExtendedProbes.end(),\ ExtendedProbe,\ [](\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ lhs,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware::ProbePositionStruct}}\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Index\ =\ std::distance(Test.ExtendedProbes.begin(),\ it);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((it\ ==\ Test.ExtendedProbes.end())\ ||\ (Test.ExtendedProbes.at(Index)\ !=\ ExtendedProbe))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00141}00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ErrorMessage\ =\ \textcolor{stringliteral}{"{}The\ transition-\/extended\ probe\ p"{}}\ +\ std::to\_string(ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_af4d1080b80693fc8e0cdc7f7465d6b34}{Probe}})\ +\ \textcolor{stringliteral}{"{}("{}}\ +\ std::to\_string(ExtendedProbe.\mbox{\hyperlink{struct_hardware_1_1_probe_position_struct_a5d19e133c6634b0854281a2f75d0c07e}{Cycle}})\ +\ \textcolor{stringliteral}{"{})\ is\ not\ known\ as\ a\ probe\ extension!"{}};}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00142}00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ std::runtime\_error(ErrorMessage);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00143}00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.ProbingSet.at(SetIndex).Extension.push\_back(Index);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00149}00149\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00151}00151\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}done!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00152}00152\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00154}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa2449b9229e683bf3e1a9f41847978f6}{00154}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa2449b9229e683bf3e1a9f41847978f6}{Hardware::GenerateProbingSets::RemoveDuplicatedProbes}}(\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00155}00155\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Remove\ duplicated\ probes\ in\ the\ sets..."{}}\ <<\ std::flush;\ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ SetIndex\ =\ 0;\ SetIndex\ <\ Test.ProbingSet.size();\ SetIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ std::sort(Test.ProbingSet.at(SetIndex).Extension.begin(),\ Test.ProbingSet.at(SetIndex).Extension.end(),\ std::greater<unsigned\ int>());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ Test.ProbingSet.at(SetIndex).Extension.erase(std::unique(Test.ProbingSet.at(SetIndex).Extension.begin(),\ Test.ProbingSet.at(SetIndex).Extension.end()),\ Test.ProbingSet.at(SetIndex).Extension.end());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00160}00160\ \ \ \ \ \}\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00162}00162\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}done!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00163}00163\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00165}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ac99d0a29090a2746c0f44d334c6ac3c9}{00165}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ac99d0a29090a2746c0f44d334c6ac3c9}{Hardware::GenerateProbingSets::CoverWithOneProbingSet}}(\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SetIndex,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Start,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ End)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00166}00166\ \ \ \ \ \textcolor{comment}{//\ Iterate\ through\ all\ probing\ set\ that\ should\ be\ covered\ by\ another\ probing\ set}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Index\ =\ Start;\ Index\ <\ End;\ Index++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((SetIndex\ !=\ Index)\ \&\&\ Test.ProbingSet.at(SetIndex).Covers(Test.ProbingSet.at(Index)))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (std::includes(Test.ProbingSet.at(SetIndex).Extension.begin(),\ Test.ProbingSet.at(SetIndex).Extension.end(),\ Test.ProbingSet.at(Index).Extension.begin(),\ Test.ProbingSet.at(Index).Extension.end(),\ std::greater<unsigned\ int>()))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Traces\ equals\ one\ means\ that\ the\ probing\ set\ should\ be\ removed}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.ProbingSet.at(Index).ContingencyTable.Traces\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00174}00174\ \ \ \ \ \}\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00175}00175\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00177}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{00177}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{Hardware::GenerateProbingSets::RemoveCoveredProbingSets}}(\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Start,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ End)\{\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{comment}{//\ Iterate\ through\ all\ probing\ set\ that\ should\ cover\ another\ probing\ set}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00179}00179\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ Index\ =\ Start;\ Index\ <\ End;\ Index++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ac99d0a29090a2746c0f44d334c6ac3c9}{Hardware::GenerateProbingSets::CoverWithOneProbingSet}}(Test,\ Index,\ Start,\ End);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00181}00181\ \ \ \ \ \}\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00182}00182\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00184}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a46b98a86fd9820e6738d2bb956dd2c9e}{00184}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a46b98a86fd9820e6738d2bb956dd2c9e}{Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00185}00185\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Remove\ duplicated\ probing\ sets..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00186}00186\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ Index\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00187}00187\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ probing\ sets\ that\ occur\ twice}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00189}00189\ \ \ \ \ std::sort(Test.ProbingSet.begin(),\ Test.ProbingSet.end(),\ [](\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware::ProbingSetStruct}}\&\ lhs,\ \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware::ProbingSetStruct}}\&\ rhs)\{return\ lhs\ <\ rhs;\});}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00190}00190\ \ \ \ \ Test.ProbingSet.erase(std::unique(Test.ProbingSet.begin(),\ Test.ProbingSet.end(),\ [](\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware::ProbingSetStruct}}\&\ lhs,\ \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware::ProbingSetStruct}}\&\ rhs)\{return\ lhs\ ==\ rhs;\}),\ Test.ProbingSet.end());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00191}00191\ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}done!\ "{}}\ <<\ Test.ProbingSet.size()\ <<\ \textcolor{stringliteral}{"{}\ probing\ sets\ remain!"{}}\ <<\ std::endl;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00193}00193\ \ \ \ \ \textcolor{comment}{//\ Remove\ all\ probing\ sets\ that\ are\ completely\ covered\ by\ another\ probing\ set}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00194}00194\ \ \ \ \ \textcolor{keywordflow}{if}\ (Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a6af63c1d4d70772c49ed2ee179038efb}{MinimizeProbeSets}})\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Remove\ subsets\ of\ probing\ sets..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00196}00196\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((Simulation.TestMultivariate\ !=\ 0)\ \&\&\ (Simulation.NumberOfTestClockCycles\ >\ 1)\ \&\&\ (Simulation.TestOrder\ !=\ 1))\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Setting\ multivariate\ case..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{Hardware::GenerateProbingSets::RemoveCoveredProbingSets}}(Test,\ 0,\ Test.ProbingSet.size());\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}Setting\ univariate\ case..."{}}\ <<\ std::flush;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Simulation.NumberOfTestClockCycles\ !=\ 1)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<unsigned\ int>\ StartIndices(1,0),\ EndIndices;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00204}00204\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (Index\ =\ 1;\ Index\ <\ Test.ProbingSet.size();\ Index++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Test.ExtendedProbes.at(Test.ProbingSet.at(Index\ -\/\ 1).Extension.back()).Cycle\ !=\ Test.ExtendedProbes.at(Test.ProbingSet.at(Index).Extension.back()).Cycle)\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ StartIndices.push\_back(Index);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EndIndices.push\_back(Index);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EndIndices.push\_back(Test.ProbingSet.size());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Each\ set\ of\ probing\ sets\ with\ the\ same\ clock\ cycle\ can\ be\ minimized\ in\ parallel}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00214}00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ As\ they\ are\ independend,\ the\ runtime\ is\ decreased}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00215}00215\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \#pragma\ omp\ parallel\ for\ schedule(guided)}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00216}00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (Index\ =\ 0;\ Index\ <\ StartIndices.size();\ Index++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00217}00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{Hardware::GenerateProbingSets::RemoveCoveredProbingSets}}(Test,\ StartIndices.at(Index),\ EndIndices.at(Index));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00218}00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Test.ProbingSet.size()\ >\ 1)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{Hardware::GenerateProbingSets::RemoveCoveredProbingSets}}(Test,\ 0,\ Test.ProbingSet.size());\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00224}00224\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00225}00225\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00226}00226\ \ \ \ \ \ \ \ \ Test.ProbingSet.erase(std::remove\_if(Test.ProbingSet.begin(),\ Test.ProbingSet.end(),\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ae2884275f305f09332b0b1b77fb51c78}{Hardware::GenerateProbingSets::Remove}}),\ Test.ProbingSet.end());}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ std::cout\ <<\ \textcolor{stringliteral}{"{}done!\ "{}}\ <<\ Test.ProbingSet.size()\ <<\ \textcolor{stringliteral}{"{}\ probing\ sets\ remain!"{}}\ <<\ std::endl;\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00228}00228\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00229}00229\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00231}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ae2884275f305f09332b0b1b77fb51c78}{00231}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ae2884275f305f09332b0b1b77fb51c78}{Hardware::GenerateProbingSets::Remove}}(\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{ProbingSetStruct}}\&\ ProbingSet)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{return}\ ProbingSet.ContingencyTable.Traces\ ==\ 1;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00233}00233\ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00235}\mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a4eb28bb290b44d98f9589e9fb1df50b6}{00235}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a4eb28bb290b44d98f9589e9fb1df50b6}{Hardware::GenerateProbingSets::InitializeCompactDistributions}}(\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware::SettingsStruct}}\&\ Settings,\ \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware::SimulationStruct}}\&\ Simulation,\ \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware::TestStruct}}\&\ Test)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00236}00236\ \ \ \ \ \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util::TableEntryStruct}}\ emptyTableEntry(Simulation.NumberOfGroups);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00237}00237\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ setIndex\ =\ 0,\ ProbeIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00238}00238\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TempIndex\ =\ 0,\ ClockCycle;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00239}00239\ \ \ \ \ \textcolor{keywordtype}{int}**\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TempClockProbeTable\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00241}00241\ \ \ \ \ \textcolor{keywordflow}{for}\ (setIndex\ =\ 0;\ setIndex\ <\ Test.ProbingSet.size();\ setIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00242}00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <=\ Test.ProbingSet.at(setIndex).Extension.size();\ ProbeIndex++)\{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ Test.ProbingSet.at(setIndex).ContingencyTable.Entries.push\_back(emptyTableEntry);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00244}00244\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00245}00245\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00247}00247\ \ \ \ \ Test.TempProbeValue.resize(Settings.\mbox{\hyperlink{struct_hardware_1_1_settings_struct_a941d1c6f15ce6607adb2b036a7709b71}{Max\_no\_of\_Threads}},\ std::vector<int>(Test.ProbingSet.size(),\ 0));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00248}00248\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00249}00249\ \ \ \ \ TempClockProbeTable\ =\ (\textcolor{keywordtype}{int}**)malloc(Simulation.NumberOfClockCycles\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}*));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00250}00250\ \ \ \ \ \textcolor{keywordflow}{for}\ (ClockCycle\ =\ 0;ClockCycle\ <\ Simulation.NumberOfClockCycles;\ ClockCycle++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00251}00251\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00252}00252\ \ \ \ \ \ \ \ \ TempClockProbeTable[ClockCycle]\ =\ (\textcolor{keywordtype}{int}*)calloc(Simulation.NumberOfAllGlitchExtendedProbes,\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{int}));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00253}00253\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (TempIndex\ =\ 0;\ TempIndex\ <\ Simulation.NumberOfAllGlitchExtendedProbes;\ TempIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00254}00254\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ TempClockProbeTable[ClockCycle][TempIndex]\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00256}00256\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00257}00257\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00258}00258\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00259}00259\ \ \ \ \ Test.NumberOfUniqueProbes\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00261}00261\ \ \ \ \ \textcolor{keywordflow}{for}\ (setIndex\ =\ 0;\ setIndex\ <\ Test.ProbingSet.size();\ setIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00262}00262\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Test.ProbingSet[setIndex].Extension.size();\ ProbeIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00263}00263\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ TempIndex\ =\ TempClockProbeTable[Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Cycle][Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Probe];}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (TempIndex\ <\ 0)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ TempClockProbeTable[Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Cycle][Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Probe]\ =\ Test.NumberOfUniqueProbes;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Test.NumberOfUniqueProbes++;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00270}00270\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00272}00272\ \ \ \ \ Test.UniqueProbe\ =\ (\mbox{\hyperlink{struct_hardware_1_1_unique_probe_struct}{UniqueProbeStruct}}**)malloc(Test.NumberOfUniqueProbes\ *\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_hardware_1_1_unique_probe_struct}{UniqueProbeStruct}}*));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00273}00273\ \ \ \ \ \textcolor{keywordflow}{for}\ (TempIndex\ =\ 0;\ TempIndex\ <\ Test.NumberOfUniqueProbes;\ TempIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00274}00274\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00275}00275\ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]\ =\ (\mbox{\hyperlink{struct_hardware_1_1_unique_probe_struct}{UniqueProbeStruct}}*)malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_hardware_1_1_unique_probe_struct}{UniqueProbeStruct}}));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00276}00276\ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00277}00277\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00279}00279\ \ \ \ \ \textcolor{keywordflow}{for}\ (setIndex\ =\ 0;\ setIndex\ <\ Test.ProbingSet.size();\ setIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00280}00280\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00281}00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Test.ProbingSet[setIndex].Extension.size();\ ProbeIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00282}00282\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ \ \ TempIndex\ =\ TempClockProbeTable[Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Cycle][Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Probe];}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>Cycle\ =\ Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Cycle;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>Probe\ =\ Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Probe;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets++;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00287}00287\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00288}00288\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00290}00290\ \ \ \ \ \textcolor{keywordflow}{for}\ (TempIndex\ =\ 0;\ TempIndex\ <\ Test.NumberOfUniqueProbes;\ TempIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00291}00291\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>ProbeSetIndexes\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}*)malloc(Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets\ *\ \textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}));}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00293}00293\ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets\ =\ 0;\ \textcolor{comment}{//\ to\ be\ used\ as\ a\ counter\ in\ the\ next\ part}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00294}00294\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00296}00296\ \ \ \ \ \textcolor{keywordflow}{for}\ (setIndex\ =\ 0;\ setIndex\ <\ Test.ProbingSet.size();\ setIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00297}00297\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00298}00298\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (ProbeIndex\ =\ 0;\ ProbeIndex\ <\ Test.ProbingSet[setIndex].Extension.size();\ ProbeIndex++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00299}00299\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00300}00300\ \ \ \ \ \ \ \ \ \ \ \ \ TempIndex\ =\ TempClockProbeTable[Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Cycle][Test.ExtendedProbes.at(Test.ProbingSet[setIndex].Extension[ProbeIndex]).Probe];}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00301}00301\ \ \ \ \ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>ProbeSetIndexes[Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets]\ =\ setIndex;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ Test.UniqueProbe[TempIndex]-\/>NumberOfProbeSets++;}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00303}00303\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00304}00304\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00305}00305\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00306}00306\ \ \ \ \ \textcolor{keywordflow}{for}\ (ClockCycle\ =\ 0;ClockCycle\ <\ Simulation.NumberOfClockCycles;ClockCycle++)}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00307}00307\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00308}00308\ \ \ \ \ \ \ \ \ free(TempClockProbeTable[ClockCycle]);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00309}00309\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00311}00311\ \ \ \ \ free(TempClockProbeTable);}
+\DoxyCodeLine{\Hypertarget{_generate_probing_sets_8cpp_source_l00312}00312\ \}}
+
+\end{DoxyCode}

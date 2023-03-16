@@ -1,0 +1,43 @@
+\hypertarget{_generate_probing_sets_8hpp}{}\doxysection{Projects/\+PROLEAD/inc/\+Hardware/\+Generate\+Probing\+Sets.hpp File Reference}
+\label{_generate_probing_sets_8hpp}\index{Projects/PROLEAD/inc/Hardware/GenerateProbingSets.hpp@{Projects/PROLEAD/inc/Hardware/GenerateProbingSets.hpp}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$cinttypes$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$omp.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Hardware/\+Operators.\+hpp\char`\"{}}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_hardware}{Hardware}}
+\item 
+namespace \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets}{Hardware\+::\+Generate\+Probing\+Sets}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ae2884275f305f09332b0b1b77fb51c78}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Remove}} (\mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware\+::\+Probing\+Set\+Struct}} \&)
+\item 
+bool \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a3a8235ec7b2b0de69c3899f80db662a0}{Hardware\+::\+Generate\+Probing\+Sets\+::\+In\+Distance}} (\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware\+::\+Settings\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&, std\+::vector$<$ unsigned int $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a88c456d61d065fce375616951b8e2e7f}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Generate\+Probes}} (\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa6363789184cc3ecc630d7ac954b4a80}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Initialize\+Multivariate\+Probe\+Combinations}} (\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&, std\+::vector$<$ unsigned int $>$ \&, std\+::vector$<$ bool $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a76f61edb15974c9a3b97e1076bc2944b}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Initialize\+Univariate\+Probe\+Combinations}} (\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, std\+::vector$<$ unsigned int $>$ \&, std\+::vector$<$ bool $>$ \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a79adc9d7368fa04e1970897fdeb8e070}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Extend}} (\mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_aa2449b9229e683bf3e1a9f41847978f6}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Remove\+Duplicated\+Probes}} (\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ac99d0a29090a2746c0f44d334c6ac3c9}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Cover\+With\+One\+Probing\+Set}} (\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&, unsigned int, unsigned int, unsigned int)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ad2e85fd700b4402c697dcee6d8b06154}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Remove\+Covered\+Probing\+Sets}} (\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&, unsigned int, unsigned int)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a46b98a86fd9820e6738d2bb956dd2c9e}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Remove\+Duplicated\+Probing\+Sets}} (\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware\+::\+Settings\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a329fe90975352ab0382ae8619c893244}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Remove\+Duplicated\+Probing\+Sets\+Bucket}} (\mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&, unsigned int, unsigned int)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_a4eb28bb290b44d98f9589e9fb1df50b6}{Hardware\+::\+Generate\+Probing\+Sets\+::\+Initialize\+Compact\+Distributions}} (\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware\+::\+Settings\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\item 
+void \mbox{\hyperlink{namespace_hardware_1_1_generate_probing_sets_ab4b952e03d053fcc77c58ca2c024caa7}{Hardware\+::\+Generate\+Probing\+Sets\+::\+All}} (\mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware\+::\+Settings\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}} \&, \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}} \&)
+\end{DoxyCompactItemize}

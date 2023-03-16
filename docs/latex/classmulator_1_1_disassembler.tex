@@ -1,0 +1,115 @@
+\hypertarget{classmulator_1_1_disassembler}{}\doxysection{mulator\+::Disassembler Class Reference}
+\label{classmulator_1_1_disassembler}\index{mulator::Disassembler@{mulator::Disassembler}}
+
+
+{\ttfamily \#include $<$disassembler.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmulator_1_1_disassembler_a5fe4420b1fceb7c2cd2e202d246b2e51}{Disassembler}} (\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} arch)
+\item 
+\mbox{\hyperlink{classmulator_1_1_disassembler_a83e0f60b8d3e6cc2fb649008ced28b3f}{$\sim$\+Disassembler}} ()
+\item 
+\mbox{\hyperlink{classmulator_1_1_instruction_decoder}{Instruction\+Decoder}} \mbox{\hyperlink{classmulator_1_1_disassembler_ae5e700e7aac63d8132b814e0b5aa42a3}{get\+\_\+decoder}} () const
+\item 
+\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} \mbox{\hyperlink{classmulator_1_1_disassembler_a1e6810ed50c9ed8a04d1e9470e66e460}{get\+\_\+architecture}} () const
+\item 
+void \mbox{\hyperlink{classmulator_1_1_disassembler_abddce35bf678296447779ed15582d399}{reset}} ()
+\item 
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} \mbox{\hyperlink{classmulator_1_1_disassembler_a3f2c5485278fc511ef32dbb506663753}{disassemble}} (\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} address, const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$code, \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}} code\+\_\+size)
+\item 
+\mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} \mbox{\hyperlink{classmulator_1_1_disassembler_a48ec0377a24e012342c8a5875e311516}{disassemble}} (\mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}} instr)
+\item 
+\mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}} \mbox{\hyperlink{classmulator_1_1_disassembler_a2b3b0d993b82c0866907981ed984e5b1}{get\+\_\+instruction}} () const
+\item 
+std\+::string \mbox{\hyperlink{classmulator_1_1_disassembler_a03985569ac359cda672459217e30c99d}{get\+\_\+mnemonic}} () const
+\item 
+std\+::string \mbox{\hyperlink{classmulator_1_1_disassembler_adac2d0b6258e0e11de0c24abcc070890}{get\+\_\+operands}} () const
+\item 
+std\+::string \mbox{\hyperlink{classmulator_1_1_disassembler_ab12bc8d139bfeb814af9f8aae0ea97d1}{get\+\_\+string}} () const
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{disassembler_8h_source_l00009}{9}} of file \mbox{\hyperlink{disassembler_8h_source}{disassembler.\+h}}.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a5fe4420b1fceb7c2cd2e202d246b2e51}\label{classmulator_1_1_disassembler_a5fe4420b1fceb7c2cd2e202d246b2e51}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!Disassembler@{Disassembler}}
+\index{Disassembler@{Disassembler}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{Disassembler()}{Disassembler()}}
+{\footnotesize\ttfamily mulator\+::\+Disassembler\+::\+Disassembler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}}]{arch }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a83e0f60b8d3e6cc2fb649008ced28b3f}\label{classmulator_1_1_disassembler_a83e0f60b8d3e6cc2fb649008ced28b3f}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!````~Disassembler@{$\sim$Disassembler}}
+\index{````~Disassembler@{$\sim$Disassembler}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{$\sim$Disassembler()}{~Disassembler()}}
+{\footnotesize\ttfamily mulator\+::\+Disassembler\+::$\sim$\+Disassembler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a48ec0377a24e012342c8a5875e311516}\label{classmulator_1_1_disassembler_a48ec0377a24e012342c8a5875e311516}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!disassemble@{disassemble}}
+\index{disassemble@{disassemble}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{disassemble()}{disassemble()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} mulator\+::\+Disassembler\+::disassemble (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}}]{instr }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a3f2c5485278fc511ef32dbb506663753}\label{classmulator_1_1_disassembler_a3f2c5485278fc511ef32dbb506663753}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!disassemble@{disassemble}}
+\index{disassemble@{disassemble}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{disassemble()}{disassemble()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{Return\+Code}} mulator\+::\+Disassembler\+::disassemble (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{address,  }\item[{const \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}} $\ast$}]{code,  }\item[{\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}}]{code\+\_\+size }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a1e6810ed50c9ed8a04d1e9470e66e460}\label{classmulator_1_1_disassembler_a1e6810ed50c9ed8a04d1e9470e66e460}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_architecture@{get\_architecture}}
+\index{get\_architecture@{get\_architecture}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_architecture()}{get\_architecture()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}} mulator\+::\+Disassembler\+::get\+\_\+architecture (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_ae5e700e7aac63d8132b814e0b5aa42a3}\label{classmulator_1_1_disassembler_ae5e700e7aac63d8132b814e0b5aa42a3}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_decoder@{get\_decoder}}
+\index{get\_decoder@{get\_decoder}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_decoder()}{get\_decoder()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{Instruction\+Decoder}} mulator\+::\+Disassembler\+::get\+\_\+decoder (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a2b3b0d993b82c0866907981ed984e5b1}\label{classmulator_1_1_disassembler_a2b3b0d993b82c0866907981ed984e5b1}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_instruction@{get\_instruction}}
+\index{get\_instruction@{get\_instruction}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_instruction()}{get\_instruction()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}} mulator\+::\+Disassembler\+::get\+\_\+instruction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_a03985569ac359cda672459217e30c99d}\label{classmulator_1_1_disassembler_a03985569ac359cda672459217e30c99d}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_mnemonic@{get\_mnemonic}}
+\index{get\_mnemonic@{get\_mnemonic}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_mnemonic()}{get\_mnemonic()}}
+{\footnotesize\ttfamily std\+::string mulator\+::\+Disassembler\+::get\+\_\+mnemonic (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_adac2d0b6258e0e11de0c24abcc070890}\label{classmulator_1_1_disassembler_adac2d0b6258e0e11de0c24abcc070890}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_operands@{get\_operands}}
+\index{get\_operands@{get\_operands}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_operands()}{get\_operands()}}
+{\footnotesize\ttfamily std\+::string mulator\+::\+Disassembler\+::get\+\_\+operands (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_ab12bc8d139bfeb814af9f8aae0ea97d1}\label{classmulator_1_1_disassembler_ab12bc8d139bfeb814af9f8aae0ea97d1}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!get\_string@{get\_string}}
+\index{get\_string@{get\_string}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{get\_string()}{get\_string()}}
+{\footnotesize\ttfamily std\+::string mulator\+::\+Disassembler\+::get\+\_\+string (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classmulator_1_1_disassembler_abddce35bf678296447779ed15582d399}\label{classmulator_1_1_disassembler_abddce35bf678296447779ed15582d399}} 
+\index{mulator::Disassembler@{mulator::Disassembler}!reset@{reset}}
+\index{reset@{reset}!mulator::Disassembler@{mulator::Disassembler}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily void mulator\+::\+Disassembler\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Projects/\+PROLEAD/inc/\+Software/mulator/\mbox{\hyperlink{disassembler_8h}{disassembler.\+h}}\end{DoxyCompactItemize}

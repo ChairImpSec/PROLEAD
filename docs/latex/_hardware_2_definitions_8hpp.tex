@@ -1,0 +1,362 @@
+\hypertarget{_hardware_2_definitions_8hpp}{}\doxysection{Projects/\+PROLEAD/inc/\+Hardware/\+Definitions.hpp File Reference}
+\label{_hardware_2_definitions_8hpp}\index{Projects/PROLEAD/inc/Hardware/Definitions.hpp@{Projects/PROLEAD/inc/Hardware/Definitions.hpp}}
+{\ttfamily \#include $<$cinttypes$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$bits/stdc++.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}Util/\+Util.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_operation_struct}{Hardware\+::\+Operation\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_cell_type_struct}{Hardware\+::\+Cell\+Type\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_library_struct}{Hardware\+::\+Library\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_cell_struct}{Hardware\+::\+Cell\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_signal_struct}{Hardware\+::\+Signal\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_circuit_struct}{Hardware\+::\+Circuit\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_settings_struct}{Hardware\+::\+Settings\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_glitch_extended_probes_struct}{Hardware\+::\+Glitch\+Extended\+Probes\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_probes_struct}{Hardware\+::\+Probes\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_shared_data_struct}{Hardware\+::\+Shared\+Data\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_simulation_struct}{Hardware\+::\+Simulation\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_probe_position_struct}{Hardware\+::\+Probe\+Position\+Struct}}
+\begin{DoxyCompactList}\small\item\em Defines a single probe. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_probing_set_struct}{Hardware\+::\+Probing\+Set\+Struct}}
+\begin{DoxyCompactList}\small\item\em Defines a probing set. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_unique_probe_struct}{Hardware\+::\+Unique\+Probe\+Struct}}
+\item 
+struct \mbox{\hyperlink{struct_hardware_1_1_test_struct}{Hardware\+::\+Test\+Struct}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_hardware}{Hardware}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_acf1dedd66aae8103a70f1250179b8f1f}{Max\+\_\+\+Name\+\_\+\+Length}}~10000
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a92e5ac406e9ac24dbcd702eafb6fd36c}{Full\+One}}~0xffffffffffffffff
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a5ed1df3e1df85897c47a80dd9e6181f3}{Group\+Input}}~0x8000000000000000
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a37a5fa5b817d7d50b992f8dc8c666b08}{Random\+Input}}~0x4000000000000000
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a8bd12fddda4470cfc0e6733340e79875}{Same\+Input}}~0x2000000000000000
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a3b0aa07676f18358d92ded85d38c726a}{Group\+In\+Mask}}~0xf000000000000000
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a90a560736628aaa957aa6c8e9a728bcf}{Cell\+Type\+\_\+\+Gate}}~0
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_ab0fab675a4159b5284900bc08e581ce2}{Cell\+Type\+\_\+\+Reg}}~1
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a48f940116524884f41adaadc36c2dec5}{Operation\+\_\+\+AND}}~0
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_abdd7f272f72ef7c2136fe6564a7fee00}{Operation\+\_\+\+OR}}~1
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a9b978e28990f94e78c1ac2c655ca76a3}{Operation\+\_\+\+XOR}}~2
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_aac317fe6e8ec0e20669e4017e35ca9e7}{Operation\+\_\+\+NOT}}~3
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a24256bd7ba3763e3c921667efae72699}{Signal\+Type\+\_\+input}}~0
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_ad79cfce5685c542983e2bc073b5f8d20}{Signal\+Type\+\_\+output}}~1
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a29d32d20d0834466f647196a602f2b77}{Signal\+Type\+\_\+wire}}~2
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_af7d0c4342710f14674282086b1cfb240}{Task\+\_\+find\+\_\+module\+\_\+type}}~0
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_ad72218882c4cca4a317315cd30c8ed75}{Task\+\_\+find\+\_\+module\+\_\+name}}~1
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a75a23da51ed2d0dbd5e34768c8634017}{Task\+\_\+find\+\_\+open\+\_\+bracket}}~2
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a04c3d9a2def8af7f35569c81a6710896}{Task\+\_\+find\+\_\+point}}~3
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a61825181ec4880eda53250c3bfd769b0}{Task\+\_\+find\+\_\+\+IO\+\_\+port}}~4
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a124706b3a4e615079e3b5ca30392de83}{Task\+\_\+find\+\_\+signal\+\_\+name}}~5
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a0a06c479656038e6ec98470acd8b26b1}{Task\+\_\+find\+\_\+close\+\_\+bracket}}~6
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a2d2adb077afaeba7edb2fee149addb8a}{Task\+\_\+find\+\_\+comma}}~7
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_afee860bc0e3aa6961bbbcb9819737375}{Task\+\_\+find\+\_\+assign\+\_\+signal\+\_\+name1}}~8
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_a5e22a42c6748bcc6d4fc7847537171c0}{Task\+\_\+find\+\_\+equal}}~9
+\item 
+\#define \mbox{\hyperlink{_hardware_2_definitions_8hpp_afb8ce970fa175d5e286228720c7b0876}{Task\+\_\+find\+\_\+assign\+\_\+signal\+\_\+name2}}~10
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a90a560736628aaa957aa6c8e9a728bcf}\label{_hardware_2_definitions_8hpp_a90a560736628aaa957aa6c8e9a728bcf}} 
+\index{Definitions.hpp@{Definitions.hpp}!CellType\_Gate@{CellType\_Gate}}
+\index{CellType\_Gate@{CellType\_Gate}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{CellType\_Gate}{CellType\_Gate}}
+{\footnotesize\ttfamily \#define Cell\+Type\+\_\+\+Gate~0}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00016}{16}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_ab0fab675a4159b5284900bc08e581ce2}\label{_hardware_2_definitions_8hpp_ab0fab675a4159b5284900bc08e581ce2}} 
+\index{Definitions.hpp@{Definitions.hpp}!CellType\_Reg@{CellType\_Reg}}
+\index{CellType\_Reg@{CellType\_Reg}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{CellType\_Reg}{CellType\_Reg}}
+{\footnotesize\ttfamily \#define Cell\+Type\+\_\+\+Reg~1}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00017}{17}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a92e5ac406e9ac24dbcd702eafb6fd36c}\label{_hardware_2_definitions_8hpp_a92e5ac406e9ac24dbcd702eafb6fd36c}} 
+\index{Definitions.hpp@{Definitions.hpp}!FullOne@{FullOne}}
+\index{FullOne@{FullOne}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{FullOne}{FullOne}}
+{\footnotesize\ttfamily \#define Full\+One~0xffffffffffffffff}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00010}{10}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a3b0aa07676f18358d92ded85d38c726a}\label{_hardware_2_definitions_8hpp_a3b0aa07676f18358d92ded85d38c726a}} 
+\index{Definitions.hpp@{Definitions.hpp}!GroupInMask@{GroupInMask}}
+\index{GroupInMask@{GroupInMask}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{GroupInMask}{GroupInMask}}
+{\footnotesize\ttfamily \#define Group\+In\+Mask~0xf000000000000000}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00014}{14}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a5ed1df3e1df85897c47a80dd9e6181f3}\label{_hardware_2_definitions_8hpp_a5ed1df3e1df85897c47a80dd9e6181f3}} 
+\index{Definitions.hpp@{Definitions.hpp}!GroupInput@{GroupInput}}
+\index{GroupInput@{GroupInput}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{GroupInput}{GroupInput}}
+{\footnotesize\ttfamily \#define Group\+Input~0x8000000000000000}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00011}{11}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_acf1dedd66aae8103a70f1250179b8f1f}\label{_hardware_2_definitions_8hpp_acf1dedd66aae8103a70f1250179b8f1f}} 
+\index{Definitions.hpp@{Definitions.hpp}!Max\_Name\_Length@{Max\_Name\_Length}}
+\index{Max\_Name\_Length@{Max\_Name\_Length}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Max\_Name\_Length}{Max\_Name\_Length}}
+{\footnotesize\ttfamily \#define Max\+\_\+\+Name\+\_\+\+Length~10000}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00008}{8}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a48f940116524884f41adaadc36c2dec5}\label{_hardware_2_definitions_8hpp_a48f940116524884f41adaadc36c2dec5}} 
+\index{Definitions.hpp@{Definitions.hpp}!Operation\_AND@{Operation\_AND}}
+\index{Operation\_AND@{Operation\_AND}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Operation\_AND}{Operation\_AND}}
+{\footnotesize\ttfamily \#define Operation\+\_\+\+AND~0}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00019}{19}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_aac317fe6e8ec0e20669e4017e35ca9e7}\label{_hardware_2_definitions_8hpp_aac317fe6e8ec0e20669e4017e35ca9e7}} 
+\index{Definitions.hpp@{Definitions.hpp}!Operation\_NOT@{Operation\_NOT}}
+\index{Operation\_NOT@{Operation\_NOT}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Operation\_NOT}{Operation\_NOT}}
+{\footnotesize\ttfamily \#define Operation\+\_\+\+NOT~3}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00022}{22}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_abdd7f272f72ef7c2136fe6564a7fee00}\label{_hardware_2_definitions_8hpp_abdd7f272f72ef7c2136fe6564a7fee00}} 
+\index{Definitions.hpp@{Definitions.hpp}!Operation\_OR@{Operation\_OR}}
+\index{Operation\_OR@{Operation\_OR}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Operation\_OR}{Operation\_OR}}
+{\footnotesize\ttfamily \#define Operation\+\_\+\+OR~1}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00020}{20}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a9b978e28990f94e78c1ac2c655ca76a3}\label{_hardware_2_definitions_8hpp_a9b978e28990f94e78c1ac2c655ca76a3}} 
+\index{Definitions.hpp@{Definitions.hpp}!Operation\_XOR@{Operation\_XOR}}
+\index{Operation\_XOR@{Operation\_XOR}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Operation\_XOR}{Operation\_XOR}}
+{\footnotesize\ttfamily \#define Operation\+\_\+\+XOR~2}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00021}{21}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a37a5fa5b817d7d50b992f8dc8c666b08}\label{_hardware_2_definitions_8hpp_a37a5fa5b817d7d50b992f8dc8c666b08}} 
+\index{Definitions.hpp@{Definitions.hpp}!RandomInput@{RandomInput}}
+\index{RandomInput@{RandomInput}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{RandomInput}{RandomInput}}
+{\footnotesize\ttfamily \#define Random\+Input~0x4000000000000000}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00012}{12}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a8bd12fddda4470cfc0e6733340e79875}\label{_hardware_2_definitions_8hpp_a8bd12fddda4470cfc0e6733340e79875}} 
+\index{Definitions.hpp@{Definitions.hpp}!SameInput@{SameInput}}
+\index{SameInput@{SameInput}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{SameInput}{SameInput}}
+{\footnotesize\ttfamily \#define Same\+Input~0x2000000000000000}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00013}{13}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a24256bd7ba3763e3c921667efae72699}\label{_hardware_2_definitions_8hpp_a24256bd7ba3763e3c921667efae72699}} 
+\index{Definitions.hpp@{Definitions.hpp}!SignalType\_input@{SignalType\_input}}
+\index{SignalType\_input@{SignalType\_input}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{SignalType\_input}{SignalType\_input}}
+{\footnotesize\ttfamily \#define Signal\+Type\+\_\+input~0}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00024}{24}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_ad79cfce5685c542983e2bc073b5f8d20}\label{_hardware_2_definitions_8hpp_ad79cfce5685c542983e2bc073b5f8d20}} 
+\index{Definitions.hpp@{Definitions.hpp}!SignalType\_output@{SignalType\_output}}
+\index{SignalType\_output@{SignalType\_output}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{SignalType\_output}{SignalType\_output}}
+{\footnotesize\ttfamily \#define Signal\+Type\+\_\+output~1}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00025}{25}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a29d32d20d0834466f647196a602f2b77}\label{_hardware_2_definitions_8hpp_a29d32d20d0834466f647196a602f2b77}} 
+\index{Definitions.hpp@{Definitions.hpp}!SignalType\_wire@{SignalType\_wire}}
+\index{SignalType\_wire@{SignalType\_wire}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{SignalType\_wire}{SignalType\_wire}}
+{\footnotesize\ttfamily \#define Signal\+Type\+\_\+wire~2}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00026}{26}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_afee860bc0e3aa6961bbbcb9819737375}\label{_hardware_2_definitions_8hpp_afee860bc0e3aa6961bbbcb9819737375}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_assign\_signal\_name1@{Task\_find\_assign\_signal\_name1}}
+\index{Task\_find\_assign\_signal\_name1@{Task\_find\_assign\_signal\_name1}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_assign\_signal\_name1}{Task\_find\_assign\_signal\_name1}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+assign\+\_\+signal\+\_\+name1~8}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00036}{36}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_afb8ce970fa175d5e286228720c7b0876}\label{_hardware_2_definitions_8hpp_afb8ce970fa175d5e286228720c7b0876}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_assign\_signal\_name2@{Task\_find\_assign\_signal\_name2}}
+\index{Task\_find\_assign\_signal\_name2@{Task\_find\_assign\_signal\_name2}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_assign\_signal\_name2}{Task\_find\_assign\_signal\_name2}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+assign\+\_\+signal\+\_\+name2~10}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00038}{38}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a0a06c479656038e6ec98470acd8b26b1}\label{_hardware_2_definitions_8hpp_a0a06c479656038e6ec98470acd8b26b1}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_close\_bracket@{Task\_find\_close\_bracket}}
+\index{Task\_find\_close\_bracket@{Task\_find\_close\_bracket}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_close\_bracket}{Task\_find\_close\_bracket}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+close\+\_\+bracket~6}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00034}{34}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a2d2adb077afaeba7edb2fee149addb8a}\label{_hardware_2_definitions_8hpp_a2d2adb077afaeba7edb2fee149addb8a}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_comma@{Task\_find\_comma}}
+\index{Task\_find\_comma@{Task\_find\_comma}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_comma}{Task\_find\_comma}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+comma~7}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00035}{35}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a5e22a42c6748bcc6d4fc7847537171c0}\label{_hardware_2_definitions_8hpp_a5e22a42c6748bcc6d4fc7847537171c0}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_equal@{Task\_find\_equal}}
+\index{Task\_find\_equal@{Task\_find\_equal}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_equal}{Task\_find\_equal}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+equal~9}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00037}{37}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a61825181ec4880eda53250c3bfd769b0}\label{_hardware_2_definitions_8hpp_a61825181ec4880eda53250c3bfd769b0}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_IO\_port@{Task\_find\_IO\_port}}
+\index{Task\_find\_IO\_port@{Task\_find\_IO\_port}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_IO\_port}{Task\_find\_IO\_port}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+\+IO\+\_\+port~4}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00032}{32}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_ad72218882c4cca4a317315cd30c8ed75}\label{_hardware_2_definitions_8hpp_ad72218882c4cca4a317315cd30c8ed75}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_module\_name@{Task\_find\_module\_name}}
+\index{Task\_find\_module\_name@{Task\_find\_module\_name}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_module\_name}{Task\_find\_module\_name}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+module\+\_\+name~1}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00029}{29}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_af7d0c4342710f14674282086b1cfb240}\label{_hardware_2_definitions_8hpp_af7d0c4342710f14674282086b1cfb240}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_module\_type@{Task\_find\_module\_type}}
+\index{Task\_find\_module\_type@{Task\_find\_module\_type}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_module\_type}{Task\_find\_module\_type}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+module\+\_\+type~0}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00028}{28}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a75a23da51ed2d0dbd5e34768c8634017}\label{_hardware_2_definitions_8hpp_a75a23da51ed2d0dbd5e34768c8634017}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_open\_bracket@{Task\_find\_open\_bracket}}
+\index{Task\_find\_open\_bracket@{Task\_find\_open\_bracket}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_open\_bracket}{Task\_find\_open\_bracket}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+open\+\_\+bracket~2}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00030}{30}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a04c3d9a2def8af7f35569c81a6710896}\label{_hardware_2_definitions_8hpp_a04c3d9a2def8af7f35569c81a6710896}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_point@{Task\_find\_point}}
+\index{Task\_find\_point@{Task\_find\_point}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_point}{Task\_find\_point}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+point~3}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00031}{31}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+
+\mbox{\Hypertarget{_hardware_2_definitions_8hpp_a124706b3a4e615079e3b5ca30392de83}\label{_hardware_2_definitions_8hpp_a124706b3a4e615079e3b5ca30392de83}} 
+\index{Definitions.hpp@{Definitions.hpp}!Task\_find\_signal\_name@{Task\_find\_signal\_name}}
+\index{Task\_find\_signal\_name@{Task\_find\_signal\_name}!Definitions.hpp@{Definitions.hpp}}
+\doxysubsubsection{\texorpdfstring{Task\_find\_signal\_name}{Task\_find\_signal\_name}}
+{\footnotesize\ttfamily \#define Task\+\_\+find\+\_\+signal\+\_\+name~5}
+
+
+
+Definition at line \mbox{\hyperlink{_hardware_2_definitions_8hpp_source_l00033}{33}} of file \mbox{\hyperlink{_hardware_2_definitions_8hpp_source}{Definitions.\+hpp}}.
+

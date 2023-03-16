@@ -1,0 +1,15 @@
+Report file after 64 simulations:
+
+1.) Summary of most leaking (and already active) probing sets per clock cycle: 
+
+Cycle 2: @[t(2)] ==> [y(2), x(2)] -log10(p) = 20.2191 --> LEAKAGE
+Cycle 3: @[t(3)] ==> [y(3), x(3)] -log10(p) = 20.2191 --> LEAKAGE
+
+2.) Summary of the most leakging (and already active) probing sets: 
+
+@[t(2)] ==> [y(2), x(2)] -log10(p) = 20.2191 --> LEAKAGE
+@[t(3)] ==> [y(3), x(3)] -log10(p) = 20.2191 --> LEAKAGE
+@[z(3)] ==> [r(3)] -log10(p) = 20.2191 --> LEAKAGE
+@[t(1)] ==> [y(1), x(1)] -log10(p) = 0 --> OKAY
+@[t(1)] ==> [y(1), x(1)] -log10(p) = 0 --> OKAY
+@[t(1)] ==> [y(1), x(1)] -log10(p) = 0 --> OKAY

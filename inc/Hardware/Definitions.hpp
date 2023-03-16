@@ -61,14 +61,10 @@ namespace Hardware
         char Intermediate;
     };
 
-	/**
-	* @brief Defines a cell library.
-	* @author Amir Moradi
-	*/
     struct LibraryStruct
     {
-        int              NumberOfCellTypes = 0; ///< The number of different cell types in the library.
-        Hardware::CellTypeStruct** CellTypes = NULL; ///< The different cell types in the library.
+        int              NumberOfCellTypes = 0;
+        Hardware::CellTypeStruct** CellTypes = NULL;
         int              BufferCellType = -1;
     };
 
@@ -88,92 +84,85 @@ namespace Hardware
 
     struct SignalStruct
     {
-        char* Name; 
-        char  Type; 
-        short Depth; 
-        int   Output; 
-        int   NumberOfInputs; 
+        char* Name;
+        char  Type;
+        short Depth;
+        int   Output;
+        int   NumberOfInputs;
         int*  Inputs;
         char  ProbeAllowed;
         char  Deleted;
     };
 
-	/**
-	* @brief Defines a hardware circuit.
-	* @author Amir Moradi
-	*/
     struct CircuitStruct
     {
-        Hardware::SignalStruct** Signals = NULL; ///< The circuit signals.
-        int            NumberOfSignals = 0; ///< The total number of signals in the circuit.
-        int*           Inputs = NULL; ///< The indices of all primary input signals.
-        int*           Outputs = NULL; ///< The indices of all primary output signals.
-        int            NumberOfInputs = 0; ///< Number of primary inputs.
-        int            NumberOfOutputs = 0; ///< Number of primary outputs.
+        Hardware::SignalStruct** Signals = NULL;
+        int            NumberOfSignals = 0;
+        int*           Inputs = NULL;
+        int*           Outputs = NULL;
+        int            NumberOfInputs = 0;
+        int            NumberOfOutputs = 0;
         int            NumberOfConstants = 0;
 
-        Hardware::CellStruct**   Cells = NULL; ///< The circuit cells.
-        int            NumberOfCells = 0; ///< The number of cells in the circuit.
-        int*           Gates = NULL; ///< The indices of all gates.
-        int*           Regs = NULL; /// The indices of all regs.
-        int            NumberOfGates = 0; ///< The number of gates in the circuit.
-        int            NumberOfRegs = 0; ///< The number of registers in the circuit.
+        Hardware::CellStruct**   Cells = NULL;
+        int            NumberOfCells = 0;
+        int*           Gates = NULL;
+        int*           Regs = NULL;
+        int            NumberOfGates = 0;
+        int            NumberOfRegs = 0;
         int            NumberOfRegValues = 0;
 
-        short          MaxDepth = 0; ///< The maximum circuit depth.
-        int**          CellsInDepth = NULL; ///< The indices of cells with a specific depth.
-        int*           NumberOfCellsInDepth = NULL; ///< The number of cells with a specific depth.
+        short          MaxDepth = 0;
+        int**          CellsInDepth = NULL;
+        int*           NumberOfCellsInDepth = NULL;
     };
 
-	/**
-	* @brief Defines the settings of the evaluation procedure.
-	* @author Amir Moradi
-	*/
     struct SettingsStruct
     {
-        int        Max_no_of_Threads; ///< The maximum number of threads PROLEAD can use for parallelism.
+        int        Max_no_of_Threads;
+        char*      ModuleName;
 
-        int        NumberOfGroups; ///< The number of user-defined groups
-        int        NumberOfGroupValues; ///< The size of the group values, i.e. their bit length.
-        char       CompactDistributions; ///< Decision whether the evaluation should be performed in compact or normal mode.
-        char       MinimizeProbeSets; ///< Decision whether the number of probing sets should be minimized before the evaluation.
-        char       RemoveProbingSets; ///< Decision whether probing sets achieving a sufficient confidence level should be removed.
-        unsigned int ProbeStepSize; ///< The number of probing sets to evaluate per execution step.
-        int**      Group_Values = NULL; ///< The values assigned to the user-defined groups
-        int*       MaxNumberOfSharesGroupValues; ///< The number of shares per input bit.
+        int        NumberOfGroups;
+        int        NumberOfGroupValues;
+        char       CompactDistributions;
+        char       MinimizeProbeSets;
+        char       RemoveProbingSets;
+        unsigned int ProbeStepSize;
+        int**      Group_Values = NULL;
+        int*       MaxNumberOfSharesGroupValues;
 
-        int        ClockSignal; ///< The index of the clock signal.
-        int        Max_No_ClockCycles = 0; ///< The maximum number of clock cycles to simulate.
-        int        Max_No_ReportEntries; ///< The maximum number of entries in the report.
+        int        ClockSignal;
+        int        Max_No_ClockCycles = 0;
+        int        Max_No_ReportEntries;
 
-        int        NumberOfAlwaysRandomInputs; ///< Number of fresh random inputs.
-        int*       AlwaysRandomInputs = NULL; ///< Indices of the fresh random input signals.
+        int        NumberOfAlwaysRandomInputs;
+        int*       AlwaysRandomInputs = NULL;
 
-        int        InitialSim_NumberOfInputs; ///< The number of inputs which are assigned to initialize the simulation.
-        int        InitialSim_NumberOfClockCycles; ///< The number of clock cycles to initialize the simulation.
-        int**      InitialSim_Inputs = NULL; ///< The indices of the initialization signals.
-        uint64_t** InitialSim_Values = NULL; ///< The signal values during the initialization cycles.
+        int        InitialSim_NumberOfInputs;
+        int        InitialSim_NumberOfClockCycles;
+        int**      InitialSim_Inputs = NULL;
+        uint64_t** InitialSim_Values = NULL;
 
-        int        EndSimCondition_ClockCycles; ///< The number of clock cycles after which the simulation terminates.
-        int        EndSimCondition_NumberOfSignals; ///< The bit width of the signal which terminates the simulation.
-        int*       EndSimCondition_Signals = NULL; ///< The indices of the single-bit signals terminating the simulation.
-        uint64_t*  EndSimCondition_Values = NULL; ///< The values the signals have to reach to terminate the simulation.
-        int        EndSim_NumberOfWaitCycles = 0; ///< Number of cycles to wait after each simulation.
+        int        EndSimCondition_ClockCycles;
+        int        EndSimCondition_NumberOfSignals;
+        int*       EndSimCondition_Signals = NULL;
+        uint64_t*  EndSimCondition_Values = NULL;
+        int        EndSim_NumberOfWaitCycles = 0;
 
-		int        NumberOfOutputShares = 0; ///< The number of output shares.
-		int        NumberOfOutputSignals = 0; ///< The bit width of the shared output.
-		int**      OutputSignals = NULL; ///< The simulated output signals (unshared).
-		int**      ExpectedOutputValues = NULL; ///< The expected unshared output given by the user.
+		int        NumberOfOutputShares = 0;
+		int        NumberOfOutputSignals = 0;
+		int**      OutputSignals = NULL;
+		int**      ExpectedOutputValues = NULL;
 
-        int        TestOrder = 0; ///< The security order to test.
-        int        TestMultivariate = 0; ///< Decision whether univariate or multivariate adversaries should be considered.
-        int        MaxDistanceMultivariet = 0; ///< The maximum distance in time, i.e. clock cycles, for multivariate adversaries.
-        int        TestTransitional = 0; ///< Decision whether transitional leakage is included.
-        int        NumberOfTestClockCycles = 0; ///< The number of clock cycles in which the adversary can place probes.
-        int*       TestClockCycles = NULL; ///< The particular clock cycles the adversary can target.
-        uint64_t   NumberOfSimulations = 0; ///< The total number of simulations.
-        uint64_t   NumberOfStepSimulations = 0; ///< The number of simulations before the simulations are evaluated.
-        uint64_t   NumberOfStepSimulationsToWrite = 0; ///< The number of simulations before a report is written.
+        int        TestOrder = 0;
+        int        TestMultivariate = 0;
+        int        MaxDistanceMultivariet = 0;
+        int        TestTransitional = 0;
+        int        NumberOfTestClockCycles = 0;
+        int*       TestClockCycles = NULL;
+        uint64_t   NumberOfSimulations = 0;
+        uint64_t   NumberOfStepSimulations = 0;
+        uint64_t   NumberOfStepSimulationsToWrite = 0;
 
         // By default, we set the allowed false-positive probability to 10^-5
         // If necessary, please change the false-positive probability here.
@@ -186,6 +175,8 @@ namespace Hardware
 
         // In statistics an effect size of 0.1 is denoted as a "small effect size"
         double EffectSize;
+
+        bool WaveformSimulation = false;
     };
 
 	/**
@@ -211,10 +202,6 @@ namespace Hardware
         Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes = NULL; ///< A list of glitch-extensions per standard probe.
     };
 
-	/**
-	* @brief Defines the shared state of a simulation.
-	* @author Amir Moradi
-	*/
     struct SharedDataStruct
     {
         uint64_t*   OneIn64 = NULL;

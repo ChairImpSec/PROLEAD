@@ -1,0 +1,32 @@
+\hypertarget{_util_8hpp}{}\doxysection{Projects/\+PROLEAD/inc/\+Util/\+Util.hpp File Reference}
+\label{_util_8hpp}\index{Projects/PROLEAD/inc/Util/Util.hpp@{Projects/PROLEAD/inc/Util/Util.hpp}}
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$numeric$>$}\newline
+{\ttfamily \#include $<$boost/math/distributions/chi\+\_\+squared.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/math/distributions/inverse\+\_\+chi\+\_\+squared.\+hpp$>$}\newline
+{\ttfamily \#include $<$boost/math/distributions/non\+\_\+central\+\_\+chi\+\_\+squared.\+hpp$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_util_1_1_table_entry_struct}{Util\+::\+Table\+Entry\+Struct}}
+\begin{DoxyCompactList}\small\item\em Defines one entry of a contingency table. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_util_1_1_contingency_table_struct}{Util\+::\+Contingency\+Table\+Struct}}
+\begin{DoxyCompactList}\small\item\em Defines a contingency table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_util}{Util}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{namespace_util_ad34641bfae3e10e69ca5d1782cba2663}{Util\+::\+Get\+GValue}} (unsigned int, unsigned int, Contingency\+Table\+Struct \&, std\+::vector$<$ double $>$, unsigned int, unsigned int \&)
+\begin{DoxyCompactList}\small\item\em Computes the G-\/value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_util_a8af79953252d000884143ce364714ea6}{Util\+::\+GTest}} (unsigned int, unsigned int, Contingency\+Table\+Struct \&, std\+::vector$<$ double $>$)
+\begin{DoxyCompactList}\small\item\em Computes the p-\/value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{namespace_util_a92553be959abdd48c9fcb9208fe8e76f}{Util\+::\+Start\+Clock}} (timespec \&)
+\item 
+double \mbox{\hyperlink{namespace_util_a378cbdca53cd3ec455a6d596a6d62116}{Util\+::\+End\+Clock}} (timespec \&)
+\end{DoxyCompactItemize}

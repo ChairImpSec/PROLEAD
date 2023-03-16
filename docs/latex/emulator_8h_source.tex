@@ -1,0 +1,230 @@
+\hypertarget{emulator_8h_source}{}\doxysection{emulator.\+h}
+\label{emulator_8h_source}\index{Projects/PROLEAD/inc/Software/mulator/emulator.h@{Projects/PROLEAD/inc/Software/mulator/emulator.h}}
+\mbox{\hyperlink{emulator_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{architectures_8h}{Software/mulator/architectures.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{callback__hook_8h}{Software/mulator/callback\_hook.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{instruction__decoder_8h}{Software/mulator/instruction\_decoder.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{memory__region_8h}{Software/mulator/memory\_region.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{registers_8h}{Software/mulator/registers.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{Software/mulator/types.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_software_2_definitions_8hpp}{Software/Definitions.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_probing_8hpp}{Software/Probing.hpp}}"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00016}00016\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00017}00017\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00018}00018\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00020}00020\ \textcolor{comment}{//use\ for\ PRNG}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00021}00021\ \textcolor{preprocessor}{\#include\ "{}boost/random/variate\_generator.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00022}00022\ \textcolor{preprocessor}{\#include\ "{}boost/random/mersenne\_twister.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00023}00023\ \textcolor{preprocessor}{\#include\ "{}boost/random/uniform\_int.hpp"{}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00025}00025\ \textcolor{comment}{//\ \#define\ DEBUG}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00027}00027\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacemulator}{mulator}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00028}00028\ \{}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00029}\mbox{\hyperlink{structmulator_1_1_c_p_u___state}{00029}}\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\_State}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00030}00030\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00031}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_aff9cb73a44fdb8426fdbf1094d2bea4a}{00031}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_aff9cb73a44fdb8426fdbf1094d2bea4a}{registers}}[\mbox{\hyperlink{namespacemulator_a7baa97e7107934b4ce39aca61a78ada3}{REGISTER\_COUNT}}];}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00035}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a989fd21a75b6330a88c2795e1d110563}{00035}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a989fd21a75b6330a88c2795e1d110563}{N}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00036}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_acf78616891d5c2a067f66e9222da54da}{00036}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_acf78616891d5c2a067f66e9222da54da}{Z}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00037}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_ae6c5847038fec0ef3bb23f27b0463912}{00037}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_ae6c5847038fec0ef3bb23f27b0463912}{C}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00038}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_af2a21e0b7e1d5c8a3fe0c144a1f51c0d}{00038}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_af2a21e0b7e1d5c8a3fe0c144a1f51c0d}{V}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00039}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a81338dddff6c8e4d03a795f1e6103358}{00039}}\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a81338dddff6c8e4d03a795f1e6103358}{Q}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00040}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_aa2133943e04e0152836edec758e3d336}{00040}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_aa2133943e04e0152836edec758e3d336}{GE}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00041}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_ae2111fef791163a91e59d424d565d155}{00041}}\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_ae2111fef791163a91e59d424d565d155}{it\_state}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00042}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_ab355a75a3bc45405a40f571c01d537e7}{00042}}\ \ \ \ \ \ \ \ \ \}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_ab355a75a3bc45405a40f571c01d537e7}{psr}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00044}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a5c48f6c21a65ce443c4ccf8de8221a48}{00044}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a5c48f6c21a65ce443c4ccf8de8221a48}{exclusive\_address}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00046}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a827607ef9b9afb23c6baf5dbcbe049f1}{00046}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a827607ef9b9afb23c6baf5dbcbe049f1}{CCR}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00047}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a753ccccbe261159afda2e14bb7c30761}{00047}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a753ccccbe261159afda2e14bb7c30761}{PRIMASK}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00048}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_ada5e58971293523e9390c53a222c75b2}{00048}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_ada5e58971293523e9390c53a222c75b2}{FAULTMASK}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00049}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a7b35eb4250a335da39389b2dd77c512b}{00049}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a7b35eb4250a335da39389b2dd77c512b}{BASEPRI}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00050}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_aa7a3a00064e6a555922cc63d65fed366}{00050}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_aa7a3a00064e6a555922cc63d65fed366}{CONTROL}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00052}\mbox{\hyperlink{structmulator_1_1_c_p_u___state_a67cd3d49f9897b2225e2c3c623af8a1a}{00052}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state_a67cd3d49f9897b2225e2c3c623af8a1a}{time}};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00053}00053\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00055}\mbox{\hyperlink{classmulator_1_1_emulator}{00055}}\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classmulator_1_1_emulator}{Emulator}}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00056}00056\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00057}00057\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00058}\mbox{\hyperlink{classmulator_1_1_emulator_a3182dc7cd5b2884c45b766f1d6dfcf09}{00058}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_emulator_a3182dc7cd5b2884c45b766f1d6dfcf09}{Emulator}}();\ \textcolor{comment}{//todo\ self\ written\ constructor}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00059}\mbox{\hyperlink{classmulator_1_1_emulator_ad93ed28ef536cd1538ef79a6b079fc66}{00059}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_emulator_ad93ed28ef536cd1538ef79a6b079fc66}{Emulator}}(\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}\ arch);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00060}\mbox{\hyperlink{classmulator_1_1_emulator_a9c2e428a8d629302e16cad66d30ec9d0}{00060}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_emulator_a9c2e428a8d629302e16cad66d30ec9d0}{Emulator}}(\mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}\ arch,\ boost::variate\_generator<boost::mt19937\&,\ boost::uniform\_int<uint64\_t>>\ ThreadPrng);\ \textcolor{comment}{//self\ written\ constructor}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00061}\mbox{\hyperlink{classmulator_1_1_emulator_a45b00ac5434eaac715014fef00505ca1}{00061}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_emulator_a45b00ac5434eaac715014fef00505ca1}{Emulator}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classmulator_1_1_emulator}{Emulator}}\&\ other);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00062}\mbox{\hyperlink{classmulator_1_1_emulator_a54ebd8e2e4a8339905f5c1e588dfc428}{00062}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_emulator_a54ebd8e2e4a8339905f5c1e588dfc428}{\string~Emulator}}();}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00065}00065\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Getters\ for\ internals.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00066}00066\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00067}\mbox{\hyperlink{classmulator_1_1_emulator_af473b4852fee84dedbc57080640f572a}{00067}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{InstructionDecoder}}\ \mbox{\hyperlink{classmulator_1_1_emulator_af473b4852fee84dedbc57080640f572a}{get\_decoder}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00068}\mbox{\hyperlink{classmulator_1_1_emulator_a5b8d7f93622ac555f38e7cdd12d71a11}{00068}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a307f16ee456461500b91a4b86e2b8283}{Architecture}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a5b8d7f93622ac555f38e7cdd12d71a11}{get\_architecture}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00071}00071\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Sets\ the\ flash\ region.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00072}00072\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00073}00073\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ offset\ -\/\ the\ starting\ address}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ size\ -\/\ the\ memory\ region\ size}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00075}00075\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00076}\mbox{\hyperlink{classmulator_1_1_emulator_adde309bae10f26dc6f068853da1e535b}{00076}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_adde309bae10f26dc6f068853da1e535b}{set\_flash\_region}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ offset,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ size);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00079}00079\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Getters\ for\ the\ flash\ region.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00080}00080\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00081}\mbox{\hyperlink{classmulator_1_1_emulator_aab6ee2493d2906fa61a69a8297a60118}{00081}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_aab6ee2493d2906fa61a69a8297a60118}{get\_flash\_offset}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00082}\mbox{\hyperlink{classmulator_1_1_emulator_a2bb1f5c4efd56c35ee0fc7f1499d8b7c}{00082}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a2bb1f5c4efd56c35ee0fc7f1499d8b7c}{get\_flash\_size}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00083}\mbox{\hyperlink{classmulator_1_1_emulator_a31361f30c0f1105638fc30f0290eabd2}{00083}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ \mbox{\hyperlink{classmulator_1_1_emulator_a31361f30c0f1105638fc30f0290eabd2}{get\_flash}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00086}00086\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Sets\ the\ ram\ region.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00087}00087\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00088}00088\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ offset\ -\/\ the\ starting\ address}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00089}00089\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ @param[in]\ size\ -\/\ the\ memory\ region\ size}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00090}00090\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00091}\mbox{\hyperlink{classmulator_1_1_emulator_a913a38c2bbbe744c03752801d43b8033}{00091}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a913a38c2bbbe744c03752801d43b8033}{set\_ram\_region}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ offset,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ size);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00094}00094\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Getters\ for\ the\ ram\ region.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00095}00095\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00096}\mbox{\hyperlink{classmulator_1_1_emulator_a79022eda9210e8029296b173daaa42f3}{00096}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a79022eda9210e8029296b173daaa42f3}{get\_ram\_offset}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00097}\mbox{\hyperlink{classmulator_1_1_emulator_a2bd1ab1233d452cf86faa1b38d8ae995}{00097}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a2bd1ab1233d452cf86faa1b38d8ae995}{get\_ram\_size}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00098}\mbox{\hyperlink{classmulator_1_1_emulator_a8e445b573b73cf79e229d54a402d0f5f}{00098}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ \mbox{\hyperlink{classmulator_1_1_emulator_a8e445b573b73cf79e229d54a402d0f5f}{get\_ram}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00100}00100\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00101}00101\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Read\ and\ write\ access\ to\ registers.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00102}00102\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Does\ not\ fire\ any\ hooks!}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00103}00103\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00104}\mbox{\hyperlink{classmulator_1_1_emulator_a10550debedc7948917c0f2c5fd3a6bad}{00104}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a10550debedc7948917c0f2c5fd3a6bad}{read\_register}}(\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\ reg)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00105}\mbox{\hyperlink{classmulator_1_1_emulator_a6b8abed90ded69111d81db58f280c3ea}{00105}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a6b8abed90ded69111d81db58f280c3ea}{write\_register}}(\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\ reg,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ value);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00108}00108\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Read\ and\ write\ access\ to\ memory.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00109}00109\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Does\ not\ fire\ any\ hooks!}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00110}00110\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00111}\mbox{\hyperlink{classmulator_1_1_emulator_a6da8176840f786f1f8b793bf851aae7f}{00111}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a6da8176840f786f1f8b793bf851aae7f}{read\_memory}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ buffer,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ len)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00112}\mbox{\hyperlink{classmulator_1_1_emulator_a080d598611a3c605df594f83558a8e3e}{00112}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a080d598611a3c605df594f83558a8e3e}{write\_memory}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ dst\_address,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ buffer,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ len);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00114}00114\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00115}00115\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Starts/continues\ emulation\ of\ the\ code\ from\ the\ current\ state.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00116}00116\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Stops\ automatically\ after\ a\ maximum\ number\ of\ instructions\ or\ when\ the\ end\ address\ is\ hit.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00117}00117\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00118}\mbox{\hyperlink{classmulator_1_1_emulator_aa672487cde8142f9a22a912dbb2b02db}{00118}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ \mbox{\hyperlink{classmulator_1_1_emulator_aa672487cde8142f9a22a912dbb2b02db}{emulate}}(\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}\ max\_instructions,\ uint32\_t\ randomness\_start\_addr,uint32\_t\ randomness\_end\_addr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00119}\mbox{\hyperlink{classmulator_1_1_emulator_a9df88c195c2ca388199b1647295a7e23}{00119}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a9df88c195c2ca388199b1647295a7e23}{emulate}}(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ end\_address,\ \mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}\ max\_instructions,\ uint32\_t\ randomness\_start\_addr,uint32\_t\ randomness\_end\_addr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00120}\mbox{\hyperlink{classmulator_1_1_emulator_a4fa95c04d89f19348db883d1519946d2}{00120}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a4fa95c04d89f19348db883d1519946d2}{emulateInstantiation}}(\mbox{\hyperlink{namespacemulator_a1a4eb2c0de0eebcf6b15e4dedd5b654f}{u64}}\ max\_isntructions,\ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{::Software::ThreadSimulationStruct}}\&\ ThreadSimulation,\ \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{::Software::ProbeTrackingStruct}}\&\ ProbeTracker,\ \mbox{\hyperlink{struct_software_1_1_helper_struct}{::Software::HelperStruct}}\&\ Helper,\ std::vector<std::vector<std::vector<uint8\_t>>>\&\ ProbeValues,\ uint32\_t\ randomness\_start\_addr,\ uint32\_t\ randomness\_end\_addr,\ uint32\_t\ SimulationIndex);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00122}00122\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00123}00123\ \textcolor{comment}{\ \ \ \ \ \ \ \ *\ \ \ Starts\ emulation\ for\ PROLEAD}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00124}00124\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00125}\mbox{\hyperlink{classmulator_1_1_emulator_a0fc19d9ba918fdb7540d1d6f421fc09c}{00125}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a0fc19d9ba918fdb7540d1d6f421fc09c}{emulate\_PROLEAD}}(\mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{::Software::ThreadSimulationStruct}}\&\ ,\ \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{::Software::ProbeTrackingStruct}}\&,\ \mbox{\hyperlink{struct_software_1_1_helper_struct}{::Software::HelperStruct}}\&,\ std::vector<std::vector<std::vector<uint8\_t>>>\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ ,\ \textcolor{keyword}{const}\ uint64\_t\ ,\ \textcolor{keyword}{const}\ uint32\_t\ ,\ \textcolor{keyword}{const}\ uint32\_t);\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00126}00126\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00128}00128\ \textcolor{comment}{\ \ \ \ \ \ \ \ *\ Stop\ the\ ongoing\ emulation.\ Useful\ in\ hooks.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00129}00129\ \textcolor{comment}{\ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00130}\mbox{\hyperlink{classmulator_1_1_emulator_aa728b1bc8ce6caef60079c730599f869}{00130}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_aa728b1bc8ce6caef60079c730599f869}{stop\_emulation}}();}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00132}00132\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00133}00133\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Check\ whether\ the\ emulator\ is\ still\ emulating.\ Useful\ in\ hooks.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00134}00134\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00135}\mbox{\hyperlink{classmulator_1_1_emulator_ae5dd754eb3bf89e99e0051432c4c3542}{00135}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmulator_1_1_emulator_ae5dd754eb3bf89e99e0051432c4c3542}{is\_running}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00138}00138\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Gets\ the\ total\ number\ of\ executed\ instructions\ in\ this\ emulator.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00139}00139\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00140}\mbox{\hyperlink{classmulator_1_1_emulator_aaf719a61ab5b652979ea04bc3151b7e2}{00140}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_aaf719a61ab5b652979ea04bc3151b7e2}{get\_time}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00142}00142\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00143}00143\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Gets\ a\ 32\ bit\ random\ value.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00144}00144\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00145}\mbox{\hyperlink{classmulator_1_1_emulator_abece628dfdd1a818488eb5091399245a}{00145}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_abece628dfdd1a818488eb5091399245a}{get\_PRNG\_randomness}}();}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00148}00148\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Gets\ the\ number\ of\ executed\ instructions\ in\ the\ last\ 'emulate'\ call.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00149}00149\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00150}\mbox{\hyperlink{classmulator_1_1_emulator_ae0d5e601dd84c834845e243781c80d49}{00150}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ \mbox{\hyperlink{classmulator_1_1_emulator_ae0d5e601dd84c834845e243781c80d49}{get\_emulated\_time}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00152}00152\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00153}00153\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Returns\ true\ if\ emulation\ is\ currently\ in\ an\ IT\ block.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00154}00154\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00155}\mbox{\hyperlink{classmulator_1_1_emulator_a8d703ae2833198c9ad81fc8657288177}{00155}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmulator_1_1_emulator_a8d703ae2833198c9ad81fc8657288177}{in\_IT\_block}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00157}00157\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00158}00158\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Returns\ true\ if\ emulation\ is\ currently\ at\ the\ last\ instruction\ in\ an\ IT\ block.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00159}00159\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00160}\mbox{\hyperlink{classmulator_1_1_emulator_aa5c49ec4482631973555c68e3e48c918}{00160}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classmulator_1_1_emulator_aa5c49ec4482631973555c68e3e48c918}{last\_in\_IT\_block}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00162}00162\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00163}00163\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Returns\ the\ current\ CPU\ state.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00164}00164\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ By\ backing\ up\ the\ CPU\ state\ and\ RAM\ contents\ the\ state\ of\ the\ emulator\ can\ be\ backed\ up\ completely.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00165}00165\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00166}\mbox{\hyperlink{classmulator_1_1_emulator_a7a07d4236f3dabb14ec6ca479b9b0a3e}{00166}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\_State}}\ \mbox{\hyperlink{classmulator_1_1_emulator_a7a07d4236f3dabb14ec6ca479b9b0a3e}{get\_cpu\_state}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00168}00168\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00169}00169\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ Set\ the\ emulator\ to\ a\ specific\ CPU\ state.}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00170}00170\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00171}\mbox{\hyperlink{classmulator_1_1_emulator_a7d1dd3b21d503cef72ecbde6c5040535}{00171}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classmulator_1_1_emulator_a7d1dd3b21d503cef72ecbde6c5040535}{set\_cpu\_state}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\_State}}\&\ state);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00174}00174\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00175}00175\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classmulator_1_1_instruction_decoder}{InstructionDecoder}}\ m\_decoder;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00177}00177\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a1c9141795a0d4349f975ebe08aedc893}{ReturnCode}}\ m\_return\_code;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00179}00179\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_memory_region}{MemoryRegion}}\ m\_flash;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00180}00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_memory_region}{MemoryRegion}}\ m\_ram;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00182}00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structmulator_1_1_c_p_u___state}{CPU\_State}}\ m\_cpu\_state;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00183}00183\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ m\_memory\_shadow\_register;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00184}00184\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ m\_emulated\_time;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00185}00185\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ m\_psr\_updated;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00187}00187\ \ \ \ \ \ \ \ \ boost::variate\_generator<boost::mt19937\&,\ boost::uniform\_int<uint64\_t>>\ m\_prolead\_prng;}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00189}00189\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}*\ validate\_address(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ clock\_cpu(uint32\_t\ randomness\_start\_addr,uint32\_t\ randomness\_end\_addr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00192}00192\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ clock\_cpu\_instantiation(\mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{::Software::ProbeTrackingStruct}}\&\ ProbeTracker,\ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{::Software::ThreadSimulationStruct}}\&\ ThreadSimulation,\ \mbox{\hyperlink{struct_software_1_1_helper_struct}{::Software::HelperStruct}}\&\ Helper,\ std::vector<std::vector<std::vector<uint8\_t>>>\&\ ProbeValues,\ uint32\_t\ randomness\_start\_addr,\ uint32\_t\ randomness\_end\_addr,\ uint32\_t\ SimulationIndex);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00194}00194\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ clock\_cpu\_PROLEAD();}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00196}00196\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ read\_memory\_internal(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ bytes);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00197}00197\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ write\_memory\_internal(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ value,\ \mbox{\hyperlink{namespacemulator_abf344b95a6f3b3627027bc60418892d2}{u8}}\ bytes);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00198}00198\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00199}00199\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ read\_register\_internal(\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\ reg);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00200}00200\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ write\_register\_internal(\mbox{\hyperlink{namespacemulator_a16b557221e896ca572d70b7713efce4d}{Register}}\ reg,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ value);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00202}00202\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a06762be93ad251be4943b6a8797a6df4}{Condition}}\ pop\_IT\_condition();}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00203}00203\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00204}00204\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ execute\_PROLEAD(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr,\ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{::Software::ThreadSimulationStruct}}\&\ ,\ \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{::Software::ProbeTrackingStruct}}\&\ ,\ \mbox{\hyperlink{struct_software_1_1_helper_struct}{::Software::HelperStruct}}\&,\ \textcolor{keywordtype}{bool},\ \textcolor{keywordtype}{bool}\&,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int},\ \textcolor{keyword}{const}\ uint64\_t,\ \textcolor{keyword}{const}\ uint32\_t,\ \textcolor{keyword}{const}\ uint32\_t);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00205}00205\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ check\_shadow\_register\_constraints(uint32\_t\&\ next\_shadow\_register\_value,\ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{Software::ThreadSimulationStruct}}\&\ ThreadSimulation,\ uint32\_t\ address,\ uint8\_t\ \textcolor{keywordtype}{byte});\ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00207}00207\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ execute(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr,\ uint32\_t\ randomness\_start\_addr,\ uint32\_t\ randomness\_end\_addr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00209}00209\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ execute\_instantiation(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr,\ \mbox{\hyperlink{struct_software_1_1_thread_simulation_struct}{::Software::ThreadSimulationStruct}}\&\ ThreadSimulation,\ \mbox{\hyperlink{struct_software_1_1_probe_tracking_struct}{::Software::ProbeTrackingStruct}}\&\ ProbeTracker,\ \mbox{\hyperlink{struct_software_1_1_helper_struct}{::Software::HelperStruct}}\&\ Helper,\ uint32\_t\ randomness\_start\_addr,\ uint32\_t\ randomness\_end\_addr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00211}00211\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ evaluate\_condition(\textcolor{keyword}{const}\ \mbox{\hyperlink{structmulator_1_1_instruction}{Instruction}}\&\ instr);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00213}00213\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ branch\_write\_PC(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ bx\_write\_PC(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00215}00215\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ blx\_write\_PC(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00217}00217\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ set\_exclusive\_monitors(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ align);}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00218}00218\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ exclusive\_monitors\_pass(\mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ address,\ \mbox{\hyperlink{namespacemulator_a2767fcbf22c6cd29a003ed5343850adc}{u32}}\ align)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00220}00220\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ in\_priviledged\_mode()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00221}00221\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacemulator_a52a2e819efed7051f57b8ab415e6d7ae}{i32}}\ get\_execution\_priority()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00222}00222\ \ \ \ \ \};}
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{emulator_8h_source_l00224}00224\ \}\ \ \ \ \textcolor{comment}{//\ namespace\ mulator}}
+
+\end{DoxyCode}

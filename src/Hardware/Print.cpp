@@ -605,7 +605,7 @@ void Hardware::Print::EvaluationResults(Hardware::SettingsStruct& Settings, Hard
     std::cout << (TableColumn.at(5) + " |");
     std::cout << std::endl;
 
-    Hardware::Print::MemoryConsumption();
+    //Hardware::Print::MemoryConsumption();
 }
 
 void Hardware::Print::Report(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, unsigned int ProbeStepIndex, unsigned int TableWidth){
