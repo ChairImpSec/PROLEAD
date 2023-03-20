@@ -132,6 +132,7 @@ namespace Hardware
     struct SettingsStruct
     {
         int        Max_no_of_Threads; ///< The maximum number of threads PROLEAD can use for parallelism.
+        char*      ModuleName; ///< The name of the top module.
 
         int        NumberOfGroups; ///< The number of user-defined groups
         int        NumberOfGroupValues; ///< The size of the group values, i.e. their bit length.
