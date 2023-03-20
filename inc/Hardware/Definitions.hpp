@@ -186,6 +186,8 @@ namespace Hardware
 
         // In statistics an effect size of 0.1 is denoted as a "small effect size"
         double EffectSize;
+		
+		bool WaveformSimulation = false;
     };
 
 	/**
