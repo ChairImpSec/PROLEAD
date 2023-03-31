@@ -66,6 +66,9 @@ compiler_flags
 -mcpu=cortex-m4 -mthumb -std=gnu99 -O3 -Wall -Wextra -Wshadow -fno-common -nostartfiles -ffreestanding
 
 
+pipeline_stages % defines how many pipeline stages the processor contains in order to cover pipeline-forwarding effects
+3
+
 probes_include   % those wires which should be included for probing (all : to include them all, 0 : to include none, e.g., 2 : to inlcude two and name them)  
 all
 

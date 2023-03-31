@@ -332,6 +332,22 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
+            case(14): //pipeline forwarding probe
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    KeyIndex++;
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+
+                    if(bit_idx >= 64){
+                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
+                }
+                break;
+            }
             default: std::runtime_error("In FirstOrderTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
         }
 
@@ -607,6 +623,19 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
 
                         heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
                     }
+                }
+                break;
+            }
+            case(14): //pipeline forwarding probe
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    if(bit_idx >= 64){
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
                 }
                 break;
             }
@@ -999,6 +1028,19 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
                     }
                 }
 
+                break;
+            }
+            case(14):
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    if(bit_idx >= 64){
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
+                }
                 break;
             }
             case(0xf):
@@ -1482,6 +1524,22 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
+            case(14):
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    KeyIndex++;
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+
+                    if(bit_idx >= 64){
+                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
+                }
+                break;
+            }
             case(0xf):
             {
                 break;
@@ -1935,6 +1993,22 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
+            case(14): //pipeline forwarding probe
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    KeyIndex++;
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+
+                    if(bit_idx >= 64){
+                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
+                }
+                break;
+            }
             case(0xf):
             {
 
@@ -2302,6 +2376,19 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                     
                 }
 
+                break;
+            }
+            case(14): //pipeline forwarding probe
+            {
+                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                    if(bit_idx >= 64){
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                    }
+                    else{
+                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                    }
+                    
+                }
                 break;
             }
             case(0xf):

@@ -291,6 +291,25 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 			}
 
 		}
+		//pipeline forwarding probes
+		else if((strstr(Probes->ProbeName[ProbeIndex], "PF") != NULL)){
+			Helper.ProbePipelineForwarding = true;
+
+			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);
+			BitIndex = std::stoi(BitIndexAsString);
+
+			for(RegisterIndex = 0; RegisterIndex < 17; ++ RegisterIndex){
+				if(std::find(Helper.NormalProbesIncluded.at(RegisterIndex).begin(), Helper.NormalProbesIncluded.at(RegisterIndex).end() , BitIndex) != Helper.NormalProbesIncluded.at(RegisterIndex).end()){
+					Helper.PipelineForwardingProbesIncluded.at(BitIndex).emplace_back(RegisterIndex);
+				}
+			}
+
+			if(Helper.PipelineForwardingProbesIncluded.at(BitIndex).size() > 1){
+				Helper.PipelineForwardingProbesSize++;
+				Helper.PipelineForwardingRelevantBits.emplace_back(BitIndex);
+			}
+
+		}
 		else 
 		{
 			throw std::runtime_error("Critical error during the generation of inclusion/exclusion list");

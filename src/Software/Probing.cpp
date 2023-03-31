@@ -161,6 +161,37 @@ void Software::Probing::CreateHorizontalMemShadowProbe(std::vector<Software::Pro
 	ProbeIndex++;
 }
 
+void Software::Probing::CreatePipelineForwardingProbe(std::vector<Software::ProbesStruct>& StandardProbes, std::vector<uint8_t>& PipelineForwardingProbes, uint8_t BitIdx, uint32_t& ProbeIndex, uint64_t ProbeInfo, uint32_t NrOfPipelineStages, std::vector<::mulator::CPU_State>& pipeline_cpu_states){
+
+	
+	uint32_t bit_pos_ctr = 0;
+
+	//use TransitionCycles and SpecialInfo to store the probe values. both together have space for 128 bits. We can have at max. a 6 stage pipeline. If all 17 registers (r0-r16) are probed in 6 stages we get: 17*6 = 102
+    uint64_t tmp_TransitionCycles =  0;
+	uint64_t tmp_SpecialInfo = 0;
+
+	for(uint32_t pipeline_idx = 0; pipeline_idx < NrOfPipelineStages; ++pipeline_idx){ //go over every pipeline stage
+		if(pipeline_cpu_states.at(pipeline_idx).containing_valid_pipeline_values){ //only add values if registers are valid
+			for(const auto& RegIdx : PipelineForwardingProbes){
+				if(bit_pos_ctr >= 64){
+					tmp_SpecialInfo |= static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr - 64));
+				}
+				else{
+					tmp_TransitionCycles |= static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr));
+				}
+				bit_pos_ctr++;
+			}
+		}
+	}
+
+	StandardProbes.at(ProbeIndex).TransitionCycles = tmp_TransitionCycles;
+	StandardProbes.at(ProbeIndex).SpecialInfo = tmp_SpecialInfo;
+
+
+	StandardProbes.at(ProbeIndex).ProbeInfo = (ProbeInfo | (BitIdx << BIT_OFFSET) | (bit_pos_ctr));
+	ProbeIndex++;
+}
+
 void Software::Probing::ExtractAllProbeInfo(uint8_t& Register, uint8_t& Id, uint8_t& PartnerRegister, uint32_t& Cycle, uint8_t& Bit, uint16_t& ExtensionSize, uint8_t& Dependency, Software::ProbesStruct& ProbeFromProbingSet){
 
     Register = (ProbeFromProbingSet.ProbeInfo & REG1_MASK) >> REG1_OFFSET;
@@ -489,6 +520,18 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 				}
 			}
 		}
+	}
+
+	//resolve pipeline forwarding probes
+	for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
+		uint32_t ProbeInfo = (14 << IdOffset) | (BitIdx << BitOffset);
+		for(uint32_t pipeline_idx = 0; pipeline_idx < Setting.NumberOfPipelineStages; ++pipeline_idx){
+			for(const auto& RegIdx: Helper.PipelineForwardingProbesIncluded.at(BitIdx)){
+				uint32_t Probe = (RegIdx << RegNrOffset) | (BitIdx);
+				ProbeMapping.at(ProbeInfo).emplace_back(Probe);
+			}
+		}
+		std::sort(ProbeMapping.at(ProbeInfo).begin(), ProbeMapping.at(ProbeInfo).end());
 	}
 
 }

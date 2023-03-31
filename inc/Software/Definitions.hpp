@@ -93,6 +93,7 @@ namespace Software{
         mulator::u32 randomness_segment_length;
         mulator::u32 num_threads;
 
+		uint32_t NumberOfPipelineStages;
 		std::string funcContainingCipher; //name of function containing cipher to search in disassembled file
 		std::string compilerFlags;
 		std::vector<std::string> externalBinaryInformation;
@@ -172,20 +173,26 @@ namespace Software{
 		std::vector<std::vector<uint8_t>>					 	FullVerticalProbesIncluded; //[32][] one vertical probe contains included register of i-th bit
 		std::vector<uint8_t>									MemoryProbesIncluded;
 		std::vector<uint8_t>									MemoryShadowRegisterProbesIncluded;
+		std::vector<std::vector<uint8_t>>						PipelineForwardingProbesIncluded; //[32][] one vertical probe contains included register of i-th bit
 		std::vector<std::vector<uint8_t>>						FULLHRProbesIncluded;	
 
 		bool 													ProbeMemory;
 		bool 													ProbeMemoryShadowRegister;
 		bool													ProbeFullHorizontal;
 		bool													ProbeFullVertical;
+		bool													ProbePipelineForwarding;
+
 
 		std::vector<bool> 										HorizontalProbesExcluded; // [0, ..., NumberOfRegisters]
 
 		std::vector<std::vector<uint32_t>>						VerticalProbesSize;
 		std::vector<std::vector<uint32_t>>						FullHorizontalProbesSize;
 		uint32_t												FullVerticalProbesSize;		
+		uint32_t												PipelineForwardingProbesSize;		
+
 
 		std::vector<uint8_t>									FullVerticalRelevantBits;
+		std::vector<uint8_t>									PipelineForwardingRelevantBits;
 
 		HelperStruct();
 	};

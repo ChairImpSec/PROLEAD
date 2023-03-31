@@ -99,7 +99,7 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
                 for(uint32_t SimulationIndex = 0; SimulationIndex < Settings.NumberOfStepSimulations; ++SimulationIndex){
 
                     if(CycleSplit ==  0){
-                        mulator::Emulator Emulator(Settings.arch, ThreadPrng);
+                        mulator::Emulator Emulator(Settings.arch, ThreadPrng, Settings.NumberOfPipelineStages);
                         Software::Simulate::Instantiate_Emulator(Emulator, GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, Settings, SharedInputData[SimulationIndex], GlobalThreadSimulations.at(ThreadIndex).CycleStart.at(CycleSplit), ProbeTracker.at(SimulationIndex), GlobalHelper, ProbeValues.at(SimulationIndex >> 3));
 
                         Software::Simulate::Run(Emulator, GlobalThreadSimulations.at(ThreadIndex), Settings, ProbeTracker.at(SimulationIndex), GlobalHelper, ProbeValues.at(SimulationIndex >> 3), SimulationIndex, CycleSplit);

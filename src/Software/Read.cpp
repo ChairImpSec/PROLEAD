@@ -18,6 +18,9 @@ int Software::Read::ProbeCompare(const void* a, const void* b)
 	else if((char)(*(const char**)a)[0] == 'R' && (char)(*(const char**)b)[0] == 'M'){
 		return false;
 	}
+	else if((char)(*(const char**)a)[0] == 'R' && (static_cast<std::string>(*(const char**)b).rfind("PF", 0) == 0)){
+		return false;
+	}
     else if((char)(*(const char**)a)[0] == 'V' && (char)(*(const char**)b)[0] == 'R'){
         return true;
     }
@@ -30,6 +33,9 @@ int Software::Read::ProbeCompare(const void* a, const void* b)
     else if((char)(*(const char**)a)[0] == 'V' && (char)(*(const char**)b)[0] == 'M'){
         return false;
     }
+	else if((char)(*(const char**)a)[0] == 'V' && (static_cast<std::string>(*(const char**)b).rfind("PF", 0) == 0)){
+		return false;
+	}
     else if((char)(*(const char**)a)[0] == 'H' && (char)(*(const char**)b)[0] == 'V'){
         return false;
     }
@@ -47,6 +53,9 @@ int Software::Read::ProbeCompare(const void* a, const void* b)
     else if((char)(*(const char**)a)[0] == 'H' && (char)(*(const char**)b)[0] == 'M'){
         return false;
     }
+	else if((char)(*(const char**)a)[0] == 'M' && (static_cast<std::string>(*(const char**)b).rfind("PF", 0) == 0)){
+		return false;
+	}
     else if((char)(*(const char**)a)[0] == 'M' && (char)(*(const char**)b)[0] == 'R'){
         return true;
     }
@@ -90,6 +99,24 @@ int Software::Read::ProbeCompare(const void* a, const void* b)
 			return false;
 		}
 	}
+	else if((char)(*(const char**)a)[0] == 'F' && (static_cast<std::string>(*(const char**)b).rfind("PF", 0) == 0)){
+		return false;
+	}
+    else if((static_cast<std::string>(*(const char**)a).rfind("PF", 0) == 0) && (char)(*(const char**)b)[0] == 'R'){
+        return true;
+    }
+    else if((static_cast<std::string>(*(const char**)a).rfind("PF", 0) == 0) && (char)(*(const char**)b)[0] == 'H'){
+        return true;
+    }
+    else if((static_cast<std::string>(*(const char**)a).rfind("PF", 0) == 0) && (char)(*(const char**)b)[0] == 'V'){
+        return true;
+    }
+    else if((static_cast<std::string>(*(const char**)a).rfind("PF", 0) == 0) && (char)(*(const char**)b)[0] == 'F'){
+        return true;
+    }
+    else if((static_cast<std::string>(*(const char**)a).rfind("PF", 0) == 0) && (char)(*(const char**)b)[0] == 'M'){
+        return true;
+    }
 
     else{ //both strings are normal registers
         char* tmp_b = (char*)malloc((strlen(*(char**)b)+1) *sizeof(char));
@@ -1002,6 +1029,21 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 
             SettingsFileCheckList |= (1 << 5);
         }
+		else if(!strcmp(Str1, "pipeline_stages")){
+			ReadNonCommentFromFile(SettingsFile, Str1, "%");
+			Settings->NumberOfPipelineStages = atoi(Str1);
+			if(Settings->NumberOfPipelineStages > 6){
+				ErrorMessage = "config file: The highest number of pipeline stages is 6 (for the Cortex M7). If you require a higher number of pipeline stages please contact the authors.";
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+				free(Str4);
+				throw std::runtime_error(ErrorMessage);
+			}
+			SettingsFileCheckList |= (1 << 18);
+
+        }
         else if (!strcmp(Str1, "probes_include"))
         {
 			
@@ -1017,8 +1059,10 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 				uint32_t NrOfVerticalProbes = 32;
 				uint32_t NrOfFullHRProbes = 1;
 				uint32_t NrOfFullVRProbes = 32;
+				uint32_t NrOfPipelineForwardProbes = 32;
+
 				
-				Probes->NumberOfProbes = NrOfNormalProbes + NrOfMemoryProbes + NrOfMemShadowProbes + NrOfHorizontalProbes + NrOfVerticalProbes + NrOfFullHRProbes + NrOfFullVRProbes;
+				Probes->NumberOfProbes = NrOfNormalProbes + NrOfMemoryProbes + NrOfMemShadowProbes + NrOfHorizontalProbes + NrOfVerticalProbes + NrOfFullHRProbes + NrOfFullVRProbes + NrOfPipelineForwardProbes;
 				Probes->Probes = (int*)malloc(Probes->NumberOfProbes * sizeof(int));
 				Probes->ProbeName = (char**)malloc(Probes->NumberOfProbes * sizeof(char*));
 
@@ -1096,6 +1140,16 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 					Probes->ProbeName[offset + bit_idx] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
 					strcpy(Probes->ProbeName[offset + bit_idx], Str3);
 				}
+
+				offset += 32;
+
+				// Generate pipeline forwarding probe
+				for(bit_idx = 0; bit_idx < 32;  ++bit_idx){
+					Probes->Probes[offset + bit_idx] = offset + bit_idx;
+					sprintf(Str3, "PF[%u]",bit_idx);
+					Probes->ProbeName[offset + bit_idx] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
+					strcpy(Probes->ProbeName[offset + bit_idx], Str3);
+				}
 									
 			}
 			//subset of registers probed
@@ -1111,6 +1165,7 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 				uint32_t NrOfVerticalProbes = 32;
 				uint32_t NrOfFullHRProbes = 1;
 				uint32_t NrOfFullVRProbes = 32;
+				uint32_t NrOfPipelineForwardProbes = 32;
 				uint32_t reg_idx = 0;
 				uint32_t bit_idx = 0;
 				//add all probes to list
@@ -1254,6 +1309,29 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 								Probes->ProbeName[Probes->NumberOfProbes - NrOfFullVRProbes + bit_idx] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
 								strcpy(Probes->ProbeName[Probes->NumberOfProbes - NrOfFullVRProbes + bit_idx], Str3);
 							}
+
+							offset += 32;
+						}
+						//pipeline forward
+						else if(!strcmp(Str1, "PF")){
+							Probes->NumberOfProbes += NrOfPipelineForwardProbes;
+							Buffer_int = (int *)malloc((Probes->NumberOfProbes) * sizeof(int));
+							memcpy(Buffer_int, Probes->Probes, (Probes->NumberOfProbes - NrOfPipelineForwardProbes) * sizeof(int));
+							free(Probes->Probes);
+							Probes->Probes = Buffer_int;
+
+							Buffer_string = (char**)malloc((Probes->NumberOfProbes) * sizeof(char*));
+							memcpy(Buffer_string, Probes->ProbeName, (Probes->NumberOfProbes - NrOfPipelineForwardProbes) * sizeof(char*));
+							free(Probes->ProbeName);
+							Probes->ProbeName = Buffer_string;
+
+							for(bit_idx = 0; bit_idx < 32;  ++bit_idx){
+								Probes->Probes[Probes->NumberOfProbes - NrOfPipelineForwardProbes + bit_idx] = Probes->NumberOfProbes - NrOfPipelineForwardProbes + bit_idx;
+								sprintf(Str3, "PF[%u]",bit_idx);
+								Probes->ProbeName[Probes->NumberOfProbes - NrOfPipelineForwardProbes + bit_idx] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
+								strcpy(Probes->ProbeName[Probes->NumberOfProbes - NrOfPipelineForwardProbes + bit_idx], Str3);
+							}
+
 
 							offset += 32;
 						}
@@ -1440,6 +1518,11 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 							Probes->ProbeName[Probes->NumberOfProbes - 1] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
 							memcpy(Probes->ProbeName[Probes->NumberOfProbes - 1], Str3, strlen(Str3)+1);			
 						}
+						else if(!strcmp(Str1, "PF")){
+							sprintf(Str3, "PF[%s]",str_ptr);
+							Probes->ProbeName[Probes->NumberOfProbes - 1] = (char*)malloc((strlen(Str3)+1)*sizeof(char));
+							memcpy(Probes->ProbeName[Probes->NumberOfProbes - 1], Str3, strlen(Str3)+1);			
+						}
 						else{
 							ErrorMessage = "Register " + std::string(Str1) + " unknown";
 							throw std::runtime_error(ErrorMessage);
@@ -1521,6 +1604,9 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 						}
 						else if((!strcmp(Str1, "FULLHR")) && (strlen(Str1) == 6)){
 							sprintf(Str1, "FULLHR");
+						}
+						else if(!strcmp(Str1, "PF")){
+							sprintf(Str1, "PF");
 						}
 						else if(!strncmp(Str1, "HR", strlen("HR")) && (strlen(Str1) == 2)){ //all horizontal probes will be deleted
 							sprintf(Str1, "HR");
@@ -1614,6 +1700,9 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 						}
 						else if(!strcmp(Str1, "FULLVR")){
 							sprintf(Str3, "FULLVR[%s]", str_ptr);
+						}
+						else if(!strcmp(Str1, "PF")){
+							sprintf(Str3, "PF[%s]", str_ptr);
 						}
 						else{
 							ErrorMessage = "Register " + std::string(Str1) + " unknown";
@@ -1983,7 +2072,7 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 	free(Str3);
 	free(Str4);
 
-    if ((SettingsFileCheckList & ((1 << 18) - 1)) != ((1 << 18) - 1))
+    if ((SettingsFileCheckList & ((1 << 19) - 1)) != ((1 << 19) - 1))
     {
         printf("config file: all required information are not given\n");
 
@@ -2040,6 +2129,8 @@ void Software::Read::SettingsFile(char* InputSettingsFileName, Software::Setting
 		if (!(SettingsFileCheckList & (1 << 17)))
 			throw std::runtime_error("\"compact_distribution\" is not given\n");
 
+		if (!(SettingsFileCheckList & (1 << 18)))
+			throw std::runtime_error("\"pipeline_stages\" is not given\n");
     }
 
 

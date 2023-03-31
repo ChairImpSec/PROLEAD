@@ -1,4 +1,6 @@
 #pragma once
+#ifndef PROBING_HPP
+#define PROBING_HPP
 #include "Software/Definitions.hpp"
 #include "Software/mulator/emulator.h"
 #include "Software/Operators.hpp"
@@ -49,6 +51,8 @@ namespace Software
         void CreateMemShadowProbe(std::vector<Software::ProbesStruct>& , std::vector<uint8_t>& ,  uint64_t , uint32_t& , uint32_t , uint32_t , uint32_t );
         void CreateHorizontalMemShadowProbe(std::vector<Software::ProbesStruct>& StandardProbes, uint32_t InstrNr, uint32_t& ProbeIndex, uint8_t RegNr, uint32_t memory_shadow_register, uint32_t next_shadow_register_value, uint32_t TransitionCycle, uint32_t ExtensionSize);
 
+        void CreatePipelineForwardingProbe(std::vector<Software::ProbesStruct>& StandardProbes, std::vector<uint8_t>& PipelineForwardingProbes, uint8_t BitIdx, uint32_t& ProbeIndex, uint64_t ProbeInfo, uint32_t NrOfPipelineStages, std::vector<::mulator::CPU_State>& pipeline_cpu_states);
+
         void ExtractAllProbeInfo(uint8_t& , uint8_t&, uint8_t& , uint32_t& , uint8_t& , uint16_t& , uint8_t& , Software::ProbesStruct& );
         void ExtractBitProbeInfo(uint8_t& , Software::ProbesStruct&);
         void ExtractCycleProbeInfo(uint32_t& , Software::ProbesStruct& );
@@ -72,3 +76,4 @@ namespace Software
     
 } // namespace Software
 
+#endif

@@ -6,6 +6,7 @@ Software::HelperStruct::HelperStruct(){
 	HorizontalBitsIncluded.resize(18);
 	VerticalProbesIncluded.resize(17);
 	FullVerticalProbesIncluded.resize(32);
+	PipelineForwardingProbesIncluded.resize(32);
 	FULLHRProbesIncluded.resize(17);	
 	HorizontalProbesExcluded.resize(18, true);
 
@@ -13,6 +14,7 @@ Software::HelperStruct::HelperStruct(){
 	ProbeMemoryShadowRegister = false;
 	ProbeFullHorizontal = false;
 	ProbeFullVertical = false;
+	ProbePipelineForwarding = false;
 
 	VerticalProbesSize.resize(17);
 	FullHorizontalProbesSize.resize(17);

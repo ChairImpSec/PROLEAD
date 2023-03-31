@@ -61,15 +61,19 @@ compiler_flags % define compiler flags, passed to compile source file(s)
 location_of_cipher % which function calls cipher function, important to find start for probing due to compiler optimizations
 main
 
+pipeline_stages % defines how many pipeline stages the processor contains in order to cover pipeline-forwarding effects
+3
+
 probes_include   % those wires which should be included for probing (all : to include them all, 0 : to include none, e.g., 2 : to inlcude two and name them)  
 all
 
 probes_exclude   % those wires which should be exclused for probing (all : to exclude them all, 0 : to exclude none, e.g., 2 : to exclude two and name them) 
-6
+7
 
 PC
 FULLHR
 FULLVR
 HR
+VR
 MEM
 MEMSHADOW

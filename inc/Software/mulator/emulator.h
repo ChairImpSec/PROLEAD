@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef EMULATOR_HPP
+#define EMULATOR_HPP
 #include "Software/mulator/architectures.h"
 #include "Software/mulator/callback_hook.h"
 #include "Software/mulator/instruction_decoder.h"
@@ -8,7 +9,6 @@
 #include "Software/mulator/types.h"
 
 #include "Software/Definitions.hpp"
-#include "Software/Probing.hpp"
 
 
 #include <functional>
@@ -50,6 +50,8 @@ namespace mulator
         u8 CONTROL;
 
         u32 time;
+
+        bool containing_valid_pipeline_values;
     };
 
     class Emulator
@@ -57,7 +59,7 @@ namespace mulator
     public:
         Emulator(); //todo self written constructor
         Emulator(Architecture arch);
-        Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> ThreadPrng); //self written constructor
+        Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> ThreadPrng, uint32_t NrOfPipelineStages); //self written constructor
         Emulator(const Emulator& other);
         ~Emulator();
 
@@ -170,6 +172,8 @@ namespace mulator
          */
         void set_cpu_state(const CPU_State& state);
 
+        uint32_t m_pipeline_stages;
+        std::vector<CPU_State> m_pipeline_cpu_states;
 
     private:
         InstructionDecoder m_decoder;
@@ -222,3 +226,7 @@ namespace mulator
     };
 
 }    // namespace mulator
+
+#include "Software/Probing.hpp"
+
+#endif

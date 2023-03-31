@@ -12,7 +12,7 @@
 using namespace mulator;
 #define REDUCE_PROBEVALUES
 
-Emulator::Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> ThreadPrng) : m_decoder(arch), m_prolead_prng(ThreadPrng)
+Emulator::Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> ThreadPrng, uint32_t NrOfPipelineStages) : m_decoder(arch), m_prolead_prng(ThreadPrng)
 {
     m_emulated_time  = 0;
     m_cpu_state.time = 0;
@@ -21,6 +21,8 @@ Emulator::Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, 
 
     m_ram.bytes   = nullptr;
     m_flash.bytes = nullptr;
+    m_pipeline_stages = NrOfPipelineStages;
+    m_pipeline_cpu_states.resize(m_pipeline_stages);
 
     std::memset(&m_cpu_state, 0, sizeof(m_cpu_state));
     m_cpu_state.registers[Register::LR] = 0xFFFFFFFF;
@@ -39,6 +41,9 @@ Emulator::Emulator(const Emulator& other) : m_decoder(other.get_architecture()),
     m_ram       = other.m_ram;
     m_ram.bytes = new u8[m_ram.size];
     std::memcpy(m_ram.bytes, other.m_ram.bytes, m_ram.size);
+
+    m_pipeline_cpu_states = other.m_pipeline_cpu_states;
+    m_pipeline_stages = other.m_pipeline_stages;
 
     m_cpu_state     = other.m_cpu_state;
     m_emulated_time = other.m_emulated_time;
@@ -260,9 +265,19 @@ void Emulator::emulate_PROLEAD(::Software::ThreadSimulationStruct& ThreadSimulat
 
     }
 
+    //write cpu state after executing current instruction into pipeline forwarding vector -> stores up to #NrOfPipelineStages last states 
+    //shift elements of vector one position to left
+    std::rotate(m_pipeline_cpu_states.begin(), m_pipeline_cpu_states.begin() + 1, m_pipeline_cpu_states.end());
+
+    //fill last element in vector with new cpu state
+    m_pipeline_cpu_states.back() = m_cpu_state;
+    m_pipeline_cpu_states.back().containing_valid_pipeline_values = true;
+
     if(InTestClockCycles && (!MemoryOperation)){
 
         uint8_t RegNr = 17, low_RegNr = 17, high_RegNr = 17;
+        uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();;
+
         /**
          * @brief Probe all specified combinations
          * 
@@ -276,7 +291,7 @@ void Emulator::emulate_PROLEAD(::Software::ThreadSimulationStruct& ThreadSimulat
 
                 uint8_t SeperatePCUpdate = (uint8_t)(RegNr != Register::PC);
 
-                uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+                ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
 
                 //one resize for all following probes
                 uint32_t ProbeSize = 0;
@@ -290,6 +305,8 @@ void Emulator::emulate_PROLEAD(::Software::ThreadSimulationStruct& ThreadSimulat
                 ProbeSize += Helper.FullHorizontalProbesSize.at(RegNr).back() + SeperatePCUpdate * (Helper.FullHorizontalProbesSize.at(Register::PC).back() - Helper.FullHorizontalProbesSize.at(Register::PC).at(RegNr)) + (uint8_t)m_psr_updated * SeperatePCUpdate * (Helper.FullHorizontalProbesSize.at(Register::PSR).back() - Helper.FullHorizontalProbesSize.at(Register::PSR).at(RegNr) - Helper.FullHorizontalProbesSize.at(Register::PSR).at(Register::PC)) + (uint8_t)m_psr_updated * (uint8_t)(!SeperatePCUpdate) * (Helper.FullHorizontalProbesSize.at(Register::PSR).back() - Helper.FullHorizontalProbesSize.at(Register::PSR).at(Register::PC));
                 //add full vertical probe sizes
                 ProbeSize += (uint8_t)Helper.ProbeFullVertical * Helper.FullVerticalProbesSize;
+                //add pipeline forwarding probe sizes
+                ProbeSize += (uint8_t)Helper.ProbePipelineForwarding * Helper.PipelineForwardingProbesSize;
 
 
 
@@ -516,7 +533,10 @@ void Emulator::emulate_PROLEAD(::Software::ThreadSimulationStruct& ThreadSimulat
                 //add full vertical probe sizes
                 ProbeSize += (uint8_t)Helper.ProbeFullVertical * Helper.FullVerticalProbesSize;
 
-                uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+                //add pipeline forwarding probe sizes
+                ProbeSize += (uint8_t)Helper.ProbePipelineForwarding * Helper.PipelineForwardingProbesSize;
+
+                ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                 
                 // one resize for all following probes
                 ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
@@ -731,6 +751,23 @@ void Emulator::emulate_PROLEAD(::Software::ThreadSimulationStruct& ThreadSimulat
                     ProbeTracker.RegisterLatestValue.at(Register::PSR) = PSR_value;
                 }
 
+        }
+
+        //PipelineForwarding probes are special in the sense that it does not depend if it was a dsp instruction or not
+        if(Helper.ProbePipelineForwarding){
+
+            if((RegNr == 17) && (low_RegNr == 17)){
+                ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+                uint32_t ProbeSize = 0;
+                ProbeSize += (uint8_t)Helper.ProbePipelineForwarding * Helper.PipelineForwardingProbesSize;
+                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+            }
+
+            // std::cout << "pipeline forwarding enabled" << std::endl;
+            uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (static_cast<uint64_t>(15) << DEPENDENCY_OFFSET)  | (14 << ID_OFFSET);
+            for(const auto& Bit: Helper.PipelineForwardingRelevantBits){
+                Software::Probing::CreatePipelineForwardingProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.PipelineForwardingProbesIncluded.at(Bit), Bit, ProbeIndex, ProbeInfo, m_pipeline_stages, m_pipeline_cpu_states);
+            }
         }
 
     }
@@ -1028,6 +1065,14 @@ void Emulator::clock_cpu_instantiation(::Software::ProbeTrackingStruct& ProbeTra
     ProbeTracker.RegisterLatestValue.at(15) = read_register((mulator::Register)15);
     ProbeTracker.VerticalLatestClockCycle.at(15) = ProbeTracker.RegisterLatestClockCycle.at(15);
     ProbeTracker.RegisterLatestClockCycle.at(15) = this->m_emulated_time;
+
+    //write cpu state after executing current instruction into pipeline forwarding vector -> stores up to #NrOfPipelineStages last states 
+    //shift elements of vector one position to left
+    std::rotate(m_pipeline_cpu_states.begin(), m_pipeline_cpu_states.begin() + 1, m_pipeline_cpu_states.end());
+
+    //fill last element in vector with new cpu state
+    m_pipeline_cpu_states.back() = m_cpu_state;
+    m_pipeline_cpu_states.back().containing_valid_pipeline_values = true;
 
     m_cpu_state.time++;
     m_emulated_time++;
