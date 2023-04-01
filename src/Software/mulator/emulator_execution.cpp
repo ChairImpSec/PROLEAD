@@ -1856,7 +1856,7 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
              * 
              */
             
-            if(Helper.ProbeMemory){
+            if(Helper.ProbeMemoryShadowRegister){
                 uint32_t memory_values_not_consider = 0;
 
                 //check if read memory address contains global input range -> if yes do not consider the specific bytes
