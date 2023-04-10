@@ -1,0 +1,152 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000020000000 0x000000000001c000 xrw
+ram2             0x000000002001c000 0x0000000000004000 xrw
+flash            0x0000000008000000 0x0000000000100000 xr
+ccm              0x0000000010000000 0x0000000000010000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+
+.text           0x0000000008000000     0x223c
+ *(.vectors)
+ *(.text*)
+ .text          0x0000000008000000     0x1fcc /tmp/ccsDq4gr.o
+                0x0000000008000000                get_random
+                0x0000000008000014                rand32
+                0x0000000008000024                rand_q
+                0x00000000080000a0                transpose32
+                0x00000000080000f0                masked_poly
+                0x00000000080001d4                masked_bitslice2dense
+                0x0000000008000314                masked_dense2bitslice_opt
+                0x00000000080008cc                masked_bitslice2dense_opt
+                0x0000000008001518                secadd_constant
+                0x000000000800181c                secadd_constant_bmsk
+                0x0000000008001a84                RefreshIOS_rec
+                0x0000000008001af8                cipher
+                0x0000000008001b24                report_done
+                0x0000000008001b58                initialize_local
+                0x0000000008001bb8                initialize_local_reverse
+                0x0000000008001bdc                StrAPoly2APoly
+                0x0000000008001c0c                poly_frombytes
+                0x0000000008001c40                masked_dense2bitslice
+ .text.startup  0x0000000008001fcc       0xbc /tmp/ccsDq4gr.o
+                0x0000000008001fcc                main
+ .text          0x0000000008002088      0x1b4 /tmp/ccJjy4Tr.o
+                0x0000000008002088                my_masked_and_asm
+                0x00000000080021be                my_masked_xor_asm
+                0x0000000008002212                copy_sharing_asm
+                0x000000000800223c                . = ALIGN (0x4)
+ *(.rodata*)
+                0x000000000800223c                . = ALIGN (0x4)
+
+.glue_7         0x000000000800223c        0x0
+ .glue_7        0x000000000800223c        0x0 linker stubs
+
+.glue_7t        0x000000000800223c        0x0
+ .glue_7t       0x000000000800223c        0x0 linker stubs
+
+.vfp11_veneer   0x000000000800223c        0x0
+ .vfp11_veneer  0x000000000800223c        0x0 linker stubs
+
+.v4_bx          0x000000000800223c        0x0
+ .v4_bx         0x000000000800223c        0x0 linker stubs
+
+.iplt           0x000000000800223c        0x0
+ .iplt          0x000000000800223c        0x0 /tmp/ccsDq4gr.o
+
+.rel.dyn        0x000000000800223c        0x0
+ .rel.iplt      0x000000000800223c        0x0 /tmp/ccsDq4gr.o
+
+.preinit_array  0x000000000800223c        0x0
+                0x000000000800223c                . = ALIGN (0x4)
+                0x000000000800223c                __preinit_array_start = .
+ *(.preinit_array)
+                0x000000000800223c                __preinit_array_end = .
+
+.init_array     0x000000000800223c        0x0
+                0x000000000800223c                . = ALIGN (0x4)
+                0x000000000800223c                __init_array_start = .
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array)
+                0x000000000800223c                __init_array_end = .
+
+.fini_array     0x000000000800223c        0x0
+                0x000000000800223c                . = ALIGN (0x4)
+                0x000000000800223c                __fini_array_start = .
+ *(.fini_array)
+ *(SORT_BY_NAME(.fini_array.*))
+                0x000000000800223c                __fini_array_end = .
+
+.ARM.extab
+ *(.ARM.extab*)
+
+.ARM.exidx      0x000000000800223c        0x0
+                0x000000000800223c                __exidx_start = .
+ *(.ARM.exidx*)
+                0x000000000800223c                __exidx_end = .
+                0x000000000800223c                . = ALIGN (0x4)
+                0x000000000800223c                _etext = .
+
+.data           0x0000000020000000       0xc0 load address 0x000000000800223c
+                0x0000000020000000                _data = .
+ *(.data*)
+ .data          0x0000000020000000       0xc0 /tmp/ccsDq4gr.o
+                0x0000000020000000                input_s1
+ .data          0x00000000200000c0        0x0 /tmp/ccJjy4Tr.o
+                0x00000000200000c0                . = ALIGN (0x4)
+                0x00000000200000c0                _edata = .
+                0x000000000800223c                _data_loadaddr = LOADADDR (.data)
+
+.igot.plt       0x00000000200000c0        0x0 load address 0x00000000080022fc
+ .igot.plt      0x00000000200000c0        0x0 /tmp/ccsDq4gr.o
+
+.bss            0x00000000200000c0        0x0 load address 0x00000000080022fc
+ *(.bss*)
+ .bss           0x00000000200000c0        0x0 /tmp/ccsDq4gr.o
+ .bss           0x00000000200000c0        0x0 /tmp/ccJjy4Tr.o
+ *(COMMON)
+                0x00000000200000c0                . = ALIGN (0x4)
+                0x00000000200000c0                _ebss = .
+
+.randomness     0x00000000200000c0        0x4 load address 0x00000000080022fc
+                0x00000000200000c0                . = ALIGN (0x4)
+                0x00000000200000c0                _random = .
+                0x00000000200000c0                _erandom = .
+ .randomness    0x00000000200000c0        0x4 /tmp/ccsDq4gr.o
+                0x00000000200000c0                randomness
+
+.ram2           0x000000002001c000        0x0
+ *(.ram2*)
+                0x000000002001c000                . = ALIGN (0x4)
+
+.ccm            0x0000000010000000        0x0
+ *(.ccmram*)
+                0x0000000010000000                . = ALIGN (0x4)
+
+/DISCARD/
+ *(.eh_frame)
+                0x0000000010000000                . = ALIGN (0x4)
+                0x0000000010000000                end = .
+LOAD /tmp/ccsDq4gr.o
+LOAD /tmp/ccJjy4Tr.o
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/9.2.1/../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libc.a
+END GROUP
+OUTPUT(../../binary/binary.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x0000000000000000       0x59
+ .comment       0x0000000000000000       0x59 /tmp/ccsDq4gr.o
+                                         0x5a (size before relaxing)
+
+.ARM.attributes
+                0x0000000000000000       0x2c
+ .ARM.attributes
+                0x0000000000000000       0x2e /tmp/ccsDq4gr.o
+ .ARM.attributes
+                0x000000000000002e       0x1c /tmp/ccJjy4Tr.o
