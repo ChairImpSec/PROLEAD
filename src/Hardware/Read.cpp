@@ -151,15 +151,18 @@ int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
                 }
             }
 
-            if (*pos != 0)
-            {
-                sprintf(Start, "I%d", Intermediate + CellType->Operations[i].NumberOfClauses + 1);
+			if (*pos != 0){
+				sprintf(Start, "I%d", Intermediate + CellType->Operations[i].NumberOfClauses + 1);
 				strncpy(TempStr, End + 1, Max_Name_Length - 1);
 				TempStr[Max_Name_Length - 1] = '\0';
 				strcat(MyStr, TempStr);
-            }
-
-            CellType->Operations[i].NumberOfClauses++;
+				CellType->Operations[i].NumberOfClauses++; 
+			}else{
+				CellType->Operations[i].NumberOfClauses++; 
+				break; 
+			}
+			
+			pos=MyStr; 
         } while (*pos != 0);
     }
 
