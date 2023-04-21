@@ -3,9 +3,21 @@ This repository contains the source code for the papers <a href="https://tches.i
 For a quick start, we recommend to watch the quick start guides on our <a href="https://www.youtube.com/channel/UCTCuC2NMxaFPtDb4yGHHwTg">Youtube Channel</a>
 
 ## Features
-PROLEAD allows to analyze the robust probing security of masked implementations provided as a verilog netlist or arm binary. In particular, PROLEAD supports the following features:
-- Consideration of glitches and transitions (simultaneously) 
-- Univariate and multivariate adversaries
+PROLEAD allows to analyze the robust probing security of masked implementations provided as a Verilog netlist or ARM binary. In particular, PROLEAD supports the following features:
+
+- Evaluation of masked hardware designs (Verilog netlists)
+  - Consideration of glitches and transitions (simultaneously) 
+  - Univariate and multivariate adversaries
+  
+- Evaluation of masked software designs (ARM binaries)  
+  - Consideration of various micro-architectural effects (simultaneously)
+    - Neighbor Leakage Effects
+    - Bit-wise Interaction Leakages
+    - Memory Overwrite Effects
+    - Memory Remnant Effecs
+    - Pipeline Register Overwrites
+    - Pipeline Forwarding Effects
+  - CPU-independent leakage detection  
 
 ## Documentation
 All information about the features and use of PROLEAD can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki">Wiki</a>.
