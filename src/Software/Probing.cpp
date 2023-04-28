@@ -13,7 +13,7 @@ void Software::Probing::CreateNormalProbe(std::vector<uint8_t>& NormalProbesRegi
 }
 
 void Software::Probing::CreateHorizontalProbe(std::vector<Software::ProbesStruct>& StandardProbes, uint32_t RegisterTransitionCycle, uint8_t ExtensionSize, uint32_t& ProbeIndex, uint32_t InstrNr, uint8_t RegisterNumber){
-    uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << CYCLE_OFFSET) | (4 << ID_OFFSET)  | (RegisterNumber << REG1_OFFSET) | ExtensionSize;
+    uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << CYCLE_OFFSET) | (5 << ID_OFFSET)  | (RegisterNumber << REG1_OFFSET) | ExtensionSize;
     StandardProbes.at(ProbeIndex).ProbeInfo = (ProbeInfo);
     StandardProbes.at(ProbeIndex).TransitionCycles = RegisterTransitionCycle;
 
@@ -153,8 +153,24 @@ void Software::Probing::CreateMemShadowProbe(std::vector<Software::ProbesStruct>
 
 }
 
+
+void Software::Probing::CreateSeperateLoadStoreMemShadowProbe(std::vector<Software::ProbesStruct>& StandardProbes, std::vector<uint8_t>& MemoryShadowRegisterProbesIncluded, uint32_t RegNr,  uint32_t InstrNr, uint32_t& ProbeIndex, uint32_t load_store_memory_shadow_register, uint32_t next_load_store_shadow_register_value, uint32_t TransitionCycle, uint32_t ExtensionSize, uint32_t LoadStoreFlag){
+
+	//LoadStoreFlag == 1 -> Load
+	//LoadStoreFlag == 0 -> Store
+	uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (2 << ID_OFFSET) | (LoadStoreFlag << REG1_OFFSET) | (RegNr << REG2_OFFSET) | (ExtensionSize);
+    
+	for(auto& BitIdx: MemoryShadowRegisterProbesIncluded){
+        StandardProbes.at(ProbeIndex).ProbeInfo = (ProbeInfo | (BitIdx << BIT_OFFSET));
+        StandardProbes.at(ProbeIndex).TransitionCycles = ((static_cast<uint64_t>(load_store_memory_shadow_register) << 32) | (next_load_store_shadow_register_value));
+        StandardProbes.at(ProbeIndex).SpecialInfo = TransitionCycle;
+        ProbeIndex++;
+    }
+
+}
+
 void Software::Probing::CreateHorizontalMemShadowProbe(std::vector<Software::ProbesStruct>& StandardProbes, uint32_t InstrNr, uint32_t& ProbeIndex, uint8_t RegNr, uint32_t memory_shadow_register, uint32_t next_shadow_register_value, uint32_t TransitionCycle, uint32_t ExtensionSize){
-    uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << CYCLE_OFFSET) | (2 << ID_OFFSET) | (RegNr << REG1_OFFSET) | ExtensionSize;
+    uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << CYCLE_OFFSET) | (3 << ID_OFFSET) | (RegNr << REG1_OFFSET) | ExtensionSize;
     StandardProbes.at(ProbeIndex).ProbeInfo = (ProbeInfo);
     StandardProbes.at(ProbeIndex).TransitionCycles =  ((static_cast<uint64_t>(memory_shadow_register) << 32) | (next_shadow_register_value));
 	StandardProbes.at(ProbeIndex).SpecialInfo = TransitionCycle;
@@ -174,10 +190,10 @@ void Software::Probing::CreatePipelineForwardingProbe(std::vector<Software::Prob
 		if(pipeline_cpu_states.at(pipeline_idx).containing_valid_pipeline_values){ //only add values if registers are valid
 			for(const auto& RegIdx : PipelineForwardingProbes){
 				if(bit_pos_ctr >= 64){
-					tmp_SpecialInfo |= static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr - 64));
+					tmp_SpecialInfo |= (static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr - 64)));
 				}
 				else{
-					tmp_TransitionCycles |= static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr));
+					tmp_TransitionCycles |= (static_cast<uint64_t>((((pipeline_cpu_states.at(pipeline_idx).registers[RegIdx] >> BitIdx) & 0x1)) << (bit_pos_ctr)));
 				}
 				bit_pos_ctr++;
 			}
@@ -267,9 +283,38 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		}
 	}
 
+
+	//resolve Load Shadow Register probes
+	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
+		uint32_t ProbeInfo = (3 << IdOffset) | (1 << RegNrOffset) | (RegNr << PartnerRegOffset);
+		for(const auto& BitIdx: Helper.MemoryShadowRegisterProbesIncluded){
+			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
+			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
+			if(Setting.TestTransitional){
+				Probe |= (1 << TransitionOffset);
+				ProbeMapping.at(ProbeInfo).emplace_back(Probe);
+			}
+			std::sort(ProbeMapping.at(ProbeInfo).begin(), ProbeMapping.at(ProbeInfo).end());
+		}
+	}
+
+	//resolve Store Shadow Register probes
+	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
+		uint32_t ProbeInfo = (3 << IdOffset) | (0 << RegNrOffset) | (RegNr << PartnerRegOffset);
+		for(const auto& BitIdx: Helper.MemoryShadowRegisterProbesIncluded){
+			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
+			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
+			if(Setting.TestTransitional){
+				Probe |= (1 << TransitionOffset);
+				ProbeMapping.at(ProbeInfo).emplace_back(Probe);
+			}
+			std::sort(ProbeMapping.at(ProbeInfo).begin(), ProbeMapping.at(ProbeInfo).end());
+		}
+	}
+
 	//resolve Horizontal Shadow Register probes
 	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
-		uint32_t ProbeInfo = (2 << IdOffset) | (RegNr << RegNrOffset);
+		uint32_t ProbeInfo = (3 << IdOffset) | (RegNr << RegNrOffset);
 		for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
 			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -285,7 +330,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 	//resolve Normal probes
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
 		for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-			uint32_t ProbeInfo = (3 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
+			uint32_t ProbeInfo = (4 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
 			if(Setting.TestTransitional){
@@ -298,7 +343,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 
 	//resolve Horizontal probes
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
-		uint32_t ProbeInfo = (4 << IdOffset) | (RegNr << RegNrOffset);
+		uint32_t ProbeInfo = (5 << IdOffset) | (RegNr << RegNrOffset);
 		for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(RegNr)){
 			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -316,7 +361,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(PartnerRegNr != RegNr){
 				for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-					uint32_t ProbeInfo = (5 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
+					uint32_t ProbeInfo = (6 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
 					uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 					ProbeMapping.at(ProbeInfo).emplace_back(Probe);
 					if(Setting.TestTransitional){
@@ -337,7 +382,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(PartnerRegNr != RegNr){
 				for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-					uint32_t ProbeInfo = (6 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
+					uint32_t ProbeInfo = (7 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
 					uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 					ProbeMapping.at(ProbeInfo).emplace_back(Probe);
 					if(Setting.TestTransitional){
@@ -361,7 +406,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(PartnerRegNr != RegNr){
-				uint32_t ProbeInfo = (7 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset);
+				uint32_t ProbeInfo = (8 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset);
 				for(const auto& BitIdx: Helper.NormalProbesIncluded.at(RegNr)){
 					uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx);
 					ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -383,7 +428,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(PartnerRegNr != RegNr){
-				uint32_t ProbeInfo = (8 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset);
+				uint32_t ProbeInfo = (9 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset);
 				for(const auto& BitIdx: Helper.NormalProbesIncluded.at(RegNr)){
 					uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx);
 					ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -408,7 +453,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 	//resolve special case Full Vertical probes
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
 		for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-			uint32_t ProbeInfo = (11 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
+			uint32_t ProbeInfo = (12 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(BitIdx)){
 				uint32_t Probe = (RegIdx << RegNrOffset) | (BitIdx);
 				ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -426,7 +471,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
 				if((RegNr != PartnerRegNr)){
-					uint32_t ProbeInfo = (9 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
+					uint32_t ProbeInfo = (10 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
 					for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(BitIdx)){
 						uint32_t Probe = (RegIdx << RegNrOffset) | (BitIdx);
 						ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -444,7 +489,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 	//resolve large Full Vertical probes
 	for(uint8_t RegNr = 0; RegNr < 17; ++RegNr){
 		for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-			uint32_t ProbeInfo = (10 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
+			uint32_t ProbeInfo = (11 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(BitIdx)){
 				uint32_t Probe = (RegIdx << RegNrOffset) | (BitIdx);
 				ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -463,7 +508,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(RegNr != PartnerRegNr){
 				for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-					uint32_t ProbeInfo = (12 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
+					uint32_t ProbeInfo = (13 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
 					for(const auto& ProbeRegNr: Helper.FullVerticalProbesIncluded.at(BitIdx << BitOffset)){
 						uint32_t Probe = (ProbeRegNr << 11) | (BitIdx);
 						ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -493,7 +538,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		for(uint8_t PartnerRegNr = 0; PartnerRegNr < 17; ++PartnerRegNr){
 			if(RegNr != PartnerRegNr){
 				for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-					uint32_t ProbeInfo = (13 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
+					uint32_t ProbeInfo = (14 << IdOffset) | (RegNr << RegNrOffset) | (PartnerRegNr << PartnerRegOffset) | (BitIdx << BitOffset);
 					for(const auto& ProbeRegNr: Helper.FullVerticalProbesIncluded.at(BitIdx << BitOffset)){
 						uint32_t Probe = (ProbeRegNr << 11) | (BitIdx);
 						ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -524,7 +569,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 
 	//resolve pipeline forwarding probes
 	for(uint8_t BitIdx = 0; BitIdx < 32; ++BitIdx){
-		uint32_t ProbeInfo = (14 << IdOffset) | (BitIdx << BitOffset);
+		uint32_t ProbeInfo = (15 << IdOffset) | (BitIdx << BitOffset);
 		for(uint32_t pipeline_idx = 0; pipeline_idx < Setting.NumberOfPipelineStages; ++pipeline_idx){
 			for(const auto& RegIdx: Helper.PipelineForwardingProbesIncluded.at(BitIdx)){
 				uint32_t Probe = (RegIdx << RegNrOffset) | (BitIdx);
@@ -567,6 +612,8 @@ void Software::Probing::Univariate_AddCombinationToProbingSet(Software::ProbingS
 		if(std::includes(ResolvedProbes.at(low_idx).begin(), ResolvedProbes.at(low_idx).end(), ResolvedProbes.at(high_idx).begin(), ResolvedProbes.at(high_idx).end())){
 			//set redundant probe to dummy value
 			Combination.at(IndexOfCombinations.at(high_idx)).ProbeInfo = 0xffffff00; //set Extension size to zero
+			Combination.at(IndexOfCombinations.at(high_idx)).SpecialInfo = 0; 
+			Combination.at(IndexOfCombinations.at(high_idx)).TransitionCycles = 0; 
 			
 		}
 	}
@@ -611,6 +658,9 @@ void Software::Probing::Multivariate_AddCombinationToProbingSet(Software::Probin
 		if(std::includes(ResolvedProbes.at(low_idx).begin(), ResolvedProbes.at(low_idx).end(), ResolvedProbes.at(high_idx).begin(), ResolvedProbes.at(high_idx).end()) && ((Combination.at(IndexOfCombinations.at(high_idx)).ProbeInfo >> 32) == (Combination.at(IndexOfCombinations.at(low_idx)).ProbeInfo >> 32))){
 			//set redundant probe to dummy value
 			Combination.at(IndexOfCombinations.at(high_idx)).ProbeInfo = 0xffffff00; //set Extension size to zero
+			Combination.at(IndexOfCombinations.at(high_idx)).SpecialInfo = 0; 
+			Combination.at(IndexOfCombinations.at(high_idx)).TransitionCycles = 0;
+			
 			
 
 		}

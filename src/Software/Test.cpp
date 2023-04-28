@@ -74,10 +74,23 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                     TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
                 }
                 break;
+            }
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                KeyIndex++;
+                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
 
+                if(ThreadSimulation.TestTransitional){
+                    KeyIndex++; 
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
             }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     KeyIndex++; 
                     TableEntry.Key.at(KeyIndex >> 3) <<= 1;
@@ -92,7 +105,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
 
                 KeyIndex++; 
@@ -108,7 +121,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             }
 
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(ProbeRegister)){
@@ -126,7 +139,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             }
 
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
                 {
                     KeyIndex++; 
                     TableEntry.Key.at(KeyIndex >> 3) <<= 1;
@@ -144,7 +157,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                     break;
                 }
 
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
                 KeyIndex++; 
                 TableEntry.Key.at(KeyIndex >> 3) <<= 1;
@@ -167,7 +180,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
 
             }
             
-            case(7): //small full HR probe
+            case(8): //small full HR probe
             {
                 for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
                     KeyIndex++;
@@ -190,7 +203,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 break;
 
             }
-            case(8): //large full HR probe
+            case(9): //large full HR probe
             {
                 for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
                     KeyIndex++;
@@ -217,7 +230,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(9): // small full VR probe
+            case(10): // small full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
                     KeyIndex++;
@@ -237,7 +250,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
                     KeyIndex++;
@@ -262,7 +275,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(11): // special full VR probe
+            case(12): // special full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
                     KeyIndex++;
@@ -277,7 +290,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(12):  //small DSP full VR probe
+            case(13):  //small DSP full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
                     KeyIndex++;
@@ -302,7 +315,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
                     KeyIndex++;
@@ -332,7 +345,7 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
                 }
                 break;
             }
-            case(14): //pipeline forwarding probe
+            case(15): //pipeline forwarding probe
             {
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     KeyIndex++;
@@ -410,9 +423,17 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 break;
 
             }
-
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                if(ThreadSimulation.TestTransitional){
+                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
+            }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
 
@@ -424,7 +445,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
 
                 heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
@@ -437,7 +458,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             }
 
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(ProbeRegister)){
@@ -451,7 +472,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 break;
             }
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
             {
                 heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
                 heuristic += ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
@@ -462,7 +483,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 break;
             }
            
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
 
                 heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
@@ -481,7 +502,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
 
 
             
-            case(7): //small full HR probe
+            case(8): //small full HR probe
             {
                 for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
          
@@ -503,7 +524,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 break;
 
             }
-            case(8): //large full HR probe
+            case(9): //large full HR probe
             {
                 for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
 
@@ -529,7 +550,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(9): // small full VR probe
+            case(10): // small full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
 
@@ -546,7 +567,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
 
@@ -567,7 +588,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(11): // special full VR probe
+            case(12): // special full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
 
@@ -580,7 +601,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(12):  //small DSP full VR probe
+            case(13):  //small DSP full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
 
@@ -601,7 +622,7 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
 
@@ -626,8 +647,11 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
                 }
                 break;
             }
-            case(14): //pipeline forwarding probe
+            case(15): //pipeline forwarding probe
             {
+                // std::cout << "extensionSize is " << static_cast<uint32_t>(ExtensionSize) << std::endl;
+                // std::cout << "instr number " << static_cast<uint32_t>(ProbeClockCycle) << std::endl;
+                // getchar();
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     if(bit_idx >= 64){
                         heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
@@ -708,9 +732,17 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
                 break;
 
             }
-
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                if(ThreadSimulation.TestTransitional){
+                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
+            }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
 
@@ -722,7 +754,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -748,7 +780,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
 
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& resolvedProbe: ResolvedProbes){
@@ -773,7 +805,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
 
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -800,7 +832,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
 
 
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -832,7 +864,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
             }
 
-            case(7)://small full HR probe
+            case(8)://small full HR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -858,7 +890,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
                 break;
 
             }
-            case(8):
+            case(9):
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -887,7 +919,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;
             }
-            case(9): //small full VR probe
+            case(10): //small full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -914,7 +946,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -944,7 +976,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;
             }
-            case(11): //special full VR probe
+            case(12): //special full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -967,7 +999,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;                
             }
-            case(12): //small DSP full VR probe
+            case(13): //small DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -997,7 +1029,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1030,7 +1062,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
                 break;
             }
-            case(14):
+            case(15):
             {
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     if(bit_idx >= 64){
@@ -1043,10 +1075,10 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
                 }
                 break;
             }
-            case(0xf):
-            {
-                break;
-            }
+            // case(0xf):
+            // {
+            //     break;
+            // }
             default: std::runtime_error("In HigherOrderUnivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
         }
 
@@ -1126,9 +1158,22 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
                 break;
 
             }
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                KeyIndex++;
+                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
 
+                if(ThreadSimulation.TestTransitional){
+                    KeyIndex++; 
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
+            }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     KeyIndex++; 
                     TableEntry.Key.at(KeyIndex >> 3) <<= 1;
@@ -1144,7 +1189,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1174,7 +1219,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
 
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& resolvedProbe: ResolvedProbes){
@@ -1203,7 +1248,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
 
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1236,7 +1281,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
 
 
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1276,7 +1321,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
             }
 
-            case(7)://small full HR probe
+            case(8)://small full HR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1308,7 +1353,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
                 break;
 
             }
-            case(8):
+            case(9):
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1345,7 +1390,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
-            case(9): //small full VR probe
+            case(10): //small full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1378,7 +1423,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1416,7 +1461,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
-            case(11): //special full VR probe
+            case(12): //special full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1443,7 +1488,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;                
             }
-            case(12): //small DSP full VR probe
+            case(13): //small DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1481,7 +1526,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1524,7 +1569,7 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
                 break;
             }
-            case(14):
+            case(15):
             {
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     KeyIndex++;
@@ -1540,10 +1585,10 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
                 }
                 break;
             }
-            case(0xf):
-            {
-                break;
-            }
+            // case(0xf):
+            // {
+            //     break;
+            // }
             default: std::runtime_error("In HigherOrderUnivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
         }
 
@@ -1619,9 +1664,22 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
                 break;
 
             }
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                KeyIndex++;
+                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
 
+                if(ThreadSimulation.TestTransitional){
+                    KeyIndex++; 
+                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
+            }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     KeyIndex++; 
                     TableEntry.Key.at(KeyIndex >> 3) <<= 1;
@@ -1637,7 +1695,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1660,7 +1718,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
 
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& resolvedProbe: ResolvedProbes){
@@ -1686,7 +1744,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
 
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1717,7 +1775,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             }
 
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1757,7 +1815,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             }
 
-            case(7)://small full HR probe
+            case(8)://small full HR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1788,7 +1846,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
                 break;
 
             }
-            case(8):
+            case(9):
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1824,7 +1882,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
-            case(9): //small full VR probe
+            case(10): //small full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1855,7 +1913,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1891,7 +1949,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
-            case(11): //special full VR probe
+            case(12): //special full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1916,7 +1974,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;                
             }
-            case(12): //small DSP full VR probe
+            case(13): //small DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1952,7 +2010,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -1993,7 +2051,7 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
                 break;
             }
-            case(14): //pipeline forwarding probe
+            case(15): //pipeline forwarding probe
             {
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     KeyIndex++;
@@ -2009,11 +2067,11 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
                 }
                 break;
             }
-            case(0xf):
-            {
+            // case(0xf):
+            // {
 
-                break;
-            }
+            //     break;
+            // }
             default: std::runtime_error("In HigherOrderMultivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
         }
 
@@ -2081,9 +2139,17 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                 break;
 
             }
-
+            //memory probe seperated load store shadow register
+            case(2):
+            {
+                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                if(ThreadSimulation.TestTransitional){
+                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                }
+                break;
+            }
             //memory probe shadow register horizontal
-            case(2):{
+            case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
                     heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
 
@@ -2095,7 +2161,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                 break;
             }
 
-            case(3): //normal probe
+            case(4): //normal probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2113,7 +2179,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                 break;
             }
 
-            case(4): //horizontal Probe
+            case(5): //horizontal Probe
             {
 
                 for(const auto& resolvedProbe: ResolvedProbes){
@@ -2135,7 +2201,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
 
 
-            case(5): //small vertical Probe
+            case(6): //small vertical Probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2160,7 +2226,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             }
 
-            case(6): //large vertical probe
+            case(7): //large vertical probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2192,7 +2258,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             }
 
-            case(7)://small full HR probe
+            case(8)://small full HR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2217,7 +2283,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                 break;
 
             }
-            case(8):
+            case(9):
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2245,7 +2311,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
                 break;
             }
-            case(9): //small full VR probe
+            case(10): //small full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2270,7 +2336,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
                 break;
             }
-            case(10): // large full VR probe
+            case(11): // large full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2298,7 +2364,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
                 break;
             }
-            case(11): //special full VR probe
+            case(12): //special full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2319,7 +2385,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
                 break;                
             }
-            case(12): //small DSP full VR probe
+            case(13): //small DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2347,7 +2413,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
                 break;
             }
-            case(13): //large DSP full VR probe
+            case(14): //large DSP full VR probe
             {
                 for(const auto& resolvedProbe: ResolvedProbes){
                     uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
@@ -2372,13 +2438,11 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                             }
 
                         }                        
-
-                    
                 }
 
                 break;
             }
-            case(14): //pipeline forwarding probe
+            case(15): //pipeline forwarding probe
             {
                 for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
                     if(bit_idx >= 64){
@@ -2391,11 +2455,7 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
                 }
                 break;
             }
-            case(0xf):
-            {
 
-                break;
-            }
             default: std::runtime_error("In HigherOrderMultivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
         }
 

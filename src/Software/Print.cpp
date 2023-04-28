@@ -50,6 +50,7 @@ void Software::Print::SoftwareMaximumProbingSet(uint32_t TestOrder, ::Software::
 {
 	uint8_t Id, RegisterNumber, Bit;
 	uint32_t Cycle;
+	uint16_t ExtensionSize;
 
 	ProbingSet = " ";
 	for(uint32_t probeIndex = 0; probeIndex < TestOrder; ++probeIndex){
@@ -57,31 +58,44 @@ void Software::Print::SoftwareMaximumProbingSet(uint32_t TestOrder, ::Software::
 		Software::Probing::ExtractCycleProbeInfo(Cycle, Test.GlobalProbingSets.at(MaximumProbingSet).StandardProbe.at(probeIndex));
 		Software::Probing::ExtractBitProbeInfo(Bit, Test.GlobalProbingSets.at(MaximumProbingSet).StandardProbe.at(probeIndex));
 		Software::Probing::ExtractRegisterProbeInfo(RegisterNumber, Test.GlobalProbingSets.at(MaximumProbingSet).StandardProbe.at(probeIndex));
+		Software::Probing::ExtractExtensionSizeProbeInfo(ExtensionSize, Test.GlobalProbingSets.at(MaximumProbingSet).StandardProbe.at(probeIndex));
+		
+		if(ExtensionSize != 0){
+			switch(Id){
+				case 0: ProbingSet += "MEM[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				case 1: ProbingSet += "MEMSHADOW[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				case 2: {
+					if(RegisterNumber == 1){
+						ProbingSet += "LOAD_MEMSHADOW[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+					}
+					else{
+						ProbingSet += "STORE_MEMSHADOW[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+					}
+					break;
+				}
+				case 3: ProbingSet += "HR_MEMSHADOW(" + std::to_string(Cycle) +  ")"; break;
+				case 4: ProbingSet += "R" + std::to_string(RegisterNumber) + "[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				case 5: ProbingSet += "HR" + std::to_string(RegisterNumber) + "(" + std::to_string(Cycle) + ")";break;
+				case 6:
+				case 7: ProbingSet += "VR[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				case 8:
+				case 9: ProbingSet += "FULLHR(" + std::to_string(Cycle) + ")"; break;
+				case 10:
+				case 11:
+				case 12:
+				case 13:
+				case 14: ProbingSet += "FULLVR[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				case 15: ProbingSet += "PIPE_FORWARD[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
+				// case 0xf:  ProbingSet += "_"; break;
+				default: ProbingSet += "???";
+			}
 
-		switch(Id){
-			case 0: ProbingSet += "MEM[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 1: ProbingSet += "MEMSHADOW[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 2: ProbingSet += "HR_MEMSHADOW(" + std::to_string(Cycle) +  ")"; break;
-			case 3: ProbingSet += "R" + std::to_string(RegisterNumber) + "[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 4: ProbingSet += "HR" + std::to_string(RegisterNumber) + "(" + std::to_string(Cycle) + ")";break;
-			case 5:
-			case 6: ProbingSet += "VR[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 7:
-			case 8: ProbingSet += "FULLHR(" + std::to_string(Cycle) + ")"; break;
-			case 9:
-			case 10:
-			case 11:
-			case 12:
-			case 13: ProbingSet += "FULLVR[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 14: ProbingSet += "PIPE_FORWARD[" + std::to_string(Bit) + "](" + std::to_string(Cycle) + ")"; break;
-			case 0xf:  ProbingSet += "_"; break;
-			default: ProbingSet += "???";
+
+			if(probeIndex != (TestOrder - 1)){
+				ProbingSet += ", ";
+			}
 		}
 
-
-		if(probeIndex != (TestOrder - 1)){
-			ProbingSet += ", ";
-		}
 	}
 
 }
@@ -154,221 +168,240 @@ void Software::Print::ProbingSet(::Software::SettingsStruct& Setting, ::Software
     for(ProbeIndex = 0; ProbeIndex < ProbingSet.StandardProbe.size(); ++ProbeIndex){
         
 		Software::Probing::ExtractAllProbeInfo(RegisterNumber, Id, PartnerRegisterNumber, Cycle, Bit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(ProbeIndex));
-
-		switch(Id){
-			case 0:{
-				fprintf(fp, "MEM[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [");
-				fprintf(fp, "MEM[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
-				fprintf(fp, "]");
-				break;
-			}
-			case 1:{
-				fprintf(fp, "MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
-				if(Setting.TestTransitional){
-					fprintf(fp, ", MEMSHADOW[%u][%u]]", Bit, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+		if(ExtensionSize != 0){
+			switch(Id){
+				case 0:{
+					fprintf(fp, "MEM[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [");
+					fprintf(fp, "MEM[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+					fprintf(fp, "]");
+					break;
 				}
-				break;
-			}
-			case 2:{
-				fprintf(fp, "HR_MEMSHADOW(%u)", static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [");
-				for(const auto& BitIdx: GlobalHelper.HorizontalBitsIncluded.at(17)){
-					fprintf(fp, "MEMSHADOW[%u](%u), ", BitIdx, static_cast<uint32_t>(Cycle));
+				case 1:{
+					fprintf(fp, "MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
 					if(Setting.TestTransitional){
-						fprintf(fp, "MEMSHADOW[%u](%u), ", BitIdx, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).SpecialInfo & 0xffffffff));
+						fprintf(fp, ", MEMSHADOW[%u](%u)]", Bit, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).SpecialInfo & 0xffffffff));
 					}
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 3:{
-				fprintf(fp, "R%u[%u](%u)]", (static_cast<uint32_t>(RegisterNumber)), Bit, Cycle);
-				fprintf(fp, " ==> [");
-
-				fprintf(fp, "R%u[%u](%u)",  (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				if(Setting.TestTransitional){
-					 fprintf(fp, ", R%u[%u](%u)",  (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+				case 2:{
+					if(RegisterNumber == 1){
+						fprintf(fp, "LOAD_MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+						fprintf(fp, " ==> [LOAD_MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+						if(Setting.TestTransitional){
+							fprintf(fp, ", LOAD_MEMSHADOW[%u](%u)]", Bit, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).SpecialInfo & 0xffffffff));
+						}
+					}
+					else{
+						fprintf(fp, "STORE_MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+						fprintf(fp, " ==> [STORE_MEMSHADOW[%u](%u)", Bit, static_cast<uint32_t>(Cycle));
+						if(Setting.TestTransitional){
+							fprintf(fp, ", STORE_MEMSHADOW[%u](%u)]", Bit, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).SpecialInfo & 0xffffffff));
+						}
+					}
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 4:{
-				fprintf(fp, "HR%u(%u)", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [");
+				case 3:{
+					fprintf(fp, "HR_MEMSHADOW(%u)", static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [");
+					for(const auto& BitIdx: GlobalHelper.HorizontalBitsIncluded.at(17)){
+						fprintf(fp, "MEMSHADOW[%u](%u), ", BitIdx, static_cast<uint32_t>(Cycle));
+						if(Setting.TestTransitional){
+							fprintf(fp, "MEMSHADOW[%u](%u), ", BitIdx, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).SpecialInfo & 0xffffffff));
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				case 4:{
+					fprintf(fp, "R%u[%u](%u)]", (static_cast<uint32_t>(RegisterNumber)), Bit, Cycle);
+					fprintf(fp, " ==> [");
 
-				for(const auto& BitIdx: GlobalHelper.HorizontalBitsIncluded.at(RegisterNumber)){
-					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), BitIdx, static_cast<uint32_t>(Cycle));
+					fprintf(fp, "R%u[%u](%u)",  (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
 					if(Setting.TestTransitional){
-						fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), BitIdx, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+						fprintf(fp, ", R%u[%u](%u)",  (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
 					}
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 5:{ //small vertical probe
-				fprintf(fp, "VR[%u](%u)]", static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [");
+				case 5:{
+					fprintf(fp, "HR%u(%u)", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [");
 
-				fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				if(Setting.TestTransitional){
-					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+					for(const auto& BitIdx: GlobalHelper.HorizontalBitsIncluded.at(RegisterNumber)){
+						fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), BitIdx, static_cast<uint32_t>(Cycle));
+						if(Setting.TestTransitional){
+							fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), BitIdx, static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+						}
+					}
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "R%u[%u](%u)", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
+				case 6:{ //small vertical probe
+					fprintf(fp, "VR[%u](%u)]", static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [");
 
-				fprintf(fp, "]");
-				break;
-			}
-			case 6:{ //large vertical probe
-				fprintf(fp, "VR[%u](%u)]", static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				fprintf(fp, " ==> [");
-
-				fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				if(Setting.TestTransitional){
-					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
-				}
-				fprintf(fp, "R%u[%u](%u)", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
-				if(Setting.TestTransitional){
-					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
-				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 7:{ //small full HR
-				uint32_t CycleRegNr2 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
-				uint32_t TransCycleRegNr1 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
-				fprintf(fp, "FULLHR:R%u(%u) - R%u(%u)",RegisterNumber, Cycle, PartnerRegisterNumber, CycleRegNr2);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(RegisterNumber)){
-					fprintf(fp, "R%u[%u](%u)", RegisterNumber, idx, Cycle);
+					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
 					if(Setting.TestTransitional){
-						fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr1);
+						fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
 					}
-					fprintf(fp, ", ");
-				}
-				for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(PartnerRegisterNumber)){
-					fprintf(fp, "R%u[%u](%u)", PartnerRegisterNumber, idx, CycleRegNr2);
-					fprintf(fp, ", ");
-				}
+					fprintf(fp, "R%u[%u](%u)", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
 
-				fprintf(fp, "]");
-				break;
-			}
-			case 8:{ //large full HR probe
-				uint32_t TransCycleRegNr1 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
-				uint32_t TransCycleRegNr2 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
-				fprintf(fp, "FULLHR:R%u(%u) - R%u(%u)",RegisterNumber, Cycle, PartnerRegisterNumber, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(RegisterNumber)){
-					fprintf(fp, "R%u[%u](%u)", RegisterNumber, idx, Cycle);
-					if(Setting.TestTransitional){
-						fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr1);
-					}
-					fprintf(fp, ", ");
+					fprintf(fp, "]");
+					break;
 				}
-				for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(PartnerRegisterNumber)){
-					fprintf(fp, "R%u[%u](%u)", PartnerRegisterNumber, idx, Cycle);
+				case 7:{ //large vertical probe
+					fprintf(fp, "VR[%u](%u)]", static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
+					fprintf(fp, " ==> [");
+
+					fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
 					if(Setting.TestTransitional){
-						fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr2);
+						fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(RegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
 					}
-					fprintf(fp, ", ");
+					fprintf(fp, "R%u[%u](%u)", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(Cycle));
+					if(Setting.TestTransitional){
+						fprintf(fp, "R%u[%u](%u), ", (static_cast<uint32_t>(PartnerRegisterNumber)), static_cast<uint32_t>(Bit), static_cast<uint32_t>(ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
+					}
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 9:{ //small full VR probe
-				fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
-					fprintf(fp, "R%u[%u]", idx, Bit);
-					fprintf(fp, ", ");
-					if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber)) && Setting.TestTransitional){
-						fprintf(fp, "R%u[%u]", idx, Bit);
+				case 8:{ //small full HR
+					uint32_t CycleRegNr2 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
+					uint32_t TransCycleRegNr1 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+					fprintf(fp, "FULLHR:R%u(%u) - R%u(%u)",RegisterNumber, Cycle, PartnerRegisterNumber, CycleRegNr2);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(RegisterNumber)){
+						fprintf(fp, "R%u[%u](%u)", RegisterNumber, idx, Cycle);
+						if(Setting.TestTransitional){
+							fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr1);
+						}
 						fprintf(fp, ", ");
 					}
-				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 10:{ //large full VR probe
-				fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
-					fprintf(fp, "R%u[%u]", idx, Bit);
-					fprintf(fp, ", ");
-					if(((idx == RegisterNumber) || (idx == 15) || (idx == 16)) && Setting.TestTransitional){
-						fprintf(fp, "R%u[%u]", idx, Bit);
+					for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(PartnerRegisterNumber)){
+						fprintf(fp, "R%u[%u](%u)", PartnerRegisterNumber, idx, CycleRegNr2);
 						fprintf(fp, ", ");
 					}
+
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 11:{ // special full VR probe
-				fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
-					fprintf(fp, "R%u[%u]", idx, Bit);
-					fprintf(fp, ", ");
-					if(((idx == RegisterNumber)) && Setting.TestTransitional){
-						fprintf(fp, "R%u[%u]", idx, Bit);
+				case 9:{ //large full HR probe
+					uint32_t TransCycleRegNr1 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles & 0xffffffff));
+					uint32_t TransCycleRegNr2 = static_cast<uint32_t>((ProbingSet.StandardProbe.at(ProbeIndex).TransitionCycles >> 32));
+					fprintf(fp, "FULLHR:R%u(%u) - R%u(%u)",RegisterNumber, Cycle, PartnerRegisterNumber, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(RegisterNumber)){
+						fprintf(fp, "R%u[%u](%u)", RegisterNumber, idx, Cycle);
+						if(Setting.TestTransitional){
+							fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr1);
+						}
 						fprintf(fp, ", ");
 					}
-				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 12:{ //small DSP full VR probe
-				fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
-					fprintf(fp, "R%u[%u]", idx, Bit);
-					fprintf(fp, ", ");
-					if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber) || (idx == 16)) && Setting.TestTransitional){
-						fprintf(fp, "R%u[%u]", idx, Bit);
+					for(const auto& idx: GlobalHelper.NormalProbesIncluded.at(PartnerRegisterNumber)){
+						fprintf(fp, "R%u[%u](%u)", PartnerRegisterNumber, idx, Cycle);
+						if(Setting.TestTransitional){
+							fprintf(fp, ", R%u[%u](%u)", RegisterNumber, idx, TransCycleRegNr2);
+						}
 						fprintf(fp, ", ");
 					}
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 13:{ //large DSP full VR probe
-				fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
-					fprintf(fp, "R%u[%u]", idx, Bit);
-					fprintf(fp, ", ");
-					if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber) || (idx == 15) || (idx == 16)) && Setting.TestTransitional){
+				case 10:{ //small full VR probe
+					fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
 						fprintf(fp, "R%u[%u]", idx, Bit);
 						fprintf(fp, ", ");
-					}
-				}
-				fprintf(fp, "]");
-				break;
-			}
-			case 14:{ //pipeline forwarding effect
-				fprintf(fp, "PIPE_FORWARD[%u](%u)",Bit, Cycle);
-				fprintf(fp, " ==> [");
-				for(const auto& idx: GlobalHelper.PipelineForwardingProbesIncluded.at(Bit)){
-					for(uint32_t pipeline_idx = 0; pipeline_idx < Setting.NumberOfPipelineStages; ++pipeline_idx){
-						if(pipeline_idx <= Cycle){
-							fprintf(fp, "R%u[%u](%u)", idx, Bit, Cycle - pipeline_idx);
+						if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber)) && Setting.TestTransitional){
+							fprintf(fp, "R%u[%u]", idx, Bit);
 							fprintf(fp, ", ");
 						}
 					}
+					fprintf(fp, "]");
+					break;
 				}
-				fprintf(fp, "]");
-				break;
+				case 11:{ //large full VR probe
+					fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
+						fprintf(fp, "R%u[%u]", idx, Bit);
+						fprintf(fp, ", ");
+						if(((idx == RegisterNumber) || (idx == 15) || (idx == 16)) && Setting.TestTransitional){
+							fprintf(fp, "R%u[%u]", idx, Bit);
+							fprintf(fp, ", ");
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				case 12:{ // special full VR probe
+					fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
+						fprintf(fp, "R%u[%u]", idx, Bit);
+						fprintf(fp, ", ");
+						if(((idx == RegisterNumber)) && Setting.TestTransitional){
+							fprintf(fp, "R%u[%u]", idx, Bit);
+							fprintf(fp, ", ");
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				case 13:{ //small DSP full VR probe
+					fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
+						fprintf(fp, "R%u[%u]", idx, Bit);
+						fprintf(fp, ", ");
+						if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber) || (idx == 16)) && Setting.TestTransitional){
+							fprintf(fp, "R%u[%u]", idx, Bit);
+							fprintf(fp, ", ");
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				case 14:{ //large DSP full VR probe
+					fprintf(fp, "FULLVR[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.FullVerticalProbesIncluded.at(Bit)){
+						fprintf(fp, "R%u[%u]", idx, Bit);
+						fprintf(fp, ", ");
+						if(((idx == RegisterNumber) || (idx == PartnerRegisterNumber) || (idx == 15) || (idx == 16)) && Setting.TestTransitional){
+							fprintf(fp, "R%u[%u]", idx, Bit);
+							fprintf(fp, ", ");
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				case 15:{ //pipeline forwarding effect
+					fprintf(fp, "PIPE_FORWARD[%u](%u)",Bit, Cycle);
+					fprintf(fp, " ==> [");
+					for(const auto& idx: GlobalHelper.PipelineForwardingProbesIncluded.at(Bit)){
+						for(uint32_t pipeline_idx = 0; pipeline_idx < Setting.NumberOfPipelineStages; ++pipeline_idx){
+							if(pipeline_idx <= Cycle){
+								fprintf(fp, "R%u[%u](%u)", idx, Bit, Cycle - pipeline_idx);
+								fprintf(fp, ", ");
+							}
+						}
+					}
+					fprintf(fp, "]");
+					break;
+				}
+				// case 0xf:{
+				// 	break;
+				// }
+				default: {
+					std::cout << "Error in printing Probing Sets to file" << std::endl;
+					exit(-1);
+				}             
 			}
-			case 0xf:{
-				break;
-			}
-			default: {
-				std::cout << "Error in printing Probing Sets to file" << std::endl;
-			    exit(-1);
-			}             
 		}
+
 		
     }
 

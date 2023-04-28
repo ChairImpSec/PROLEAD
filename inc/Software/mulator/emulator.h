@@ -185,6 +185,8 @@ namespace mulator
 
         CPU_State m_cpu_state;
         u32 m_memory_shadow_register;
+        u32 m_load_memory_shadow_register;
+        u32 m_store_memory_shadow_register;
         u32 m_emulated_time;
         bool m_psr_updated;
 
@@ -205,7 +207,7 @@ namespace mulator
 
         Condition pop_IT_condition();
         
-        bool execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimulationStruct& , ::Software::ProbeTrackingStruct& , ::Software::HelperStruct&, bool, bool&, const int, const uint64_t, const uint32_t, const uint32_t);
+        bool execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimulationStruct& , ::Software::ProbeTrackingStruct& , ::Software::HelperStruct&, bool, bool&, const int, const uint64_t, const uint32_t, const uint32_t,  std::vector<std::vector<std::vector<uint8_t>>>&);
         void check_shadow_register_constraints(uint32_t& next_shadow_register_value, Software::ThreadSimulationStruct& ThreadSimulation, uint32_t address, uint8_t byte);      
 
         bool execute(const Instruction& instr, uint32_t randomness_start_addr, uint32_t randomness_end_addr);

@@ -201,7 +201,7 @@ void Emulator::check_shadow_register_constraints(uint32_t& next_shadow_register_
     SwapEndian(next_shadow_register_value);
 }
 
-bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimulationStruct& ThreadSimulation, ::Software::ProbeTrackingStruct& ProbeTracker, ::Software::HelperStruct& Helper, bool InTestClockCycles, bool& MemoryOperation, const int InstrNr, const uint64_t SimulationIdx, const uint32_t randomness_start_addr, const uint32_t randomness_end_addr)
+bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimulationStruct& ThreadSimulation, ::Software::ProbeTrackingStruct& ProbeTracker, ::Software::HelperStruct& Helper, bool InTestClockCycles, bool& MemoryOperation, const int InstrNr, const uint64_t SimulationIdx, const uint32_t randomness_start_addr, const uint32_t randomness_end_addr, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues)
 {
     m_psr_updated             = false;
     bool instruction_executed = false;
@@ -434,10 +434,12 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                         uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                         uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
 
-                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() +  (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
 
                         Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
                         
+                        Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                         if(!Helper.HorizontalProbesExcluded.at(17)){
                             Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                         }
@@ -445,7 +447,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     }
 
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = next_shadow_register_value;
+
                     ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
 
                 if (instr.name == Mnemonic::LDRSB || instr.name == Mnemonic::LDRSH)
@@ -505,8 +510,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                         uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                         uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
                         Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
+
+                        Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
 
                         if(!Helper.HorizontalProbesExcluded.at(17)){
                             Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -516,7 +523,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = next_shadow_register_value;
+
                     ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
 
 
@@ -682,8 +692,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 if(InTestClockCycles){
                     uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                     uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + (uint8_t)(!Helper.HorizontalProbesExcluded.at(17)));
                     Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.MemoryLatestClockCycle);
+
+                    Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_store_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
 
                     if(!Helper.HorizontalProbesExcluded.at(17)){
                         Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex,0, m_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -692,7 +704,9 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = read_register_internal(instr.Rd);
+                m_store_memory_shadow_register = m_memory_shadow_register;
                 ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
             }
 
 
@@ -1065,13 +1079,15 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
             u32 cnt = 0;
             uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
             uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+            uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
             if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                 uint8_t hw = 0;
                 for(u32 i = 0; i < 15; ++i){
                     hw += ((instr.imm >> i) & 1);
                 }
-                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))) );
-                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))) );
+                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
             }
 
 
@@ -1104,6 +1120,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                             uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | ((i) << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                             Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
 
+                            Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                             if(!Helper.HorizontalProbesExcluded.at(17)){
                                 Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                             }
@@ -1112,6 +1130,7 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                         //overwrite shadow register with new value
                         m_memory_shadow_register = next_shadow_register_value;
+                        m_load_memory_shadow_register = next_shadow_register_value;
                         
                     }
 
@@ -1123,9 +1142,13 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     
                     address += 4;
                     cnt++;
+
+                    ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
             }
-            ProbeTracker.MemoryLatestClockCycle = InstrNr;
+
+            
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -1206,10 +1229,12 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
             if(Helper.ProbeMemoryShadowRegister){
                 uint32_t ProbeIndex = 0;
                 uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+                uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
                 if(InTestClockCycles ){
                     ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores +  consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
-                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores +  consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size() + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
                 }
                 for(u32 i = 0; i < 15; ++i){
                     if(((instr.imm >> i) & 1)){
@@ -1217,15 +1242,21 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                             uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | ((i) << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                             Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle);
 
+                            Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_store_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
+
                             if(!Helper.HorizontalProbesExcluded.at(17)){
                                 Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                             }
                         }
                         //overwrite shadow register with new value
                         m_memory_shadow_register = read_register_internal((Register)i);
+                        m_store_memory_shadow_register = m_memory_shadow_register;
+
+                        ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                        ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
                     }
                 }
-                ProbeTracker.MemoryLatestClockCycle = InstrNr;
+
             }
 
 
@@ -1318,21 +1349,43 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
             uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
             uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+            uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
+            std::vector<std::vector<uint32_t>> sequencial_register_latest_clock_cycle(17);
+
+            std::vector<uint32_t> tmp;
+            for(uint32_t idx = 0; idx < 17; ++idx){
+                tmp.emplace_back(ProbeTracker.RegisterLatestClockCycle.at(idx));
+            }
+            for(uint32_t idx = 0; idx < 17; ++idx){
+                sequencial_register_latest_clock_cycle.at(idx) = tmp;
+            }
+
+            std::vector<uint32_t> involved_register_in_pop;
+
             if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                 uint8_t hw = 0;
                 for(u32 i = 0; i < 15; ++i){
                     hw += ((instr.imm >> i) & 1);
+
+                    for(const auto& previously_popped_register: involved_register_in_pop){
+                        sequencial_register_latest_clock_cycle.at(i).at(previously_popped_register) = InstrNr;
+                    }
+
+                    involved_register_in_pop.emplace_back(i);
                 }
-                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
-                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
             }
+
+            std::vector<std::tuple<uint8_t, uint32_t>> changed_registers_by_pop;
 
             for (u32 i = 0; i < 15; ++i)
             {
                 if ((instr.imm >> i) & 1)
                 {
                     write_register_internal((Register)i, read_memory_internal(address, 4));
-
+                    changed_registers_by_pop.emplace_back(std::make_tuple(i, read_register_internal((Register)i)));
                     /**
                      * @brief shadow register probing
                      * 
@@ -1341,17 +1394,205 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                         uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | ((i) << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                         Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle);
 
+                        Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_load_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                         if(!Helper.HorizontalProbesExcluded.at(17)){
                             Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, (read_register_internal((Register)i)), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                         }
                     }  
                     //overwrite shadow register with new value
                     m_memory_shadow_register = (read_register_internal((Register)i));
+                    m_load_memory_shadow_register = m_memory_shadow_register;
 
                     address += 4;
+
+                    ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
             }
-            ProbeTracker.MemoryLatestClockCycle = InstrNr;
+
+
+            //############################################################################
+            if(InTestClockCycles){
+                //normal probes
+                for(const auto& changed_register_info: changed_registers_by_pop){
+                    uint8_t RegNr = std::get<0>(changed_register_info);
+                    uint32_t DestinationRegisterValue = std::get<1>(changed_register_info);
+
+                    ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+
+                    //one resize for all following probes
+                    uint32_t ProbeSize = 0;
+                    //add normal probe sizes
+                    ProbeSize = Helper.NormalProbesIncluded.at(RegNr).size();
+
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+
+
+                    uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << CYCLE_OFFSET) | (4 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
+
+                    //normal probe Rd
+                    Software::Probing::CreateNormalProbe(Helper.NormalProbesIncluded.at(RegNr), ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeValues.at(RegNr), ProbeIndex, ProbeInfo, ProbeTracker.RegisterLatestClockCycle.at(RegNr), InstrNr, SimulationIdx, DestinationRegisterValue, RegNr);
+                }
+
+                //horizontal probes
+                for(const auto& changed_register_info: changed_registers_by_pop){
+                    uint8_t RegNr = std::get<0>(changed_register_info);
+
+                    uint8_t SeperatePCUpdate = (uint8_t)(RegNr != Register::PC);
+
+                    ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+
+                    //one resize for all following probes
+                    uint32_t ProbeSize = 0;
+                    //add normal probe sizes
+                    ProbeSize = ((uint8_t)(!Helper.HorizontalProbesExcluded.at(RegNr)));
+
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+
+
+                    if(RegNr < 15){
+                        if(!Helper.HorizontalProbesExcluded.at(RegNr)){
+                            Software::Probing::CreateHorizontalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeTracker.RegisterLatestClockCycle.at(RegNr), Helper.HorizontalBitsIncluded.at(RegNr).size() << ThreadSimulation.TestTransitional, ProbeIndex, InstrNr, RegNr);
+                        }
+                    }
+                    else if(RegNr == 15){
+                        //horizontal probe PC
+                        if(SeperatePCUpdate && ((uint8_t)(!Helper.HorizontalProbesExcluded.at(Register::PC)))){
+                            Software::Probing::CreateHorizontalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeTracker.RegisterLatestClockCycle.at(Register::PC), Helper.HorizontalBitsIncluded.at(Register::PC).size() << ThreadSimulation.TestTransitional, ProbeIndex, InstrNr, Register::PC);
+                        }
+                    }
+                    else if(RegNr == 16){
+                        //horizontal probe PSR
+                        if(m_psr_updated && ((uint8_t)(!Helper.HorizontalProbesExcluded.at(Register::PSR)))){
+                            Software::Probing::CreateHorizontalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeTracker.RegisterLatestClockCycle.at(Register::PSR), Helper.HorizontalBitsIncluded.at(Register::PSR).size() << ThreadSimulation.TestTransitional, ProbeIndex, InstrNr, Register::PSR);
+                        }
+                    }
+                    else{
+                        throw std::runtime_error("pop operation contains unkown register");
+                    }
+                }
+
+                //vertical probes
+                for(const auto& changed_register_info: changed_registers_by_pop){
+                    uint8_t RegNr = std::get<0>(changed_register_info);
+
+                    ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+
+                    //one resize for all following probes
+                    uint32_t ProbeSize = 0;
+                    //add normal probe sizes
+                    if(RegNr <= 15){
+                        ProbeSize = Helper.VerticalProbesSize.at(RegNr).back();
+                    }
+                    
+
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+                    
+                    uint8_t PartnerRegNr, BitIdx;
+                    uint8_t HigherIdOccurred = 0;
+                    bool Increment_HigherId = false;
+
+                    if(RegNr <= 15){
+
+                        for(const auto& tup: Helper.VerticalProbesIncluded.at(RegNr)){
+                            std::tie(PartnerRegNr, BitIdx) = tup;
+
+                            HigherIdOccurred += (uint8_t)Increment_HigherId;
+                            Increment_HigherId = false;
+                            uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (HigherIdOccurred << DEPENDENCY_OFFSET) | (6 << ID_OFFSET) | (RegNr << REG1_OFFSET) | (PartnerRegNr << REG2_OFFSET) | (BitIdx << BIT_OFFSET) | (2 + ThreadSimulation.TestTransitional);
+                            Software::Probing::CreateSmallVerticalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeInfo, ProbeIndex, ProbeTracker.RegisterLatestClockCycle.at(RegNr), sequencial_register_latest_clock_cycle.at(RegNr).at(PartnerRegNr));
+
+                        }
+                    }
+                    else{
+                        throw std::runtime_error("pop operation contains unkown register");
+                    }
+                }
+
+
+                if(Helper.ProbeFullHorizontal){
+                    //full horizontal probes
+                    for(const auto& changed_register_info: changed_registers_by_pop){
+                        uint8_t RegNr = std::get<0>(changed_register_info);
+
+                        ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+
+                        //one resize for all following probes
+                        uint32_t ProbeSize = 0;
+                        //add normal probe sizes
+                        if(RegNr <= 15){
+                            ProbeSize = Helper.FullHorizontalProbesSize.at(RegNr).back();
+                        }
+                        
+
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+                        
+                        uint8_t HigherIdOccurred = 0;
+
+                        if(RegNr <= 15){
+
+                            HigherIdOccurred = 0;
+                        
+                            for(const auto& RegisterIndex: Helper.FULLHRProbesIncluded.at(RegNr)){
+                                uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | ((5 + HigherIdOccurred) << DEPENDENCY_OFFSET) | (8 << ID_OFFSET) | (RegNr << REG1_OFFSET) | (RegisterIndex << REG2_OFFSET) | (Helper.NormalProbesIncluded.at(RegisterIndex).size() + (1 + ThreadSimulation.TestTransitional) * Helper.NormalProbesIncluded.at(RegNr).size());
+                                Software::Probing::CreateSmallFullHorizontalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), ProbeInfo, ProbeIndex, ProbeTracker.RegisterLatestClockCycle.at(RegNr), sequencial_register_latest_clock_cycle.at(RegNr).at(RegisterIndex));
+                            }
+                        }
+
+                        else{
+                            throw std::runtime_error("pop operation contains unkown register");
+                        }
+                    }
+                }
+
+                if(Helper.ProbeFullVertical){
+                    //full vertical probes
+                    for(const auto& changed_register_info: changed_registers_by_pop){
+                        uint8_t RegNr = std::get<0>(changed_register_info);
+
+                        ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
+
+                        //one resize for all following probes
+                        uint32_t ProbeSize = 0;
+                        //add normal probe sizes
+                        if(RegNr <= 15){
+                            ProbeSize = (uint8_t)Helper.ProbeFullVertical * Helper.FullVerticalProbesSize;
+                        }
+                        
+
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + ProbeSize);
+                        
+
+                        if(RegNr <= 15){
+
+                            uint32_t TransitionValueRegNr = ProbeTracker.RegisterLatestValue.at(RegNr);
+                            uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (9 << DEPENDENCY_OFFSET)  | (12 << ID_OFFSET) | (RegNr << REG1_OFFSET);
+                            for(const auto& Bit: Helper.FullVerticalRelevantBits){
+                                Software::Probing::CreateOneRegisterOnlyFullVerticalProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.FullVerticalProbesIncluded.at(Bit), Bit, RegNr, ProbeIndex, ProbeInfo, sequencial_register_latest_clock_cycle.at(RegNr), TransitionValueRegNr);
+                            }
+                        }
+
+                        else{
+                            throw std::runtime_error("pop operation contains unkown register");
+                        }
+                    }
+                }
+
+
+                for(const auto& changed_register_info: changed_registers_by_pop){
+                    uint8_t RegNr = std::get<0>(changed_register_info);
+                    uint32_t DestinationRegisterValue = std::get<1>(changed_register_info);
+                    ProbeTracker.RegisterLatestClockCycle.at(RegNr) = InstrNr;
+                    ProbeTracker.RegisterLatestValue.at(RegNr) = DestinationRegisterValue;
+                }
+
+            }
+
+
+            //############################################################################
+
+
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -1429,10 +1670,12 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
             if( Helper.ProbeMemoryShadowRegister){
                 uint32_t ProbeIndex = 0;
                 uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+                uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
                 if(InTestClockCycles){
                     ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
-                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size() + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
                 }
 
                 for(u32 i = 0; i < 15; ++i){
@@ -1441,15 +1684,21 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                             uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (i << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                             Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle);
 
+                            Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_store_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
+
                             if(!Helper.HorizontalProbesExcluded.at(17)){
                                 Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                             }
                         }
                         //overwrite shadow register with new value
                         m_memory_shadow_register = read_register_internal((Register)i);
+                        m_store_memory_shadow_register = m_memory_shadow_register;
+
+                        ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                        ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
                     }
                 }
-                ProbeTracker.MemoryLatestClockCycle = InstrNr;
+
             }
 
             MemoryOperation = true;
@@ -1545,10 +1794,12 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
             if(Helper.ProbeMemoryShadowRegister){
                 uint32_t ProbeIndex = 0;
                 uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+                uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
                 if(InTestClockCycles){
                     ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
-                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + Helper.MemoryShadowRegisterProbesIncluded.size() * consecutive_stores + consecutive_stores * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size() + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
+                    OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + consecutive_stores * Helper.MemoryShadowRegisterProbesIncluded.size();
                 }
                 for(u32 i = 0; i < 15; ++i){
                     if(((instr.imm >> i) & 1)){
@@ -1557,15 +1808,23 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                             uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (i << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                             Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle);
 
+                            Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_store_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
+
                             if(!Helper.HorizontalProbesExcluded.at(17)){
                                 Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, read_register_internal((Register)i), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                             }
                         }
                         //overwrite shadow register with new value
                         m_memory_shadow_register = read_register_internal((Register)i);
+                        m_store_memory_shadow_register = m_memory_shadow_register;
+
+                        ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                        ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
                     }
+
+
                 }
-                ProbeTracker.MemoryLatestClockCycle = InstrNr;
+
             }
 
 
@@ -1598,13 +1857,15 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
             uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
             uint32_t OffsetShadowProbeToHorizontalShadowProbe = 0;
+            uint32_t OffsetShadowProbeToLoadStoreShadowProbe = 0;
             if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                 uint8_t hw = 0;
                 for(u32 i = 0; i < 15; ++i){
                     hw += ((instr.imm >> i) & 1);
                 }
-                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
-                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size() + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
+                OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + hw * Helper.MemoryShadowRegisterProbesIncluded.size();
             }
 
             for (u32 i = 0; i < 15; ++i)
@@ -1639,6 +1900,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                             uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (i << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                             Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
 
+                            Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, i, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                             if(!Helper.HorizontalProbesExcluded.at(17)){
                                 Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, i, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                             }
@@ -1647,14 +1910,18 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                         //overwrite shadow register with new value
                         m_memory_shadow_register = next_shadow_register_value;
+                        m_load_memory_shadow_register = m_memory_shadow_register;
                         
                     }
 
 
                     address += 4;
+
+                    ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
             }
-            ProbeTracker.MemoryLatestClockCycle = InstrNr;
+            
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -1738,12 +2005,15 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
              * 
              */
             uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
-            uint32_t OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
+            uint32_t OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
+            uint32_t OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
  	        if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                 
                 uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                 Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.MemoryLatestClockCycle);
+
+                Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_store_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
 
                 if(!Helper.HorizontalProbesExcluded.at(17)){
                     Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, 0, m_memory_shadow_register, read_register_internal(instr.Rd), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -1752,7 +2022,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
             //overwrite shadow register with new value
             m_memory_shadow_register = read_register_internal(instr.Rd);
-
+            m_store_memory_shadow_register = m_memory_shadow_register;
+            
+            ProbeTracker.MemoryLatestClockCycle = InstrNr;
+            ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
 
 
             //second shadow register probing
@@ -1762,6 +2035,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                 Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.MemoryLatestClockCycle);
 
+                Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 1, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_store_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
+
                 if(!Helper.HorizontalProbesExcluded.at(17)){
                     Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, 1, m_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                 }
@@ -1769,7 +2044,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
             //overwrite shadow register with new value
             m_memory_shadow_register = read_register_internal(instr.Rm);
+            m_store_memory_shadow_register = m_memory_shadow_register;
+
             ProbeTracker.MemoryLatestClockCycle = InstrNr;
+            ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
 
             MemoryOperation = true;
 
@@ -1814,7 +2092,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
              */
             
             uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
-            uint32_t OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
+            uint32_t OffsetShadowProbeToHorizontalShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
+            uint32_t OffsetShadowProbeToLoadStoreShadowProbe = ProbeIndex + 2 * Helper.MemoryShadowRegisterProbesIncluded.size();
             if(Helper.ProbeMemoryShadowRegister){
                 uint32_t memory_values_not_consider = 0;
 
@@ -1831,8 +2110,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 if(InTestClockCycles){
                     
                     uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * Helper.MemoryShadowRegisterProbesIncluded.size() + 2 * ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                     Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
+
+                    Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
 
                     if(!Helper.HorizontalProbesExcluded.at(17)){
                         Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -1841,6 +2122,7 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
             }
 
             //if randomness was used update it
@@ -1849,7 +2131,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
             }
         
             write_register_internal(instr.RdLo, read_memory_internal(address + 4, 4));
-
+            ProbeTracker.MemoryLatestClockCycle = InstrNr;
+            ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
 
             /**
              * @brief second shadow register probing
@@ -1872,6 +2155,8 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << REG1_OFFSET) | (1 << ThreadSimulation.TestTransitional);
                     Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
 
+                    Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 1, InstrNr, OffsetShadowProbeToLoadStoreShadowProbe, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                     if(!Helper.HorizontalProbesExcluded.at(17)){
                         Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, OffsetShadowProbeToHorizontalShadowProbe, 1, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                     }
@@ -1879,10 +2164,13 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
+
             }
 
 
             ProbeTracker.MemoryLatestClockCycle = InstrNr;
+            ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
             //if randomness was used update it
             if((randomness_start_addr <= (address+4)) && ((address+4) < randomness_end_addr)){
                 write_memory_internal(randomness_start_addr, get_PRNG_randomness() , 4);
@@ -1954,8 +2242,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                     uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                     uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                     Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.MemoryLatestClockCycle);
+
+                    Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_store_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.StoreMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 0);
 
                     if(!Helper.HorizontalProbesExcluded.at(17)){
                         Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, read_register_internal(instr.Rm), ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -1963,6 +2253,7 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = read_register_internal(instr.Rm);
+                    m_store_memory_shadow_register = m_memory_shadow_register;
                 }
 
 
@@ -1971,6 +2262,7 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 MemoryOperation = true;
                 
                 ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                ProbeTracker.StoreMemoryLatestClockCycle = InstrNr;
                 
                 write_register_internal(instr.Rd, 0);
             }
@@ -2025,8 +2317,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                 if(InTestClockCycles){
                     uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                     uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                    ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                     Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
+
+                    Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
 
                     if(!Helper.HorizontalProbesExcluded.at(17)){
                         Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -2035,7 +2329,9 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
 
                 // overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
                 ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
             }
 
 
@@ -2085,8 +2381,10 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     if(InTestClockCycles){
                         uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                         uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                         Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
+
+                        Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
 
                         if(!Helper.HorizontalProbesExcluded.at(17)){
                             Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
@@ -2095,7 +2393,9 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     }
                     // overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = m_memory_shadow_register;
                     ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                 }
 
 
@@ -2120,17 +2420,21 @@ bool Emulator::execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimul
                     if(InTestClockCycles && Helper.ProbeMemoryShadowRegister){
                         uint32_t ProbeIndex = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size();
                         uint64_t ProbeInfo = (static_cast<uint64_t>(InstrNr) << 32) | (1 << ID_OFFSET) | (1 << ThreadSimulation.TestTransitional);
-                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
+                        ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).resize(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx).size() + Helper.MemoryShadowRegisterProbesIncluded.size() + Helper.MemoryShadowRegisterProbesIncluded.size() + ((uint8_t)(!Helper.HorizontalProbesExcluded.at(17))));
                         Software::Probing::CreateMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, ProbeInfo, ProbeIndex, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle);
                         
+                        Software::Probing::CreateSeperateLoadStoreMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), Helper.MemoryShadowRegisterProbesIncluded, 0, InstrNr, ProbeIndex, m_load_memory_shadow_register, next_shadow_register_value, ProbeTracker.LoadMemoryLatestClockCycle, (1 << ThreadSimulation.TestTransitional), 1);
+
                         if(!Helper.HorizontalProbesExcluded.at(17)){
                             Software::Probing::CreateHorizontalMemShadowProbe(ThreadSimulation.StandardProbesPerSimulation.at(SimulationIdx), InstrNr, ProbeIndex, 0, m_memory_shadow_register, next_shadow_register_value, ProbeTracker.MemoryLatestClockCycle, (Helper.MemoryShadowRegisterProbesIncluded.size() << ThreadSimulation.TestTransitional));
                         }
 
                     }
                     ProbeTracker.MemoryLatestClockCycle = InstrNr;
+                    ProbeTracker.LoadMemoryLatestClockCycle = InstrNr;
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = m_memory_shadow_register;
                 }
 
                 
@@ -4079,8 +4383,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = next_shadow_register_value;
 
                     ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                    ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
                 }
 
                 
@@ -4143,7 +4449,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = next_shadow_register_value;
+
                     ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                    ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
                 }
 
 
@@ -4263,7 +4572,11 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
              * 
              */
             m_memory_shadow_register = read_register_internal(instr.Rd);
+            m_store_memory_shadow_register = m_memory_shadow_register;
+
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             if (instr.flags.wback)
             {
                 write_register_internal(instr.Rn, offset_addr);
@@ -4650,6 +4963,7 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                         //overwrite shadow register with new value
                         m_memory_shadow_register = next_shadow_register_value;
+                        m_load_memory_shadow_register = next_shadow_register_value;
                     }
 
 
@@ -4662,7 +4976,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                     cnt++;
                 }
             }
+
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
+            
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -4699,12 +5016,15 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                      * 
                      */
                     m_memory_shadow_register = read_register_internal((Register)i);
+                    m_store_memory_shadow_register = m_memory_shadow_register;
                     
                     address += 4;
                     cnt++;
                 }
             }
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             if (instr.flags.wback)
             {
                 write_register_internal(instr.Rn, address);
@@ -4789,21 +5109,34 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
             u32 end_val = address + arm_functions::bit_count(instr.imm) * 4;
 
+            std::vector<std::tuple<uint8_t, uint32_t>> changed_registers_by_pop;
+            
             for (u32 i = 0; i < 15; ++i)
             {
                 if ((instr.imm >> i) & 1)
                 {
                     write_register_internal((Register)i, read_memory_internal(address, 4));
+                    changed_registers_by_pop.emplace_back(std::make_tuple(i, read_register_internal((Register)i)));
                     /**
                      * @brief shadow register update
                      * 
                      */
                     m_memory_shadow_register = read_register_internal((Register)i);
+                    m_load_memory_shadow_register = m_memory_shadow_register;
                     address += 4;
                 }
             }
 
+            for(const auto& changed_register_info: changed_registers_by_pop){
+                uint8_t RegNr = std::get<0>(changed_register_info);
+                uint32_t DestinationRegisterValue = std::get<1>(changed_register_info);
+                ProbeTracker.RegisterLatestClockCycle.at(RegNr) = m_emulated_time;
+                ProbeTracker.RegisterLatestValue.at(RegNr) = DestinationRegisterValue;
+            }
+
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
+
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -4846,10 +5179,13 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                      * 
                      */
                     m_memory_shadow_register = reg1;
+                    m_store_memory_shadow_register = m_memory_shadow_register;
                     address += 4;
                 }
             }
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             write_register_internal(SP, end_val);
 
             instruction_executed = true;
@@ -4907,11 +5243,14 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                      * 
                      */
                     m_memory_shadow_register = reg;
+                    m_store_memory_shadow_register = m_memory_shadow_register;
 
                     address += 4;
                 }
             }
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             if (instr.flags.wback)
             {
                 write_register_internal(instr.Rn, end_val);
@@ -4962,6 +5301,7 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                         //overwrite shadow register with new value
                         m_memory_shadow_register = next_shadow_register_value;
+                        m_load_memory_shadow_register = m_memory_shadow_register;
                     }
 
 
@@ -4974,6 +5314,8 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                 }
             }
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
+
             if ((instr.imm >> 15) & 1)
             {
                 bx_write_PC(read_memory_internal(address, 4));
@@ -5013,6 +5355,7 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
              * 
              */
             m_memory_shadow_register = read_register_internal(instr.Rd);
+            m_store_memory_shadow_register = m_memory_shadow_register;
 
 
             write_memory_internal(address + 4, read_register_internal(instr.Rm), 4);
@@ -5023,7 +5366,11 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
              * 
              */
             m_memory_shadow_register = read_register_internal(instr.Rm);
+            m_store_memory_shadow_register = m_memory_shadow_register;
+
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             if (instr.flags.wback)
             {
                 write_register_internal(instr.Rn, offset_address);
@@ -5078,6 +5425,7 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
             }
 
 
@@ -5107,9 +5455,12 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
             }
 
             ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+            ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
+
             //if randomness was used update it
             if((randomness_start_addr <= (address+4)) && ((address+4) < randomness_end_addr)){
                 write_memory_internal(randomness_start_addr, get_PRNG_randomness() , 4);
@@ -5160,8 +5511,11 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
                  * 
                  */
                 m_memory_shadow_register = read_register_internal(instr.Rm);
+                m_store_memory_shadow_register = m_memory_shadow_register;
                 write_register_internal(instr.Rd, 0);
                 ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                ProbeTracker.StoreMemoryLatestClockCycle = m_emulated_time;
+
             }
             else
             {
@@ -5213,7 +5567,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                 //overwrite shadow register with new value
                 m_memory_shadow_register = next_shadow_register_value;
+                m_load_memory_shadow_register = m_memory_shadow_register;
+
                 ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
             }
 
            //if randomness was used update it
@@ -5259,7 +5616,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = m_memory_shadow_register;
+
                     ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                    ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
                 }
 
             }
@@ -5280,7 +5640,10 @@ bool Emulator::execute_instantiation(const Instruction& instr, ::Software::Threa
 
                     //overwrite shadow register with new value
                     m_memory_shadow_register = next_shadow_register_value;
+                    m_load_memory_shadow_register = m_memory_shadow_register;
+
                     ProbeTracker.MemoryLatestClockCycle = m_emulated_time;
+                    ProbeTracker.LoadMemoryLatestClockCycle = m_emulated_time;
                 }
 
             }
