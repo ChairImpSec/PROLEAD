@@ -26,12 +26,13 @@ var searchData=
   ['librarystruct_23',['LibraryStruct',['../struct_hardware_1_1_library_struct.html',1,'Hardware']]],
   ['linker_5fpath_24',['LINKER_PATH',['../namespacecompile__sw.html#a5fe3afcb86feab66edc5282527eb9c9d',1,'compile_sw']]],
   ['linkerfilename_25',['LinkerFileName',['../struct_command_line_parameter_struct.html#a338c05bcef67a5d8c7f1b2fef0f01e8c',1,'CommandLineParameterStruct']]],
-  ['lowest_5fset_5fbit_26',['lowest_set_bit',['../namespacemulator_1_1arm__functions.html#a7c268d191253537a75a655b2efc66404',1,'mulator::arm_functions']]],
-  ['lr_27',['LR',['../namespacemulator.html#a16b557221e896ca572d70b7713efce4da6199df136bddb8cfd7aaa4800c7a29bd',1,'mulator']]],
-  ['ls_28',['LS',['../namespacemulator.html#a06762be93ad251be4943b6a8797a6df4ab2659bc01068f79ad2fbc7448a862eb2',1,'mulator']]],
-  ['lsl_29',['LSL',['../namespacemulator_1_1arm__functions.html#a727e88708a61f1a8978ccbe4a1b9c994',1,'mulator::arm_functions::LSL()'],['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05ea3005b8eab96f81df142d787d501d0537',1,'mulator::LSL()'],['../namespacemulator.html#a1a547d928c44738ef9cd0dbb8675f4e6a3005b8eab96f81df142d787d501d0537',1,'mulator::LSL()']]],
-  ['lsl_5fc_30',['LSL_C',['../namespacemulator_1_1arm__functions.html#a8cb01eaf09b25b44e7034f40eea92bde',1,'mulator::arm_functions']]],
-  ['lsr_31',['LSR',['../namespacemulator_1_1arm__functions.html#aa60e1d6a448916042eb92d58c8e3cef8',1,'mulator::arm_functions::LSR()'],['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05eaa8d2c6c1c1799817dcc4a965a5a13dc1',1,'mulator::LSR()'],['../namespacemulator.html#a1a547d928c44738ef9cd0dbb8675f4e6aa8d2c6c1c1799817dcc4a965a5a13dc1',1,'mulator::LSR()']]],
-  ['lsr_5fc_32',['LSR_C',['../namespacemulator_1_1arm__functions.html#aac0f0078549681495d81e652a4444d7f',1,'mulator::arm_functions']]],
-  ['lt_33',['LT',['../namespacemulator.html#a06762be93ad251be4943b6a8797a6df4a080cd6f891c0a79e5171521d49daa735',1,'mulator']]]
+  ['loadmemorylatestclockcycle_26',['LoadMemoryLatestClockCycle',['../struct_software_1_1_probe_tracking_struct.html#af552a0d53c9b305743968379194c7853',1,'Software::ProbeTrackingStruct']]],
+  ['lowest_5fset_5fbit_27',['lowest_set_bit',['../namespacemulator_1_1arm__functions.html#a7c268d191253537a75a655b2efc66404',1,'mulator::arm_functions']]],
+  ['lr_28',['LR',['../namespacemulator.html#a16b557221e896ca572d70b7713efce4da6199df136bddb8cfd7aaa4800c7a29bd',1,'mulator']]],
+  ['ls_29',['LS',['../namespacemulator.html#a06762be93ad251be4943b6a8797a6df4ab2659bc01068f79ad2fbc7448a862eb2',1,'mulator']]],
+  ['lsl_30',['LSL',['../namespacemulator_1_1arm__functions.html#a727e88708a61f1a8978ccbe4a1b9c994',1,'mulator::arm_functions::LSL()'],['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05ea3005b8eab96f81df142d787d501d0537',1,'mulator::LSL()'],['../namespacemulator.html#a1a547d928c44738ef9cd0dbb8675f4e6a3005b8eab96f81df142d787d501d0537',1,'mulator::LSL()']]],
+  ['lsl_5fc_31',['LSL_C',['../namespacemulator_1_1arm__functions.html#a8cb01eaf09b25b44e7034f40eea92bde',1,'mulator::arm_functions']]],
+  ['lsr_32',['LSR',['../namespacemulator_1_1arm__functions.html#aa60e1d6a448916042eb92d58c8e3cef8',1,'mulator::arm_functions::LSR()'],['../namespacemulator.html#aa4991949c68b2149e932f87a885fa05eaa8d2c6c1c1799817dcc4a965a5a13dc1',1,'mulator::LSR()'],['../namespacemulator.html#a1a547d928c44738ef9cd0dbb8675f4e6aa8d2c6c1c1799817dcc4a965a5a13dc1',1,'mulator::LSR()']]],
+  ['lsr_5fc_33',['LSR_C',['../namespacemulator_1_1arm__functions.html#aac0f0078549681495d81e652a4444d7f',1,'mulator::arm_functions']]],
+  ['lt_34',['LT',['../namespacemulator.html#a06762be93ad251be4943b6a8797a6df4a080cd6f891c0a79e5171521d49daa735',1,'mulator']]]
 ];

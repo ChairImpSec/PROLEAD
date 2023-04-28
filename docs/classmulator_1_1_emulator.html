@@ -76,6 +76,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classmulator_1_1_emulator-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">mulator::Emulator Class Reference</div></div>
 </div><!--header-->
@@ -89,8 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3182dc7cd5b2884c45b766f1d6dfcf09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad93ed28ef536cd1538ef79a6b079fc66"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#ad93ed28ef536cd1538ef79a6b079fc66">Emulator</a> (<a class="el" href="namespacemulator.html#a307f16ee456461500b91a4b86e2b8283">Architecture</a> arch)</td></tr>
 <tr class="separator:ad93ed28ef536cd1538ef79a6b079fc66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c2e428a8d629302e16cad66d30ec9d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a9c2e428a8d629302e16cad66d30ec9d0">Emulator</a> (<a class="el" href="namespacemulator.html#a307f16ee456461500b91a4b86e2b8283">Architecture</a> arch, boost::variate_generator&lt; boost::mt19937 &amp;, boost::uniform_int&lt; uint64_t &gt; &gt; ThreadPrng)</td></tr>
-<tr class="separator:a9c2e428a8d629302e16cad66d30ec9d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a397be69dddba43014b5d338ad8585185"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a397be69dddba43014b5d338ad8585185">Emulator</a> (<a class="el" href="namespacemulator.html#a307f16ee456461500b91a4b86e2b8283">Architecture</a> arch, boost::variate_generator&lt; boost::mt19937 &amp;, boost::uniform_int&lt; uint64_t &gt; &gt; ThreadPrng, uint32_t NrOfPipelineStages)</td></tr>
+<tr class="separator:a397be69dddba43014b5d338ad8585185"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45b00ac5434eaac715014fef00505ca1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a45b00ac5434eaac715014fef00505ca1">Emulator</a> (const <a class="el" href="classmulator_1_1_emulator.html">Emulator</a> &amp;other)</td></tr>
 <tr class="separator:a45b00ac5434eaac715014fef00505ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54ebd8e2e4a8339905f5c1e588dfc428"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a54ebd8e2e4a8339905f5c1e588dfc428">~Emulator</a> ()</td></tr>
@@ -149,10 +150,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7a07d4236f3dabb14ec6ca479b9b0a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d1dd3b21d503cef72ecbde6c5040535"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a7d1dd3b21d503cef72ecbde6c5040535">set_cpu_state</a> (const <a class="el" href="structmulator_1_1_c_p_u___state.html">CPU_State</a> &amp;state)</td></tr>
 <tr class="separator:a7d1dd3b21d503cef72ecbde6c5040535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a25b379732a2cbc70eab47437638c2216"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#a25b379732a2cbc70eab47437638c2216">m_pipeline_stages</a></td></tr>
+<tr class="separator:a25b379732a2cbc70eab47437638c2216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac394b1f44244793c29abe72237ae728d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structmulator_1_1_c_p_u___state.html">CPU_State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmulator_1_1_emulator.html#ac394b1f44244793c29abe72237ae728d">m_pipeline_cpu_states</a></td></tr>
+<tr class="separator:ac394b1f44244793c29abe72237ae728d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="emulator_8h_source.html#l00055">55</a> of file <a class="el" href="emulator_8h_source.html">emulator.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="emulator_8h_source.html#l00057">57</a> of file <a class="el" href="emulator_8h_source.html">emulator.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3182dc7cd5b2884c45b766f1d6dfcf09" name="a3182dc7cd5b2884c45b766f1d6dfcf09"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3182dc7cd5b2884c45b766f1d6dfcf09">&#9670;&#160;</a></span>Emulator() <span class="overload">[1/4]</span></h2>
@@ -189,8 +197,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c2e428a8d629302e16cad66d30ec9d0" name="a9c2e428a8d629302e16cad66d30ec9d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c2e428a8d629302e16cad66d30ec9d0">&#9670;&#160;</a></span>Emulator() <span class="overload">[3/4]</span></h2>
+<a id="a397be69dddba43014b5d338ad8585185" name="a397be69dddba43014b5d338ad8585185"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a397be69dddba43014b5d338ad8585185">&#9670;&#160;</a></span>Emulator() <span class="overload">[3/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -205,7 +213,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::variate_generator&lt; boost::mt19937 &amp;, boost::uniform_int&lt; uint64_t &gt; &gt;&#160;</td>
-          <td class="paramname"><em>ThreadPrng</em>&#160;</td>
+          <td class="paramname"><em>ThreadPrng</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>NrOfPipelineStages</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -912,6 +926,39 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac394b1f44244793c29abe72237ae728d" name="ac394b1f44244793c29abe72237ae728d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac394b1f44244793c29abe72237ae728d">&#9670;&#160;</a></span>m_pipeline_cpu_states</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structmulator_1_1_c_p_u___state.html">CPU_State</a>&gt; mulator::Emulator::m_pipeline_cpu_states</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="emulator_8h_source.html#l00176">176</a> of file <a class="el" href="emulator_8h_source.html">emulator.h</a>.</p>
+
+</div>
+</div>
+<a id="a25b379732a2cbc70eab47437638c2216" name="a25b379732a2cbc70eab47437638c2216"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25b379732a2cbc70eab47437638c2216">&#9670;&#160;</a></span>m_pipeline_stages</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t mulator::Emulator::m_pipeline_stages</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="emulator_8h_source.html#l00175">175</a> of file <a class="el" href="emulator_8h_source.html">emulator.h</a>.</p>
 
 </div>
 </div>

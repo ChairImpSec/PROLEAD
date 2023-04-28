@@ -82,6 +82,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a struct that track meta information for probes.  
+ <a href="struct_software_1_1_helper_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -92,41 +95,69 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a982f619ed4e2b0dd6c68403e5ab1cdea"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint8_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a982f619ed4e2b0dd6c68403e5ab1cdea">NormalProbesIncluded</a></td></tr>
+<tr class="memdesc:a982f619ed4e2b0dd6c68403e5ab1cdea"><td class="mdescLeft">&#160;</td><td class="mdescRight">stores bit position of every register that will be probed  <br /></td></tr>
 <tr class="separator:a982f619ed4e2b0dd6c68403e5ab1cdea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87b32f5727ac11512c4dcdb2ebb7a34c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint8_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a87b32f5727ac11512c4dcdb2ebb7a34c">HorizontalBitsIncluded</a></td></tr>
+<tr class="memdesc:a87b32f5727ac11512c4dcdb2ebb7a34c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store the probes which are not excluded in a horizontal probe.  <br /></td></tr>
 <tr class="separator:a87b32f5727ac11512c4dcdb2ebb7a34c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7736ab01fadf8582613008390dc8a2c1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; std::tuple&lt; uint8_t, uint8_t &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a7736ab01fadf8582613008390dc8a2c1">VerticalProbesIncluded</a></td></tr>
+<tr class="memdesc:a7736ab01fadf8582613008390dc8a2c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store the probes which are not excluded in a vertical probe.  <br /></td></tr>
 <tr class="separator:a7736ab01fadf8582613008390dc8a2c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f180c73e2f26f18a2f7cebf0765c9b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint8_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#ac0f180c73e2f26f18a2f7cebf0765c9b">FullVerticalProbesIncluded</a></td></tr>
+<tr class="memdesc:ac0f180c73e2f26f18a2f7cebf0765c9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">[32][] one vertical probe contains included register of i-th bit  <br /></td></tr>
 <tr class="separator:ac0f180c73e2f26f18a2f7cebf0765c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a273a3984e8e6d18006ffcba875a3811b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a273a3984e8e6d18006ffcba875a3811b">MemoryProbesIncluded</a></td></tr>
+<tr class="memdesc:a273a3984e8e6d18006ffcba875a3811b"><td class="mdescLeft">&#160;</td><td class="mdescRight">stores bit position of a memory word that will be probed  <br /></td></tr>
 <tr class="separator:a273a3984e8e6d18006ffcba875a3811b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabd7793fb7effeedc5706355b158aa83"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#aabd7793fb7effeedc5706355b158aa83">MemoryShadowRegisterProbesIncluded</a></td></tr>
+<tr class="memdesc:aabd7793fb7effeedc5706355b158aa83"><td class="mdescLeft">&#160;</td><td class="mdescRight">stores bit position of the shadow memory register that will be probed  <br /></td></tr>
 <tr class="separator:aabd7793fb7effeedc5706355b158aa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac327862e8e1f2b72d9dc0f757220cc9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint8_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#aac327862e8e1f2b72d9dc0f757220cc9">PipelineForwardingProbesIncluded</a></td></tr>
+<tr class="memdesc:aac327862e8e1f2b72d9dc0f757220cc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">[32][] one pipeline probe contains included register of i-th bit with a depth of #PipelineSize  <br /></td></tr>
+<tr class="separator:aac327862e8e1f2b72d9dc0f757220cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45c2c6adc91316ccfa16b328a8330f63"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint8_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a45c2c6adc91316ccfa16b328a8330f63">FULLHRProbesIncluded</a></td></tr>
+<tr class="memdesc:a45c2c6adc91316ccfa16b328a8330f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store the probes which are not excluded in a horizontal probe.  <br /></td></tr>
 <tr class="separator:a45c2c6adc91316ccfa16b328a8330f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92b471c6e53bba365b15abd14d4a4065"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a92b471c6e53bba365b15abd14d4a4065">ProbeMemory</a></td></tr>
+<tr class="memdesc:a92b471c6e53bba365b15abd14d4a4065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision if memory should be probed.  <br /></td></tr>
 <tr class="separator:a92b471c6e53bba365b15abd14d4a4065"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeaf424de12c8a4e6c9c9cb65aa80aa79"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#aeaf424de12c8a4e6c9c9cb65aa80aa79">ProbeMemoryShadowRegister</a></td></tr>
+<tr class="memdesc:aeaf424de12c8a4e6c9c9cb65aa80aa79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision if memory shadow register should be probed.  <br /></td></tr>
 <tr class="separator:aeaf424de12c8a4e6c9c9cb65aa80aa79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1f7d009c457bbcce481611c615a4e50"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#af1f7d009c457bbcce481611c615a4e50">ProbeFullHorizontal</a></td></tr>
+<tr class="memdesc:af1f7d009c457bbcce481611c615a4e50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision if full horizontal should be probed.  <br /></td></tr>
 <tr class="separator:af1f7d009c457bbcce481611c615a4e50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3be3d7fe45004e3b4c9ac7bd8601a107"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a3be3d7fe45004e3b4c9ac7bd8601a107">ProbeFullVertical</a></td></tr>
+<tr class="memdesc:a3be3d7fe45004e3b4c9ac7bd8601a107"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision if full vertical should be probed.  <br /></td></tr>
 <tr class="separator:a3be3d7fe45004e3b4c9ac7bd8601a107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab234a4270e1e48fffe0812cc6660101c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#ab234a4270e1e48fffe0812cc6660101c">ProbePipelineForwarding</a></td></tr>
+<tr class="memdesc:ab234a4270e1e48fffe0812cc6660101c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision if pipeline forwarding should be probed.  <br /></td></tr>
+<tr class="separator:ab234a4270e1e48fffe0812cc6660101c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f2bbc2c2495c1356777ed70033441ad"><td class="memItemLeft" align="right" valign="top">std::vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a5f2bbc2c2495c1356777ed70033441ad">HorizontalProbesExcluded</a></td></tr>
+<tr class="memdesc:a5f2bbc2c2495c1356777ed70033441ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision which bits should be probed in a horizontal probe.  <br /></td></tr>
 <tr class="separator:a5f2bbc2c2495c1356777ed70033441ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3bcb1612663ec0c7df106273b470139"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint32_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#ab3bcb1612663ec0c7df106273b470139">VerticalProbesSize</a></td></tr>
+<tr class="memdesc:ab3bcb1612663ec0c7df106273b470139"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains probe size of each register for vertical probe.  <br /></td></tr>
 <tr class="separator:ab3bcb1612663ec0c7df106273b470139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27aacb15941212a7eae4d2a5856ad7ec"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint32_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a27aacb15941212a7eae4d2a5856ad7ec">FullHorizontalProbesSize</a></td></tr>
+<tr class="memdesc:a27aacb15941212a7eae4d2a5856ad7ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains probe size of each register for full horizontal probe.  <br /></td></tr>
 <tr class="separator:a27aacb15941212a7eae4d2a5856ad7ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ae1d3e0d377a51f4f948622df67d904"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#a1ae1d3e0d377a51f4f948622df67d904">FullVerticalProbesSize</a></td></tr>
+<tr class="memdesc:a1ae1d3e0d377a51f4f948622df67d904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains probe size of full vertical probe.  <br /></td></tr>
 <tr class="separator:a1ae1d3e0d377a51f4f948622df67d904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc27a7959a818f21fa05b5717abe8f4e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#abc27a7959a818f21fa05b5717abe8f4e">PipelineForwardingProbesSize</a></td></tr>
+<tr class="memdesc:abc27a7959a818f21fa05b5717abe8f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains probe size of pipeline forwarding probe <br  />
+  <br /></td></tr>
+<tr class="separator:abc27a7959a818f21fa05b5717abe8f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6efb38482e307b9ca6db04484fe2a99"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#aa6efb38482e307b9ca6db04484fe2a99">FullVerticalRelevantBits</a></td></tr>
 <tr class="separator:aa6efb38482e307b9ca6db04484fe2a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5c6e89d7504a6ff2bbfeb30291ea5f8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_helper_struct.html#ab5c6e89d7504a6ff2bbfeb30291ea5f8">PipelineForwardingRelevantBits</a></td></tr>
+<tr class="separator:ab5c6e89d7504a6ff2bbfeb30291ea5f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00167">167</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<div class="textblock"><p>Defines a struct that track meta information for probes. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00214">214</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aae5ac14a6d04b6427e862338e2b8288b" name="aae5ac14a6d04b6427e862338e2b8288b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aae5ac14a6d04b6427e862338e2b8288b">&#9670;&#160;</a></span>HelperStruct()</h2>
@@ -158,7 +189,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00185">185</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Contains probe size of each register for full horizontal probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00235">235</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -174,7 +207,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00175">175</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Store the probes which are not excluded in a horizontal probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00223">223</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -190,7 +225,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00172">172</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>[32][] one vertical probe contains included register of i-th bit </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00219">219</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +243,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00186">186</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Contains probe size of full vertical probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00236">236</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -222,7 +261,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00188">188</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00240">240</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -238,7 +277,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00170">170</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Store the probes which are not excluded in a horizontal probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00217">217</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -254,7 +295,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00182">182</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision which bits should be probed in a horizontal probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00232">232</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -270,7 +313,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00173">173</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>stores bit position of a memory word that will be probed </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00220">220</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -286,7 +331,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00174">174</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>stores bit position of the shadow memory register that will be probed </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00221">221</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -302,7 +349,62 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00169">169</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>stores bit position of every register that will be probed </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00216">216</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aac327862e8e1f2b72d9dc0f757220cc9" name="aac327862e8e1f2b72d9dc0f757220cc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac327862e8e1f2b72d9dc0f757220cc9">&#9670;&#160;</a></span>PipelineForwardingProbesIncluded</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;uint8_t&gt; &gt; Software::HelperStruct::PipelineForwardingProbesIncluded</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>[32][] one pipeline probe contains included register of i-th bit with a depth of #PipelineSize </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00222">222</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abc27a7959a818f21fa05b5717abe8f4e" name="abc27a7959a818f21fa05b5717abe8f4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc27a7959a818f21fa05b5717abe8f4e">&#9670;&#160;</a></span>PipelineForwardingProbesSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Software::HelperStruct::PipelineForwardingProbesSize</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Contains probe size of pipeline forwarding probe <br  />
+ </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00237">237</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab5c6e89d7504a6ff2bbfeb30291ea5f8" name="ab5c6e89d7504a6ff2bbfeb30291ea5f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5c6e89d7504a6ff2bbfeb30291ea5f8">&#9670;&#160;</a></span>PipelineForwardingRelevantBits</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;uint8_t&gt; Software::HelperStruct::PipelineForwardingRelevantBits</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00241">241</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -318,7 +420,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00179">179</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision if full horizontal should be probed. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00227">227</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +438,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00180">180</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision if full vertical should be probed. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00228">228</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -350,7 +456,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00177">177</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision if memory should be probed. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00225">225</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -366,7 +474,27 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00178">178</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision if memory shadow register should be probed. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00226">226</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab234a4270e1e48fffe0812cc6660101c" name="ab234a4270e1e48fffe0812cc6660101c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab234a4270e1e48fffe0812cc6660101c">&#9670;&#160;</a></span>ProbePipelineForwarding</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Software::HelperStruct::ProbePipelineForwarding</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Decision if pipeline forwarding should be probed. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00229">229</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -382,7 +510,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00171">171</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Store the probes which are not excluded in a vertical probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00218">218</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -398,7 +528,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00184">184</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Contains probe size of each register for vertical probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00234">234</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>

@@ -96,48 +96,53 @@ $(function() {
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">#   check if directory exists</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keywordflow">if</span> <span class="keywordflow">not</span> os.path.isdir(BINARY_PATH):</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    print(<span class="stringliteral">&quot;\n{} is not a directory&quot;</span>.format(BINARY_PATH))</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    exit(1)</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keywordflow">if</span> <span class="keywordflow">not</span> os.path.exists(BINARY_PATH):</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    os.mkdir(BINARY_PATH)</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keywordflow">elif</span> <span class="keywordflow">not</span> os.path.isdir(BINARY_PATH):</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordflow">raise</span> FileExistsError(<span class="stringliteral">&quot;&#39;{}&#39; is not a directory.&quot;</span>.format(BINARY_PATH))</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#afda43d881391ef01f402c67d5cfae33f">   25</a></span><span class="keywordflow">try</span>:</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    if(sys.argv[-1] == <span class="stringliteral">&#39;0&#39;</span>):</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a5fe3afcb86feab66edc5282527eb9c9d">   29</a></span>        LINKER_PATH = sys.argv[1]</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="comment">#generate source file list for gcc call</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ab1a75e42f365c97e7f756a5c55a26c51">   32</a></span>        source_file_args = <span class="stringliteral">&quot;&quot;</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordflow">for</span> arg_idx <span class="keywordflow">in</span> range(2, len(sys.argv[:-1]) - 1):</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            source_file_args += (sys.argv[arg_idx])</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            source_file_args += <span class="stringliteral">&quot; &quot;</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a5ed74c239168f3dccfee21638b11ddcb">   37</a></span>        compiler_flags = sys.argv[len(sys.argv) - 2]</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="comment"># build the ARM binary</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordflow">if</span> os.system(<span class="stringliteral">&quot;arm-none-eabi-gcc &quot;</span> + compiler_flags + <span class="stringliteral">&quot; -Wl,-T&quot;</span> + LINKER_PATH +<span class="stringliteral">&quot; -Wl,-Map,&quot;</span> + BINARY_PATH + <span class="stringliteral">&quot;/binary.map&quot;</span> + <span class="stringliteral">&quot; -o &quot;</span> + BINARY_PATH + <span class="stringliteral">&quot;/binary.elf &quot;</span> + source_file_args) != 0: sys.exit(1)</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a71c29167e511f6d7948d205895fac7fa">   40</a></span>    <span class="keywordflow">else</span>:</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a2e0065814ea038e5d32558986f59e335">   41</a></span>        map_path = sys.argv[-3]</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a3acc76bc6fa652bd932b0f0e60a16c82">   42</a></span>        disassembled_path = sys.argv[-2]</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#acf6432b1261e786390182dc0ca9c153a">   43</a></span>        elf_path = sys.argv[-4]</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ad8b766cbe26bbb0d1ae796b405b2c6fe">   45</a></span>        map_name = map_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#adb516d414a77e5cc50a8bcd44c9b238e">   46</a></span>        disassembled_name = disassembled_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ac9033c57042928cbbfd54f8a2242e422">   47</a></span>        elf_name =  elf_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="comment">#copy to binary directory</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        shutil.copyfile(map_path, <span class="stringliteral">&quot;../../binary/binary.map&quot;</span>)</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        shutil.copyfile(disassembled_path, <span class="stringliteral">&quot;../../binary/disassembled.txt&quot;</span>)</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        shutil.copyfile(elf_path, <span class="stringliteral">&quot;../../binary/binary.elf&quot;</span>)</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keywordflow">except</span> Exception <span class="keyword">as</span> e:</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    print(str(e))</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    print(<span class="stringliteral">&quot;\nFile or directory to program file not found&quot;</span>)</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    exit(1)</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>if(sys.argv[-1] == <span class="stringliteral">&#39;0&#39;</span>):</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a5fe3afcb86feab66edc5282527eb9c9d">   27</a></span>    LINKER_PATH = sys.argv[1]</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment">#generate source file list for gcc call</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ab1a75e42f365c97e7f756a5c55a26c51">   30</a></span>    source_file_args = <span class="stringliteral">&quot;&quot;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordflow">for</span> arg_idx <span class="keywordflow">in</span> range(2, len(sys.argv[:-1]) - 1):</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        source_file_args += (sys.argv[arg_idx])</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        source_file_args += <span class="stringliteral">&quot; &quot;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a5ed74c239168f3dccfee21638b11ddcb">   35</a></span>    compiler_flags = sys.argv[len(sys.argv) - 2]</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="comment"># build the ARM binary</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    sub.run(</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            f<span class="stringliteral">&quot;arm-none-eabi-gcc {compiler_flags} -Wl,-T{LINKER_PATH} -Wl,-Map,{BINARY_PATH}/binary.map -o {BINARY_PATH}/binary.elf {source_file_args}&quot;</span>,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ac06ffa85c0237ed0542dfd682c7d1fa0">   39</a></span>            shell=<span class="keyword">True</span>,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a70c542caee5042b9bf80489d5be2164b">   40</a></span>            check=<span class="keyword">True</span>,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            )</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a71c29167e511f6d7948d205895fac7fa">   42</a></span><span class="keywordflow">else</span>:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a2e0065814ea038e5d32558986f59e335">   43</a></span>    map_path = sys.argv[-3]</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#a3acc76bc6fa652bd932b0f0e60a16c82">   44</a></span>    disassembled_path = sys.argv[-2]</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#acf6432b1261e786390182dc0ca9c153a">   45</a></span>    elf_path = sys.argv[-4]</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ad8b766cbe26bbb0d1ae796b405b2c6fe">   47</a></span>    map_name = map_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#adb516d414a77e5cc50a8bcd44c9b238e">   48</a></span>    disassembled_name = disassembled_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ac9033c57042928cbbfd54f8a2242e422">   49</a></span>    elf_name =  elf_path.rsplit(<span class="stringliteral">&quot;/&quot;</span>, 1)[-1]</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="comment">#copy to binary directory</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#afda43d881391ef01f402c67d5cfae33f">   51</a></span>    <span class="keywordflow">try</span>:</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        shutil.copyfile(map_path, <span class="stringliteral">&quot;../../binary/binary.map&quot;</span>)</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        shutil.copyfile(disassembled_path, <span class="stringliteral">&quot;../../binary/disassembled.txt&quot;</span>)</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        shutil.copyfile(elf_path, <span class="stringliteral">&quot;../../binary/binary.elf&quot;</span>)</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">except</span> OSError <span class="keyword">as</span> e:</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordflow">raise</span> FileExistsError(<span class="stringliteral">&quot;File or directory to program file not found&quot;</span>) <span class="keyword">from</span> e</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"># create disassembly for looking up armory results later</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keywordflow">if</span> os.system(<span class="stringliteral">&quot;arm-none-eabi-objdump &quot;</span> + BINARY_PATH + <span class="stringliteral">&quot;/binary.elf -d &gt; &quot;</span> + BINARY_PATH + <span class="stringliteral">&quot;/disassembled.txt&quot;</span>) != 0: sys.exit(1)</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">with</span> open(BINARY_PATH + <span class="stringliteral">&quot;/disassembled.txt&quot;</span>, <span class="stringliteral">&quot;w&quot;</span>) <span class="keyword">as</span> dis_file:</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    sub.run(</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            [<span class="stringliteral">&quot;arm-none-eabi-objdump&quot;</span>, BINARY_PATH + <span class="stringliteral">&quot;/binary.elf&quot;</span>,  <span class="stringliteral">&quot;-d&quot;</span>],</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="namespacecompile__sw.html#ad585030e6b2a67a5e3952992300b7198">   63</a></span>            stdout=dis_file,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            check=<span class="keyword">True</span>,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            )</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

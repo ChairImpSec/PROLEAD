@@ -81,20 +81,28 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines how every probe during simulation looks like.  
+ <a href="struct_software_1_1_probes_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a2c7daa0083c2d12b051ca3af30a89262"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probes_struct.html#a2c7daa0083c2d12b051ca3af30a89262">TransitionCycles</a></td></tr>
+<tr class="memdesc:a2c7daa0083c2d12b051ca3af30a89262"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains previous cycle where probed register was used last.  <br /></td></tr>
 <tr class="separator:a2c7daa0083c2d12b051ca3af30a89262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a3e8f1c77e6e5de855410b49b23398a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probes_struct.html#a2a3e8f1c77e6e5de855410b49b23398a">ProbeInfo</a></td></tr>
+<tr class="memdesc:a2a3e8f1c77e6e5de855410b49b23398a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uniquly identifies a probe, (Cycle | Dependency | ID | RegNr1 | RegNr2 | Bit | ExtensionSize) <br  />
+  <br /></td></tr>
 <tr class="separator:a2a3e8f1c77e6e5de855410b49b23398a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4200913731457a04e7c120cedf6f622f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probes_struct.html#a4200913731457a04e7c120cedf6f622f">SpecialInfo</a></td></tr>
+<tr class="memdesc:a4200913731457a04e7c120cedf6f622f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains information that might change depending on type of probe.  <br /></td></tr>
 <tr class="separator:a4200913731457a04e7c120cedf6f622f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00111">111</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<div class="textblock"><p>Defines how every probe during simulation looks like. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00132">132</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a2a3e8f1c77e6e5de855410b49b23398a" name="a2a3e8f1c77e6e5de855410b49b23398a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2a3e8f1c77e6e5de855410b49b23398a">&#9670;&#160;</a></span>ProbeInfo</h2>
@@ -108,7 +116,10 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00115">115</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Uniquly identifies a probe, (Cycle | Dependency | ID | RegNr1 | RegNr2 | Bit | ExtensionSize) <br  />
+ </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00136">136</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -124,7 +135,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00116">116</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Contains information that might change depending on type of probe. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00137">137</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -140,7 +153,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00114">114</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Contains previous cycle where probed register was used last. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00135">135</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>

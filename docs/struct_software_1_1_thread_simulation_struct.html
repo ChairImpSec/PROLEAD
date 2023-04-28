@@ -81,11 +81,15 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a struct that tracks necessary information for thread simulation.  
+ <a href="struct_software_1_1_thread_simulation_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a5fdf41dfec44a8c5db9df690706c41ed"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a5fdf41dfec44a8c5db9df690706c41ed">NumberOfGroups</a></td></tr>
+<tr class="memdesc:a5fdf41dfec44a8c5db9df690706c41ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of user-defined groups.  <br /></td></tr>
 <tr class="separator:a5fdf41dfec44a8c5db9df690706c41ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad11ec2816da21564a6c3d34dada2bfc3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#ad11ec2816da21564a6c3d34dada2bfc3">GlobalCycleStart</a> = 0</td></tr>
 <tr class="separator:ad11ec2816da21564a6c3d34dada2bfc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -96,24 +100,32 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a98bd23bb07d7851cab47f30aff302234"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a98bd23bb07d7851cab47f30aff302234">CycleEnd</a></td></tr>
 <tr class="separator:a98bd23bb07d7851cab47f30aff302234"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99233159d37de3898cc0a9eb052233fc"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a99233159d37de3898cc0a9eb052233fc">NumberOfStepSimulations</a></td></tr>
+<tr class="memdesc:a99233159d37de3898cc0a9eb052233fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of simulations before the simulations are evaluated.  <br /></td></tr>
 <tr class="separator:a99233159d37de3898cc0a9eb052233fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3296251077a020dc54dd0648a9811fd6"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a3296251077a020dc54dd0648a9811fd6">NumberOfCycleSplits</a> = 0</td></tr>
 <tr class="separator:a3296251077a020dc54dd0648a9811fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f9c5687d3a934a3de86eeea3383407c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a1f9c5687d3a934a3de86eeea3383407c">SelectedGroups</a></td></tr>
+<tr class="memdesc:a1f9c5687d3a934a3de86eeea3383407c"><td class="mdescLeft">&#160;</td><td class="mdescRight">// [0...NumberOfStepSimulations-1]  <br /></td></tr>
 <tr class="separator:a1f9c5687d3a934a3de86eeea3383407c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0633011499e3d5bb41d62096d6bf112"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt;<a class="el" href="struct_software_1_1_probes_struct.html">::Software::ProbesStruct</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#af0633011499e3d5bb41d62096d6bf112">StandardProbesPerSimulation</a></td></tr>
 <tr class="separator:af0633011499e3d5bb41d62096d6bf112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65b24a1c4aa75be23a435419efffcea7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a65b24a1c4aa75be23a435419efffcea7">TestClockCycles</a></td></tr>
+<tr class="memdesc:a65b24a1c4aa75be23a435419efffcea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">//assign only needed TestClockCycles for specific thread to vector  <br /></td></tr>
 <tr class="separator:a65b24a1c4aa75be23a435419efffcea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a3ab7c3f75e98c0b211818eff8bfd20"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a8a3ab7c3f75e98c0b211818eff8bfd20">TestTransitional</a> = 0</td></tr>
+<tr class="memdesc:a8a3ab7c3f75e98c0b211818eff8bfd20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision regarding transitional leakage.  <br /></td></tr>
 <tr class="separator:a8a3ab7c3f75e98c0b211818eff8bfd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8699f60cc06569738b259ece4746868a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a8699f60cc06569738b259ece4746868a">TestMultivariate</a> = 0</td></tr>
+<tr class="memdesc:a8699f60cc06569738b259ece4746868a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision regarding univariate and multivariate attackers.  <br /></td></tr>
 <tr class="separator:a8699f60cc06569738b259ece4746868a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f80ee7320b8000d14081b56ee2494df"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a0f80ee7320b8000d14081b56ee2494df">TestOrder</a> = 0</td></tr>
+<tr class="memdesc:a0f80ee7320b8000d14081b56ee2494df"><td class="mdescLeft">&#160;</td><td class="mdescRight">The security order to test.  <br /></td></tr>
 <tr class="separator:a0f80ee7320b8000d14081b56ee2494df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a484f56db879b19c6463fcec06f930e3f"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a484f56db879b19c6463fcec06f930e3f">NumberOfTestClockCycles</a> = 0</td></tr>
+<tr class="memdesc:a484f56db879b19c6463fcec06f930e3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of clock cycles in which standard probes can record.  <br /></td></tr>
 <tr class="separator:a484f56db879b19c6463fcec06f930e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89dfd40c539e621d90ab43ea5dba682c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a89dfd40c539e621d90ab43ea5dba682c">EvaluationResultFolderName</a></td></tr>
+<tr class="memdesc:a89dfd40c539e621d90ab43ea5dba682c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name and path of the generated reports.  <br /></td></tr>
 <tr class="separator:a89dfd40c539e621d90ab43ea5dba682c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19ed67ff3f9b900d88f1ddd5a22fc7aa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::vector&lt; uint32_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_thread_simulation_struct.html#a19ed67ff3f9b900d88f1ddd5a22fc7aa">StartRAM_EndRAM_EmulatorInputs</a></td></tr>
 <tr class="separator:a19ed67ff3f9b900d88f1ddd5a22fc7aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,8 +137,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a42d203edd6f5472275d5fb751b146e1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00145">145</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<div class="textblock"><p>Defines a struct that tracks necessary information for thread simulation. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00181">181</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a80d6e986ccf7e4fcd4996a8c22aaf337" name="a80d6e986ccf7e4fcd4996a8c22aaf337"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80d6e986ccf7e4fcd4996a8c22aaf337">&#9670;&#160;</a></span>AlphaThreshold</h2>
@@ -140,7 +153,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00162">162</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00202">202</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -156,7 +169,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00163">163</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00206">206</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -172,7 +185,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00150">150</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00186">186</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -188,7 +201,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00149">149</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00185">185</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -204,7 +217,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00164">164</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00207">207</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -220,7 +233,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00160">160</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Name and path of the generated reports. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00196">196</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -236,7 +251,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00148">148</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00184">184</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -252,7 +267,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00147">147</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00183">183</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -268,7 +283,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00152">152</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00188">188</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -284,7 +299,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00146">146</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The number of user-defined groups. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00182">182</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -300,7 +317,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00151">151</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The number of simulations before the simulations are evaluated. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00187">187</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -316,7 +335,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00159">159</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Number of clock cycles in which standard probes can record. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00195">195</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +353,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00153">153</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>// [0...NumberOfStepSimulations-1] </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00189">189</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -348,7 +371,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00154">154</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00190">190</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -364,7 +387,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00161">161</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00197">197</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -380,7 +403,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00155">155</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>//assign only needed TestClockCycles for specific thread to vector </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00191">191</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -396,7 +421,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00157">157</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision regarding univariate and multivariate attackers. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00193">193</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -412,7 +439,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00158">158</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>The security order to test. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00194">194</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -428,7 +457,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00156">156</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Decision regarding transitional leakage. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00192">192</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>

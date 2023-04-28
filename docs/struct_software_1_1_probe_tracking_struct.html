@@ -82,6 +82,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a struct that tracks metadata during the simulation.  
+ <a href="struct_software_1_1_probe_tracking_struct.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -92,17 +95,27 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a949aaff44f9f791910afb897b445eec9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#a949aaff44f9f791910afb897b445eec9">RegisterLatestValue</a></td></tr>
+<tr class="memdesc:a949aaff44f9f791910afb897b445eec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of previous values for each register.  <br /></td></tr>
 <tr class="separator:a949aaff44f9f791910afb897b445eec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa32bcab0ceb591172cf88298b523174"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#afa32bcab0ceb591172cf88298b523174">RegisterLatestClockCycle</a></td></tr>
+<tr class="memdesc:afa32bcab0ceb591172cf88298b523174"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of cycles where each register was used last.  <br /></td></tr>
 <tr class="separator:afa32bcab0ceb591172cf88298b523174"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb27babd4ee53b594804705e9cf0e687"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#abb27babd4ee53b594804705e9cf0e687">MemoryLatestClockCycle</a> = 0</td></tr>
+<tr class="memdesc:abb27babd4ee53b594804705e9cf0e687"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycle that last used a memory instruction.  <br /></td></tr>
 <tr class="separator:abb27babd4ee53b594804705e9cf0e687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af552a0d53c9b305743968379194c7853"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#af552a0d53c9b305743968379194c7853">LoadMemoryLatestClockCycle</a> = 0</td></tr>
+<tr class="memdesc:af552a0d53c9b305743968379194c7853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycle that last used a load memory instruction.  <br /></td></tr>
+<tr class="separator:af552a0d53c9b305743968379194c7853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a315da86b40366d62993b1b4f34d8663e"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#a315da86b40366d62993b1b4f34d8663e">StoreMemoryLatestClockCycle</a> = 0</td></tr>
+<tr class="memdesc:a315da86b40366d62993b1b4f34d8663e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cycle that last used a store memory instruction.  <br /></td></tr>
+<tr class="separator:a315da86b40366d62993b1b4f34d8663e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c1dbc811e2a49b72851be6d09bc6b2e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_software_1_1_probe_tracking_struct.html#a7c1dbc811e2a49b72851be6d09bc6b2e">VerticalLatestClockCycle</a></td></tr>
 <tr class="separator:a7c1dbc811e2a49b72851be6d09bc6b2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00119">119</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<div class="textblock"><p>Defines a struct that tracks metadata during the simulation. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00144">144</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adaea5d9126dca757aa800d69b0c348ae" name="adaea5d9126dca757aa800d69b0c348ae"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adaea5d9126dca757aa800d69b0c348ae">&#9670;&#160;</a></span>ProbeTrackingStruct()</h2>
@@ -122,6 +135,24 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="af552a0d53c9b305743968379194c7853" name="af552a0d53c9b305743968379194c7853"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af552a0d53c9b305743968379194c7853">&#9670;&#160;</a></span>LoadMemoryLatestClockCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Software::ProbeTrackingStruct::LoadMemoryLatestClockCycle = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cycle that last used a load memory instruction. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00148">148</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abb27babd4ee53b594804705e9cf0e687" name="abb27babd4ee53b594804705e9cf0e687"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb27babd4ee53b594804705e9cf0e687">&#9670;&#160;</a></span>MemoryLatestClockCycle</h2>
 
@@ -134,7 +165,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00122">122</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>Cycle that last used a memory instruction. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00147">147</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -150,7 +183,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00121">121</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>List of cycles where each register was used last. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00146">146</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -166,7 +201,27 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00120">120</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p>List of previous values for each register. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00145">145</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a315da86b40366d62993b1b4f34d8663e" name="a315da86b40366d62993b1b4f34d8663e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a315da86b40366d62993b1b4f34d8663e">&#9670;&#160;</a></span>StoreMemoryLatestClockCycle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Software::ProbeTrackingStruct::StoreMemoryLatestClockCycle = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cycle that last used a store memory instruction. </p>
+
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00149">149</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -182,7 +237,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00123">123</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_software_2_definitions_8hpp_source.html#l00150">150</a> of file <a class="el" href="_software_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>

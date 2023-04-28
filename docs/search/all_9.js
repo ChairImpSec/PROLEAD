@@ -13,7 +13,7 @@ var searchData=
   ['in_5fit_5fblock_10',['in_IT_block',['../classmulator_1_1_emulator.html#a8d703ae2833198c9ad81fc8657288177',1,'mulator::Emulator']]],
   ['incomplete_5fdata_11',['INCOMPLETE_DATA',['../namespacemulator.html#a1c9141795a0d4349f975ebe08aedc893afe86a785751d9dadfbc240db1b97d0a4',1,'mulator']]],
   ['index_12',['index',['../structmulator_1_1_instruction.html#a4bdaca5910127e9dfd5b45274342b1f5',1,'mulator::Instruction']]],
-  ['indistance_13',['InDistance',['../namespace_hardware_1_1_generate_probing_sets.html#a3a8235ec7b2b0de69c3899f80db662a0',1,'Hardware::GenerateProbingSets::InDistance()'],['../namespace_software_1_1_probing.html#a96cf78c811338609a3d597d932164bad',1,'Software::Probing::InDistance()']]],
+  ['indistance_13',['InDistance',['../namespace_hardware_1_1_generate_probing_sets.html#a3a8235ec7b2b0de69c3899f80db662a0',1,'Hardware::GenerateProbingSets::InDistance()'],['../namespace_software_1_1_probing.html#a8af13b1c3fcc05078d030375b373aa7e',1,'Software::Probing::InDistance()']]],
   ['initializecompactdistributions_14',['InitializeCompactDistributions',['../namespace_hardware_1_1_generate_probing_sets.html#a4eb28bb290b44d98f9589e9fb1df50b6',1,'Hardware::GenerateProbingSets']]],
   ['initializemultivariateprobecombinations_15',['InitializeMultivariateProbeCombinations',['../namespace_hardware_1_1_generate_probing_sets.html#aa6363789184cc3ecc630d7ac954b4a80',1,'Hardware::GenerateProbingSets']]],
   ['initializeunivariateprobecombinations_16',['InitializeUnivariateProbeCombinations',['../namespace_hardware_1_1_generate_probing_sets.html#a76f61edb15974c9a3b97e1076bc2944b',1,'Hardware::GenerateProbingSets']]],
