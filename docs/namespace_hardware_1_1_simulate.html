@@ -83,14 +83,19 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a72dfd851a208dc46bb3dabfae0a05e64"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_simulate.html#a72dfd851a208dc46bb3dabfae0a05e64">EvaluateOperation</a> (<a class="el" href="struct_hardware_1_1_operation_struct.html">Hardware::OperationStruct</a>, uint64_t *, char)</td></tr>
+<tr class="memdesc:a72dfd851a208dc46bb3dabfae0a05e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates a specific operation.  <br /></td></tr>
 <tr class="separator:a72dfd851a208dc46bb3dabfae0a05e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a918b3104b44309495784c751d245b247"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_simulate.html#a918b3104b44309495784c751d245b247">All</a> (<a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_shared_data_struct.html">Hardware::SharedDataStruct</a> *, <a class="el" href="struct_hardware_1_1_simulation_struct.html">Hardware::SimulationStruct</a> &amp;, int, boost::mt19937 &amp;)</td></tr>
+<tr class="memdesc:a918b3104b44309495784c751d245b247"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the simulations.  <br /></td></tr>
 <tr class="separator:a918b3104b44309495784c751d245b247"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e811a1a57b31b56c596d2ff39201892"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_simulate.html#a8e811a1a57b31b56c596d2ff39201892">GenerateVCDfile</a> (<a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;, int)</td></tr>
+<tr class="memdesc:a8e811a1a57b31b56c596d2ff39201892"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate header for a .vcd file.  <br /></td></tr>
 <tr class="separator:a8e811a1a57b31b56c596d2ff39201892"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb35d7376641622b6ae21dd5eb685c1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_simulate.html#abb35d7376641622b6ae21dd5eb685c1e">WriteVCDfile</a> (<a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;, <a class="el" href="struct_hardware_1_1_shared_data_struct.html">Hardware::SharedDataStruct</a> *, int, int)</td></tr>
+<tr class="memdesc:abb35d7376641622b6ae21dd5eb685c1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the simulation to the .vcd file.  <br /></td></tr>
 <tr class="separator:abb35d7376641622b6ae21dd5eb685c1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac26d18fe2a5c916ce0040e64dbc64989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_simulate.html#ac26d18fe2a5c916ce0040e64dbc64989">FinalizeVCDfile</a> (int, int)</td></tr>
+<tr class="memdesc:ac26d18fe2a5c916ce0040e64dbc64989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finalizes the .vcd file.  <br /></td></tr>
 <tr class="separator:ac26d18fe2a5c916ce0040e64dbc64989"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -150,6 +155,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Performs the simulations. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Library</td><td>The cell library.. </td></tr>
+    <tr><td class="paramname">Circuit</td><td>The hardware circuit to analyze. </td></tr>
+    <tr><td class="paramname">Settings</td><td>The general settings. </td></tr>
+    <tr><td class="paramname">SharedData</td><td>The shared state of a simulation. </td></tr>
+    <tr><td class="paramname">Simulation</td><td>The simulation settings. </td></tr>
+    <tr><td class="paramname">ThreadRng</td><td>The rng assigned to a specific thread. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Amir Moradi </dd></dl>
+
 </div>
 </div>
 <a id="a72dfd851a208dc46bb3dabfae0a05e64" name="a72dfd851a208dc46bb3dabfae0a05e64"></a>
@@ -184,6 +203,17 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Evaluates a specific operation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Operation</td><td>The operation to evaluate. </td></tr>
+    <tr><td class="paramname">Values</td><td>The inputs of the operation </td></tr>
+    <tr><td class="paramname">Intermediate</td><td>The index of an intermediate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Amir Moradi </dd></dl>
+
 </div>
 </div>
 <a id="ac26d18fe2a5c916ce0040e64dbc64989" name="ac26d18fe2a5c916ce0040e64dbc64989"></a>
@@ -211,6 +241,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Finalizes the .vcd file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">SimulationIndex</td><td>The index of the simulation to store in the .vcd file. </td></tr>
+    <tr><td class="paramname">CycleIndex</td><td>The index of the simulated clock cycle to store in the .vcd file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
 
 </div>
 </div>
@@ -245,6 +285,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Generate header for a .vcd file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Circuit</td><td>The hardware circuit to analyze. </td></tr>
+    <tr><td class="paramname">Settings</td><td>The general settings. </td></tr>
+    <tr><td class="paramname">SimulationIndex</td><td>The index of the simulation to store in the .vcd file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
 
 </div>
 </div>
@@ -291,6 +342,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Writes the simulation to the .vcd file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">Circuit</td><td>The hardware circuit to analyze. </td></tr>
+    <tr><td class="paramname">Settings</td><td>The general settings. </td></tr>
+    <tr><td class="paramname">SharedData</td><td>The shared state of a simulation. </td></tr>
+    <tr><td class="paramname">SimulationIndex</td><td>The index of the simulation to store in the .vcd file. </td></tr>
+    <tr><td class="paramname">CycleIndex</td><td>The index of the simulated clock cycle to store in the .vcd file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
 
 </div>
 </div>
