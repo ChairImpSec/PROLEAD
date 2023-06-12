@@ -3904,20 +3904,12 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		throw std::runtime_error("\"no_of_groups\" is not given!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 2))) {
-		throw std::runtime_error("\"order_of_test\" is not given!");
-	}
-
 	if (!(SettingsFileCheckList & (1 << 3))) {
 		throw std::runtime_error("\"clock_signal_name\" is not given!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 4))) {
 		throw std::runtime_error("\"max_clock_cycle\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 5))) {
-		throw std::runtime_error("\"no_of_always_random_inputs\" is not given!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 6))) {
@@ -3928,36 +3920,16 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		throw std::runtime_error("\"no_of_initial_clock_cycles\" is not given!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 8))) {
-		throw std::runtime_error("\"end_condition\" is not given!");
+	if ((!(SettingsFileCheckList & (1 << 10)) && (SettingsFileCheckList & (1 << 11)))) {
+		throw std::runtime_error("\"probes_include\" is not given while \"probes_exclude\" is given!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 9))) {
-		throw std::runtime_error("\"end_wait_cycles\" is not given!");
+	if (((SettingsFileCheckList & (1 << 10)) && !(SettingsFileCheckList & (1 << 11)))) {
+		throw std::runtime_error("\"probes_exclude\" is not given while \"probes_include\" is given!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 10))) {
-		throw std::runtime_error("\"probes_include\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 11))) {
-		throw std::runtime_error("\"probes_exclude\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 14))) {
-		throw std::runtime_error("\"no_of_test_clock_cycles\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 15))) {
-		throw std::runtime_error("\"no_of_simulations\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 16))) {
-		throw std::runtime_error("\"no_of_step_simulations\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 17))) {
-		throw std::runtime_error("\"no_of_step_write_results\" is not given!");
+	if ((!(SettingsFileCheckList & (1 << 15)) || !(SettingsFileCheckList & (1 << 16)) || !(SettingsFileCheckList & (1 << 17))) && !(!(SettingsFileCheckList & (1 << 15)) && !(SettingsFileCheckList & (1 << 16)) && !(SettingsFileCheckList & (1 << 17)))) {
+		throw std::runtime_error("Incomplete set of {\"no_of_simulations\", \"no_of_step_simulations\", \"no_of_step_write_results\"} is given!");
 	}
 
 	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) && (Settings->NumberOfOutputShares > 0)) {
@@ -3976,6 +3948,40 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
         Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
     }
 
+	if (!(SettingsFileCheckList & (1 << 2))) {
+		Settings->TestOrder = 1;
+		Warnings.push_back("Warning \"order_of_test\" is not specified. Default \"order_of_test\" = 1 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 5))) {
+		Settings->AlwaysRandomInputs = NULL;
+		Settings->NumberOfAlwaysRandomInputs = 0;
+		Warnings.push_back("Warning \"no_of_always_random_inputs\" is not specified. Default \"no_of_always_random_inputs\" = 0 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 8))) {
+		Settings->EndSimCondition_ClockCycles = Settings->Max_No_ClockCycles;
+		Settings->EndSimCondition_NumberOfSignals = 0;
+		ErrorMessage = "Warning  \"end_condition\" is not specified. Default \"end_condition\" = ClockCycles " + std::to_string(Settings->Max_No_ClockCycles) + " is taken!";
+		Warnings.push_back(ErrorMessage);
+	}
+
+	if (!(SettingsFileCheckList & (1 << 9))) {
+		Settings->EndSim_NumberOfWaitCycles = 0;
+		Warnings.push_back("Warning \"end_wait_cycles\" is not specified. Default \"end_wait_cycles\" = 0 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 10))) {
+        for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+			Circuit->Signals[SignalIndex]->ProbeAllowed = 1;
+		
+		Warnings.push_back("Warning \"probes_include\" is not specified. Default \"probes_include\" = all is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 11))) {
+		Warnings.push_back("Warning \"probes_exclude\" is not specified. Default \"probes_exclude\" = none is taken!");
+	}
+
  	if (!(SettingsFileCheckList & (1 << 12))){
         Settings->TestMultivariate = 0;
         Warnings.push_back("Warning \"multivariate_test\" is not specified. Default \"multivariate_test\" = no is taken!");
@@ -3984,6 +3990,33 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
  	if (!(SettingsFileCheckList & (1 << 13))){
         Settings->TestTransitional = 0;
         Warnings.push_back("Warning \"transitional_leakage\" is not specified. Default \"transitional_leakage\" = no is taken!");
+	}
+
+
+	if (!(SettingsFileCheckList & (1 << 14))) {
+		Settings->NumberOfTestClockCycles = Settings->Max_No_ClockCycles;
+		Settings->TestClockCycles = (int*)malloc(Settings->NumberOfTestClockCycles * sizeof(int));
+
+		for(ClockCycle = 0; ClockCycle < Settings->NumberOfTestClockCycles; ClockCycle++)
+			Settings->TestClockCycles[ClockCycle] = ClockCycle + 1;
+
+		ErrorMessage = "Warning \"no_of_test_clock_cycles\" is not specified. Default \"no_of_test_clock_cycles\" = 1-" + std::to_string(Settings->NumberOfTestClockCycles) + " is taken!";
+        Warnings.push_back(ErrorMessage);
+	}
+
+	if (!(SettingsFileCheckList & (1 << 15))) {
+		Settings->NumberOfSimulations = 100000000;
+		Warnings.push_back("Warning \"no_of_simulations\" is not specified. Default \"no_of_simulations\" = 100000000 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 16))) {
+		Settings->NumberOfStepSimulations = 1000000;
+		Warnings.push_back("Warning \"no_of_step_simulations\" is not specified. Default \"no_of_step_simulations\" = 1000000 is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 17))) {
+		Settings->NumberOfStepSimulationsToWrite = 1000000;
+		Warnings.push_back("Warning \"no_of_step_write_results\" is not specified. Default \"no_of_step_write_results\" = 1000000 is taken!");
 	}
 
 	if (!(SettingsFileCheckList & (1 << 18))){
