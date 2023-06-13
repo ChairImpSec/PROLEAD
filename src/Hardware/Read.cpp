@@ -3898,49 +3898,6 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 	free(Str3);
 
 	//---------------------------------------------------------------------
-	// check the essential inputs
-
-	if (!(SettingsFileCheckList & (1 << 1))) {
-		throw std::runtime_error("\"no_of_groups\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 3))) {
-		throw std::runtime_error("\"clock_signal_name\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 4))) {
-		throw std::runtime_error("\"max_clock_cycle\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 6))) {
-		throw std::runtime_error("\"no_of_initial_inputs\" is not given!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 7))) {
-		throw std::runtime_error("\"no_of_initial_clock_cycles\" is not given!");
-	}
-
-	if ((!(SettingsFileCheckList & (1 << 10)) && (SettingsFileCheckList & (1 << 11)))) {
-		throw std::runtime_error("\"probes_include\" is not given while \"probes_exclude\" is given!");
-	}
-
-	if (((SettingsFileCheckList & (1 << 10)) && !(SettingsFileCheckList & (1 << 11)))) {
-		throw std::runtime_error("\"probes_exclude\" is not given while \"probes_include\" is given!");
-	}
-
-	if ((!(SettingsFileCheckList & (1 << 15)) || !(SettingsFileCheckList & (1 << 16)) || !(SettingsFileCheckList & (1 << 17))) && !(!(SettingsFileCheckList & (1 << 15)) && !(SettingsFileCheckList & (1 << 16)) && !(SettingsFileCheckList & (1 << 17)))) {
-		throw std::runtime_error("Incomplete set of {\"no_of_simulations\", \"no_of_step_simulations\", \"no_of_step_write_results\"} is given!");
-	}
-
-	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) && (Settings->NumberOfOutputShares > 0)) {
-		throw std::runtime_error("\"expected_output\" is not given!");
-	}
-
-	if ((Settings->NumberOfAlwaysRandomInputs + Settings->InitialSim_NumberOfInputs + 1) != Circuit->NumberOfInputs) {
-		throw std::runtime_error("Number of always random inputs + initial sim number of inputs in settings file does not match with the circuit's number of inputs!");
-	}
-
-	//---------------------------------------------------------------------
 	// check optional inputs
 
 	if (!(SettingsFileCheckList & (1 << 0))){
@@ -4063,6 +4020,49 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 	if (!(SettingsFileCheckList & (1 << 26))) {
 		Settings->WaveformSimulation = false;
 		Warnings.push_back("Warning \"waveform_simulation\" is not specified. Default \"waveform_simulation\" = false is taken!");
+	}
+
+	//---------------------------------------------------------------------
+	// check the essential inputs
+
+	if (!(SettingsFileCheckList & (1 << 1))) {
+		throw std::runtime_error("\"no_of_groups\" is not given!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 3))) {
+		throw std::runtime_error("\"clock_signal_name\" is not given!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 4))) {
+		throw std::runtime_error("\"max_clock_cycle\" is not given!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 6))) {
+		throw std::runtime_error("\"no_of_initial_inputs\" is not given!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 7))) {
+		throw std::runtime_error("\"no_of_initial_clock_cycles\" is not given!");
+	}
+
+	if ((!(SettingsFileCheckList & (1 << 10)) && (SettingsFileCheckList & (1 << 11)))) {
+		throw std::runtime_error("\"probes_include\" is not given while \"probes_exclude\" is given!");
+	}
+
+	if (((SettingsFileCheckList & (1 << 10)) && !(SettingsFileCheckList & (1 << 11)))) {
+		throw std::runtime_error("\"probes_exclude\" is not given while \"probes_include\" is given!");
+	}
+
+	if ((!(SettingsFileCheckList & (1 << 15)) || !(SettingsFileCheckList & (1 << 16)) || !(SettingsFileCheckList & (1 << 17))) && !(!(SettingsFileCheckList & (1 << 15)) && !(SettingsFileCheckList & (1 << 16)) && !(SettingsFileCheckList & (1 << 17)))) {
+		throw std::runtime_error("Incomplete set of {\"no_of_simulations\", \"no_of_step_simulations\", \"no_of_step_write_results\"} is given!");
+	}
+
+	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) && (Settings->NumberOfOutputShares > 0)) {
+		throw std::runtime_error("\"expected_output\" is not given!");
+	}
+
+	if ((Settings->NumberOfAlwaysRandomInputs + Settings->InitialSim_NumberOfInputs + 1) != Circuit->NumberOfInputs) {
+		throw std::runtime_error("Number of always random inputs + initial sim number of inputs in settings file does not match with the circuit's number of inputs!");
 	}
 
 	std::cout << "done with " << Warnings.size() << " warnings!" << std::endl;
