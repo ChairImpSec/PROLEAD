@@ -1,5 +1,5 @@
 max_no_of_threads   % maximum number of threads *for parallel operation*
-5
+30
 
 no_of_groups % number of groups to conduct the test, e.g., fixed vs. fixed, fixed vs. random, etc.
 2
@@ -35,7 +35,7 @@ multivariate_test % no: only univariate test should be done, yes: univariate + m
 no
 
 transitional_leakage % yes/no: whether transitional leakage should be considered in the tests
-no
+yes
 
 compact_distributions % yes/no: whether distributions (of probes) should be considered as compact. 
                       % it is recommended to use 'no' only for small circuits and low security orders

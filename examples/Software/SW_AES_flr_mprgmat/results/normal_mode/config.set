@@ -1,5 +1,5 @@
 max_no_of_threads   % maximum number of threads *for parallel operation*
-4
+30
 
 no_of_groups % number of groups to conduct the test, e.g., fixed vs. fixed, fixed vs. random, etc.
 2

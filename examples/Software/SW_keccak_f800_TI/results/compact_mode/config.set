@@ -1,5 +1,5 @@
 max_no_of_threads   % maximum number of threads *for parallel operation*
-1
+30
 
 no_of_groups % number of groups to conduct the test, e.g., fixed vs. fixed, fixed vs. random, etc.
 2
@@ -68,12 +68,4 @@ probes_include   % those wires which should be included for probing (all : to in
 all
 
 probes_exclude   % those wires which should be exclused for probing (all : to exclude them all, 0 : to exclude none, e.g., 2 : to exclude two and name them) 
-7
-
-VR
-FULLHR
-FULLVR
-HR
-MEM
-MEMSHADOW
-PF
+0
