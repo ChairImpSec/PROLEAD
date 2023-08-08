@@ -156,13 +156,13 @@ int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
 				strncpy(TempStr, End + 1, Max_Name_Length - 1);
 				TempStr[Max_Name_Length - 1] = '\0';
 				strcat(MyStr, TempStr);
-				CellType->Operations[i].NumberOfClauses++; 
+				CellType->Operations[i].NumberOfClauses++;
 			}else{
-				CellType->Operations[i].NumberOfClauses++; 
-				break; 
+				CellType->Operations[i].NumberOfClauses++;
+				break;
 			}
-			
-			pos=MyStr; 
+
+			pos=MyStr;
         } while (*pos != 0);
     }
 
@@ -400,6 +400,8 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                             break;
                     }
                 }
+                else
+                	Buffer[i++] = ch;
             }
             else if ((ch == '*') && i)
             {
@@ -3931,7 +3933,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 	if (!(SettingsFileCheckList & (1 << 10))) {
         for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
 			Circuit->Signals[SignalIndex]->ProbeAllowed = 1;
-		
+
 		Warnings.push_back("Warning \"probes_include\" is not specified. Default \"probes_include\" = all is taken!");
 	}
 
