@@ -113,10 +113,10 @@ MAKEFLAGS += --no-print-directory
 all: debug release
 
 debug:
-	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR)
+	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR) -j8
 
 release:
-	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR)
+	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR) -j8
 
 clean:
 	@echo  Removing build artifacts...
