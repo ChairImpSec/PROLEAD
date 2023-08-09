@@ -499,6 +499,46 @@ int Hardware::Read::TrimSignalName(char* SignalName, int* k = NULL)
 	return(j);
 }
 
+int Hardware::Read::SearchSignalName(CircuitStruct* Circuit, char* SignalName, char Trim)
+{
+	int    SignalIndex = -1;
+	int    Index;
+	int    size;
+	char   flag = 0;
+
+	if (Trim)
+		size = strlen(SignalName);
+	else
+		size = Max_Name_Length;
+
+	omp_set_num_threads(omp_get_num_procs());
+
+	#pragma omp parallel for shared(flag, SignalIndex)
+	for (Index = 0; Index < Circuit->NumberOfSignals; Index++)
+	{
+		if(flag) continue;
+
+		if (!strncmp(SignalName, Circuit->Signals[Index]->Name, size))
+		{
+			if (Trim)
+			{
+				if ((Circuit->Signals[Index]->Name[size] == 0) || (Circuit->Signals[Index]->Name[size] == '['))
+				{
+					SignalIndex = Index;
+					flag = 1;
+				}
+			}
+			else
+			{
+				SignalIndex = Index;
+				flag = 1;
+			}
+		}
+	}
+
+	return(SignalIndex);
+}
+
 void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
                                              LibraryStruct* Library, CircuitStruct* Circuit, int NumberOfSignalsOffset,
                                              char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
@@ -764,39 +804,54 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 			if (Index1 < 0) // the given signal name does not have any index (without [])
 			{
-				for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 1);
+
+				if (SignalIndex != -1)
 				{
-					strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
-					TrimSignalName(Str2);
-
-					if (!strcmp(strptr, Str2))
+					for (SignalIndex2 = SignalIndex - 1; SignalIndex2 >= 0; SignalIndex2--)
 					{
-						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-						free(IOSignals);
-						IOSignals = Buffer_int;
+						strncpy(Str2, Circuit->Signals[SignalIndex2]->Name, Max_Name_Length - 1);
+						TrimSignalName(Str2);
 
-						IOSignals[NumberOfIOSignals] = SignalIndex;
-						NumberOfIOSignals++;
-						doneone = 1;
+						if (strcmp(strptr, Str2))
+							break;
+					}
+
+					for (SignalIndex = SignalIndex2 + 1; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+					{
+						strncpy(Str2, Circuit->Signals[SignalIndex]->Name, Max_Name_Length - 1);
+						TrimSignalName(Str2);
+
+						if (!strcmp(strptr, Str2))
+						{
+							Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+							memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+							free(IOSignals);
+							IOSignals = Buffer_int;
+
+							IOSignals[NumberOfIOSignals] = SignalIndex;
+							NumberOfIOSignals++;
+							doneone = 1;
+						}
+						else
+							break;
 					}
 				}
 			}
 			else if ((Index1 >= 0) && (Index2 < 0)) // the given signal name has one index (with [ ])
 			{
-				for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-				{
-					if (!strcmp(strptr, Circuit->Signals[SignalIndex]->Name))
-					{
-						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
-						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
-						free(IOSignals);
-						IOSignals = Buffer_int;
+				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 0);
 
-						IOSignals[NumberOfIOSignals] = SignalIndex;
-						NumberOfIOSignals++;
-						doneone = 1;
-					}
+				if (SignalIndex != -1)
+				{
+					Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
+					memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
+					free(IOSignals);
+					IOSignals = Buffer_int;
+
+					IOSignals[NumberOfIOSignals] = SignalIndex;
+					NumberOfIOSignals++;
+					doneone = 1;
 				}
 			}
 			else if ((Index1 >= 0) && (Index2 >= 0)) // the given signal name has two indices (with [ : ])
@@ -807,11 +862,9 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 				{
 					sprintf(Str3, "%s[%d]", Str2, j);
 
-					for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-						if (!strcmp(Str3, Circuit->Signals[SignalIndex]->Name))
-							break;
+					SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str3, 0);
 
-					if (SignalIndex < Circuit->NumberOfSignals)
+					if (SignalIndex != -1)
 					{
 						Buffer_int = (int *)malloc((NumberOfIOSignals + 1) * sizeof(int));
 						memcpy(Buffer_int, IOSignals, NumberOfIOSignals * sizeof(int));
@@ -1307,11 +1360,9 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                         sprintf(Str2, "%s", Str1);
 
-									for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
-										if (!strcmp(Str2, Circuit->Signals[SignalIndex]->Name))
-											break;
+									SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str2, 0);
 
-									if (SignalIndex < Circuit->NumberOfSignals)
+									if (SignalIndex != -1)
 									{
 										if (!strcmp(Phrase, "input"))
 										{
@@ -1404,6 +1455,9 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                     else
                         ReadSignalsFinished = 1;
                 }
+
+
+printf("done1\n");
 
                 //---------------------------------------------------------------------------------------------//
                 //------------------- reading the Circuit->Cells from the design file ----------------------------------//
