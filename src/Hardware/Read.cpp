@@ -1456,9 +1456,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                         ReadSignalsFinished = 1;
                 }
 
-
-printf("done1\n");
-
                 //---------------------------------------------------------------------------------------------//
                 //------------------- reading the Circuit->Cells from the design file ----------------------------------//
 
