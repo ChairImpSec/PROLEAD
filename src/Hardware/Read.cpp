@@ -3600,7 +3600,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				throw std::runtime_error("Given value for \"waveform_simulation\" is not valid, can be only no or yes!");
 			}
 
-			SettingsFileCheckList |= (1 << 26);
+			SettingsFileCheckList |= (1 << 21);
 		}
 
 		else if (!strcmp(Str1, "no_of_entries_in_report"))
@@ -3617,7 +3617,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			}
 
 			Settings->Max_No_ReportEntries = templl;
-			SettingsFileCheckList |= (1 << 21);
+			SettingsFileCheckList |= (1 << 22);
 		}
 		else if (!strcmp(Str1, "max_distance_multivariate"))
 		{
@@ -3632,7 +3632,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
                 throw std::runtime_error("Given value for \"max_distance_multivariate\" is not valid, should be greater or equal zero!");
 			}
 
-			SettingsFileCheckList |= (1 << 22);
+			SettingsFileCheckList |= (1 << 23);
 		}
 		else if (!strcmp(Str1, "no_of_probing_sets_per_step"))
 		{
@@ -3648,7 +3648,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			}
 
             Settings->ProbeStepSize = templl;
-			SettingsFileCheckList |= (1 << 23);
+			SettingsFileCheckList |= (1 << 24);
 		}
 		else if (!strcmp(Str1, "effect_size"))
 		{
@@ -3666,7 +3666,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			}
 
             Settings->EffectSize = Effect;
-			SettingsFileCheckList |= (1 << 24);
+			SettingsFileCheckList |= (1 << 25);
 		}
 		else if (!strcmp(Str1, "no_of_outputs"))
 		{
@@ -3788,11 +3788,11 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				}
 			}
 
-			SettingsFileCheckList |= (1 << 25);
+			SettingsFileCheckList |= (1 << 26);
 		}
 		else if (!strcmp(Str1, "expected_output"))
 		{
-			if (!(SettingsFileCheckList & (1 << 25)))
+			if (!(SettingsFileCheckList & (1 << 26)))
 			{
 				ErrorMessage = "\"no_of_outputs\" should be defined before \"expected_output\" in settings file!";
 				fclose(SettingsFile);
@@ -3932,7 +3932,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 				}
 			}
 
-			SettingsFileCheckList |= (1 << 26);
+			SettingsFileCheckList |= (1 << 27);
 		}
 		else if ((strlen(Str1) > 0) && (Str1[0] != '%'))
 		{
@@ -4044,35 +4044,35 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
         Warnings.push_back("Warning \"remove_full_probing_sets\" is not specified. Default \"remove_full_probing_sets\" = no is taken!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 21))){
+	if (!(SettingsFileCheckList & (1 << 21))) {
+		Settings->WaveformSimulation = false;
+		Warnings.push_back("Warning \"waveform_simulation\" is not specified. Default \"waveform_simulation\" = false is taken!");
+	}
+
+	if (!(SettingsFileCheckList & (1 << 22))){
 		Settings->Max_No_ReportEntries = 10;
         Warnings.push_back("Warning \"no_of_entries_in_report\" is not specified. Default \"no_of_entries_in_report\" = 10 is taken!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 22))){
+	if (!(SettingsFileCheckList & (1 << 23))){
 		Settings->MaxDistanceMultivariet = 10;
         Warnings.push_back("Warning \"max_distance_multivariate\" is not specified. Default \"max_distance_multivariate\" = 10 is taken!");
 	}
 
-    if (!(SettingsFileCheckList & (1 << 23))){
+    if (!(SettingsFileCheckList & (1 << 24))){
         Settings->ProbeStepSize = UINT_MAX;
         Warnings.push_back("Warning \"no_of_probing_sets_per_step\" is not specified. Default \"no_of_probing_sets_per_step\" = all is taken!");
     }
 
-	if (!(SettingsFileCheckList & (1 << 24))) {
+	if (!(SettingsFileCheckList & (1 << 25))) {
 		Settings->EffectSize = 0.1;
 		Warnings.push_back("Warning \"effect_size\" is not specified. Default \"effect_size\" = 0.1 is taken!");
 	}
 
-	if (!(SettingsFileCheckList & (1 << 25))) {
+	if (!(SettingsFileCheckList & (1 << 26))) {
 		Settings->NumberOfOutputShares = 0;
 		Settings->NumberOfOutputSignals = 0;
 		Warnings.push_back("Warning \"no_of_outputs\" is not specified. Default \"no_of_outputs\" = 0 is taken!");
-	}
-
-	if (!(SettingsFileCheckList & (1 << 26))) {
-		Settings->WaveformSimulation = false;
-		Warnings.push_back("Warning \"waveform_simulation\" is not specified. Default \"waveform_simulation\" = false is taken!");
 	}
 
 	//---------------------------------------------------------------------
@@ -4110,7 +4110,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 		throw std::runtime_error("Incomplete set of {\"no_of_simulations\", \"no_of_step_simulations\", \"no_of_step_write_results\"} is given!");
 	}
 
-	if ((SettingsFileCheckList & (1 << 25)) && (!(SettingsFileCheckList & (1 << 26))) && (Settings->NumberOfOutputShares > 0)) {
+	if ((SettingsFileCheckList & (1 << 26)) && (!(SettingsFileCheckList & (1 << 27))) && (Settings->NumberOfOutputShares > 0)) {
 		throw std::runtime_error("\"expected_output\" is not given!");
 	}
 
