@@ -13,7 +13,7 @@ namespace Hardware
     namespace Prepare
     {
         void MakeCircuitDepth(Hardware::LibraryStruct *, Hardware::CircuitStruct *);
-        void ExtendProbe(LibraryStruct *, CircuitStruct *, SettingsStruct *, int, int, int *);
+        void ExtendProbe(LibraryStruct *, CircuitStruct *, SettingsStruct *, int, int, int *, int *);
         void Probes(Hardware::LibraryStruct *, Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::ProbesStruct *);
         void Simulation(Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::ProbesStruct *, char *, Hardware::SimulationStruct *);
         void SharedData(Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::SharedDataStruct *);

@@ -115,24 +115,28 @@ void Hardware::Prepare::MakeCircuitDepth(Hardware::LibraryStruct* Library, Hardw
     std::cout << "done!" << std::endl;
 }
 
-void Hardware::Prepare::ExtendProbe(LibraryStruct* Library, CircuitStruct* Circuit, SettingsStruct* Settings, int MainSignalIndex, int SignalIndex, int* Buffer_int)
+void Hardware::Prepare::ExtendProbe(LibraryStruct* Library, CircuitStruct* Circuit, SettingsStruct* Settings, int MainSignalIndex, int SignalIndex, int* Buffer_int, int* Check_int)
 {
 	int  InputIndex;
 
-	if ((!Circuit->Signals[SignalIndex]->Deleted) &&
-		(SignalIndex != Settings->ClockSignal))
-	{
-		if ((Circuit->Signals[SignalIndex]->Output == -1) ||
-			(Library->CellTypes[Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Type]->GateOrReg == CellType_Reg))
+	if (SignalIndex >= 0)
+		if ((!Circuit->Signals[SignalIndex]->Deleted) &&
+			(SignalIndex != Settings->ClockSignal) &&
+			(Check_int[SignalIndex] == 0))
 		{
-			if ((Circuit->Signals[SignalIndex]->ProbeAllowed) || (Circuit->Signals[MainSignalIndex]->ProbeAllowed == 2))
-				Buffer_int[SignalIndex] = 1;
+			Check_int[SignalIndex] = 1;
+
+			if ((Circuit->Signals[SignalIndex]->Output == -1) ||
+				(Library->CellTypes[Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Type]->GateOrReg == CellType_Reg))
+			{
+				if ((Circuit->Signals[SignalIndex]->ProbeAllowed) || (Circuit->Signals[MainSignalIndex]->ProbeAllowed == 2))
+					Buffer_int[SignalIndex] = 1;
+			}
+			else
+				if (!Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Deleted)
+					for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->NumberOfInputs;InputIndex++)
+						Hardware::Prepare::ExtendProbe(Library, Circuit, Settings, MainSignalIndex, Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Inputs[InputIndex], Buffer_int, Check_int);
 		}
-		else
-			if (!Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Deleted)
-				for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->NumberOfInputs;InputIndex++)
-					Hardware::Prepare::ExtendProbe(Library, Circuit, Settings, MainSignalIndex, Circuit->Cells[Circuit->Signals[SignalIndex]->Output]->Inputs[InputIndex], Buffer_int);
-	}
 }
 
 void Hardware::Prepare::Probes(Hardware::LibraryStruct* Library, Hardware::CircuitStruct* Circuit, Hardware::SettingsStruct* Settings, Hardware::ProbesStruct* Probes)
@@ -142,6 +146,7 @@ void Hardware::Prepare::Probes(Hardware::LibraryStruct* Library, Hardware::Circu
 	int     InputIndex;
 	int     ProbeIndex;
 	int*    Buffer_int;
+	int*    Check_int;
 	int     NumberOfElements;
 	int     i;
 
@@ -173,11 +178,13 @@ void Hardware::Prepare::Probes(Hardware::LibraryStruct* Library, Hardware::Circu
 	Probes->GlitchExtendedProbes = (GlitchExtendedProbesStruct*)malloc(Probes->NumberOfProbes * sizeof(GlitchExtendedProbesStruct));
 
 	Buffer_int = (int*)malloc(Circuit->NumberOfSignals * sizeof(int));
+	Check_int = (int*)malloc(Circuit->NumberOfSignals * sizeof(int));
 
 	for (ProbeIndex = 0;ProbeIndex < Probes->NumberOfProbes;ProbeIndex++)
 	{
 		memset(Buffer_int, 0, Circuit->NumberOfSignals * sizeof(int));
-		Hardware::Prepare::ExtendProbe(Library, Circuit, Settings, Probes->Probes[ProbeIndex], Probes->Probes[ProbeIndex], Buffer_int);
+		memset(Check_int, 0, Circuit->NumberOfSignals * sizeof(int));
+		Hardware::Prepare::ExtendProbe(Library, Circuit, Settings, Probes->Probes[ProbeIndex], Probes->Probes[ProbeIndex], Buffer_int, Check_int);
 
 		NumberOfElements = 0;
 		for (SignalIndex = 0;SignalIndex < Circuit->NumberOfSignals;SignalIndex++)
