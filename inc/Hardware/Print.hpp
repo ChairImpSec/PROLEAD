@@ -25,7 +25,7 @@ namespace Hardware
 		* @brief Prints the current memory consumption. 
 		* @author Nicolai Müller
 		*/		
-        unsigned int MemoryConsumption();
+        uint64_t MemoryConsumption();
 		
 		/**
 		* @brief Prints the command line parameters. 
