@@ -10,16 +10,22 @@ void Hardware::GenerateProbingSets::All(Hardware::SettingsStruct& Settings, Hard
     // Moreover, we remove probing sets which are fully convered by another probing set.
     Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Settings, Simulation, Test);
 
-    if (Settings.CompactDistributions){
+    bool is_in_compact_mode = Settings.CompactDistributions == 1;
+
+    if (is_in_compact_mode){
         // We assume, that the contingency tables in compact mode encompass a small number of entries
         // Therefore, we pre-allocate memory for all entries of the table. This leads to a faster evaluation. 
         Hardware::GenerateProbingSets::InitializeCompactDistributions(Settings, Simulation, Test);
-    }else{
-        Test.TableEntries.resize(Settings.Max_no_of_Threads, std::vector<Util::TableEntryStruct>(Simulation.NumberOfStepSimulations, Util::TableEntryStruct(1)));
+    }/*
+        //Test.TableEntries.resize(Settings.Max_no_of_Threads, std::vector<Util::TableEntryStruct>(Simulation.NumberOfStepSimulations, Util::TableEntryStruct(1)));
         
         for (size_t SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
             Test.ProbingSet.at(SetIndex).ContingencyTable.OnlyOneEntry.resize(Simulation.NumberOfGroups, std::vector<std::vector<std::vector<unsigned char>>>(256));
         }
+    }*/
+
+    for (size_t set_index = 0; set_index < Test.ProbingSet.size(); ++set_index){
+        Test.ProbingSet[set_index].contingency_table.Initialize(Settings.NumberOfGroups, Test.ProbingSet[set_index].Extension.size(), is_in_compact_mode);
     }
 }
 
@@ -168,7 +174,7 @@ void Hardware::GenerateProbingSets::CoverWithOneProbingSet(Hardware::TestStruct&
         if ((SetIndex != Index) && Test.ProbingSet.at(SetIndex).Covers(Test.ProbingSet.at(Index))){
             if (std::includes(Test.ProbingSet.at(SetIndex).Extension.begin(), Test.ProbingSet.at(SetIndex).Extension.end(), Test.ProbingSet.at(Index).Extension.begin(), Test.ProbingSet.at(Index).Extension.end(), std::greater<unsigned int>())){
                 // Traces equals one means that the probing set should be removed
-                Test.ProbingSet.at(Index).ContingencyTable.Traces = 1;
+                Test.ProbingSet.at(Index).contingency_table.MarkAsRemovable();
             }
         }
     }    
@@ -229,7 +235,7 @@ void Hardware::GenerateProbingSets::RemoveDuplicatedProbingSets(Hardware::Settin
 }
 
 bool Hardware::GenerateProbingSets::Remove(ProbingSetStruct& ProbingSet){
-    return ProbingSet.ContingencyTable.Traces == 1;
+    return ProbingSet.contingency_table.IsRemovable();
 }
 
 void Hardware::GenerateProbingSets::InitializeCompactDistributions(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
@@ -238,11 +244,11 @@ void Hardware::GenerateProbingSets::InitializeCompactDistributions(Hardware::Set
 	int                   TempIndex = 0, ClockCycle;
 	int**                 TempClockProbeTable = NULL;
 
-    for (setIndex = 0; setIndex < Test.ProbingSet.size(); setIndex++){
+    /*for (setIndex = 0; setIndex < Test.ProbingSet.size(); setIndex++){
         for (ProbeIndex = 0; ProbeIndex <= Test.ProbingSet.at(setIndex).Extension.size(); ProbeIndex++){
 			Test.ProbingSet.at(setIndex).ContingencyTable.Entries.push_back(emptyTableEntry);
 		}
-	}
+	}*/
 
     Test.TempProbeValue.resize(Settings.Max_no_of_Threads, std::vector<int>(Test.ProbingSet.size(), 0));
 

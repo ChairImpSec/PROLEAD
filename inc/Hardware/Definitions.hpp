@@ -299,7 +299,8 @@ namespace Hardware
     {
         std::vector<unsigned int> Standard; ///< The standard probes placed by an adversary.
         std::vector<unsigned int> Extension; ///< The extensions of the standard probes, i.e. glitch- and transition-extended probes.
-        Util::ContingencyTableStruct ContingencyTable; ///< The contingency table storing the occurences of values probed by the extended probes.
+        //Util::ContingencyTableStruct ContingencyTable; ///< The contingency table storing the occurences of values probed by the extended probes.
+        hardware::stats::ContingencyTable<hardware::stats::TableBucketVector> contingency_table; ///< The contingency table storing the occurences of values probed by the extended probes.
 
 		/**
 		* @brief Initializes a probing set with a single standard probe.
@@ -325,15 +326,6 @@ namespace Hardware
 		* @author Nicolai Müller
 		*/	
         bool Covers(Hardware::ProbingSetStruct&);
-		
-		/**
-		* @brief Checks if the contingency table contains a particular entry.
-		* @param Entry The contingency table entry to search.
-		* @param IgnoredEntries Number of entries at the end of the contingency table to ignore during search.
-		* @return The position of the entry in the table or -1 if the entry was not found.
-		* @author Nicolai Müller
-		*/			
-        int FindEntry(Util::TableEntryStruct&, unsigned int);
     };
 		
     /** 
@@ -357,7 +349,7 @@ namespace Hardware
         std::vector<double>           SumOverGroup; ///< Stores the number of simulations per group.
         std::vector<Hardware::ProbingSetStruct> ProbingSet; ///< A list of all probing sets to evaluate.
         std::vector<std::vector<int>> TempProbeValue; ///< A list of table entries which will be added to the contingency tables in compact mode.
-        std::vector<std::vector<Util::TableEntryStruct>> TableEntries; ///< A list of table entries which will be added to the contingency tables in normal mode.
+        //std::vector<std::vector<Util::TableEntryStruct>> TableEntries; ///< A list of table entries which will be added to the contingency tables in normal mode.
         int				              NumberOfUniqueProbes = 0;
         Hardware::UniqueProbeStruct** UniqueProbe = NULL;
 
@@ -414,5 +406,7 @@ namespace Hardware
 		* @author Nicolai Müller
 		*/
         Hardware::ProbePositionStruct GetExtendedProbe(Hardware::ProbingSetStruct&, unsigned int);
+
+        void GetExtendedProbes(Hardware::ProbingSetStruct& probing_set, std::vector<Hardware::ProbePositionStruct*>& extensions);
     };
 }

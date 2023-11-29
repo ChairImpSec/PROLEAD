@@ -14,20 +14,20 @@ void Hardware::Test::All(Hardware::SettingsStruct& Settings, Hardware::Simulatio
 	}
 }
 
-void Hardware::Test::CompactTest(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
+void Hardware::Test::CompactTest(Hardware::SimulationStruct& simulation, Hardware::TestStruct& test){
     uint64_t     StepSimulationIndex = 0;
     int		     ThreadIndex = 0;
-    size_t       SetIndex = 0;
+    size_t       set_index = 0;
 
     #pragma omp parallel for schedule(guided) private(ThreadIndex)
-    for (StepSimulationIndex = 0; StepSimulationIndex < Simulation.NumberOfStepSimulations; StepSimulationIndex++){
+    for (StepSimulationIndex = 0; StepSimulationIndex < simulation.NumberOfStepSimulations; StepSimulationIndex++){
         ThreadIndex = omp_get_thread_num();
-        Hardware::Test::CompactTableUpdate(Simulation, StepSimulationIndex, Test, Test.TempProbeValue.at(ThreadIndex));
+        Hardware::Test::CompactTableUpdate(simulation, StepSimulationIndex, test, test.TempProbeValue.at(ThreadIndex));
     }
 
     #pragma omp parallel for schedule(guided)
-    for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-        Util::GTest(Simulation.NumberOfGroups, Simulation.NumberOfProcessedSimulations, Test.ProbingSet.at(SetIndex).ContingencyTable, Test.SumOverGroup);
+    for (set_index = 0; set_index < test.ProbingSet.size(); set_index++){
+        test.ProbingSet[set_index].contingency_table.ComputeGTest(simulation.NumberOfGroups, simulation.NumberOfProcessedSimulations, test.SumOverGroup);
     }
 }
 
@@ -48,192 +48,55 @@ void Hardware::Test::CompactTableUpdate(Hardware::SimulationStruct& Simulation, 
 
 	for (ProbeSetIndex = 0; ProbeSetIndex < (unsigned int)Test.ProbingSet.size(); ProbeSetIndex++){
 		#pragma omp atomic
-        Test.ProbingSet.at(ProbeSetIndex).ContingencyTable.Entries.at(TempProbeValue.at(ProbeSetIndex)).Count.at(Simulation.SelectedGroups[SimulationIndex])++;
+        ++Test.ProbingSet.at(ProbeSetIndex).contingency_table.GetCounters(TempProbeValue[ProbeSetIndex])[Simulation.SelectedGroups[SimulationIndex]];
 	}
 }
 
-void Hardware::Test::NormalTest(Hardware::SettingsStruct& Settings, Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test){
-	size_t SetIndex = 0;
-    int ThreadIndex;
-
-    #pragma omp parallel for schedule(guided) private(ThreadIndex)
-	for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-        ThreadIndex = omp_get_thread_num();
-		Hardware::Test::NormalTableUpdate(Simulation, Test, Test.ProbingSet.at(SetIndex), Test.TableEntries.at(ThreadIndex));
-        Util::GTest(Simulation.NumberOfGroups, Simulation.NumberOfProcessedSimulations, Test.ProbingSet.at(SetIndex).ContingencyTable, Test.SumOverGroup);
-        Test.ProbingSet.at(SetIndex).ContingencyTable.CalculateTraces(Settings.NumberOfGroups, Settings.BetaThreshold, Settings.EffectSize);
+void Hardware::Test::NormalTest(Hardware::SettingsStruct& settings, Hardware::SimulationStruct& simulation, Hardware::TestStruct& test){
+    #pragma omp parallel for schedule(guided)
+	for (size_t set_index = 0; set_index < test.ProbingSet.size(); ++set_index){
+		Hardware::Test::NormalTableUpdate(simulation, test, test.ProbingSet.at(set_index));
+        test.ProbingSet[set_index].contingency_table.ComputeGTest(simulation.NumberOfGroups, simulation.NumberOfProcessedSimulations, test.SumOverGroup);
+        test.ProbingSet[set_index].contingency_table.ComputeNumberOfRequiredTraces(settings.NumberOfGroups, settings.BetaThreshold, settings.EffectSize);
     } 
 }
 
-void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& Simulation, Hardware::TestStruct& Test, Hardware::ProbingSetStruct& ProbingSet, std::vector<Util::TableEntryStruct>& TableEntries){
-    uint64_t SimulationIndex = 0;
-    int KeySizeFull = ProbingSet.Extension.size() >> 3;
-    int KeySize = KeySizeFull + 1;
-    int KeyRemainder = ProbingSet.Extension.size() & 0b111;
-    int BitIndex = 0, GroupIndex = 0, EntryIndex = 0, KeyIndex = 0, TempIndex = 0;
-    unsigned int NewTableElements = 0;
-    std::vector<std::vector<unsigned int>> NewGroupElements(Simulation.NumberOfGroups, std::vector<unsigned int>(256, 0));
-    std::vector<std::vector<std::vector<int>>> RemovedElementIndices(Simulation.NumberOfGroups, std::vector<std::vector<int>>(256));
-    std::vector<unsigned char> Subkey;
+void Hardware::Test::NormalTableUpdate(Hardware::SimulationStruct& simulation, Hardware::TestStruct& test, Hardware::ProbingSetStruct& probing_set){
+    hardware::stats::Key key;
+    unsigned int group_index;
+    size_t bit_index, key_index, tmp_index;
+    unsigned char hash_value0, hash_value1;
+    std::vector<Hardware::ProbePositionStruct*> extensions(probing_set.Extension.size());
 
-    for (SimulationIndex = 0; SimulationIndex < Simulation.NumberOfStepSimulations; SimulationIndex++){
-	    TableEntries.at(SimulationIndex).Key.resize(KeySize, 0);
-        std::fill(TableEntries.at(SimulationIndex).Key.begin(), TableEntries.at(SimulationIndex).Key.end(), 0);
+    test.GetExtendedProbes(probing_set, extensions);
 
-        for (KeyIndex = 0; KeyIndex < KeySizeFull; KeyIndex++){
-            TempIndex = KeySizeFull - KeyIndex;
-            for (BitIndex = KeyIndex << 3; BitIndex < (KeyIndex + 1) << 3; BitIndex++){
-                TableEntries.at(SimulationIndex).Key.at(TempIndex) <<= 1;
-                TableEntries.at(SimulationIndex).Key.at(TempIndex) |= Simulation.ProbeValues[SimulationIndex][Test.GetExtendedProbe(ProbingSet, BitIndex).Cycle][Test.GetExtendedProbe(ProbingSet, BitIndex).Probe];
-            }
+    for (uint64_t sim_index = 0; sim_index < simulation.NumberOfStepSimulations; ++sim_index){
+        hash_value0 = 0;
+        hash_value1 = 0;
+        key = std::make_unique<unsigned char[]>(probing_set.contingency_table.GetKeySizeExcludingHashValues()); 
+
+        // Set first hash value
+        for (bit_index = 0; (bit_index < 8) && (bit_index < probing_set.Extension.size()); ++bit_index){
+            hash_value0 <<= 1;
+            hash_value0 |= simulation.ProbeValues[sim_index][extensions[bit_index]->Cycle][extensions[bit_index]->Probe];
         }
 
-        for (BitIndex = KeySizeFull << 3; BitIndex < (KeySizeFull << 3) + KeyRemainder; BitIndex++){
-            TableEntries.at(SimulationIndex).Key.at(0) <<= 1;
-            TableEntries.at(SimulationIndex).Key.at(0) |= Simulation.ProbeValues[SimulationIndex][Test.GetExtendedProbe(ProbingSet, BitIndex).Cycle][Test.GetExtendedProbe(ProbingSet, BitIndex).Probe];
+        // Set second hash value
+        for (bit_index = 8; (bit_index < 16) && (bit_index < probing_set.Extension.size()); ++bit_index){
+            hash_value1 <<= 1;
+            hash_value1 |= simulation.ProbeValues[sim_index][extensions[bit_index]->Cycle][extensions[bit_index]->Probe];
         }
-
-        TableEntries.at(SimulationIndex).Count.at(0) = Simulation.SelectedGroups[SimulationIndex]; 
-    }
-
-    std::sort(TableEntries.begin(), TableEntries.end(), [](const Util::TableEntryStruct& lhs, const Util::TableEntryStruct& rhs){return lhs.Key < rhs.Key;});
-
-    // Search if an entry exists in the list of entries that occur multiple times
-    EntryIndex = ProbingSet.FindEntry(TableEntries.at(0), 0);
     
-    if (EntryIndex == -1){
-        // If the entry did not already occur multiple times, we check if entry occured at least once
-        if (KeySize > 1){
-            Subkey = {TableEntries.at(0).Key.begin(), TableEntries.at(0).Key.end() - 1};
-
-            for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-                KeyIndex = Hardware::Test::SearchKey(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(0).Key.back()), Subkey, 0);
-
-                if (KeyIndex != -1){
-                    // If the entry already occured once, we add it to the table and remove the other entry
-                    ProbingSet.ContingencyTable.Entries.emplace_back(Simulation.NumberOfGroups, TableEntries.at(0).Key, GroupIndex, TableEntries.at(0).Count.at(0));
-                    NewTableElements++;
-                    RemovedElementIndices.at(GroupIndex).at(TableEntries.at(0).Key.back()).push_back(KeyIndex);  
-                    break;
-                }
-            }
-
-            if (GroupIndex == Simulation.NumberOfGroups){
-                // If the entry occurs for the first time, create a new entry
-                ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back()).push_back(Subkey);
-                NewGroupElements.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back())++;
-            }
-
-        }else{
-            for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-                if (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(0).Key.back()).size()){
-                    // If the entry already occured once, we add it to the table and remove the other entry
-                    ProbingSet.ContingencyTable.Entries.emplace_back(Simulation.NumberOfGroups, TableEntries.at(0).Key, GroupIndex, TableEntries.at(0).Count.at(0));
-                    NewTableElements++;
-                    RemovedElementIndices.at(GroupIndex).at(TableEntries.at(0).Key.back()).push_back(0);  
-                    break;
-                }
-            }
-
-            if (GroupIndex == Simulation.NumberOfGroups){
-                // If the entry occurs for the first time, create a new entry
-                ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back()).push_back(TableEntries.at(0).Key);
-                NewGroupElements.at(TableEntries.at(0).Count.at(0)).at(TableEntries.at(0).Key.back())++;
+        // Get regular key
+        for (key_index = 0; key_index < probing_set.contingency_table.GetKeySizeExcludingHashValues(); ++key_index){
+            tmp_index = probing_set.contingency_table.GetKeySizeExcludingHashValues() - key_index - 1;
+            for (bit_index = (key_index + probing_set.contingency_table.GetNumberOfLayers()) << 3; bit_index < ((key_index + probing_set.contingency_table.GetNumberOfLayers() + 1) << 3) && (bit_index < probing_set.Extension.size()); ++bit_index){
+                key[tmp_index] <<= 1;
+                key[tmp_index] |= simulation.ProbeValues[sim_index][extensions[bit_index]->Cycle][extensions[bit_index]->Probe];
             }
         }
-    }else{
-        // If the entry already occured multiple times, we just increment the existing bin
-        ProbingSet.ContingencyTable.Entries.at(EntryIndex).Count.at(TableEntries.at(0).Count.at(0))++; 
-    }
 
-    for (SimulationIndex = 1; SimulationIndex < Simulation.NumberOfStepSimulations; SimulationIndex++){ 
-        Subkey = {TableEntries.at(SimulationIndex).Key.begin(), TableEntries.at(SimulationIndex).Key.end() - 1};
-
-        if (ProbingSet.ContingencyTable.Entries.size() && TableEntries.at(SimulationIndex).Key == ProbingSet.ContingencyTable.Entries.back().Key){
-            // Increment the existing entry
-            ProbingSet.ContingencyTable.Entries.back().Count.at(TableEntries.at(SimulationIndex).Count.at(0))++;  
-        }else{
-            for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-                if (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size() && Subkey == ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).back()){
-                    // Add the entry to the table and clear the entry in the group table
-                    ProbingSet.ContingencyTable.Entries.emplace_back(Simulation.NumberOfGroups, TableEntries.at(SimulationIndex).Key, GroupIndex, TableEntries.at(SimulationIndex).Count.at(0));
-                    NewTableElements++;
-                    RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push_back(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size() - 1);  
-                    break;
-                }
-            }
-
-            if (GroupIndex == Simulation.NumberOfGroups){
-                // Search if an entry exists in the list of entries that occur multiple times
-                EntryIndex = ProbingSet.FindEntry(TableEntries.at(SimulationIndex), NewTableElements);
-                
-                if (EntryIndex == -1){
-                    if (KeySize > 1){
-                        // If the entry did not already occur multiple times, we check if entry occured at least once
-                        for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-                            KeyIndex = Hardware::Test::SearchKey(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()), Subkey, NewGroupElements.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()));
-
-                            if (KeyIndex != -1){
-                                // If the entry already occured once, we add it to the table and remove the other entry
-                                ProbingSet.ContingencyTable.Entries.emplace_back(Simulation.NumberOfGroups, TableEntries.at(SimulationIndex).Key, GroupIndex, TableEntries.at(SimulationIndex).Count.at(0));                    
-                                NewTableElements++;
-                                RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push_back(KeyIndex);     
-                                break;
-                            }                    
-                        }    
-
-                        if (GroupIndex == Simulation.NumberOfGroups){
-                            // If the entry occurs for the first time, create a new entry
-                            ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back()).push_back(Subkey);
-                            NewGroupElements.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back())++;
-                        } 
-                    }else{
-                        // If the entry did not already occur multiple times, we check if entry occured at least once
-                        for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-                            if (ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).size()){
-                                // If the entry already occured once, we add it to the table and remove the other entry
-                                ProbingSet.ContingencyTable.Entries.emplace_back(Simulation.NumberOfGroups, TableEntries.at(SimulationIndex).Key, GroupIndex, TableEntries.at(SimulationIndex).Count.at(0));
-                                NewTableElements++;
-                                RemovedElementIndices.at(GroupIndex).at(TableEntries.at(SimulationIndex).Key.back()).push_back(0);     
-                                break;
-                            }                    
-                        }    
-
-                        if (GroupIndex == Simulation.NumberOfGroups){
-                            // If the entry occurs for the first time, create a new entry
-                            ProbingSet.ContingencyTable.OnlyOneEntry.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back()).push_back(TableEntries.at(SimulationIndex).Key);
-                            NewGroupElements.at(TableEntries.at(SimulationIndex).Count.at(0)).at(TableEntries.at(SimulationIndex).Key.back())++;
-                        }                         
-                    }      
-                }else{
-                    // If the entry already occured multiple times, we just increment the existing bin
-                    ProbingSet.ContingencyTable.Entries.at(EntryIndex).Count.at(TableEntries.at(SimulationIndex).Count.at(0))++; 
-                }
-            }  
-        }
-    }
-
-    for (GroupIndex = 0; GroupIndex < Simulation.NumberOfGroups; GroupIndex++){
-        for (BitIndex = 0; BitIndex < 256; BitIndex++){
-            for (EntryIndex = 0; EntryIndex < (int)RemovedElementIndices.at(GroupIndex).at(BitIndex).size(); EntryIndex++){
-                ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).at(RemovedElementIndices.at(GroupIndex).at(BitIndex).at(EntryIndex)).clear();
-            }
-        
-            std::sort(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).begin(), ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end(), [](const std::vector<unsigned char>& lhs, const std::vector<unsigned char>& rhs){return lhs < rhs;});
-            ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).erase(std::remove_if(ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).begin(), ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end(), [](const std::vector<unsigned char>& x){return (x.size() == 0);}), ProbingSet.ContingencyTable.OnlyOneEntry.at(GroupIndex).at(BitIndex).end());
-        }
-    }
-
-    std::sort(ProbingSet.ContingencyTable.Entries.begin(), ProbingSet.ContingencyTable.Entries.end(), [](const Util::TableEntryStruct& lhs, const Util::TableEntryStruct& rhs){return lhs.Key < rhs.Key;});
-}
-
-int Hardware::Test::SearchKey(std::vector<std::vector<unsigned char>>& Table, std::vector<unsigned char>& Entry, unsigned int IgnoredEntries){ 
-    std::vector<std::vector<unsigned char>>::iterator it = std::lower_bound(Table.begin(), Table.end() - IgnoredEntries, Entry, [](const std::vector<unsigned char>& lhs, const std::vector<unsigned char>& rhs){return lhs < rhs;});
-    std::iterator_traits<std::vector<std::vector<unsigned char>>::iterator>::difference_type Position = std::distance(Table.begin(), it); 
-    
-    if ((it == Table.end()) || (Table.at(Position) != Entry)){
-        return -1;
-    }else{
-        return (int)Position;
+        group_index = simulation.SelectedGroups[sim_index];
+        probing_set.contingency_table.UpdateTable(std::move(key), hash_value0, hash_value1, simulation.NumberOfGroups, group_index);
     }
 }

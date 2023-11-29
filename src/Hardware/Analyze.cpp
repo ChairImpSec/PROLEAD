@@ -35,7 +35,14 @@ void Hardware::Analyze::MultivariateRobustProbingSecurity(Hardware::LibraryStruc
     unsigned int ProbeStepIndex = 0;
     std::vector<unsigned int> Combination;
     std::vector<bool> CombinationBitmask(Test.StandardProbes.size(), false);
-    Hardware::TestStruct EmptyTest = Test;
+    Hardware::TestStruct EmptyTest(Simulation);// = Test;
+
+    EmptyTest.ExtendedProbes = Test.ExtendedProbes;
+    EmptyTest.NumberOfUniqueProbes = Test.NumberOfUniqueProbes;
+    EmptyTest.StandardProbes = Test.StandardProbes;
+    EmptyTest.SumOverGroup = Test.SumOverGroup;
+    EmptyTest.TempProbeValue = Test.TempProbeValue;
+    EmptyTest.UniqueProbe = Test.UniqueProbe;
 
     std::cout << "Generate multivariate probing sets..." << std::flush;
     Hardware::GenerateProbingSets::InitializeMultivariateProbeCombinations(Simulation, Test, Combination, CombinationBitmask);
@@ -61,7 +68,15 @@ void Hardware::Analyze::MultivariateRobustProbingSecurity(Hardware::LibraryStruc
             if (Test.ProbingSet.size() == (size_t)Settings.ProbeStepSize){
                 std::cout << "done! " << Test.ProbingSet.size() << " probing sets generated!" << std::endl;
                 Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Library, Circuit, Settings, SharedData, Simulation, Test, StartTime, ProbeStepIndex);
-                Test = EmptyTest;
+                //Test = EmptyTest;
+
+                Test.ProbingSet.clear();
+                Test.ExtendedProbes = EmptyTest.ExtendedProbes;
+                Test.NumberOfUniqueProbes = EmptyTest.NumberOfUniqueProbes;
+                Test.StandardProbes = EmptyTest.StandardProbes;
+                Test.SumOverGroup = EmptyTest.SumOverGroup;
+                Test.TempProbeValue = EmptyTest.TempProbeValue;
+                Test.UniqueProbe = EmptyTest.UniqueProbe;
             }
         }
     } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end()));   
@@ -69,7 +84,15 @@ void Hardware::Analyze::MultivariateRobustProbingSecurity(Hardware::LibraryStruc
     if (Test.ProbingSet.size()){
         std::cout << "done (last step)! " << Test.ProbingSet.size() << " probing sets generated!" << std::endl;
         Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Library, Circuit, Settings, SharedData, Simulation, Test, StartTime, ProbeStepIndex);
-        Test = EmptyTest;
+        //Test = EmptyTest;
+
+        Test.ProbingSet.clear();
+        Test.ExtendedProbes = EmptyTest.ExtendedProbes;
+        Test.NumberOfUniqueProbes = EmptyTest.NumberOfUniqueProbes;
+        Test.StandardProbes = EmptyTest.StandardProbes;
+        Test.SumOverGroup = EmptyTest.SumOverGroup;
+        Test.TempProbeValue = EmptyTest.TempProbeValue;
+        Test.UniqueProbe = EmptyTest.UniqueProbe;
     }
 }
 
@@ -79,7 +102,14 @@ void Hardware::Analyze::UnivariateRobustProbingSecurity(Hardware::LibraryStruct&
     unsigned int ProbeStepIndex = 0;
     std::vector<unsigned int> Combination;
     std::vector<bool> CombinationBitmask(Simulation.NumberOfProbes, false);
-    Hardware::TestStruct EmptyTest = Test;
+    Hardware::TestStruct EmptyTest(Simulation);// = Test;
+
+    EmptyTest.ExtendedProbes = Test.ExtendedProbes;
+    EmptyTest.NumberOfUniqueProbes = Test.NumberOfUniqueProbes;
+    EmptyTest.StandardProbes = Test.StandardProbes;
+    EmptyTest.SumOverGroup = Test.SumOverGroup;
+    EmptyTest.TempProbeValue = Test.TempProbeValue;
+    EmptyTest.UniqueProbe = Test.UniqueProbe;
 
     std::cout << "Generate univariate probing sets..." << std::flush;
     for (CycleIndex = 0; CycleIndex < Simulation.NumberOfTestClockCycles; CycleIndex++){
@@ -104,7 +134,15 @@ void Hardware::Analyze::UnivariateRobustProbingSecurity(Hardware::LibraryStruct&
             if (Test.ProbingSet.size() == (size_t)Settings.ProbeStepSize){
                 std::cout << "done! " << Test.ProbingSet.size() << " probing sets generated!" << std::endl;
                 Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Library, Circuit, Settings, SharedData, Simulation, Test, StartTime, ProbeStepIndex);
-                Test = EmptyTest;
+                //Test = EmptyTest;
+
+                Test.ProbingSet.clear();
+                Test.ExtendedProbes = EmptyTest.ExtendedProbes;
+                Test.NumberOfUniqueProbes = EmptyTest.NumberOfUniqueProbes;
+                Test.StandardProbes = EmptyTest.StandardProbes;
+                Test.SumOverGroup = EmptyTest.SumOverGroup;
+                Test.TempProbeValue = EmptyTest.TempProbeValue;
+                Test.UniqueProbe = EmptyTest.UniqueProbe;                
             }
 
         } while (std::prev_permutation(CombinationBitmask.begin(), CombinationBitmask.end())); 
@@ -113,7 +151,15 @@ void Hardware::Analyze::UnivariateRobustProbingSecurity(Hardware::LibraryStruct&
     if (Test.ProbingSet.size()){
         std::cout << "done (last step)! " << Test.ProbingSet.size() << " probing sets generated!" << std::endl;
         Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Library, Circuit, Settings, SharedData, Simulation, Test, StartTime, ProbeStepIndex);
-        Test = EmptyTest;
+        //Test = EmptyTest;
+
+        Test.ProbingSet.clear();
+        Test.ExtendedProbes = EmptyTest.ExtendedProbes;
+        Test.NumberOfUniqueProbes = EmptyTest.NumberOfUniqueProbes;
+        Test.StandardProbes = EmptyTest.StandardProbes;
+        Test.SumOverGroup = EmptyTest.SumOverGroup;
+        Test.TempProbeValue = EmptyTest.TempProbeValue;
+        Test.UniqueProbe = EmptyTest.UniqueProbe;        
     }
 }
 
@@ -159,9 +205,9 @@ void Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Hardware::Librar
 
         if(Settings.RemoveProbingSets && !Settings.CompactDistributions){ // Remove probing set if enough traces are processed
             for (SetIndex = 0; SetIndex < Test.ProbingSet.size(); SetIndex++){
-                if (Simulation.NumberOfProcessedSimulations > Test.ProbingSet.at(SetIndex).ContingencyTable.Traces){
-                    if (Test.ProbingSet.at(SetIndex).ContingencyTable.Probability > Alpha){
-                        Alpha = Test.ProbingSet.at(SetIndex).ContingencyTable.Probability;
+                if (Simulation.NumberOfProcessedSimulations > Test.ProbingSet.at(SetIndex).contingency_table.GetNumberOfRequiredTraces()){
+                    if (Test.ProbingSet.at(SetIndex).contingency_table.GetGValue() > Alpha){
+                        Alpha = Test.ProbingSet.at(SetIndex).contingency_table.GetGValue();
                         ProbingSet = "";
 
                         for (ProbeIndex = 0; ProbeIndex < Test.GetNumberOfStandardProbes(SetIndex); ProbeIndex++){
@@ -178,7 +224,7 @@ void Hardware::Analyze::RobustProbingSecurityForSomeProbingSets(Hardware::Librar
                 }
             }
 
-            Test.ProbingSet.erase(std::remove_if(Test.ProbingSet.begin(), Test.ProbingSet.end(), [&Simulation](const ProbingSetStruct& Ps){return (Simulation.NumberOfProcessedSimulations > Ps.ContingencyTable.Traces);}), Test.ProbingSet.end());
+            Test.ProbingSet.erase(std::remove_if(Test.ProbingSet.begin(), Test.ProbingSet.end(), [&Simulation](const ProbingSetStruct& Ps){return (Simulation.NumberOfProcessedSimulations > Ps.contingency_table.GetNumberOfRequiredTraces());}), Test.ProbingSet.end());
 
             if (Test.ProbingSet.size() == 0){
                 if ((Simulation.NumberOfProcessedSimulations % Settings.NumberOfStepSimulationsToWrite) != 0){

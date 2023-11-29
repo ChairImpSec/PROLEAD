@@ -45,10 +45,9 @@ namespace Hardware
 		* @param Simulation The simulation settings, i.e. the simulated circuit states.
 		* @param Test The test settings, i.e. the unique probes and the contingency tables.
 		* @param ProbingSet The probing set to update.
-		* @param TableEntries A temporary storage for the probed states.
 		* @author Nicolai Müller
 		*/		
-        void NormalTableUpdate(Hardware::SimulationStruct&, Hardware::TestStruct&, Hardware::ProbingSetStruct&, std::vector<Util::TableEntryStruct>&);
+        void NormalTableUpdate(Hardware::SimulationStruct&, Hardware::TestStruct&, Hardware::ProbingSetStruct&);
 	
 		/**
 		* @brief Adds the new simulations to the contingency tables in normal mode, computes a new g-value for each table, and performs statistical power analysis.
@@ -58,15 +57,6 @@ namespace Hardware
 		* @author Nicolai Müller
 		*/		
         void NormalTest(Hardware::SettingsStruct&, Hardware::SimulationStruct&, Hardware::TestStruct&);
-		
-		/**
-		* @brief Searches for a particular probed state in a normal mode continagency table.
-		* @param Table The contingency table..
-		* @param Entry The probed state to search.
-		* @param IgnoredEntries The number of entries at the end of the contingency table to ignore during search.
-		* @author Nicolai Müller
-		*/			
-        int SearchKey(std::vector<std::vector<unsigned char>>&, std::vector<unsigned char>&, unsigned int);
 		
 		/**
 		* @brief Performs the full test procedure.
