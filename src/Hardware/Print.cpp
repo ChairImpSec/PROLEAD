@@ -507,16 +507,17 @@ unsigned int Hardware::Print::EvaluationSettings(Hardware::SimulationStruct& Sim
     return Maximum;
 }
 
-unsigned int Hardware::Print::MemoryConsumption(){
+uint64_t Hardware::Print::MemoryConsumption(){
     std::ifstream Status("/proc/self/status");
     std::string Line, Number;
-    unsigned int ram = 0;
+    uint64_t ram = 0;
 
     if (Status.is_open()){
         while (getline(Status,Line)){
+            // Parse VmSize: 21475178120 kB
             if (Line.find("VmSize") != std::string::npos){
                 Number = Line.substr(7, Line.length());
-                ram = std::stoi(Number.substr(0, Number.length() - 2));
+                ram = std::stoll(Number.substr(0, Number.length() - 2));
                 break;
             }
         }
