@@ -16,7 +16,7 @@ Hardware::ProbingSetStruct::ProbingSetStruct(std::vector<unsigned int>& Probe){
 }
 
 bool Hardware::ProbingSetStruct::Covers(Hardware::ProbingSetStruct& ProbingSet){
-	if (this->contingency_table.GetNumberOfRequiredTraces() || ProbingSet.contingency_table.GetNumberOfRequiredTraces()){
+	if (this->contingency_table.IsRemovable() || ProbingSet.contingency_table.IsRemovable()){
 		return false;
 	}else{
 		if (this->Extension.size() <= ProbingSet.Extension.size()){

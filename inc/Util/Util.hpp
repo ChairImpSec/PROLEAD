@@ -54,7 +54,7 @@ namespace stats{
 		TableData(size_t number_of_groups);
 
 		/**
-		* To read and update the distributions we return a reference to the counters.
+		* To read and update the distributions we return a pointer on the counters.
 		* As the TableData instance still owns Data (smart pointer), we don't have to delete the returned pointer. 
 		*
 		* @brief Returns a pointer to all counters of the entry.
@@ -75,7 +75,7 @@ namespace stats{
 
 	private:
 		/**
-		* This counters count store the distibutions by counting how often the connected key was probed for each group.
+		* This counters store the distibutions by counting how often the connected key was probed for each group.
 		* There is always one counter per group so, number_of_groups in total.
 		* We use unsigned int for the counters as no negative numbers are possible and the maximum number of counted elements is assumed to be at most 100 million.
 		*/	
@@ -435,7 +435,7 @@ namespace stats{
 		* Unfortunately, the g-test overestimates statistical outliers.
 		* This leads to the fact that PROLEAD reports leakage if entries of the contingency table are sparsely filled.
 		* For example, if a probing set contains many probes, each key will be simulated only once.
-		* To avoid such false-positives we use pooling to combine sprsely-filled entries.
+		* To avoid such false-positives we use pooling to combine sparsely-filled entries.
 		* This function, checks if the expected frequency of an entry is high enough or has to be pooled.
 		* This check is done based on a pooling factor which depends on the size of the contingency table.
 		* The larger a table is the more aggresively the pooling is. Hence, the pooling factor increases.
