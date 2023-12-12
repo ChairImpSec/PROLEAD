@@ -2562,6 +2562,16 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
                     Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
+					int InvertedInput = 0;
+					if (Str1[0] == '~')
+					{
+						strncpy(Str2, &Str1[1], Max_Name_Length - 2);
+						Str2[Max_Name_Length - 1] = '\0';
+						strncpy(Str1, Str2, Max_Name_Length - 1);
+						Str1[Max_Name_Length - 1] = '\0';
+						InvertedInput = 1;
+					}
+
 					if (strstr(Str1, "group_in") != Str1)
 					{
 						strncpy(Str2, Str1, Max_Name_Length - 1);
@@ -2871,7 +2881,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 							else
 								TempIndex = InitialInputList[NumberOfBuffer_char];
 
-							Settings->InitialSim_Values[ClockCycle][TempIndex]   = ShareIndex;
+							Settings->InitialSim_Values[ClockCycle][TempIndex]   = (ShareIndex << 1) | InvertedInput;
 							Settings->InitialSim_Values[ClockCycle][TempIndex] <<= 32;
 							Settings->InitialSim_Values[ClockCycle][TempIndex]  |= IndexL2 + (j - IndexL);
 							Settings->InitialSim_Values[ClockCycle][TempIndex]  |= GroupInput;

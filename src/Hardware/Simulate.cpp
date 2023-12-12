@@ -51,6 +51,7 @@ void Hardware::Simulate::All(Hardware::LibraryStruct &Library, Hardware::Circuit
 	int GroupIndex;
 	int ValueIndex;
 	int ShareIndex;
+	uint64_t InvertedInput;
 	uint64_t Select[100];
 	int ProbeIndex;
 	std::string ErrorMessage;
@@ -143,9 +144,14 @@ void Hardware::Simulate::All(Hardware::LibraryStruct &Library, Hardware::Circuit
 				if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) == GroupInput)
 				{
 					ValueIndex = Settings.InitialSim_Values[ClockCycle][InputIndex] & 0xffffffff;
-					ShareIndex = (Settings.InitialSim_Values[ClockCycle][InputIndex] >> 32) & 0xff;
+					InvertedInput = (Settings.InitialSim_Values[ClockCycle][InputIndex] >> 32) & 1;
+					ShareIndex = (Settings.InitialSim_Values[ClockCycle][InputIndex] >> 33) & 0xff;
 
-					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = SharedData->SelectedGroupValues[ValueIndex][ShareIndex];
+					if (InvertedInput){
+						InvertedInput = FullOne;
+					}
+
+					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = InvertedInput ^ SharedData->SelectedGroupValues[ValueIndex][ShareIndex];
 				}
 				else if ((Settings.InitialSim_Values[ClockCycle][InputIndex] & GroupInMask) == SameInput)
 					SharedData->SignalValues[Settings.InitialSim_Inputs[ClockCycle][InputIndex]] = SharedData->LastInitialSimValues[InputIndex];
