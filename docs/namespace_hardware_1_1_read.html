@@ -92,6 +92,8 @@ Functions</h2></td></tr>
 <tr class="separator:a76d3d11d801c950f1acc435460349ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae940e47f1fb15a22ffeb8c9a2f0c893"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_read.html#aae940e47f1fb15a22ffeb8c9a2f0c893">TrimSignalName</a> (char *, int *)</td></tr>
 <tr class="separator:aae940e47f1fb15a22ffeb8c9a2f0c893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade6f96902609f99d22b4479e5c261d7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_read.html#ade6f96902609f99d22b4479e5c261d7a">SearchSignalName</a> (<a class="el" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a> *, char *, char)</td></tr>
+<tr class="separator:ade6f96902609f99d22b4479e5c261d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a285cc310391d96c522ec69e3adcfbd2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_read.html#a285cc310391d96c522ec69e3adcfbd2f">DesignFile_Find_IO_Port</a> (char *, char, int, int, <a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *, <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *, int, char *, <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *, int *&amp;, int &amp;, int *&amp;, int &amp;)</td></tr>
 <tr class="separator:a285cc310391d96c522ec69e3adcfbd2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3722b48eb87bd5fe6ff658f000730768"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_hardware_1_1_read.html#a3722b48eb87bd5fe6ff658f000730768">DesignFile_Find_Signal_Name</a> (char *, char, int, int, <a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *, <a class="el" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a> *, int, int, int, char *, <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *, int *&amp;, int &amp;, int *&amp;, int &amp;, int &amp;)</td></tr>
@@ -112,43 +114,43 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::DesignFile </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>InputVerilogFileName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>MainModuleName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Library</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfSignalsOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfCellsOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>NumberOfRegValuesOffset</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -157,6 +159,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l01151">1151</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -170,79 +174,79 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::DesignFile_Find_IO_Port </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Str1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuitRead</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>CellTypeIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>CaseIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Library</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfSignalsOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuitInstanceName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>InputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfInputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>OutputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>NumberOfOutputPorts</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -251,6 +255,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00542">542</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -264,97 +270,97 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::DesignFile_Find_Signal_Name </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Str1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuitRead</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>CellTypeIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>CaseIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Library</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Task</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfSignalsOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfCellsOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuitInstanceName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SubCircuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>InputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfInputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>OutputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfOutputPorts</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>CurrentIO</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -363,6 +369,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00754">754</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -376,19 +384,19 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::fReadaWord </td>
           <td>(</td>
           <td class="paramtype">FILE *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>F</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Buffer</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Attribute</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -397,6 +405,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00315">315</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -410,19 +420,19 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::LibraryFile </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>LibraryFileName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>LibraryName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Library</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -431,6 +441,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00176">176</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -444,11 +456,13 @@ Functions</h2></td></tr>
           <td class="memname">int Hardware::Read::MakeFormulaForCellInLibrary </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_cell_type_struct.html">Hardware::CellTypeStruct</a> *&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>CellType</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00026">26</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -462,19 +476,19 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::NonCommentFromFile </td>
           <td>(</td>
           <td class="paramtype">FILE *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>FileHeader</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Str</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>CommentSyntax</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -483,6 +497,44 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00003">3</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ade6f96902609f99d22b4479e5c261d7a" name="ade6f96902609f99d22b4479e5c261d7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade6f96902609f99d22b4479e5c261d7a">&#9670;&#160;</a></span>SearchSignalName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Hardware::Read::SearchSignalName </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a> *&#160;</td>
+          <td class="paramname"><em>Circuit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>SignalName</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>Trim</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00502">502</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -496,19 +548,19 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Read::SettingsFile </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>InputSettingsFileName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Settings</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -517,6 +569,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l01901">1901</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>
@@ -530,13 +584,13 @@ Functions</h2></td></tr>
           <td class="memname">int Hardware::Read::TrimSignalName </td>
           <td>(</td>
           <td class="paramtype">char *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SignalName</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>k</em> = <code>NULL</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -545,6 +599,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_read_8cpp_source.html#l00461">461</a> of file <a class="el" href="_hardware_2_read_8cpp_source.html">Read.cpp</a>.</p>
 
 </div>
 </div>

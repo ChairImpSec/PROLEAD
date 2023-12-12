@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['u16_0',['u16',['../namespacemulator.html#ae1a1d87c2c063291a14284ebbaddc812',1,'mulator']]],
-  ['u32_1',['u32',['../namespacemulator.html#a2767fcbf22c6cd29a003ed5343850adc',1,'mulator']]],
-  ['u64_2',['u64',['../namespacemulator.html#a1a4eb2c0de0eebcf6b15e4dedd5b654f',1,'mulator']]],
-  ['u8_3',['u8',['../namespacemulator.html#abf344b95a6f3b3627027bc60418892d2',1,'mulator']]]
+  ['i16_0',['i16',['../namespacemulator.html#a00246a115218686efcf892767de54ec3',1,'mulator']]],
+  ['i32_1',['i32',['../namespacemulator.html#a52a2e819efed7051f57b8ab415e6d7ae',1,'mulator']]],
+  ['i64_2',['i64',['../namespacemulator.html#ac369abcdd4aaa45b1d32cdcfe60210ec',1,'mulator']]],
+  ['i8_3',['i8',['../namespacemulator.html#a86b24f3a7a7d8dcdc25a5e70f698f156',1,'mulator']]]
 ];

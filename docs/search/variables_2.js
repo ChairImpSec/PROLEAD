@@ -16,10 +16,9 @@ var searchData=
   ['compilerflags_13',['compilerFlags',['../struct_software_1_1_settings_struct.html#a48b4d1545d8e0a96221403f0635d70ce',1,'Software::SettingsStruct']]],
   ['condition_14',['condition',['../structmulator_1_1_instruction.html#a40557e9534f571d521bd30e2dbb95014',1,'mulator::Instruction']]],
   ['containing_5fvalid_5fpipeline_5fvalues_15',['containing_valid_pipeline_values',['../structmulator_1_1_c_p_u___state.html#aed26ef775a465108437209c76a892c68',1,'mulator::CPU_State']]],
-  ['contingencytable_16',['ContingencyTable',['../struct_hardware_1_1_probing_set_struct.html#ac888c6ea93d3d7ad783e283335bf2cae',1,'Hardware::ProbingSetStruct::ContingencyTable()'],['../struct_software_1_1_probing_set_struct.html#a20f4ff2e6c45dae7857c1bdd3c82d555',1,'Software::ProbingSetStruct::ContingencyTable()']]],
+  ['contingencytable_16',['ContingencyTable',['../struct_software_1_1_probing_set_struct.html#a20f4ff2e6c45dae7857c1bdd3c82d555',1,'Software::ProbingSetStruct']]],
   ['control_17',['CONTROL',['../structmulator_1_1_c_p_u___state.html#aa7a3a00064e6a555922cc63d65fed366',1,'mulator::CPU_State']]],
   ['count_18',['Count',['../struct_util_1_1_table_entry_struct.html#a1e67ec10401f545d43d682eeac625272',1,'Util::TableEntryStruct']]],
-  ['cycle_19',['Cycle',['../struct_hardware_1_1_probe_position_struct.html#a5d19e133c6634b0854281a2f75d0c07e',1,'Hardware::ProbePositionStruct::Cycle()'],['../struct_hardware_1_1_unique_probe_struct.html#a7c11c877409499de197cb8251f5a846e',1,'Hardware::UniqueProbeStruct::Cycle()']]],
-  ['cycleend_20',['CycleEnd',['../struct_software_1_1_thread_simulation_struct.html#a98bd23bb07d7851cab47f30aff302234',1,'Software::ThreadSimulationStruct']]],
-  ['cyclestart_21',['CycleStart',['../struct_software_1_1_thread_simulation_struct.html#a275cbeba1577fcd0aae603bab8c2cf67',1,'Software::ThreadSimulationStruct']]]
+  ['cycleend_19',['CycleEnd',['../struct_software_1_1_thread_simulation_struct.html#a98bd23bb07d7851cab47f30aff302234',1,'Software::ThreadSimulationStruct']]],
+  ['cyclestart_20',['CycleStart',['../struct_software_1_1_thread_simulation_struct.html#a275cbeba1577fcd0aae603bab8c2cf67',1,'Software::ThreadSimulationStruct']]]
 ];

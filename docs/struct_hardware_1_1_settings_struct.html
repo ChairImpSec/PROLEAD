@@ -75,6 +75,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="struct_hardware_1_1_settings_struct-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Hardware::SettingsStruct Struct Reference</div></div>
@@ -86,10 +87,14 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:af35c9d69958f9ffbf0a39a63edf4fc9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#af35c9d69958f9ffbf0a39a63edf4fc9b">IsInMultivariateSetting</a> () const</td></tr>
+<tr class="separator:af35c9d69958f9ffbf0a39a63edf4fc9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a941d1c6f15ce6607adb2b036a7709b71"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a941d1c6f15ce6607adb2b036a7709b71">Max_no_of_Threads</a></td></tr>
-<tr class="memdesc:a941d1c6f15ce6607adb2b036a7709b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of threads PROLEAD can use for parallelism.  <br /></td></tr>
 <tr class="separator:a941d1c6f15ce6607adb2b036a7709b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35e740522e538305c80e2c5f15d55449"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a35e740522e538305c80e2c5f15d55449">ModuleName</a></td></tr>
 <tr class="memdesc:a35e740522e538305c80e2c5f15d55449"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the top module.  <br /></td></tr>
@@ -98,21 +103,17 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a8d08eb84cd06bbb0896a0ae0d92b4acc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of user-defined groups.  <br /></td></tr>
 <tr class="separator:a8d08eb84cd06bbb0896a0ae0d92b4acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9415e722f8d9f4767af7dc6de507c0cd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a9415e722f8d9f4767af7dc6de507c0cd">NumberOfGroupValues</a></td></tr>
-<tr class="memdesc:a9415e722f8d9f4767af7dc6de507c0cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The size of the group values, i.e. their bit length.  <br /></td></tr>
 <tr class="separator:a9415e722f8d9f4767af7dc6de507c0cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a048ac3007b902753bc5165a4dfd6bd99"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a048ac3007b902753bc5165a4dfd6bd99">CompactDistributions</a></td></tr>
-<tr class="memdesc:a048ac3007b902753bc5165a4dfd6bd99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision whether the evaluation should be performed in compact or normal mode.  <br /></td></tr>
 <tr class="separator:a048ac3007b902753bc5165a4dfd6bd99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6af63c1d4d70772c49ed2ee179038efb"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a6af63c1d4d70772c49ed2ee179038efb">MinimizeProbeSets</a></td></tr>
-<tr class="memdesc:a6af63c1d4d70772c49ed2ee179038efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision whether the number of probing sets should be minimized before the evaluation.  <br /></td></tr>
 <tr class="separator:a6af63c1d4d70772c49ed2ee179038efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4daf704c7663ef0b09ac3119034f73e"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ae4daf704c7663ef0b09ac3119034f73e">RemoveProbingSets</a></td></tr>
-<tr class="memdesc:ae4daf704c7663ef0b09ac3119034f73e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision whether probing sets achieving a sufficient confidence level should be removed.  <br /></td></tr>
+<tr class="memdesc:ae4daf704c7663ef0b09ac3119034f73e"><td class="mdescLeft">&#160;</td><td class="mdescRight">sufficient confidence level should be removed.  <br /></td></tr>
 <tr class="separator:ae4daf704c7663ef0b09ac3119034f73e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a2f3be54e370babdaa027f70ea22f1e"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a5a2f3be54e370babdaa027f70ea22f1e">ProbeStepSize</a></td></tr>
-<tr class="memdesc:a5a2f3be54e370babdaa027f70ea22f1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of probing sets to evaluate per execution step.  <br /></td></tr>
 <tr class="separator:a5a2f3be54e370babdaa027f70ea22f1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1484af44e2fdb8f587dfacaa95bd76a1"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a1484af44e2fdb8f587dfacaa95bd76a1">Group_Values</a> = NULL</td></tr>
+<tr class="memitem:a1484af44e2fdb8f587dfacaa95bd76a1"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a1484af44e2fdb8f587dfacaa95bd76a1">Group_Values</a></td></tr>
 <tr class="memdesc:a1484af44e2fdb8f587dfacaa95bd76a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values assigned to the user-defined groups.  <br /></td></tr>
 <tr class="separator:a1484af44e2fdb8f587dfacaa95bd76a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ed1783f1b03909a505a8f6ab555e9aa"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a9ed1783f1b03909a505a8f6ab555e9aa">MaxNumberOfSharesGroupValues</a></td></tr>
@@ -121,7 +122,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a8363d2b3f0a4fd23a19de3eb8f2d2b39"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a8363d2b3f0a4fd23a19de3eb8f2d2b39">ClockSignal</a></td></tr>
 <tr class="memdesc:a8363d2b3f0a4fd23a19de3eb8f2d2b39"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of the clock signal.  <br /></td></tr>
 <tr class="separator:a8363d2b3f0a4fd23a19de3eb8f2d2b39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a995f534c3f10b6ea72e6de314320cca7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a995f534c3f10b6ea72e6de314320cca7">Max_No_ClockCycles</a> = 0</td></tr>
+<tr class="memitem:a995f534c3f10b6ea72e6de314320cca7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a995f534c3f10b6ea72e6de314320cca7">Max_No_ClockCycles</a></td></tr>
 <tr class="memdesc:a995f534c3f10b6ea72e6de314320cca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum number of clock cycles to simulate.  <br /></td></tr>
 <tr class="separator:a995f534c3f10b6ea72e6de314320cca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0229983b0fd3517c6d6c35fe8703fb16"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a0229983b0fd3517c6d6c35fe8703fb16">Max_No_ReportEntries</a></td></tr>
@@ -130,34 +131,28 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aca3ebb1197dab4dfc715583a6e8f75d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#aca3ebb1197dab4dfc715583a6e8f75d7">NumberOfAlwaysRandomInputs</a></td></tr>
 <tr class="memdesc:aca3ebb1197dab4dfc715583a6e8f75d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of fresh random inputs.  <br /></td></tr>
 <tr class="separator:aca3ebb1197dab4dfc715583a6e8f75d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7a047f87f75a66867d75780769309e7"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ac7a047f87f75a66867d75780769309e7">AlwaysRandomInputs</a> = NULL</td></tr>
+<tr class="memitem:ac7a047f87f75a66867d75780769309e7"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ac7a047f87f75a66867d75780769309e7">AlwaysRandomInputs</a></td></tr>
 <tr class="memdesc:ac7a047f87f75a66867d75780769309e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indices of the fresh random input signals.  <br /></td></tr>
 <tr class="separator:ac7a047f87f75a66867d75780769309e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26a97bb7ee13ecb31b844ea0d2ed63a6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a26a97bb7ee13ecb31b844ea0d2ed63a6">InitialSim_NumberOfInputs</a></td></tr>
-<tr class="memdesc:a26a97bb7ee13ecb31b844ea0d2ed63a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of inputs which are assigned to initialize the simulation.  <br /></td></tr>
 <tr class="separator:a26a97bb7ee13ecb31b844ea0d2ed63a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78a14f2ca28f78151dea221a11b9433e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a78a14f2ca28f78151dea221a11b9433e">InitialSim_NumberOfClockCycles</a></td></tr>
-<tr class="memdesc:a78a14f2ca28f78151dea221a11b9433e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of clock cycles to initialize the simulation.  <br /></td></tr>
 <tr class="separator:a78a14f2ca28f78151dea221a11b9433e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbb9567c079cc90d1c44eed0490d9758"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#adbb9567c079cc90d1c44eed0490d9758">InitialSim_Inputs</a> = NULL</td></tr>
+<tr class="memitem:adbb9567c079cc90d1c44eed0490d9758"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#adbb9567c079cc90d1c44eed0490d9758">InitialSim_Inputs</a></td></tr>
 <tr class="memdesc:adbb9567c079cc90d1c44eed0490d9758"><td class="mdescLeft">&#160;</td><td class="mdescRight">The indices of the initialization signals.  <br /></td></tr>
 <tr class="separator:adbb9567c079cc90d1c44eed0490d9758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73b289322b5392c42a097f018a330f4b"><td class="memItemLeft" align="right" valign="top">uint64_t **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a73b289322b5392c42a097f018a330f4b">InitialSim_Values</a> = NULL</td></tr>
+<tr class="memitem:a73b289322b5392c42a097f018a330f4b"><td class="memItemLeft" align="right" valign="top">uint64_t **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a73b289322b5392c42a097f018a330f4b">InitialSim_Values</a></td></tr>
 <tr class="memdesc:a73b289322b5392c42a097f018a330f4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The signal values during the initialization cycles.  <br /></td></tr>
 <tr class="separator:a73b289322b5392c42a097f018a330f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad90cba2532d0fc1372430ba5d51e31ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ad90cba2532d0fc1372430ba5d51e31ae">EndSimCondition_ClockCycles</a></td></tr>
-<tr class="memdesc:ad90cba2532d0fc1372430ba5d51e31ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of clock cycles after which the simulation terminates.  <br /></td></tr>
 <tr class="separator:ad90cba2532d0fc1372430ba5d51e31ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c4c046c1a3a33745a289c6fc2bdb086"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a6c4c046c1a3a33745a289c6fc2bdb086">EndSimCondition_NumberOfSignals</a></td></tr>
-<tr class="memdesc:a6c4c046c1a3a33745a289c6fc2bdb086"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bit width of the signal which terminates the simulation.  <br /></td></tr>
 <tr class="separator:a6c4c046c1a3a33745a289c6fc2bdb086"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388412c1bf58b54c0ac68f70870fc08a"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a388412c1bf58b54c0ac68f70870fc08a">EndSimCondition_Signals</a> = NULL</td></tr>
-<tr class="memdesc:a388412c1bf58b54c0ac68f70870fc08a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The indices of the single-bit signals terminating the simulation.  <br /></td></tr>
 <tr class="separator:a388412c1bf58b54c0ac68f70870fc08a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb3e091ba955b745753f544f105b975f"><td class="memItemLeft" align="right" valign="top">uint64_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#afb3e091ba955b745753f544f105b975f">EndSimCondition_Values</a> = NULL</td></tr>
-<tr class="memdesc:afb3e091ba955b745753f544f105b975f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The values the signals have to reach to terminate the simulation.  <br /></td></tr>
+<tr class="memitem:afb3e091ba955b745753f544f105b975f"><td class="memItemLeft" align="right" valign="top">uint64_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#afb3e091ba955b745753f544f105b975f">EndSimCondition_Values</a></td></tr>
 <tr class="separator:afb3e091ba955b745753f544f105b975f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46c62b0a4b6bfabae4dc924a6fa19b94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a46c62b0a4b6bfabae4dc924a6fa19b94">EndSim_NumberOfWaitCycles</a> = 0</td></tr>
+<tr class="memitem:a46c62b0a4b6bfabae4dc924a6fa19b94"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a46c62b0a4b6bfabae4dc924a6fa19b94">EndSim_NumberOfWaitCycles</a></td></tr>
 <tr class="memdesc:a46c62b0a4b6bfabae4dc924a6fa19b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of cycles to wait after each simulation.  <br /></td></tr>
 <tr class="separator:a46c62b0a4b6bfabae4dc924a6fa19b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae669a7d102157fc5296a10938a30600f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ae669a7d102157fc5296a10938a30600f">NumberOfOutputShares</a> = 0</td></tr>
@@ -169,34 +164,31 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a0b1e8edc27cb64d6de0b21eb37a776a6"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a0b1e8edc27cb64d6de0b21eb37a776a6">OutputSignals</a> = NULL</td></tr>
 <tr class="memdesc:a0b1e8edc27cb64d6de0b21eb37a776a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The simulated output signals (unshared).  <br /></td></tr>
 <tr class="separator:a0b1e8edc27cb64d6de0b21eb37a776a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab82b72ea70dbd0a7d2e3a73ee9ede9bd"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ab82b72ea70dbd0a7d2e3a73ee9ede9bd">ExpectedOutputValues</a> = NULL</td></tr>
+<tr class="memitem:ab82b72ea70dbd0a7d2e3a73ee9ede9bd"><td class="memItemLeft" align="right" valign="top">int **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ab82b72ea70dbd0a7d2e3a73ee9ede9bd">ExpectedOutputValues</a></td></tr>
 <tr class="memdesc:ab82b72ea70dbd0a7d2e3a73ee9ede9bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The expected unshared output given by the user.  <br /></td></tr>
 <tr class="separator:ab82b72ea70dbd0a7d2e3a73ee9ede9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c03dda72864a3d9e49e35f8ebee3db"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a64c03dda72864a3d9e49e35f8ebee3db">TestOrder</a> = 0</td></tr>
 <tr class="memdesc:a64c03dda72864a3d9e49e35f8ebee3db"><td class="mdescLeft">&#160;</td><td class="mdescRight">The security order to test.  <br /></td></tr>
 <tr class="separator:a64c03dda72864a3d9e49e35f8ebee3db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10d0c623a3f1f2275c3de4655ceb3999"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a10d0c623a3f1f2275c3de4655ceb3999">TestMultivariate</a> = 0</td></tr>
-<tr class="memdesc:a10d0c623a3f1f2275c3de4655ceb3999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision whether univariate or multivariate adversaries should be considered.  <br /></td></tr>
 <tr class="separator:a10d0c623a3f1f2275c3de4655ceb3999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1b032bf3f6953e2687bc7ecb53fff5d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#ae1b032bf3f6953e2687bc7ecb53fff5d">MaxDistanceMultivariet</a> = 0</td></tr>
-<tr class="memdesc:ae1b032bf3f6953e2687bc7ecb53fff5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum distance in time, i.e. clock cycles, for multivariate adversaries.  <br /></td></tr>
 <tr class="separator:ae1b032bf3f6953e2687bc7ecb53fff5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e818ee0060f1b3dce934be2b2431606"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a0e818ee0060f1b3dce934be2b2431606">TestTransitional</a> = 0</td></tr>
+<tr class="memitem:a0e818ee0060f1b3dce934be2b2431606"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a0e818ee0060f1b3dce934be2b2431606">TestTransitional</a></td></tr>
 <tr class="memdesc:a0e818ee0060f1b3dce934be2b2431606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decision whether transitional leakage is included.  <br /></td></tr>
 <tr class="separator:a0e818ee0060f1b3dce934be2b2431606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18bc8e34ae1b3356bbae7f42aa52f012"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a18bc8e34ae1b3356bbae7f42aa52f012">NumberOfTestClockCycles</a> = 0</td></tr>
-<tr class="memdesc:a18bc8e34ae1b3356bbae7f42aa52f012"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of clock cycles in which the adversary can place probes.  <br /></td></tr>
 <tr class="separator:a18bc8e34ae1b3356bbae7f42aa52f012"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3231e6295102e17921eefd69ed9459eb"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a3231e6295102e17921eefd69ed9459eb">TestClockCycles</a> = NULL</td></tr>
+<tr class="memitem:a3231e6295102e17921eefd69ed9459eb"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a3231e6295102e17921eefd69ed9459eb">TestClockCycles</a></td></tr>
 <tr class="memdesc:a3231e6295102e17921eefd69ed9459eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The particular clock cycles the adversary can target.  <br /></td></tr>
 <tr class="separator:a3231e6295102e17921eefd69ed9459eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90ffa3f9806770a6a515db9f3dc83fa3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a90ffa3f9806770a6a515db9f3dc83fa3">NumberOfSimulations</a> = 0</td></tr>
 <tr class="memdesc:a90ffa3f9806770a6a515db9f3dc83fa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The total number of simulations.  <br /></td></tr>
 <tr class="separator:a90ffa3f9806770a6a515db9f3dc83fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d1a4f777932a099c534951b99f4516a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a5d1a4f777932a099c534951b99f4516a">NumberOfStepSimulations</a> = 0</td></tr>
+<tr class="memitem:a5d1a4f777932a099c534951b99f4516a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a5d1a4f777932a099c534951b99f4516a">NumberOfStepSimulations</a></td></tr>
 <tr class="memdesc:a5d1a4f777932a099c534951b99f4516a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of simulations before the simulations are evaluated.  <br /></td></tr>
 <tr class="separator:a5d1a4f777932a099c534951b99f4516a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a594d5193e071c3eac401ce89b5e6621f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a594d5193e071c3eac401ce89b5e6621f">NumberOfStepSimulationsToWrite</a> = 0</td></tr>
+<tr class="memitem:a594d5193e071c3eac401ce89b5e6621f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#a594d5193e071c3eac401ce89b5e6621f">NumberOfStepSimulationsToWrite</a></td></tr>
 <tr class="memdesc:a594d5193e071c3eac401ce89b5e6621f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of simulations before a report is written.  <br /></td></tr>
 <tr class="separator:a594d5193e071c3eac401ce89b5e6621f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa52f9971497a1c3d99405b97e7706151"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hardware_1_1_settings_struct.html#aa52f9971497a1c3d99405b97e7706151">AlphaThreshold</a> = 5.0</td></tr>
@@ -212,8 +204,36 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Defines the settings of the evaluation procedure. </p>
 <dl class="section author"><dt>Author</dt><dd>Amir Moradi </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00132">132</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00130">130</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af35c9d69958f9ffbf0a39a63edf4fc9b" name="af35c9d69958f9ffbf0a39a63edf4fc9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af35c9d69958f9ffbf0a39a63edf4fc9b">&#9670;&#160;</a></span>IsInMultivariateSetting()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Hardware::SettingsStruct::IsInMultivariateSetting </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00217">217</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
 <a id="aa52f9971497a1c3d99405b97e7706151" name="aa52f9971497a1c3d99405b97e7706151"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa52f9971497a1c3d99405b97e7706151">&#9670;&#160;</a></span>AlphaThreshold</h2>
 
@@ -226,7 +246,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00182">182</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00206">206</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -237,14 +257,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int* Hardware::SettingsStruct::AlwaysRandomInputs = NULL</td>
+          <td class="memname">int* Hardware::SettingsStruct::AlwaysRandomInputs</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>Indices of the fresh random input signals. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00151">151</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00156">156</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -260,7 +282,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00186">186</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00210">210</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -278,7 +300,7 @@ Public Attributes</h2></td></tr>
 
 <p>The index of the clock signal. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00146">146</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00150">150</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -293,10 +315,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>Decision whether the evaluation should be performed in compact or normal mode. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00139">139</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00138">138</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +333,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00189">189</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00213">213</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -323,14 +344,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Hardware::SettingsStruct::EndSim_NumberOfWaitCycles = 0</td>
+          <td class="memname">int Hardware::SettingsStruct::EndSim_NumberOfWaitCycles</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      0</div>
+</div><!-- fragment -->
 <p>Number of cycles to wait after each simulation. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00162">162</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00177">177</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -345,10 +368,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The number of clock cycles after which the simulation terminates. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00158">158</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00168">168</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -363,10 +385,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The bit width of the signal which terminates the simulation. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00159">159</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00170">170</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -381,10 +402,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The indices of the single-bit signals terminating the simulation. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00160">160</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00172">172</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -395,14 +415,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t* Hardware::SettingsStruct::EndSimCondition_Values = NULL</td>
+          <td class="memname">uint64_t* Hardware::SettingsStruct::EndSimCondition_Values</td>
         </tr>
       </table>
 </div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment --><p>The values the signals have to reach to terminate the simulation. </p>
 
-<p>The values the signals have to reach to terminate the simulation. </p>
-
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00161">161</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00174">174</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -413,14 +434,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int** Hardware::SettingsStruct::ExpectedOutputValues = NULL</td>
+          <td class="memname">int** Hardware::SettingsStruct::ExpectedOutputValues</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>The expected unshared output given by the user. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00167">167</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00183">183</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -431,14 +454,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int** Hardware::SettingsStruct::Group_Values = NULL</td>
+          <td class="memname">int** Hardware::SettingsStruct::Group_Values</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>The values assigned to the user-defined groups. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00143">143</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00146">146</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -449,14 +474,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int** Hardware::SettingsStruct::InitialSim_Inputs = NULL</td>
+          <td class="memname">int** Hardware::SettingsStruct::InitialSim_Inputs</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>The indices of the initialization signals. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00155">155</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00163">163</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -471,10 +498,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The number of clock cycles to initialize the simulation. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00154">154</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00161">161</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -489,10 +515,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The number of inputs which are assigned to initialize the simulation. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00153">153</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00159">159</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -503,14 +528,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t** Hardware::SettingsStruct::InitialSim_Values = NULL</td>
+          <td class="memname">uint64_t** Hardware::SettingsStruct::InitialSim_Values</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>The signal values during the initialization cycles. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00156">156</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00165">165</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -521,14 +548,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Hardware::SettingsStruct::Max_No_ClockCycles = 0</td>
+          <td class="memname">int Hardware::SettingsStruct::Max_No_ClockCycles</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      0</div>
+</div><!-- fragment -->
 <p>The maximum number of clock cycles to simulate. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00147">147</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00151">151</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -543,10 +572,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The maximum number of threads PROLEAD can use for parallelism. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00134">134</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00131">131</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -564,7 +592,7 @@ Public Attributes</h2></td></tr>
 
 <p>The maximum number of entries in the report. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00148">148</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00153">153</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -579,10 +607,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The maximum distance in time, i.e. clock cycles, for multivariate adversaries. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00171">171</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00189">189</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -600,7 +627,7 @@ Public Attributes</h2></td></tr>
 
 <p>The number of shares per input bit. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00144">144</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00148">148</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -615,7 +642,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>Decision whether the number of probing sets should be minimized before the evaluation. </p>
 
 <p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00140">140</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
@@ -636,7 +662,7 @@ Public Attributes</h2></td></tr>
 
 <p>The name of the top module. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00135">135</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00133">133</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -654,7 +680,7 @@ Public Attributes</h2></td></tr>
 
 <p>Number of fresh random inputs. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00150">150</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00155">155</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -672,7 +698,7 @@ Public Attributes</h2></td></tr>
 
 <p>The number of user-defined groups. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00137">137</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00135">135</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -687,10 +713,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The size of the group values, i.e. their bit length. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00138">138</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00136">136</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -708,7 +733,7 @@ Public Attributes</h2></td></tr>
 
 <p>The number of output shares. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00164">164</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00180">180</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -726,7 +751,7 @@ Public Attributes</h2></td></tr>
 
 <p>The bit width of the shared output. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00165">165</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00181">181</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -744,7 +769,7 @@ Public Attributes</h2></td></tr>
 
 <p>The total number of simulations. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00175">175</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00197">197</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -755,14 +780,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t Hardware::SettingsStruct::NumberOfStepSimulations = 0</td>
+          <td class="memname">uint64_t Hardware::SettingsStruct::NumberOfStepSimulations</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      0</div>
+</div><!-- fragment -->
 <p>The number of simulations before the simulations are evaluated. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00176">176</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00198">198</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -773,14 +800,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint64_t Hardware::SettingsStruct::NumberOfStepSimulationsToWrite = 0</td>
+          <td class="memname">uint64_t Hardware::SettingsStruct::NumberOfStepSimulationsToWrite</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      0</div>
+</div><!-- fragment -->
 <p>The number of simulations before a report is written. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00177">177</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00200">200</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -795,10 +824,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The number of clock cycles in which the adversary can place probes. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00173">173</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00193">193</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -816,7 +844,7 @@ Public Attributes</h2></td></tr>
 
 <p>The simulated output signals (unshared). </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00166">166</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00182">182</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -831,10 +859,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>The number of probing sets to evaluate per execution step. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00142">142</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00144">144</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -850,9 +877,10 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Decision whether probing sets achieving a sufficient confidence level should be removed. </p>
+<p>sufficient confidence level should be removed. </p>
+<p>Decision whether probing sets achieving a </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00141">141</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00142">142</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -863,14 +891,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int* Hardware::SettingsStruct::TestClockCycles = NULL</td>
+          <td class="memname">int* Hardware::SettingsStruct::TestClockCycles</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      NULL</div>
+</div><!-- fragment -->
 <p>The particular clock cycles the adversary can target. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00174">174</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00195">195</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -885,10 +915,9 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>Decision whether univariate or multivariate adversaries should be considered. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00170">170</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00187">187</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -906,7 +935,7 @@ Public Attributes</h2></td></tr>
 
 <p>The security order to test. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00169">169</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00186">186</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -917,14 +946,16 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Hardware::SettingsStruct::TestTransitional = 0</td>
+          <td class="memname">int Hardware::SettingsStruct::TestTransitional</td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      0</div>
+</div><!-- fragment -->
 <p>Decision whether transitional leakage is included. </p>
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00172">172</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00191">191</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
@@ -940,12 +971,12 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00191">191</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_hardware_2_definitions_8hpp_source.html#l00215">215</a> of file <a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Projects/PROLEAD/inc/Hardware/<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a></li>
+<li>PROLEAD/inc/Hardware/<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

@@ -17,6 +17,6 @@ namespace Hardware
         void Probes(Hardware::LibraryStruct *, Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::ProbesStruct *);
         void Simulation(Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::ProbesStruct *, char *, Hardware::SimulationStruct *);
         void SharedData(Hardware::CircuitStruct *, Hardware::SettingsStruct *, Hardware::SharedDataStruct *);
-        void All(CommandLineParameterStruct&, Hardware::CircuitStruct&, Hardware::LibraryStruct&, Hardware::SettingsStruct&, Hardware::ProbesStruct&, Hardware::SimulationStruct&, Hardware::SharedDataStruct*&);
+        void All(const CommandLineParameterStruct&, Hardware::CircuitStruct&, Hardware::LibraryStruct&, Hardware::SettingsStruct&, Hardware::ProbesStruct&, Hardware::SimulationStruct&, Hardware::SharedDataStruct*&);
     }
 }

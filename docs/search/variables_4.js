@@ -16,8 +16,7 @@ var searchData=
   ['execute_13',['execute',['../structmulator_1_1_memory_region.html#af5156d0a3a713ff1251a550bca050ef7',1,'mulator::MemoryRegion']]],
   ['expectedoutputvalues_14',['ExpectedOutputValues',['../struct_hardware_1_1_settings_struct.html#ab82b72ea70dbd0a7d2e3a73ee9ede9bd',1,'Hardware::SettingsStruct']]],
   ['expresions_15',['Expresions',['../struct_hardware_1_1_cell_type_struct.html#a95129a799aca610094ad8b9484cd8e97',1,'Hardware::CellTypeStruct']]],
-  ['extendedprobes_16',['ExtendedProbes',['../struct_hardware_1_1_test_struct.html#a3d27d153f9ab1e4022aef19035856f24',1,'Hardware::TestStruct']]],
-  ['extension_17',['Extension',['../struct_hardware_1_1_probing_set_struct.html#aaef8b83980867b7ce5fa5ee0293a5012',1,'Hardware::ProbingSetStruct']]],
-  ['externalbinaryinformation_18',['externalBinaryInformation',['../struct_software_1_1_settings_struct.html#ac4b66a412be0f5fede759ce3a6a29ca8',1,'Software::SettingsStruct']]],
-  ['externalmake_19',['externalMake',['../struct_software_1_1_settings_struct.html#abef8dff423c886f46f31632a9f07e713',1,'Software::SettingsStruct']]]
+  ['extension_5findices_5f_16',['extension_indices_',['../class_hardware_1_1probing_1_1_abstract_probe_extension.html#a199b989f361156a8e04e9eaebfcdd0b9',1,'Hardware::probing::AbstractProbeExtension']]],
+  ['externalbinaryinformation_17',['externalBinaryInformation',['../struct_software_1_1_settings_struct.html#ac4b66a412be0f5fede759ce3a6a29ca8',1,'Software::SettingsStruct']]],
+  ['externalmake_18',['externalMake',['../struct_software_1_1_settings_struct.html#abef8dff423c886f46f31632a9f07e713',1,'Software::SettingsStruct']]]
 ];

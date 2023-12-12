@@ -98,9 +98,22 @@ Functions</h2></td></tr>
 <tr class="separator:a92553be959abdd48c9fcb9208fe8e76f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a378cbdca53cd3ec455a6d596a6d62116"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a378cbdca53cd3ec455a6d596a6d62116">EndClock</a> (timespec &amp;)</td></tr>
 <tr class="separator:a378cbdca53cd3ec455a6d596a6d62116"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eefaa30a771318dd0da614b2cdf1478"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a2eefaa30a771318dd0da614b2cdf1478">PrintHelp</a> ()</td></tr>
+<tr class="separator:a2eefaa30a771318dd0da614b2cdf1478"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d79b7ede1d5b5e092f8b933292ca699"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a8d79b7ede1d5b5e092f8b933292ca699">PrintCommandLineSettings</a> (const <a class="el" href="struct_command_line_parameter_struct.html">CommandLineParameterStruct</a> &amp;command_line_parameters)</td></tr>
+<tr class="separator:a8d79b7ede1d5b5e092f8b933292ca699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433f00194dd36f3ceca20ea93264036e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a433f00194dd36f3ceca20ea93264036e">PrintMemoryConsumption</a> ()</td></tr>
+<tr class="separator:a433f00194dd36f3ceca20ea93264036e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e835965c6d848d971f3ebdfb5f7d568"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a3e835965c6d848d971f3ebdfb5f7d568">PrintHorizontalLine</a> (unsigned int width)</td></tr>
+<tr class="separator:a3e835965c6d848d971f3ebdfb5f7d568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a868610c3f8dfed6205e78ebdc1fc991d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a868610c3f8dfed6205e78ebdc1fc991d">PrintRow</a> (std::vector&lt; unsigned int &gt; &amp;width, std::vector&lt; std::string &gt; &amp;elements)</td></tr>
+<tr class="separator:a868610c3f8dfed6205e78ebdc1fc991d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63786acc69b1c839959b0ab4b9e7566a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_util.html#a63786acc69b1c839959b0ab4b9e7566a">GenerateThreadRng</a> (std::vector&lt; boost::mt19937 &gt; &amp;, unsigned int)</td></tr>
+<tr class="separator:a63786acc69b1c839959b0ab4b9e7566a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Generic functions required for hard- and software evaluations, e.g. all statistical procedures. </p>
+<div class="textblock"><p>Generic functions required for software evaluations, e.g. all statistical procedures. <br  />
+ </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a id="a378cbdca53cd3ec455a6d596a6d62116" name="a378cbdca53cd3ec455a6d596a6d62116"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a378cbdca53cd3ec455a6d596a6d62116">&#9670;&#160;</a></span>EndClock()</h2>
@@ -112,11 +125,43 @@ Functions</h2></td></tr>
           <td class="memname">double Util::EndClock </td>
           <td>(</td>
           <td class="paramtype">timespec &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>Begin</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00618">618</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a63786acc69b1c839959b0ab4b9e7566a" name="a63786acc69b1c839959b0ab4b9e7566a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63786acc69b1c839959b0ab4b9e7566a">&#9670;&#160;</a></span>GenerateThreadRng()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Util::GenerateThreadRng </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; boost::mt19937 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>thread_rng</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>number_of_threads</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00689">689</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
 
 </div>
 </div>
@@ -130,37 +175,37 @@ Functions</h2></td></tr>
           <td class="memname">double Util::GetGValue </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfGroups</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfSimulations</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">Util::ContingencyTableStruct</a> &amp;&#160;</td>
+          <td class="paramname"><em>Table</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Frequency</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>TableSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Df</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -184,6 +229,8 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>gValue The G-value. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00496">496</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a8af79953252d000884143ce364714ea6" name="a8af79953252d000884143ce364714ea6"></a>
@@ -196,25 +243,25 @@ Functions</h2></td></tr>
           <td class="memname">void Util::GTest </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfGroups</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>NumberOfSimulations</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">ContingencyTableStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramtype"><a class="el" href="struct_util_1_1_contingency_table_struct.html">Util::ContingencyTableStruct</a> &amp;&#160;</td>
+          <td class="paramname"><em>Table</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Frequency</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -240,6 +287,116 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>gValue The G-value. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00592">592</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a8d79b7ede1d5b5e092f8b933292ca699" name="a8d79b7ede1d5b5e092f8b933292ca699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d79b7ede1d5b5e092f8b933292ca699">&#9670;&#160;</a></span>PrintCommandLineSettings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Util::PrintCommandLineSettings </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_command_line_parameter_struct.html">CommandLineParameterStruct</a> &amp;&#160;</td>
+          <td class="paramname"><em>command_line_parameters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00639">639</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2eefaa30a771318dd0da614b2cdf1478" name="a2eefaa30a771318dd0da614b2cdf1478"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eefaa30a771318dd0da614b2cdf1478">&#9670;&#160;</a></span>PrintHelp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Util::PrintHelp </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00627">627</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e835965c6d848d971f3ebdfb5f7d568" name="a3e835965c6d848d971f3ebdfb5f7d568"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e835965c6d848d971f3ebdfb5f7d568">&#9670;&#160;</a></span>PrintHorizontalLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Util::PrintHorizontalLine </td>
+          <td>(</td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>width</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00671">671</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a433f00194dd36f3ceca20ea93264036e" name="a433f00194dd36f3ceca20ea93264036e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a433f00194dd36f3ceca20ea93264036e">&#9670;&#160;</a></span>PrintMemoryConsumption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Util::PrintMemoryConsumption </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00650">650</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a868610c3f8dfed6205e78ebdc1fc991d" name="a868610c3f8dfed6205e78ebdc1fc991d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a868610c3f8dfed6205e78ebdc1fc991d">&#9670;&#160;</a></span>PrintRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Util::PrintRow </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; unsigned int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>elements</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00678">678</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a92553be959abdd48c9fcb9208fe8e76f" name="a92553be959abdd48c9fcb9208fe8e76f"></a>
@@ -252,11 +409,13 @@ Functions</h2></td></tr>
           <td class="memname">void Util::StartClock </td>
           <td>(</td>
           <td class="paramtype">timespec &amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>Begin</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="src_2_util_2_util_8cpp_source.html#l00614">614</a> of file <a class="el" href="src_2_util_2_util_8cpp_source.html">Util.cpp</a>.</p>
 
 </div>
 </div>

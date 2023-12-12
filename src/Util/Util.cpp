@@ -623,3 +623,76 @@ double Util::EndClock(timespec& Begin){
     double ElapsedTimePeriod = TimeInSeconds + TimeInNanoseconds*1e-9;
     return ElapsedTimePeriod;
 }
+
+void Util::PrintHelp(){
+    std::cout << "Welcome to the PROLEAD help!" << std::endl;
+    std::cout << "For detailed instructions on how to use our software, please refer to our GitHub Page:" << std::endl;
+    std::cout << "Link to GitHub: https://github.com/ChairImpSec/PROLEAD/tree/main" << std::endl << std::endl;
+    std::cout << "If you have further questions, need assistance, or want to reach out for any reason, you can get in touch with me:" << std::endl;
+    std::cout << "Website: https://informatik.rub.de/impsec/personen/mueller/" << std::endl;
+    std::cout << "E-Mail:  nicolai.mueller@rub.de" << std::endl << std::endl;
+    std::cout << "We are happy to assist you with any questions, issues, or feedback you may have." << std::endl; 
+    std::cout << "Your input is important to us and will help us enhance your experience with PROLEAD." << std::endl;
+    std::cout << "Thank you for choosing PROLEAD!" << std::endl;
+}
+
+void Util::PrintCommandLineSettings(const CommandLineParameterStruct& command_line_parameters){
+    std::cout << "Library file:   " << command_line_parameters.LibraryFileName            << std::endl;
+    std::cout << "Library name:   " << command_line_parameters.LibraryName                << std::endl;
+    std::cout << "Design file:    " << command_line_parameters.DesignFileName             << std::endl;
+    std::cout << "Module name:    " << command_line_parameters.MainModuleName             << std::endl;
+    std::cout << "Linker file:    " << command_line_parameters.LinkerFileName             << std::endl;
+    std::cout << "Settings file:  " << command_line_parameters.SettingsFileName           << std::endl;
+    std::cout << "Result folder:  " << command_line_parameters.EvaluationResultFolderName << std::endl;
+    std::cout << std::endl;
+}
+
+uint64_t Util::PrintMemoryConsumption(){
+    std::ifstream status("/proc/self/status");
+    std::string line, number;
+    uint64_t ram = 0;
+
+    if (status.is_open()){
+        while (getline(status,line)){
+            if (line.find("VmSize") != std::string::npos){
+                number = line.substr(7, line.length());
+                ram = std::stoll(number.substr(0, number.length() - 2));
+                break;
+            }
+        }
+        status.close();
+    }else{
+        throw std::logic_error("Status file not found!");
+    }
+
+    return ram;
+}
+
+void Util::PrintHorizontalLine(unsigned int width){
+  std::cout.width(width);
+  std::cout.fill('-');
+  std::cout << '-' << std::endl;
+  std::cout.fill(' ');
+}
+
+void Util::PrintRow(std::vector<unsigned int>& width, std::vector<std::string>& elements){
+  std::cout << '|';
+
+  for (size_t index = 0; index < elements.size(); ++index){
+    std::cout.width(width[index]);
+    std::cout << (elements[index] + " |");        
+  }
+
+  std::cout << std::endl;  
+}
+
+void Util::GenerateThreadRng(std::vector<boost::mt19937>& thread_rng, unsigned int number_of_threads){
+	unsigned int seed;
+
+	for(unsigned int thread_index = 0; thread_index < number_of_threads; ++thread_index){
+		seed = rand();
+		boost::mt19937 rng(seed);
+		thread_rng[thread_index] = rng;
+	}
+}
+

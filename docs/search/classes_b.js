@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['tableentrystruct_0',['TableEntryStruct',['../struct_util_1_1_table_entry_struct.html',1,'Util']]],
-  ['teststruct_1',['TestStruct',['../struct_hardware_1_1_test_struct.html',1,'Hardware::TestStruct'],['../struct_software_1_1_test_struct.html',1,'Software::TestStruct']]],
-  ['threadsimulationstruct_2',['ThreadSimulationStruct',['../struct_software_1_1_thread_simulation_struct.html',1,'Software']]]
+  ['settingsstruct_0',['SettingsStruct',['../struct_hardware_1_1_settings_struct.html',1,'Hardware::SettingsStruct'],['../struct_software_1_1_settings_struct.html',1,'Software::SettingsStruct']]],
+  ['shareddatastruct_1',['SharedDataStruct',['../struct_hardware_1_1_shared_data_struct.html',1,'Hardware::SharedDataStruct'],['../struct_software_1_1_shared_data_struct.html',1,'Software::SharedDataStruct']]],
+  ['signalstruct_2',['SignalStruct',['../struct_hardware_1_1_signal_struct.html',1,'Hardware']]],
+  ['simulationstruct_3',['SimulationStruct',['../struct_hardware_1_1_simulation_struct.html',1,'Hardware::SimulationStruct'],['../struct_software_1_1_simulation_struct.html',1,'Software::SimulationStruct']]]
 ];

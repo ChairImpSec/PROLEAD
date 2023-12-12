@@ -1,14 +1,16 @@
 var searchData=
 [
-  ['in_5fit_5fblock_0',['in_IT_block',['../classmulator_1_1_emulator.html#a8d703ae2833198c9ad81fc8657288177',1,'mulator::Emulator']]],
-  ['indistance_1',['InDistance',['../namespace_hardware_1_1_generate_probing_sets.html#a3a8235ec7b2b0de69c3899f80db662a0',1,'Hardware::GenerateProbingSets::InDistance()'],['../namespace_software_1_1_probing.html#a8af13b1c3fcc05078d030375b373aa7e',1,'Software::Probing::InDistance()']]],
-  ['initializecompactdistributions_2',['InitializeCompactDistributions',['../namespace_hardware_1_1_generate_probing_sets.html#a4eb28bb290b44d98f9589e9fb1df50b6',1,'Hardware::GenerateProbingSets']]],
-  ['initializemultivariateprobecombinations_3',['InitializeMultivariateProbeCombinations',['../namespace_hardware_1_1_generate_probing_sets.html#aa6363789184cc3ecc630d7ac954b4a80',1,'Hardware::GenerateProbingSets']]],
-  ['initializeunivariateprobecombinations_4',['InitializeUnivariateProbeCombinations',['../namespace_hardware_1_1_generate_probing_sets.html#a76f61edb15974c9a3b97e1076bc2944b',1,'Hardware::GenerateProbingSets']]],
+  ['in_5fit_5fblock_0',['in_IT_block',['../classmulator_1_1_emulator.html#ae7edd802c88c835c8a0382f1dbc35796',1,'mulator::Emulator']]],
+  ['includes_1',['Includes',['../class_hardware_1_1probing_1_1_probing_set.html#af758be0900b6e6e61218c7281c41ea0e',1,'Hardware::probing::ProbingSet::Includes(const ProbingSet &amp;other) const'],['../class_hardware_1_1probing_1_1_probing_set.html#a5c4f559e98d42189479d25f3e4a0ccbd',1,'Hardware::probing::ProbingSet::Includes(const ProbingSet&lt; RobustProbeExtension &gt; &amp;other) const']]],
+  ['increment_2',['Increment',['../classhardware_1_1stats_1_1_table_data.html#ac664cf1e65884eebe7f4021ddc1e1d2e',1,'hardware::stats::TableData::Increment()'],['../classhardware_1_1stats_1_1_table_entry.html#a753fc882daa1520e0121a72e8100d146',1,'hardware::stats::TableEntry::Increment()'],['../classhardware_1_1stats_1_1_table_bucket.html#af6abcde2e95d573f342b2351ceb78520',1,'hardware::stats::TableBucket::Increment(Key key, size_t number_of_groups, size_t group_index, size_t size_of_key_in_bytes)'],['../classhardware_1_1stats_1_1_table_bucket.html#ac9a270a89aaa60a51caea0ce41275b8b',1,'hardware::stats::TableBucket::Increment(Key key, size_t number_of_groups, size_t group_index, size_t size_of_key_in_bytes)']]],
+  ['indistance_3',['InDistance',['../namespace_software_1_1_probing.html#a8af13b1c3fcc05078d030375b373aa7e',1,'Software::Probing']]],
+  ['initialize_4',['Initialize',['../class_hardware_1_1probing_1_1_probing_set.html#a479c0108d958a52ec5f30734a8d2fa7a',1,'Hardware::probing::ProbingSet::Initialize()'],['../classhardware_1_1stats_1_1_contingency_table.html#a059ca60a3cb85ed1ac1db18373d09109',1,'hardware::stats::ContingencyTable::Initialize()'],['../ut_2_hardware_2_test_8cpp.html#ab23186bd76fddaab833f5b6370df2406',1,'Initialize():&#160;Test.cpp']]],
   ['instantiate_5femulator_5',['Instantiate_Emulator',['../namespace_software_1_1_simulate.html#a46aef0a8f37a74d3799f91eb6376933a',1,'Software::Simulate']]],
-  ['instruction_6',['Instruction',['../structmulator_1_1_instruction.html#a5c51424f8ad3a01b8de5299b5745e76c',1,'mulator::Instruction']]],
-  ['instructiondecoder_7',['InstructionDecoder',['../classmulator_1_1_instruction_decoder.html#ab19a4821513a746f2f811d187686e487',1,'mulator::InstructionDecoder']]],
+  ['instruction_6',['Instruction',['../structmulator_1_1_instruction.html#aebd15229c1651af49dcb203707e7a2d5',1,'mulator::Instruction']]],
+  ['instructiondecoder_7',['InstructionDecoder',['../classmulator_1_1_instruction_decoder.html#a6482bab50f70d579e6aa7a458c93c18d',1,'mulator::InstructionDecoder']]],
   ['is_5fint_8',['is_int',['../namespaceparse__args.html#a9c46db8e977c28310ab1f1bd1197d5a4',1,'parse_args']]],
-  ['is_5frunning_9',['is_running',['../classmulator_1_1_emulator.html#ae5dd754eb3bf89e99e0051432c4c3542',1,'mulator::Emulator']]],
-  ['isemptyorblank_10',['IsEmptyOrBlank',['../namespace_software_1_1_prepare.html#ac49c979514db99bb885d6fdc300f5813',1,'Software::Prepare']]]
+  ['is_5frunning_9',['is_running',['../classmulator_1_1_emulator.html#a9387e4c7ab3aeca51c41f47310cbaf3c',1,'mulator::Emulator']]],
+  ['isemptyorblank_10',['IsEmptyOrBlank',['../namespace_software_1_1_prepare.html#ac49c979514db99bb885d6fdc300f5813',1,'Software::Prepare']]],
+  ['isinmultivariatesetting_11',['IsInMultivariateSetting',['../struct_hardware_1_1_settings_struct.html#af35c9d69958f9ffbf0a39a63edf4fc9b',1,'Hardware::SettingsStruct']]],
+  ['isremovable_12',['IsRemovable',['../class_hardware_1_1probing_1_1_probing_set.html#a1421e90c1b906c6d41e2f6f18f738718',1,'Hardware::probing::ProbingSet::IsRemovable()'],['../classhardware_1_1stats_1_1_contingency_table.html#a35913b8491938ce404219330831cdf50',1,'hardware::stats::ContingencyTable::IsRemovable()'],['../class_hardware_1_1probing_1_1_probing_set.html#a184e504f977cfc88bf2b03a146650b29',1,'Hardware::probing::ProbingSet::IsRemovable()']]]
 ];

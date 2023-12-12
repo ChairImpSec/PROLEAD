@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['instruction_0',['Instruction',['../structmulator_1_1_instruction.html',1,'mulator']]],
-  ['instructiondecoder_1',['InstructionDecoder',['../classmulator_1_1_instruction_decoder.html',1,'mulator']]]
+  ['helperstruct_0',['HelperStruct',['../struct_software_1_1_helper_struct.html',1,'Software']]]
 ];

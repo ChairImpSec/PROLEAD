@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['helperstruct_0',['HelperStruct',['../struct_software_1_1_helper_struct.html',1,'Software']]]
+  ['glitchextendedprobesstruct_0',['GlitchExtendedProbesStruct',['../struct_hardware_1_1_glitch_extended_probes_struct.html',1,'Hardware']]]
 ];

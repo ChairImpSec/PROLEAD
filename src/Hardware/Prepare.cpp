@@ -346,7 +346,7 @@ void Hardware::Prepare::SharedData(CircuitStruct* Circuit, SettingsStruct* Setti
 	SharedData->LastInitialSimValues = (uint64_t*)calloc(Settings->InitialSim_NumberOfInputs, sizeof(uint64_t));
 }
 
-void Hardware::Prepare::All(CommandLineParameterStruct& Parameter, Hardware::CircuitStruct& Circuit, Hardware::LibraryStruct& Library, Hardware::SettingsStruct& Settings, Hardware::ProbesStruct& Probes, Hardware::SimulationStruct& Simulation, Hardware::SharedDataStruct*& SharedData){
+void Hardware::Prepare::All(const CommandLineParameterStruct& Parameter, Hardware::CircuitStruct& Circuit, Hardware::LibraryStruct& Library, Hardware::SettingsStruct& Settings, Hardware::ProbesStruct& Probes, Hardware::SimulationStruct& Simulation, Hardware::SharedDataStruct*& SharedData){
     // TODO: Replace c strings with std::string
     char LibraryFileName[Max_Name_Length];
     char LibraryName[Max_Name_Length];

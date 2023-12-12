@@ -109,43 +109,43 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Simulate::All </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_library_struct.html">Hardware::LibraryStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Library</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Settings</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_shared_data_struct.html">Hardware::SharedDataStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SharedData</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_simulation_struct.html">Hardware::SimulationStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Simulation</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SimulationIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">boost::mt19937 &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>ThreadRng</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -169,6 +169,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Amir Moradi </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_hardware_2_simulate_8cpp_source.html#l00033">33</a> of file <a class="el" href="_hardware_2_simulate_8cpp_source.html">Simulate.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a72dfd851a208dc46bb3dabfae0a05e64" name="a72dfd851a208dc46bb3dabfae0a05e64"></a>
@@ -181,19 +183,19 @@ Functions</h2></td></tr>
           <td class="memname">uint64_t Hardware::Simulate::EvaluateOperation </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_operation_struct.html">Hardware::OperationStruct</a>&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Operation</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint64_t *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Values</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>Intermediate</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -214,6 +216,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Amir Moradi </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_hardware_2_simulate_8cpp_source.html#l00006">6</a> of file <a class="el" href="_hardware_2_simulate_8cpp_source.html">Simulate.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ac26d18fe2a5c916ce0040e64dbc64989" name="ac26d18fe2a5c916ce0040e64dbc64989"></a>
@@ -226,13 +230,13 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Simulate::FinalizeVCDfile </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>CycleIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>SimulationIndex</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -252,6 +256,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_hardware_2_simulate_8cpp_source.html#l00331">331</a> of file <a class="el" href="_hardware_2_simulate_8cpp_source.html">Simulate.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a8e811a1a57b31b56c596d2ff39201892" name="a8e811a1a57b31b56c596d2ff39201892"></a>
@@ -264,19 +270,19 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Simulate::GenerateVCDfile </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Settings</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>SimulationIndex</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -297,6 +303,8 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_hardware_2_simulate_8cpp_source.html#l00278">278</a> of file <a class="el" href="_hardware_2_simulate_8cpp_source.html">Simulate.cpp</a>.</p>
+
 </div>
 </div>
 <a id="abb35d7376641622b6ae21dd5eb685c1e" name="abb35d7376641622b6ae21dd5eb685c1e"></a>
@@ -309,31 +317,31 @@ Functions</h2></td></tr>
           <td class="memname">void Hardware::Simulate::WriteVCDfile </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Circuit</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_settings_struct.html">Hardware::SettingsStruct</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>Settings</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="struct_hardware_1_1_shared_data_struct.html">Hardware::SharedDataStruct</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SharedData</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>SimulationIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>CycleIndex</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -355,6 +363,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Thanh Dat Nguyen </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_hardware_2_simulate_8cpp_source.html#l00301">301</a> of file <a class="el" href="_hardware_2_simulate_8cpp_source.html">Simulate.cpp</a>.</p>
 
 </div>
 </div>

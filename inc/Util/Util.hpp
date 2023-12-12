@@ -6,7 +6,12 @@
 #include <time.h>
 #include <utility>
 #include <vector>
+#include <fstream>
+#include <iostream>
 
+#include "Util/CommandLineParameter.hpp"
+#include "boost/random.hpp"
+#include "boost/generator_iterator.hpp"
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/inverse_chi_squared.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
@@ -365,7 +370,7 @@ namespace stats{
 		* @return The decision whether a probing set can be removed.
 		* @author Nicolai Müller and Felix Uhle
 		*/			
-		bool IsRemovable(){return number_of_required_traces_ == 1;}
+		bool IsRemovable() const {return number_of_required_traces_ == 1;}
 
 	private:
 		/**
@@ -590,4 +595,11 @@ namespace Util{
 
     void StartClock(timespec&);
     double EndClock(timespec&);
+	void PrintHelp();
+	void PrintCommandLineSettings(const CommandLineParameterStruct& command_line_parameters);
+	uint64_t PrintMemoryConsumption();
+	void PrintHorizontalLine(unsigned int width);
+	void PrintRow(std::vector<unsigned int>& width, std::vector<std::string>& elements);
+    void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
+
 }
