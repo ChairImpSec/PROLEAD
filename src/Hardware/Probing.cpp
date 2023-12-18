@@ -496,8 +496,9 @@ void Adversaries<RobustProbeExtension>::AddProbingSet(
          ++probe_index) {
       probe_extension_index =
           standard_probe_indices[probe_index] % GetNumberOfProbeExtensions();
-      clock_cycle =
-          standard_probe_indices[probe_index] / GetNumberOfProbeExtensions();
+      clock_cycle = settings.TestClockCycles[standard_probe_indices[probe_index] /
+                                             GetNumberOfProbeExtensions()] -
+                    1;
       signal_indices =
           probe_extensions_[probe_extension_index].GetAllExtensionIndices();
 
