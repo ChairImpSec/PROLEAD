@@ -572,6 +572,16 @@ void Adversaries<RobustProbeExtension>::SetProbeExtensions(
       if (input_index >= circuit.Signals[signal_index]->NumberOfInputs) {
         probe_extensions_.emplace_back(signal_index, library, circuit,
                                        settings);
+          
+        if (!probe_extensions_.back().GetAllExtensionIndices().size()) {
+          std::cout << "    Warning A probe on signal \""
+                    << circuit.Signals[signal_index]->Name
+                    << "\" does not record any useful information. PROLEAD "
+                       "automatically removes the probe on \""
+                    << circuit.Signals[signal_index]->Name
+                    << "\" during the evaluation!" << std::endl;
+          probe_extensions_.pop_back();
+        }          
       }
     }
   }
