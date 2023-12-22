@@ -7,6 +7,7 @@
 ##   all       build debug and release          ##
 ##   release   build in release mode            ##
 ##   debug     build in debug mode              ##
+##   test      performs unit tests              ##
 ##   clean     remove output directories        ##
 ##                                              ##
 ##################################################
@@ -19,7 +20,9 @@
 INC_DIRS = inc
 
 # Source directories with the .c and .cpp files. Separate multiple directories with a space.
-SRC_DIRS = src
+TEST_SRC = "ut src/Hardware src/Util"
+DEBUG_SRC = src
+RELEASE_SRC = src
 
 LIB_DIR = lib
 
@@ -27,19 +30,23 @@ LIB_DIR = lib
 # If both point to the same directory, the final binaries will be suffixed with "_release" and "_debug".
 RELEASE_DIR = release
 DEBUG_DIR = debug
+TEST_DIR = test
 
 # Compiler options
 INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
 C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
+C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 
 CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
 CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
+CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
 
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3)
 DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3)
+TEST_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3)
 
 # Output file name
 OUTPUT = PROLEAD
@@ -54,10 +61,16 @@ OUTPUT = PROLEAD
 
 .PHONY: all release debug clean help compile directories check
 
-HELP_MESSAGE = Simply use any combination of 'make {debug, release, help, clean}'. Just calling 'make' will build release and debug. By adding 'V=1' prints more verbose output.
+HELP_MESSAGE = Simply use any combination of 'make {debug, release, test, help, clean}'. Just calling 'make' will build release and debug. By adding 'V=1' prints more verbose output.
 
 # switch between debug and release config
-ifeq ($(D),1)
+
+ifeq ($(D),2)
+	C_FLAGS = $(C_TEST_FLAGS)
+	CXX_FLAGS = $(CXX_TEST_FLAGS)
+	LINK_FLAGS = $(TEST_LINK_FLAGS)
+	OBJ_DIR = obj_test
+else ifeq ($(D),1)
 	C_FLAGS = $(C_DEBUG_FLAGS)
 	CXX_FLAGS = $(CXX_DEBUG_FLAGS)
 	LINK_FLAGS = $(DEBUG_LINK_FLAGS)
@@ -112,16 +125,20 @@ MAKEFLAGS += --no-print-directory
 
 all: debug release
 
+test:
+	@+make compile D=2 OUTPUT_DIRECTORY=$(TEST_DIR) SRC_DIRS=$(TEST_SRC) -j8
+
 debug:
-	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR) -j8
+	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR) SRC_DIRS=$(DEBUG_SRC) -j8
 
 release:
-	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR) -j8
+	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR) SRC_DIRS=$(RELEASE_SRC) -j8
 
 clean:
 	@echo  Removing build artifacts...
 	$(SUPPRESS_CMD)rm -rf $(DEBUG_DIR)
 	$(SUPPRESS_CMD)rm -rf $(RELEASE_DIR)
+	$(SUPPRESS_CMD)rm -rf $(TEST_DIR)
 	$(SUPPRESS_CMD)rm -f *.stackdump
 
 help:
@@ -141,7 +158,10 @@ endif
 
 # create obj directory and compile
 compile: check directories $(OUTPUT_DIRECTORY)/$(OUTPUT)
-ifeq ($(D), 1)
+
+ifeq ($(D), 2)
+	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Test build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
+else ifeq ($(D), 1)
 	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Debug build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
 else
 	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Release build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
@@ -150,7 +170,10 @@ endif
 
 # create the obj directory
 directories: check
-ifeq ($(D), 1)
+
+ifeq ($(D), 2)
+	@echo  '_______Building Tests_______'
+else ifeq ($(D), 1)
 	@echo  '_______Building Debug_______'
 else
 	@echo  '______Building Release______'
