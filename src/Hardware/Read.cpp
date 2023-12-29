@@ -1955,20 +1955,33 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 		if (!strcmp(Str1, "max_no_of_threads"))
 		{
+			CpuCoreSelector cpu_core_selector;
 			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
-			templ = strtol(Str1, &tmptr, 10);
-			if ((*tmptr) ||
-			    (templ < 1))
-			{
-                ErrorMessage = "Given \"max_no_of_threads\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
-				fclose(SettingsFile);
-				free(Str1);
-				free(Str2);
-				free(Str3);
-                throw std::runtime_error(ErrorMessage);
-			}
 
-			Settings->Max_no_of_Threads = templ;
+            if (!strcmp(Str1, "all")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::all);
+            }else if (!strcmp(Str1, "half")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::half);
+			}else if (!strcmp(Str1, "third")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::third);
+			}else if (!strcmp(Str1, "quarter")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::quarter);
+			}else{
+				templ = strtol(Str1, &tmptr, 10);
+				if ((*tmptr) ||
+					(templ < 1))
+				{
+					ErrorMessage = "Given \"max_no_of_threads\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
+					fclose(SettingsFile);
+					free(Str1);
+					free(Str2);
+					free(Str3);
+					throw std::runtime_error(ErrorMessage);
+				}
+
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::specific, templ);
+			}
+											
 			SettingsFileCheckList |= (1 << 0);
 		}
 		else if (!strcmp(Str1, "no_of_groups"))
