@@ -1,22 +1,23 @@
-#include "CpuCoreSelector.hpp"
-#include <thread>
+#include "Util/CpuCoreSelector.hpp"
+
 #include <algorithm>
+#include <thread>
 
-unsigned int CpuCoreSelector::getOptimalCount(CpuSelectionOption option, unsigned int specificCount) {
-    unsigned int nCores = std::thread::hardware_concurrency();
-    switch (option) {
-    case CpuSelectionOption::All:
-        return nCores;
-    case CpuSelectionOption::Half:
-        return nCores / 2;
-    case CpuSelectionOption::Third:
-        return nCores / 3;
-    case CpuSelectionOption::Quarter:
-        return nCores / 4;
-    case CpuSelectionOption::Specific:
-        return std::min(specificCount, nCores);
+unsigned int CpuCoreSelector::getOptimalCount(
+    CpuSelectionOption option, unsigned int specified_number_of_cores) {
+  unsigned int estimated_number_of_cores = std::thread::hardware_concurrency();
+  switch (option) {
+    case CpuSelectionOption::all:
+      return estimated_number_of_cores;
+    case CpuSelectionOption::half:
+      return estimated_number_of_cores / 2;
+    case CpuSelectionOption::third:
+      return estimated_number_of_cores / 3;
+    case CpuSelectionOption::quarter:
+      return estimated_number_of_cores / 4;
+    case CpuSelectionOption::specific:
+      return std::min(specified_number_of_cores, estimated_number_of_cores);
     default:
-        return 1;  // Default case for safety
-    }
+      return 1;  // Default case for safety
+  }
 }
-

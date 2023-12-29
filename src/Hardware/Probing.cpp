@@ -2,6 +2,15 @@
 
 namespace Hardware {
 namespace probing {
+
+template <class ExtensionContainer>
+void RemoveDuplicates(std::vector<ExtensionContainer>& extensions) {
+  std::sort(extensions.begin(), extensions.end(),
+            std::greater<ExtensionContainer>());
+  extensions.erase(std::unique(extensions.begin(), extensions.end()),
+                   extensions.end());
+}
+
 template <class ExtensionContainer>
 AbstractProbeExtension<ExtensionContainer>::AbstractProbeExtension(
     unsigned int signal_index)
@@ -14,7 +23,13 @@ unsigned int AbstractProbeExtension<ExtensionContainer>::GetSignalIndex() {
 
 template <>
 std::vector<unsigned int>
-AbstractProbeExtension<RobustProbeExtension>::GetAllExtensionIndices() {
+AbstractProbeExtension<GlitchExtendedProbe>::GetAllExtensionIndices() {
+  return extension_indices_;
+}
+
+template <class ExtensionContainer>
+std::vector<ExtensionContainer>
+AbstractProbeExtension<ExtensionContainer>::GetExtensionContainer() {
   return extension_indices_;
 }
 
@@ -27,59 +42,48 @@ ProbeExtension<ExtensionContainer>::ProbeExtension(unsigned int signal_index,
   PropagateProbe(library, circuit, settings);
 }
 
-template ProbeExtension<RobustProbeExtension>::ProbeExtension(unsigned int,
-                                                              LibraryStruct&,
-                                                              CircuitStruct&,
-                                                              SettingsStruct&);
+template ProbeExtension<GlitchExtendedProbe>::ProbeExtension(unsigned int,
+                                                             LibraryStruct&,
+                                                             CircuitStruct&,
+                                                             SettingsStruct&);
 
 template <>
-void ProbeExtension<RobustProbeExtension>::PropagateProbe(
+void ProbeExtension<GlitchExtendedProbe>::PropagateProbe(
     LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings) {
   std::vector<bool> probe_already_considered(circuit.NumberOfSignals, false);
-  std::queue<int> signals_in_progress;
-  int current_signal_index, input_index, next_signal_index;
+  std::queue<GlitchExtendedProbe> signals_in_progress;
+  int tmp_index, probe_index, next_index;
 
   signals_in_progress.push(signal_index_);
 
   while (!signals_in_progress.empty()) {
-    current_signal_index = signals_in_progress.front();
+    tmp_index = signals_in_progress.front();
     signals_in_progress.pop();
 
-    if (!(circuit.Signals[current_signal_index]->Deleted) &&
-        (current_signal_index != settings.ClockSignal) &&
-        !probe_already_considered[current_signal_index]) {
-      if ((circuit.Signals[current_signal_index]->Output == -1) ||
-          (library
-               .CellTypes
-                   [circuit
-                        .Cells[circuit.Signals[current_signal_index]->Output]
-                        ->Type]
-               ->GateOrReg == CellType_Reg)) {
-        if ((circuit.Signals[current_signal_index]->ProbeAllowed) ||
-            (circuit.Signals[signal_index_]->ProbeAllowed == 2)) {
-          extension_indices_.push_back(current_signal_index);
+    if (circuit.IsProbeOnSignalAllowed(signal_index_, tmp_index,
+                                       settings.ClockSignal)) {
+      if (!circuit.CanProbeOnSignalBePropagated(tmp_index, library)) {
+        if (!probe_already_considered[tmp_index]) {
+          extension_indices_.push_back(tmp_index);
         }
       } else {
-        if (!circuit.Cells[circuit.Signals[current_signal_index]->Output]
-                 ->Deleted) {
-          for (input_index = 0;
-               input_index <
-               circuit.Cells[circuit.Signals[current_signal_index]->Output]
-                   ->NumberOfInputs;
-               ++input_index) {
-            next_signal_index =
-                circuit.Cells[circuit.Signals[current_signal_index]->Output]
-                    ->Inputs[input_index];
+        if (!circuit.IsGateThatOutputsSignalDeleted(tmp_index)) {
+          for (probe_index = 0;
+               probe_index <
+               circuit.GetNumberOfInputsForSignalsComputingCell(tmp_index);
+               ++probe_index) {
+            next_index = circuit.Cells[circuit.Signals[tmp_index]->Output]
+                             ->Inputs[probe_index];
 
-            if (!probe_already_considered[next_signal_index]) {
-              signals_in_progress.push(next_signal_index);
+            if (!probe_already_considered[next_index]) {
+              signals_in_progress.push(next_index);
             }
           }
         }
       }
     }
 
-    probe_already_considered[current_signal_index] = true;
+    probe_already_considered[tmp_index] = true;
   }
 
   std::sort(extension_indices_.begin(), extension_indices_.end());
@@ -130,7 +134,7 @@ size_t ProbingSet<ExtensionContainer>::GetStandardProbeIndex(
 }
 
 template <class ExtensionContainer>
-size_t ProbingSet<ExtensionContainer>::GetExtendedProbeIndex(
+ExtensionContainer ProbingSet<ExtensionContainer>::GetExtendedProbeIndex(
     size_t extended_probe_index) {
   return probe_extension_indices_[extended_probe_index];
 }
@@ -138,46 +142,58 @@ size_t ProbingSet<ExtensionContainer>::GetExtendedProbeIndex(
 template <class ExtensionContainer>
 ProbingSet<ExtensionContainer>::ProbingSet(
     std::vector<unsigned int>& standard_probe_indices,
-    ExtensionContainer& probe_extension_indices)
+    std::vector<ExtensionContainer>& probe_extension_indices)
     : standard_probe_indices_(standard_probe_indices),
       probe_extension_indices_(probe_extension_indices) {}
 
-template ProbingSet<RobustProbeExtension>::ProbingSet(
-    std::vector<unsigned int>& standard_probe_indices, RobustProbeExtension&);
+template ProbingSet<GlitchExtendedProbe>::ProbingSet(
+    std::vector<unsigned int>&, std::vector<GlitchExtendedProbe>&);
 
-template <>
-size_t ProbingSet<RobustProbeExtension>::GetNumberOfProbeExtensions() const {
+template <class ExtensionContainer>
+size_t ProbingSet<ExtensionContainer>::GetNumberOfProbeExtensions() const {
   return probe_extension_indices_.size();
 }
 
-template <>
-unsigned int ProbingSet<RobustProbeExtension>::GetFirstProbeExtension() const {
-  return probe_extension_indices_.front();
+template <class ExtensionContainer>
+ExtensionContainer ProbingSet<ExtensionContainer>::GetFirstProbeExtension()
+    const {
+  if (!probe_extension_indices_.empty()) {
+    return probe_extension_indices_.front();
+  } else {
+    throw std::out_of_range(
+        "Tried to return the first element of an empty vector!");
+  }
 }
 
-template <>
-unsigned int ProbingSet<RobustProbeExtension>::GetLastProbeExtension() const {
-  return probe_extension_indices_.back();
+template <class ExtensionContainer>
+ExtensionContainer ProbingSet<ExtensionContainer>::GetLastProbeExtension()
+    const {
+  if (!probe_extension_indices_.empty()) {
+    return probe_extension_indices_.back();
+  } else {
+    throw std::out_of_range(
+        "Tried to return the last element of an empty vector!");
+  }
 }
 
-template <>
-std::vector<unsigned int>
-ProbingSet<RobustProbeExtension>::GetAllProbeExtensions() const {
+template <class ExtensionContainer>
+std::vector<ExtensionContainer>
+ProbingSet<ExtensionContainer>::GetAllProbeExtensions() const {
   return probe_extension_indices_;
 }
 
-template <>
-bool ProbingSet<RobustProbeExtension>::IsRemovable() const {
+template <class ExtensionContainer>
+bool ProbingSet<ExtensionContainer>::IsRemovable() const {
   return contingency_table_.IsRemovable();
 }
 
-template <>
-void ProbingSet<RobustProbeExtension>::MarkAsRemovable() {
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
   contingency_table_.MarkAsRemovable();
 }
 
-template <>
-void ProbingSet<RobustProbeExtension>::ResetGValue() {
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::ResetGValue() {
   contingency_table_.ResetGValue();
 }
 
@@ -238,8 +254,8 @@ std::string ProbingSet<ExtensionContainer>::PrintStandardProbes(
   return printed_probing_set;
 }
 
-template <class ExtensionContainer>
-std::string ProbingSet<ExtensionContainer>::PrintExtendedProbes(
+template <>
+std::string ProbingSet<GlitchExtendedProbe>::PrintExtendedProbes(
     const CircuitStruct& circuit, std::vector<Probe>& extended_probes) {
   unsigned int signal_index;
   std::string cycle, printed_probing_set, signal_name;
@@ -263,27 +279,27 @@ std::string ProbingSet<ExtensionContainer>::PrintExtendedProbes(
   return printed_probing_set;
 }
 
-template <>
-bool ProbingSet<RobustProbeExtension>::operator<(
-    const ProbingSet<RobustProbeExtension>& other) const {
+template <class ExtensionContainer>
+bool ProbingSet<ExtensionContainer>::operator<(
+    const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ < other.probe_extension_indices_);
 }
 
-template <>
-bool ProbingSet<RobustProbeExtension>::operator==(
-    const ProbingSet<RobustProbeExtension>& other) const {
+template <class ExtensionContainer>
+bool ProbingSet<ExtensionContainer>::operator==(
+    const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ == other.probe_extension_indices_);
 }
 
-template <>
-bool ProbingSet<RobustProbeExtension>::operator!=(
-    const ProbingSet<RobustProbeExtension>& other) const {
+template <class ExtensionContainer>
+bool ProbingSet<ExtensionContainer>::operator!=(
+    const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ != other.probe_extension_indices_);
 }
 
-template <>
-bool ProbingSet<RobustProbeExtension>::Includes(
-    const ProbingSet<RobustProbeExtension>& other) const {
+template <class ExtensionContainer>
+bool ProbingSet<ExtensionContainer>::Includes(
+    const ProbingSet<ExtensionContainer>& other) const {
   if (IsRemovable() || other.IsRemovable()) {
     return false;
   } else {
@@ -296,7 +312,7 @@ bool ProbingSet<RobustProbeExtension>::Includes(
                           probe_extension_indices_.end(),
                           other.probe_extension_indices_.begin(),
                           other.probe_extension_indices_.end(),
-                          std::greater<unsigned int>())) {
+                          std::greater<ExtensionContainer>())) {
           return true;
         } else {
           return false;
@@ -309,7 +325,7 @@ bool ProbingSet<RobustProbeExtension>::Includes(
 }
 
 template <>
-void ProbingSet<RobustProbeExtension>::NormalTableUpdate(
+void ProbingSet<GlitchExtendedProbe>::NormalTableUpdate(
     SimulationStruct& simulation, std::vector<Probe>& extended_probes) {
   unsigned int group_index;
   unsigned char hash_value0, hash_value1;
@@ -318,7 +334,8 @@ void ProbingSet<RobustProbeExtension>::NormalTableUpdate(
   size_t number_of_layers = contingency_table_.GetNumberOfLayers();
   size_t number_of_extended_probes = GetNumberOfProbeExtensions();
   size_t key_size = contingency_table_.GetKeySizeExcludingHashValues();
-  std::vector<unsigned int> probe_extension_indices = GetAllProbeExtensions();
+  std::vector<GlitchExtendedProbe> probe_extension_indices =
+      GetAllProbeExtensions();
   std::vector<unsigned int> signal_indices(number_of_extended_probes);
   std::vector<unsigned int> cycles(number_of_extended_probes);
 
@@ -374,25 +391,25 @@ void ProbingSet<RobustProbeExtension>::NormalTableUpdate(
   }
 }
 
-template <>
-unsigned int* ProbingSet<RobustProbeExtension>::GetCounters(size_t index) {
+template <class ExtensionContainer>
+unsigned int* ProbingSet<ExtensionContainer>::GetCounters(size_t index) {
   return contingency_table_.GetCounters(index);
 }
 
 template <>
-bool ProbingSet<RobustProbeExtension>::ContainsExtension(size_t index) {
+bool ProbingSet<GlitchExtendedProbe>::ContainsExtension(size_t index) {
   return std::find(probe_extension_indices_.begin(),
                    probe_extension_indices_.end(),
                    index) != probe_extension_indices_.end();
 }
 
-template <>
-size_t Adversaries<RobustProbeExtension>::GetNumberOfUniqueProbes() {
+template <class ExtensionContainer>
+size_t Adversaries<ExtensionContainer>::GetNumberOfUniqueProbes() {
   return unique_probes_.size();
 }
 
 template <>
-void Adversaries<RobustProbeExtension>::CompactTableUpdate(
+void Adversaries<GlitchExtendedProbe>::CompactTableUpdate(
     Hardware::SimulationStruct& simulation, unsigned int simulation_index) {
   size_t probe_index, set_index;
   std::vector<int> probe_values(GetNumberOfProbingSets(), 0);
@@ -420,8 +437,8 @@ void Adversaries<RobustProbeExtension>::CompactTableUpdate(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::CompactTest(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::CompactTest(
     Hardware::SimulationStruct& simulation,
     const std::vector<double>& number_of_simulations_per_group) {
 #pragma omp parallel for schedule(guided)
@@ -443,8 +460,8 @@ size_t Adversaries<ExtensionContainer>::GetNumberOfProbingSets() {
   return probing_sets_.size();
 }
 
-template <>
-bool Adversaries<RobustProbeExtension>::IsInDistance(
+template <class ExtensionContainer>
+bool Adversaries<ExtensionContainer>::IsInDistance(
     std::vector<unsigned int>& standard_probe_indices,
     SettingsStruct& settings) {
   unsigned int standard_probe_index;
@@ -463,8 +480,8 @@ bool Adversaries<RobustProbeExtension>::IsInDistance(
   return is_distance_small_enough && is_no_unallowed_univariate_set;
 }
 
-template <>
-size_t Adversaries<RobustProbeExtension>::SearchExtendedProbe(
+template <class ExtensionContainer>
+size_t Adversaries<ExtensionContainer>::SearchExtendedProbe(
     unsigned int signal_index, unsigned int clock_cycle) {
   Probe probe(signal_index, clock_cycle);
   std::vector<Probe>::iterator it = std::lower_bound(
@@ -474,51 +491,61 @@ size_t Adversaries<RobustProbeExtension>::SearchExtendedProbe(
       std::distance(extended_probes_.begin(), it);
 
   if ((it == extended_probes_.end()) || (extended_probes_.at(diff) != probe)) {
-    throw std::runtime_error(
+    std::string error_message =
         "A glitch-extended probe was not found in the list of glitch-extended "
-        "probes.");
+        "probes.\n  signal index: " +
+        std::to_string(signal_index) +
+        ", clock cycle: " + std::to_string(clock_cycle);
+    throw std::runtime_error(error_message);
   }
 
   return (size_t)diff;
 }
 
 template <>
-void Adversaries<RobustProbeExtension>::AddProbingSet(
+std::vector<GlitchExtendedProbe>
+Adversaries<GlitchExtendedProbe>::ReplaceWireIndexWithListIndex(
+    const std::vector<GlitchExtendedProbe>& signal_indices,
+    unsigned int clock_cycle, bool is_with_transitional_leakage) {
+  std::vector<GlitchExtendedProbe> extended_probe_indices;
+  unsigned int signal_index;
+  size_t index;
+
+  for (index = 0; index < signal_indices.size(); ++index) {
+    signal_index = signal_indices[index];
+    extended_probe_indices.push_back(
+        SearchExtendedProbe(signal_index, clock_cycle));
+
+    if (is_with_transitional_leakage && (clock_cycle != 0)) {
+      extended_probe_indices.push_back(
+          SearchExtendedProbe(signal_index, clock_cycle - 1));
+    }
+  }
+
+  return extended_probe_indices;
+}
+
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::AddProbingSet(
     std::vector<unsigned int>& standard_probe_indices,
     bool is_with_transitional_leakage, SettingsStruct& settings) {
-  size_t probe_index, signal_index;
-  unsigned int probe_extension_index, clock_cycle;
-  std::vector<unsigned int> signal_indices;
-  RobustProbeExtension extended_probes_indices;
+  size_t index;
+  unsigned int signal_index, clock_cycle;
+  std::vector<ExtensionContainer> extended_probes_indices, signal_indices;
 
   if (IsInDistance(standard_probe_indices, settings)) {
-    for (probe_index = 0; probe_index < standard_probe_indices.size();
-         ++probe_index) {
-      probe_extension_index =
-          standard_probe_indices[probe_index] % GetNumberOfProbeExtensions();
-      clock_cycle = settings.TestClockCycles[standard_probe_indices[probe_index] /
+    for (index = 0; index < standard_probe_indices.size(); ++index) {
+      signal_index =
+          standard_probe_indices[index] % GetNumberOfProbeExtensions();
+      clock_cycle = settings.TestClockCycles[standard_probe_indices[index] /
                                              GetNumberOfProbeExtensions()] -
                     1;
-      signal_indices =
-          probe_extensions_[probe_extension_index].GetAllExtensionIndices();
-
-      for (signal_index = 0; signal_index < signal_indices.size();
-           ++signal_index) {
-        extended_probes_indices.push_back(
-            SearchExtendedProbe(signal_indices[signal_index], clock_cycle));
-
-        if (is_with_transitional_leakage && (clock_cycle != 0)) {
-          extended_probes_indices.push_back(SearchExtendedProbe(
-              signal_indices[signal_index], clock_cycle - 1));
-        }
-      }
+      signal_indices = probe_extensions_[signal_index].GetExtensionContainer();
+      extended_probes_indices = ReplaceWireIndexWithListIndex(
+          signal_indices, clock_cycle, is_with_transitional_leakage);
     }
 
-    std::sort(extended_probes_indices.begin(), extended_probes_indices.end(),
-              std::greater<unsigned int>());
-    extended_probes_indices.erase(std::unique(extended_probes_indices.begin(),
-                                              extended_probes_indices.end()),
-                                  extended_probes_indices.end());
+    RemoveDuplicates(extended_probes_indices);
     probing_sets_.emplace_back(standard_probe_indices, extended_probes_indices);
   }
 }
@@ -528,34 +555,32 @@ size_t Adversaries<ExtensionContainer>::GetNumberOfProbeExtensions() {
   return probe_extensions_.size();
 }
 
-template size_t Adversaries<RobustProbeExtension>::GetNumberOfProbeExtensions();
+template size_t Adversaries<GlitchExtendedProbe>::GetNumberOfProbeExtensions();
 
 template <class ExtensionContainer>
 size_t Adversaries<ExtensionContainer>::GetNumberOfStandardProbes() {
   return standard_probes_.size();
 }
 
-template size_t Adversaries<RobustProbeExtension>::GetNumberOfStandardProbes();
+template size_t Adversaries<GlitchExtendedProbe>::GetNumberOfStandardProbes();
 
 template <class ExtensionContainer>
 size_t Adversaries<ExtensionContainer>::GetNumberOfExtendedProbes() {
   return extended_probes_.size();
 }
 
-template size_t Adversaries<RobustProbeExtension>::GetNumberOfExtendedProbes();
+template size_t Adversaries<GlitchExtendedProbe>::GetNumberOfExtendedProbes();
 
 template <>
-void Adversaries<RobustProbeExtension>::SetProbeExtensions(
+void Adversaries<GlitchExtendedProbe>::SetProbeExtensions(
     LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings) {
   int input_index, signal_index;
-
   // finding the probes at the input of registers or signals which are not
   // connected to anywhere (but are primary output)
   for (signal_index = circuit.NumberOfConstants;
        signal_index < circuit.NumberOfSignals; ++signal_index) {
-    if ((!circuit.Signals[signal_index]->Deleted) &&
-        (circuit.Signals[signal_index]->ProbeAllowed) &&
-        (signal_index != settings.ClockSignal)) {
+    if (circuit.IsProbeOnSignalAllowed(signal_index, signal_index,
+                                       settings.ClockSignal)) {
       for (input_index = 0;
            input_index < circuit.Signals[signal_index]->NumberOfInputs;
            ++input_index) {
@@ -572,7 +597,7 @@ void Adversaries<RobustProbeExtension>::SetProbeExtensions(
       if (input_index >= circuit.Signals[signal_index]->NumberOfInputs) {
         probe_extensions_.emplace_back(signal_index, library, circuit,
                                        settings);
-          
+
         if (!probe_extensions_.back().GetAllExtensionIndices().size()) {
           std::cout << "    Warning A probe on signal \""
                     << circuit.Signals[signal_index]->Name
@@ -581,14 +606,14 @@ void Adversaries<RobustProbeExtension>::SetProbeExtensions(
                     << circuit.Signals[signal_index]->Name
                     << "\" during the evaluation!" << std::endl;
           probe_extensions_.pop_back();
-        }          
+        }
       }
     }
   }
 
   std::sort(probe_extensions_.begin(), probe_extensions_.end(),
-            [](Hardware::probing::ProbeExtension<RobustProbeExtension>& lhs,
-               Hardware::probing::ProbeExtension<RobustProbeExtension>& rhs) {
+            [](Hardware::probing::ProbeExtension<GlitchExtendedProbe>& lhs,
+               Hardware::probing::ProbeExtension<GlitchExtendedProbe>& rhs) {
               return lhs.GetSignalIndex() < rhs.GetSignalIndex();
             });
 }
@@ -600,8 +625,8 @@ UniqueProbe::UniqueProbe(unsigned int signal_index, unsigned int clock_cycle,
     : Probe(signal_index, clock_cycle),
       probing_set_indices_(probing_set_indices) {}
 
-template <>
-void Adversaries<RobustProbeExtension>::SetStandardProbes(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::SetStandardProbes(
     SettingsStruct& settings) {
   size_t extension_index;
 
@@ -616,8 +641,8 @@ void Adversaries<RobustProbeExtension>::SetStandardProbes(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::SetExtendedProbes(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::SetExtendedProbes(
     SettingsStruct& settings) {
   int cycle_index;
   size_t extension_index, probe_index;
@@ -654,30 +679,29 @@ void Adversaries<RobustProbeExtension>::SetExtendedProbes(
       extended_probes_.end());
 }
 
-template <>
-Adversaries<RobustProbeExtension>::Adversaries(LibraryStruct& library,
-                                               CircuitStruct& circuit,
-                                               SettingsStruct& settings) {
+template <class ExtensionContainer>
+Adversaries<ExtensionContainer>::Adversaries(LibraryStruct& library,
+                                             CircuitStruct& circuit,
+                                             SettingsStruct& settings) {
   SetProbeExtensions(library, circuit, settings);
-
-  // We generate a global list of all standard and extended probes.
-  // Afterwards, we can store the probe index in the probing sets.
-  // This procedure is more memory efficient than storing the full probe in the
-  // probing set.
   SetStandardProbes(settings);
   SetExtendedProbes(settings);
 }
 
+template Adversaries<GlitchExtendedProbe>::Adversaries(LibraryStruct&,
+                                                       CircuitStruct&,
+                                                       SettingsStruct&);
+
 template <>
-unsigned int Adversaries<RobustProbeExtension>::GetHighestClockCycle(
+unsigned int Adversaries<GlitchExtendedProbe>::GetHighestClockCycle(
     size_t probing_set_index) {
   return extended_probes_[probing_sets_[probing_set_index]
                               .GetLastProbeExtension()]
       .GetCycle();
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::
     RemoveOneStrictlyLessInformativeProbingSet(unsigned int set_index,
                                                unsigned int start,
                                                unsigned int end) {
@@ -690,33 +714,32 @@ void Adversaries<RobustProbeExtension>::
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::
-    RemoveStrictlyLessInformativeProbingSets(unsigned int start,
-                                             unsigned int end) {
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::RemoveStrictlyLessInformativeProbingSets(
+    unsigned int start, unsigned int end) {
   for (unsigned int index = start; index < end; index++) {
     RemoveOneStrictlyLessInformativeProbingSet(index, start, end);
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::RemoveDuplicatedProbingSets() {
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::RemoveDuplicatedProbingSets() {
   std::cout << "Remove duplicated probing sets..." << std::flush;
   std::sort(probing_sets_.begin(), probing_sets_.end(),
-            [](ProbingSet<RobustProbeExtension>& lhs,
-               ProbingSet<RobustProbeExtension>& rhs) { return lhs < rhs; });
+            [](ProbingSet<ExtensionContainer>& lhs,
+               ProbingSet<ExtensionContainer>& rhs) { return lhs < rhs; });
   probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
-                                  [](ProbingSet<RobustProbeExtension>& lhs,
-                                     ProbingSet<RobustProbeExtension>& rhs) {
+                                  [](ProbingSet<ExtensionContainer>& lhs,
+                                     ProbingSet<ExtensionContainer>& rhs) {
                                     return lhs == rhs;
                                   }),
                       probing_sets_.end());
-  std::cout << "done! " << GetNumberOfProbingSets() << " probing sets remain!"
+  std::cout << GetNumberOfProbingSets() << " probing sets remain...done!"
             << std::endl;
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::
     RemoveUninformativeProbingSetsInUnivariateSetting(
         size_t number_of_probing_sets) {
   std::vector<unsigned int> start_indices(1, 0), end_indices;
@@ -739,8 +762,8 @@ void Adversaries<RobustProbeExtension>::
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::RemoveUninformativeProbingSets(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::RemoveUninformativeProbingSets(
     SettingsStruct& settings) {
   RemoveDuplicatedProbingSets();
   size_t number_of_probing_sets = GetNumberOfProbingSets();
@@ -762,26 +785,26 @@ void Adversaries<RobustProbeExtension>::RemoveUninformativeProbingSets(
         }
       }
     }
-  }
 
-  probing_sets_.erase(
-      std::remove_if(probing_sets_.begin(), probing_sets_.end(),
-                     [](const ProbingSet<RobustProbeExtension>& lhs) {
-                       return lhs.IsRemovable();
-                     }),
-      probing_sets_.end());
-  std::cout << "done! " << GetNumberOfProbingSets() << " probing sets remain!"
-            << std::endl;
+    probing_sets_.erase(
+        std::remove_if(probing_sets_.begin(), probing_sets_.end(),
+                       [](const ProbingSet<ExtensionContainer>& lhs) {
+                         return lhs.IsRemovable();
+                       }),
+        probing_sets_.end());
+    std::cout << "done! " << GetNumberOfProbingSets() << " probing sets remain!"
+              << std::endl;
+  }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::InitializeUnivariateProbeCombinations(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::InitializeUnivariateProbeCombinations(
     SettingsStruct& settings, std::vector<unsigned int>& combination,
     std::vector<bool>& combination_bitmask) {
   int number_of_probe_extensions = GetNumberOfProbeExtensions();
-  // Cover the case that the order is higher than the number of different probe
-  // positions In this case, multiple probing set with probes on all positions
-  // are generated
+  // Cover the case that the order is higher than the number of different
+  // probe positions In this case, multiple probing set with probes on all
+  // positions are generated
   if (settings.TestOrder > number_of_probe_extensions) {
     combination.resize(number_of_probe_extensions);
     std::fill(combination_bitmask.begin(), combination_bitmask.end(), true);
@@ -792,14 +815,14 @@ void Adversaries<RobustProbeExtension>::InitializeUnivariateProbeCombinations(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::InitializeMultivariateProbeCombinations(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::InitializeMultivariateProbeCombinations(
     SettingsStruct& settings, std::vector<unsigned int>& combination,
     std::vector<bool>& combination_bitmask) {
   int number_of_standard_probes = GetNumberOfStandardProbes();
-  // Cover the case that the order is higher than the number of standard probes
-  // In this case, only one probing set including all standard probes is
-  // generated
+  // Cover the case that the order is higher than the number of standard
+  // probes In this case, only one probing set including all standard probes
+  // is generated
   if (settings.TestOrder > number_of_standard_probes) {
     combination.resize(number_of_standard_probes);
     std::fill(combination_bitmask.begin(), combination_bitmask.end(), true);
@@ -810,8 +833,8 @@ void Adversaries<RobustProbeExtension>::InitializeMultivariateProbeCombinations(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::PrintProbingSetInformation() {
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::PrintProbingSetInformation() {
   std::vector<std::string> table_body(6);
   std::vector<std::string> table_header = {
       "#Standard Probes",        "#Extended Probes",
@@ -823,8 +846,8 @@ void Adversaries<RobustProbeExtension>::PrintProbingSetInformation() {
 
   size_t minimum_number_of_probes_in_a_set =
       std::min_element(probing_sets_.begin(), probing_sets_.end(),
-                       [](const ProbingSet<RobustProbeExtension>& lhs,
-                          const ProbingSet<RobustProbeExtension>& rhs) {
+                       [](const ProbingSet<ExtensionContainer>& lhs,
+                          const ProbingSet<ExtensionContainer>& rhs) {
                          return lhs.GetNumberOfProbeExtensions() <
                                 rhs.GetNumberOfProbeExtensions();
                        })
@@ -832,8 +855,8 @@ void Adversaries<RobustProbeExtension>::PrintProbingSetInformation() {
 
   size_t maximum_number_of_probes_in_a_set =
       std::max_element(probing_sets_.begin(), probing_sets_.end(),
-                       [](const ProbingSet<RobustProbeExtension>& lhs,
-                          const ProbingSet<RobustProbeExtension>& rhs) {
+                       [](const ProbingSet<ExtensionContainer>& lhs,
+                          const ProbingSet<ExtensionContainer>& rhs) {
                          return lhs.GetNumberOfProbeExtensions() <
                                 rhs.GetNumberOfProbeExtensions();
                        })
@@ -842,10 +865,10 @@ void Adversaries<RobustProbeExtension>::PrintProbingSetInformation() {
   double average_number_of_probes_in_a_set =
       std::accumulate(
           probing_sets_.begin(), probing_sets_.end(), 0,
-          [](unsigned int sum, ProbingSet<RobustProbeExtension>& set) {
+          [](unsigned int sum, ProbingSet<ExtensionContainer>& set) {
             return sum + set.GetNumberOfProbeExtensions();
           }) /
-      GetNumberOfProbingSets();
+      (double)GetNumberOfProbingSets();
 
   table_body[0] = std::to_string(GetNumberOfStandardProbes());
   table_body[1] = std::to_string(GetNumberOfExtendedProbes());
@@ -884,11 +907,11 @@ size_t Adversaries<ExtensionContainer>::GetMaximumLengthOfProbeNames(
   return number_of_characters;
 }
 
-template size_t Adversaries<RobustProbeExtension>::GetMaximumLengthOfProbeNames(
+template size_t Adversaries<GlitchExtendedProbe>::GetMaximumLengthOfProbeNames(
     const CircuitStruct&);
 
-template <>
-size_t Adversaries<RobustProbeExtension>::PrintEvaluationHeader(
+template <class ExtensionContainer>
+size_t Adversaries<ExtensionContainer>::PrintEvaluationHeader(
     const CircuitStruct& circuit) {
   size_t table_width = GetMaximumLengthOfProbeNames(circuit);
   std::vector<std::string> table_header = {
@@ -928,7 +951,7 @@ size_t Adversaries<ExtensionContainer>::GetIndexOfMostLeakingProbingSet() {
 }
 
 template size_t
-Adversaries<RobustProbeExtension>::GetIndexOfMostLeakingProbingSet();
+Adversaries<GlitchExtendedProbe>::GetIndexOfMostLeakingProbingSet();
 
 template <class ExtensionContainer>
 size_t Adversaries<ExtensionContainer>::GetMaximumNumberOfRequiredTraces() {
@@ -946,10 +969,10 @@ size_t Adversaries<ExtensionContainer>::GetMaximumNumberOfRequiredTraces() {
 }
 
 template size_t
-Adversaries<RobustProbeExtension>::GetMaximumNumberOfRequiredTraces();
+Adversaries<GlitchExtendedProbe>::GetMaximumNumberOfRequiredTraces();
 
-template <>
-void Adversaries<RobustProbeExtension>::PrintEvaluationBody(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::PrintEvaluationBody(
     const CircuitStruct& circuit, const SettingsStruct& settings,
     const SimulationStruct& simulation, double& maximum_g_value_deleted,
     std::string& printed_probing_set_deleted, double elapsed_time_period,
@@ -990,8 +1013,8 @@ void Adversaries<RobustProbeExtension>::PrintEvaluationBody(
   Util::PrintRow(table_widths, table_body);
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::RemoveProbingSetsWithEnoughTraces(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::RemoveProbingSetsWithEnoughTraces(
     const CircuitStruct& circuit, uint64_t number_of_simulations,
     double& maximum_g_value_deleted, std::string& printed_probing_set_deleted) {
   double g_value;
@@ -1014,14 +1037,14 @@ void Adversaries<RobustProbeExtension>::RemoveProbingSetsWithEnoughTraces(
   probing_sets_.erase(
       std::remove_if(
           probing_sets_.begin(), probing_sets_.end(),
-          [&number_of_simulations](ProbingSet<RobustProbeExtension>& Ps) {
+          [&number_of_simulations](ProbingSet<ExtensionContainer>& Ps) {
             return (number_of_simulations > Ps.GetNumberOfRequiredTraces());
           }),
       probing_sets_.end());
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::SetUniqueProbes() {
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::SetUniqueProbes() {
   size_t probe_index, set_index;
   unsigned int signal_index, clock_cycle;
   std::vector<unsigned int> probing_set_indices;
@@ -1042,8 +1065,8 @@ void Adversaries<RobustProbeExtension>::SetUniqueProbes() {
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::Test(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::Test(
     Hardware::SettingsStruct& settings, Hardware::SimulationStruct& simulation,
     const std::vector<double>& number_of_simulations_per_group,
     bool is_in_compact_mode) {
@@ -1054,8 +1077,8 @@ void Adversaries<RobustProbeExtension>::Test(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::PrintReport(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::PrintReport(
     const CircuitStruct& circuit, const SettingsStruct& settings,
     const SimulationStruct& simulation, unsigned int probe_step_index,
     size_t space) {
@@ -1130,10 +1153,10 @@ void Adversaries<RobustProbeExtension>::PrintReport(
   }
 
   report_file << std::endl;
-  report_file
-      << "2.) Summary of the most leakging (and already active) probing sets: "
-      << std::endl
-      << std::endl;
+  report_file << "2.) Summary of the most leakging (and already active) "
+                 "probing sets: "
+              << std::endl
+              << std::endl;
 
   for (counter = 0; ((counter < settings.Max_No_ReportEntries) &&
                      (counter < (int)GetNumberOfProbingSets()));
@@ -1155,14 +1178,18 @@ void Adversaries<RobustProbeExtension>::PrintReport(
     }
 
     probing_sets_[set_index].ResetGValue();
+
+    if (g_value == 0.0) {
+      break;
+    }
   }
 
   report_file.close();
   Util::PrintHorizontalLine(space);
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::EvaluateProbingSets(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::EvaluateProbingSets(
     LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings,
     SharedDataStruct* shared_data, SimulationStruct& simulation,
     timespec& start_time, unsigned int& probe_step_index) {
@@ -1249,14 +1276,11 @@ void Adversaries<RobustProbeExtension>::EvaluateProbingSets(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::
-    EvaluateMultivariateRobustProbingSecurity(LibraryStruct& library,
-                                              CircuitStruct& circuit,
-                                              SettingsStruct& settings,
-                                              SharedDataStruct* shared_data,
-                                              SimulationStruct& simulation,
-                                              timespec& start_time) {
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::EvaluateMultivariateRobustProbingSecurity(
+    LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings,
+    SharedDataStruct* shared_data, SimulationStruct& simulation,
+    timespec& start_time) {
   std::cout << "Generate multivariate probing sets..." << std::flush;
   size_t probe_index, number_of_standard_probes = GetNumberOfStandardProbes();
   int combination_index = 0;
@@ -1283,6 +1307,8 @@ void Adversaries<RobustProbeExtension>::
     AddProbingSet(combination, is_with_transitional_leakage, settings);
 
     if (probing_sets_.size() == (size_t)settings.ProbeStepSize) {
+      std::cout << GetNumberOfProbingSets() << " probing sets generated...done!"
+                << std::endl;
       RemoveUninformativeProbingSets(settings);
       PrintProbingSetInformation();
       EvaluateProbingSets(library, circuit, settings, shared_data, simulation,
@@ -1294,6 +1320,8 @@ void Adversaries<RobustProbeExtension>::
                                  combination_bitmask.end()));
 
   if (probing_sets_.size()) {
+    std::cout << GetNumberOfProbingSets() << " probing sets generated...done!"
+              << std::endl;
     RemoveUninformativeProbingSets(settings);
     PrintProbingSetInformation();
     EvaluateProbingSets(library, circuit, settings, shared_data, simulation,
@@ -1303,8 +1331,8 @@ void Adversaries<RobustProbeExtension>::
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::EvaluateUnivariateRobustProbingSecurity(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::EvaluateUnivariateRobustProbingSecurity(
     LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings,
     SharedDataStruct* shared_data, SimulationStruct& simulation,
     timespec& start_time) {
@@ -1339,6 +1367,8 @@ void Adversaries<RobustProbeExtension>::EvaluateUnivariateRobustProbingSecurity(
       AddProbingSet(combination, is_with_transitional_leakage, settings);
 
       if (probing_sets_.size() == (size_t)settings.ProbeStepSize) {
+        std::cout << GetNumberOfProbingSets()
+                  << " probing sets generated...done!" << std::endl;
         RemoveUninformativeProbingSets(settings);
         PrintProbingSetInformation();
         EvaluateProbingSets(library, circuit, settings, shared_data, simulation,
@@ -1352,6 +1382,8 @@ void Adversaries<RobustProbeExtension>::EvaluateUnivariateRobustProbingSecurity(
   }
 
   if (probing_sets_.size()) {
+    std::cout << GetNumberOfProbingSets() << " probing sets generated...done!"
+              << std::endl;
     RemoveUninformativeProbingSets(settings);
     PrintProbingSetInformation();
     EvaluateProbingSets(library, circuit, settings, shared_data, simulation,
@@ -1361,8 +1393,8 @@ void Adversaries<RobustProbeExtension>::EvaluateUnivariateRobustProbingSecurity(
   }
 }
 
-template <>
-void Adversaries<RobustProbeExtension>::EvaluateRobustProbingSecurity(
+template <class ExtensionContainer>
+void Adversaries<ExtensionContainer>::EvaluateRobustProbingSecurity(
     LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings,
     SharedDataStruct* shared_data, SimulationStruct& simulation) {
   struct timespec start_time;
@@ -1379,6 +1411,10 @@ void Adversaries<RobustProbeExtension>::EvaluateRobustProbingSecurity(
   std::cout << "Evaluation done in " << Util::EndClock(start_time)
             << " seconds!" << std::endl;
 }
+
+template void Adversaries<GlitchExtendedProbe>::EvaluateRobustProbingSecurity(
+    LibraryStruct&, CircuitStruct&, SettingsStruct&, SharedDataStruct*,
+    SimulationStruct&);
 
 template <class ExtensionContainer>
 void Adversaries<ExtensionContainer>::NormalTest(

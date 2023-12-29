@@ -3,7 +3,7 @@
 #include <thread>
 
 enum class CpuSelectionOption {
-    All, Half, Third, Quarter, Specific
+    all, half, third, quarter, specific
 };
 
 
@@ -16,7 +16,7 @@ enum class CpuSelectionOption {
 class CpuCoreSelector
 {
 public:
-    static unsigned int getOptimalCount(CpuSelectionOption option, unsigned int specificCount = 0);
+    static unsigned int getOptimalCount(CpuSelectionOption option, unsigned int specified_number_of_cores = 0);
 };
 
 

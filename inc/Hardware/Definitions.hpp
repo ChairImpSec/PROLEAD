@@ -121,6 +121,13 @@ struct CircuitStruct {
   int** CellsInDepth = NULL;  ///< The indices of cells with a specific depth.
   int* NumberOfCellsInDepth =
       NULL;  ///< The number of cells with a specific depth.
+  bool IsProbeOnSignalAllowed(int base_signal_index, int current_signal_index,
+                              int clock_signal_index);
+
+  bool CanProbeOnSignalBePropagated(int signal_index,
+                                    const LibraryStruct& library);
+  bool IsGateThatOutputsSignalDeleted(int signal_index);
+  int GetNumberOfInputsForSignalsComputingCell(int signal_index);
 };
 
 /**

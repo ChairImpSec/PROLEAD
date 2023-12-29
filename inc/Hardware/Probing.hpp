@@ -20,11 +20,20 @@ namespace probing {
  * Hence, we try to allow different data structures for building probing sets.
  */
 /**
- * Here, we define a first basic-structure that stores a set of signal indiices.
- * The signal indices abstract the signals/wires which are probed after
- * extending a standard probe according to the robust probing model.
+ * We define a first basic structure that stores a single probe-extension,
+ * derived by extending a glitch-extended probe. According to the
+ * glitch-extended probing model, the extension abtracts the probed signal by
+ * storing the signal index.
  */
-using RobustProbeExtension = std::vector<unsigned int>;
+using GlitchExtendedProbe = unsigned int;
+
+/**
+ * @brief Removes duplicates from an extension.
+ * @return The extension container where we remove duplicates.
+ * @author Nicolai Müller
+ */
+template <typename ExtensionContainer>
+void RemoveDuplicates(std::vector<ExtensionContainer>& extensions);
 
 /**
  * We derive all probe-extension procedures of current and future models from
@@ -56,6 +65,13 @@ class AbstractProbeExtension {
    */
   std::vector<unsigned int> GetAllExtensionIndices();
 
+  /**
+   * @brief Returns the structed extension.
+   * @return The probe-extension with structure.
+   * @author Nicolai Müller
+   */
+  std::vector<ExtensionContainer> GetExtensionContainer();
+
  protected:
   /**
    * Every probe-propagation starts by placing a standard probe on a certain
@@ -71,7 +87,7 @@ class AbstractProbeExtension {
    * to the robust probing model. We repreat that this data structure can be
    * changed to integrate new probing models into PROLEAD.
    */
-  ExtensionContainer extension_indices_;
+  std::vector<ExtensionContainer> extension_indices_;
 
   /**
    * Every probe-propagation must define how a probe is propagated.
@@ -227,7 +243,7 @@ class ProbingSet {
    * @author Nicolai Müller
    */
   ProbingSet(std::vector<unsigned int>& standard_probe_indices,
-             ExtensionContainer& probe_extension_indices);
+             std::vector<ExtensionContainer>& probe_extension_indices);
 
   /**
    * @brief Returns the number of standard probes.
@@ -261,7 +277,7 @@ class ProbingSet {
    * extended probe.
    * @author Nicolai Müller
    */
-  size_t GetExtendedProbeIndex(size_t extended_probe_index);
+  ExtensionContainer GetExtendedProbeIndex(size_t extended_probe_index);
 
   /**
    * We remark that the probe_extension_indices list is sorted.
@@ -274,7 +290,7 @@ class ProbingSet {
    * extended probe.
    * @author Nicolai Müller
    */
-  unsigned int GetFirstProbeExtension() const;
+  ExtensionContainer GetFirstProbeExtension() const;
 
   /**
    * We remark that the probe_extension_indices list is sorted.
@@ -286,14 +302,14 @@ class ProbingSet {
    * extended probe.
    * @author Nicolai Müller
    */
-  unsigned int GetLastProbeExtension() const;
+  ExtensionContainer GetLastProbeExtension() const;
 
   /**
    * @brief Returns a list with all different probe extensions.
    * @return A list of different probe-extensions.
    * @author Nicolai Müller
    */
-  std::vector<unsigned int> GetAllProbeExtensions() const;
+  std::vector<ExtensionContainer> GetAllProbeExtensions() const;
 
   /**
    * @brief Marks the probing set as removable, i.e. strictly less informative
@@ -433,7 +449,7 @@ class ProbingSet {
    * probe-extensions depends on the concrete model and we want to encourage
    * users  to integrate other probing models into PROLEAD.
    */
-  ExtensionContainer probe_extension_indices_;
+  std::vector<ExtensionContainer> probe_extension_indices_;
 
   /**
    * The contingency table required to store the distributions of probed
@@ -598,6 +614,20 @@ class Adversaries {
    */
   bool IsInDistance(std::vector<unsigned int>& standard_probe_indices,
                     SettingsStruct& settings);
+
+  /**
+   * @brief Replaces the given signal indices with indices from the list of
+   * extended probes.
+   * @param signal_indices The signal indices to replace.
+   * @param clock_cycle The cycle in which the probes should record.
+   * @param is_with_transitional_leakage True if transitional leakage is
+   * considered during evaluation, False if not.
+   * @return The extended probe indices.
+   * @author Nicolai Müller
+   */
+  std::vector<ExtensionContainer> ReplaceWireIndexWithListIndex(
+      const std::vector<ExtensionContainer>& signal_indices,
+      unsigned int clock_cycle, bool is_with_transitional_leakage);
 
   /**
    * @brief Adds a new probing set to the list of probing sets.
