@@ -7,6 +7,7 @@
 #include <omp.h>
 
 #include "Hardware/Definitions.hpp"
+#include "Util/CpuCoreSelector.hpp"
 
 namespace Hardware
 {

@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_ENABLE_BENCHMARKING
 #include "Util/CpuCoreSelector.hpp"
 
 #include <catch2/catch.hpp>
@@ -15,12 +15,12 @@ TEST_CASE("CpuCoreSelector returns correct thread counts",
             std::thread::hardware_concurrency() / 2);
   }
 
-  SECTION("Return Third cores for third option") {
+  SECTION("Return third cores for third option") {
     REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::third) ==
             std::thread::hardware_concurrency() / 3);
   }
 
-  SECTION("Return Quarter cores for quarter option") {
+  SECTION("Return quarter cores for quarter option") {
     REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::quarter) ==
             std::thread::hardware_concurrency() / 4);
   }
