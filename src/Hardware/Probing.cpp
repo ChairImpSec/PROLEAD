@@ -130,12 +130,31 @@ size_t ProbingSet<ExtensionContainer>::GetNumberOfStandardProbes() const {
 template <class ExtensionContainer>
 size_t ProbingSet<ExtensionContainer>::GetStandardProbeIndex(
     size_t standard_probe_index) {
+  if (standard_probe_indices_.empty()) {
+    throw std::out_of_range(
+        "Tried to access a standard probe index from an empty vector!");
+  }
+
+  if (standard_probe_index >= standard_probe_indices_.size()) {
+    throw std::out_of_range("Tried to access an invalid standard probe index!");
+  }
+
   return standard_probe_indices_[standard_probe_index];
 }
 
 template <class ExtensionContainer>
 ExtensionContainer ProbingSet<ExtensionContainer>::GetExtendedProbeIndex(
     size_t extended_probe_index) {
+  if (probe_extension_indices_.empty()) {
+    throw std::out_of_range(
+        "Tried to access a probe-extension index from an empty vector!");
+  }
+
+  if (extended_probe_index >= probe_extension_indices_.size()) {
+    throw std::out_of_range(
+        "Tried to access an invalid probe-extension index!");
+  }
+
   return probe_extension_indices_[extended_probe_index];
 }
 
@@ -153,6 +172,9 @@ template <class ExtensionContainer>
 size_t ProbingSet<ExtensionContainer>::GetNumberOfProbeExtensions() const {
   return probe_extension_indices_.size();
 }
+
+template size_t ProbingSet<GlitchExtendedProbe>::GetNumberOfProbeExtensions()
+    const;
 
 template <class ExtensionContainer>
 ExtensionContainer ProbingSet<ExtensionContainer>::GetFirstProbeExtension()
@@ -181,6 +203,9 @@ std::vector<ExtensionContainer>
 ProbingSet<ExtensionContainer>::GetAllProbeExtensions() const {
   return probe_extension_indices_;
 }
+
+template std::vector<GlitchExtendedProbe>
+ProbingSet<GlitchExtendedProbe>::GetAllProbeExtensions() const;
 
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::IsRemovable() const {
@@ -285,17 +310,26 @@ bool ProbingSet<ExtensionContainer>::operator<(
   return (probe_extension_indices_ < other.probe_extension_indices_);
 }
 
+template bool ProbingSet<GlitchExtendedProbe>::operator<(
+    const ProbingSet<GlitchExtendedProbe>&) const;
+
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::operator==(
     const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ == other.probe_extension_indices_);
 }
 
+template bool ProbingSet<GlitchExtendedProbe>::operator==(
+    const ProbingSet<GlitchExtendedProbe>&) const;
+
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::operator!=(
     const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ != other.probe_extension_indices_);
 }
+
+template bool ProbingSet<GlitchExtendedProbe>::operator!=(
+    const ProbingSet<GlitchExtendedProbe>&) const;
 
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::Includes(
