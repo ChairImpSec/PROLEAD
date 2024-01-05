@@ -408,7 +408,8 @@ TEST_CASE(
   }
 }
 
-TEST_CASE("Test the check whether a probing set is removable", "bool ProbingSet<ExtensionContainer>::IsRemovable()") {
+TEST_CASE("Test the check whether a probing set is removable",
+          "bool ProbingSet<ExtensionContainer>::IsRemovable()") {
   SECTION("IsRemovable == false") {
     std::vector<unsigned int> test_vector = {};
     Hardware::probing::ProbingSet<unsigned int> probing_set(test_vector,
@@ -420,7 +421,7 @@ TEST_CASE("Test the check whether a probing set is removable", "bool ProbingSet<
     std::vector<unsigned int> test_vector = {};
     Hardware::probing::ProbingSet<unsigned int> probing_set(test_vector,
                                                             test_vector);
-    probing_set.MarkAsRemovable();                                                        
+    probing_set.MarkAsRemovable();
     REQUIRE(probing_set.IsRemovable());
   }
 }
