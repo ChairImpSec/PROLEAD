@@ -119,6 +119,15 @@ size_t UniqueProbe::GetNumberOfProbeSetIndices() {
 }
 
 unsigned int UniqueProbe::GetProbeSetIndex(size_t index) {
+  if (probing_set_indices_.empty()) {
+    throw std::out_of_range(
+        "Tried to access a probing set index from an empty vector!");
+  }
+
+  if (index >= probing_set_indices_.size()) {
+    throw std::out_of_range("Tried to access an invalid probing set index!");
+  }
+
   return probing_set_indices_[index];
 }
 
@@ -126,6 +135,17 @@ template <class ExtensionContainer>
 size_t ProbingSet<ExtensionContainer>::GetNumberOfStandardProbes() const {
   return standard_probe_indices_.size();
 }
+
+template size_t ProbingSet<GlitchExtendedProbe>::GetNumberOfStandardProbes()
+    const;
+
+template <class ExtensionContainer>
+size_t ProbingSet<ExtensionContainer>::GetNumberOfProbeExtensions() const {
+  return probe_extension_indices_.size();
+}
+
+template size_t ProbingSet<GlitchExtendedProbe>::GetNumberOfProbeExtensions()
+    const;
 
 template <class ExtensionContainer>
 size_t ProbingSet<ExtensionContainer>::GetStandardProbeIndex(
@@ -169,14 +189,6 @@ template ProbingSet<GlitchExtendedProbe>::ProbingSet(
     std::vector<unsigned int>&, std::vector<GlitchExtendedProbe>&);
 
 template <class ExtensionContainer>
-size_t ProbingSet<ExtensionContainer>::GetNumberOfProbeExtensions() const {
-  return probe_extension_indices_.size();
-}
-
-template size_t ProbingSet<GlitchExtendedProbe>::GetNumberOfProbeExtensions()
-    const;
-
-template <class ExtensionContainer>
 ExtensionContainer ProbingSet<ExtensionContainer>::GetFirstProbeExtension()
     const {
   if (!probe_extension_indices_.empty()) {
@@ -212,10 +224,14 @@ bool ProbingSet<ExtensionContainer>::IsRemovable() const {
   return contingency_table_.IsRemovable();
 }
 
+template bool ProbingSet<GlitchExtendedProbe>::IsRemovable() const;
+
 template <class ExtensionContainer>
 void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
   contingency_table_.MarkAsRemovable();
 }
+
+template void ProbingSet<GlitchExtendedProbe>::MarkAsRemovable();
 
 template <class ExtensionContainer>
 void ProbingSet<ExtensionContainer>::ResetGValue() {
