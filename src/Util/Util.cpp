@@ -44,10 +44,14 @@ size_t TableBucket<BucketContainer>::GetNumberOfEntries() {
   return bucket_.size();
 }
 
+template size_t TableBucket<TableBucketVector>::GetNumberOfEntries();
+
 template <class BucketContainer>
 unsigned int* TableBucket<BucketContainer>::GetCounters(size_t entry_index) {
   return bucket_[entry_index].GetCounters();
 }
+
+template unsigned int* TableBucket<TableBucketVector>::GetCounters(size_t);
 
 template <>
 TableBucketVector::iterator TableBucket<TableBucketVector>::FindEntry(const unsigned char* key, size_t size_of_key_in_bytes) {
@@ -62,6 +66,8 @@ TableBucketVector::iterator TableBucket<TableBucketVector>::FindEntry(const unsi
       return false;
     });
 }
+
+template TableBucketVector::iterator TableBucket<TableBucketVector>::FindEntry(const unsigned char*, size_t);
 
 template <>
 bool TableBucket<TableBucketVector>::IsEntryInBucket(const unsigned char* key, const TableBucketVector::iterator it, size_t size_of_key_in_bytes){
