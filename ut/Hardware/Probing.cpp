@@ -3,6 +3,8 @@
 
 #include <catch2/catch.hpp>
 
+#include "Hardware/Execute.hpp"
+
 TEST_CASE("Test the removing of duplicates from a vector",
           "[void RemoveDuplicates(std::vector<ExtensionContainer>&)]") {
   SECTION("Empty vector") {
@@ -657,5 +659,37 @@ TEST_CASE("Test if a probing set fully includes another probing set",
                                                              test_vector2);
     REQUIRE_FALSE(probing_set1.Includes(probing_set2));
     REQUIRE_FALSE(probing_set2.Includes(probing_set1));
+  }
+}
+
+TEST_CASE("Test the probe-propagation according to the robust probing model",
+          "[ProbeExtension<GlitchExtendedProbe>::PropagateProbe(LibraryStruct&,"
+          " CircuitStruct&, SettingsStruct&)]") {
+  SECTION("dom_indep_d1") {
+    char library_file_name[12] = "library.lib";
+    char library_name[7] = "NANG45";
+    char design_file_name[36] = "ut/full/dom_indep_d1/dom_indep_d1.v";
+    char top_module_name[13] = "dom_indep_d1";
+    Hardware::CircuitStruct circuit;
+    Hardware::LibraryStruct library;
+    Hardware::SettingsStruct settings;
+    settings.ClockSignal = 6;
+
+    Hardware::Read::LibraryFile(library_file_name, library_name, &library);
+    Hardware::Read::DesignFile(design_file_name, top_module_name, &library,
+                               &circuit, 0, 0, 0);
+
+    // Test probes on port_c[1], port_c[0], j0, j1
+    auto test_vectors = GENERATE(
+        table<unsigned int, std::vector<unsigned int>>({{12, {7, 9, 21}},
+                                                        {13, {8, 10, 20}},
+                                                        {18, {8, 9, 11}},
+                                                        {19, {7, 10, 11}}}));
+
+    Hardware::probing::ProbeExtension<Hardware::probing::GlitchExtendedProbe>
+        probe_extension(std::get<0>(test_vectors), library, circuit, settings);
+    std::vector<unsigned int> probe_extension_indices =
+        probe_extension.GetAllExtensionIndices();
+    REQUIRE(probe_extension_indices == std::get<1>(test_vectors));
   }
 }
