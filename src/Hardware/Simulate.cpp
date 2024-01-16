@@ -196,6 +196,8 @@ void Hardware::Simulate::All(Hardware::LibraryStruct &Library, Hardware::Circuit
 					{
 						Value = Hardware::Simulate::EvaluateOperation(Library.CellTypes[Circuit.Cells[CellIndex]->Type]->Operations[OutputIndex], InputVector,
 																	  Library.CellTypes[Circuit.Cells[CellIndex]->Type]->Intermediate);
+
+						Value = Simulation.fault_set.TryToInduceFaults(Value, Circuit.Cells[CellIndex]->Outputs[OutputIndex], (ClockCycle + 1));
 						SharedData->SignalValues[Circuit.Cells[CellIndex]->Outputs[OutputIndex]] = Value;
 					}
 			}

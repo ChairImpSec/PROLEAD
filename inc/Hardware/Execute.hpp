@@ -2,7 +2,7 @@
 
 #include "Hardware/Definitions.hpp"
 #include "Hardware/Prepare.hpp"
-#include "Hardware/Probing.hpp"
+#include "Hardware/Adversaries.hpp"
 #include "Hardware/Read.hpp"
 #include "Util/CommandLineParameter.hpp"
 

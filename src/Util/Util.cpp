@@ -702,3 +702,17 @@ void Util::GenerateThreadRng(std::vector<boost::mt19937>& thread_rng, unsigned i
 	}
 }
 
+void Util::ExtractCombinationFromBitmask(std::vector<unsigned int>& combination, std::vector<bool>& bitmask){
+  unsigned int combination_index = 0, index = 0;
+
+  while (combination_index != combination.size()) { 
+    if (bitmask.at(index)) {
+      combination.at(combination_index) = index;
+      ++combination_index;
+    }
+
+    ++index;
+  }
+}
+
+

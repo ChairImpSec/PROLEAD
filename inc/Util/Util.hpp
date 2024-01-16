@@ -148,6 +148,8 @@ namespace stats{
 	*/ 
 	using TableBucketVector = std::vector<TableEntry>;
 
+	using TableBucketUnorderedMap = std::unordered_map<Key, TableData>;
+
 	/**
 	* This class defines the bucket, i.e. a list of entries.
 	* We repeat that the data type of a bucket (BucketContainer) can be exchanged. 
@@ -601,5 +603,5 @@ namespace Util{
 	void PrintHorizontalLine(unsigned int width);
 	void PrintRow(std::vector<unsigned int>& width, std::vector<std::string>& elements);
     void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
-
+	void ExtractCombinationFromBitmask(std::vector<unsigned int>& combination, std::vector<bool>& bitmask);
 }

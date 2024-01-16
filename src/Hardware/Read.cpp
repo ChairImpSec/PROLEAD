@@ -1911,7 +1911,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
     int       IndexH2, IndexL2;
 	int       ShareIndex;
     FILE*     SettingsFile;
-    int       SettingsFileCheckList = 0;
+    uint64_t  SettingsFileCheckList = 0;
     int       ClockCycle;
     int       InitialSim_NumberOfInputBlocksGeneral = -1;
     int       InitialSim_NumberOfInputBlocksLocal = -1;
@@ -3956,6 +3956,331 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			}
 
 			SettingsFileCheckList |= (1 << 27);
+		}
+        else if (!strcmp(Str1, "fault_injection_include"))
+        {
+            Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+            if (!strcmp(Str1, "all"))
+            {
+                for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+					Circuit->Signals[SignalIndex]->FaultAllowed = 1;
+            }
+            else
+            {
+	            if (!strcmp(Str1, "none"))
+	            	NumberOfItems = 0;
+	            else
+	            {
+					templ = strtol(Str1, &tmptr, 10);
+					if ((*tmptr) || (templ < 0))
+					{
+                        ErrorMessage = "Given number of \"fault_injection_include\" (" + (std::string)Str1 + " >= 0) in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					NumberOfItems = templ;
+				}
+
+                for (i = 0; i < NumberOfItems; i++)
+                {
+                    Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+					Str2[0] = 1;
+
+					if (Str1[strlen(Str1)-1] == '*')
+					{
+						Str1[strlen(Str1)-1] = 0;
+						OneFound = 0;
+
+						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+							if (strstr(Circuit->Signals[SignalIndex]->Name, Str1) == Circuit->Signals[SignalIndex]->Name)
+							{
+								Circuit->Signals[SignalIndex]->FaultAllowed = Str2[0];
+								OneFound = 1;
+							}
+
+						if (!OneFound)
+						{
+                            ErrorMessage = "Given signal name " + (std::string)Str1 + " for \"fault_injection_include\" in settings file does not match to any signal!";
+                            fclose(SettingsFile);
+                            free(Str1);
+                            free(Str2);
+                            free(Str3);
+                            throw std::runtime_error(ErrorMessage);
+						}
+					}
+					else
+					{
+						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+							if (!strcmp(Circuit->Signals[SignalIndex]->Name, Str1))
+							{
+								Circuit->Signals[SignalIndex]->FaultAllowed = Str2[0];
+								break;
+							}
+
+						if (SignalIndex >= Circuit->NumberOfSignals)
+						{
+                            ErrorMessage = "Given signal name " + (std::string)Str1 + " for \"fault_injection_include\" in settings file not found!";
+                            fclose(SettingsFile);
+                            free(Str1);
+                            free(Str2);
+                            free(Str3);
+                            throw std::runtime_error(ErrorMessage);
+						}
+					}
+                }
+            }
+
+            SettingsFileCheckList |= (1 << 28);
+        }
+        else if (!strcmp(Str1, "fault_injection_exclude"))
+        {
+            Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+            if (!strcmp(Str1, "all"))
+            {
+				for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+					Circuit->Signals[SignalIndex]->FaultAllowed = 0;
+            }
+            else
+            {
+	            if (!strcmp(Str1, "none"))
+	            	NumberOfItems = 0;
+	            else
+	            {
+					templ = strtol(Str1, &tmptr, 10);
+					if ((*tmptr) || (templ < 0))
+					{
+                        ErrorMessage = "Given number of \"fault_injection_exclude\" (" + (std::string)Str1 + " >= 0) in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					NumberOfItems = templ;
+				}
+
+                for (i = 0; i < NumberOfItems; i++)
+                {
+                    Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+					if (Str1[strlen(Str1)-1] == '*')
+					{
+						Str1[strlen(Str1)-1] = 0;
+						OneFound = 0;
+
+						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+							if (strstr(Circuit->Signals[SignalIndex]->Name, Str1) == Circuit->Signals[SignalIndex]->Name)
+							{
+								Circuit->Signals[SignalIndex]->FaultAllowed = 0;
+								OneFound = 1;
+							}
+
+						if (!OneFound)
+						{
+                            ErrorMessage = "Given signal name " + (std::string)Str1 + " for fault_injection_exclude in settings file does not match to any signal!";
+                            fclose(SettingsFile);
+                            free(Str1);
+                            free(Str2);
+                            free(Str3);
+                            throw std::runtime_error(ErrorMessage);
+						}
+					}
+					else
+					{
+						for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++)
+							if (!strcmp(Circuit->Signals[SignalIndex]->Name, Str1))
+							{
+								Circuit->Signals[SignalIndex]->FaultAllowed = 0;
+								break;
+							}
+
+						if (SignalIndex >= Circuit->NumberOfSignals)
+						{
+                            ErrorMessage = "Given signal name " + (std::string)Str1 + " for fault_injection_exclude in settings file not found!";
+                            fclose(SettingsFile);
+                            free(Str1);
+                            free(Str2);
+                            free(Str3);
+                            throw std::runtime_error(ErrorMessage);
+						}
+					}
+                }
+            }
+
+            SettingsFileCheckList |= (1 << 29);
+		}
+		else if (!strcmp(Str1, "number_of_faults"))
+		{
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+			templ = strtol(Str1, &tmptr, 10);
+			if ((*tmptr) || (templ < 1))
+			{
+                ErrorMessage = "Given \"number_of_faults\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+				free(Str3);
+                throw std::runtime_error(ErrorMessage);
+			}
+			Settings->number_of_faults = templ;
+			SettingsFileCheckList |= (1 << 30);
+		}
+		else if (!strcmp(Str1, "number_of_faulted_clock_cycles"))
+		{
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+			templ = strtol(Str1, &tmptr, 10);
+			if ((*tmptr) || (templ < 1))
+			{
+                ErrorMessage = "Given number_of_faulted_clock_cycles (" + (std::string)Str1 + " > 0) in settings file is not valid!";
+                fclose(SettingsFile);
+                free(Str1);
+                free(Str2);
+                free(Str3);
+                throw std::runtime_error(ErrorMessage);
+			}
+
+			NumberOfEntries = templ;
+
+			Settings->number_of_faulted_clock_cycles = 0;
+			Settings->faulted_clock_cycles = NULL;
+			for (EntryIndex = 0;EntryIndex < NumberOfEntries;EntryIndex++)
+			{
+				Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+				str_ptr = strchr(Str1, '-');
+				if (str_ptr == NULL)
+				{
+					Buffer_int = (int*)malloc((Settings->number_of_faulted_clock_cycles + 1) * sizeof(int));
+					memcpy(Buffer_int, Settings->faulted_clock_cycles, Settings->number_of_faulted_clock_cycles * sizeof(int));
+					free(Settings->faulted_clock_cycles);
+					Settings->faulted_clock_cycles = Buffer_int;
+					templ = strtol(Str1, &tmptr, 10);
+					if ((*tmptr) || (templ < 1))
+					{
+                        ErrorMessage = "Given value for one of the faulted clock cycles (" + (std::string)Str1 + " > 0) in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					Settings->faulted_clock_cycles[Settings->number_of_faulted_clock_cycles] = templ;
+
+					if (Settings->faulted_clock_cycles[Settings->number_of_faulted_clock_cycles] > Settings->Max_No_ClockCycles)
+					{
+                        ErrorMessage = "Given value for one of the faulted clock cycles " + (std::string)Str1 + " in settings file is bigger than \"max_clock_cycle\"!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					Settings->number_of_faulted_clock_cycles++;
+				}
+				else
+				{
+					strncpy(Str3, Str1, Max_Name_Length - 1);
+					Str3[Max_Name_Length - 1] = '\0';
+					strncpy(Str2, str_ptr + 1, Max_Name_Length - 1);
+					Str2[Max_Name_Length - 1] = '\0';
+					*str_ptr = 0;
+
+					templ = strtol(Str1, &tmptr, 10);
+					if ((*tmptr) || (templ < 1))
+					{
+                        ErrorMessage = "Given value (" + (std::string)Str1 + " > 0) in " +  (std::string)Str3 + " for one of the faulted clock cycles in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					IndexL = templ;
+
+					templ = strtol(Str2, &tmptr, 10);
+					if ((*tmptr) ||
+						(templ < 1))
+					{
+                        ErrorMessage = "Given value (" + (std::string)Str2 + " > 0) in " +  (std::string)Str3 + " for one of the test clock cycles in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					IndexH = templ;
+
+					if (IndexL > IndexH)
+					{
+                        ErrorMessage = "Given value " + (std::string)Str3 + " for one of the test clock cycles in settings file is not valid!";
+                        fclose(SettingsFile);
+                        free(Str1);
+                        free(Str2);
+                        free(Str3);
+                        throw std::runtime_error(ErrorMessage);
+					}
+
+					for (ClockCycle = IndexL;ClockCycle <= IndexH;ClockCycle++)
+					{
+						if (ClockCycle > Settings->Max_No_ClockCycles)
+						{
+                            ErrorMessage = "Given value " + std::to_string(ClockCycle) + " for one of the test clock cycles in settings file is bigger than \"max_clock_cycle\"!";
+                            fclose(SettingsFile);
+                            free(Str1);
+                            free(Str2);
+                            free(Str3);
+                            throw std::runtime_error(ErrorMessage);
+						}
+
+						Buffer_int = (int*)malloc((Settings->number_of_faulted_clock_cycles + 1) * sizeof(int));
+						memcpy(Buffer_int, Settings->faulted_clock_cycles, Settings->number_of_faulted_clock_cycles * sizeof(int));
+						free(Settings->faulted_clock_cycles);
+						Settings->faulted_clock_cycles = Buffer_int;
+						Settings->faulted_clock_cycles[Settings->number_of_faulted_clock_cycles] = ClockCycle;
+						Settings->number_of_faulted_clock_cycles++;
+					}
+				}
+			}
+
+			SettingsFileCheckList |= (1 << 31);
+		}
+
+
+		else if (!strcmp(Str1, "fault_injection_type"))
+		{
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+			if (!strcmp(Str1, "stuck_at_0")){
+               for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt0;			
+			   }
+			}else if (!strcmp(Str1, "stuck_at_1"))
+               for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt1;			
+			   }
+			else if (!strcmp(Str1, "toggle"))
+               for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::Toggle;			
+			   }
+			else
+			{
+				fclose(SettingsFile);
+				free(Str1);
+				free(Str2);
+			    throw std::runtime_error("Unknown fault injection type!");
+			}
+
+			SettingsFileCheckList |= (1 << 32);
 		}
 		else if ((strlen(Str1) > 0) && (Str1[0] != '%'))
 		{

@@ -5,6 +5,7 @@
 #include <cinttypes>
 #include <vector>
 
+#include "Hardware/Faulting.hpp"
 #include "Util/Util.hpp"
 
 #define Max_Name_Length 10000
@@ -93,6 +94,8 @@ struct SignalStruct {
   int NumberOfInputs;
   int* Inputs;
   char ProbeAllowed;
+  char FaultAllowed;
+  Hardware::faulting::FaultType fault_type;
   char Deleted;
 };
 
@@ -123,6 +126,8 @@ struct CircuitStruct {
       NULL;  ///< The number of cells with a specific depth.
   bool IsProbeOnSignalAllowed(int base_signal_index, int current_signal_index,
                               int clock_signal_index);
+
+  bool IsFaultOnSignalAllowed(int signal_index, int clock_signal_index);
 
   bool CanProbeOnSignalBePropagated(int signal_index,
                                     const LibraryStruct& library);
@@ -190,7 +195,7 @@ struct SettingsStruct {
   int** ExpectedOutputValues =
       NULL;  ///< The expected unshared output given by the user.
 
-  int TestOrder = 0;         ///< The security order to test.
+  int TestOrder = 0;  ///< The security order to test.
   int TestMultivariate = 0;  ///< Decision whether univariate or multivariate
                              ///< adversaries should be considered.
   int MaxDistanceMultivariet = 0;  ///< The maximum distance in time, i.e. clock
@@ -220,6 +225,12 @@ struct SettingsStruct {
   double EffectSize;
 
   bool WaveformSimulation = false;
+
+  unsigned int number_of_faults = 0;
+
+  unsigned int number_of_faulted_clock_cycles = 0;
+
+  int* faulted_clock_cycles = NULL;
 
   bool IsInMultivariateSetting() const {
     return (TestMultivariate != 0) && (NumberOfTestClockCycles > 1) &&
@@ -311,5 +322,6 @@ struct SimulationStruct {
   int* SelectedGroups = NULL;  ///< The chosen group for each simulation.
   char*** ProbeValues;  ///< The simulated states of all wires during different
                         ///< simulations and clock cycles.
+  Hardware::faulting::FaultSet fault_set;
 };
 }  // namespace Hardware

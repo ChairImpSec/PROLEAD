@@ -15,7 +15,7 @@ void Hardware::Execute(const CommandLineParameterStruct& parameter) {
   // Store the module name to have access during vcd file generation
   settings.ModuleName = new char[parameter.MainModuleName.length() + 1];
   strcpy(settings.ModuleName, parameter.MainModuleName.c_str());
-  Hardware::probing::Adversaries<Hardware::probing::GlitchExtendedProbe>
+  Hardware::Adversaries<Hardware::probing::GlitchExtendedProbe>
       glitch_extended_adversary(library, circuit, settings);
   glitch_extended_adversary.EvaluateRobustProbingSecurity(
       library, circuit, settings, shared_data, simulation);

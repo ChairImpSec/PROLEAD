@@ -5,6 +5,7 @@
 #include "boost/random.hpp"
 #include "boost/generator_iterator.hpp"
 #include "Hardware/Definitions.hpp"
+#include "Hardware/Faulting.hpp"
 
 namespace Hardware{
     namespace Simulate{
