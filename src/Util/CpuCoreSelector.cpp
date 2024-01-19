@@ -16,7 +16,7 @@ unsigned int CpuCoreSelector::getOptimalCount(
     case CpuSelectionOption::quarter:
       return estimated_number_of_cores / 4;
     case CpuSelectionOption::specific:
-      return std::min(specified_number_of_cores, estimated_number_of_cores);
+      return specified_number_of_cores;
     default:
       return 1;  // Default case for safety
   }

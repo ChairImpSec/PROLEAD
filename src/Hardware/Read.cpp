@@ -499,19 +499,24 @@ int Hardware::Read::TrimSignalName(char* SignalName, int* k = NULL)
 	return(j);
 }
 
-int Hardware::Read::SearchSignalName(CircuitStruct* Circuit, char* SignalName, char Trim)
+int Hardware::Read::SearchSignalName(CircuitStruct* Circuit, char* SignalName, char Trim, SettingsStruct* Settings)
 {
 	int    SignalIndex = -1;
 	int    Index;
 	int    size;
 	char   flag = 0;
+	int    no_of_Threads = 0;
 
 	if (Trim)
 		size = strlen(SignalName);
 	else
 		size = Max_Name_Length;
 
-	omp_set_num_threads(omp_get_num_procs());
+	no_of_Threads = ceil(Circuit->NumberOfSignals / 10000);
+	if (no_of_Threads > Settings->Max_no_of_Threads)
+		no_of_Threads = Settings->Max_no_of_Threads;
+
+	omp_set_num_threads(no_of_Threads);
 
 	#pragma omp parallel for shared(flag, SignalIndex)
 	for (Index = 0; Index < Circuit->NumberOfSignals; Index++)
@@ -752,7 +757,7 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 }
 
 void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
-                                                 LibraryStruct* Library, CircuitStruct* Circuit, int Task,
+                                                 SettingsStruct* Settings, LibraryStruct* Library, CircuitStruct* Circuit, int Task,
                                                  int NumberOfSignalsOffset, int NumberOfCellsOffset,
                                                  char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
                                                  int* &InputPorts, int &NumberOfInputPorts, int* &OutputPorts, int &NumberOfOutputPorts, int &CurrentIO)
@@ -804,7 +809,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 			if (Index1 < 0) // the given signal name does not have any index (without [])
 			{
-				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 1);
+				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 1, Settings);
 
 				if (SignalIndex != -1)
 				{
@@ -840,7 +845,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			}
 			else if ((Index1 >= 0) && (Index2 < 0)) // the given signal name has one index (with [ ])
 			{
-				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 0);
+				SignalIndex = Hardware::Read::SearchSignalName(Circuit, strptr, 0, Settings);
 
 				if (SignalIndex != -1)
 				{
@@ -862,7 +867,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 				{
 					sprintf(Str3, "%s[%d]", Str2, j);
 
-					SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str3, 0);
+					SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str3, 0, Settings);
 
 					if (SignalIndex != -1)
 					{
@@ -1148,7 +1153,8 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 	free(Str2);
 }
 
-void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName, LibraryStruct* Library, CircuitStruct* Circuit,
+void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName,
+                                SettingsStruct* Settings, LibraryStruct* Library, CircuitStruct* Circuit,
                                 int NumberOfSignalsOffset, int NumberOfCellsOffset, int NumberOfRegValuesOffset)
 {
     FILE*          DesignFile;
@@ -1360,7 +1366,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                         sprintf(Str2, "%s", Str1);
 
-									SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str2, 0);
+									SignalIndex = Hardware::Read::SearchSignalName(Circuit, Str2, 0, Settings);
 
 									if (SignalIndex != -1)
 									{
@@ -1598,7 +1604,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 													SubCircuit.CellsInDepth = NULL;
 													SubCircuit.NumberOfCellsInDepth = NULL;
 
-													Hardware::Read::DesignFile(InputVerilogFileName, Str1, Library, &SubCircuit,
+													Hardware::Read::DesignFile(InputVerilogFileName, Str1, Settings, Library, &SubCircuit,
 																			   NumberOfSignalsOffset + Circuit->NumberOfSignals - Circuit->NumberOfConstants,
 																			   NumberOfCellsOffset + Circuit->NumberOfCells,
 																			   NumberOfRegValuesOffset + Circuit->NumberOfRegValues);
@@ -1709,7 +1715,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                                  (Task == Task_find_assign_signal_name1) ||
                                                  (Task == Task_find_assign_signal_name2))
                                         {
-											DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, Task,
+											DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Settings, Library, Circuit, Task,
 																		NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
 																		InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
@@ -1797,7 +1803,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     }
                                     else if (Task == Task_find_signal_name)
                                     {
-										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, Task,
+										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Settings, Library, Circuit, Task,
 																	NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
 																	InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
@@ -1814,7 +1820,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 																InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
 										Str1[0] = 0;
-										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Library, Circuit, Task,
+										DesignFile_Find_Signal_Name(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Settings, Library, Circuit, Task,
 																	NumberOfSignalsOffset, NumberOfCellsOffset, SubCircuitInstanceName, &SubCircuit,
 																	InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts, CurrentIO);
 
@@ -1898,6 +1904,86 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
     Circuit->Signals[5]->Name[Max_Name_Length - 1] = '\0';
 }
 
+void Hardware::Read::SettingsFile_BeforeDesign(char *InputSettingsFileName, Hardware::SettingsStruct* Settings)
+{
+    std::cout << "Read settings file before design file..." << std::flush;
+    char*     Str1 = (char *)malloc(Max_Name_Length * sizeof(char));
+    FILE*     SettingsFile;
+    uint64_t  SettingsFileCheckList = 0;
+	char*     tmptr;
+	int		  templ;
+    std::string ErrorMessage;
+    std::vector<std::string> Warnings;
+
+    SettingsFile = fopen(InputSettingsFileName, "rt");
+
+    if (SettingsFile == NULL)
+    {
+        ErrorMessage = "Settings file " + (std::string)InputSettingsFileName + " not found!";
+        free(Str1);
+        throw std::runtime_error(ErrorMessage);
+    }
+
+    do
+    {
+        Str1[0] = 0;
+        Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+		if (!strcmp(Str1, "max_no_of_threads"))
+		{
+			CpuCoreSelector cpu_core_selector;
+			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
+
+            if (!strcmp(Str1, "all")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::all);
+            }else if (!strcmp(Str1, "half")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::half);
+			}else if (!strcmp(Str1, "third")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::third);
+			}else if (!strcmp(Str1, "quarter")){
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::quarter);
+			}else{
+				templ = strtol(Str1, &tmptr, 10);
+				if ((*tmptr) ||
+					(templ < 1))
+				{
+					ErrorMessage = "Given \"max_no_of_threads\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
+					fclose(SettingsFile);
+					free(Str1);
+					throw std::runtime_error(ErrorMessage);
+				}
+
+				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::specific, templ);
+			}
+
+			SettingsFileCheckList |= (1 << 0);
+		}
+    } while (!feof(SettingsFile));
+
+    fclose(SettingsFile);
+    free(Str1);
+
+	//---------------------------------------------------------------------
+	// check optional inputs
+
+	if (!(SettingsFileCheckList & (1 << 0))){
+        Settings->Max_no_of_Threads = 1;
+        Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
+    }
+
+	if (Settings->Max_no_of_Threads > omp_get_num_procs()){
+		Settings->Max_no_of_Threads = omp_get_num_procs();
+		ErrorMessage = "Warning \"max_no_of_threads\" is larger than available cores, reduced to " + std::to_string(omp_get_num_procs()) + "!";
+        Warnings.push_back(ErrorMessage);
+	}
+
+	std::cout << "done with " << Warnings.size() << " warnings!" << std::endl;
+
+    for (size_t WarningIndex = 0; WarningIndex < Warnings.size(); WarningIndex++){
+        std::cout << "    " << Warnings.at(WarningIndex) << std::endl;
+    }
+}
+
 void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::CircuitStruct* Circuit, Hardware::SettingsStruct* Settings)
 {
     std::cout << "Read settings file..." << std::flush;
@@ -1955,34 +2041,10 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 		if (!strcmp(Str1, "max_no_of_threads"))
 		{
-			CpuCoreSelector cpu_core_selector;
 			Hardware::Read::NonCommentFromFile(SettingsFile, Str1, "%");
 
-            if (!strcmp(Str1, "all")){
-				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::all);
-            }else if (!strcmp(Str1, "half")){
-				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::half);
-			}else if (!strcmp(Str1, "third")){
-				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::third);
-			}else if (!strcmp(Str1, "quarter")){
-				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::quarter);
-			}else{
-				templ = strtol(Str1, &tmptr, 10);
-				if ((*tmptr) ||
-					(templ < 1))
-				{
-					ErrorMessage = "Given \"max_no_of_threads\" (" + (std::string)Str1 + " > 0) in settings file is not valid!";
-					fclose(SettingsFile);
-					free(Str1);
-					free(Str2);
-					free(Str3);
-					throw std::runtime_error(ErrorMessage);
-				}
+			// is already processed in Hardware::Read::SettingsFile_BeforeDesign
 
-				Settings->Max_no_of_Threads = cpu_core_selector.getOptimalCount(CpuSelectionOption::specific, templ);
-			}
-											
-			SettingsFileCheckList |= (1 << 0);
 		}
 		else if (!strcmp(Str1, "no_of_groups"))
 		{
@@ -4262,15 +4324,15 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 			if (!strcmp(Str1, "stuck_at_0")){
                for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
-					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt0;			
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt0;
 			   }
 			}else if (!strcmp(Str1, "stuck_at_1"))
                for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
-					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt1;			
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::StuckAt1;
 			   }
 			else if (!strcmp(Str1, "toggle"))
                for (SignalIndex = 0; SignalIndex < Circuit->NumberOfSignals; SignalIndex++){
-					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::Toggle;			
+					Circuit->Signals[SignalIndex]->fault_type = Hardware::faulting::FaultType::Toggle;
 			   }
 			else
 			{
@@ -4300,11 +4362,6 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 
 	//---------------------------------------------------------------------
 	// check optional inputs
-
-	if (!(SettingsFileCheckList & (1 << 0))){
-        Settings->Max_no_of_Threads = 1;
-        Warnings.push_back("Warning \"max_no_of_threads\" is not specified. Default \"max_no_of_threads\" = 1 is taken!");
-    }
 
 	if (!(SettingsFileCheckList & (1 << 2))) {
 		Settings->TestOrder = 1;

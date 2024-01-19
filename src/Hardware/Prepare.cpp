@@ -362,9 +362,10 @@ void Hardware::Prepare::All(const CommandLineParameterStruct& Parameter, Hardwar
     strcpy(SettingsFileName, Parameter.SettingsFileName.c_str());
     strcpy(EvaluationResultFolderName, Parameter.EvaluationResultFolderName.c_str());
 
+	Hardware::Read::SettingsFile_BeforeDesign(SettingsFileName, &Settings);
     Hardware::Read::LibraryFile(LibraryFileName, LibraryName, &Library);
     std::cout << "Read design file..." << std::flush;
-    Hardware::Read::DesignFile(DesignFileName, MainModuleName, &Library, &Circuit, 0, 0, 0);
+    Hardware::Read::DesignFile(DesignFileName, MainModuleName, &Settings, &Library, &Circuit, 0, 0, 0);
     std::cout << "done!" << std::endl;
     Hardware::Prepare::MakeCircuitDepth(&Library, &Circuit);
 	Hardware::Read::SettingsFile(SettingsFileName, &Circuit, &Settings);
