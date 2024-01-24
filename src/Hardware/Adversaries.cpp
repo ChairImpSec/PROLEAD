@@ -234,6 +234,15 @@ void Adversaries<Hardware::probing::GlitchExtendedProbe>::SetProbeExtensions(
                    Hardware::probing::GlitchExtendedProbe>& rhs) {
               return lhs.GetSignalIndex() < rhs.GetSignalIndex();
             });
+
+  if (GetNumberOfProbeExtensions() == 0) {
+    throw std::runtime_error(
+        "No suited probe positions considered during the evaluation!\n\n It "
+        "appears that no probes were included or excluded during the "
+        "evaluation process. Please review the settings for the "
+        "\"probes_include\" and \"probes_exclude\" parameters to ensure they "
+        "are configured correctly.");
+  }
 }
 
 template <class ExtensionContainer>

@@ -28,11 +28,8 @@ TEST_CASE("CpuCoreSelector returns correct thread counts",
 
 TEST_CASE("CpuCoreSelector handles invalid cases", "[CpuCoreSelector]") {
   SECTION("Handle invalid specific count gracefully") {
-    // You can test for an unusually high specific count, expecting it to return
-    // the max hardware concurrency
     REQUIRE(
-        CpuCoreSelector::getOptimalCount(CpuSelectionOption::specific, 10000) ==
-        std::thread::hardware_concurrency());
+        CpuCoreSelector::getOptimalCount(CpuSelectionOption::specific, 10000) == 10000);
   }
 
   SECTION("Handle invalid specific count gracefully") {

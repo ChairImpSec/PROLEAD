@@ -33,6 +33,7 @@ TEST_CASE(
       glitch_extended_adversary.EvaluateRobustProbingSecurity(
           library, circuit, settings, shared_data, simulation);
 
+  REQUIRE(settings.Max_no_of_Threads == (int)(std::thread::hardware_concurrency() / 2));
   REQUIRE(glitch_extended_adversary.GetNumberOfProbeExtensions() == 4);
   REQUIRE(glitch_extended_adversary.GetNumberOfStandardProbes() == 12);
   REQUIRE(glitch_extended_adversary.GetNumberOfExtendedProbes() == 21);

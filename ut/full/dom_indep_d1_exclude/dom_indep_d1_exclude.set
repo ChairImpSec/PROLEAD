@@ -1,0 +1,74 @@
+max_no_of_threads
+half
+
+no_of_groups
+2
+
+2'b$$
+2'b11
+
+clock_signal_name 
+clk
+
+max_clock_cycle 
+3
+
+no_of_outputs
+2
+
+[0:0] port_c
+[1:1] port_c
+
+expected_output
+
+1'b$
+1'b1
+
+no_of_always_random_inputs
+1
+
+[0:0] port_r
+
+no_of_initial_inputs  
+4
+
+no_of_initial_clock_cycles 
+1
+
+[0:0] port_a group_in0[0:0]
+[0:0] port_b group_in0[1:1]
+[1:1] port_a group_in1[0:0]
+[1:1] port_b group_in1[1:1]
+
+order_of_test
+1
+
+multivariate_test
+no
+
+transitional_leakage
+yes
+
+compact_distributions
+no
+
+minimize_probe_sets
+yes
+
+no_of_simulations 
+1536000
+
+no_of_step_simulations 
+128000
+
+no_of_step_write_results
+128000
+
+probes_exclude
+all
+
+probes_include
+2
+
+{port_c[0]}
+{port_c[1]}

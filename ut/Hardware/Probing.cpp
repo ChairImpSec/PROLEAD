@@ -676,7 +676,7 @@ TEST_CASE("Test the probe-propagation according to the robust probing model",
     settings.ClockSignal = 6;
 
     Hardware::Read::LibraryFile(library_file_name, library_name, &library);
-    Hardware::Read::DesignFile(design_file_name, top_module_name, &library,
+    Hardware::Read::DesignFile(design_file_name, top_module_name, &settings, &library,
                                &circuit, 0, 0, 0);
 
     // Test probes on port_c[1], port_c[0], j0, j1
