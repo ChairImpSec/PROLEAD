@@ -312,7 +312,7 @@ void Hardware::Read::LibraryFile(char *LibraryFileName, char *LibraryName, Hardw
     std::cout << "done!" << std::endl;
 }
 
-void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
+void Hardware::Read::fReadaWord(Hardware::FileBufferStruct* FileBuffer, char *Buffer, char *Attribute)
 {
     //reset Buffer
 	memset(Buffer, 0, 10); //Max_Name_Length
@@ -326,14 +326,14 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
     if (Attribute)
         Attribute[0] = 0;
 
-    while ((!feof(F)) || Lastch)
+    while ((FileBuffer->Index <= FileBuffer->Size) || Lastch)
     {
         if (Lastch)
             ch = Lastch;
         else
-            ch = fgetc(F);
+            ch = FileBuffer->Buffer[FileBuffer->Index++];
 
-        if ((!feof(F)) || Lastch)
+        if ((FileBuffer->Index <= FileBuffer->Size) || Lastch)
         {
             Lastch = 0;
 
@@ -355,12 +355,12 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
 
                     if (ch == '(')
                     {
-                        ch = fgetc(F);
+                        ch = FileBuffer->Buffer[FileBuffer->Index++];
                         if (ch == '*')
                         {
-                            while (!feof(F))
+                            while (FileBuffer->Index <= FileBuffer->Size)
                             {
-                                ch = fgetc(F);
+                                ch = FileBuffer->Buffer[FileBuffer->Index++];
                                 if ((Buffer[i] == '*') && (ch == ')'))
                                     break;
                                 else
@@ -371,7 +371,7 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                                 }
                             }
 
-                            if (!feof(F))
+                            if (FileBuffer->Index <= FileBuffer->Size)
                             {
                                 i--;
                                 j--;
@@ -393,9 +393,9 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                 {
                     i--;
 
-                    while (!feof(F))
+                    while (FileBuffer->Index <= FileBuffer->Size)
                     {
-                        ch = fgetc(F);
+                        ch = FileBuffer->Buffer[FileBuffer->Index++];
                         if ((ch == '\n') || (ch == '\r'))
                             break;
                     }
@@ -409,9 +409,9 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                 {
                     i--;
 
-                    while (!feof(F))
+                    while (FileBuffer->Index <= FileBuffer->Size)
                     {
-                        ch = fgetc(F);
+                        ch = FileBuffer->Buffer[FileBuffer->Index++];
                         if ((Buffer[i] == '*') && (ch == '/'))
                             break;
                         else
@@ -422,9 +422,9 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                 {
                     i--;
 
-                    while (!feof(F))
+                    while (FileBuffer->Index <= FileBuffer->Size)
                     {
-                        ch = fgetc(F);
+                        ch = FileBuffer->Buffer[FileBuffer->Index++];
                         if ((Buffer[i] == '*') && (ch == ')'))
                             break;
                         else
@@ -435,7 +435,7 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
                         }
                     }
 
-                    if (!feof(F))
+                    if (FileBuffer->Index <= FileBuffer->Size)
                         j--;
                 }
             }
@@ -455,7 +455,6 @@ void Hardware::Read::fReadaWord(FILE *F, char *Buffer, char *Attribute)
     Buffer[i] = 0;
     if (Attribute)
         Attribute[j] = 0;
-    return;
 }
 
 int Hardware::Read::TrimSignalName(char* SignalName, int* k = NULL)
@@ -1154,8 +1153,8 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 }
 
 void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName,
-                                SettingsStruct* Settings, LibraryStruct* Library, CircuitStruct* Circuit,
-                                int NumberOfSignalsOffset, int NumberOfCellsOffset, int NumberOfRegValuesOffset)
+                                Hardware::SettingsStruct* Settings, Hardware::LibraryStruct* Library, Hardware::CircuitStruct* Circuit,
+                                int NumberOfSignalsOffset, int NumberOfCellsOffset, int NumberOfRegValuesOffset, Hardware::FileBufferStruct* FB)
 {
     FILE*          DesignFile;
     char           finished;
@@ -1187,6 +1186,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
     int            NumberOfInputPorts = 0;
     int*           OutputPorts = NULL;
     int            NumberOfOutputPorts = 0;
+	FileBufferStruct FileBuffer;
+	struct stat      file_status;
 
     std::cout << "\"" << MainModuleName << "\"..." << std::flush;
 
@@ -1284,19 +1285,43 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
     //---------------------------------------------------------------------------------------------//
     //------------------- reading the Circuit->Signals from the design file --------------------------------//
 
-    DesignFile = fopen(InputVerilogFileName, "rt");
+	if (FB == NULL)
+	{
+		DesignFile = fopen(InputVerilogFileName, "rt");
 
-    if (DesignFile == NULL)
-    {
-        ErrorMessage = InputVerilogFileName;
-        ErrorMessage = "Design file " + ErrorMessage + " not found!";
-        free(Str1);
-        free(Str2);
-        free(Phrase);
-        free(SubCircuitInstanceName);
-        throw std::runtime_error(ErrorMessage);
-    }
+		if (DesignFile == NULL)
+		{
+			ErrorMessage = InputVerilogFileName;
+			ErrorMessage = "Design file " + ErrorMessage + " not found!";
+			free(Str1);
+			free(Str2);
+			free(Phrase);
+			free(SubCircuitInstanceName);
+			throw std::runtime_error(ErrorMessage);
+		}
 
+		if (stat(InputVerilogFileName, &file_status))
+		{
+			ErrorMessage = InputVerilogFileName;
+			ErrorMessage = "\ncannot find the size of design file " + ErrorMessage;
+			free(Str1);
+			free(Str2);
+			free(Phrase);
+			free(SubCircuitInstanceName);
+			throw std::runtime_error(ErrorMessage);
+		}
+
+		FileBuffer.Buffer = (char*)malloc((file_status.st_size + 10) * sizeof(char));
+		FileBuffer.Size = fread(FileBuffer.Buffer, sizeof(char), file_status.st_size, DesignFile);
+		fclose(DesignFile);
+	}
+	else
+	{
+		FileBuffer.Size = FB->Size;
+		FileBuffer.Buffer = FB->Buffer;
+	}
+
+	FileBuffer.Index = 0;
     finished = 0;
     ReadSignalsFinished = 0;
 
@@ -1304,30 +1329,30 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
     {
         do
         {
-            fReadaWord(DesignFile, Str1, NULL);
-        } while ((!feof(DesignFile)) && strcmp(Str1, "module"));
+            fReadaWord(&FileBuffer, Str1, NULL);
+        } while ((FileBuffer.Index <= FileBuffer.Size) && strcmp(Str1, "module"));
 
-        if (!feof(DesignFile))
+        if (FileBuffer.Index <= FileBuffer.Size)
         {
-            fReadaWord(DesignFile, Str1, NULL);
+            fReadaWord(&FileBuffer, Str1, NULL);
             if (strcmp(Str1, MainModuleName))
             {
                 do
                 {
-                    fReadaWord(DesignFile, Str1, NULL);
-                } while ((!feof(DesignFile)) && strcmp(Str1, "endmodule"));
+                    fReadaWord(&FileBuffer, Str1, NULL);
+                } while ((FileBuffer.Index <= FileBuffer.Size) && strcmp(Str1, "endmodule"));
             }
             else
             {
                 do
                 {
-                    fReadaWord(DesignFile, Str1, NULL);
+                    fReadaWord(&FileBuffer, Str1, NULL);
                     ch = Str1[strlen(Str1) - 1];
-                } while ((ch != ';') && (!feof(DesignFile))); // ignoring the entire list of input/output ports
+                } while ((ch != ';') && (FileBuffer.Index <= FileBuffer.Size)); // ignoring the entire list of input/output ports
 
-                while ((!ReadSignalsFinished) && (!feof(DesignFile)))
+                while ((!ReadSignalsFinished) && (FileBuffer.Index <= FileBuffer.Size))
                 {
-                    fReadaWord(DesignFile, Str1, NULL);
+                    fReadaWord(&FileBuffer, Str1, NULL);
 
                     if ((!strcmp(Str1, "input")) || (!strcmp(Str1, "output")) || (!strcmp(Str1, "wire")))
                     {
@@ -1339,7 +1364,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 
                         do
                         {
-                            ch = fgetc(DesignFile);
+                            ch = FileBuffer.Buffer[FileBuffer.Index++];
 
                             if ((ch == '[') && (!i))
                             {
@@ -1456,7 +1481,7 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                 Str1[i++] = ch;
                                 Str1[i] = 0;
                             }
-                        } while ((ch != ';') && (!feof(DesignFile)));
+                        } while ((ch != ';') && (FileBuffer.Index <= FileBuffer.Size));
                     }
                     else
                         ReadSignalsFinished = 1;
@@ -1465,14 +1490,14 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                 //---------------------------------------------------------------------------------------------//
                 //------------------- reading the Circuit->Cells from the design file ----------------------------------//
 
-                if (!feof(DesignFile))
+                if (FileBuffer.Index <= FileBuffer.Size)
                 {
                     strncpy(Str2, Str1, Max_Name_Length - 1);
                     Str2[Max_Name_Length - 1] = '\0';
 
                     do
                     {
-                        fReadaWord(DesignFile, Str1, NULL);
+                        fReadaWord(&FileBuffer, Str1, NULL);
                         if (Str1[0] != '[')
                             strcat(Str2, " ");
                         strcat(Str2, Str1);
@@ -1511,7 +1536,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 												}
                                                 else
                                                 {
-                                                    fclose(DesignFile);
                                                     free(Str1);
                                                     free(Str2);
                                                     free(Phrase);
@@ -1607,7 +1631,8 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 													Hardware::Read::DesignFile(InputVerilogFileName, Str1, Settings, Library, &SubCircuit,
 																			   NumberOfSignalsOffset + Circuit->NumberOfSignals - Circuit->NumberOfConstants,
 																			   NumberOfCellsOffset + Circuit->NumberOfCells,
-																			   NumberOfRegValuesOffset + Circuit->NumberOfRegValues);
+																			   NumberOfRegValuesOffset + Circuit->NumberOfRegValues, 
+														                       &FileBuffer);
 
 													TempSignals = (SignalStruct **)malloc((Circuit->NumberOfSignals + SubCircuit.NumberOfSignals - SubCircuit.NumberOfConstants) * sizeof(SignalStruct *));
 													memcpy(TempSignals, Circuit->Signals, Circuit->NumberOfSignals * sizeof(SignalStruct *));
@@ -1703,7 +1728,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             {
                                                 ErrorMessage = Str1;
                                                 ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";
-                                                fclose(DesignFile);
                                                 free(Str1);
                                                 free(Str2);
                                                 free(Phrase);
@@ -1739,7 +1763,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                             Task = Task_find_assign_signal_name2;
                                         else
                                         {
-                                            fclose(DesignFile);
                                             free(Str1);
                                             free(Str2);
                                             free(Phrase);
@@ -1772,7 +1795,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                         {
                                             ErrorMessage = Str1;
                                             ErrorMessage = "Error in reading the netlist, '.' is expected in " + ErrorMessage + "!";
-                                            fclose(DesignFile);
                                             free(Str1);
                                             free(Str2);
                                             free(Phrase);
@@ -1783,7 +1805,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                     {
                                         ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\"(\" is placed in a wrong position.";
-                                        fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
                                         free(Phrase);
@@ -1829,7 +1850,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                                     else
                                     {
                                         ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\")\" is placed in a wrong position.";
-                                        fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
                                         free(Phrase);
@@ -1853,7 +1873,6 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
 									else
 									{
                                         ErrorMessage = "Error in reading the netlist, Taskid: " + std::to_string(Task) + "!\n\".\" is placed in a wrong position.";
-                                        fclose(DesignFile);
                                         free(Str1);
                                         free(Str2);
                                         free(Phrase);
@@ -1876,19 +1895,20 @@ void Hardware::Read::DesignFile(char *InputVerilogFileName, char *MainModuleName
                             Str2[0] = 0;
                         }
 
-                    } while (strcmp(Str1, "endmodule") && (!feof(DesignFile)));
+                    } while (strcmp(Str1, "endmodule") && (FileBuffer.Index <= FileBuffer.Size));
 
                     finished = 1;
                 }
             }
         }
-    } while ((!feof(DesignFile)) && (!finished));
+    } while ((FileBuffer.Index <= FileBuffer.Size) && (!finished));
 
-    fclose(DesignFile);
     free(Str1);
     free(Str2);
     free(Phrase);
     free(SubCircuitInstanceName);
+	if (FB == NULL)
+		free(FileBuffer.Buffer);
 
     if (!finished)
     {
@@ -4342,7 +4362,7 @@ void Hardware::Read::SettingsFile(char *InputSettingsFileName, Hardware::Circuit
 			    throw std::runtime_error("Unknown fault injection type!");
 			}
 
-			SettingsFileCheckList |= (1 << 32);
+			SettingsFileCheckList |= ((uint64_t)1 << 32);
 		}
 		else if ((strlen(Str1) > 0) && (Str1[0] != '%'))
 		{

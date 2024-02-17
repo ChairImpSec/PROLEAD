@@ -277,6 +277,16 @@ struct SharedDataStruct {
 };
 
 /**
+ * @brief Defines a buffer to read design files.
+ * @author Amir Moradi
+ */
+struct FileBufferStruct {
+	char* Buffer;
+	int   Size;
+	int   Index;
+};
+
+/**
  * @brief Defines all settings regarding simulations.
  * @author Amir Moradi
  */
