@@ -6,6 +6,7 @@ Software::HelperStruct::HelperStruct(){
 	HorizontalBitsIncluded.resize(18);
 	VerticalProbesIncluded.resize(17);
 	FullVerticalProbesIncluded.resize(32);
+	FullVerticalProbesSize = 0;
 	PipelineForwardingProbesIncluded.resize(32);
 	FULLHRProbesIncluded.resize(17);	
 	HorizontalProbesExcluded.resize(18, true);
@@ -22,8 +23,6 @@ Software::HelperStruct::HelperStruct(){
 		VerticalProbesSize.at(idx).resize(18,0);
 		FullHorizontalProbesSize.at(idx).resize(18,0);
 	}
-
-	
 }
 Software::ProbingSetStruct::ProbingSetStruct(std::vector<Software::ProbesStruct>& Probe){
 	StandardProbe = {Probe.begin(), Probe.end()};

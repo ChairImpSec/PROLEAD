@@ -257,7 +257,7 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 
 	//resolve memory probes
 	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
-		for(const auto& BitIdx: Helper.MemoryShadowRegisterProbesIncluded){
+		for(const auto& BitIdx: Helper.MemoryProbesIncluded){
 			uint32_t ProbeInfo = (0 << IdOffset) | (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			uint32_t Probe = (18 << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
@@ -283,11 +283,10 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		}
 	}
 
-
-	//resolve Load Shadow Register probes
+	//resolve Store Shadow Register probes
 	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
-		uint32_t ProbeInfo = (3 << IdOffset) | (1 << RegNrOffset) | (RegNr << PartnerRegOffset);
 		for(const auto& BitIdx: Helper.MemoryShadowRegisterProbesIncluded){
+			uint32_t ProbeInfo = (2 << IdOffset) | (0 << RegNrOffset) | (BitIdx << BitOffset) | (RegNr << PartnerRegOffset);			
 			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
 			if(Setting.TestTransitional){
@@ -298,10 +297,10 @@ void Software::Probing::ProbeInfoToStandardProbeMapping(std::vector<std::vector<
 		}
 	}
 
-	//resolve Store Shadow Register probes
+	//resolve Load Shadow Register probes
 	for(uint8_t RegNr = 0; RegNr <= 15; ++RegNr){
-		uint32_t ProbeInfo = (3 << IdOffset) | (0 << RegNrOffset) | (RegNr << PartnerRegOffset);
 		for(const auto& BitIdx: Helper.MemoryShadowRegisterProbesIncluded){
+			uint32_t ProbeInfo = (2 << IdOffset) | (1 << RegNrOffset) | (BitIdx << BitOffset) | (RegNr << PartnerRegOffset);
 			uint32_t Probe = (RegNr << RegNrOffset) | (BitIdx << BitOffset);
 			ProbeMapping.at(ProbeInfo).emplace_back(Probe);
 			if(Setting.TestTransitional){

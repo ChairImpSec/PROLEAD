@@ -24,6 +24,7 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
     uint64_t StepSimulationIndex = 0;
     uint32_t NumberOfProcessedSimulations = 0;
     struct timespec begin, end;
+    std::tuple<int, int, uint32_t> LargestContingencyTableProbingSet = std::make_tuple(0,0,0); //(thread, probing set, contingency table size)
     std::tuple<int, int> MaximumProbingSet;
     std::tuple<int, int> MinimumProbingSet;
     std::vector<ProbingSetStruct>::iterator MaximumIterator;
@@ -245,6 +246,12 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
             GlobalProbingSetSize += GlobalTests.at(thread).GlobalProbingSets.size();
             for (size_t i = 0; i < GlobalTests.at(thread).GlobalProbingSets.size(); ++i)
             {
+                if(GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Entries.size() > std::get<2>(LargestContingencyTableProbingSet)){
+                    std::get<0>(LargestContingencyTableProbingSet) = thread;
+                    std::get<1>(LargestContingencyTableProbingSet) = i;
+                    std::get<2>(LargestContingencyTableProbingSet) = GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Entries.size();
+                }
+                
                 // found probability which is higher than lowest probability in vector -> replace and set index to new position
                 if(GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Probability > std::get<2>(ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability))){
                     ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability) = std::make_tuple(thread, i,GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Probability );
@@ -290,7 +297,7 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
         if (Settings.CompactDistributions){
 		    TableRow[3] = std::to_string(NumberOfProcessedSimulations);
         }else{
-            TableRow[3] = std::to_string(NumberOfProcessedSimulations) + " / " + std::to_string(GlobalTests.at(std::get<0>(MaximumProbingSet)).GlobalProbingSets.at(std::get<1>(MaximumProbingSet)).ContingencyTable.Traces);
+            TableRow[3] = std::to_string(NumberOfProcessedSimulations) + " / " + std::to_string(GlobalTests.at(std::get<0>(LargestContingencyTableProbingSet)).GlobalProbingSets.at(std::get<1>(LargestContingencyTableProbingSet)).ContingencyTable.Traces);
         }
 
 		// Stop timing of one evaluation step
