@@ -10,6 +10,7 @@ namespace mulator
         u32 offset;
         u32 size;
         u8* bytes;
+        bool* accessed_in_probing_scope;
         struct
         {
             bool read;
@@ -25,6 +26,11 @@ namespace mulator
         u8* get(u32 address) const
         {
             return bytes + (address - offset);
+        }
+
+        bool* get_probing_scope(u32 address) const
+        {
+            return accessed_in_probing_scope + (address - offset);
         }
     };
 

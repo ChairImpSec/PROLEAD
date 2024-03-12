@@ -21,6 +21,8 @@ Emulator::Emulator(Architecture arch, boost::variate_generator<boost::mt19937&, 
 
     m_ram.bytes   = nullptr;
     m_flash.bytes = nullptr;
+    m_ram.accessed_in_probing_scope = nullptr;
+    m_flash.accessed_in_probing_scope = nullptr;
     m_pipeline_stages = NrOfPipelineStages;
     m_pipeline_cpu_states.resize(m_pipeline_stages);
 
@@ -36,11 +38,16 @@ Emulator::Emulator(const Emulator& other) : m_decoder(other.get_architecture()),
 
     m_flash       = other.m_flash;
     m_flash.bytes = new u8[m_flash.size];
+    m_flash.accessed_in_probing_scope = new bool[m_flash.size];
     std::memcpy(m_flash.bytes, other.m_flash.bytes, m_flash.size);
+    std::memcpy(m_flash.accessed_in_probing_scope, other.m_flash.accessed_in_probing_scope, m_flash.size);
 
     m_ram       = other.m_ram;
     m_ram.bytes = new u8[m_ram.size];
+    m_ram.accessed_in_probing_scope = new bool[m_ram.size];
     std::memcpy(m_ram.bytes, other.m_ram.bytes, m_ram.size);
+    std::memcpy(m_ram.accessed_in_probing_scope, other.m_ram.accessed_in_probing_scope, m_ram.size);
+
 
     m_pipeline_cpu_states = other.m_pipeline_cpu_states;
     m_pipeline_stages = other.m_pipeline_stages;
@@ -54,6 +61,8 @@ Emulator::~Emulator()
 {
     delete[] m_ram.bytes;
     delete[] m_flash.bytes;
+    delete[] m_ram.accessed_in_probing_scope;
+    delete[] m_flash.accessed_in_probing_scope;
 }
 
 InstructionDecoder Emulator::get_decoder() const
@@ -73,13 +82,20 @@ void Emulator::set_flash_region(u32 offset, u32 size)
         delete[] m_flash.bytes;
     }
 
+    if (m_flash.accessed_in_probing_scope != nullptr)
+    {
+        delete[] m_flash.accessed_in_probing_scope;
+    }
+
     m_flash.offset         = offset;
     m_flash.size           = size;
     m_flash.bytes          = new u8[size];
+    m_flash.accessed_in_probing_scope = new bool[size];
     m_flash.access.read    = true;
     m_flash.access.write   = false;
     m_flash.access.execute = true;
     std::memset(m_flash.bytes, 0xFF, size);
+    std::memset(m_flash.accessed_in_probing_scope, false, size);
 }
 u32 Emulator::get_flash_offset() const
 {
@@ -101,14 +117,21 @@ void Emulator::set_ram_region(u32 offset, u32 size)
         delete[] m_ram.bytes;
     }
 
+    if (m_ram.accessed_in_probing_scope != nullptr)
+    {
+        delete[] m_ram.accessed_in_probing_scope;
+    }
+
     m_ram.offset         = offset;
     m_ram.size           = size;
     m_ram.bytes          = new u8[size];
+    m_ram.accessed_in_probing_scope = new bool[size];
     m_ram.access.read    = true;
     m_ram.access.write   = true;
     m_ram.access.execute = false;
 
     std::memset(m_ram.bytes, 0x00, size);
+    std::memset(m_ram.accessed_in_probing_scope, false, size);
 }
 u32 Emulator::get_ram_offset() const
 {
@@ -1386,4 +1409,86 @@ void Emulator::write_memory_internal(u32 address, u32 value, u8 bytes)
         *((u32*)memory) = value;
     }
 
+}
+
+
+void Emulator::make_memory_visible_for_probing(u32 address, u8 bytes){
+    if (m_return_code != ReturnCode::OK)
+    {
+        return;
+    }
+
+    if (bytes != 4 && bytes != 2 && bytes != 1)
+    {
+        m_return_code = ReturnCode::INVALID_MEMORY_ACCESS;
+        return;
+    }
+
+    MemoryRegion* mem = nullptr;
+
+    if (m_ram.contains(address, bytes))
+    {
+        mem = &m_ram;
+    }
+    else if (m_flash.contains(address, bytes))
+    {
+        mem = &m_flash;
+    }
+
+    if (mem == nullptr || !mem->access.write)
+    {
+        m_return_code = ReturnCode::INVALID_MEMORY_ACCESS;
+        return;
+    }
+
+    bool* memory_to_probe = mem->get_probing_scope(address);
+
+    if (m_return_code != ReturnCode::OK)
+    {
+        return;
+    }
+
+
+    std::memset(memory_to_probe, true, bytes);
+
+}
+
+u32 Emulator::mask_probing_memory(u32 address, u8 bytes, u32 memory_simulation_value){
+    if (m_return_code != ReturnCode::OK)
+    {
+        return 0;
+    }
+
+    if (bytes != 4 && bytes != 2 && bytes != 1)
+    {
+        m_return_code = ReturnCode::INVALID_MEMORY_ACCESS;
+        return 0;
+    }
+
+    MemoryRegion* mem = nullptr;
+
+    if (m_ram.contains(address, bytes))
+    {
+        mem = &m_ram;
+    }
+    else if (m_flash.contains(address, bytes))
+    {
+        mem = &m_flash;
+    }
+
+    if (mem == nullptr || !mem->access.write)
+    {
+        m_return_code = ReturnCode::INVALID_MEMORY_ACCESS;
+        return 0;
+    }
+
+    bool* memory_to_probe = mem->get_probing_scope(address);
+
+    uint32_t lsb_byte_mask = 0xff * static_cast<uint32_t>(*memory_to_probe);
+    uint32_t second_lsb_byte_mask = 0xff00 * static_cast<uint32_t>(*(memory_to_probe + 1));
+    uint32_t second_msb_byte_mask = 0xff0000 * static_cast<uint32_t>(*(memory_to_probe + 2));
+    uint32_t msb_byte_mask = 0xff000000 * static_cast<uint32_t>(*(memory_to_probe + 3));
+    uint32_t memory_probing_mask = lsb_byte_mask | second_lsb_byte_mask | second_msb_byte_mask | msb_byte_mask;
+
+    return memory_simulation_value & memory_probing_mask;
 }

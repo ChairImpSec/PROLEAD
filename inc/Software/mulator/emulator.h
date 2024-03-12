@@ -205,6 +205,9 @@ namespace mulator
         u32 read_register_internal(Register reg);
         void write_register_internal(Register reg, u32 value);
 
+        void make_memory_visible_for_probing(u32 address, u8 bytes);
+        u32 mask_probing_memory(u32 address, u8 bytes, u32 memory_simulation_value);
+
         Condition pop_IT_condition();
         
         bool execute_PROLEAD(const Instruction& instr, ::Software::ThreadSimulationStruct& , ::Software::ProbeTrackingStruct& , ::Software::HelperStruct&, bool, bool&, const int, const uint64_t, const uint32_t, const uint32_t,  std::vector<std::vector<std::vector<uint8_t>>>&);
