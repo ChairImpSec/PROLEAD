@@ -1,0 +1,1034 @@
+$version 
+ PROLEAD 
+$end 
+$timescale 
+ 1ps 
+$end
+$scope module circuit $end
+
+$var wire 1 sboxIn1[3] sboxIn1[3] $end
+$var wire 1 sboxIn1[2] sboxIn1[2] $end
+$var wire 1 sboxIn1[1] sboxIn1[1] $end
+$var wire 1 sboxIn1[0] sboxIn1[0] $end
+$var wire 1 sboxIn2[3] sboxIn2[3] $end
+$var wire 1 sboxIn2[2] sboxIn2[2] $end
+$var wire 1 sboxIn2[1] sboxIn2[1] $end
+$var wire 1 sboxIn2[0] sboxIn2[0] $end
+$var wire 1 sboxIn3[3] sboxIn3[3] $end
+$var wire 1 sboxIn3[2] sboxIn3[2] $end
+$var wire 1 sboxIn3[1] sboxIn3[1] $end
+$var wire 1 sboxIn3[0] sboxIn3[0] $end
+$var wire 1 share1[3] share1[3] $end
+$var wire 1 share1[2] share1[2] $end
+$var wire 1 share1[1] share1[1] $end
+$var wire 1 share1[0] share1[0] $end
+$var wire 1 share2[3] share2[3] $end
+$var wire 1 share2[2] share2[2] $end
+$var wire 1 share2[1] share2[1] $end
+$var wire 1 share2[0] share2[0] $end
+$var wire 1 share3[3] share3[3] $end
+$var wire 1 share3[2] share3[2] $end
+$var wire 1 share3[1] share3[1] $end
+$var wire 1 share3[0] share3[0] $end
+$var wire 1 clk clk $end
+$var wire 1 en en $end
+$var wire 1 f1_n13 f1_n13 $end
+$var wire 1 f1_n12 f1_n12 $end
+$var wire 1 f1_n11 f1_n11 $end
+$var wire 1 f1_n10 f1_n10 $end
+$var wire 1 f1_n9 f1_n9 $end
+$var wire 1 f1_n8 f1_n8 $end
+$var wire 1 f1_n7 f1_n7 $end
+$var wire 1 f1_n6 f1_n6 $end
+$var wire 1 f1_n5 f1_n5 $end
+$var wire 1 f1_n4 f1_n4 $end
+$var wire 1 f1_n3 f1_n3 $end
+$var wire 1 f1_n2 f1_n2 $end
+$var wire 1 f1_n1 f1_n1 $end
+$var wire 1 f2_n11 f2_n11 $end
+$var wire 1 f2_n10 f2_n10 $end
+$var wire 1 f2_n9 f2_n9 $end
+$var wire 1 f2_n8 f2_n8 $end
+$var wire 1 f2_n7 f2_n7 $end
+$var wire 1 f2_n6 f2_n6 $end
+$var wire 1 f2_n5 f2_n5 $end
+$var wire 1 f2_n4 f2_n4 $end
+$var wire 1 f2_n3 f2_n3 $end
+$var wire 1 f2_n2 f2_n2 $end
+$var wire 1 f2_n1 f2_n1 $end
+$var wire 1 f3_n13 f3_n13 $end
+$var wire 1 f3_n12 f3_n12 $end
+$var wire 1 f3_n11 f3_n11 $end
+$var wire 1 f3_n10 f3_n10 $end
+$var wire 1 f3_n9 f3_n9 $end
+$var wire 1 f3_n8 f3_n8 $end
+$var wire 1 f3_n7 f3_n7 $end
+$var wire 1 f3_n6 f3_n6 $end
+$var wire 1 f3_n5 f3_n5 $end
+$var wire 1 f3_n4 f3_n4 $end
+$var wire 1 f3_n3 f3_n3 $end
+$var wire 1 f3_n2 f3_n2 $end
+$var wire 1 f3_n1 f3_n1 $end
+$var wire 1 g1_n22 g1_n22 $end
+$var wire 1 g1_n21 g1_n21 $end
+$var wire 1 g1_n20 g1_n20 $end
+$var wire 1 g1_n19 g1_n19 $end
+$var wire 1 g1_n18 g1_n18 $end
+$var wire 1 g1_n17 g1_n17 $end
+$var wire 1 g1_n16 g1_n16 $end
+$var wire 1 g1_n15 g1_n15 $end
+$var wire 1 g1_n14 g1_n14 $end
+$var wire 1 g1_n13 g1_n13 $end
+$var wire 1 g1_n12 g1_n12 $end
+$var wire 1 g1_n11 g1_n11 $end
+$var wire 1 g1_n10 g1_n10 $end
+$var wire 1 g1_n9 g1_n9 $end
+$var wire 1 g1_n8 g1_n8 $end
+$var wire 1 g1_n7 g1_n7 $end
+$var wire 1 g1_n6 g1_n6 $end
+$var wire 1 g1_n5 g1_n5 $end
+$var wire 1 g1_n4 g1_n4 $end
+$var wire 1 g1_n3 g1_n3 $end
+$var wire 1 g1_n2 g1_n2 $end
+$var wire 1 g1_n1 g1_n1 $end
+$var wire 1 g2_n23 g2_n23 $end
+$var wire 1 g2_n22 g2_n22 $end
+$var wire 1 g2_n21 g2_n21 $end
+$var wire 1 g2_n20 g2_n20 $end
+$var wire 1 g2_n19 g2_n19 $end
+$var wire 1 g2_n18 g2_n18 $end
+$var wire 1 g2_n17 g2_n17 $end
+$var wire 1 g2_n16 g2_n16 $end
+$var wire 1 g2_n15 g2_n15 $end
+$var wire 1 g2_n14 g2_n14 $end
+$var wire 1 g2_n13 g2_n13 $end
+$var wire 1 g2_n12 g2_n12 $end
+$var wire 1 g2_n11 g2_n11 $end
+$var wire 1 g2_n10 g2_n10 $end
+$var wire 1 g2_n9 g2_n9 $end
+$var wire 1 g2_n8 g2_n8 $end
+$var wire 1 g2_n7 g2_n7 $end
+$var wire 1 g2_n6 g2_n6 $end
+$var wire 1 g2_n5 g2_n5 $end
+$var wire 1 g2_n4 g2_n4 $end
+$var wire 1 g2_n3 g2_n3 $end
+$var wire 1 g2_n2 g2_n2 $end
+$var wire 1 g2_n1 g2_n1 $end
+$var wire 1 g2_C g2_C $end
+$var wire 1 g3_n22 g3_n22 $end
+$var wire 1 g3_n21 g3_n21 $end
+$var wire 1 g3_n20 g3_n20 $end
+$var wire 1 g3_n19 g3_n19 $end
+$var wire 1 g3_n18 g3_n18 $end
+$var wire 1 g3_n17 g3_n17 $end
+$var wire 1 g3_n16 g3_n16 $end
+$var wire 1 g3_n15 g3_n15 $end
+$var wire 1 g3_n14 g3_n14 $end
+$var wire 1 g3_n13 g3_n13 $end
+$var wire 1 g3_n12 g3_n12 $end
+$var wire 1 g3_n11 g3_n11 $end
+$var wire 1 g3_n10 g3_n10 $end
+$var wire 1 g3_n9 g3_n9 $end
+$var wire 1 g3_n8 g3_n8 $end
+$var wire 1 g3_n7 g3_n7 $end
+$var wire 1 g3_n6 g3_n6 $end
+$var wire 1 g3_n5 g3_n5 $end
+$var wire 1 g3_n4 g3_n4 $end
+$var wire 1 g3_n3 g3_n3 $end
+$var wire 1 g3_n2 g3_n2 $end
+$var wire 1 g3_n1 g3_n1 $end
+$var wire 1 g3_C g3_C $end
+$var wire 1 y3_n13 y3_n13 $end
+$var wire 1 y3_n12 y3_n12 $end
+$var wire 1 y3_n11 y3_n11 $end
+$var wire 1 y3_n10 y3_n10 $end
+$var wire 1 y2_n17 y2_n17 $end
+$var wire 1 y2_n16 y2_n16 $end
+$var wire 1 y2_n15 y2_n15 $end
+$var wire 1 y2_n14 y2_n14 $end
+$var wire 1 y1_n17 y1_n17 $end
+$var wire 1 y1_n16 y1_n16 $end
+$var wire 1 y1_n15 y1_n15 $end
+$var wire 1 y1_n14 y1_n14 $end
+$var wire 1 g1Out[3] g1Out[3] $end
+$var wire 1 g1Out[2] g1Out[2] $end
+$var wire 1 g1Out[1] g1Out[1] $end
+$var wire 1 g1Out[0] g1Out[0] $end
+$var wire 1 g2Out[3] g2Out[3] $end
+$var wire 1 g2Out[2] g2Out[2] $end
+$var wire 1 g2Out[1] g2Out[1] $end
+$var wire 1 g2Out[0] g2Out[0] $end
+$var wire 1 g3Out[3] g3Out[3] $end
+$var wire 1 g3Out[2] g3Out[2] $end
+$var wire 1 g3Out[1] g3Out[1] $end
+$var wire 1 g3Out[0] g3Out[0] $end
+$var wire 1 g3Reg[3] g3Reg[3] $end
+$var wire 1 g3Reg[2] g3Reg[2] $end
+$var wire 1 g3Reg[1] g3Reg[1] $end
+$var wire 1 g3Reg[0] g3Reg[0] $end
+$var wire 1 g2Reg[3] g2Reg[3] $end
+$var wire 1 g2Reg[2] g2Reg[2] $end
+$var wire 1 g2Reg[1] g2Reg[1] $end
+$var wire 1 g2Reg[0] g2Reg[0] $end
+$var wire 1 g1Reg[3] g1Reg[3] $end
+$var wire 1 g1Reg[2] g1Reg[2] $end
+$var wire 1 g1Reg[1] g1Reg[1] $end
+$var wire 1 g1Reg[0] g1Reg[0] $end
+$upscope $end
+$enddefinitions $end
+#0
+1sboxIn1[3]
+0sboxIn1[2]
+0sboxIn1[1]
+0sboxIn1[0]
+1sboxIn2[3]
+1sboxIn2[2]
+0sboxIn2[1]
+1sboxIn2[0]
+0sboxIn3[3]
+0sboxIn3[2]
+0sboxIn3[1]
+1sboxIn3[0]
+0share1[3]
+0share1[2]
+0share1[1]
+0share1[0]
+0share2[3]
+0share2[2]
+0share2[1]
+0share2[0]
+0share3[3]
+0share3[2]
+0share3[1]
+0share3[0]
+1clk
+1en
+1f1_n13
+0f1_n12
+0f1_n11
+1f1_n10
+0f1_n9
+1f1_n8
+1f1_n7
+1f1_n6
+0f1_n5
+1f1_n4
+1f1_n3
+1f1_n2
+0f1_n1
+1f2_n11
+0f2_n10
+0f2_n9
+1f2_n8
+0f2_n7
+1f2_n6
+1f2_n5
+1f2_n4
+1f2_n3
+1f2_n2
+1f2_n1
+1f3_n13
+0f3_n12
+0f3_n11
+1f3_n10
+0f3_n9
+1f3_n8
+1f3_n7
+1f3_n6
+0f3_n5
+1f3_n4
+1f3_n3
+1f3_n2
+0f3_n1
+1g1_n22
+0g1_n21
+1g1_n20
+1g1_n19
+0g1_n18
+1g1_n17
+1g1_n16
+1g1_n15
+0g1_n14
+0g1_n13
+1g1_n12
+1g1_n11
+0g1_n10
+0g1_n9
+1g1_n8
+0g1_n7
+0g1_n6
+0g1_n5
+1g1_n4
+0g1_n3
+1g1_n2
+1g1_n1
+1g2_n23
+1g2_n22
+1g2_n21
+1g2_n20
+1g2_n19
+1g2_n18
+1g2_n17
+0g2_n16
+1g2_n15
+1g2_n14
+1g2_n13
+0g2_n12
+1g2_n11
+0g2_n10
+1g2_n9
+1g2_n8
+1g2_n7
+1g2_n6
+1g2_n5
+0g2_n4
+0g2_n3
+0g2_n2
+1g2_n1
+0g2_C
+1g3_n22
+1g3_n21
+0g3_n20
+0g3_n19
+1g3_n18
+0g3_n17
+1g3_n16
+0g3_n15
+0g3_n14
+1g3_n13
+1g3_n12
+1g3_n11
+1g3_n10
+0g3_n9
+0g3_n8
+1g3_n7
+1g3_n6
+1g3_n5
+1g3_n4
+1g3_n3
+1g3_n2
+1g3_n1
+0g3_C
+0y3_n13
+0y3_n12
+1y3_n11
+1y3_n10
+1y2_n17
+1y2_n16
+0y2_n15
+1y2_n14
+1y1_n17
+1y1_n16
+0y1_n15
+0y1_n14
+0g1Out[3]
+0g1Out[2]
+1g1Out[1]
+1g1Out[0]
+1g2Out[3]
+0g2Out[2]
+1g2Out[1]
+1g2Out[0]
+0g3Out[3]
+0g3Out[2]
+1g3Out[1]
+1g3Out[0]
+0g3Reg[3]
+0g3Reg[2]
+0g3Reg[1]
+0g3Reg[0]
+0g2Reg[3]
+0g2Reg[2]
+0g2Reg[1]
+0g2Reg[0]
+0g1Reg[3]
+0g1Reg[2]
+0g1Reg[1]
+0g1Reg[0]
+#1000
+0clk
+#2000
+1sboxIn1[3]
+0sboxIn1[2]
+0sboxIn1[1]
+0sboxIn1[0]
+1sboxIn2[3]
+1sboxIn2[2]
+0sboxIn2[1]
+1sboxIn2[0]
+0sboxIn3[3]
+0sboxIn3[2]
+0sboxIn3[1]
+1sboxIn3[0]
+0share1[3]
+0share1[2]
+1share1[1]
+1share1[0]
+0share2[3]
+1share2[2]
+1share2[1]
+1share2[0]
+1share3[3]
+1share3[2]
+0share3[1]
+1share3[0]
+1clk
+1en
+0f1_n13
+0f1_n12
+1f1_n11
+0f1_n10
+1f1_n9
+1f1_n8
+1f1_n7
+1f1_n6
+0f1_n5
+0f1_n4
+1f1_n3
+0f1_n2
+0f1_n1
+1f2_n11
+1f2_n10
+1f2_n9
+1f2_n8
+0f2_n7
+1f2_n6
+1f2_n5
+1f2_n4
+0f2_n3
+1f2_n2
+0f2_n1
+0f3_n13
+1f3_n12
+1f3_n11
+1f3_n10
+1f3_n9
+1f3_n8
+1f3_n7
+1f3_n6
+0f3_n5
+0f3_n4
+1f3_n3
+0f3_n2
+0f3_n1
+1g1_n22
+0g1_n21
+1g1_n20
+1g1_n19
+0g1_n18
+1g1_n17
+1g1_n16
+1g1_n15
+0g1_n14
+0g1_n13
+1g1_n12
+1g1_n11
+0g1_n10
+0g1_n9
+1g1_n8
+0g1_n7
+0g1_n6
+0g1_n5
+1g1_n4
+0g1_n3
+1g1_n2
+1g1_n1
+1g2_n23
+1g2_n22
+1g2_n21
+1g2_n20
+1g2_n19
+1g2_n18
+1g2_n17
+0g2_n16
+1g2_n15
+1g2_n14
+1g2_n13
+0g2_n12
+1g2_n11
+0g2_n10
+1g2_n9
+1g2_n8
+1g2_n7
+1g2_n6
+1g2_n5
+0g2_n4
+0g2_n3
+0g2_n2
+1g2_n1
+0g2_C
+1g3_n22
+1g3_n21
+0g3_n20
+0g3_n19
+1g3_n18
+0g3_n17
+1g3_n16
+0g3_n15
+0g3_n14
+1g3_n13
+1g3_n12
+1g3_n11
+1g3_n10
+0g3_n9
+0g3_n8
+1g3_n7
+1g3_n6
+1g3_n5
+1g3_n4
+1g3_n3
+1g3_n2
+1g3_n1
+0g3_C
+0y3_n13
+0y3_n12
+1y3_n11
+1y3_n10
+1y2_n17
+1y2_n16
+0y2_n15
+1y2_n14
+1y1_n17
+1y1_n16
+0y1_n15
+0y1_n14
+0g1Out[3]
+0g1Out[2]
+1g1Out[1]
+1g1Out[0]
+1g2Out[3]
+0g2Out[2]
+1g2Out[1]
+1g2Out[0]
+0g3Out[3]
+0g3Out[2]
+1g3Out[1]
+1g3Out[0]
+0g3Reg[3]
+0g3Reg[2]
+1g3Reg[1]
+1g3Reg[0]
+1g2Reg[3]
+0g2Reg[2]
+1g2Reg[1]
+1g2Reg[0]
+0g1Reg[3]
+0g1Reg[2]
+1g1Reg[1]
+1g1Reg[0]
+#3000
+0clk
+#4000
+1sboxIn1[3]
+0sboxIn1[2]
+0sboxIn1[1]
+0sboxIn1[0]
+1sboxIn2[3]
+1sboxIn2[2]
+0sboxIn2[1]
+1sboxIn2[0]
+0sboxIn3[3]
+0sboxIn3[2]
+0sboxIn3[1]
+1sboxIn3[0]
+0share1[3]
+0share1[2]
+1share1[1]
+1share1[0]
+0share2[3]
+1share2[2]
+1share2[1]
+1share2[0]
+1share3[3]
+1share3[2]
+0share3[1]
+1share3[0]
+1clk
+1en
+0f1_n13
+0f1_n12
+1f1_n11
+0f1_n10
+1f1_n9
+1f1_n8
+1f1_n7
+1f1_n6
+0f1_n5
+0f1_n4
+1f1_n3
+0f1_n2
+0f1_n1
+1f2_n11
+1f2_n10
+1f2_n9
+1f2_n8
+0f2_n7
+1f2_n6
+1f2_n5
+1f2_n4
+0f2_n3
+1f2_n2
+0f2_n1
+0f3_n13
+1f3_n12
+1f3_n11
+1f3_n10
+1f3_n9
+1f3_n8
+1f3_n7
+1f3_n6
+0f3_n5
+0f3_n4
+1f3_n3
+0f3_n2
+0f3_n1
+1g1_n22
+0g1_n21
+1g1_n20
+1g1_n19
+0g1_n18
+1g1_n17
+1g1_n16
+1g1_n15
+0g1_n14
+0g1_n13
+1g1_n12
+1g1_n11
+0g1_n10
+0g1_n9
+1g1_n8
+0g1_n7
+0g1_n6
+0g1_n5
+1g1_n4
+0g1_n3
+1g1_n2
+1g1_n1
+1g2_n23
+1g2_n22
+1g2_n21
+1g2_n20
+1g2_n19
+1g2_n18
+1g2_n17
+0g2_n16
+1g2_n15
+1g2_n14
+1g2_n13
+0g2_n12
+1g2_n11
+0g2_n10
+1g2_n9
+1g2_n8
+1g2_n7
+1g2_n6
+1g2_n5
+0g2_n4
+0g2_n3
+0g2_n2
+1g2_n1
+0g2_C
+1g3_n22
+1g3_n21
+0g3_n20
+0g3_n19
+1g3_n18
+0g3_n17
+1g3_n16
+0g3_n15
+0g3_n14
+1g3_n13
+1g3_n12
+1g3_n11
+1g3_n10
+0g3_n9
+0g3_n8
+1g3_n7
+1g3_n6
+1g3_n5
+1g3_n4
+1g3_n3
+1g3_n2
+1g3_n1
+0g3_C
+0y3_n13
+0y3_n12
+1y3_n11
+1y3_n10
+1y2_n17
+1y2_n16
+0y2_n15
+1y2_n14
+1y1_n17
+1y1_n16
+0y1_n15
+0y1_n14
+0g1Out[3]
+0g1Out[2]
+1g1Out[1]
+1g1Out[0]
+1g2Out[3]
+0g2Out[2]
+1g2Out[1]
+1g2Out[0]
+0g3Out[3]
+0g3Out[2]
+1g3Out[1]
+1g3Out[0]
+0g3Reg[3]
+0g3Reg[2]
+1g3Reg[1]
+1g3Reg[0]
+1g2Reg[3]
+0g2Reg[2]
+1g2Reg[1]
+1g2Reg[0]
+0g1Reg[3]
+0g1Reg[2]
+1g1Reg[1]
+1g1Reg[0]
+#5000
+0clk
+#6000
+1sboxIn1[3]
+0sboxIn1[2]
+0sboxIn1[1]
+0sboxIn1[0]
+1sboxIn2[3]
+1sboxIn2[2]
+0sboxIn2[1]
+1sboxIn2[0]
+0sboxIn3[3]
+0sboxIn3[2]
+0sboxIn3[1]
+1sboxIn3[0]
+0share1[3]
+0share1[2]
+1share1[1]
+1share1[0]
+0share2[3]
+1share2[2]
+1share2[1]
+1share2[0]
+1share3[3]
+1share3[2]
+0share3[1]
+1share3[0]
+1clk
+1en
+0f1_n13
+0f1_n12
+1f1_n11
+0f1_n10
+1f1_n9
+1f1_n8
+1f1_n7
+1f1_n6
+0f1_n5
+0f1_n4
+1f1_n3
+0f1_n2
+0f1_n1
+1f2_n11
+1f2_n10
+1f2_n9
+1f2_n8
+0f2_n7
+1f2_n6
+1f2_n5
+1f2_n4
+0f2_n3
+1f2_n2
+0f2_n1
+0f3_n13
+1f3_n12
+1f3_n11
+1f3_n10
+1f3_n9
+1f3_n8
+1f3_n7
+1f3_n6
+0f3_n5
+0f3_n4
+1f3_n3
+0f3_n2
+0f3_n1
+1g1_n22
+0g1_n21
+1g1_n20
+1g1_n19
+0g1_n18
+1g1_n17
+1g1_n16
+1g1_n15
+0g1_n14
+0g1_n13
+1g1_n12
+1g1_n11
+0g1_n10
+0g1_n9
+1g1_n8
+0g1_n7
+0g1_n6
+0g1_n5
+1g1_n4
+0g1_n3
+1g1_n2
+1g1_n1
+1g2_n23
+1g2_n22
+1g2_n21
+1g2_n20
+1g2_n19
+1g2_n18
+1g2_n17
+0g2_n16
+1g2_n15
+1g2_n14
+1g2_n13
+0g2_n12
+1g2_n11
+0g2_n10
+1g2_n9
+1g2_n8
+1g2_n7
+1g2_n6
+1g2_n5
+0g2_n4
+0g2_n3
+0g2_n2
+1g2_n1
+0g2_C
+1g3_n22
+1g3_n21
+0g3_n20
+0g3_n19
+1g3_n18
+0g3_n17
+1g3_n16
+0g3_n15
+0g3_n14
+1g3_n13
+1g3_n12
+1g3_n11
+1g3_n10
+0g3_n9
+0g3_n8
+1g3_n7
+1g3_n6
+1g3_n5
+1g3_n4
+1g3_n3
+1g3_n2
+1g3_n1
+0g3_C
+0y3_n13
+0y3_n12
+1y3_n11
+1y3_n10
+1y2_n17
+1y2_n16
+0y2_n15
+1y2_n14
+1y1_n17
+1y1_n16
+0y1_n15
+0y1_n14
+0g1Out[3]
+0g1Out[2]
+1g1Out[1]
+1g1Out[0]
+1g2Out[3]
+0g2Out[2]
+1g2Out[1]
+1g2Out[0]
+0g3Out[3]
+0g3Out[2]
+1g3Out[1]
+1g3Out[0]
+0g3Reg[3]
+0g3Reg[2]
+1g3Reg[1]
+1g3Reg[0]
+1g2Reg[3]
+0g2Reg[2]
+1g2Reg[1]
+1g2Reg[0]
+0g1Reg[3]
+0g1Reg[2]
+1g1Reg[1]
+1g1Reg[0]
+#7000
+0clk
+#8000
+1sboxIn1[3]
+0sboxIn1[2]
+0sboxIn1[1]
+0sboxIn1[0]
+1sboxIn2[3]
+1sboxIn2[2]
+0sboxIn2[1]
+1sboxIn2[0]
+0sboxIn3[3]
+0sboxIn3[2]
+0sboxIn3[1]
+1sboxIn3[0]
+0share1[3]
+0share1[2]
+1share1[1]
+1share1[0]
+0share2[3]
+1share2[2]
+1share2[1]
+1share2[0]
+1share3[3]
+1share3[2]
+0share3[1]
+1share3[0]
+1clk
+1en
+0f1_n13
+0f1_n12
+1f1_n11
+0f1_n10
+1f1_n9
+1f1_n8
+1f1_n7
+1f1_n6
+0f1_n5
+0f1_n4
+1f1_n3
+0f1_n2
+0f1_n1
+1f2_n11
+1f2_n10
+1f2_n9
+1f2_n8
+0f2_n7
+1f2_n6
+1f2_n5
+1f2_n4
+0f2_n3
+1f2_n2
+0f2_n1
+0f3_n13
+1f3_n12
+1f3_n11
+1f3_n10
+1f3_n9
+1f3_n8
+1f3_n7
+1f3_n6
+0f3_n5
+0f3_n4
+1f3_n3
+0f3_n2
+0f3_n1
+1g1_n22
+0g1_n21
+1g1_n20
+1g1_n19
+0g1_n18
+1g1_n17
+1g1_n16
+1g1_n15
+0g1_n14
+0g1_n13
+1g1_n12
+1g1_n11
+0g1_n10
+0g1_n9
+1g1_n8
+0g1_n7
+0g1_n6
+0g1_n5
+1g1_n4
+0g1_n3
+1g1_n2
+1g1_n1
+1g2_n23
+1g2_n22
+1g2_n21
+1g2_n20
+1g2_n19
+1g2_n18
+1g2_n17
+0g2_n16
+1g2_n15
+1g2_n14
+1g2_n13
+0g2_n12
+1g2_n11
+0g2_n10
+1g2_n9
+1g2_n8
+1g2_n7
+1g2_n6
+1g2_n5
+0g2_n4
+0g2_n3
+0g2_n2
+1g2_n1
+0g2_C
+1g3_n22
+1g3_n21
+0g3_n20
+0g3_n19
+1g3_n18
+0g3_n17
+1g3_n16
+0g3_n15
+0g3_n14
+1g3_n13
+1g3_n12
+1g3_n11
+1g3_n10
+0g3_n9
+0g3_n8
+1g3_n7
+1g3_n6
+1g3_n5
+1g3_n4
+1g3_n3
+1g3_n2
+1g3_n1
+0g3_C
+0y3_n13
+0y3_n12
+1y3_n11
+1y3_n10
+1y2_n17
+1y2_n16
+0y2_n15
+1y2_n14
+1y1_n17
+1y1_n16
+0y1_n15
+0y1_n14
+0g1Out[3]
+0g1Out[2]
+1g1Out[1]
+1g1Out[0]
+1g2Out[3]
+0g2Out[2]
+1g2Out[1]
+1g2Out[0]
+0g3Out[3]
+0g3Out[2]
+1g3Out[1]
+1g3Out[0]
+0g3Reg[3]
+0g3Reg[2]
+1g3Reg[1]
+1g3Reg[0]
+1g2Reg[3]
+0g2Reg[2]
+1g2Reg[1]
+1g2Reg[0]
+0g1Reg[3]
+0g1Reg[2]
+1g1Reg[1]
+1g1Reg[0]
+#9000
+0clk
+#10000

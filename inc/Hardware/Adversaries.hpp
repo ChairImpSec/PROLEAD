@@ -1,13 +1,15 @@
 #pragma once
 
+#include <algorithm>
 #include <omp.h>
 
-#include <cinttypes>
-#include <iostream>
-#include <vector>
+#include <boost/dynamic_bitset.hpp>
+#include <boost/math/special_functions/binomial.hpp>
 
-#include "Hardware/Faulting.hpp"
-#include "Hardware/Probing.hpp"
+#include "Hardware/Printer.hpp"
+#include "Hardware/Simulate.hpp"
+#include "Hardware/Enabler.hpp"
+#include "Hardware/FaultManager.hpp"
 
 namespace Hardware {
 /**
@@ -17,6 +19,23 @@ namespace Hardware {
 template <typename ExtensionContainer>
 class Adversaries {
  public:
+
+  const Library& library_;
+  const CircuitStruct& circuit_;
+  const Settings& settings_;
+  Simulation& simulation_;
+
+  /**
+   * @brief Returns the number of propagations.
+   * @return The number of propagations.
+   * @author Nicolai Müller
+   */
+  size_t GetNumberOfPropagations();
+
+  Propagation<ExtensionContainer> GetPropagation(uint64_t index);
+
+  std::vector<Propagation<ExtensionContainer>> GetPropagations();
+
   /**
    * @brief Constructs the adversaries.
    * @param library The given cell-library.
@@ -24,15 +43,10 @@ class Adversaries {
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  Adversaries(LibraryStruct& library, CircuitStruct& circuit,
-              SettingsStruct& settings);
+  Adversaries(Library& library, CircuitStruct& circuit,
+              Settings& settings, Simulation& simulation);
 
-  /**
-   * @brief Returns the number of probe-extensions.
-   * @return The number of probe-extensions.
-   * @author Nicolai Müller
-   */
-  size_t GetNumberOfProbeExtensions();
+  size_t GetNumberOfSpots();
 
   /**
    * @brief Returns the number of standard probes.
@@ -41,6 +55,8 @@ class Adversaries {
    */
   size_t GetNumberOfStandardProbes();
 
+  Probe GetStandardProbe(size_t index);
+
   /**
    * @brief Returns the number of extended probes.
    * @return The number of extended probes.
@@ -48,60 +64,75 @@ class Adversaries {
    */
   size_t GetNumberOfExtendedProbes();
 
-  /**
-   * @brief Returns the number of unique probes.
-   * @return The number of unique probes.
-   * @author Nicolai Müller
-   */
-  size_t GetNumberOfUniqueProbes();
+  Probe GetProbeExtension(size_t index);
 
-  /**
-   * @brief Returns the number of fault targets.
-   * @return The number of fault targets.
-   * @author Nicolai Müller
-   */
-  size_t GetNumberOfFaultTargets();
+  std::vector<Probe> GetProbeExtensions();
+
+
+  size_t GetNumberOfEnablers();
+
+  Enabler<CustomOperation> GetEnabler(size_t index);
+
+  std::vector<Enabler<CustomOperation>> GetEnablers();
+
 
   /**
    * @brief Evaluates all adversaries under the robust d-probing model
-   * @param library The given cell-library.
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
    * @param shared_data The shared state of a simulation.
-   * @param simulation The simulations to update.
    * @return The maximum leakage.
    * @author Nicolai Müller
    */
-  double EvaluateRobustProbingSecurity(LibraryStruct& library,
-                                     CircuitStruct& circuit,
-                                     SettingsStruct& settings,
-                                     SharedDataStruct* shared_data,
-                                     SimulationStruct& simulation);
+  double EvaluateRobustProbingSecurity(std::vector<SharedData>& shared_data);
+
+  /**
+   * @brief Adds a new probing set to the list of probing sets.
+   * @param standard_probe_indices The indices of all standard probes belonging
+   * to the probing set.
+   * @author Nicolai Müller
+   */
+  void AddProbingSet(std::vector<Probe*>& probe_addresses, uint64_t& index);
+
+  /**
+   * @brief Returns the number of probing sets in the list.
+   * @return The number of probing sets.
+   * @author Nicolai Müller
+   */
+  size_t GetNumberOfProbingSets();
+
+  std::vector<Probe*> GetProbeAddressesOfProbingSet(size_t index);
+
+
+  std::vector<uint64_t> GetProbeExtensionsOfProbingSet(size_t index);
+  std::string PrintProbingSet(size_t index, CircuitStruct& circuit);
+
+  std::vector<size_t> enabler_evaluation_order_;
 
  private:
+  Printer<ExtensionContainer> printer_;
   /**
    * The list of all probe extensions required to create the other lists of
    * probes.
    */
-  std::vector<Hardware::probing::ProbeExtension<ExtensionContainer>>
-      probe_extensions_;
+  std::vector<Propagation<ExtensionContainer>> propagations_;
 
   /**
    * The list of all standard probes, i.e. all probes that the adversary can
    * place.
    */
-  std::vector<Hardware::probing::Probe> standard_probes_;
+  std::vector<Probe> standard_probes_;
 
   /**
    * The list of all extended probes, i.e. all probes that can be set by
    * extending the standard probes.
    */
-  std::vector<Hardware::probing::Probe> extended_probes_;
+  std::vector<Probe> extended_probes_;
+
+  std::vector<Enabler<CustomOperation>> enabler_;
 
   /**
    * The list of all unique probes. Only required in the compact mode.
    */
-  std::vector<Hardware::probing::UniqueProbe> unique_probes_;
+  //std::vector<UniqueProbe> unique_probes_;
 
   /**
    * The list of all probing sets.
@@ -109,13 +140,15 @@ class Adversaries {
    * To save memory, every probing set just stores the indices of probes in
    * standard_probes_ or extended_probes_.
    */
-  std::vector<Hardware::probing::ProbingSet<ExtensionContainer>> probing_sets_;
+  std::vector<ProbingSet<ExtensionContainer>> probing_sets_;
 
   /**
    * The list of all fault targets, i.e. all possible locations where a fault
    * injection is allowed.
    */
-  std::vector<Hardware::faulting::FaultTarget> fault_targets_;
+  FaultManager fault_manager_;
+
+  void SetSpots(CircuitStruct& circuit);
 
   /**
    * This function finds all relevant positions for standard probes.
@@ -125,13 +158,12 @@ class Adversaries {
    * are considered.
    *
    * @brief Sets all possible probe extensions
-   * @param library The given cell-library.
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  void SetProbeExtensions(LibraryStruct& library, CircuitStruct& circuit,
-                          SettingsStruct& settings);
+  void SetPropagations();
+
+
+  void UpdatePropagations();
 
   /**
    * To create the standard probes we use the probe-extensions and extend it
@@ -142,7 +174,7 @@ class Adversaries {
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  void SetStandardProbes(SettingsStruct& settings);
+  void SetStandardProbes();
 
   /**
    * To create a list of extended probes we go thorugh the probe extensions and
@@ -153,7 +185,12 @@ class Adversaries {
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  void SetExtendedProbes(SettingsStruct& settings);
+  void SetExtendedProbes();
+
+  void SetEnablers();
+
+  void SetConsideredSimulations(std::vector<uint64_t>& number_of_simulations_per_group);
+
 
   /**
    * To create a list of unique probes we go thorugh the probe extensions and
@@ -162,22 +199,13 @@ class Adversaries {
    * @brief Sets all unique probes
    * @author Nicolai Müller
    */
-  void SetUniqueProbes();
-  
-   /**
-   * @brief Finds all relevant positions for injecting faults
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
-   * @author Aykan Yüce
-   */
-  void SetFaultTargets(CircuitStruct& circuit, SettingsStruct& settings);
+  //void SetUniqueProbes();
 
   /**
-   * @brief Returns the number of probing sets in the list.
-   * @return The number of probing sets.
-   * @author Nicolai Müller
+   * @brief Finds all relevant positions for injecting faults
+   * @author Aykan Yüce
    */
-  size_t GetNumberOfProbingSets();
+  void SetFaults();
 
   /**
    * @brief Reports if set of probes satisfies the distance constrains.
@@ -186,8 +214,7 @@ class Adversaries {
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  bool IsInDistance(std::vector<unsigned int>& standard_probe_indices,
-                    SettingsStruct& settings);
+  bool IsInDistance(std::vector<Probe*>& probe_addresses);
 
   /**
    * @brief Replaces the given signal indices with indices from the list of
@@ -199,29 +226,16 @@ class Adversaries {
    * @return The extended probe indices.
    * @author Nicolai Müller
    */
-  std::vector<ExtensionContainer> ReplaceWireIndexWithListIndex(
-      const std::vector<ExtensionContainer>& signal_indices,
-      unsigned int clock_cycle, bool is_with_transitional_leakage);
+  void ReplaceWireIndexWithListIndex(std::vector<uint64_t>& result, std::vector<uint64_t>& signal_indices, uint64_t clock_cycle, bool is_with_transitional_leakage);
 
-  /**
-   * @brief Adds a new probing set to the list of probing sets.
-   * @param standard_probe_indices The indices of all standard probes belonging
-   * to the probing set.
-   * @param is_with_transitional_leakage True if transitional leakage is
-   * considered during evaluation, False if not.
-   * @param settings The settings read from the config file.
-   * @author Nicolai Müller
-   */
-  void AddProbingSet(std::vector<unsigned int>& standard_probe_indices,
-                     bool is_with_transitional_leakage,
-                     SettingsStruct& settings);
+  std::vector<uint64_t> GetSearchedIndices(uint64_t signal_index, uint64_t clock_cycle);
 
   /**
    * @brief Removes duplicated and strictly-less informative probing sets.
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  void RemoveUninformativeProbingSets(SettingsStruct& settings);
+  void RemoveUninformativeProbingSets();
 
   /**
    * @brief Removes duplicated and strictly-less informative probing sets in a
@@ -229,8 +243,7 @@ class Adversaries {
    * @param number_of_probing_sets The number of probing sets.
    * @author Nicolai Müller
    */
-  void RemoveUninformativeProbingSetsInUnivariateSetting(
-      size_t number_of_probing_sets);
+  void RemoveUninformativeProbingSetsInUnivariateSetting(size_t number_of_probing_sets);
 
   /**
    * @brief Removes duplicated probing sets.
@@ -251,8 +264,7 @@ class Adversaries {
    * @param end The last element in the list of probing sets to compare.
    * @author Nicolai Müller
    */
-  void RemoveStrictlyLessInformativeProbingSets(unsigned int start,
-                                                unsigned int end);
+  void RemoveStrictlyLessInformativeProbingSets(uint64_t start, uint64_t end);
 
   /**
    * @brief Removes all probing sets which are strictly less informative then
@@ -263,9 +275,7 @@ class Adversaries {
    * @param end The last element in the list of probing sets to compare.
    * @author Nicolai Müller
    */
-  void RemoveOneStrictlyLessInformativeProbingSet(unsigned int set_index,
-                                                  unsigned int start,
-                                                  unsigned int end);
+  void RemoveOneStrictlyLessInformativeProbingSet(uint64_t set_index, uint64_t start, uint64_t end);
 
   /**
    * @brief Finds the extended-probe index based on the index of the probed
@@ -277,8 +287,7 @@ class Adversaries {
    * @return The extended probe index.
    * @author Nicolai Müller
    */
-  size_t SearchExtendedProbe(unsigned int signal_index,
-                             unsigned int clock_cycle);
+   size_t SearchExtendedProbe(uint64_t signal_index, uint64_t clock_cycle);
 
   /**
    * @brief Returns the highest clock cycle in which a probe in a probing set
@@ -288,21 +297,12 @@ class Adversaries {
    * records.
    * @author Nicolai Müller
    */
-  unsigned int GetHighestClockCycle(size_t probing_set_index);
+  uint64_t GetHighestClockCycleOfSet(size_t probing_set_index);
 
-  /**
-   * @brief Initializes the combination data structure for the univariate
-   * probing set generation.
-   * @param settings The settings read from the config file.
-   * @param combination The data structure storing the probe-extension indices
-   * of a new probing set.
-   * @param combination_bitmask A bitmask where a set bit indicates that one
-   * probe-extension is part of the probing set.
-   * @author Nicolai Müller
-   */
-  void InitializeUnivariateProbeCombinations(
-      SettingsStruct& settings, std::vector<unsigned int>& combiantion,
-      std::vector<bool>& combination_bitmask);
+  double GetLeakageOfSet(size_t probing_set_index);
+
+  std::vector<uint64_t> GetProbingSets(); 
+
 
   /**
    * @brief Initializes the combination data structure for the fault set
@@ -314,68 +314,36 @@ class Adversaries {
    * fault target is part of the fault set.
    * @author Aykan Yüce
    */
-  void InitializeFaultCombinations(SettingsStruct& settings,
-                                   std::vector<unsigned int>& combiantion,
-                                   std::vector<bool>& combination_bitmask);
+  void InitializeFaultCombinations(uint64_t number_of_faults_per_run, std::vector<uint64_t>& combiantion, std::vector<bool>& bitmask);
 
-  /**
-   * @brief Initializes the combination data structure for the multivariate
-   * probing set generation.
-   * @param settings The settings read from the config file.
-   * @param combination The data structure storing the standard-probe indices of
-   * a new probing set.
-   * @param combination_bitmask A bitmask where a set bit indicates that one
-   * standard probe is part of the probing set.
-   * @author Nicolai Müller
-   */
-  void InitializeMultivariateProbeCombinations(
-      SettingsStruct& settings, std::vector<unsigned int>& combiantion,
-      std::vector<bool>& combination_bitmask);
+
+  void InitializeUnivariateProbeCombinations(std::vector<Probe*>& addresses, std::vector<bool>& bitmask);
+
+
+  void InitializeMultivariateProbeCombinations(std::vector<Probe*>& addresses, std::vector<bool>& combination_bitmask);
 
   /**
    * @brief Generates and evaluates all univariate probing sets.
-   * @param library The given cell-library.
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
    * @param shared_data The shared state of a simulation.
-   * @param simulation The simulations to update.
    * @param start_time The start time of PROLEAD.
    * @return The maximum leakage.
    * @author Nicolai Müller
    */
-  double EvaluateUnivariateRobustProbingSecurity(LibraryStruct& library,
-                                               CircuitStruct& circuit,
-                                               SettingsStruct& settings,
-                                               SharedDataStruct* shared_data,
-                                               SimulationStruct& simulation,
-                                               timespec& start_time);
+  double EvaluateUnivariateRobustProbingSecurity(std::vector<SharedData>& shared_data, timespec& start_time);
 
   /**
    * @brief Generates and evaluates all multivariate probing sets.
-   * @param library The given cell-library.
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
    * @param shared_data The shared state of a simulation.
-   * @param simulation The simulations to update.
    * @param start_time The start time of PROLEAD.
    * @return The maximum leakage.
    * @author Nicolai Müller
    */
-  double EvaluateMultivariateRobustProbingSecurity(LibraryStruct& library,
-                                                 CircuitStruct& circuit,
-                                                 SettingsStruct& settings,
-                                                 SharedDataStruct* shared_data,
-                                                 SimulationStruct& simulation,
-                                                 timespec& start_time);
+ double EvaluateMultivariateRobustProbingSecurity(std::vector<SharedData>& shared_data, timespec& start_time);
 
   /**
    * @brief Evaluates all probing sets in the list based on potentially faulty
    * simulations.
-   * @param library The given cell-library.
-   * @param circuit The circuit read from the gate-level netlist.
-   * @param settings The settings read from the config file.
    * @param shared_data The shared state of a simulation.
-   * @param simulation The simulations to update.
    * @param start_time The start time of PROLEAD.
    * @param probe_step_index The step index.
    * @param number_of_fault_targets The number of fault targets.
@@ -384,11 +352,8 @@ class Adversaries {
    * @author Nicolai Müller
    */
   void EvaluateProbingSetsUnderFaults(
-      LibraryStruct& library, CircuitStruct& circuit, SettingsStruct& settings,
-      SharedDataStruct* shared_data, SimulationStruct& simulation,
-      timespec& start_time, unsigned int& probe_step_index,
-      unsigned int number_of_fault_targets,
-      std::vector<unsigned int>& combination, std::vector<bool>& bitmask);
+      std::vector<SharedData>& shared_data,
+      timespec& start_time, uint64_t& probe_step_index);
 
   /**
    * @brief Evaluates all probing sets in the list.
@@ -401,11 +366,7 @@ class Adversaries {
    * @param probe_step_index The step index.
    * @author Nicolai Müller
    */
-  void EvaluateProbingSets(LibraryStruct& library, CircuitStruct& circuit,
-                           SettingsStruct& settings,
-                           SharedDataStruct* shared_data,
-                           SimulationStruct& simulation, timespec& start_time,
-                           unsigned int& probe_step_index);
+  void EvaluateProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t& probe_step_index);
 
   /**
    * @brief Updates the contingency table with new simulations in compact mode.
@@ -413,8 +374,8 @@ class Adversaries {
    * @param simulation_index The index of the current simulation.
    * @author Nicolai Müller
    */
-  void CompactTableUpdate(Hardware::SimulationStruct& simulation,
-                          unsigned int simulation_index);
+  //void CompactTableUpdate(Hardware::Simulation& simulation,
+  //                        uint64_t simulation_index);
 
   /**
    * @brief Evaluates all contingency tables in the compact mode.
@@ -423,8 +384,7 @@ class Adversaries {
    * per group.
    * @author Nicolai Müller
    */
-  void CompactTest(Hardware::SimulationStruct& simulation,
-                   const std::vector<double>& number_of_simulations_per_group);
+  void CompactTest(std::vector<double>& group_simulation_ratio);
 
   /**
    * @brief Evaluates all contingency tables in the compact mode.
@@ -434,9 +394,7 @@ class Adversaries {
    * per group.
    * @author Nicolai Müller
    */
-  void NormalTest(Hardware::SettingsStruct& settings,
-                  Hardware::SimulationStruct& simulation,
-                  const std::vector<double>& number_of_simulations_per_group);
+  void NormalTest(std::vector<double>& group_simulation_ratio);
 
   /**
    * @brief Performs the evaluation procedure of PROLEAD.
@@ -448,26 +406,8 @@ class Adversaries {
    * if not.
    * @author Nicolai Müller
    */
-  void Test(Hardware::SettingsStruct& settings,
-            Hardware::SimulationStruct& simulation,
-            const std::vector<double>& number_of_simulations_per_group,
+  void Test(std::vector<double>& number_of_simulations_per_group,
             bool is_in_compact_mode);
-
-  /**
-   * @brief Returns the index of the probing set with the highest g-value.
-   * @param bitmask An indicator whether the probing set was already considered.
-   * @return The index of the probing set with the highest g-value.
-   * @author Nicolai Müller
-   */
-  size_t GetIndexOfMostLeakingProbingSet(std::vector<bool>& bitmask);
-
-  /**
-   * @brief Returns the maximum number of required simulations to get a
-   * confident result for all probing sets.
-   * @return The maximum number of required simulations.
-   * @author Nicolai Müller
-   */
-  size_t GetMaximumNumberOfRequiredTraces();
 
   /**
    * @brief Returns the maximum leakage, i.e. the maximum p-value
@@ -483,7 +423,6 @@ class Adversaries {
    * then remove it.
    *
    * @brief Removes all probing sets which already lead to a confident result.
-   * @param circuit The circuit read from the gate-level netlist.
    * @param number_of_simulations The number of already processed simulations.
    * @param maximum_g_value_deleted The maximum g-value of an already deleted
    * probing set.
@@ -491,23 +430,17 @@ class Adversaries {
    * highest g-value.
    * @author Nicolai Müller
    */
-  void RemoveProbingSetsWithEnoughTraces(
-      const CircuitStruct& circuit, uint64_t number_of_simulations,
+  uint64_t RemoveProbingSetsWithEnoughTraces(
+      uint64_t number_of_simulations,
       double& maximum_g_value_deleted,
       std::string& printed_probing_set_deleted);
-
-  /**
-   * @brief Prints all information belonging to the probing set generation.
-   * @author Nicolai Müller
-   */
-  void PrintProbingSetInformation();
 
   /**
    * @brief Prints the header of the printed evaluation output.
    * @param circuit The circuit read from the gate-level netlist.
    * @author Nicolai Müller
    */
-  size_t PrintEvaluationHeader(const CircuitStruct& circuit);
+  size_t PrintEvaluationHeader(CircuitStruct& circuit);
 
   /**
    * @brief Returns the maximum length of text to print an arbitrary probing
@@ -516,7 +449,7 @@ class Adversaries {
    * @return The maximum space of the probing set print.
    * @author Nicolai Müller
    */
-  size_t GetMaximumLengthOfProbeNames(const CircuitStruct& circuit);
+  size_t GetMaximumLengthOfProbeNames(CircuitStruct& circuit);
 
   /**
    * @brief Prints the evaluation output.
@@ -532,9 +465,9 @@ class Adversaries {
    * output string.
    * @author Nicolai Müller
    */
-  void PrintEvaluationBody(const CircuitStruct& circuit,
-                           const SettingsStruct& settings,
-                           const SimulationStruct& simulation,
+  void PrintEvaluationBody(CircuitStruct& circuit,
+                           Settings& settings,
+                           Simulation& simulation,
                            double& maximum_g_value_deleted,
                            std::string& printed_probing_set_deleted,
                            double elapsed_time_period, size_t space);
@@ -549,8 +482,8 @@ class Adversaries {
    * output string.
    * @author Nicolai Müller
    */
-  void PrintReport(const CircuitStruct& circuit, const SettingsStruct& settings,
-                   const SimulationStruct& simulation,
-                   unsigned int probe_step_index, size_t space);
+  void PrintReport(CircuitStruct& circuit, Settings& settings,
+                   Simulation& simulation,
+                   uint64_t probe_step_index, size_t space);
 };
 }  // namespace Hardware

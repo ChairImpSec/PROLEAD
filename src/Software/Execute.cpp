@@ -1,16 +1,18 @@
 #include "Software/Execute.hpp"
 
-void Software::Execute(CommandLineParameterStruct& CommandLineParameters){
+void Software::Execute(const po::variables_map& vm){
 
-    Software::ConfigProbesStruct Probes;
-    Software::SettingsStruct Settings;
+    Software::ConfigProbesStruct probes;
+    Software::SettingsStruct settings;
     Software::HelperStruct GlobalHelper;
     std::vector<Software::SharedDataStruct> SharedData;
     std::vector<Software::ThreadSimulationStruct> GlobalThreadSimulations;
 
+    std::string config_file_name = vm["configfile"].as<std::string>();
+    Settings settings2(config_file_name, false);
+
     std::cout << "Start Software Leakage Evaluation" << std::endl << std::endl;
-    Software::Print::CommandLineSettings(CommandLineParameters);
-    Software::Prepare::All(CommandLineParameters, &Probes, &Settings, SharedData, GlobalHelper, GlobalThreadSimulations);
-    Software::Analyze::All(Settings, SharedData, GlobalHelper, GlobalThreadSimulations);
+    Software::Prepare::All(vm, probes, settings, settings2, SharedData, GlobalHelper, GlobalThreadSimulations);
+    double maximum_leakage = Software::Analyze::All(settings, SharedData, GlobalHelper, GlobalThreadSimulations);
     std::cout << "done!" << std::endl;
 }

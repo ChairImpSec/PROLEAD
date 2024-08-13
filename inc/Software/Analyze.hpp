@@ -23,7 +23,7 @@ namespace Software
 {
     namespace Analyze
     {
-        void All(Software::SettingsStruct&,  std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>&);
-        void ProbingSecurity(Software::SettingsStruct&,  std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>&);
+        double All(Software::SettingsStruct&,  std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>&);
+        double ProbingSecurity(Software::SettingsStruct&,  std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>&);
     }
 }

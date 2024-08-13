@@ -9,6 +9,7 @@
 
 #include "Hardware/Definitions.hpp"
 #include "Util/CpuCoreSelector.hpp"
+#include "Util/Settings.hpp"
 
 namespace Hardware
 {
@@ -17,13 +18,10 @@ namespace Hardware
         void NonCommentFromFile(FILE*, char*, const char*);
         void fReadaWord(Hardware::FileBufferStruct*, char*, char*);
         int  MakeFormulaForCellInLibrary(Hardware::CellTypeStruct*);
-        void LibraryFile(char*, char*, Hardware::LibraryStruct*);
         int  TrimSignalName(char*, int*);
-        int  SearchSignalName(CircuitStruct*, char*, char, Hardware::SettingsStruct*);
-        void DesignFile_Find_IO_Port(char*, char, int, int, Hardware::LibraryStruct*, Hardware::CircuitStruct*, int, char*, Hardware::CircuitStruct*, int*&, int&, int*&, int&);
-        void DesignFile_Find_Signal_Name(char*, char, int, int, Hardware::SettingsStruct*, Hardware::LibraryStruct*, CircuitStruct*, int, int, int, char*, Hardware::CircuitStruct*, int*&, int&, int*&, int&, int&);
-        void DesignFile(char*, char*, Hardware::SettingsStruct*, Hardware::LibraryStruct*, Hardware::CircuitStruct*, int, int, int, Hardware::FileBufferStruct*);
-        void SettingsFile_BeforeDesign(char*, Hardware::SettingsStruct*);
-        void SettingsFile(char*, Hardware::CircuitStruct*, Hardware::SettingsStruct*);
+        int  SearchSignalName(CircuitStruct*, char*, char, Settings&);
+        void DesignFile_Find_IO_Port(char*, char, int, int, Hardware::Library&, Hardware::CircuitStruct*, int, char*, Hardware::CircuitStruct*, int*&, int&, int*&, int&);
+        void DesignFile_Find_Signal_Name(char*, char, int, int, Settings&, Hardware::Library&, CircuitStruct*, int, int, int, char*, Hardware::CircuitStruct*, int*&, int&, int*&, int&, int&);
+        void DesignFile(const std::string&, const std::string&, Settings&, Hardware::Library&, Hardware::CircuitStruct*, int, int, int, Hardware::FileBufferStruct*);
     }
 }

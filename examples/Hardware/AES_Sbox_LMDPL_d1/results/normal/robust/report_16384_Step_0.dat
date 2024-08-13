@@ -1,0 +1,19 @@
+Report file after 16384 simulations:
+
+1.) Summary of most leaking (and still active) probing sets per clock cycle: 
+
+Clock cycle 2: @[top_XOR_T7_U1_xorInst_n9(1)] ==> [X_s0[5](1)] -log10(p) = 1.94649 --> OKAY
+Clock cycle 3: @[top_AND_M7_U1_OperationInst_orInst2_n5(2)] ==> [top_AND_M7_U1_t_reg[6](2), top_AND_M7_U1_t_reg[7](2), X_s1_bar[0](2), X_s1_bar[1](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[1](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+
+2.) Summary of the most leakging (and still active) probing sets: 
+
+1: @[top_AND_M7_U1_OperationInst_orInst2_n5(2)] ==> [top_AND_M7_U1_t_reg[6](2), top_AND_M7_U1_t_reg[7](2), X_s1_bar[0](2), X_s1_bar[1](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[1](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+2: @[top_AND_M7_U1_OperationInst_orInst1_n5(2)] ==> [top_AND_M7_U1_t_reg[2](2), top_AND_M7_U1_t_reg[3](2), X_s1_bar[0](2), X_s1_bar[1](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[1](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+3: @[top_AND_M12_U1_OperationInst_orInst2_n5(2)] ==> [top_AND_M12_U1_t_reg[6](2), top_AND_M12_U1_t_reg[7](2), X_s1_bar[2](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[7](2), X_s1[2](2), X_s1[4](2), X_s1[5](2), X_s1[7](2)] -log10(p) = inf --> LEAKAGE
+4: @[top_AND_M12_U1_OperationInst_orInst1_n5(2)] ==> [top_AND_M12_U1_t_reg[2](2), top_AND_M12_U1_t_reg[3](2), X_s1_bar[2](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[7](2), X_s1[2](2), X_s1[4](2), X_s1[5](2), X_s1[7](2)] -log10(p) = inf --> LEAKAGE
+5: @[top_AND_M4_U1_OperationInst_orInst2_n5(2)] ==> [top_AND_M4_U1_t_reg[6](2), top_AND_M4_U1_t_reg[7](2), X_s1_bar[0](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[4](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+6: @[top_AND_M4_U1_OperationInst_orInst1_n5(2)] ==> [top_AND_M4_U1_t_reg[2](2), top_AND_M4_U1_t_reg[3](2), X_s1_bar[0](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[4](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+7: @[top_AND_M4_U1_OperationInst_orInst1_n6(2)] ==> [top_AND_M4_U1_t_reg[0](2), top_AND_M4_U1_t_reg[2](2), top_AND_M4_U1_t_reg[3](2), X_s1_bar[0](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[4](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE
+8: @[top_AND_M12_U1_OperationInst_orInst2_n6(2)] ==> [top_AND_M12_U1_t_reg[4](2), top_AND_M12_U1_t_reg[6](2), top_AND_M12_U1_t_reg[7](2), X_s1_bar[2](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[7](2), X_s1[2](2), X_s1[4](2), X_s1[5](2), X_s1[7](2)] -log10(p) = inf --> LEAKAGE
+9: @[top_AND_M12_U1_OperationInst_orInst1_n6(2)] ==> [top_AND_M12_U1_t_reg[0](2), top_AND_M12_U1_t_reg[2](2), top_AND_M12_U1_t_reg[3](2), X_s1_bar[2](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[7](2), X_s1[2](2), X_s1[4](2), X_s1[5](2), X_s1[7](2)] -log10(p) = inf --> LEAKAGE
+10: @[top_AND_M4_U1_OperationInst_orInst2_n6(2)] ==> [top_AND_M4_U1_t_reg[4](2), top_AND_M4_U1_t_reg[6](2), top_AND_M4_U1_t_reg[7](2), X_s1_bar[0](2), X_s1_bar[4](2), X_s1_bar[5](2), X_s1_bar[6](2), X_s1[0](2), X_s1[4](2), X_s1[5](2), X_s1[6](2)] -log10(p) = inf --> LEAKAGE

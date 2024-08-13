@@ -2,20 +2,21 @@
 
 #include "Software/Definitions.hpp"
 #include "Software/Read.hpp"
-#include "Util/CommandLineParameter.hpp"
 #include <cstring>
 #include <iostream>
 #include <algorithm>
+#include <boost/program_options.hpp>
+
+namespace po = boost::program_options;
 
 namespace Software
 {
     namespace Prepare
     {
-        void Simulation(Software::SettingsStruct*, Software::ConfigProbesStruct*, char* , Software::SimulationStruct*);
-        void SharedData(Software::SettingsStruct*, Software::SharedDataStruct&);
-        void ThreadSimulation(Software::ThreadSimulationStruct& , Software::SettingsStruct* , char*, uint32_t , uint32_t , std::vector<uint32_t>& );
-        void Helper(Software::ConfigProbesStruct* , Software::HelperStruct& );
-        void All(CommandLineParameterStruct&, Software::ConfigProbesStruct*, Software::SettingsStruct*, std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>& );
+        void SharedData(Software::SettingsStruct&, Software::SharedDataStruct&);
+        void ThreadSimulation(Software::ThreadSimulationStruct& , Software::SettingsStruct& , const std::string&, uint32_t , uint32_t , std::vector<uint32_t>& );
+        void Helper(Software::ConfigProbesStruct& , Software::HelperStruct& );
+        void All(const po::variables_map&, Software::ConfigProbesStruct&, Software::SettingsStruct&, Settings&, std::vector<Software::SharedDataStruct>&, Software::HelperStruct&, std::vector<Software::ThreadSimulationStruct>& );
         bool IsEmptyOrBlank(const std::string &s);
     }
 }

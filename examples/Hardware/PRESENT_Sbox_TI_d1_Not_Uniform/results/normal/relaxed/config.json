@@ -1,0 +1,55 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "minimize_probing_sets": "aggressive",
+        "number_of_entries_in_report": 10
+    },
+    "simulation": {
+        "groups": [
+            "4'h$",
+            "4'h0"
+        ],
+        "number_of_clock_cycles": 3,
+        "output_shares": [
+            "share1[3:0]",
+            "share2[3:0]",
+            "share3[3:0]"
+        ],
+        "expected_output": [
+            "4'h$",
+            "4'hC"
+        ],
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "sboxIn1[3:0]",
+                        "value": "group_in0[3:0]"
+                    },
+                    {
+                        "name": "sboxIn2[3:0]",
+                        "value": "group_in1[3:0]"
+                    },
+                    {
+                        "name": "sboxIn3[3:0]",
+                        "value": "group_in2[3:0]"
+                    },
+                    {
+                        "name": "en",
+                        "value": "1'b1"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 32000,
+        "number_of_simulations_per_step": 3200,
+        "number_of_simulations_per_write": 32000
+    },
+    "hardware": {
+        "clock_signal_name": "clk"
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "relaxed_model": true
+    }
+}

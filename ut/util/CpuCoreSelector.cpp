@@ -3,37 +3,43 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("CpuCoreSelector returns correct thread counts",
-          "[CpuCoreSelector]") {
-  SECTION("Return all cores for all option") {
-    REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::all) ==
-            std::thread::hardware_concurrency());
+TEST_CASE("Test the GetOptimalNumberOfThreads function",
+          "[GetOptimalNumberOfThreads]") {
+  CpuCoreSelector core_selector;
+  uint64_t hardware_concurrency = std::thread::hardware_concurrency();
+
+  SECTION("Test 'all' option") {
+    REQUIRE(core_selector.GetOptimalNumberOfThreads("all") ==
+            hardware_concurrency);
   }
 
-  SECTION("Return half cores for half option") {
-    REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::half) ==
-            std::thread::hardware_concurrency() / 2);
+  SECTION("Test 'half' option") {
+    REQUIRE(core_selector.GetOptimalNumberOfThreads("half") ==
+            hardware_concurrency / 2);
   }
 
-  SECTION("Return third cores for third option") {
-    REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::third) ==
-            std::thread::hardware_concurrency() / 3);
+  SECTION("Test 'third' option") {
+    REQUIRE(core_selector.GetOptimalNumberOfThreads("third") ==
+            hardware_concurrency / 3);
   }
 
-  SECTION("Return quarter cores for quarter option") {
-    REQUIRE(CpuCoreSelector::getOptimalCount(CpuSelectionOption::quarter) ==
-            std::thread::hardware_concurrency() / 4);
-  }
-}
-
-TEST_CASE("CpuCoreSelector handles invalid cases", "[CpuCoreSelector]") {
-  SECTION("Handle invalid specific count gracefully") {
-    REQUIRE(
-        CpuCoreSelector::getOptimalCount(CpuSelectionOption::specific, 10000) == 10000);
+  SECTION("Test 'quarter' option") {
+    REQUIRE(core_selector.GetOptimalNumberOfThreads("quarter") ==
+            hardware_concurrency / 4);
   }
 
-  SECTION("Handle invalid specific count gracefully") {
-    REQUIRE(CpuCoreSelector::getOptimalCount(
-                static_cast<CpuSelectionOption>(-1)) == 1);
+  SECTION("Test valid number option") {
+    REQUIRE(core_selector.GetOptimalNumberOfThreads("2") ==
+            std::min<uint64_t>(2, hardware_concurrency));
+  }
+
+  SECTION("Test invalid option") {
+    REQUIRE_THROWS_AS(core_selector.GetOptimalNumberOfThreads("invalid"),
+                      std::invalid_argument);
+  }
+
+  SECTION("Test out of range option") {
+    REQUIRE_THROWS_AS(core_selector.GetOptimalNumberOfThreads("-1"),
+                      std::out_of_range);
   }
 }

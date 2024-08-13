@@ -1,607 +1,435 @@
+/**
+ * @file Util.hpp
+ * @author Felix Uhle
+ * @author Nicolai Müller
+ */
+
 #pragma once
 
-#include <cmath>
-#include <memory>
-#include <numeric>
 #include <time.h>
-#include <utility>
-#include <vector>
-#include <fstream>
-#include <iostream>
 
-#include "Util/CommandLineParameter.hpp"
-#include "boost/random.hpp"
-#include "boost/generator_iterator.hpp"
 #include <boost/math/distributions/chi_squared.hpp>
 #include <boost/math/distributions/inverse_chi_squared.hpp>
 #include <boost/math/distributions/non_central_chi_squared.hpp>
+#include <boost/math/tools/roots.hpp>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <numeric>
+#include <utility>
+#include <vector>
 
-namespace hardware{
-/**
-* The stats namespace encompasses everything which is related to the statistical evaluation performed by PROLEAD. 
-* In particular, all functions required for updating and evaluating the contingency tables in the hardware version are stored here.
-* For the future, we plan to use this statistic functions also for the software version of PROLEAD.
-*/
-namespace stats{
-	/**
-	* We define "key" as the multibit value recorded by a probing set. This key is used to identify a probed value in the contingency table.
-	* Further, we define data as the counters which count the number of occurrences of a specific key for multiple groups.
-	* We decided to use dynamic allocated arrays instead of vectors due to the smaller overhead in RAM.
-	* We use smart pointers as the ownership of the pointer may change multiple times.
-	* Note that vectors always store their size which would be stored redundantly.
-	* It it enough to store the key size (size_of_key_in_bytes) together with each contingency table.
-	* The number of different groups (number_of_groups) is stored only once for all contingency tables.
-	* For the key, we used unigned char, i.e. bytes to reduce the number of unused bites per key.
-	* However, if you want to change the datatypes for the key and data, you can change it here.
-	*/
-	using Key = std::unique_ptr<unsigned char[]>;
-	using Data = std::unique_ptr<unsigned int[]>;
-
-	/**
-	* This class defines the distributions related to one key, i.e. the data sorted in one column of the contingency table.
-	* In order to allow more advanced data structures, we removed the key from this class.
-	* However, one key needs to be connected to every TableData instance.
-	*
-	* @brief Defines the distributions of one contingency table entry.
-	* @author Nicolai Müller and Felix Uhle
-	*/
-	class TableData{
-	public:
-		/**
-		* The constructor of an empty data set of one entry.
-		* Here, we allocate and zero-initialize counters for every group.
-		* Finally, all counters are zero.
-		*
-		* @brief Constructs an empty data set of one entry.
-		* @param number_of_groups The total number of groups.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		TableData(size_t number_of_groups);
-
-		/**
-		* To read and update the distributions we return a pointer on the counters.
-		* As the TableData instance still owns Data (smart pointer), we don't have to delete the returned pointer. 
-		*
-		* @brief Returns a pointer to all counters of the entry.
-		* @return A pointer thats points on the counter array.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		unsigned int* GetCounters();
-
-		/**
-		* If a key is already part of the contingency table, we increment its corresponding counter.
-		* For this, we take the index of the group in which the key was observed and increment the associated counter.
-		*
-		* @brief Increments an existing counter.
-		* @param group_index The index of the group to increment.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		void Increment(size_t group_index);
-
-	private:
-		/**
-		* This counters store the distibutions by counting how often the connected key was probed for each group.
-		* There is always one counter per group so, number_of_groups in total.
-		* We use unsigned int for the counters as no negative numbers are possible and the maximum number of counted elements is assumed to be at most 100 million.
-		*/	
-		Data counters_;
-	};	
-
-	/**
-	* This struct connects key and data to define an entry of the contingency table.
-	* We use this structure as a helper to define a list of multiple entries.
-	* We refer to such a list as bucket.
-	*
-	* @brief Defines a full table entry with key.
-	* @author Nicolai Müller and Felix Uhle
-	*/ 
-	class TableEntry{
-	public:
-		/**
-		* The constructor of an empty entry with key.
-		* It works similar to the TableData constructor
-		* but also moves the key pointer to the TableEntry object.
-		*
-		* @brief Constructs a new entry with key.
-		* @param key The key belonging to this entry.
-		* @param number_of_groups The total number of groups.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		TableEntry(Key key, size_t number_of_groups); 
-
-		/**
-		* @brief Returns all counters of the entry.
-		* @return A pointer thats points on the counter array.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		unsigned int* GetCounters();
-
-		/**
-		* @brief Returns a specific byte of the key.
-		* @param byte_index The index of the byte to return.
-		* @return The specific byte of the key.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		unsigned char GetKeyByte(size_t byte_index) const;
-
-		/**
-		* @brief Increments one counter of the entry.
-		* @param group_index The index of the group to increment.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		void Increment(size_t group_index);
-
-	private:
-		Key key_;
-        TableData table_data_;
-	};
-
-	/**
-	* Here, we just define a bucket as a vector of entries.
-	* This vector must be sorted based on the keys.
-	* As we are not sure that std::vector is the best data structure here
-	* we use BucketContainer as a template which allows to use other data
-	* types within the contingency table as long as all required functions
-	* are defined for your data structure. 
-	* Feel free, to try other data structures if you think they fit better.
-	* The only requirement is that your new data structure must be iterable.
-	*/ 
-	using TableBucketVector = std::vector<TableEntry>;
-
-	using TableBucketUnorderedMap = std::unordered_map<Key, TableData>;
-
-	/**
-	* This class defines the bucket, i.e. a list of entries.
-	* We repeat that the data type of a bucket (BucketContainer) can be exchanged. 
-	*
-	* @brief Defines one bucket.
-	* @author Nicolai Müller and Felix Uhle
-	*/
-	template <typename BucketContainer>
-	class TableBucket {
-	public:
-		/**
-		* In the compact mode we pre-initialize the contingency table with empty buckets.
-		* Therefore, we need the default contructor. 
-		*
-		* @brief Constructs an empty bucket.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		TableBucket() = default;
-
-		/**
-		* In the normal mode, we dynamically create buckets if they have to store an entry.
-		* So if a bucket is created, there is already an entry to store in this bucket.
-		* Therefore, we need the another constructor that place an entry in the newly created bucket. 
-		*
-		* @brief Constructs a bucket with one entry.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		TableBucket(Key key, size_t number_of_groups);
-
-		/**
-		* This functions returns a reference to the full bucket.
-		* We need this function to use omp atomic in the compact mode.
-		* Omp atomic can only be used for specific operators but not function calls. 
-		*
-		* @brief Returns a reference to the bucket.
-		* @return A reference to the bucket.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		TableBucketVector& GetBucket();
-		
-		/**
-		* @brief Returns the number of entries stored in the bucket.
-		* @return The number of entries in the bucket.
-		* @author Nicolai Müller and Felix Uhle
-		*/		
-		size_t GetNumberOfEntries();
-
-		/**
-		* @brief Returns the counters of a specific entry.
-		* @param entry_index The index of the entry, i.e.e the bucket column.
-		* @return A pointer thats points on the counter array.
-		* @author Nicolai Müller and Felix Uhle
-		*/		
-		unsigned int* GetCounters(size_t entry_index);
-
-		/**
-		* For every simulated key we either increment the counter of an existing entry or create a new entry. 
-		* This depends on whether the key is already present in the bucket, i.e. is associated with an entry, or not. 
-		* However, if a new entry is created, it stil has to be incremented.
-		*
-		* @brief Increments one entry of the bucket.
-		* @param key The simulated key.
-		* @param number_of_groups The number of groups, i.e. the number of counter a new entry must encompass.
-		* @param group_index The index of the group, i.e. the counter we need to update.
-		* @param size_of_key_in_bytes The byte-size of the key which is required to compare the key with the entry-keys.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		void Increment(Key key, size_t number_of_groups, size_t group_index, size_t size_of_key_in_bytes);
-
-	private:
-		/**
-		* We define a bucket as a sorted list of TableEntry instances.
-		**/
-		BucketContainer bucket_;
-
-		/**
-		* To check if there is already an entry connected to this key, we have to search the key in the bucket.
-		*
-		* @brief Searches for an entry with the simulated key.
-		* @param key A reference to the simulated key.
-		* @param size_of_key_in_bytes The byte-size of the key which is required to compare the key with the entry-keys.
-		* @return An iterator to the entry with the same key or to the end of the bucket. 
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		TableBucketVector::iterator FindEntry(const unsigned char* key, size_t size_of_key_in_bytes);
-
-		/**
-		* @brief Returns whether a key is already part of an entry.
-		* @param key A reference to the simulated key.
-		* @param it The iterator returned by Find Entry.
-		* @param size_of_key_in_bytes The byte-size of the key which is required to compare the key with the entry-keys.
-		* @return An iterator to the entry with the same key or to the end of the bucket. 
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		bool IsEntryInBucket(const unsigned char* key, const TableBucketVector::iterator it, size_t size_of_key_in_bytes);
-	};
-
-	/**
-	* This class defines the contingency table and is therefore instantiated in every probing set.
-	*
-	* @brief Defines the contingency table.
-	* @author Nicolai Müller and Felix Uhle
-	*/
-	template <typename BucketContainer>
-	class ContingencyTable {
-	public:
-		/**
-		* To initialize a contingency table, we set the key and layer sizes
-		* Further, depending on the mode of PROLEAD we pre-allocate the hash table.
-		* Normal mode: Only the first layer is preallocated while the second layer is allocated during evaluation.
-		* Compact mode. The whole table is pre-allocated. 
-		* The exact sizes of the table depend on the size of the key, i.e. the number of probe-extensions of the probing set. 
-		*
-		* @brief Initializes the contingency table.
-		* @param number_of_groups The number of groups.
-		* @param number_of_probes The number of probe-extensions of the probing set.
-		* @param is_in_compact_mode decision whether PROLEAD operates in compact mode or not.
-		* @author Nicolai Müller and Felix Uhle
-		*/			
-		void Initialize(size_t number_of_groups, size_t number_of_probes, bool is_in_compact_mode);
-
-		/**
-		* @brief Returns -log10(p).
-		* @return -log10(p)
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		double GetGValue() const;
-
-		/**
-		* @brief Sets -log10(p) = 0.0.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		void ResetGValue();
-
-		/**
-		* @brief Returns the number of required traces.
-		* @return The number of required traces.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		size_t GetNumberOfRequiredTraces() const;
-
-		/**
-		* Returns the size of the key after considering one or two bytes as indices for the hash table.
-		* Only a key of this size is stored in a table entry.
-		*
-		* @brief Returns the size of the key in a table entry.
-		* @return The number of required traces.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		size_t GetKeySizeExcludingHashValues();
-
-		/**
-		* If the probing set encompasses only a small number of probes using to layers tend to be an overkill.
-		* For such probing sets we only use the first layer of the hash table and only one hash value.
-		* Hence, we need the information how many layers are in use. 
-		*
-		* @brief Returns the number of used layers of the hash table.
-		* @return The number of layers.
-		* @author Nicolai Müller and Felix Uhle
-		*/			
-		size_t GetNumberOfLayers();
-
-		/**
-		* This is again required for using omp atomic in the compact mode.
-		* In compact mode we only use the first layer for indexing so the first layer index corresponds to the key.
-		*
-		* @brief Returns a pointer to all counters of the entry.
-		* @param index first-layer index of the hash table.
-		* @return A pointer thats points on the counter array.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		unsigned int* GetCounters(size_t index);
-
-		/**
-		* This function is called by the probing set to update the contingency table with a new simulation.
-		* For this, the key and the hash values must be already separated.
-		*
-		* @brief Updates the contingency table with a new simulation.
-		* @param key The simulated key.
-		* @param hash_value0 The first hash value belonging to the key, i.e. the first-layer index.
-		* @param hash_value1 The second hash value belonging to the key, i.e. the second-layer index.
-		* @param number_of_groups The number of groups. In case we have to build a new entry.
-		* @param group_index The group index to update the entry.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		void UpdateTable(Key key, unsigned char hash_value0, unsigned char hash_value1, size_t number_of_groups, size_t group_index);
-
-		/**
-		* @brief Performs the full g-test procedure.
-		* @param number_of_groups The number of groups.
-		* @param number_of_simulations The number of already performed simulations.
-		* @param frequencies The pre-computed frequencies.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		void ComputeGTest(size_t number_of_groups, size_t number_of_simulations, std::vector<double> frequencies);
-
-		/**
-		* @brief Computes the number of required traces.
-		* @param number_of_groups The number of groups.
-		* @param beta_threshold The desired false-negative probability to achieve.
-		* @param effect_size The desired effect size to achieve.
-		* @author Nicolai Müller and Felix Uhle
-		*/
-		void ComputeNumberOfRequiredTraces(size_t number_of_groups, double beta_threshold, double effect_size);
-
-		/**
-		* Before we start with the evaluation, we remove all probing sets that are strictly less informative than other probing sets.
-		* This function just encodes the information wether a probing set is strictly less informative in an unused variable.
-		* Later, all probing sets which are marked in this way are removed.
-		*
-		* @brief Marks a probing set as removable.
-		* @author Nicolai Müller and Felix Uhle
-		*/		
-		void MarkAsRemovable(){number_of_required_traces_ = 1;}
-
-		/**
-		* On the other hand, this function checks if a probing set is marked and can be removed.
-		*
-		* @brief Checks if a probing set can be removed.
-		* @return The decision whether a probing set can be removed.
-		* @author Nicolai Müller and Felix Uhle
-		*/			
-		bool IsRemovable() const {return number_of_required_traces_ == 1;}
-
-	private:
-		/**
-		* The contingency table is split into multiple buckets which are organized as an hash table with two layers.
-		* In particular, at most, the first two bytes of the key are used as indices to address the required bucket.
-		* The rest of the key is then moved to an entry of the bucket.
-		* This is faster as having all table entries in one bucket as the time for searching keys in a bucket is reduced.
-		* Further, this saves RAM as, at most, the first two bytes of the key must not be stored.
-		* We decided to use a dynamic 2d-array based on smart-pointers due to a lower memory overhead compared to, e.g., std::vector.
-		* In particular, every vector stores its size which would lead to multiple vectors storing the same size.
-		*/	
-		std::unique_ptr<std::unique_ptr<TableBucket<BucketContainer>[]>[]> hash_table_;
-
-		size_t size_of_key_in_bytes_;
-
-		/**
-		* We store the dimensions of the 2D hash_table_ array separately to avoid additional area overhead.
-		*/
-		size_t number_of_indices_in_layer_0_;
-		size_t number_of_indices_in_layer_1_;
-
-		/**
-		* Every time we evaluate the contingency table, i.e. perform the g-test, store the -log10(p) value.
-		* We remark that -log10(p) > 5.0 indicates leakage.
-		* We store -log10(p) in the class instead of returning it to allow sorting of contingency tables based on -log10(p).
-		*/
-		double g_;
-
-		/**
-		* Every time we evaluate the contingency table, i.e. perform the g-test, we also compute the number of traces required to achieve a reliable result.
-		* Hence, if the required number of traces is reached we can assume that PROLEAD detects all leakages  w.r.t. a predefined error-probability and effect size.
-		* We store the number of required traces in the class instead of returning it to allow sorting of contingency tables based on the number of traces.
-		*/
-		size_t number_of_required_traces_;
-		
-		/**
-		* This function calculates the number of entries in the contingency table, i.e. the sum of all entry counts of the buckets.
-		* This size of the contingency table is required to compute the g-test and the number of required traces.
-		*
-		* @brief Returns the number of entries in a contingency table.
-		* @return The number of entries. 
-		* @author Nicolai Müller and Felix Uhle
-		*/			
-		size_t GetNumberOfEntries();
-
-		/**
-		* @brief Returns the sum over all counters of one table entry.
-		* @param counters A pointer thats points on the counter array.
-		* @param number_of_groups The number of groups, i.e. the number of elements in the counter array.
-		* @return The sum over all counters. 
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		inline unsigned int ComputeSumOverAllGroupCountersOfAnEntry(unsigned int* counters, size_t number_of_groups);
-
-		/**
-		* Computing the expected frequencies of every table entry is part of the g-test.
-		* 
-		* @brief Computes the expected frequency of a table entry.
-		* @param frequencies The precomputed frequencies.
-		* @param sum The sum over all counters of an entry.
-		* @param expected_frequencies The expected frequencies. (return value)
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		void ComputeExpectedFrequenciesOfAnEntry(const std::vector<double>& frequencies, unsigned int sum, std::vector<double>& expected_frequencies);
-
-		/**
-		* Unfortunately, the g-test overestimates statistical outliers.
-		* This leads to the fact that PROLEAD reports leakage if entries of the contingency table are sparsely filled.
-		* For example, if a probing set contains many probes, each key will be simulated only once.
-		* To avoid such false-positives we use pooling to combine sparsely-filled entries.
-		* This function, checks if the expected frequency of an entry is high enough or has to be pooled.
-		* This check is done based on a pooling factor which depends on the size of the contingency table.
-		* The larger a table is the more aggresively the pooling is. Hence, the pooling factor increases.
-		* 
-		* @brief Checks if an entry has to be pooled.
-		* @param expected_frequencies The precomputed frequencies.
-		* @param pooling_factor The pooling factor.
-		* @return The decision whether pooling is necessary or not.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		bool AreExpectedFrequenciesHighEnoughForEvaluation(const std::vector<double>& expected_frequencies, double pooling_factor);
-
-		/**
-		* If we decided that an entry need to be pooled, we just add its counters to a so-called pooling entry.
-		* Hence, the table size decreases and the pooling entry becomes filled.
-		* 
-		* @brief Updates the pooling entry.
-		* @param counters The counters to add to the pooling entry.
-		* @param pooled_counters The counters of the pooling entry to update.
-		* @param number_of_groups The number of groups, i.e. the number of counters to update.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		inline void UpdatePooledCounters(unsigned int* counters, unsigned int* pooled_counters, size_t number_of_groups);
-
-		/**
-		* @brief Updates the g-value with an entry.
-		* @param counters A pointer thats points on the counter array of an entry.
-		* @param expected_frequencies The expected frequencies of the same entry.
-		* @return The updated g-value.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		inline void UpdateGValue(unsigned int* counters, const std::vector<double>& expected_frequencies, double& g);
-
-		/**
-		* @brief Transforms the g-value into -log10(p).
-		* @param number_of_groups The number of groups.
-		* @param number_of_simulations The number of already processed simulations.
-		* @param frequencies The precomputed frequencies.
-		* @param size_of_table The number of entries in the table (before pooling).
-		* @param degree_of_freedom The degree of freedom.
-		* @return The updated g-value.
-		* @author Nicolai Müller and Felix Uhle
-		*/	
-		double ComputeGValue(size_t number_of_groups, size_t number_of_simulations, std::vector<double> frequencies, size_t size_of_table, size_t& degree_of_freedom);
-	};
-}
-}
+#include "boost/generator_iterator.hpp"
+#include "boost/random.hpp"
 
 /**
-* Generic functions required for software evaluations, e.g. all statistical procedures.	
-*/	
-namespace Util{
-	/**
-	* Defines one entry, i.e. one column, of a contingency table. 
-	*
-	* @brief Defines one entry of a contingency table.
-	* @author Nicolai Müller
-	*/
-    struct TableEntryStruct{
-        std::vector<unsigned char> Key; ///< The probed state of the cell, i.e. a byte-wise n-bit value recorded by n probes of a probing set.
-        std::vector<unsigned int> Count; ///< Counts how often state state was probed for each user-defined group.
-        
-		/**
-		* Initializes a new entry without a predefined state but with a specified number of groups. 
-		* All counters are set to zero. 
-		*
-		* @brief Initializes a new entry without fixed state and zero counts. 
-		* @param GroupSize Number of user-defined groups.
-		* @author Nicolai Müller
-		*/
-		TableEntryStruct(unsigned int);
-        
-		/**
-		* Initializes a new entry with a predefined state and predefined counts. 
-		* All counters are set to zero. 
-		*
-		* @brief Initializes a new entry with fixed state and counts. 
-		* @details While initializing the entry, all counts are set to zero but the user can define up to two counts to increment, i.e. two group counters can be set to one.
-		* @param GroupSize Number of user-defined groups.
-		* @param NewKey The fixed state of the entry.
-		* @param GroupIndex1 The index of the first group.
-		* @param GroupIndex2 The index of the second group.
-		* @author Nicolai Müller
-		*/		
-		TableEntryStruct(unsigned int, std::vector<unsigned char>&, unsigned int, unsigned int);
-    };
+ * @brief Represents an observation set made by a set of probes.
+ *
+ * The `Key` type is used to identify a particular observation in the
+ * contingency table. To minimize memory overhead, dynamically allocated arrays
+ * are used instead of vectors. Specifically, there is no need to store the size
+ * of the array since the size is determined by the maximum number of
+ * probe-extensions.
+ */
+using Key = std::unique_ptr<uint8_t[]>;
 
-	/**
-	* Defines the contingency table related to a probing set.
-	* Every contingency table encompasses a list of contingency table entries.
-	*
-	* @brief Defines a contingency table.
-	* @author Nicolai Müller
-	*/
-    struct ContingencyTableStruct{
-        std::vector<TableEntryStruct> Entries; ///< Different entries of a contingency table, i.e. one entry per sample.
-		
-		/**
-		* Temporary storage for all samples that occurred only once.
-		* To save memory, we create a new entry in the table only if the sample occurres multiple times. 
-		* Hence, only the sample itself must be stored without corresponding counters.
-		* The structure is as follows:
-		* 1. Dimension: The underlying group in which the sample occurred once.
-		* 2. Dimension: The last byte of the sample vector. This only accelerates searching for samples.
-		* 3. Dimension: The particular sample vector.
-		* 4. Dimension: The specific byte of a particular sample vector.
-		*/
-        std::vector<std::vector<std::vector<std::vector<unsigned char>>>> OnlyOneEntry; ///< Stores all entires that occurred only once. 
-        double Probability; ///< The false-positive probability computed with the G-test.
-        unsigned int Traces; ///< The number of traces required to achieve a desired confidence level computed via statistical power analysis.
+/**
+ * @brief Stores a counter for each group, counting the occurrences of a
+ * particular key.
+ *
+ * The `Data` type is used to maintain a count of the number of times a specific
+ * key appears in each group. To minimize memory overhead, dynamically allocated
+ * arrays are used instead of vectors. Specifically, there is no need to store
+ * the size of the array since the size is determined by the number of groups.
+ */
+using Data = std::unique_ptr<uint32_t[]>;
 
-		/**
-		* Computes the number of traces required to achieve a pre-defined confidence level, i.e. false-negative probability.
-		*
-		* @brief Computes the required number of traces. 
-		* @param NumberOfGroups Number of user-defined groups.
-		* @param BetaThreshold The pre-defined false-negative probability to achieve.
-		* @param EffectSize The statistical effect size for which the false-negative probability should be achieved.
-		* @return Traces Number of traces required to satisfy the effect size and false-negative probability.
-		* @author Nicolai Müller
-		*/	
-        void CalculateTraces(int, double, double);
-    };
- 
-	/**
-	* Compute the statistical G-value from a given contingency table.
-	*
-	* @brief Computes the G-value. 
-	* @param NumberOfGroups Number of user-defined groups.
-	* @param NumberOfSimulations The number of simulated executions so far.
-	* @param Table The contingency table.
-	* @param Frequency Precomputed number of simulations per group.
-	* @return gValue The G-value.
-	* @author Nicolai Müller
-	*/
-    double GetGValue(unsigned int, unsigned int, ContingencyTableStruct&, std::vector<double>, unsigned int, unsigned int&);
-	
-	/**
-	* Compute the false-positive probability from a given contingency table.
-	*
-	* @brief Computes the p-value. 
-	* @param NumberOfGroups Number of user-defined groups.
-	* @param NumberOfSimulations The number of simulated executions so far.
-	* @param Table The contingency table.
-	* @param Frequency Precomputed number of simulations per group.
-	* @param TableSize The number of entries in a contingency table.
-	* @param df The degree of freedom.
-	* @return gValue The G-value.
-	* @author Nicolai Müller
-	*/	
-    void GTest(unsigned int, unsigned int, ContingencyTableStruct&, std::vector<double>);
+/**
+ * @brief Represents an entry in a contingency table, containing a key and
+ * associated data.
+ *
+ * The `TableEntry` class is used to store an observation set (key) and its
+ * corresponding counters (data) in a table. Each entry consists of a key that
+ * identifies a particular observation and data that counts the occurrences of
+ * that observation for each group.
+ */
+class TableEntry {
+ public:
+  Key key_;    ///< The key representing the observation set.
+  Data data_;  ///< The data representing the counters for each group.
+};
 
-    void StartClock(timespec&);
-    double EndClock(timespec&);
-	void PrintHelp();
-	void PrintCommandLineSettings(const CommandLineParameterStruct& command_line_parameters);
-	uint64_t PrintMemoryConsumption();
-	void PrintHorizontalLine(unsigned int width);
-	void PrintRow(std::vector<unsigned int>& width, std::vector<std::string>& elements);
-    void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
-	void ExtractCombinationFromBitmask(std::vector<unsigned int>& combination, std::vector<bool>& bitmask);
-}
+/**
+ * @brief Stores the contingency table as a sorted list of TableEntry instances.
+ *
+ * The `TableBucketVector` type is used to maintain the contingency table as a
+ * sorted list of `TableEntry` objects. A `std::vector` is chosen for its
+ * relatively low memory overhead, ease of sorting, and ability to dynamically
+ * extend.
+ *
+ * @details `TableBucketVector` is the currently implemented data type used for
+ * the `BucketContainer` template. Users are encouraged to implement and
+ * experiment with other data structures that might offer better performance or
+ * characteristics.
+ */
+using TableBucketVector = std::vector<TableEntry>;
+
+/**
+ * @brief Sorts the elements in a bucket and merges duplicates.
+ *
+ * Sorts the entries in the `TableBucketVector` based on their keys and merges
+ * duplicate entries by summing their counters. This ensures that each key in
+ * the vector is unique, with the corresponding counter representing the total
+ * count of occurrences.
+ *
+ * @param observations The bucket (vector) to sort and merge.
+ * @param size_of_key_in_bytes The size of the keys in bytes, used for comparing
+ * keys.
+ * @param number_of_groups The number of groups, used to determine the length of
+ * the `Data` array.
+ */
+template <typename BucketContainer>
+void SortAndMergeDuplicates(BucketContainer& observations,
+                            uint64_t size_of_key_in_bytes,
+                            uint64_t number_of_groups);
+
+/**
+ * @brief Merges elements from `observations` into `bucket`, updating existing
+ * entries and removing merged ones.
+ *
+ * @details Iterates through the `observations` and `bucket` vectors. If an
+ * element in `observations` is already present in `bucket`, it updates the
+ * corresponding element in `bucket` and removes the element from
+ * `observations`. If the element is not present in `bucket`, it is retained in
+ * `observations`.
+ *
+ * @param bucket The vector representing the bucket where data is merged.
+ * @param observations The vector containing observations to merge into the
+ * bucket. Elements that are merged will be removed.
+ * @param size_of_key_in_bytes The size of the key in bytes used for comparison.
+ * @param number_of_groups The number of groups of data associated with each
+ * key.
+ */
+template <typename BucketContainer>
+void UpdateBucketWithBucket(BucketContainer& bucket,
+                            BucketContainer& observations,
+                            uint64_t size_of_key_in_bytes,
+                            uint64_t number_of_groups);
+
+/**
+ * @brief Determines if the sample size is sufficient based on statistical
+ * parameters.
+ *
+ * @details This function calculates whether the given sample size is adequate
+ * for detecting an effect size with a specified beta threshold, given the
+ * number of groups and entries. It uses a chi-squared distribution to compute
+ * the critical value and a non-central chi-squared distribution to evaluate the
+ * cumulative distribution function.
+ *
+ * @param number_of_samples The number of samples in the dataset.
+ * @param number_of_groups The number of groups in the dataset.
+ * @param number_of_entries The number of entries in the dataset.
+ * @param beta_threshold The acceptable probability of a Type II error
+ * (false-negative rate).
+ * @param effect_size The expected effect size to detect.
+ * @return true if the sample size is sufficient to detect the effect size with
+ * the given beta threshold, false otherwise.
+ */
+bool IsSampleSizeSufficient(uint64_t number_of_samples,
+                            uint64_t number_of_groups,
+                            uint64_t number_of_entries, double_t beta_threshold,
+                            double_t effect_size);
+
+/**
+ * @brief Computes the required sample size for a chi-squared test.
+ *
+ * This function calculates the sample size needed to achieve sufficient
+ * statistical power in a chi-squared test based on specified parameters.
+ *
+ * @param number_of_groups The number of groups in the dataset.
+ * @param number_of_entries The number of entries in the dataset.
+ * @param beta_threshold The desired probability of a Type II error
+ * (false-negative rate).
+ * @param effect_size The desired effect size to detect.
+ * @return The computed required sample size to achieve the desired statistical
+ * power.
+ */
+uint64_t ComputeRequiredSampleSize(uint64_t number_of_groups,
+                                   uint64_t number_of_entries,
+                                   double_t beta_threshold,
+                                   double_t effect_size);
+
+template <typename BucketContainer>
+class ContingencyTable {
+ public:
+  /**
+   * @brief Default constructor for ContingencyTable.
+   *
+   * Initializes a ContingencyTable instance with all possible observations.
+   * In compact mode, this constructor ensures that every possible observation
+   * is accessible by index, reflecting the small number of possible
+   * observations. This initialization is crucial for efficient access and
+   * manipulation of observations within the table and allows a great
+   * performance improvement compared to the normal mode.
+   */
+  ContingencyTable() = default;
+
+  /**
+   * @brief Initializes the ContingencyTable for a specific type of bucket
+   * container.
+   *
+   * Sets up the ContingencyTable instance, adjusting the size of keys based on
+   * the number of probes and whether the table is in compact mode.
+   *
+   * @param number_of_probes The number of probes used in observations.
+   * @param is_in_compact_mode Flag indicating if the table operates in compact
+   * mode.
+   */
+  void Initialize(uint64_t number_of_probes, bool is_in_compact_mode);
+
+  void Deconstruct();
+
+  uint64_t GetSizeOfKeyInBytes() const;
+  uint64_t GetNumberOfEntries() const;
+  double_t GetLog10pValue() const;
+
+  /**
+   * @brief Updates the bucket with a single observation.
+   *
+   * This function updates the existing entries in the bucket with data from the
+   * provided observation. If the observation's key matches an existing key in
+   * the bucket, the corresponding data is added to the existing entry. If no
+   * match is found, the observation is inserted into the bucket in a sorted
+   * order.
+   *
+   * @param observation The TableEntry containing the key and data to be updated
+   * or inserted into the bucket.
+   * @param number_of_groups The number of groups associated with each key,
+   * used to iterate over the data arrays.
+   *
+   * @details The function uses a binary search to find the appropriate position
+   * for the observation in the sorted bucket. If a match is found, the data
+   * arrays of the existing entry and the observation are combined by adding
+   * corresponding elements. If no match is found, the observation is inserted
+   * into the correct position to maintain the bucket's sorted order.
+   */
+  void UpdateBucket(TableEntry& observation, uint64_t number_of_groups);
+
+  /**
+   * @brief Updates the bucket with multiple observations.
+   *
+   * This function updates the bucket with data from a vector of observations.
+   * It sorts and merges duplicate entries in the observations vector, then
+   * updates the bucket by merging the processed observations into it. The
+   * function ensures that the bucket remains sorted.
+   *
+   * @param observations The vector of TableEntry objects containing the keys
+   * and data to be updated or inserted into the bucket.
+   * @param number_of_groups The number of groups associated with each key,
+   * used to iterate over the data arrays.
+   *
+   * @details The function first sorts and merges duplicates in the observations
+   * vector using `SortAndMergeDuplicates`. It then updates the bucket with the
+   * processed observations using `UpdateBucketWithBucket`. After reserving
+   * enough space for new entries, it moves the remaining observations into the
+   * bucket and ensures that the bucket remains sorted by calling `SortBucket`.
+   */
+  void UpdateBucket(TableBucketVector& observations, uint64_t number_of_groups);
+
+  /**
+   * @brief Calculates and sets the log base 10 p-value for PROLEAD_SW.
+   *
+   * This function calculates the log base 10 p-value for the contingency table
+   * based on the observed data. It first computes the number of simulations per
+   * group and their ratios, then calculates the G-test statistic and uses it to
+   * compute the log base 10 p-value.
+   *
+   * @param number_of_groups The number of groups in the contingency table.
+   */
+  void SetLog10pValue(uint64_t number_of_groups);
+
+  /**
+   * @brief Calculates and sets the log base 10 p-value for PROLEAD.
+   *
+   * This function calculates the log base 10 p-value for the contingency table
+   * based on pre-determined numbers of simulations and group simulation ratios.
+   * It calculates the G-test statistic and uses it to compute the log base 10
+   * p-value.
+   *
+   * @param number_of_groups The number of groups in the contingency table.
+   * @param number_of_simulations The total number of simulations.
+   * @param group_simulation_ratio A vector containing the ratio of simulations
+   * for each group.
+   */
+  void SetLog10pValue(uint64_t number_of_groups, uint64_t number_of_simulations,
+                      std::vector<double_t>& group_simulation_ratio);
+
+ private:
+  /**
+   * @brief The size of the key in bytes.
+   *
+   * This variable stores the size of the key used in the contingency table,
+   * measured in bytes. It is used to perform comparisons of the keys within the
+   * table.
+   */
+  uint64_t size_of_key_in_bytes_;
+
+  /**
+   * @brief The logarithm base 10 of the p-value.
+   *
+   * This variable stores the log base 10 of the p-value calculated from the
+   * contingency table. It is used to assess the statistical significance of the
+   * observations in the table.
+   */
+  double_t log_10_p_value_;
+
+  /**
+   * @brief The container holding the table entries.
+   *
+   * This variable holds the entries of the contingency table. It uses a
+   * container, typically a vector, to store `TableEntry` objects, which consist
+   * of keys and associated data. The type of container is defined by the
+   * `BucketContainer` template parameter.
+   */
+  BucketContainer bucket_;
+
+  /**
+   * @brief Sorts the bucket in the contingency table.
+   *
+   * This function sorts the `bucket_` container, which holds the table entries.
+   * It uses an in-place merge algorithm to efficiently sort the elements.
+   *
+   * @param number_of_entries The number of entries in the bucket before the
+   * merge.
+   *
+   * @details The function assumes that the first `number_of_entries` elements
+   * in the `bucket_` are already sorted. It merges these sorted elements with
+   * the remaining, but also sorted, elements in the bucket to produce a fully
+   * sorted container.
+   *
+   * The sorting is based on the comparison of keys using `std::memcmp` to
+   * ensure that the keys are compared correctly according to their byte size
+   * defined by `size_of_key_in_bytes_`.
+   */
+  void SortBucket(uint64_t number_of_entries);
+
+  /**
+   * @brief Sums up the counters for one entry.
+   * @param counters A pointer to the array of counters.
+   * @param number_of_groups The number of groups for which the counters are
+   * summed.
+   * @return The total sum of the counters.
+   */
+  uint64_t SumUpCounters(uint32_t* counters, uint64_t number_of_groups) const;
+
+  /**
+   * @brief Calculates the expected frequencies for one entry of the contingency
+   * table.
+   *
+   * @param group_simulation_ratio A vector containing the ratio of the number
+   * of simulations per group to the total number of simulations.
+   * @param number_of_simulations_per_entry The total number of simulations for
+   * the table entry.
+   * @param expected_frequencies A vector to be filled with the calculated
+   * expected frequencies for each group.
+   */
+  void SetExpectedFrequenciesOfAnEntry(
+      const std::vector<double_t>& group_simulation_ratio,
+      uint64_t number_of_simulations_per_entry,
+      std::vector<double_t>& expected_frequencies) const;
+
+  /**
+   * @brief Checks if an entry's expected frequency is high enough for direct
+   * evaluation or if pooling is necessary.
+   *
+   * The G-test can overestimate statistical outliers, especially when the
+   * contingency table is sparsely filled. For instance, a probing set with many
+   * probes might simulate each key only once, leading to potential false
+   * positives. To mitigate this issue, pooling combines sparsely-filled entries
+   * based on a pooling factor, which dynamically adjusts according to the size
+   * of the contingency table.
+   *
+   * @param expected_frequencies The precomputed expected frequencies of entries
+   * in the contingency table.
+   * @param pooling_factor The factor that determines the threshold for pooling.
+   * Larger tables use a higher pooling factor to be more aggressive in pooling.
+   * @return True if the expected frequency is high enough for direct
+   * evaluation, false if pooling is recommended.
+   *
+   * @details This function evaluates whether the expected frequency of an entry
+   * in the contingency table is sufficient for direct statistical evaluation or
+   * if pooling should be considered. The decision is based on comparing the
+   * entry's expected frequency with a threshold determined by the pooling
+   * factor. If the expected frequency meets or exceeds the threshold, direct
+   * evaluation is recommended. Otherwise, pooling is suggested to improve
+   * statistical reliability, especially in sparsely-populated tables.
+   */
+  bool AreExpectedFrequenciesHighEnoughForEvaluation(
+      const std::vector<double_t>& expected_frequencies,
+      double_t pooling_factor) const;
+
+  /**
+   * @brief Updates the G-test statistic based on observed counters and expected
+   * frequencies.
+   * @param counters Array of observed counts for each group.
+   * @param expected_frequencies Precomputed expected frequencies for each
+   * group.
+   * @param g_test_statistic Reference to the current G-test statistic, updated
+   * by adding contributions from each non-zero counter.
+   */
+  void UpdateGTestStatistic(uint32_t* counters,
+                            const std::vector<double_t>& expected_frequencies,
+                            double_t& g_test_statistic) const;
+
+  /**
+   * @brief Computes the G-test statistic for the contingency table.
+   * @param number_of_groups Number of groups in the contingency table.
+   * @param number_of_simulations Total number of simulations performed.
+   * @param group_simulation_ratio Ratio of simulations per group relative to
+   * total simulations.
+   * @param degrees_of_freedom Reference to store the degrees of freedom for the
+   * G-test.
+   * @return Computed G-test statistic for the contingency table.
+   */
+  double_t SetGTestStatistic(uint64_t number_of_groups,
+                             uint64_t number_of_simulations,
+                             std::vector<double_t>& group_simulation_ratio,
+                             uint64_t& degrees_of_freedom) const;
+
+  /**
+   * @brief Computes the negative log base 10 of the p-value for a given G-test
+   * statistic.
+   *
+   * The function calculates the negative log base 10 of the p-value associated
+   * with the G-test statistic. It utilizes the chi-squared distribution with
+   * given degrees of freedom to determine the p-value, which is then
+   * transformed into its negative logarithmic form.
+   *
+   * @param g_test_statistic The computed G-test statistic from observed and
+   * expected frequencies.
+   * @param degrees_of_freedom The degrees of freedom for the chi-squared
+   * distribution, determining the shape of the distribution.
+   * @return The negative log base 10 of the p-value corresponding to the
+   * provided G-test statistic. Returns 0.0 if degrees of freedom are zero.
+   */
+  double_t ComputeLog10pValue(double_t g_test_statistic,
+                              uint64_t degrees_of_freedom) const;
+};
+
+void StartClock(timespec& start);
+double EndClock(timespec& start);
+void GenerateThreadRng(std::vector<boost::mt19937>& rng,
+                       uint64_t number_of_threads);
+void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
+                                   std::vector<bool>& bitmask);
+
+namespace Util {
+uint64_t PrintMemoryConsumption();
+void PrintHorizontalLine(unsigned int width);
+void PrintRow(std::vector<unsigned int>& width,
+              std::vector<std::string>& elements);
+void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
+void ExtractCombinationFromBitmask(std::vector<unsigned int>& combination,
+                                   std::vector<bool>& bitmask);
+}  // namespace Util

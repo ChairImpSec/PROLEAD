@@ -1,11 +1,13 @@
 #include "Software/Analyze.hpp"
 
-void Software::Analyze::All(Software::SettingsStruct& Settings, std::vector<Software::SharedDataStruct>& SharedInputData,  Software::HelperStruct& Helper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
+double Software::Analyze::All(Software::SettingsStruct& Settings, std::vector<Software::SharedDataStruct>& SharedInputData,  Software::HelperStruct& Helper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
     struct timespec begin, end;
     clock_gettime(CLOCK_REALTIME, &begin);
 
+    double maximum_leakage = 0.0;
+
     if (true){
-        Software::Analyze::ProbingSecurity(Settings, SharedInputData, Helper, GlobalThreadSimulations);
+        maximum_leakage = Software::Analyze::ProbingSecurity(Settings, SharedInputData, Helper, GlobalThreadSimulations);
     }else{
         throw std::runtime_error("More models are currently not supported!");
     }
@@ -16,11 +18,12 @@ void Software::Analyze::All(Software::SettingsStruct& Settings, std::vector<Soft
     long timeInNanoseconds = end.tv_nsec - begin.tv_nsec;
     double elapsedTimePeriod = timeInSeconds + timeInNanoseconds*1e-9;
     std::cout << "Evaluation done in " << elapsedTimePeriod << " seconds!" << std::endl;
+    return maximum_leakage;
 }
 
 //***************************************************************************************
-void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std::vector<Software::SharedDataStruct>& SharedInputData, Software::HelperStruct& GlobalHelper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
-
+double Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std::vector<Software::SharedDataStruct>& SharedInputData, Software::HelperStruct& GlobalHelper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
+    double maximum_leakage = 0.0;
     uint64_t StepSimulationIndex = 0;
     uint32_t NumberOfProcessedSimulations = 0;
     struct timespec begin, end;
@@ -37,7 +40,7 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
     if(Settings.TestOrder > 1){
         Software::Operators::ComputeBinomCoeffOrderOverTwo(OrderOverTwoCombination, Settings.TestOrder);
     }
-    
+    	
     for(auto& Test: GlobalTests){
         Test.NumberOfSets.resize(Settings.NumberOfStepSimulations, 0);
         Test.ProbingSet.resize(Settings.NumberOfStepSimulations);
@@ -58,14 +61,13 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
 
     Software::Print::EvaluationTableHeader();
 
-
     for(StepSimulationIndex = 0; StepSimulationIndex < (Settings.NumberOfSimulations / Settings.NumberOfStepSimulations); ++StepSimulationIndex){
-        
         //initialize inputs for i-th simulation
         Software::Simulate::GenerateInputs(SharedInputData, GlobalThreadSimulations, Settings, InputPrng);
         
         std::vector<std::tuple<uint32_t, uint32_t, double>> ProbingSetsWithHighestProbabilities; //<thread, position, probability>
         uint32_t IndexOfSmallestProbability = 0;
+        
         for(uint32_t i = 0; i < (uint32_t)Settings.Max_No_ReportEntries; ++i){
             ProbingSetsWithHighestProbabilities.push_back(std::make_tuple(0,0,0.0));
         }
@@ -73,12 +75,11 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
         std::vector<std::vector<std::vector<std::vector<uint8_t>>>> FullStepSimulationProbeValues; //required for multivariate case; contains all probed values of all #numberstepsimulations
         std::vector<std::vector<std::vector<Software::ProbesStruct>>> FullStepSimulationStandardProbes(Settings.NumberOfStepSimulations, std::vector<std::vector<Software::ProbesStruct>>(Settings.Max_no_of_Threads)); //required for multivariate case; contains all standard proes of all #numberofstepsimulations
 
-
         #pragma omp parallel for schedule(auto)
         for(uint32_t thread = 0; thread < (uint32_t)Settings.Max_no_of_Threads; ++thread){
             uint32_t Position;
             uint32_t ThreadIndex = omp_get_thread_num();
-      
+	  
             /**
              * @brief local thread instances
              * 
@@ -93,12 +94,9 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
 
             std::vector<std::vector<std::vector<std::vector<uint8_t>>>> ProbeValues; //[simulation][registernumber][registerbit][clockcycle]
             ProbeValues.resize(static_cast<uint64_t>(std::ceil(Settings.NumberOfStepSimulations/8.0f)), std::vector<std::vector<std::vector<uint8_t>>>(17,std::vector<std::vector<uint8_t>>(32,std::vector<uint8_t>(GlobalThreadSimulations.at(ThreadIndex).CycleEnd.back() + 1, 0))));
-
             
             for(uint32_t CycleSplit = 0; CycleSplit < GlobalThreadSimulations.at(ThreadIndex).NumberOfCycleSplits; ++CycleSplit){
-
                 for(uint32_t SimulationIndex = 0; SimulationIndex < Settings.NumberOfStepSimulations; ++SimulationIndex){
-
                     if(CycleSplit ==  0){
                         mulator::Emulator Emulator(Settings.arch, ThreadPrng, Settings.NumberOfPipelineStages);
                         Software::Simulate::Instantiate_Emulator(Emulator, GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, Settings, SharedInputData[SimulationIndex], GlobalThreadSimulations.at(ThreadIndex).CycleStart.at(CycleSplit), ProbeTracker.at(SimulationIndex), GlobalHelper, ProbeValues.at(SimulationIndex >> 3));
@@ -113,30 +111,24 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
                     if(!Settings.TestMultivariate){
                         Software::Probing::GetProbingSets(GlobalThreadSimulations.at(ThreadIndex), Settings, GlobalTests.at(ThreadIndex), OrderOverTwoCombination, ProbeInfoToStandardProbe, SimulationIndex);
                     }
-
                 }
+								
                 if(!Settings.TestMultivariate){
-                    if (GlobalTests.at(ThreadIndex).GlobalProbingSets.empty()){
-                        GlobalTests.at(ThreadIndex).GlobalProbingSets = GlobalTests.at(ThreadIndex).ProbingSet.at(0); //first simulation directly copied to globaprobingsets
-                    }
-
                     //go over every StepSimulation
                     for (uint32_t SimulationIndex = 0; SimulationIndex < Settings.NumberOfStepSimulations; SimulationIndex++)
                     {
                         unsigned int GlobalProbingSetIndex = 0;
-                        Util::TableEntryStruct TableEntry(GlobalThreadSimulations.at(ThreadIndex).NumberOfGroups);
 
                             //go over ervery ProbingSet of the current Simulation
                         for (uint32_t ProbingSetIndex = 0; ProbingSetIndex < GlobalTests.at(ThreadIndex).NumberOfSets.at(SimulationIndex); ProbingSetIndex++)
                         {
                             //check if we already have a probing set that is exactly the one we currently look at and get position
                             auto it = std::lower_bound(GlobalTests.at(ThreadIndex).GlobalProbingSets.begin() + GlobalProbingSetIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.end(), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbingSetCompare);
-
                             Position = std::distance(GlobalTests.at(ThreadIndex).GlobalProbingSets.begin(), it);
 
                             //if its not in GlobalProbingSets yet -> insert it, otherwise update the corresponding table entry
                             if ((it == GlobalTests.at(ThreadIndex).GlobalProbingSets.end()) || !(GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position) == GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex))){
-                                it = GlobalTests.at(ThreadIndex).GlobalProbingSets.insert(it, GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex));
+                                it = GlobalTests.at(ThreadIndex).GlobalProbingSets.insert(it, std::move(GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex)));
                             }
 
                             Position = std::distance(GlobalTests.at(ThreadIndex).GlobalProbingSets.begin(), it);
@@ -145,19 +137,19 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
                             if(Settings.TestOrder == 1){
                                 
                                 if(Settings.CompactDistributions){
-                                    Software::Test::CompactFirstOrderTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry);
+                                    Software::Test::CompactFirstOrderTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper);
                                 }else{
-                                    Software::Test::FirstOrderTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry);
+                                    Software::Test::FirstOrderTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper);
                                 }
 
                             }
                             else if((Settings.TestOrder > 1) && (!Settings.TestMultivariate)) //higher order univariate case
                             {
                                 if(Settings.CompactDistributions){
-                                    Software::Test::CompactHigherOrderUnivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry, HighOrderUnivariateRedundancy, ProbeInfoToStandardProbe);
+                                    Software::Test::CompactHigherOrderUnivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, HighOrderUnivariateRedundancy, ProbeInfoToStandardProbe);
                                 }
                                 else{
-                                    Software::Test::HigherOrderUnivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry, HighOrderUnivariateRedundancy, ProbeInfoToStandardProbe);
+                                    Software::Test::HigherOrderUnivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), ProbeValues.at(SimulationIndex >> 3), GlobalHelper, HighOrderUnivariateRedundancy, ProbeInfoToStandardProbe);
                                 }
                                 for(auto &row: HighOrderUnivariateRedundancy){
                                     std::fill(row.begin(), row.end(), false);
@@ -165,7 +157,7 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
                             } 
                         }
                     }
-                    Software::Test::Test(GlobalThreadSimulations.at(ThreadIndex), GlobalTests.at(ThreadIndex), Settings.CompactDistributions);
+                    Software::Test::Test(GlobalThreadSimulations.at(ThreadIndex), GlobalTests.at(ThreadIndex));
                 }
 
                 
@@ -206,7 +198,6 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
     
                 for(uint32_t SimulationIndex = 0; SimulationIndex < Settings.NumberOfStepSimulations; ++SimulationIndex){
                     unsigned int GlobalProbingSetIndex = 0;
-                    Util::TableEntryStruct TableEntry(GlobalThreadSimulations.at(ThreadIndex).NumberOfGroups);
 
                         // go over ervery ProbingSet of the current Simulation
                     for (uint32_t ProbingSetIndex = 0; ProbingSetIndex < GlobalTests.at(ThreadIndex).NumberOfSets.at(SimulationIndex); ProbingSetIndex++)
@@ -217,23 +208,22 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
 
                         // if its not in GlobalProbingSets yet -> insert it, otherwise update the corresponding table entry
                         if ((it == GlobalTests.at(ThreadIndex).GlobalProbingSets.end()) || !(GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position) == GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex))){
-                            it = GlobalTests.at(ThreadIndex).GlobalProbingSets.insert(it, GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex));
+                            it = GlobalTests.at(ThreadIndex).GlobalProbingSets.insert(it, std::move(GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex)));
                         }
 
                         Position = std::distance(GlobalTests.at(ThreadIndex).GlobalProbingSets.begin(), it);
 
                         GlobalProbingSetIndex = Position;
                         if(Settings.CompactDistributions){
-                            Software::Test::CompactHigherOrderMultivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), FullStepSimulationProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry, ProbeInfoToStandardProbe);
+                            Software::Test::CompactHigherOrderMultivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), FullStepSimulationProbeValues.at(SimulationIndex >> 3), GlobalHelper, ProbeInfoToStandardProbe);
 
                         }
                         else{
-                            Software::Test::HigherOrderMultivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), FullStepSimulationProbeValues.at(SimulationIndex >> 3), GlobalHelper, TableEntry, ProbeInfoToStandardProbe);
+                            Software::Test::HigherOrderMultivariateTableUpdate(GlobalThreadSimulations.at(ThreadIndex), SimulationIndex, GlobalTests.at(ThreadIndex).GlobalProbingSets.at(Position), GlobalTests.at(ThreadIndex).ProbingSet.at(SimulationIndex).at(ProbingSetIndex), FullStepSimulationProbeValues.at(SimulationIndex >> 3), GlobalHelper, ProbeInfoToStandardProbe);
                         }
-
                     }
                 }
-                Software::Test::Test(GlobalThreadSimulations.at(ThreadIndex), GlobalTests.at(ThreadIndex), Settings.CompactDistributions);
+                Software::Test::Test(GlobalThreadSimulations.at(ThreadIndex), GlobalTests.at(ThreadIndex));
             }
         }
   
@@ -246,15 +236,15 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
             GlobalProbingSetSize += GlobalTests.at(thread).GlobalProbingSets.size();
             for (size_t i = 0; i < GlobalTests.at(thread).GlobalProbingSets.size(); ++i)
             {
-                if(GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Entries.size() > std::get<2>(LargestContingencyTableProbingSet)){
+                if(GlobalTests.at(thread).GlobalProbingSets.at(i).contingency_table_.GetNumberOfEntries() > std::get<2>(LargestContingencyTableProbingSet)){
                     std::get<0>(LargestContingencyTableProbingSet) = thread;
                     std::get<1>(LargestContingencyTableProbingSet) = i;
-                    std::get<2>(LargestContingencyTableProbingSet) = GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Entries.size();
+                    std::get<2>(LargestContingencyTableProbingSet) = GlobalTests.at(thread).GlobalProbingSets.at(i).contingency_table_.GetNumberOfEntries();
                 }
                 
                 // found probability which is higher than lowest probability in vector -> replace and set index to new position
-                if(GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Probability > std::get<2>(ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability))){
-                    ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability) = std::make_tuple(thread, i,GlobalTests.at(thread).GlobalProbingSets.at(i).ContingencyTable.Probability );
+                if(GlobalTests.at(thread).GlobalProbingSets.at(i).contingency_table_.GetLog10pValue() > std::get<2>(ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability))){
+                    ProbingSetsWithHighestProbabilities.at(IndexOfSmallestProbability) = std::make_tuple(thread, i,GlobalTests.at(thread).GlobalProbingSets.at(i).contingency_table_.GetLog10pValue() );
 
                     auto it = std::min_element(ProbingSetsWithHighestProbabilities.begin(), ProbingSetsWithHighestProbabilities.end(), [](const auto& a, const auto& b){return std::get<2>(a) < std::get<2>(b);});
                     IndexOfSmallestProbability = std::distance(ProbingSetsWithHighestProbabilities.begin(), it);
@@ -292,13 +282,13 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
         std::get<1>(MaximumProbingSet) = std::get<1>(ProbingSetsWithHighestProbabilities.back());
 
         Software::Print::SoftwareMaximumProbingSet(Settings.TestOrder, GlobalTests.at(std::get<0>(MaximumProbingSet)), std::get<1>(MaximumProbingSet), TableRow[4]);
-        TableRow[5] = std::to_string(GlobalTests.at(std::get<0>(MaximumProbingSet)).GlobalProbingSets.at(std::get<1>(MaximumProbingSet)).ContingencyTable.Probability);
+        TableRow[5] = std::to_string(GlobalTests.at(std::get<0>(MaximumProbingSet)).GlobalProbingSets.at(std::get<1>(MaximumProbingSet)).contingency_table_.GetLog10pValue());
 
         if (Settings.CompactDistributions){
 		    TableRow[3] = std::to_string(NumberOfProcessedSimulations);
         }else{
-            TableRow[3] = std::to_string(NumberOfProcessedSimulations) + " / " + std::to_string(GlobalTests.at(std::get<0>(LargestContingencyTableProbingSet)).GlobalProbingSets.at(std::get<1>(LargestContingencyTableProbingSet)).ContingencyTable.Traces);
-        }
+			TableRow[3] = std::to_string(NumberOfProcessedSimulations) + " / " + std::to_string(ComputeRequiredSampleSize(Settings.NumberOfGroups, GlobalTests.at(std::get<0>(LargestContingencyTableProbingSet)).GlobalProbingSets.at(std::get<1>(LargestContingencyTableProbingSet)).contingency_table_.GetNumberOfEntries(), Settings.BetaThreshold, Settings.EffectSize));
+			}
 
 		// Stop timing of one evaluation step
 		clock_gettime(CLOCK_REALTIME, &end);
@@ -311,15 +301,18 @@ void Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  std
         Software::Print::EvaluationTableLine(TableRow);
         
         //Print reports
-        if ((NumberOfProcessedSimulations % Settings.NumberOfStepSimulationsToWrite) == 0){
-            Software::Print::ProbeReport(GlobalThreadSimulations, Settings, GlobalTests, (NumberOfProcessedSimulations / Settings.NumberOfStepSimulationsToWrite) - 1, Settings.Max_No_ReportEntries, ProbingSetsWithHighestProbabilities, GlobalHelper, NumberOfProcessedSimulations);
+        if (Settings.NumberOfStepSimulationsToWrite) {
+            if ((NumberOfProcessedSimulations % Settings.NumberOfStepSimulationsToWrite) == 0){
+                Software::Print::ProbeReport(GlobalThreadSimulations, Settings, GlobalTests, (NumberOfProcessedSimulations / Settings.NumberOfStepSimulationsToWrite) - 1, Settings.Max_No_ReportEntries, ProbingSetsWithHighestProbabilities, GlobalHelper, NumberOfProcessedSimulations);
+            }
         }
-
     }
 
+    maximum_leakage = GlobalTests.at(std::get<0>(MaximumProbingSet)).GlobalProbingSets.at(std::get<1>(MaximumProbingSet)).contingency_table_.GetLog10pValue();
     std::cout.width(96);
     std::cout.fill('-');
     std::cout << '-' << std::endl;
     std::cout.fill(' ');
     std::cout << std::endl;
+    return maximum_leakage;
 }

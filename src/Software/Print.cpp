@@ -1,6 +1,6 @@
 #include "Software/Print.hpp"
 
-void Software::Print::CommandLineSettings(CommandLineParameterStruct& CommandLineParameters){
+/*void Software::Print::CommandLineSettings(CommandLineParameterStruct& CommandLineParameters){
     std::cout << "Source file(s): " << CommandLineParameters.DesignFileName             << std::endl;
     std::cout << "Linker file:    " << CommandLineParameters.LinkerFileName             << std::endl;
     std::cout << "Settings file:  " << CommandLineParameters.SettingsFileName           << std::endl;
@@ -8,7 +8,8 @@ void Software::Print::CommandLineSettings(CommandLineParameterStruct& CommandLin
 	if(!CommandLineParameters.BinaryInformationNames.empty()){
 		std::cout << "Binary information path:  " << CommandLineParameters.BinaryInformationNames << std::endl;
 	}
-}
+}*/
+
 //***************************************************************************************
 void Software::Print::EvaluationTableHeader(){
 

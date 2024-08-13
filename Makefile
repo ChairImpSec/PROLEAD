@@ -20,7 +20,7 @@
 INC_DIRS = inc
 
 # Source directories with the .c and .cpp files. Separate multiple directories with a space.
-TEST_SRC = "ut src/Hardware src/Util"
+TEST_SRC = "ut src/Software src/Hardware src/Util"
 DEBUG_SRC = src
 RELEASE_SRC = src
 
@@ -32,21 +32,25 @@ RELEASE_DIR = release
 DEBUG_DIR = debug
 TEST_DIR = test
 
+EXCLUDED_FILES := test/obj_test/ut/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c
+
 # Compiler options
 INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
-C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
+C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
-C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
+C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 
-CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -fomit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
+CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
 CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
-CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
+CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
 
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`
-RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3)
-DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3)
-TEST_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3)
+LINK_FLINT = -lflint -lmpfr -lgmp -lm
+LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python310
+RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
+DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
+TEST_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 
 # Output file name
 OUTPUT = PROLEAD
@@ -59,7 +63,7 @@ OUTPUT = PROLEAD
 ##          CORE (do not touch)            ##
 #############################################
 
-.PHONY: all release debug clean help compile directories check
+.PHONY: all release debug clean help compile directories check test
 
 HELP_MESSAGE = Simply use any combination of 'make {debug, release, test, help, clean}'. Just calling 'make' will build release and debug. By adding 'V=1' prints more verbose output.
 
@@ -90,6 +94,7 @@ endif
 
 # list all .c and .cpp files
 C_LIST := $(foreach dir,$(SRC_DIRS),$(patsubst $(dir)/%,$(OUTPUT_DIRECTORY)/$(OBJ_DIR)/$(dir)/%,$(shell find $(dir) -name "*.c")))
+C_LIST := $(filter-out $(EXCLUDED_FILES),$(C_LIST))
 CXX_LIST := $(foreach dir,$(SRC_DIRS),$(patsubst $(dir)/%,$(OUTPUT_DIRECTORY)/$(OBJ_DIR)/$(dir)/%,$(shell find $(dir) -name "*.cpp")))
 
 # create object file names in the obj directory

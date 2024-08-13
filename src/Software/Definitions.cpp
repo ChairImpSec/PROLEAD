@@ -26,7 +26,6 @@ Software::HelperStruct::HelperStruct(){
 }
 Software::ProbingSetStruct::ProbingSetStruct(std::vector<Software::ProbesStruct>& Probe){
 	StandardProbe = {Probe.begin(), Probe.end()};
-	ContingencyTable.Probability = 0.0;
     for(const auto& item: Probe){
         NumberOfProbesInSet += (item.ProbeInfo & 0xff);
     }
@@ -34,13 +33,11 @@ Software::ProbingSetStruct::ProbingSetStruct(std::vector<Software::ProbesStruct>
 
 Software::ProbingSetStruct::ProbingSetStruct(Software::ProbesStruct& Probe){
 	StandardProbe.push_back(Probe);
-	ContingencyTable.Probability = 0.0;
     NumberOfProbesInSet += (Probe.ProbeInfo & 0x0ff);
 }
 
 Software::ProbingSetStruct::ProbingSetStruct(uint32_t TestOrder){
 	StandardProbe.resize(TestOrder);
-	ContingencyTable.Probability = 0.0;
     NumberOfProbesInSet = 0;
 }
 

@@ -1,93 +1,47 @@
 #include "Software/Prepare.hpp"
 
-void Software::Prepare::All(CommandLineParameterStruct& Parameter, Software::ConfigProbesStruct* Probes, Software::SettingsStruct* Settings, std::vector<Software::SharedDataStruct>& SharedInputData, Software::HelperStruct& GlobalHelper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
+void Software::Prepare::All(const po::variables_map& vm, Software::ConfigProbesStruct& probes, Software::SettingsStruct& settings, Settings& settings2, std::vector<Software::SharedDataStruct>& SharedInputData, Software::HelperStruct& GlobalHelper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
+  std::string result_folder_name = vm["resultfolder"].as<std::string>();
+  std::string linker_file_name = vm["linkerfile"].as<std::string>();
+  std::string design_file_name = vm["designfile"].as<std::string>();
+  const std::string config_file_name = vm["configfile"].as<std::string>();
 
-    char* LinkerFileName			 =	(char*)malloc(sizeof(char) * (Parameter.LinkerFileName.length() + 1));
-    char* DesignFileName			 =	(char*)malloc(sizeof(char) * (Parameter.DesignFileName.length() + 1));
-    char* SettingsFileName			 =	(char*)malloc(sizeof(char) * (Parameter.SettingsFileName.length() + 1));
-    char* EvaluationResultFolderName =	(char*)malloc(sizeof(char) * (Parameter.EvaluationResultFolderName.length() + 1));
+	bool ignore_makefile_config = false;
 
-	bool ignoreMakefileConfig = false;
-	if(!Parameter.BinaryInformationNames.empty()){
-		//split Binary parameter into location of .map file, location of disassembled.txt, location of binary.elf
-		Settings->externalBinaryInformation.resize(3);
-		std::vector<std::string> tmpBinaryName;
-		std::istringstream iss(Parameter.BinaryInformationNames);
-		std::string tmp;
-		while(std::getline(iss, tmp, ' ' )){
-			tmpBinaryName.push_back(tmp);
-		}
-		tmpBinaryName.erase(std::remove_if(tmpBinaryName.begin(), tmpBinaryName.end(), IsEmptyOrBlank), tmpBinaryName.end());
-		if(tmpBinaryName.size() != 3){
-			throw std::runtime_error("binary flag does not exactly contain three paths (required path to: .elf file, disassembled file, .map file)");
-		}
-		bool mapFound = false;
-		bool disassembledFound = false;
-		bool elfFound = false;
-		for(const auto& path: tmpBinaryName){
-			if(path.rfind(".map", path.length() - 4) != std::string::npos){
-				Settings->externalBinaryInformation.at(1) = path;
-				mapFound = true;
-			}
-			else if(path.rfind(".txt", path.length() -4) != std::string::npos){
-				Settings->externalBinaryInformation.at(2) = path;
-				disassembledFound = true;
-			}
-			else if(path.rfind(".elf", path.length() - 4) != std::string::npos){
-				Settings->externalBinaryInformation.at(0) = path;
-				elfFound = true;
-			}
-			else{
-				throw std::runtime_error("in binary flag: detected path to unknown format");
-			}
-		}
-		if(!mapFound){
-			throw std::runtime_error("in binary flag: no path to .map found");
-		}
-		if(!disassembledFound){
-			throw std::runtime_error("in binary flag: no path to disassembled.txt found");
-		}
-		if(!elfFound){
-			throw std::runtime_error("in binary flag: no path to .elf found");
-		}
-
-
-
-		ignoreMakefileConfig = true;
+	if(design_file_name == "design.v"){
+		settings.externalBinaryInformation.resize(3);
+		settings.externalBinaryInformation.at(0) = vm["binary"].as<std::string>();
+		settings.externalBinaryInformation.at(1) = vm["mapfile"].as<std::string>();
+		settings.externalBinaryInformation.at(2) = vm["asmfile"].as<std::string>();
+		ignore_makefile_config = true;
 	}
 
+    Software::Read::SettingsFile(config_file_name, settings, settings2, probes, ignore_makefile_config);
+    Software::Read::BinaryFile(vm, settings);
 
-    strcpy(LinkerFileName, Parameter.LinkerFileName.c_str());
-    strcpy(DesignFileName, Parameter.DesignFileName.c_str());
-    strcpy(SettingsFileName, Parameter.SettingsFileName.c_str());
-    strcpy(EvaluationResultFolderName, Parameter.EvaluationResultFolderName.c_str());
-
-    Software::Read::SettingsFile(SettingsFileName, Settings, Probes, ignoreMakefileConfig);
-    Software::Read::BinaryFile(DesignFileName , Settings, LinkerFileName);
-
-	GlobalThreadSimulations.resize(Settings->Max_no_of_Threads);
+	GlobalThreadSimulations.resize(settings.Max_no_of_Threads);
     
-    std::cout << "Prepare shared data for " << Settings->Max_no_of_Threads << " threads ..." << std::flush;
-	SharedInputData.resize(Settings->NumberOfStepSimulations);
+    std::cout << "Prepare shared data for " << settings.Max_no_of_Threads << " threads ..." << std::flush;
+	SharedInputData.resize(settings.NumberOfStepSimulations);
 	
 	uint32_t CycleCounter = 0;
-	std::vector<uint32_t> number_of_cycles_per_thread(Settings->Max_no_of_Threads);
-	for(uint32_t i = 0; i < (uint32_t)Settings->Max_no_of_Threads; ++i){
-		number_of_cycles_per_thread.at(i) = (uint32_t)Settings->Max_No_ClockCycles/(uint32_t)Settings->Max_no_of_Threads;
+	std::vector<uint32_t> number_of_cycles_per_thread(settings.Max_no_of_Threads);
+	for(uint32_t i = 0; i < (uint32_t)settings.Max_no_of_Threads; ++i){
+		number_of_cycles_per_thread[i] = (uint32_t)settings.Max_No_ClockCycles/(uint32_t)settings.Max_no_of_Threads;
 	}
-	for(uint32_t i = 0; i < (uint32_t)(Settings->Max_No_ClockCycles % Settings->Max_no_of_Threads); ++i){
-		number_of_cycles_per_thread.at(i) += 1;
+	for(uint32_t i = 0; i < (uint32_t)(settings.Max_No_ClockCycles % settings.Max_no_of_Threads); ++i){
+		number_of_cycles_per_thread[i] += 1;
 	}
 
-    for (uint32_t ThreadIndex = 0; ThreadIndex < (uint32_t)Settings->Max_no_of_Threads; ThreadIndex++){
+    for (uint32_t ThreadIndex = 0; ThreadIndex < (uint32_t)settings.Max_no_of_Threads; ThreadIndex++){
         // Software::Prepare::SharedData(Settings, SharedInputData.at(ThreadIndex));
-        Software::Prepare::ThreadSimulation(GlobalThreadSimulations.at(ThreadIndex), Settings, EvaluationResultFolderName, ThreadIndex, CycleCounter, number_of_cycles_per_thread);
-		CycleCounter += number_of_cycles_per_thread.at(ThreadIndex);
+        Software::Prepare::ThreadSimulation(GlobalThreadSimulations[ThreadIndex], settings, result_folder_name, ThreadIndex, CycleCounter, number_of_cycles_per_thread);
+		CycleCounter += number_of_cycles_per_thread[ThreadIndex];
 	}
-	for(uint32_t SimulationIndex = 0; SimulationIndex < Settings->NumberOfStepSimulations; ++SimulationIndex){
-		Software::Prepare::SharedData(Settings, SharedInputData.at(SimulationIndex));
+	for(uint32_t SimulationIndex = 0; SimulationIndex < settings.NumberOfStepSimulations; ++SimulationIndex){
+		Software::Prepare::SharedData(settings, SharedInputData.at(SimulationIndex));
 	}
-    Software::Prepare::Helper(Probes, GlobalHelper);
+    Software::Prepare::Helper(probes, GlobalHelper);
     std::cout << "done!" << std::endl << std::endl;
 }
 
@@ -96,39 +50,39 @@ bool Software::Prepare::IsEmptyOrBlank(const std::string &s) {
 }
 
 
-void Software::Prepare::SharedData(Software::SettingsStruct* Settings, Software::SharedDataStruct& SharedData){
+void Software::Prepare::SharedData(Software::SettingsStruct& settings, Software::SharedDataStruct& SharedData){
 	uint32_t i;
 	
 	/*
 	*	SharedDataStruct for instantiating the emulator in multiple threads
 	*/
 
-	SharedData.BytelengthOfParams.resize(Settings->InitialSim_NumberOfInputs, 0);
-	SharedData.VariableOrArrayParams.resize(Settings->InitialSim_NumberOfInputs, 0);
-	SharedData.StartaddrInRAM.resize(Settings->InitialSim_NumberOfInputs, 0);
+	SharedData.BytelengthOfParams.resize(settings.InitialSim_NumberOfInputs, 0);
+	SharedData.VariableOrArrayParams.resize(settings.InitialSim_NumberOfInputs, 0);
+	SharedData.StartaddrInRAM.resize(settings.InitialSim_NumberOfInputs, 0);
 
-	SharedData.ByteValuesOfParams.resize(Settings->InitialSim_NumberOfInputs);
+	SharedData.ByteValuesOfParams.resize(settings.InitialSim_NumberOfInputs);
 
-	for(i = 0; i < (uint32_t)Settings->InitialSim_NumberOfInputs; ++i){
-		SharedData.ByteValuesOfParams[i].resize(Settings->InitialSim_InputsLength[i], 0);
+	for(i = 0; i < (uint32_t)settings.InitialSim_NumberOfInputs; ++i){
+		SharedData.ByteValuesOfParams[i].resize(settings.InitialSim_InputsLength[i], 0);
 	}
 }
 
-void Software::Prepare::ThreadSimulation(Software::ThreadSimulationStruct& GlobalThreadSimulation, Software::SettingsStruct* Settings, char* EvaluationResultFolderName, uint32_t ThreadIdx, uint32_t CycleCounter, std::vector<uint32_t>& number_of_cycles_per_thread){
-	GlobalThreadSimulation.TestTransitional = Settings->TestTransitional;
-	GlobalThreadSimulation.StandardProbesPerSimulation.resize(Settings->NumberOfStepSimulations);
-	GlobalThreadSimulation.TestMultivariate = Settings->TestMultivariate;
-	GlobalThreadSimulation.NumberOfTestClockCycles = Settings->NumberOfTestClockCycles;
-	GlobalThreadSimulation.SelectedGroups.resize(Settings->NumberOfStepSimulations);
-	GlobalThreadSimulation.NumberOfGroups = static_cast<uint32_t>(Settings->NumberOfGroups);
-	GlobalThreadSimulation.TestOrder = Settings->TestOrder;
-	GlobalThreadSimulation.EvaluationResultFolderName = EvaluationResultFolderName;
-	GlobalThreadSimulation.NumberOfStepSimulations = static_cast<uint32_t>(Settings->NumberOfStepSimulations);
-	GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.resize(GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.size() + Settings->InitialSim_PositionInEmulatorRam.size());
+void Software::Prepare::ThreadSimulation(Software::ThreadSimulationStruct& GlobalThreadSimulation, Software::SettingsStruct& settings, const std::string& result_folder_name, uint32_t ThreadIdx, uint32_t CycleCounter, std::vector<uint32_t>& number_of_cycles_per_thread){
+	GlobalThreadSimulation.TestTransitional = settings.TestTransitional;
+	GlobalThreadSimulation.StandardProbesPerSimulation.resize(settings.NumberOfStepSimulations);
+	GlobalThreadSimulation.TestMultivariate = settings.TestMultivariate;
+	GlobalThreadSimulation.NumberOfTestClockCycles = settings.NumberOfTestClockCycles;
+	GlobalThreadSimulation.SelectedGroups.resize(settings.NumberOfStepSimulations);
+	GlobalThreadSimulation.NumberOfGroups = static_cast<uint32_t>(settings.NumberOfGroups);
+	GlobalThreadSimulation.TestOrder = settings.TestOrder;
+	GlobalThreadSimulation.EvaluationResultFolderName = result_folder_name;
+	GlobalThreadSimulation.NumberOfStepSimulations = static_cast<uint32_t>(settings.NumberOfStepSimulations);
+	GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.resize(GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.size() + settings.InitialSim_PositionInEmulatorRam.size());
 	
-	for(uint32_t i = 0; i < (uint32_t)Settings->InitialSim_PositionInEmulatorRam.size(); ++i){
-		GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.at(i).push_back(Settings->ram.offset + Settings->InitialSim_PositionInEmulatorRam[Settings->InitialSim_InputName[i]]);
-		GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.at(i).push_back(Settings->ram.offset + Settings->InitialSim_PositionInEmulatorRam[Settings->InitialSim_InputName[i]] + Settings->InitialSim_InputsLength[i] - 1);
+	for(uint32_t i = 0; i < (uint32_t)settings.InitialSim_PositionInEmulatorRam.size(); ++i){
+		GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.at(i).push_back(settings.ram.offset + settings.InitialSim_PositionInEmulatorRam[settings.InitialSim_InputName[i]]);
+		GlobalThreadSimulation.StartRAM_EndRAM_EmulatorInputs.at(i).push_back(settings.ram.offset + settings.InitialSim_PositionInEmulatorRam[settings.InitialSim_InputName[i]] + settings.InitialSim_InputsLength[i] - 1);
 	}
 
 	//calculate which thread executes which clock cycles
@@ -138,11 +92,11 @@ void Software::Prepare::ThreadSimulation(Software::ThreadSimulationStruct& Globa
 
 
 	for(uint32_t i = GlobalThreadSimulation.GlobalCycleStart; i <= GlobalThreadSimulation.GlobalCycleEnd; ++i){
-		for(uint32_t j = 0; j < (uint32_t)Settings->NumberOfTestClockCycles; ++j){
-			if((i) == (uint32_t)Settings->TestClockCycles[j]){
+		for(uint32_t j = 0; j < (uint32_t)settings.NumberOfTestClockCycles; ++j){
+			if((i) == (uint32_t)settings.TestClockCycles[j]){
 				GlobalThreadSimulation.TestClockCycles.push_back(i);
 			}
-			if((uint32_t)Settings->TestClockCycles[j] > GlobalThreadSimulation.GlobalCycleEnd){
+			if((uint32_t)settings.TestClockCycles[j] > GlobalThreadSimulation.GlobalCycleEnd){
 				break;
 			}
 		}
@@ -169,18 +123,18 @@ void Software::Prepare::ThreadSimulation(Software::ThreadSimulationStruct& Globa
 
 }
 
-void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::HelperStruct& Helper){
+void Software::Prepare::Helper(Software::ConfigProbesStruct& probes, Software::HelperStruct& Helper){
 	int ProbeIndex, RegisterIndex, BitIndex;
 	std::string RegisterIndexAsString, BitIndexAsString;
 
 
-	for(ProbeIndex = 0; ProbeIndex < Probes->NumberOfProbes; ++ProbeIndex){
+	for(ProbeIndex = 0; ProbeIndex < probes.NumberOfProbes; ++ProbeIndex){
 
-		RegisterIndexAsString = Probes->ProbeName[ProbeIndex];
-		BitIndexAsString = Probes->ProbeName[ProbeIndex];
+		RegisterIndexAsString = probes.ProbeName[ProbeIndex];
+		BitIndexAsString = probes.ProbeName[ProbeIndex];
 
 		//Normal probes
-		if (Probes->ProbeName[ProbeIndex][0] == 'R'){
+		if (probes.ProbeName[ProbeIndex][0] == 'R'){
 			// Get the Number of the register -> RegisterIndex of R14[12] is 14
 			RegisterIndexAsString = RegisterIndexAsString.substr(1, RegisterIndexAsString.find("[") - 1);
 			RegisterIndex = std::stoi(RegisterIndexAsString);
@@ -194,7 +148,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 
 		}
 		//memory probes
-		else if((strstr(Probes->ProbeName[ProbeIndex], "MEM") != NULL) && (strstr(Probes->ProbeName[ProbeIndex], "MEMSHADOW") == NULL)){ //if string contains mem but not memshadow
+		else if((strstr(probes.ProbeName[ProbeIndex], "MEM") != NULL) && (strstr(probes.ProbeName[ProbeIndex], "MEMSHADOW") == NULL)){ //if string contains mem but not memshadow
 			Helper.ProbeMemory = true;
 
 			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);
@@ -203,7 +157,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 			Helper.MemoryProbesIncluded.emplace_back(BitIndex);
 		}
 		// memory shadow register probes
-		else if((strstr(Probes->ProbeName[ProbeIndex], "MEMSHADOW") != NULL)){
+		else if((strstr(probes.ProbeName[ProbeIndex], "MEMSHADOW") != NULL)){
 			Helper.ProbeMemoryShadowRegister = true;
 
 			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);
@@ -211,7 +165,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 			Helper.MemoryShadowRegisterProbesIncluded.emplace_back(BitIndex);
 		}
 		//horizontal probes
-		else if(Probes->ProbeName[ProbeIndex][0] == 'H'){
+		else if(probes.ProbeName[ProbeIndex][0] == 'H'){
 			// Get the Number of the register -> RegisterIndex of HR14 is 14
 			RegisterIndexAsString = RegisterIndexAsString.substr(2, RegisterIndexAsString.find("[") - 2);
 			RegisterIndex = std::stoi(RegisterIndexAsString);	
@@ -235,7 +189,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 
 		}
 		//vertical probes
-		else if(Probes->ProbeName[ProbeIndex][0] == 'V'){
+		else if(probes.ProbeName[ProbeIndex][0] == 'V'){
 
 			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);
 			BitIndex = std::stoi(BitIndexAsString);
@@ -259,7 +213,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 			}
 		}
 		//full horizontal probes
-		else if((strstr(Probes->ProbeName[ProbeIndex], "FULLHR") != NULL)){
+		else if((strstr(probes.ProbeName[ProbeIndex], "FULLHR") != NULL)){
 			Helper.ProbeFullHorizontal = true;
 
 			for(uint8_t RegIdx = 0; RegIdx < 17; ++RegIdx){
@@ -273,7 +227,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 			}
 		}
 		//full vertical probes
-		else if((strstr(Probes->ProbeName[ProbeIndex], "FULLVR") != NULL)){
+		else if((strstr(probes.ProbeName[ProbeIndex], "FULLVR") != NULL)){
 			Helper.ProbeFullVertical = true;
 
 			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);
@@ -292,7 +246,7 @@ void Software::Prepare::Helper(Software::ConfigProbesStruct* Probes, Software::H
 
 		}
 		//pipeline forwarding probes
-		else if((strstr(Probes->ProbeName[ProbeIndex], "PF") != NULL)){
+		else if((strstr(probes.ProbeName[ProbeIndex], "PF") != NULL)){
 			Helper.ProbePipelineForwarding = true;
 
 			BitIndexAsString = BitIndexAsString.substr(BitIndexAsString.find("[") + 1, BitIndexAsString.find("]") - BitIndexAsString.find("[") - 1);

@@ -2,6 +2,15 @@
 This repository contains the source code for the papers <a href="https://tches.iacr.org/index.php/TCHES/article/view/9822">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a> and <a href="https://eprint.iacr.org/2023/034.pdf">PROLEAD_SW - Probing-Based Software Leakage Detection for ARM Binaries</a>.
 For a quick start, we recommend to watch the quick start guides on our <a href="https://www.youtube.com/channel/UCTCuC2NMxaFPtDb4yGHHwTg">Youtube Channel</a> or to read the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Hardware-beginner's-guide">Hardware beginner's guide</a> or <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Software-beginner's-guide">Software beginner's guide</a> .
 
+## News
+We are excited to announce the release of PROLEADv3, an enhanced and extended version of the original PROLEAD tool. This new version includes several significant features:
+- Evaluation of side-channel resistance under the RR d-probing model
+- Assessment of security against combined adversaries capable of injecting faults and probing wires
+- Support for .json files for configuration and library management, replacing the previous custom file format
+- More granular settings to precisely define adversarial capabilities
+
+We acknowledge that only a few examples are currently available and that full documentation is still in progress. We're working to provide both as quickly as possible. In the meantime, if you have any questions about using PROLEAD, please don't hesitate to reach out to us.
+
 ## Features
 PROLEAD allows to analyze the robust probing security of masked implementations provided as a Verilog netlist or ARM binary. In particular, PROLEAD supports the following features:
 

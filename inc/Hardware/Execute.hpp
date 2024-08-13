@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Hardware/Definitions.hpp"
 #include "Hardware/Prepare.hpp"
 #include "Hardware/Adversaries.hpp"
 #include "Hardware/Read.hpp"
-#include "Util/CommandLineParameter.hpp"
+#include <boost/program_options.hpp>
+
+namespace po = boost::program_options;
 
 namespace Hardware {
 /**
@@ -12,5 +13,5 @@ namespace Hardware {
  * @param parameter The given command line parameters.
  * @author Nicolai Müller
  */
-void Execute(const CommandLineParameterStruct& parameter);
+void Execute(const po::variables_map& vm);
 }  // namespace Hardware

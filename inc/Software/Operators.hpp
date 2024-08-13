@@ -10,7 +10,6 @@ bool operator<(const std::vector<Software::ProbesStruct>& firstOperand, const st
 
 bool operator==(const std::vector<Software::ProbingSetStruct>& firstOperand, const std::vector<Software::ProbingSetStruct>& secondOperand);
 bool operator<(const std::vector<Software::ProbingSetStruct>& firstOperand, const std::vector<Software::ProbingSetStruct>& secondOperand);
-bool TableEntryCompare(const Util::TableEntryStruct& firstOperand, const Util::TableEntryStruct& secondOperand);
 
 bool operator==(const Software::ProbesStruct& firstOperand, const Software::ProbesStruct& secondOperand);
 bool operator<(const Software::ProbesStruct& firstOperand, const Software::ProbesStruct& secondOperand);

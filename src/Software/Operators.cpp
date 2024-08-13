@@ -92,12 +92,6 @@ bool operator<(const std::vector<::Software::ProbingSetStruct>& firstOperand, co
 
 
 //***************************************************************************************
-bool TableEntryCompare(const Util::TableEntryStruct& firstOperand, const Util::TableEntryStruct& secondOperand){
-	return (firstOperand.Key < secondOperand.Key);
-}
-
-
-//***************************************************************************************
 bool operator==(const ::Software::ProbesStruct& firstOperand, const ::Software::ProbesStruct& secondOperand){
 
     return (firstOperand.ProbeInfo) == (secondOperand.ProbeInfo);
@@ -119,12 +113,12 @@ bool operator>(const Software::ProbesStruct& firstOperand, const ::Software::Pro
 
 //***************************************************************************************
 bool ProbabilityCompare(const Software::ProbingSetStruct& firstOperand, const  Software::ProbingSetStruct& secondOperand){
-    return (firstOperand.ContingencyTable.Probability < secondOperand.ContingencyTable.Probability);
+    return (firstOperand.contingency_table_.GetLog10pValue() < secondOperand.contingency_table_.GetLog10pValue());
 }
 
 //***************************************************************************************
 bool SoftwareProbabilityCompare(const ::Software::ProbingSetStruct& firstOperand, const ::Software::ProbingSetStruct& secondOperand){
-    return (firstOperand.ContingencyTable.Probability < secondOperand.ContingencyTable.Probability);
+    return (firstOperand.contingency_table_.GetLog10pValue() < secondOperand.contingency_table_.GetLog10pValue());
 }
 
 //***************************************************************************************

@@ -620,11 +620,9 @@ void Software::Probing::Univariate_AddCombinationToProbingSet(Software::ProbingS
 	std::sort(Combination.begin(), Combination.end(), [](const Software::ProbesStruct& a, const Software::ProbesStruct& b){ return a.ProbeInfo < b.ProbeInfo; });
 	
 	for(uint32_t idx = 0; idx < TestOrder; ++idx){
-		ProbingSet.ContingencyTable.Probability = 0.0;
 		ProbingSet.NumberOfProbesInSet += (Combination.at(idx).ProbeInfo & EXTENSION_MASK);
 		ProbingSet.StandardProbe.at(idx) = Combination.at(idx);
 	}
-
 }
 
 // **************************************************************************************************************************
@@ -659,20 +657,15 @@ void Software::Probing::Multivariate_AddCombinationToProbingSet(Software::Probin
 			Combination.at(IndexOfCombinations.at(high_idx)).ProbeInfo = 0xffffff00; //set Extension size to zero
 			Combination.at(IndexOfCombinations.at(high_idx)).SpecialInfo = 0; 
 			Combination.at(IndexOfCombinations.at(high_idx)).TransitionCycles = 0;
-			
-			
-
 		}
 	}
 
 	std::sort(Combination.begin(), Combination.end(), [](const Software::ProbesStruct& a, const Software::ProbesStruct& b){ return a.ProbeInfo < b.ProbeInfo; });
 	
 	for(uint32_t idx = 0; idx < TestOrder; ++idx){
-		ProbingSet.ContingencyTable.Probability = 0.0;
 		ProbingSet.NumberOfProbesInSet += (Combination.at(idx).ProbeInfo & EXTENSION_MASK);
 		ProbingSet.StandardProbe.at(idx) = Combination.at(idx);
 	}
-
 }
 
 // **************************************************************************************************************************
@@ -683,12 +676,9 @@ void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadS
 	int ProbeIndex = 0, CycleIndex = 0;
 	uint32_t NumberOfStandardProbes = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).size();
 
-
-	
-
 	if ((Settings.TestMultivariate != 0) && (Settings.NumberOfTestClockCycles > 1) && (Settings.TestOrder != 1)){
 		// Multivariate setting
-		Test.ProbingSet.at(SimulationIndex).resize(Software::Operators::BinomialCoefficient(NumberOfStandardProbes,Settings.TestOrder), Settings.TestOrder);
+		//Test.ProbingSet.at(SimulationIndex).resize(Software::Operators::BinomialCoefficient(NumberOfStandardProbes,Settings.TestOrder));
 		// Set the bitmask to the first possible probe combination
 		std::vector<bool>().swap(Test.CombinationBitmask);
 		Test.CombinationBitmask.resize(NumberOfStandardProbes, false);
@@ -708,7 +698,8 @@ void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadS
 					break;
 				}
 			}
-				Test.ProbingSet.at(SimulationIndex).emplace_back(Test.Combination);
+			Test.ProbingSet.at(SimulationIndex).emplace_back(Test.Combination);
+			Test.ProbingSet.at(SimulationIndex).back().contingency_table_.Initialize(Test.ProbingSet.at(SimulationIndex).back().NumberOfProbesInSet, Settings.CompactDistributions == 1 );
 
 
 		} while (std::prev_permutation(Test.CombinationBitmask.begin(), Test.CombinationBitmask.end()));
@@ -719,16 +710,17 @@ void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadS
 		
 		//as StandardProbesPerSimulation has ascending ClockCycle -> if we found a ClockCycle that is greater we know all following Probes are also in later ClockCycle
 		if(Settings.TestOrder == 1){
-			Test.ProbingSet.at(SimulationIndex).resize(NumberOfStandardProbes, (uint32_t)Settings.TestOrder);
+
+			//Test.ProbingSet.at(SimulationIndex).resize(NumberOfStandardProbes, (uint32_t)Settings.TestOrder);
 			for(SetIndex = 0; SetIndex < NumberOfStandardProbes; ++SetIndex){
-				Test.ProbingSet.at(SimulationIndex).at(SetIndex).ContingencyTable.Probability = 0.0;
-				Test.ProbingSet.at(SimulationIndex).at(SetIndex).NumberOfProbesInSet = (ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(SetIndex).ProbeInfo & EXTENSION_MASK);// << ThreadSimulation.TestTransitional;
-				Test.ProbingSet.at(SimulationIndex).at(SetIndex).StandardProbe.at(0) = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(SetIndex);
-
-
+				Test.ProbingSet[SimulationIndex].emplace_back(Settings.TestOrder);
+				Test.ProbingSet[SimulationIndex].back().NumberOfProbesInSet = (ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(SetIndex).ProbeInfo & EXTENSION_MASK);// << ThreadSimulation.TestTransitional;
+				Test.ProbingSet[SimulationIndex].back().StandardProbe.at(0) = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(SetIndex);
+				Test.ProbingSet[SimulationIndex].back().contingency_table_.Initialize(Test.ProbingSet[SimulationIndex][SetIndex].NumberOfProbesInSet, Settings.CompactDistributions == 1);
 			}
+			
 			if(NumberOfStandardProbes == 0){
-				Test.ProbingSet.at(SimulationIndex).clear();
+				Test.ProbingSet[SimulationIndex].clear();
 			}
 		}else{
 			std::vector<std::vector<uint32_t>> ResolvedProbes(Settings.TestOrder);
@@ -739,7 +731,7 @@ void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadS
 				if (((ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(CycleIndex).ProbeInfo >> 32) < (ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).at(StandardProbeIndex).ProbeInfo >> 32)) || (StandardProbeIndex == (NumberOfStandardProbes - 1))){				
 					NumberOfStandardProbesPerCycle = StandardProbeIndex - CycleIndex;
 					//make space for new pairs
-					Test.ProbingSet.at(SimulationIndex).resize(Test.ProbingSet.at(SimulationIndex).size() + Software::Operators::BinomialCoefficient(NumberOfStandardProbesPerCycle,Settings.TestOrder), (uint32_t)Settings.TestOrder);
+					//Test.ProbingSet.at(SimulationIndex).resize(Test.ProbingSet.at(SimulationIndex).size() + Software::Operators::BinomialCoefficient(NumberOfStandardProbesPerCycle,Settings.TestOrder), (uint32_t)Settings.TestOrder);
 
 					// Set the bitmask to the first possible probe combination
 					std::vector<bool>().swap(Test.CombinationBitmask); //clear bitmask
@@ -760,8 +752,11 @@ void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadS
 								break;
 							}
 						}
+					
+						Test.ProbingSet.at(SimulationIndex).emplace_back(Settings.TestOrder);
+						Software::Probing::Univariate_AddCombinationToProbingSet(Test.ProbingSet.at(SimulationIndex).back(), Test.Combination, OrderOverTwoCombination, ProbeInfoToStandardProbe, ResolvedProbes, Settings.TestOrder);
+						Test.ProbingSet.at(SimulationIndex).back().contingency_table_.Initialize(Test.ProbingSet.at(SimulationIndex).back().NumberOfProbesInSet, Settings.CompactDistributions == 1 );
 
-						Software::Probing::Univariate_AddCombinationToProbingSet(Test.ProbingSet.at(SimulationIndex).at(ProbingSetIndex), Test.Combination, OrderOverTwoCombination, ProbeInfoToStandardProbe, ResolvedProbes, Settings.TestOrder);
 						ProbingSetIndex++;
 					
 					} while (std::prev_permutation(Test.CombinationBitmask.begin(), Test.CombinationBitmask.end()));
@@ -809,7 +804,7 @@ void Software::Probing::GetMultivariateProbingSets(std::vector<std::vector<Softw
 
 	std::fill(Test.CombinationBitmask.begin(), Test.CombinationBitmask.begin() + Settings.TestOrder, true);
 
-	Test.ProbingSet.at(SimulationIndex).resize(Software::Operators::BinomialCoefficient(NumberOfStandardProbes,Settings.TestOrder), (uint32_t)Settings.TestOrder);
+	//Test.ProbingSet.at(SimulationIndex).resize(Software::Operators::BinomialCoefficient(NumberOfStandardProbes,Settings.TestOrder), (uint32_t)Settings.TestOrder);
 	std::vector<std::vector<uint32_t>> ResolvedProbes(Settings.TestOrder);
 	std::vector<uint32_t> IndexOfProbes(Settings.TestOrder,0);
 	// Iterate through all possible probe combinations
@@ -831,8 +826,10 @@ void Software::Probing::GetMultivariateProbingSets(std::vector<std::vector<Softw
 
 		//add probing set only if at least one probe is new
 		if(IndexOfProbes.back() > ProbeThreshold){
+			Test.ProbingSet.at(SimulationIndex).emplace_back(Settings.TestOrder);
+			Software::Probing::Multivariate_AddCombinationToProbingSet(Test.ProbingSet.at(SimulationIndex).back(), Test.Combination, OrderOverTwoCombination, ProbeInfoToStandardProbe, ResolvedProbes, Settings.TestOrder);
+			Test.ProbingSet.at(SimulationIndex).back().contingency_table_.Initialize(Test.ProbingSet.at(SimulationIndex).back().NumberOfProbesInSet, Settings.CompactDistributions == 1 );
 
-			Software::Probing::Multivariate_AddCombinationToProbingSet(Test.ProbingSet.at(SimulationIndex).at(ProbingSetIndex), Test.Combination, OrderOverTwoCombination, ProbeInfoToStandardProbe, ResolvedProbes, Settings.TestOrder);
 			ProbingSetIndex++;
 		}
 

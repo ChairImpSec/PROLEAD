@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "Software/Definitions.hpp"
-#include "Util/CommandLineParameter.hpp"
 #include "Software/Probing.hpp"
 #include <array>
 
@@ -10,7 +9,7 @@ namespace Software
 {
     namespace Print
     {
-        void CommandLineSettings(CommandLineParameterStruct&);
+        //void CommandLineSettings(CommandLineParameterStruct&);
         void EvaluationTableHeader();
         void SoftwareMaximumProbingSet(uint32_t , Software::TestStruct& , int& , std::string& );
         void EvaluationTableLine(std::array<std::string, 6>& );

@@ -1,24 +1,23 @@
 #pragma once
 
 #include <cinttypes>
+#include <memory>
+#include <vector>
+#include <stdio.h>
+#include <string>
+#include <cstring>
 
 #include "boost/random.hpp"
 #include "boost/generator_iterator.hpp"
 #include "Hardware/Definitions.hpp"
-#include "Hardware/Faulting.hpp"
+#include "Hardware/Enabler.hpp"
+#include "Hardware/Library.hpp"
+#include "Hardware/Probes.hpp"
+#include "Hardware/SharedData.hpp"
+#include "Util/Sharing.hpp"
 
 namespace Hardware{
     namespace Simulate{
-	
-		/**
-		* @brief Evaluates a specific operation. 
-		* @param Operation The operation to evaluate.
-		* @param Values The inputs of the operation
-		* @param Intermediate The index of an intermediate.
-		* @author Amir Moradi
-		*/
-        uint64_t EvaluateOperation(Hardware::OperationStruct, uint64_t *, char);
-		
 		/**
 		* @brief Performs the simulations. 
 		* @param Library The cell library..
@@ -29,7 +28,7 @@ namespace Hardware{
 		* @param ThreadRng The rng assigned to a specific thread.
 		* @author Amir Moradi
 		*/		
-        void All(Hardware::LibraryStruct&, Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, Hardware::SimulationStruct&, int, boost::mt19937&);
+        void All(const Hardware::Library&, const Hardware::CircuitStruct&, const Settings&, SharedData&, std::vector<Probe>&, std::vector<Enabler<CustomOperation>>&, std::vector<size_t>&, Simulation&, int, boost::mt19937&);
 
 		/**
 		* @brief Generate header for a .vcd file. 
@@ -38,7 +37,7 @@ namespace Hardware{
 		* @param SimulationIndex The index of the simulation to store in the .vcd file.
 		* @author Thanh Dat Nguyen
 		*/
-        void GenerateVCDfile(Hardware::CircuitStruct&, Hardware::SettingsStruct&, int);
+        void GenerateVCDfile(const Hardware::CircuitStruct&, int, std::string, std::string topmodule_name);
 		
 		/**
 		* @brief Writes the simulation to the .vcd file. 
@@ -49,7 +48,7 @@ namespace Hardware{
 		* @param CycleIndex The index of the simulated clock cycle to store in the .vcd file.
 		* @author Thanh Dat Nguyen
 		*/		
-        void WriteVCDfile(Hardware::CircuitStruct&, Hardware::SettingsStruct&, Hardware::SharedDataStruct*, int, int);
+        void WriteVCDfile(const Hardware::CircuitStruct&, uint64_t, SharedData&, int, int, std::string);
 
 		/**
 		* @brief Finalizes the .vcd file. 
@@ -57,7 +56,7 @@ namespace Hardware{
 		* @param CycleIndex The index of the simulated clock cycle to store in the .vcd file.
 		* @author Thanh Dat Nguyen
 		*/	
-        void FinalizeVCDfile(int, int);
+        void FinalizeVCDfile(int, int, std::string);
     }
 }
 

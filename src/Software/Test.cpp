@@ -1,62 +1,42 @@
 #include "Software/Test.hpp"
 
 //***************************************************************************************
-void Software::Test::Test(Software::ThreadSimulationStruct& ThreadSimulation, Software::TestStruct& Test, char Compact){
-    unsigned int  NumberOfProcessedSimulations, SetIndex;
-    size_t i, j;
+void Software::Test::Test(Software::ThreadSimulationStruct& ThreadSimulation, Software::TestStruct& Test){
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t set_index;
 
-    for (SetIndex = 0; SetIndex < Test.GlobalProbingSets.size(); SetIndex++){
-        std::vector<double> SumOverGroup(ThreadSimulation.NumberOfGroups, 0.0);
-
-        for (i = 0; i < Test.GlobalProbingSets.at(SetIndex).ContingencyTable.Entries.size(); i++){
-            for (j = 0; j < Test.GlobalProbingSets.at(SetIndex).ContingencyTable.Entries.at(i).Count.size(); j++){
-                SumOverGroup.at(j) += Test.GlobalProbingSets.at(SetIndex).ContingencyTable.Entries.at(i).Count.at(j);
-            }
-        }
-
-        NumberOfProcessedSimulations = std::accumulate(SumOverGroup.begin(), SumOverGroup.end(), 0);
-
-        Util::GTest(ThreadSimulation.NumberOfGroups, NumberOfProcessedSimulations, Test.GlobalProbingSets.at(SetIndex).ContingencyTable, SumOverGroup);
-    }
-
-    if (!Compact){
-        for (SetIndex = 0; SetIndex < Test.GlobalProbingSets.size(); SetIndex++){
-            Test.GlobalProbingSets.at(SetIndex).ContingencyTable.CalculateTraces(ThreadSimulation.NumberOfGroups, ThreadSimulation.BetaThreshold, ThreadSimulation.EffectSize);
-        }
+    for ( set_index = 0; set_index < Test.GlobalProbingSets.size(); set_index++){
+        Test.GlobalProbingSets[set_index].contingency_table_.SetLog10pValue(number_of_groups);
     }
 }
 
 //***************************************************************************************
-void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry){
+void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper){
+    uint64_t key_index = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    unsigned int StandardProbeIndex, KeyIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
-
-    KeyIndex = 0;
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
+        switch(id){
             case(0): //memory probe
             {
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> 1) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((probe.TransitionCycles) & 1);
                 }
 
                 break;
@@ -64,42 +44,42 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             //memory probe shadow register
             case(1):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= (((probe.TransitionCycles ) >> probed_bit) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> (32 + probed_bit)) & 1);
                 }
                 break;
             }
             //memory probe seperated load store shadow register
             case(2):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= (((probe.TransitionCycles ) >> probed_bit) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> (32 + probed_bit)) & 1);
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> (BitIdx) ) & 1);
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> (32 + BitIdx)) & 1);
                     }
                 }
                 break;
@@ -108,14 +88,14 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             case(4): //normal probe
             {
 
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
                 }                                                                    
                 break;
             }
@@ -124,57 +104,56 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             case(5): //horizontal Probe
             {
 
-                for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(ProbeRegister)){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                for(const auto& BitIdx: Helper.HorizontalBitsIncluded[register_index]){
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7) ) & 1);
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
                     }
                 }
                 break;
             }
 
-
             case(6): //small vertical Probe
                 {
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[partner_register_index][probed_bit].at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1);
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
                     }
                     break;
                 }
 
             case(7): //large vertical probe
             {
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((ProbeValues[partner_register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
 
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= ((ProbeValues[partner_register_index][probed_bit].at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1);
                 }
                 break;
 
@@ -182,22 +161,22 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             
             case(8): //small full HR probe
             {
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[register_index]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //destination register of probe 
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
                     }
                 }
 
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbePartnerRegister)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe    
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[partner_register_index]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((ProbeValues[partner_register_index].at(BitIdx).at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe    
                 }
 
                 break;
@@ -205,220 +184,203 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
             }
             case(9): //large full HR probe
             {
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[register_index]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //destination register of probe 
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe  
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe  
                     }
                 }
 
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbePartnerRegister)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[partner_register_index]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((ProbeValues[partner_register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe     
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((ProbeValues[partner_register_index].at(BitIdx).at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe     
                     }        
                 }
                 break;
             }
             case(10): // small full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                 }
                 break;
             }
             case(11): // large full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 15)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                 }
                 break;
             }
             case(12): // special full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
                 }
                 break;
             }
             case(13):  //small DSP full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                 }
                 break;
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 15)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
-                        KeyIndex++;
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                        key_index++;
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |=  ((probe.TransitionCycles >> 20) & 0x1);
                     }
                 }
                 break;
             }
             case(15): //pipeline forwarding probe
             {
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
 
                     if(bit_idx >= 64){
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        dataset.key_[key_index >> 3] |= ((probe.SpecialInfo >> (bit_idx - 64)) & 0x1);
                     }
                     else{
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        dataset.key_[key_index >> 3] |= ((probe.TransitionCycles >> (bit_idx)) & 0x1);
                     }
                     
                 }
                 break;
             }
-            default: std::runtime_error("In FirstOrderTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a first-order table update: Unknown ID detected!"); break;
         }
-
-    }  
-
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
-
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
     }
 
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }
 
-
 //***************************************************************************************
-void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry){
+void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper){
+    uint64_t heuristic = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    unsigned int StandardProbeIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
-
-    uint32_t heuristic = 0;
-
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
+        switch(id){
             case(0): //memory probe
             {
-                heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
+                heuristic += ((probe.TransitionCycles >> 1) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
-
+                    heuristic += ((probe.TransitionCycles) & 1);
                 }
                 break;
             }
             //memory probe shadow register
             case(1):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                heuristic += (((probe.TransitionCycles ) >> probed_bit) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += ((probe.TransitionCycles >> (32 + probed_bit)) & 1);
                 }
                 break;
 
@@ -426,19 +388,19 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             //memory probe seperated load store shadow register
             case(2):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                heuristic += (((probe.TransitionCycles) >> probed_bit) & 1);
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += ((probe.TransitionCycles >> (32 + probed_bit)) & 1);
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    heuristic += ((probe.TransitionCycles >> (BitIdx) ) & 1);
 
                     if(ThreadSimulation.TestTransitional){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
+                        heuristic += ((probe.TransitionCycles >> (32 + BitIdx)) & 1);
 
                     }
                 }
@@ -448,10 +410,10 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             case(4): //normal probe
             {
 
-                heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                heuristic += ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                    heuristic += ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
                 }
 
                 break;
@@ -461,11 +423,11 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             case(5): //horizontal Probe
             {
 
-                for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(ProbeRegister)){
-                    heuristic += ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                for(const auto& BitIdx: Helper.HorizontalBitsIncluded[register_index]){
+                    heuristic += ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7) ) & 1);
 
                     if(ThreadSimulation.TestTransitional){
-                        heuristic += ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                        heuristic += ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
 
                     }
                 }
@@ -474,11 +436,11 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
 
             case(6): //small vertical Probe
             {
-                heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
-                heuristic += ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                heuristic += ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
+                heuristic += ((ProbeValues[partner_register_index][probed_bit].at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                    heuristic += ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
                 }
                 break;
             }
@@ -486,14 +448,14 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             case(7): //large vertical probe
             {
 
-                heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                heuristic += ((ProbeValues[register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
-                heuristic += ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                heuristic += ((ProbeValues[partner_register_index][probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                    heuristic += ((ProbeValues[register_index][probed_bit].at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1);
 
-                    heuristic += ((ProbeValues.at(ProbePartnerRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                    heuristic += ((ProbeValues[partner_register_index][probed_bit].at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1);
                 
                 }
                 break;
@@ -504,20 +466,20 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             
             case(8): //small full HR probe
             {
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[register_index]){
          
-                    heuristic +=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                    heuristic +=  ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //destination register of probe 
 
                     if(ThreadSimulation.TestTransitional){
                     
-                        heuristic +=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                        heuristic +=  ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
                         
                     }
                 }
 
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbePartnerRegister)){
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[partner_register_index]){
 
-                    heuristic +=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                    heuristic +=  ((ProbeValues[partner_register_index].at(BitIdx).at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
                         
                 }
 
@@ -526,24 +488,24 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             }
             case(9): //large full HR probe
             {
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbeRegister)){
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[register_index]){
 
-                    heuristic +=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                    heuristic +=  ((ProbeValues[register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //destination register of probe 
 
                     if(ThreadSimulation.TestTransitional){
 
-                        heuristic +=  ((ProbeValues.at(ProbeRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                        heuristic +=  ((ProbeValues[register_index].at(BitIdx).at((probe.TransitionCycles & 0xffffffff)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
                         
                     }
                 }
 
-                for(const auto& BitIdx: Helper.NormalProbesIncluded.at(ProbePartnerRegister)){
+                for(const auto& BitIdx: Helper.NormalProbesIncluded[partner_register_index]){
 
-                    heuristic +=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                    heuristic +=  ((ProbeValues[partner_register_index].at(BitIdx)[clock_cycle] >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
 
                     if(ThreadSimulation.TestTransitional){
 
-                        heuristic +=  ((ProbeValues.at(ProbePartnerRegister).at(BitIdx).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                        heuristic +=  ((ProbeValues[partner_register_index].at(BitIdx).at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1); //transition of destination register of probe
                         
                     }        
                 
@@ -552,182 +514,161 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
             }
             case(10): // small full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
 
-                    heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                    heuristic +=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                 }
                 break;
             }
             case(11): // large full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
 
-                    heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                    heuristic +=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 15)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                 }
                 break;
             }
             case(12): // special full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
 
-                    heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                    heuristic +=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
                 }
                 break;
             }
             case(13):  //small DSP full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
 
-                    heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                    heuristic +=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                 }
                 break;
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded.at(ProbeBit)){
+                for(const auto& RegIdx: Helper.FullVerticalProbesIncluded[probed_bit]){
 
-                    heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
+                    heuristic +=  ((probe.TransitionCycles >> RegIdx) & 0x1); //transition of destination register of probe
 
-                    if(ThreadSimulation.TestTransitional && (RegIdx == ProbeRegister)){
+                    if(ThreadSimulation.TestTransitional && (RegIdx == register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                     }
-                    else if(ThreadSimulation.TestTransitional && (RegIdx == ProbePartnerRegister)){
+                    else if(ThreadSimulation.TestTransitional && (RegIdx == partner_register_index)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 18) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 15)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 19) & 0x1);
                     }
                     else if(ThreadSimulation.TestTransitional && (RegIdx == 16)){
 
-                        heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                        heuristic +=  ((probe.TransitionCycles >> 20) & 0x1);
                     }
                 }
                 break;
             }
             case(15): //pipeline forwarding probe
             {
-                // std::cout << "extensionSize is " << static_cast<uint32_t>(ExtensionSize) << std::endl;
-                // std::cout << "instr number " << static_cast<uint32_t>(ProbeClockCycle) << std::endl;
-                // getchar();
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
                     if(bit_idx >= 64){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        heuristic += ((probe.SpecialInfo >> (bit_idx - 64)) & 0x1);
                     }
                     else{
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        heuristic += ((probe.TransitionCycles >> (bit_idx)) & 0x1);
                     }
                     
                 }
                 break;
             }
-            default: std::runtime_error("In NormalTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a first-order compact table update: Unknown ID detected!"); break;
         }
 
     }  
 
-    for(unsigned int i = 0; i < KeySize; ++i){
-        TableEntry.Key.at(i) = (heuristic >> (i << 3)) & 0xff;
+    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
+        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
     }
 
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
-
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
-    }
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }
 
 //***************************************************************************************
-void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry, std::vector<std::vector<bool>>& HighOrderUnivariateRedundancy, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<bool>>& HighOrderUnivariateRedundancy, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+    uint64_t heuristic = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    unsigned int StandardProbeIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
+        std::vector<uint32_t> resolved_probes = ProbeInfoToStandardProbe[(probe.ProbeInfo >> 8) & 0x7ffff]; //TODO: place resolved_probes into each case
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
-
-    uint32_t heuristic = 0;
-
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        //resolve mapping from probes to standard probes
-        std::vector<uint32_t> ResolvedProbes = ProbeInfoToStandardProbe.at((ProbingSet.StandardProbe.at(StandardProbeIndex).ProbeInfo >> 8) & 0x7ffff); //TODO: place ResolvedProbes into each case
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
-
+        switch(id){
             case(0): //memory probe
             {
-                heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
+                heuristic += (probe.TransitionCycles >> 1) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
-
+                    heuristic += (probe.TransitionCycles) & 1;
                 }
                 break;
             }
             //memory probe shadow register
             case(1):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                heuristic += (((probe.TransitionCycles ) >> probed_bit) & 1);
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
 
@@ -735,19 +676,19 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             //memory probe seperated load store shadow register
             case(2):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                heuristic += (((probe.TransitionCycles) >> probed_bit) & 1);
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    heuristic += (probe.TransitionCycles >> (BitIdx) ) & 1;
 
                     if(ThreadSimulation.TestTransitional){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
+                        heuristic += (probe.TransitionCycles >> (32 + BitIdx)) & 1;
 
                     }
                 }
@@ -756,19 +697,19 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
             case(4): //normal probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){ //not yet probed in ProbingSet -> add to table
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){ //not yet probed in ProbingSet -> add to table
 
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                         }
                         else{
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
 
                     } 
@@ -783,23 +724,19 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             case(5): //horizontal Probe
             {
 
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){ //not yet probed in ProbingSet -> add to table
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){ //not yet probed in ProbingSet -> add to table
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                        if(!resolved_transition){
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7) ) & 1;
+                        }else{
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
-                        else{
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
-
-                        }
-
                     }
-
                 }
                 break;
             }
@@ -807,22 +744,22 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
             case(6): //small vertical Probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            heuristic += (ProbeValues[register_index][probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
                     }
                 }
@@ -834,26 +771,26 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
             case(7): //large vertical probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
 
                         }
@@ -866,22 +803,22 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
             case(8)://small full HR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); 
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1; 
                             }
                         }
                         else{
-                            heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                            heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             
                         }
                     }
@@ -892,26 +829,26 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(9):
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); 
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                     }
@@ -921,22 +858,22 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(10): //small full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
 
                         }
@@ -948,25 +885,25 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(11): // large full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -978,19 +915,19 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(12): //special full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1); 
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1; 
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
                         }
 
@@ -1001,25 +938,25 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(13): //small DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  ((probe.TransitionCycles >> resolved_probed_register) & 0x1);
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  ((probe.TransitionCycles >> 17) & 0x1);
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  ((probe.TransitionCycles >> 18) & 0x1);
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  ((probe.TransitionCycles >> 19) & 0x1);
                             }
 
                         }
@@ -1031,28 +968,28 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                heuristic +=  (probe.TransitionCycles >> 19) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  (probe.TransitionCycles >> 20) & 0x1;
                             }
 
                         }                        
@@ -1064,81 +1001,59 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
             }
             case(15):
             {
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
                     if(bit_idx >= 64){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        heuristic += (probe.SpecialInfo >> (bit_idx - 64)) & 0x1;
                     }
                     else{
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        heuristic += (probe.TransitionCycles >> (bit_idx)) & 0x1;
                     }
                     
                 }
                 break;
             }
-            // case(0xf):
-            // {
-            //     break;
-            // }
-            default: std::runtime_error("In HigherOrderUnivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a higher-order univariate table update: Unknown ID detected!"); break;
         }
 
     }  
 
-    for(unsigned int i = 0; i < KeySize; ++i){
-        TableEntry.Key.at(i) = (heuristic >> (i*8)) & 0xff;
+    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
+        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
     }
 
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
-
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
-    }
-    
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
-
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }
 
 //***************************************************************************************
-void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry, std::vector<std::vector<bool>>& HighOrderUnivariateRedundancy, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<bool>>& HighOrderUnivariateRedundancy, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+    uint64_t key_index = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    unsigned int StandardProbeIndex, KeyIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
+        std::vector<uint32_t> resolved_probes = ProbeInfoToStandardProbe[(probe.ProbeInfo >> 8) & 0x7ffff];
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
-
-    KeyIndex = 0;
-
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        //resolve mapping from probes to standard probes
-        std::vector<uint32_t> ResolvedProbes = ProbeInfoToStandardProbe.at((ProbingSet.StandardProbe.at(StandardProbeIndex).ProbeInfo >> 8) & 0x7ffff);
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
-
+        switch(id){
             case(0): //memory probe
             {
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> 1) & 1;
 
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles) & 1;
 
                 }
                 break;
@@ -1146,14 +1061,14 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             //memory probe shadow register
             case(1):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((probe.TransitionCycles ) >> probed_bit) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
 
@@ -1161,28 +1076,28 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             //memory probe seperated load store shadow register
             case(2):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((probe.TransitionCycles ) >> probed_bit) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (BitIdx) ) & 1;
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + BitIdx)) & 1;
 
                     }
                 }
@@ -1191,23 +1106,23 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
             case(4): //normal probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){ //not yet probed in ProbingSet -> add to table
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){ //not yet probed in ProbingSet -> add to table
 
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                         }
                         else{
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
 
                     } 
@@ -1222,22 +1137,22 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             case(5): //horizontal Probe
             {
 
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){ //not yet probed in ProbingSet -> add to table
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){ //not yet probed in ProbingSet -> add to table
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                        if(!resolved_transition){
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7) ) & 1;
                         }
                         else{
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
 
                         }
 
@@ -1250,28 +1165,28 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
             case(6): //small vertical Probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[register_index][probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
                     }
                 }
@@ -1283,34 +1198,34 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
             case(7): //large vertical probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
 
                         }
@@ -1323,28 +1238,28 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
 
             case(8)://small full HR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); 
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1; 
                             }
                         }
                         else{
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             
                         }
                     }
@@ -1355,34 +1270,34 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(9):
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); 
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                     }
@@ -1392,28 +1307,28 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(10): //small full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
 
                         }
@@ -1425,33 +1340,33 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(11): // large full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -1463,23 +1378,23 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(12): //special full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1); 
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1; 
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
                         }
 
@@ -1490,33 +1405,33 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(13): //small DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -1528,38 +1443,38 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
-                    if(!HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit)){
-                        HighOrderUnivariateRedundancy.at(resolvedProbeRegister << resolvedTransition).at(resolvedProbeBit) = true;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
+                    if(!HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit]){
+                        HighOrderUnivariateRedundancy[resolved_probed_register << resolved_transition][resolved_probed_bit] = true;
 
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 20) & 0x1;
                             }
 
                         }                        
@@ -1571,80 +1486,58 @@ void Software::Test::HigherOrderUnivariateTableUpdate(Software::ThreadSimulation
             }
             case(15):
             {
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
 
                     if(bit_idx >= 64){
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        dataset.key_[key_index >> 3] |=  (probe.SpecialInfo >> (bit_idx - 64)) & 0x1;
                     }
                     else{
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> (bit_idx)) & 0x1;
                     }
                     
                 }
                 break;
             }
-            // case(0xf):
-            // {
-            //     break;
-            // }
-            default: std::runtime_error("In HigherOrderUnivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a higher-order univariate table update: Unknown ID detected!"); break;
         }
-
-    }  
-
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
-
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
     }
-    
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
 
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }
 
 //***************************************************************************************
 
-void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, uint32_t SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
-    unsigned int StandardProbeIndex, KeyIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, uint32_t simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+    uint64_t key_index = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
+        std::vector<uint32_t> resolved_probes = ProbeInfoToStandardProbe[(probe.ProbeInfo >> 8) & 0x7ffff];
 
-    KeyIndex = 0;
-
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        //resolve mapping from probes to standard probes
-        std::vector<uint32_t> ResolvedProbes = ProbeInfoToStandardProbe.at((ProbingSet.StandardProbe.at(StandardProbeIndex).ProbeInfo >> 8) & 0x7ffff); 
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
-
+        switch(id){
             case(0): //memory probe
             {
-                KeyIndex++; 
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
+                key_index++; 
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> 1) & 1;
 
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles) & 1;
 
                 }
                 break;
@@ -1652,14 +1545,14 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             //memory probe shadow register
             case(1):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((probe.TransitionCycles ) >> probed_bit) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
 
@@ -1667,28 +1560,28 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             //memory probe seperated load store shadow register
             case(2):
             {
-                KeyIndex++;
-                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                TableEntry.Key.at(KeyIndex >> 3) |= (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                key_index++;
+                dataset.key_[key_index >> 3] <<= 1;
+                dataset.key_[key_index >> 3] |= ((probe.TransitionCycles ) >> probed_bit) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    KeyIndex++; 
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                    TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    key_index++; 
+                    dataset.key_[key_index >> 3] <<= 1;
+                    dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (BitIdx) ) & 1;
 
                     if(ThreadSimulation.TestTransitional){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= (probe.TransitionCycles >> (32 + BitIdx)) & 1;
 
                     }
                 }
@@ -1697,20 +1590,20 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             case(4): //normal probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                    if(!resolvedTransition){
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                    if(!resolved_transition){
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                     }
                     else{
-                        KeyIndex++; 
-                        TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                        TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                        key_index++; 
+                        dataset.key_[key_index >> 3] <<= 1;
+                        dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                     }
                 }
                 
@@ -1721,21 +1614,20 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             case(5): //horizontal Probe
             {
 
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                        if(!resolved_transition){
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7) ) & 1;
                         }
                         else{
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
-
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
 
 
@@ -1746,27 +1638,27 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             case(6): //small vertical Probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            KeyIndex++; 
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            key_index++; 
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |= (ProbeValues[register_index][probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
                     
                 }
@@ -1777,33 +1669,33 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             case(7): //large vertical probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                KeyIndex++; 
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |= ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++; 
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |= (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
 
                         }
@@ -1817,27 +1709,27 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
             case(8)://small full HR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); 
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1; 
                             }
                         }
                         else{
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             
                         }
                     
@@ -1848,33 +1740,33 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(9):
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); 
+                            if(resolved_probed_register != partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; 
                             }
                             else{
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                     
@@ -1884,26 +1776,26 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(10): //small full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
 
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
 
                         }
@@ -1915,31 +1807,31 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(11): // large full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -1951,21 +1843,21 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(12): //special full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1); 
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1; 
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
                         }
 
@@ -1976,31 +1868,31 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(13): //small DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -2012,36 +1904,36 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
 
-                        if(!resolvedTransition){
-                            KeyIndex++;
-                            TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                            TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            key_index++;
+                            dataset.key_[key_index >> 3] <<= 1;
+                            dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 19) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                KeyIndex++;
-                                TableEntry.Key.at(KeyIndex >> 3) <<= 1;
-                                TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                key_index++;
+                                dataset.key_[key_index >> 3] <<= 1;
+                                dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> 20) & 0x1;
                             }
 
                         }                        
@@ -2053,77 +1945,54 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
             }
             case(15): //pipeline forwarding probe
             {
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
-                    KeyIndex++;
-                    TableEntry.Key.at(KeyIndex >> 3) <<= 1;
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
+                    key_index++;
+                    dataset.key_[key_index >> 3] <<= 1;
 
                     if(bit_idx >= 64){
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        dataset.key_[key_index >> 3] |=  (probe.SpecialInfo >> (bit_idx - 64)) & 0x1;
                     }
                     else{
-                        TableEntry.Key.at(KeyIndex >> 3) |=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        dataset.key_[key_index >> 3] |=  (probe.TransitionCycles >> (bit_idx)) & 0x1;
                     }
                     
                 }
                 break;
             }
-            // case(0xf):
-            // {
-
-            //     break;
-            // }
-            default: std::runtime_error("In HigherOrderMultivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a higher-order multivariate table update: Unknown ID detected!"); break;
         }
 
     }  
 
-    
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
-
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
-    }
-    
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }
 
 //***************************************************************************************
 
-void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, uint32_t SimulationIndex, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, Util::TableEntryStruct& TableEntry, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
-    unsigned int StandardProbeIndex;
-    unsigned int KeySize = (ProbingSet.NumberOfProbesInSet >> 3) + 1;
-    std::vector<Util::TableEntryStruct>::iterator it;
-    std::iterator_traits<std::vector<Util::TableEntryStruct>::iterator>::difference_type Position;
+void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, uint32_t simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
+    uint64_t heuristic = 0;
+    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
+    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
+    uint32_t clock_cycle;
+    uint8_t id, register_index, partner_register_index, probed_bit, dependency;
+    uint16_t extension_size;
+    TableEntry dataset;
 
-    uint32_t ProbeClockCycle;
-    uint8_t ProbeId, ProbeRegister, ProbePartnerRegister, ProbeBit, Dependency;
-    uint16_t ExtensionSize;
+    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
-    TableEntry.Key.resize(KeySize, 0);
-    std::fill(TableEntry.Key.begin(), TableEntry.Key.end(), 0); 
+    for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
+        Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
+        std::vector<uint32_t> resolved_probes = ProbeInfoToStandardProbe[(probe.ProbeInfo >> 8) & 0x7ffff]; //TODO: place resolved_probes into each case
 
-    uint32_t heuristic = 0;
-
-    for (StandardProbeIndex = 0; StandardProbeIndex < ProbingSet.StandardProbe.size(); ++StandardProbeIndex){
-
-        //resolve mapping from probes to standard probes
-        std::vector<uint32_t> ResolvedProbes = ProbeInfoToStandardProbe.at((ProbingSet.StandardProbe.at(StandardProbeIndex).ProbeInfo >> 8) & 0x7ffff); 
-
-        Software::Probing::ExtractAllProbeInfo(ProbeRegister, ProbeId, ProbePartnerRegister, ProbeClockCycle, ProbeBit, ExtensionSize, Dependency, ProbingSet.StandardProbe.at(StandardProbeIndex));
-
-        switch(ProbeId){
-
+        switch(id){
             case(0): //memory probe
             {
-                heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 1) & 1);
-
+                heuristic += (probe.TransitionCycles >> 1) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) & 1);
+                    heuristic += (probe.TransitionCycles) & 1;
 
                 }
                 break;
@@ -2131,10 +2000,10 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             //memory probe shadow register
             case(1):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles ) >> ProbeBit) & 1);
+                heuristic += ((probe.TransitionCycles ) >> probed_bit) & 1;
 
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
 
@@ -2142,20 +2011,19 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             //memory probe seperated load store shadow register
             case(2):
             {
-                heuristic += (((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles) >> ProbeBit) & 1);
+                heuristic += ((probe.TransitionCycles) >> probed_bit) & 1;
                 if(ThreadSimulation.TestTransitional){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + ProbeBit)) & 1);
+                    heuristic += (probe.TransitionCycles >> (32 + probed_bit)) & 1;
                 }
                 break;
             }
             //memory probe shadow register horizontal
             case(3):{
                 for(const auto& BitIdx: Helper.HorizontalBitsIncluded.at(17)){
-                    heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (BitIdx) ) & 1);
+                    heuristic += (probe.TransitionCycles >> (BitIdx) ) & 1;
 
                     if(ThreadSimulation.TestTransitional){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (32 + BitIdx)) & 1);
-
+                        heuristic += (probe.TransitionCycles >> (32 + BitIdx)) & 1;
                     }
                 }
                 break;
@@ -2163,16 +2031,16 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             case(4): //normal probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                    if(!resolvedTransition){
-                        heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                    if(!resolved_transition){
+                        heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                     }
                     else{
-                        heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                        heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                     }
                 }
                 
@@ -2182,20 +2050,17 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             case(5): //horizontal Probe
             {
 
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7) ) & 1);
+                        if(!resolved_transition){
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7) ) & 1;
                         }
                         else{
-                            heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
-
+                            heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
-
-
                 }
                 break;
             }
@@ -2203,21 +2068,21 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             case(6): //small vertical Probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit].at((probe.TransitionCycles >> 32)) >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            heuristic += ((ProbeValues.at(ProbeRegister).at(ProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            heuristic += (ProbeValues[register_index][probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                         }
                     
                 }
@@ -2228,25 +2093,25 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             case(7): //large vertical probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1);
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1;
                             }
                             else{
-                                heuristic += ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic += (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
 
                         }
@@ -2260,21 +2125,21 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
             case(8)://small full HR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1); 
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1; 
                             }
                         }
                         else{
-                            heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                            heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             
                         }
                     
@@ -2285,25 +2150,25 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(9):
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedProbeBit = resolvedProbe & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_probed_bit = resolvedProbe & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
-                        if(!resolvedTransition){
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //destination register of probe 
+                        if(!resolved_transition){
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //destination register of probe 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at(ProbeClockCycle) >> (SimulationIndex & 0x7)) & 1); //transition of destination register of probe
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][clock_cycle] >> (simulation_index & 0x7)) & 1; //transition of destination register of probe
                             }
                         }
                         else{
-                            if(resolvedProbeRegister != ProbePartnerRegister){
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles & 0xffffffff)) >> (SimulationIndex & 0x7)) & 1); 
+                            if(resolved_probed_register != partner_register_index){
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles & 0xffffffff] >> (simulation_index & 0x7)) & 1; 
                             }
                             else{
-                                heuristic +=  ((ProbeValues.at(resolvedProbeRegister).at(resolvedProbeBit).at((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 32)) >> (SimulationIndex & 0x7)) & 1);
+                                heuristic +=  (ProbeValues[resolved_probed_register][resolved_probed_bit][probe.TransitionCycles >> 32] >> (simulation_index & 0x7)) & 1;
                             }
                         }
                     
@@ -2313,20 +2178,20 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(10): //small full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
 
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
 
                         }
@@ -2338,23 +2203,23 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(11): // large full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -2366,17 +2231,17 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(12): //special full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1); 
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1; 
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
                         }
 
@@ -2387,23 +2252,23 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(13): //small DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
                         
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  (probe.TransitionCycles >> 19) & 0x1;
                             }
 
                         }
@@ -2415,26 +2280,26 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(14): //large DSP full VR probe
             {
-                for(const auto& resolvedProbe: ResolvedProbes){
-                    uint8_t resolvedProbeRegister = (resolvedProbe >> 10) & 0x1f;
-                    uint8_t resolvedTransition = (resolvedProbe >> 19) & 0x1;
+                for(const auto& resolvedProbe: resolved_probes){
+                    uint8_t resolved_probed_register = (resolvedProbe >> 10) & 0x1f;
+                    uint8_t resolved_transition = (resolvedProbe >> 19) & 0x1;
 
 
-                        if(!resolvedTransition){
-                            heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> resolvedProbeRegister) & 0x1);
+                        if(!resolved_transition){
+                            heuristic +=  (probe.TransitionCycles >> resolved_probed_register) & 0x1;
                         }
                         else{
-                            if(resolvedProbeRegister == ProbeRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 17) & 0x1);
+                            if(resolved_probed_register == register_index){
+                                heuristic +=  (probe.TransitionCycles >> 17) & 0x1;
                             }
-                            else if(resolvedProbeRegister == ProbePartnerRegister){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 18) & 0x1);
+                            else if(resolved_probed_register == partner_register_index){
+                                heuristic +=  (probe.TransitionCycles >> 18) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 15){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 19) & 0x1);
+                            else if(resolved_probed_register == 15){
+                                heuristic +=  (probe.TransitionCycles >> 19) & 0x1;
                             }
-                            else if(resolvedProbeRegister == 16){
-                                heuristic +=  ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> 20) & 0x1);
+                            else if(resolved_probed_register == 16){
+                                heuristic +=  (probe.TransitionCycles >> 20) & 0x1;
                             }
 
                         }                        
@@ -2444,36 +2309,27 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
             }
             case(15): //pipeline forwarding probe
             {
-                for(uint32_t bit_idx = 0; bit_idx < ExtensionSize; ++bit_idx){
+                for(uint32_t bit_idx = 0; bit_idx < extension_size; ++bit_idx){
                     if(bit_idx >= 64){
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).SpecialInfo >> (bit_idx - 64)) & 0x1);
+                        heuristic += ((probe.SpecialInfo >> (bit_idx - 64)) & 0x1);
                     }
                     else{
-                        heuristic += ((ProbingSet.StandardProbe.at(StandardProbeIndex).TransitionCycles >> (bit_idx)) & 0x1);
+                        heuristic += ((probe.TransitionCycles >> (bit_idx)) & 0x1);
                     }
                     
                 }
                 break;
             }
 
-            default: std::runtime_error("In HigherOrderMultivariateTableUpdate: unkown ID detected (neither normal, horizontal, vertical, memory, memoryshadow, fullhr or fullvr)"); break;
+            default: std::runtime_error("Error while performing a higher-order multivariate compact table update: Unknown ID detected!"); break;
         }
 
     }  
 
-    for(unsigned int i = 0; i < KeySize; ++i){
-        TableEntry.Key.at(i) = (heuristic >> (i*8)) & 0xff;
+    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
+        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
     }
-    
-    // Search if an entry exists
-    it = std::lower_bound(GlobalSet.ContingencyTable.Entries.begin(), GlobalSet.ContingencyTable.Entries.end(), TableEntry, TableEntryCompare);
-    Position = std::distance(GlobalSet.ContingencyTable.Entries.begin(), it);
 
-    // Create a new bin for each group
-    if ((it == GlobalSet.ContingencyTable.Entries.end()) || (GlobalSet.ContingencyTable.Entries.at(Position).Key != TableEntry.Key)){
-        GlobalSet.ContingencyTable.Entries.insert(it, TableEntry);
-    }
-    
-    // Increment the existing bin 
-    GlobalSet.ContingencyTable.Entries.at(Position).Count[ThreadSimulation.SelectedGroups[SimulationIndex]]++; 
+    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
+    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
 }

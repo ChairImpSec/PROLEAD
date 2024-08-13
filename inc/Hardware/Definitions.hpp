@@ -2,10 +2,16 @@
 
 #include <bits/stdc++.h>
 
+#include <unordered_map>
 #include <cinttypes>
 #include <vector>
+#include <memory>
+#include <map>
 
-#include "Hardware/Faulting.hpp"
+#include "Hardware/FaultSet.hpp"
+#include "Hardware/Library.hpp"
+#include "Util/Settings.hpp"
+#include "Util/Sharing.hpp"
 #include "Util/Util.hpp"
 
 #define Max_Name_Length 10000
@@ -41,6 +47,16 @@
 #define Task_find_assign_signal_name2 10
 
 namespace Hardware {
+/**
+ * @brief Defines a buffer to read design files.
+ * @author Amir Moradi
+ */
+struct FileBufferStruct {
+	char* Buffer;
+	int   Size;
+	int   Index;
+};
+
 struct OperationStruct {
   unsigned char NumberOfClauses;
   char* OperationOfClause;
@@ -61,18 +77,6 @@ struct CellTypeStruct {
   char Intermediate;
 };
 
-/**
- * @brief Defines a cell library.
- * @author Amir Moradi
- */
-struct LibraryStruct {
-  int NumberOfCellTypes =
-      0;  ///< The number of different cell types in the library.
-  Hardware::CellTypeStruct** CellTypes =
-      NULL;  ///< The different cell types in the library.
-  int BufferCellType = -1;
-};
-
 struct CellStruct {
   int Type;
   char* Name;
@@ -84,6 +88,23 @@ struct CellStruct {
   int* Outputs;
   int* RegValueIndexes;
   char Deleted;
+
+    // Destructor
+  /*  ~CellStruct() {
+        if (Name != NULL) {
+            free(Name);  // Free the dynamically allocated name
+        }
+        if (NumberOfInputs) {
+            free(Inputs);  // Free the dynamically allocated inputs array
+        }
+        if (NumberOfOutputs) {
+            free(Outputs);  // Free the dynamically allocated outputs array
+        }
+        if (RegValueIndexes != NULL) {
+            free(RegValueIndexes);  // Free the dynamically allocated reg value indexes array
+        }
+    }*/
+
 };
 
 struct SignalStruct {
@@ -93,10 +114,21 @@ struct SignalStruct {
   int Output;
   int NumberOfInputs;
   int* Inputs;
-  char ProbeAllowed;
-  char FaultAllowed;
-  Hardware::faulting::FaultType fault_type;
+  bool is_probe_allowed;
+  bool is_extension_allowed;
+  bool is_analysis_allowed;
+  bool is_fault_allowed;
   char Deleted;
+
+    // Destructor
+ /*   ~SignalStruct() {
+        if (Name != NULL) {
+            free(Name);    // Free the dynamically allocated name
+        }
+        if (NumberOfInputs) {
+            free(Inputs);  // Free the dynamically allocated inputs array
+        }
+    }*/
 };
 
 /**
@@ -124,214 +156,90 @@ struct CircuitStruct {
   int** CellsInDepth = NULL;  ///< The indices of cells with a specific depth.
   int* NumberOfCellsInDepth =
       NULL;  ///< The number of cells with a specific depth.
-  bool IsProbeOnSignalAllowed(int base_signal_index, int current_signal_index,
-                              int clock_signal_index);
 
-  bool IsFaultOnSignalAllowed(int signal_index, int clock_signal_index);
-
-  bool CanProbeOnSignalBePropagated(int signal_index,
-                                    const LibraryStruct& library);
   bool IsGateThatOutputsSignalDeleted(int signal_index);
-  int GetNumberOfInputsForSignalsComputingCell(int signal_index);
+  uint64_t GetNumberOfInputsForSignalsComputingCell(uint64_t signal_index) const;
+  std::vector<uint64_t> GetSignals() const;
+  uint64_t GetSignalIndexByName(const std::string& signal_name);
+  void PropagateProbe(Library& library, uint64_t signal_index, const bool allowed);
+  void PropagateExtension(Library& library, uint64_t signal_index, const bool allowed);
+  void SetIsProbeAllowed(Library& library, const Settings& settings);
+  void SetIsExtensionAllowed(Library& library, const Settings& settings);
+  void SetIsAnalysisAllowed(const Settings& settings);
+  void SetIsFaultAllowed(const Settings& settings);
+
+  // Destructor
+ /*  ~CircuitStruct() {
+    // Free Signals
+    if (NumberOfSignals) {
+      for (int i = 0; i < NumberOfSignals; ++i) {
+        if (Signals[i] != NULL) {
+          free(Signals[i]);
+        }
+      }
+      if (Signals != NULL) {
+        free(Signals);
+      }
+    }
+
+    // Free Inputs and Outputs
+    if (NumberOfInputs)
+      free(Inputs);
+    
+    if (NumberOfOutputs)
+      free(Outputs);
+
+    // Free Cells
+    if (Cells != NULL) {
+        for (int i = 0; i < NumberOfCells; ++i) {
+            if (Cells[i] != NULL) {
+                free(Cells[i]); // Free each individual CellStruct object
+            }
+        }
+        free(Cells); // Free the array of CellStruct pointers
+    }
+
+    // Free Gates and Regs
+    if (NumberOfGates)
+      free(Gates);
+
+    if (NumberOfRegs)  
+      free(Regs);
+
+    // Free CellsInDepth and NumberOfCellsInDepth
+    if (CellsInDepth) {
+      for (int i = 0; i <= MaxDepth; ++i) {
+        if (NumberOfCellsInDepth[i])
+          free(CellsInDepth[i]);
+      }
+      free(CellsInDepth);
+    }
+    free(NumberOfCellsInDepth);
+  }*/
 };
 
-/**
- * @brief Defines the settings of the evaluation procedure.
- * @author Amir Moradi
- */
-struct SettingsStruct {
-  int Max_no_of_Threads;  ///< The maximum number of threads PROLEAD can use for
-                          ///< parallelism.
-  char* ModuleName;       ///< The name of the top module.
-
-  int NumberOfGroups;         ///< The number of user-defined groups
-  int NumberOfGroupValues;    ///< The size of the group values, i.e. their bit
-                              ///< length.
-  char CompactDistributions;  ///< Decision whether the evaluation should be
-                              ///< performed in compact or normal mode.
-  char MinimizeProbeSets;     ///< Decision whether the number of probing sets
-                              ///< should be minimized before the evaluation.
-  char RemoveProbingSets;     ///< Decision whether probing sets achieving a
-                           ///< sufficient confidence level should be removed.
-  unsigned int ProbeStepSize;  ///< The number of probing sets to evaluate per
-                               ///< execution step.
-  int** Group_Values =
-      NULL;  ///< The values assigned to the user-defined groups
-  int* MaxNumberOfSharesGroupValues;  ///< The number of shares per input bit.
-
-  int ClockSignal;  ///< The index of the clock signal.
-  int Max_No_ClockCycles =
-      0;  ///< The maximum number of clock cycles to simulate.
-  int Max_No_ReportEntries;  ///< The maximum number of entries in the report.
-
-  int NumberOfAlwaysRandomInputs;  ///< Number of fresh random inputs.
-  int* AlwaysRandomInputs =
-      NULL;  ///< Indices of the fresh random input signals.
-
-  int InitialSim_NumberOfInputs;  ///< The number of inputs which are assigned
-                                  ///< to initialize the simulation.
-  int InitialSim_NumberOfClockCycles;  ///< The number of clock cycles to
-                                       ///< initialize the simulation.
-  int** InitialSim_Inputs =
-      NULL;  ///< The indices of the initialization signals.
-  uint64_t** InitialSim_Values =
-      NULL;  ///< The signal values during the initialization cycles.
-
-  int EndSimCondition_ClockCycles;  ///< The number of clock cycles after which
-                                    ///< the simulation terminates.
-  int EndSimCondition_NumberOfSignals;  ///< The bit width of the signal which
-                                        ///< terminates the simulation.
-  int* EndSimCondition_Signals = NULL;  ///< The indices of the single-bit
-                                        ///< signals terminating the simulation.
-  uint64_t* EndSimCondition_Values =
-      NULL;  ///< The values the signals have to reach to terminate the
-             ///< simulation.
-  int EndSim_NumberOfWaitCycles =
-      0;  ///< Number of cycles to wait after each simulation.
-
-  int NumberOfOutputShares = 0;   ///< The number of output shares.
-  int NumberOfOutputSignals = 0;  ///< The bit width of the shared output.
-  int** OutputSignals = NULL;     ///< The simulated output signals (unshared).
-  int** ExpectedOutputValues =
-      NULL;  ///< The expected unshared output given by the user.
-
-  int TestOrder = 0;  ///< The security order to test.
-  int TestMultivariate = 0;  ///< Decision whether univariate or multivariate
-                             ///< adversaries should be considered.
-  int MaxDistanceMultivariet = 0;  ///< The maximum distance in time, i.e. clock
-                                   ///< cycles, for multivariate adversaries.
-  int TestTransitional =
-      0;  ///< Decision whether transitional leakage is included.
-  int NumberOfTestClockCycles = 0;  ///< The number of clock cycles in which the
-                                    ///< adversary can place probes.
-  int* TestClockCycles =
-      NULL;  ///< The particular clock cycles the adversary can target.
-  uint64_t NumberOfSimulations = 0;  ///< The total number of simulations.
-  uint64_t NumberOfStepSimulations =
-      0;  ///< The number of simulations before the simulations are evaluated.
-  uint64_t NumberOfStepSimulationsToWrite =
-      0;  ///< The number of simulations before a report is written.
-
-  // By default, we set the allowed false-positive probability to 10^-5
-  // If necessary, please change the false-positive probability here.
-  // Important: Give probability as negative logarithmic value
-  double AlphaThreshold = 5.0;
-
-  // By default, we set the allowed false-negative probability to 10^-5
-  // If necessary, please change the false-negative probability here.
-  double BetaThreshold = 0.00001;
-
-  // In statistics an effect size of 0.1 is denoted as a "small effect size"
-  double EffectSize;
-
-  bool WaveformSimulation = false;
-
-  unsigned int number_of_faults = 0;
-
-  unsigned int number_of_faulted_clock_cycles = 0;
-
-  int* faulted_clock_cycles = NULL;
-
-  bool IsInMultivariateSetting() const {
-    return (TestMultivariate != 0) && (NumberOfTestClockCycles > 1) &&
-           (TestOrder != 1);
-  }
-};
-
-/**
- * @brief Defines an already extended probe, i.e. a set of glitch extended
- * probes.
- * @author Amir Moradi
- */
-struct GlitchExtendedProbesStruct {
-  int NumberOfProbes = 0;  ///< The number of glitch-extended probes.
-  int* Probes = NULL;      ///< A list of glitch-extended probes.
-};
-
-/**
- * @brief Defines a probing set, i.e. a set of standard probes with their
- * corresponding glitch extensions.
- * @author Amir Moradi
- */
-struct ProbesStruct {
-  int NumberOfProbes = 0;   ///< The number of standard probes.
-  int* Probes = NULL;       ///< A list of the standard probe indices.
-  char** ProbeName = NULL;  ///< A list of the standard probe names.
-
-  Hardware::GlitchExtendedProbesStruct* GlitchExtendedProbes =
-      NULL;  ///< A list of glitch-extensions per standard probe.
-};
-
-/**
- * @brief Defines the shared state of a simulation.
- * @author Amir Moradi
- */
-struct SharedDataStruct {
-  uint64_t* OneIn64 = NULL;
-  uint64_t* ZeroIn64 = NULL;
-  uint64_t* SignalValues = NULL;
-  uint64_t* RegValues = NULL;
-  uint64_t** GroupValues = NULL;
-  uint64_t** SelectedGroupValues = NULL;
-  uint64_t* LastInitialSimValues = NULL;
-};
-
-/**
- * @brief Defines a buffer to read design files.
- * @author Amir Moradi
- */
-struct FileBufferStruct {
-	char* Buffer;
-	int   Size;
-	int   Index;
-};
-
-/**
- * @brief Defines all settings regarding simulations.
- * @author Amir Moradi
- */
-struct SimulationStruct {
-  int NumberOfGroups;  ///< The number of user-defined groups.
-  char* EvaluationResultFolderName =
-      NULL;  ///< Name and path of the generated reports.
-
-  int NumberOfProbes = 0;   ///< The total number of standard probes.
-  char** ProbeName = NULL;  ///< The names of the standard probes, i.e. the name
-                            ///< of the probed wire.
-  Hardware::GlitchExtendedProbesStruct*
-      GlitchExtendedProbes;  ///< The glitch-extended probes belonging to the
-                             ///< standard probes.
-
-  int NumberOfAllGlitchExtendedProbes =
-      0;  ///< The total number of glitch-extended probes.
-  int* SignalIndex_of_GlitchExtendedProbe = NULL;
-  int* GlitchExtendedProbeIndex_of_Signal = NULL;
-  char** GlitchExtendedProbeName =
-      NULL;  ///< The names of the glitch-extended probes, i.e. the name of the
-             ///< probed wire.
-
-  int TestOrder = 0;  ///< The security order to test.
-  int TestMultivariate =
-      0;  ///< Decision regarding univariate and multivariate attackers.
-  int TestTransitional = 0;  ///< Decision regarding transitional leakage.
-  int NumberOfTestClockCycles =
-      0;  ///< Number of clock cycles in which standard probes can record
-  int* TestClockCycles = NULL;  ///< The list of clock cycles to test.
-
-  int NumberOfClockCycles = 0;  ///< Number of clock cycles to simulate, i.e.
-                                ///< the duration of one simulation.
-  uint64_t NumberOfSimulations = 0;  ///< The total number of simulations.
-  uint64_t NumberOfStepSimulations =
-      0;  ///< The number of simulations per step. After each step the
-          ///< contingency tables are updated.
-  uint64_t NumberOfStepSimulationsToWrite =
-      0;  ///< The number of simulations after which reports are written.
-  uint64_t NumberOfProcessedSimulations =
-      0;  ///< The number of currently processed simulations.
-
-  int* SelectedGroups = NULL;  ///< The chosen group for each simulation.
-  char*** ProbeValues;  ///< The simulated states of all wires during different
-                        ///< simulations and clock cycles.
-  Hardware::faulting::FaultSet fault_set;
-};
 }  // namespace Hardware
+
+class Simulation {
+  public: 
+    Simulation(Hardware::CircuitStruct& circuit, Settings& settings);
+
+    std::string topmodule_name_; 
+    std::string result_folder_name_;
+    uint64_t clock_signal_index_;
+    uint64_t number_of_clock_cycles_;
+    uint64_t number_of_processed_simulations;
+    std::vector<std::vector<uint64_t>> always_random_inputs_indices_;
+    std::vector<uint64_t> selected_groups_;
+    std::vector<std::pair<uint64_t, uint64_t>> end_condition_signals_; 
+    std::vector<std::pair<uint64_t, uint64_t>> fault_detection_flags_; 
+    std::vector<std::vector<std::vector<uint64_t>>> output_share_signal_indices_; 
+    std::vector<std::vector<std::vector<TriStateBit>>> expected_unshared_output_values_;
+    std::unique_ptr<std::unique_ptr<uint64_t[]>[]> probe_values_;
+    std::unique_ptr<std::unique_ptr<uint64_t[]>[]> propagation_values_;
+    std::unique_ptr<std::unique_ptr<uint64_t[]>[]> glitch_values_;
+    std::unique_ptr<std::unique_ptr<uint64_t[]>[]> constant_zero_;
+    std::unique_ptr<uint64_t[]> is_simulation_faulty_;
+    std::vector<uint64_t> considered_simulation_indices_;
+    std::vector<FaultSet> fault_set;
+};
