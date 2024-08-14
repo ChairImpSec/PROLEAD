@@ -262,7 +262,7 @@ namespace Hardware{
     }   
 
     template <>
-    bool Propagation<RelaxedProbe>::IsObsolete(const Library& library, const CircuitStruct& circuit, const Settings& settings){
+    bool Propagation<RelaxedProbe>::IsObsolete(const Library& /*library*/, const CircuitStruct& circuit, const Settings& /*settings*/){
         uint64_t signal_index = GetSignalIndex();
 
         if (!extension_indices_[0].number_of_enable_indices_ && extension_indices_[0].propagation_indices_.empty() && !extension_indices_[0].number_of_signal_indices_) {

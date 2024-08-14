@@ -2,19 +2,21 @@
 
 pkgs.mkShell {
   name = "prolead-dev";
-  nativeBuildInputs = with pkgs; [ pkg-config ];
-  buildInputs = with pkgs; [
+
+  nativeBuildInputs = with pkgs; [
+    pkg-config
     gnumake
+  ];
+  nativeCheckInputs = with pkgs; [
+    catch2
+  ];
+  buildInputs = with pkgs; [
     (boost185.override {
-        enablePython = true;
-        python = python310;
+      enablePython = true;
+      python = python310;
     })
     flint
-    git
     python310
-    catch2
-    heaptrack
-    flamegraph
     gcc-arm-embedded
   ];
 }

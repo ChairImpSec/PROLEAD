@@ -21,7 +21,7 @@ public:
      * @param fault_free_computation The fault-free computation computed by the simulator.
      * @return One is returned since for StuckAtZero fault, the signal is always set to 0.
      */
-    virtual uint64_t ComputeFaultEffect(uint64_t fault_free_computation) const override {
+    virtual uint64_t ComputeFaultEffect(uint64_t /*fault_free_computation*/) const override {
         return 0xffffffffffffffff;
     }
 };
