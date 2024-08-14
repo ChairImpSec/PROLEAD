@@ -13,6 +13,6 @@ void Software::Execute(const po::variables_map& vm){
 
     std::cout << "Start Software Leakage Evaluation" << std::endl << std::endl;
     Software::Prepare::All(vm, probes, settings, settings2, SharedData, GlobalHelper, GlobalThreadSimulations);
-    double maximum_leakage = Software::Analyze::All(settings, SharedData, GlobalHelper, GlobalThreadSimulations);
+    Software::Analyze::All(settings, SharedData, GlobalHelper, GlobalThreadSimulations);
     std::cout << "done!" << std::endl;
 }

@@ -4,7 +4,6 @@ void Software::Prepare::All(const po::variables_map& vm, Software::ConfigProbesS
   std::string result_folder_name = vm["resultfolder"].as<std::string>();
   std::string linker_file_name = vm["linkerfile"].as<std::string>();
   std::string design_file_name = vm["designfile"].as<std::string>();
-  const std::string config_file_name = vm["configfile"].as<std::string>();
 
 	bool ignore_makefile_config = false;
 
@@ -16,7 +15,7 @@ void Software::Prepare::All(const po::variables_map& vm, Software::ConfigProbesS
 		ignore_makefile_config = true;
 	}
 
-    Software::Read::SettingsFile(config_file_name, settings, settings2, probes, ignore_makefile_config);
+    Software::Read::SettingsFile(settings, settings2, probes, ignore_makefile_config);
     Software::Read::BinaryFile(vm, settings);
 
 	GlobalThreadSimulations.resize(settings.Max_no_of_Threads);

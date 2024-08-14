@@ -349,7 +349,7 @@ js::object ParseJsonFile(const std::filesystem::path& path) {
     js::value json_data = js::parse(
         data, js::make_shared_resource<js::monotonic_resource>(), opt);
     return json_data.as_object();
-  } catch (const js::system_error& e) {
+  } catch (const boost::system::system_error& e) {
     std::string error_message =
         "Error while parsing the JSON file located at path \"" + path.string() +
         "\": ";

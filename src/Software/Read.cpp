@@ -188,7 +188,7 @@ std::vector<uint8_t> Software::Read::read_file(const std::string& path){
 }
 
 //***************************************************************************************
-void Software::Read::SettingsFile(const std::string& settings_file_name, Software::SettingsStruct& settings, Settings& settings2, Software::ConfigProbesStruct& probes, bool ignoreMakefileConfig){
+void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& settings2, Software::ConfigProbesStruct& probes, bool ignoreMakefileConfig){
 	settings.Max_no_of_Threads = settings2.GetNumberOfThreads();
 	settings.NumberOfGroups = settings2.GetNumberOfGroups();
 	settings.Group_Values = (int**)malloc(settings.NumberOfGroups * sizeof(int*));
@@ -547,7 +547,7 @@ void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsS
 	PyObject* result = PyUnicode_AsEncodedString(cwd, "utf-8", "~E~");
 	const char *bytes = PyBytes_AS_STRING(result);
 	std::string path_of_example(bytes);
-	std::string path_of_directory = path_of_example.substr(0, path_of_example.rfind("PROLEAD") + strlen("PROLEAD"));
+	std::string path_of_directory = path_of_example.substr(0, path_of_example.rfind("prolead") + strlen("prolead"));
 
 	PyObject *sys_path = PySys_GetObject("path");
 	PyList_Append(sys_path, PyUnicode_FromString(path_of_directory.c_str()));
