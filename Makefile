@@ -8,6 +8,7 @@
 ##   release   build in release mode            ##
 ##   debug     build in debug mode              ##
 ##   test      performs unit tests              ##
+##   benchmark performs benchmarks              ##
 ##   clean     remove output directories        ##
 ##                                              ##
 ##################################################
@@ -20,7 +21,8 @@
 INC_DIRS = inc
 
 # Source directories with the .c and .cpp files. Separate multiple directories with a space.
-TEST_SRC = "ut src/Software src/Hardware src/Util"
+BENCHMARK_SRC = "benchmarks src/Software src/Hardware src/Util"
+TEST_SRC = "tests src/Software src/Hardware src/Util"
 DEBUG_SRC = src
 RELEASE_SRC = src
 
@@ -28,18 +30,21 @@ LIB_DIR = lib
 
 # Output directories for release and debug configurations.
 # If both point to the same directory, the final binaries will be suffixed with "_release" and "_debug".
+BENCHMARK_DIR = benchmark
 RELEASE_DIR = release
 DEBUG_DIR = debug
 TEST_DIR = test
 
-EXCLUDED_FILES := test/obj_test/ut/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c
+EXCLUDED_FILES := test/obj_test/tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c
 
 # Compiler options
 INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
+C_BENCHMARK_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 
+CXX_BENCHMARK_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
 CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
 CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
 CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
@@ -48,6 +53,7 @@ CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-fr
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 LINK_FLINT = -lflint -lmpfr -lgmp -lm
 LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python310
+BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 TEST_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
@@ -68,8 +74,12 @@ OUTPUT = PROLEAD
 HELP_MESSAGE = Simply use any combination of 'make {debug, release, test, help, clean}'. Just calling 'make' will build release and debug. By adding 'V=1' prints more verbose output.
 
 # switch between debug and release config
-
-ifeq ($(D),2)
+ifeq ($(D),3)
+	C_FLAGS = $(C_BENCHMARK_FLAGS)
+	CXX_FLAGS = $(CXX_BENCHMARK_FLAGS)
+	LINK_FLAGS = $(BENCHMARK_LINK_FLAGS)
+	OBJ_DIR = obj_test
+else ifeq ($(D),2)
 	C_FLAGS = $(C_TEST_FLAGS)
 	CXX_FLAGS = $(CXX_TEST_FLAGS)
 	LINK_FLAGS = $(TEST_LINK_FLAGS)
@@ -130,6 +140,9 @@ MAKEFLAGS += --no-print-directory
 
 all: debug release
 
+benchmark:
+	@+make compile D=3 OUTPUT_DIRECTORY=$(BENCHMARK_DIR) SRC_DIRS=$(BENCHMARK_SRC) -j8
+
 test:
 	@+make compile D=2 OUTPUT_DIRECTORY=$(TEST_DIR) SRC_DIRS=$(TEST_SRC) -j8
 
@@ -141,6 +154,7 @@ release:
 
 clean:
 	@echo  Removing build artifacts...
+	$(SUPPRESS_CMD)rm -rf $(BENCHMARK_DIR)
 	$(SUPPRESS_CMD)rm -rf $(DEBUG_DIR)
 	$(SUPPRESS_CMD)rm -rf $(RELEASE_DIR)
 	$(SUPPRESS_CMD)rm -rf $(TEST_DIR)
@@ -164,7 +178,9 @@ endif
 # create obj directory and compile
 compile: check directories $(OUTPUT_DIRECTORY)/$(OUTPUT)
 
-ifeq ($(D), 2)
+ifeq ($(D), 3)
+	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Benchmark build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
+else ifeq ($(D), 2)
 	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Test build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
 else ifeq ($(D), 1)
 	@diff=$$(($(shell date +%s%3N) - $(START_TIME))); echo 'Debug build completed in '$$(($$diff / 1000))'.'$$(($$diff % 1000))'s'
@@ -176,7 +192,9 @@ endif
 # create the obj directory
 directories: check
 
-ifeq ($(D), 2)
+ifeq ($(D), 3)
+	@echo  '_____Building Benchmark_____'
+else ifeq ($(D), 2)
 	@echo  '_______Building Tests_______'
 else ifeq ($(D), 1)
 	@echo  '_______Building Debug_______'

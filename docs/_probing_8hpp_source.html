@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.0</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
    </div>
   </td>
  </tr>
@@ -103,9 +103,9 @@ $(function() {
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>{</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">namespace </span>Probing</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    {</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> GetProbingSets(<a class="code hl_struct" href="struct_software_1_1_thread_simulation_struct.html">Software::ThreadSimulationStruct</a>&amp; ThreadSimulation, SettingsStruct&amp; <a class="code hl_class" href="class_settings.html">Settings</a>, <a class="code hl_struct" href="struct_software_1_1_test_struct.html">Software::TestStruct</a>&amp; Test, std::vector&lt;std::tuple&lt;uint32_t, uint32_t&gt;&gt;&amp; OrderOverTwoCombination, std::vector&lt;std::vector&lt;uint32_t&gt;&gt;&amp; ProbeInfoToStandardProbe, uint64_t SimulationIndex);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> GetProbingSets(<a class="code hl_struct" href="struct_software_1_1_thread_simulation_struct.html">Software::ThreadSimulationStruct</a>&amp; ThreadSimulation, SettingsStruct&amp; <a class="code hl_class" href="class_settings.html">Settings</a>, <a class="code hl_struct" href="struct_software_1_1_test_struct.html">Software::TestStruct</a>&amp; <a class="code hl_class" href="class_test.html">Test</a>, std::vector&lt;std::tuple&lt;uint32_t, uint32_t&gt;&gt;&amp; OrderOverTwoCombination, std::vector&lt;std::vector&lt;uint32_t&gt;&gt;&amp; ProbeInfoToStandardProbe, uint64_t SimulationIndex);</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordtype">void</span> GetMultivariateProbingSets(std::vector&lt;std::vector&lt;Software::ProbesStruct&gt;&gt;&amp; OneSimulationStandardProbes, SettingsStruct&amp; <a class="code hl_class" href="class_settings.html">Settings</a>, <a class="code hl_struct" href="struct_software_1_1_test_struct.html">Software::TestStruct</a>&amp; Test, std::vector&lt;std::tuple&lt;uint32_t, uint32_t&gt;&gt;&amp; OrderOverTwoCombination, std::vector&lt;std::vector&lt;uint32_t&gt;&gt;&amp; ProbeInfoToStandardProbe, uint32_t ThreadIndex, uint32_t SimulationIndex);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keywordtype">void</span> GetMultivariateProbingSets(std::vector&lt;std::vector&lt;Software::ProbesStruct&gt;&gt;&amp; OneSimulationStandardProbes, SettingsStruct&amp; <a class="code hl_class" href="class_settings.html">Settings</a>, <a class="code hl_struct" href="struct_software_1_1_test_struct.html">Software::TestStruct</a>&amp; <a class="code hl_class" href="class_test.html">Test</a>, std::vector&lt;std::tuple&lt;uint32_t, uint32_t&gt;&gt;&amp; OrderOverTwoCombination, std::vector&lt;std::vector&lt;uint32_t&gt;&gt;&amp; ProbeInfoToStandardProbe, uint32_t ThreadIndex, uint32_t SimulationIndex);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        </div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordtype">bool</span> InDistance(<a class="code hl_struct" href="struct_software_1_1_settings_struct.html">Software::SettingsStruct</a>&amp; <a class="code hl_class" href="class_settings.html">Settings</a>, std::vector&lt;Software::ProbesStruct&gt;&amp; ProbingSet);</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        uint32_t MemoryConsumption();</div>
@@ -175,6 +175,7 @@ $(function() {
 <div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span> </div>
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> Settings.hpp:99</div></div>
+<div class="ttc" id="aclass_test_html"><div class="ttname"><a href="class_test.html">Test</a></div><div class="ttdef"><b>Definition:</b> dom_indep_d1.cpp:6</div></div>
 <div class="ttc" id="astruct_software_1_1_helper_struct_html"><div class="ttname"><a href="struct_software_1_1_helper_struct.html">Software::HelperStruct</a></div><div class="ttdoc">Defines a struct that track meta information for probes.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:218</div></div>
 <div class="ttc" id="astruct_software_1_1_probes_struct_html"><div class="ttname"><a href="struct_software_1_1_probes_struct.html">Software::ProbesStruct</a></div><div class="ttdoc">Defines how every probe during simulation looks like.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:136</div></div>
 <div class="ttc" id="astruct_software_1_1_probing_set_struct_html"><div class="ttname"><a href="struct_software_1_1_probing_set_struct.html">Software::ProbingSetStruct</a></div><div class="ttdoc">Defines a probing set.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:268</div></div>

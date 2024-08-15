@@ -857,6 +857,8 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(std::vector<SharedData>& shar
   printer_.SetColumnSize(probing_sets_, circuit_);
   printer_.PrintEvaluationHeader();
 
+  simulation_.number_of_processed_simulations = 0;
+
   for (step_simulation_index = 0; step_simulation_index < (settings_.GetNumberOfSimulations() / settings_.GetNumberOfSimulationsPerStep()); ++step_simulation_index) {
     #pragma omp parallel for schedule(guided) private(thread_index)
     for (simulation_index = 0; simulation_index < (settings_.GetNumberOfSimulationsPerStep() / 64); ++simulation_index) {
@@ -911,12 +913,12 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
   uint64_t number_of_remaining_probing_sets;
   std::cout << "Evaluate security under the relaxed robust probing model!" << std::endl;
 
-  // SetUniqueProbes();
-
   // We use a PRNG that is thread safe
   GenerateThreadRng(thread_rng, settings_.GetNumberOfThreads());
   printer_.SetColumnSize(probing_sets_, circuit_);
   printer_.PrintEvaluationHeader();
+
+  simulation_.number_of_processed_simulations = 0;
 
   for (step_simulation_index = 0; step_simulation_index < (settings_.GetNumberOfSimulations() / settings_.GetNumberOfSimulationsPerStep()); ++step_simulation_index) {
     #pragma omp parallel for schedule(guided) private(thread_index)
@@ -956,15 +958,16 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
 }
 
 template <class ExtensionContainer>
-void Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t& probe_step_index) {
+double Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t& probe_step_index) {
   uint64_t number_of_faults = fault_manager_.GetNumberOfFaults();
   std::vector<uint64_t> combination_for_faults;
   std::vector<bool> bitmask_for_faults(number_of_faults, false);
   std::vector<Fault const*> faults;
   std::vector<uint64_t> number_of_faults_per_cycle(settings_.GetNumberOfClockCycles(), 0);
   uint64_t maximum, minimum;
-    
-
+  std::string fault_message;  
+  double maximum_leakage = 0.0;
+  
   for (ProbingSet<ExtensionContainer>& it : probing_sets_) {
     it.Initialize(false, propagations_);
   }
@@ -973,7 +976,7 @@ void Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vector
     return lhs.GetNumberOfProbeExtensions(propagations_) < rhs.GetNumberOfProbeExtensions(propagations_);
   });
 
-  if (number_of_faults && settings_.fault_injection.minimum_per_run && settings_.fault_injection.minimum_per_cycle) {
+  if (number_of_faults && settings_.fault_injection.minimum_per_run) {
     for (uint64_t index = settings_.fault_injection.minimum_per_run; index <= settings_.fault_injection.maximum_per_run; ++index) {
       InitializeFaultCombinations(index, combination_for_faults, bitmask_for_faults);
 
@@ -984,14 +987,16 @@ void Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vector
         minimum = 0xffffffffffffffff;
         faults.clear();
 
-        std::cout << "Induce faults at: ";
+        fault_message = "Induce faults at: [";
         for (uint64_t fault_index : combination_for_faults){
           Fault const* fault = fault_manager_.GetFault(fault_index);
           faults.push_back(fault);
           ++number_of_faults_per_cycle[fault->GetClockCycle()];
-          std::cout << circuit_.Signals[fault->GetSignalIndex()]->Name << " (" << fault->GetClockCycle() << "), ";
+          fault_message += std::string(circuit_.Signals[fault->GetSignalIndex()]->Name) + " (" + std::to_string(fault->GetClockCycle()) + "), ";
         }
-        std::cout << std::endl;
+        
+        fault_message.pop_back();
+        fault_message.back() = ']';
 
         for (uint64_t test_cycle : settings_.fault_injection.clock_cycles) {
           --test_cycle;
@@ -1005,16 +1010,32 @@ void Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vector
         }
 
         if (maximum <= settings_.fault_injection.maximum_per_cycle && minimum >= settings_.fault_injection.minimum_per_cycle) {
+          std::cout << fault_message << std::endl;
           simulation_.fault_set.emplace_back(faults);
           EvaluateProbingSets(shared_data, start_time, probe_step_index);
           simulation_.fault_set.pop_back();
+
+          if (GetMaximumLeakage() > maximum_leakage) {
+            maximum_leakage = GetMaximumLeakage();
+          }
+
+          #pragma omp parallel for schedule(guided)
+          for (uint64_t set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index){
+            probing_sets_[set_index].DeconstructTable();
+          }
         }
 
       } while (std::prev_permutation(bitmask_for_faults.begin(), bitmask_for_faults.end()));
     }
   } else {
     EvaluateProbingSets(shared_data, start_time, probe_step_index);
+
+    if (GetMaximumLeakage() > maximum_leakage) {
+      maximum_leakage = GetMaximumLeakage();
+    }
   }
+
+  return maximum_leakage;
 }
 
 template <>
@@ -1027,6 +1048,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
   std::vector<bool> bitmask_for_probes(number_of_standard_probes, false);
   InitializeMultivariateProbeCombinations(addresses_for_probes, bitmask_for_probes);
   double maximum_leakage = 0.0;
+  double leakage_per_run;
 
   uint64_t number_of_probes_per_set = std::min(number_of_standard_probes, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)boost::math::binomial_coefficient<double>(number_of_standard_probes, number_of_probes_per_set);
@@ -1055,9 +1077,11 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
         RemoveUninformativeProbingSets();
       }
       printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-      EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+      leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
 
-      maximum_leakage = GetMaximumLeakage();
+      if (leakage_per_run > maximum_leakage) {
+        maximum_leakage = leakage_per_run;
+      }
       
       if (number_of_probing_sets != maximum_number_of_probing_sets) {
         #pragma omp parallel for schedule(guided)
@@ -1080,8 +1104,11 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
       RemoveUninformativeProbingSets();
     }
     printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-    EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-    maximum_leakage = GetMaximumLeakage();    
+    leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+    if (leakage_per_run > maximum_leakage) {
+      maximum_leakage = leakage_per_run;
+    } 
   }
 
   return maximum_leakage;
@@ -1097,6 +1124,7 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(std:
   std::vector<bool> bitmask_for_probes(number_of_standard_probes, false);
   InitializeMultivariateProbeCombinations(addresses_for_probes, bitmask_for_probes);
   double maximum_leakage = 0.0;
+  double leakage_per_run;
 
   uint64_t number_of_probes_per_set = std::min(number_of_standard_probes, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)boost::math::binomial_coefficient<double>(number_of_standard_probes, number_of_probes_per_set);
@@ -1120,8 +1148,11 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(std:
     if (set_index == number_of_probing_sets) {
       std::cout << GetNumberOfProbingSets() << " probing sets generated...done!" << std::endl;
       printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-      EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-      maximum_leakage = GetMaximumLeakage();
+      leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+      if (leakage_per_run > maximum_leakage) {
+        maximum_leakage = leakage_per_run;
+      }
 
       if (number_of_probing_sets != maximum_number_of_probing_sets) {
         #pragma omp parallel for schedule(guided)
@@ -1140,8 +1171,11 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(std:
     probing_sets_.resize(set_index);
     std::cout << GetNumberOfProbingSets() << " probing sets generated...done!" << std::endl;
     printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-    EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-    maximum_leakage = GetMaximumLeakage();          
+    leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+    if (leakage_per_run > maximum_leakage) {
+      maximum_leakage = leakage_per_run;
+    }      
   }
 
   return maximum_leakage;
@@ -1159,6 +1193,7 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(std::ve
   std::vector<Probe*> addresses_for_probes;
   std::vector<bool> bitmask_for_probes(number_of_spots, false);
   double maximum_leakage = 0.0;
+  double leakage_per_run; 
 
   uint64_t number_of_probes_per_set = std::min(number_of_spots, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)(settings_.side_channel_analysis.clock_cycles.size() * boost::math::binomial_coefficient<double>(number_of_spots, number_of_probes_per_set));
@@ -1188,8 +1223,11 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(std::ve
           RemoveUninformativeProbingSets();
         }
         printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-        EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-        maximum_leakage = GetMaximumLeakage();
+        leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+        if (leakage_per_run > maximum_leakage) {
+          maximum_leakage = leakage_per_run;
+        }
 
         if (number_of_probing_sets != maximum_number_of_probing_sets) {
           #pragma omp parallel for schedule(guided)
@@ -1213,8 +1251,11 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(std::ve
       RemoveUninformativeProbingSets();
     }
     printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-    EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-    maximum_leakage = GetMaximumLeakage();     
+    leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+    if (leakage_per_run > maximum_leakage) {
+      maximum_leakage = leakage_per_run;
+    }
   }
 
   return maximum_leakage;
@@ -1232,6 +1273,7 @@ double Adversaries<RelaxedProbe>::EvaluateUnivariateRobustProbingSecurity(std::v
   std::vector<Probe*> addresses_for_probes;
   std::vector<bool> bitmask_for_probes(number_of_spots, false);
   double maximum_leakage = 0.0;
+  double leakage_per_run;
 
   uint64_t number_of_probes_per_set = std::min(number_of_spots, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)(settings_.side_channel_analysis.clock_cycles.size() * boost::math::binomial_coefficient<double>(number_of_spots, number_of_probes_per_set));
@@ -1258,8 +1300,11 @@ double Adversaries<RelaxedProbe>::EvaluateUnivariateRobustProbingSecurity(std::v
       if (set_index == number_of_probing_sets) {
         std::cout << GetNumberOfProbingSets() << " probing sets generated...done!" << std::endl;
         printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-        EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-        maximum_leakage = GetMaximumLeakage();
+        leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+        if (leakage_per_run > maximum_leakage) {
+          maximum_leakage = leakage_per_run;
+        }
 
         if (number_of_probing_sets != maximum_number_of_probing_sets) {
           #pragma omp parallel for schedule(guided)
@@ -1281,8 +1326,11 @@ double Adversaries<RelaxedProbe>::EvaluateUnivariateRobustProbingSecurity(std::v
     std::cout << GetNumberOfProbingSets() << " probing sets generated...done!"
               << std::endl;
     printer_.PrintProbingSetInformation(propagations_, standard_probes_, extended_probes_, probing_sets_);
-    EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
-    maximum_leakage = GetMaximumLeakage();
+    leakage_per_run = EvaluateProbingSetsUnderFaults(shared_data, start_time, probe_step_index);
+
+    if (leakage_per_run > maximum_leakage) {
+      maximum_leakage = leakage_per_run;
+    }
   }
 
   return maximum_leakage;

@@ -365,6 +365,7 @@ void Hardware::CircuitStruct::SetIsAnalysisAllowed(const Settings& settings) {
 
 void Hardware::CircuitStruct::SetIsFaultAllowed(const Settings& settings) {
   uint64_t number_of_signals = NumberOfSignals;
+  uint64_t number_of_constants = NumberOfConstants;
   std::string signal_name;
 
   if (settings.fault_injection.locations.first_include) {
@@ -411,7 +412,21 @@ void Hardware::CircuitStruct::SetIsFaultAllowed(const Settings& settings) {
     }
   } 
 
-  // TODO set clock signal to false
+  for (uint64_t index = 0; index < number_of_constants; ++index) {
+    Signals[index]->is_fault_allowed = false;
+  }
+
+  for (uint64_t index = 0; index < number_of_signals; ++index) {  
+    signal_name = Signals[index]->Name;
+    if (signal_name == settings.GetClockSignalName()) {
+      Signals[index]->is_fault_allowed = false;
+    }
+  }
+
+  uint64_t number_of_inputs = NumberOfInputs;
+  for (uint64_t index = 0; index < number_of_inputs; ++index) {  
+    Signals[Inputs[index]]->is_fault_allowed = false;
+  }
 }
 
 

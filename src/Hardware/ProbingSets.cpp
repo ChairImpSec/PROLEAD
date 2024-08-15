@@ -44,12 +44,20 @@ template ProbingSet<RobustProbe>::ProbingSet();
 template ProbingSet<RelaxedProbe>::ProbingSet();
 
 template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::DeconstructTable() {
+  contingency_table_.Deconstruct();
+};
+
+template void ProbingSet<RobustProbe>::DeconstructTable();
+template void ProbingSet<RelaxedProbe>::DeconstructTable();
+
+template <class ExtensionContainer>
 void ProbingSet<ExtensionContainer>::Deconstruct() {
   probe_addresses_.clear();
   //probe_addresses_.shrink_to_fit();
   probe_extension_indices_.clear();
   //probe_extension_indices_.shrink_to_fit(); 
-  contingency_table_.Deconstruct();
+  DeconstructTable();
 };
 
 template void ProbingSet<RobustProbe>::Deconstruct();

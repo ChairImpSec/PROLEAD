@@ -351,7 +351,7 @@ class Adversaries {
    * @param bitmask The bit mask indication which faults are considered.
    * @author Nicolai Müller
    */
-  void EvaluateProbingSetsUnderFaults(
+  double EvaluateProbingSetsUnderFaults(
       std::vector<SharedData>& shared_data,
       timespec& start_time, uint64_t& probe_step_index);
 

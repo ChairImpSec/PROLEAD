@@ -92,7 +92,6 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		SharedData.signal_values_[simulation.clock_signal_index_] = FullOne;
 
 		// ----------- evaluate the registers
-
 		for (RegIndex = 0; RegIndex < Circuit.NumberOfRegs; RegIndex++)
 		{
 			input_values.resize(Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfInputs + Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfOutputs);

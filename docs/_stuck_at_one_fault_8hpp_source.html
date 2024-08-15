@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.0</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
    </div>
   </td>
  </tr>
@@ -86,14 +86,14 @@ $(function() {
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                    <span class="keywordtype">double</span> fault_probability)</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        : <a class="code hl_class" href="class_fault.html">Fault</a>(signal_index, clock_cycle, fault_probability, FaultType::stuck_at_1) {}</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_stuck_at_one_fault.html#ac60ca43285b23ae2c1c0d2fa4a7e6bde">   24</a></span>    <span class="keyword">virtual</span> uint64_t <a class="code hl_function" href="class_stuck_at_one_fault.html#ac60ca43285b23ae2c1c0d2fa4a7e6bde">ComputeFaultEffect</a>(uint64_t fault_free_computation)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="class_stuck_at_one_fault.html#a704e65e2ea848402c88e4a62da1fb9ef">   24</a></span>    <span class="keyword">virtual</span> uint64_t <a class="code hl_function" href="class_stuck_at_one_fault.html#a704e65e2ea848402c88e4a62da1fb9ef">ComputeFaultEffect</a>(uint64_t <span class="comment">/*fault_free_computation*/</span>)<span class="keyword"> const override </span>{</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordflow">return</span> 0xffffffffffffffff;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    }</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
 <div class="ttc" id="a_fault_8hpp_html"><div class="ttname"><a href="_fault_8hpp.html">Fault.hpp</a></div><div class="ttdoc">Declaration of the Fault class.</div></div>
 <div class="ttc" id="aclass_fault_html"><div class="ttname"><a href="class_fault.html">Fault</a></div><div class="ttdoc">Faults are parameteriesed by a location (signal/position and time) and a fault type.</div><div class="ttdef"><b>Definition:</b> Fault.hpp:23</div></div>
 <div class="ttc" id="aclass_stuck_at_one_fault_html"><div class="ttname"><a href="class_stuck_at_one_fault.html">StuckAtOneFault</a></div><div class="ttdef"><b>Definition:</b> StuckAtOneFault.hpp:5</div></div>
-<div class="ttc" id="aclass_stuck_at_one_fault_html_ac60ca43285b23ae2c1c0d2fa4a7e6bde"><div class="ttname"><a href="class_stuck_at_one_fault.html#ac60ca43285b23ae2c1c0d2fa4a7e6bde">StuckAtOneFault::ComputeFaultEffect</a></div><div class="ttdeci">virtual uint64_t ComputeFaultEffect(uint64_t fault_free_computation) const override</div><div class="ttdoc">Computes the effect of this fault on a given fault-free computation of a signal.</div><div class="ttdef"><b>Definition:</b> StuckAtOneFault.hpp:24</div></div>
+<div class="ttc" id="aclass_stuck_at_one_fault_html_a704e65e2ea848402c88e4a62da1fb9ef"><div class="ttname"><a href="class_stuck_at_one_fault.html#a704e65e2ea848402c88e4a62da1fb9ef">StuckAtOneFault::ComputeFaultEffect</a></div><div class="ttdeci">virtual uint64_t ComputeFaultEffect(uint64_t) const override</div><div class="ttdoc">Computes the effect of this fault on a given fault-free computation of a signal.</div><div class="ttdef"><b>Definition:</b> StuckAtOneFault.hpp:24</div></div>
 <div class="ttc" id="aclass_stuck_at_one_fault_html_ae7d09d324a7443c8fdea09d325c8cde9"><div class="ttname"><a href="class_stuck_at_one_fault.html#ae7d09d324a7443c8fdea09d325c8cde9">StuckAtOneFault::StuckAtOneFault</a></div><div class="ttdeci">StuckAtOneFault(unsigned int signal_index, unsigned int clock_cycle, double fault_probability)</div><div class="ttdoc">Constructor of StuckAtOneFault.</div><div class="ttdef"><b>Definition:</b> StuckAtOneFault.hpp:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

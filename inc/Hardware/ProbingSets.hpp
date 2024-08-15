@@ -184,6 +184,7 @@ class ProbingSet {
    */
   std::string PrintProbes(CircuitStruct& circuit);
 
+  void DeconstructTable();
   void Deconstruct();
 
   uint64_t GetHighestClockCycle(std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions);

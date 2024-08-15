@@ -101,7 +101,8 @@ void Settings::ParsePerformanceSettings(const boost::json::object& json_object,
           cpu_core_selector.GetOptimalNumberOfThreads(parsed_value);
     }
 
-    if (SetValue(performance_object, SettingNames::MINIMIZE_PROBING_SETS, parsed_value)) {
+    if (SetValue(performance_object, SettingNames::MINIMIZE_PROBING_SETS,
+                 parsed_value)) {
       if (is_target_hardware_) {
         if (parsed_value == "no") {
           settings.minimize = Minimization::none;
@@ -110,8 +111,9 @@ void Settings::ParsePerformanceSettings(const boost::json::object& json_object,
         } else if (parsed_value == "aggressive") {
           settings.minimize = Minimization::aggressive;
         } else {
-          throw std::invalid_argument(error_context + "Invalid argument for \"" +
-                                      SettingNames::MINIMIZE_PROBING_SETS + "\"!");
+          throw std::invalid_argument(
+              error_context + "Invalid argument for \"" +
+              SettingNames::MINIMIZE_PROBING_SETS + "\"!");
         }
       } else {
         throw std::runtime_error(error_context + "Unsupported key \"" +
@@ -171,7 +173,8 @@ void Settings::ParseSoftwareSettings(const boost::json::object& json_object,
     }
   } else {
     if (SetValue(json_object, identifier, software_object)) {
-      SetValue(software_object, SettingNames::COMPILER_FLAGS, settings.compiler_flags);
+      SetValue(software_object, SettingNames::COMPILER_FLAGS,
+               settings.compiler_flags);
 
       if (!SetValue(software_object, SettingNames::LOCATION_OF_CIPHER,
                     settings.location_of_cipher)) {
@@ -442,7 +445,8 @@ void Settings::ParseInputSequence(
                       if (is_target_hardware_) {
                         input_assignment.type_ = ValueType::standard;
                       } else {
-                        throw std::runtime_error(error_context + "Key \"type\" not found!");
+                        throw std::runtime_error(error_context +
+                                                 "Key \"type\" not found!");
                       }
                     }
 
@@ -508,7 +512,8 @@ void Settings::ParseInputSequence(
     }
 
     if ((input_sequence.size() != 1) && !is_target_hardware_) {
-      throw std::invalid_argument(error_context + "Invalid number of arguments!");
+      throw std::invalid_argument(error_context +
+                                  "Invalid number of arguments!");
     }
   } else {
     throw std::runtime_error(error_context + "Key \"" +
@@ -625,8 +630,7 @@ void Settings::ParseClockCycles(const boost::json::object& json_object,
     clock_cycles.erase(std::unique(clock_cycles.begin(), clock_cycles.end()),
                        clock_cycles.end());
   } else {
-    for (uint64_t index = 1; index <= GetNumberOfClockCycles();
-         ++index) {
+    for (uint64_t index = 1; index <= GetNumberOfClockCycles(); ++index) {
       clock_cycles.push_back(index);
     }
   }
@@ -813,8 +817,8 @@ void Settings::ParseFaultInjectionSettings(
         throw std::invalid_argument(error_context + "Invalid argument for \"" +
                                     SettingNames::FAULT_ANALYSIS + "\"!");
       }
-    } 
-    
+    }
+
     SetValue(fi, SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_RUN,
              settings.maximum_per_run);
     SetValue(fi, SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_RUN,
@@ -827,6 +831,20 @@ void Settings::ParseFaultInjectionSettings(
                      settings.clock_cycles);
     ParseIncludeSettings(fi, SettingNames::FAULT_LOCATIONS, false,
                          settings.locations);
+
+    if (settings.maximum_per_run < settings.minimum_per_run) {
+      throw std::invalid_argument(
+          error_context + "Invalid arguments for \"" +
+          SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_RUN + "\" and \"" +
+          SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_RUN + "\"!");
+    }
+
+    if (settings.maximum_per_cycle < settings.minimum_per_cycle) {
+      throw std::invalid_argument(
+          error_context + "Invalid arguments for \"" +
+          SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_CYCLE + "\" and \"" +
+          SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_CYCLE + "\"!");
+    }
   }
 }
 
@@ -856,7 +874,7 @@ uint64_t Settings::GetNumberOfProbingSetsPerStep() const {
 
 Minimization Settings::GetMinimization() const { return performance.minimize; }
 
-void Settings::SetMinimization(const Minimization& minimization) { 
+void Settings::SetMinimization(const Minimization& minimization) {
   performance.minimize = minimization;
 }
 
@@ -925,7 +943,8 @@ uint64_t Settings::GetNumberOfBitsPerOutputShare() const {
   return simulation.output_shares[0].size();
 }
 
-std::string Settings::GetOutputShareName(uint64_t share_index, uint64_t bit_index) const {
+std::string Settings::GetOutputShareName(uint64_t share_index,
+                                         uint64_t bit_index) const {
   return simulation.output_shares[share_index][bit_index];
 }
 
@@ -933,7 +952,8 @@ uint64_t Settings::GetNumberOfExpectedOutputs() const {
   return simulation.expected_outputs.size();
 }
 
-TriStateBit Settings::GetExpectedOutputBit(uint64_t group_index, uint64_t bit_index) const {
+TriStateBit Settings::GetExpectedOutputBit(uint64_t group_index,
+                                           uint64_t bit_index) const {
   return simulation.expected_outputs[group_index][bit_index];
 }
 
@@ -941,11 +961,13 @@ uint64_t Settings::GetNumberOfEndConditionSignalValuePairs() const {
   return simulation.end_condition_signals.size();
 }
 
-const std::vector<std::pair<std::string, bool>>& Settings::GetEndConditionSignalValuePairs() const {
+const std::vector<std::pair<std::string, bool>>&
+Settings::GetEndConditionSignalValuePairs() const {
   return simulation.end_condition_signals;
 }
 
-std::pair<std::string, bool> Settings::GetEndConditionSignalValuePair(uint64_t index) const {
+std::pair<std::string, bool> Settings::GetEndConditionSignalValuePair(
+    uint64_t index) const {
   return simulation.end_condition_signals[index];
 }
 
@@ -953,11 +975,13 @@ uint64_t Settings::GetNumberOfFaultDetectionSignalValuePairs() const {
   return simulation.fault_detection_flags.size();
 }
 
-const std::vector<std::pair<std::string, bool>>& Settings::GetFaultDetectionSignalValuePairs() const {
+const std::vector<std::pair<std::string, bool>>&
+Settings::GetFaultDetectionSignalValuePairs() const {
   return simulation.fault_detection_flags;
 }
 
-std::pair<std::string, bool> Settings::GetFaultDetectionSignalValuePair(uint64_t index) const {
+std::pair<std::string, bool> Settings::GetFaultDetectionSignalValuePair(
+    uint64_t index) const {
   return simulation.fault_detection_flags[index];
 }
 
@@ -965,11 +989,13 @@ uint64_t Settings::GetNumberOfAlwaysRandomInputSignals() const {
   return simulation.always_random_input_signals.size();
 }
 
-const std::vector<std::string>& Settings::GetAlwaysRandomInputElement(uint64_t index) const {
+const std::vector<std::string>& Settings::GetAlwaysRandomInputElement(
+    uint64_t index) const {
   return simulation.always_random_input_signals[index];
 }
 
-const std::vector<InputAssignment>& Settings::GetInputSequenceOfOneCycle(uint64_t index) const {
+const std::vector<InputAssignment>& Settings::GetInputSequenceOfOneCycle(
+    uint64_t index) const {
   return simulation.input_sequence[index];
 }
 
@@ -995,26 +1021,11 @@ void Settings::SetTestOrder(uint64_t order) {
   side_channel_analysis.order = order;
 }
 
-Analysis Settings::GetVariate() const {
-  return side_channel_analysis.variate;
-}
+Analysis Settings::GetVariate() const { return side_channel_analysis.variate; }
 
 uint64_t Settings::GetDistance() const {
   return side_channel_analysis.distance;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 uint64_t Settings::GetNumberOfTestClockCycles() const {
   return side_channel_analysis.clock_cycles.size();
@@ -1028,24 +1039,33 @@ uint64_t Settings::GetNumberOfSignalValuePairs(uint64_t index) const {
   return simulation.input_sequence[index].size();
 }
 
-uint64_t Settings::GetSignalLengthPerAssignment(uint64_t clock_index, uint64_t assignment_index) const {
-  return simulation.input_sequence[clock_index][assignment_index].signal_names_.size();
+uint64_t Settings::GetSignalLengthPerAssignment(
+    uint64_t clock_index, uint64_t assignment_index) const {
+  return simulation.input_sequence[clock_index][assignment_index]
+      .signal_names_.size();
 }
 
-uint64_t Settings::GetGroupIndexOfAssignment(uint64_t clock_index, uint64_t assignment_index, uint64_t group_index) const {
-  return simulation.input_sequence[clock_index][assignment_index].group_indices_[group_index];
+uint64_t Settings::GetGroupIndexOfAssignment(uint64_t clock_index,
+                                             uint64_t assignment_index,
+                                             uint64_t group_index) const {
+  return simulation.input_sequence[clock_index][assignment_index]
+      .group_indices_[group_index];
 }
 
-uint64_t Settings::GetShareIndexOfAssignment(uint64_t clock_index, uint64_t assignment_index) const {
+uint64_t Settings::GetShareIndexOfAssignment(uint64_t clock_index,
+                                             uint64_t assignment_index) const {
   return simulation.input_sequence[clock_index][assignment_index].share_index_;
 }
 
-ValueType Settings::GetAssignmentType(uint64_t clock_index, uint64_t assignment_index) const {
+ValueType Settings::GetAssignmentType(uint64_t clock_index,
+                                      uint64_t assignment_index) const {
   return simulation.input_sequence[clock_index][assignment_index].type_;
 }
 
-std::string Settings::GetSignalVectorName(uint64_t clock_index, uint64_t assignment_index) const {
-  std::string result = simulation.input_sequence[clock_index][assignment_index].signal_names_[0];
+std::string Settings::GetSignalVectorName(uint64_t clock_index,
+                                          uint64_t assignment_index) const {
+  std::string result =
+      simulation.input_sequence[clock_index][assignment_index].signal_names_[0];
   uint64_t index = result.find('[');
   if (index != std::string::npos) {
     result = result.substr(0, index);
@@ -1053,18 +1073,22 @@ std::string Settings::GetSignalVectorName(uint64_t clock_index, uint64_t assignm
   return result;
 }
 
-bool Settings::IsAssignedToConstant(uint64_t clock_index, uint64_t assignment_index) const {
-  return !simulation.input_sequence[clock_index][assignment_index].signal_values_.empty();
+bool Settings::IsAssignedToConstant(uint64_t clock_index,
+                                    uint64_t assignment_index) const {
+  return !simulation.input_sequence[clock_index][assignment_index]
+              .signal_values_.empty();
 }
 
-TriStateBit Settings::GetAssignedConstantBit(uint64_t clock_index, uint64_t assignment_index, uint64_t bit_index) const {
-  return simulation.input_sequence[clock_index][assignment_index].signal_values_[bit_index];
+TriStateBit Settings::GetAssignedConstantBit(uint64_t clock_index,
+                                             uint64_t assignment_index,
+                                             uint64_t bit_index) const {
+  return simulation.input_sequence[clock_index][assignment_index]
+      .signal_values_[bit_index];
 }
 
 bool Settings::EndConditionIsBasedOnClockCycles() const {
   return simulation.end_condition_signals.empty();
 }
-
 
 std::string Settings::GetEndConditionVectorName() const {
   std::string result = simulation.end_condition_signals[0].first;
@@ -1075,11 +1099,6 @@ std::string Settings::GetEndConditionVectorName() const {
   return result;
 }
 
-
-
-
-
-
 bool Settings::IsMultivariateEvaluationRequired() const {
   return (GetVariate() != Analysis::univariate) &&
          (side_channel_analysis.clock_cycles.size() > 1) &&
@@ -1089,8 +1108,7 @@ bool Settings::IsMultivariateEvaluationRequired() const {
 bool Settings::IsDistanceSmallEnough(uint64_t distance) const {
   bool is_distance_small_enough = distance <= GetDistance();
   bool is_no_unallowed_univariate_set =
-      (GetVariate() != Analysis::exclusive_multivariate) ||
-      distance != 0;
+      (GetVariate() != Analysis::exclusive_multivariate) || distance != 0;
   return is_distance_small_enough && is_no_unallowed_univariate_set;
 }
 
