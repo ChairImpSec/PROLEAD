@@ -4,7 +4,7 @@ For a quick start, we recommend to watch the quick start guides on our <a href="
 
 ## News
 We are excited to announce the release of PROLEADv3, an enhanced and extended version of the original PROLEAD tool. This new version includes several significant features:
-- Evaluation of side-channel resistance under the RR d-probing model
+- Evaluation of side-channel resistance under the <a href="https://eprint.iacr.org/2024/1277.pdf">RR d-probing model</a>
 - Assessment of security against combined adversaries capable of injecting faults and probing wires
 - Support for .json files for configuration and library management, replacing the previous custom file format
 - More granular settings to precisely define adversarial capabilities
@@ -40,3 +40,5 @@ Please contact <a href="https://github.com/nicolaimueller">Nicolai Müller</a> (
 ## Publications 
 - <a href="https://github.com/nicolaimueller">N. Müller</a>, <a href="https://github.com/amircrypto001">A. Moradi</a> (2022): <a href="https://tches.iacr.org/index.php/TCHES/article/view/9822">PROLEAD - A Probing-Based Hardware Leakage Detection Tool</a>, <a href="https://artifacts.iacr.org/tches/2022/a19">artifact available!</a>
 - <a href="https://github.com/JannikZeitschner">J. Zeitschner</a>, <a href="https://github.com/nicolaimueller">N. Müller</a>, <a href="https://github.com/amircrypto001">A. Moradi</a> (2023): <a href="https://tches.iacr.org/index.php/TCHES/article/view/10968">PROLEAD_SW - Probing-Based Software Leakage Detection for ARM Binaries</a>
+- <a href="https://github.com/nicolaimueller">N. Müller</a>, <a href="https://github.com/amircrypto001">A. Moradi</a> (2024): <a href="https://eprint.iacr.org/2024/1277.pdf">Robust but Relaxed Probing Model</a>
+
