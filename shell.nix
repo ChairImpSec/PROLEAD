@@ -6,9 +6,7 @@ pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     pkg-config
     gnumake
-  ];
-  nativeCheckInputs = with pkgs; [
-    catch2
+    gcc
   ];
   buildInputs = with pkgs; [
     (boost185.override {
@@ -18,5 +16,8 @@ pkgs.mkShell {
     flint
     python310
     gcc-arm-embedded
+    bear
+    catch2
   ];
 }
+
