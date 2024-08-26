@@ -58,7 +58,7 @@ void Settings::ParseFiniteField(const boost::json::object& json_object,
                                "\" not found!");
     }
 
-    if (!SetValue(finite_field, SettingNames::EXPONENT, settings.base)) {
+    if (!SetValue(finite_field, SettingNames::EXPONENT, settings.exponent)) {
       throw std::runtime_error(error_context + "\"" + SettingNames::EXPONENT +
                                "\" not found!");
     }
