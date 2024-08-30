@@ -1,0 +1,34 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"circuit"...done
+Successfully matched 0 fresh mask signals [].
+Evaluate the circuit under the robust probing model!
+488 different spots to probe detected!
+Generate univariate probing sets...267424 probing sets generated...done!
+Remove duplicated probing sets...267424 probing sets remain...done!
+Remove strictly less informative probing sets...Setting univariate case...done! 263588 probing sets remain!
+-------------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+-------------------------------------------------------------------------------------------------------------------------------------
+|           267424 |           568824 |        263588 |                       5 |                      15 |                7.097713 |
+-------------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         8.829900s |        4.179184GB |                   3200 |                 [md1FF_state_gff_8_n32(462)] |   7.359785 | LEAKAGE |
+|        12.052049s |        4.179184GB |                   6400 |                 [md1FF_state_gff_5_n32(415)] |  12.382650 | LEAKAGE |
+|        15.560156s |        4.179184GB |                   9600 |                 [md1FF_state_gff_5_n32(415)] |  16.425522 | LEAKAGE |
+|        19.335228s |        4.179184GB |                  12800 |                 [md1FF_state_gff_5_n32(415)] |  19.305477 | LEAKAGE |
+|        22.816897s |        4.179184GB |                  16000 |                [md1FF_state_gff_11_n29(280)] |  21.507643 | LEAKAGE |
+|        25.748064s |        4.179184GB |                  19200 |                 [md1FF_state_gff_5_n32(415)] |  24.766269 | LEAKAGE |
+|        28.676925s |        4.179184GB |                  22400 |                 [md2FF_state_gff_9_n32(130)] |  28.158186 | LEAKAGE |
+|        31.579960s |        4.179184GB |                  25600 |                [md1FF_state_gff_13_n29(282)] |  32.221416 | LEAKAGE |
+|        34.628270s |        4.179184GB |                  28800 |                         [sboxTI_y2_n17(104)] |  34.248201 | LEAKAGE |
+|        37.541951s |        4.179184GB |                  32000 |                [md1FF_state_gff_13_n29(282)] |  39.943461 | LEAKAGE |
+----------------------------------------------------------------------------------------------------------------------------------------
+Evaluation done in 37.5788 seconds!
