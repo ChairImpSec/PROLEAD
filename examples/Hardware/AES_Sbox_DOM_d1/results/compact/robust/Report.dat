@@ -1,0 +1,123 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"circuit"...done
+Successfully matched 18 fresh mask signals [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].
+Evaluate the circuit under the robust probing model!
+115 different spots to probe detected!
+Generate univariate probing sets...1150 probing sets generated...done!
+Remove duplicated probing sets...890 probing sets remain...done!
+Remove strictly less informative probing sets...Setting univariate case...done! 738 probing sets remain!
+-------------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+-------------------------------------------------------------------------------------------------------------------------------------
+|             1150 |             1860 |           738 |                       6 |                      26 |               14.439024 |
+-------------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|        12.045428s |        7.470304GB |                1000000 |                      [mult_msb_FFxDN[11](7)] |   3.308901 |    OKAY |
+|        22.522849s |        7.470304GB |                2000000 |                         [InverterInxD[6](4)] |   3.270975 |    OKAY |
+|        32.868721s |        7.470304GB |                3000000 |          [inverter_gf24_b_mul_e_FFxDN[6](6)] |   2.955514 |    OKAY |
+|        43.212300s |        7.470436GB |                4000000 |          [inverter_gf24_a_mul_b_FFxDN[2](7)] |   2.447133 |    OKAY |
+|        53.522266s |        7.470436GB |                5000000 |                         [InverterInxD[1](7)] |   2.729647 |    OKAY |
+|        63.834620s |        7.470436GB |                6000000 |                      [mult_msb_FFxDN[11](5)] |   2.174759 |    OKAY |
+|        74.194977s |        7.470700GB |                7000000 |                      [mult_msb_FFxDN[11](5)] |   3.785034 |    OKAY |
+|        84.729092s |        7.470700GB |                8000000 |                      [mult_msb_FFxDN[11](5)] |   3.129137 |    OKAY |
+|        95.167617s |        7.470700GB |                9000000 |                      [mult_msb_FFxDN[11](5)] |   2.345976 |    OKAY |
+|       105.591193s |        7.470700GB |               10000000 |                       [mult_lsb_FFxDN[5](6)] |   2.513192 |    OKAY |
+|       116.003536s |        7.470700GB |               11000000 |          [inverter_gf24_a_mul_b_FFxDN[1](3)] |   2.425674 |    OKAY |
+|       126.539524s |        7.470700GB |               12000000 |                       [mult_lsb_FFxDN[5](6)] |   2.226381 |    OKAY |
+|       137.066922s |        7.470700GB |               13000000 |                    [inverter_gf24_ExD[2](6)] |   2.272785 |    OKAY |
+|       147.509834s |        7.471228GB |               14000000 |                       [mult_msb_FFxDN[7](8)] |   2.124408 |    OKAY |
+|       158.006831s |        7.471228GB |               15000000 |                                 [QxDO[8](8)] |   1.995679 |    OKAY |
+|       168.603546s |        7.471228GB |               16000000 |                                 [QxDO[8](8)] |   2.266395 |    OKAY |
+|       179.502559s |        7.471228GB |               17000000 |                       [mult_lsb_FFxDN[7](9)] |   2.200406 |    OKAY |
+|       190.067952s |        7.471228GB |               18000000 |                       [mult_msb_FFxDN[7](8)] |   2.275046 |    OKAY |
+|       200.994107s |        7.471228GB |               19000000 |                       [mult_msb_FFxDN[7](8)] |   2.005776 |    OKAY |
+|       211.535373s |        7.471228GB |               20000000 |                       [mult_lsb_FFxDN[7](9)] |   2.100147 |    OKAY |
+|       222.160264s |        7.471228GB |               21000000 |          [inverter_gf24_a_mul_e_FFxDN[0](5)] |   2.062435 |    OKAY |
+|       232.681705s |        7.471228GB |               22000000 |                       [mult_lsb_FFxDN[7](9)] |   2.335706 |    OKAY |
+|       243.294835s |        7.471228GB |               23000000 |                       [mult_lsb_FFxDN[7](9)] |   1.996545 |    OKAY |
+|       253.899558s |        7.471228GB |               24000000 |                       [mult_lsb_FFxDN[1](6)] |   2.127149 |    OKAY |
+|       264.413444s |        7.471228GB |               25000000 |                       [mult_lsb_FFxDN[1](6)] |   2.094615 |    OKAY |
+|       275.018837s |        7.471228GB |               26000000 |          [inverter_gf24_a_mul_e_FFxDN[5](4)] |   1.876395 |    OKAY |
+|       286.202959s |        7.471228GB |               27000000 |                       [mult_msb_FFxDN[3](9)] |   1.809414 |    OKAY |
+|       296.722097s |        7.472284GB |               28000000 |                      [mul_y0y1_FFxDN[11](3)] |   2.168604 |    OKAY |
+|       307.250976s |        7.472284GB |               29000000 |                       [mult_lsb_FFxDN[3](9)] |   2.409294 |    OKAY |
+|       317.802545s |        7.472284GB |               30000000 |                       [mult_msb_FFxDN[3](9)] |   2.388385 |    OKAY |
+|       328.302106s |        7.472284GB |               31000000 |                       [mult_msb_FFxDN[3](9)] |   2.127907 |    OKAY |
+|       338.762028s |        7.472284GB |               32000000 |                      [mult_msb_FFxDN[12](7)] |   2.281723 |    OKAY |
+|       349.300202s |        7.472284GB |               33000000 |                      [mult_msb_FFxDN[12](7)] |   2.352093 |    OKAY |
+|       359.790264s |        7.472284GB |               34000000 |                      [mult_msb_FFxDN[12](7)] |   2.418563 |    OKAY |
+|       370.375030s |        7.472284GB |               35000000 |                       [mult_msb_FFxDN[3](9)] |   2.459227 |    OKAY |
+|       380.859984s |        7.472284GB |               36000000 |                       [mult_msb_FFxDN[3](9)] |   2.455067 |    OKAY |
+|       391.817073s |        7.472284GB |               37000000 |          [inverter_gf24_a_mul_b_FFxDN[3](6)] |   2.462478 |    OKAY |
+|       402.386135s |        7.472284GB |               38000000 |                      [mult_msb_FFxDN[12](7)] |   2.547863 |    OKAY |
+|       413.040338s |        7.472284GB |               39000000 |                      [mult_msb_FFxDN[12](7)] |   2.710029 |    OKAY |
+|       424.004008s |        7.472284GB |               40000000 |                      [mult_msb_FFxDN[11](9)] |   2.653005 |    OKAY |
+|       434.616531s |        7.472284GB |               41000000 |                      [mult_msb_FFxDN[11](9)] |   2.496575 |    OKAY |
+|       445.233736s |        7.472284GB |               42000000 |                      [mult_msb_FFxDN[12](7)] |   2.693946 |    OKAY |
+|       456.014874s |        7.472284GB |               43000000 |                      [mult_msb_FFxDN[12](7)] |   2.971722 |    OKAY |
+|       466.716959s |        7.472284GB |               44000000 |                      [mult_msb_FFxDN[12](7)] |   2.462496 |    OKAY |
+|       477.738188s |        7.472284GB |               45000000 |                      [mult_msb_FFxDN[11](9)] |   2.419760 |    OKAY |
+|       488.388572s |        7.472284GB |               46000000 |                       [mult_msb_FFxDN[3](9)] |   2.351442 |    OKAY |
+|       499.014609s |        7.472284GB |               47000000 |                       [mult_msb_FFxDN[3](9)] |   2.431184 |    OKAY |
+|       509.653161s |        7.472284GB |               48000000 |          [inverter_gf24_a_mul_b_FFxDN[1](4)] |   2.084930 |    OKAY |
+|       521.557691s |        7.472284GB |               49000000 |                      [mult_msb_FFxDN[11](9)] |   2.596694 |    OKAY |
+|       532.286106s |        7.472284GB |               50000000 |                      [mult_msb_FFxDN[11](9)] |   2.508362 |    OKAY |
+|       543.052078s |        7.472284GB |               51000000 |                      [mult_msb_FFxDN[11](9)] |   2.264551 |    OKAY |
+|       553.926626s |        7.472284GB |               52000000 |                    [inverter_gf24_ExD[0](9)] |   1.988654 |    OKAY |
+|       564.709447s |        7.472284GB |               53000000 |                    [inverter_gf24_ExD[0](9)] |   2.084215 |    OKAY |
+|       575.448009s |        7.472284GB |               54000000 |                    [inverter_gf24_ExD[0](9)] |   2.113953 |    OKAY |
+|       586.299035s |        7.472284GB |               55000000 |                    [inverter_gf24_ExD[0](9)] |   2.289808 |    OKAY |
+|       597.703789s |        7.485936GB |               56000000 |                    [inverter_gf24_ExD[3](2)] |   2.311660 |    OKAY |
+|       608.468766s |        7.485936GB |               57000000 |                    [inverter_gf24_ExD[3](2)] |   2.485117 |    OKAY |
+|       619.990265s |        7.485936GB |               58000000 |                    [inverter_gf24_ExD[3](2)] |   2.403085 |    OKAY |
+|       631.082902s |        7.485936GB |               59000000 |                    [inverter_gf24_ExD[0](9)] |   2.389771 |    OKAY |
+|       641.891770s |        7.485936GB |               60000000 |                    [inverter_gf24_ExD[0](9)] |   2.351212 |    OKAY |
+|       652.704280s |        7.485936GB |               61000000 |                    [inverter_gf24_ExD[0](9)] |   2.334160 |    OKAY |
+|       663.863624s |        7.485936GB |               62000000 |                    [inverter_gf24_ExD[3](2)] |   2.297649 |    OKAY |
+|       674.687927s |        7.485936GB |               63000000 |                    [inverter_gf24_ExD[3](2)] |   2.462529 |    OKAY |
+|       685.484849s |        7.485936GB |               64000000 |                    [inverter_gf24_ExD[3](2)] |   2.571540 |    OKAY |
+|       696.560370s |        7.485936GB |               65000000 |                    [inverter_gf24_ExD[3](2)] |   2.934901 |    OKAY |
+|       707.386407s |        7.485936GB |               66000000 |                    [inverter_gf24_ExD[3](2)] |   2.908287 |    OKAY |
+|       718.170804s |        7.485936GB |               67000000 |                    [inverter_gf24_ExD[3](2)] |   3.090446 |    OKAY |
+|       729.294761s |        7.485936GB |               68000000 |                    [inverter_gf24_ExD[3](2)] |   3.177257 |    OKAY |
+|       740.514288s |        7.485936GB |               69000000 |                    [inverter_gf24_ExD[3](2)] |   3.353733 |    OKAY |
+|       751.696339s |        7.485936GB |               70000000 |                    [inverter_gf24_ExD[3](2)] |   2.925498 |    OKAY |
+|       762.560078s |        7.485936GB |               71000000 |                    [inverter_gf24_ExD[3](2)] |   3.058282 |    OKAY |
+|       774.789492s |        7.485936GB |               72000000 |                    [inverter_gf24_ExD[3](2)] |   2.948891 |    OKAY |
+|       787.053383s |        7.485936GB |               73000000 |                    [inverter_gf24_ExD[3](2)] |   2.845876 |    OKAY |
+|       798.755344s |        7.485936GB |               74000000 |                    [inverter_gf24_ExD[3](2)] |   2.894031 |    OKAY |
+|       810.459934s |        7.485936GB |               75000000 |                    [inverter_gf24_ExD[3](2)] |   2.590752 |    OKAY |
+|       822.238357s |        7.485936GB |               76000000 |                    [inverter_gf24_ExD[1](8)] |   2.495314 |    OKAY |
+|       834.341805s |        7.485936GB |               77000000 |                    [inverter_gf24_ExD[1](8)] |   2.500718 |    OKAY |
+|       846.346745s |        7.485936GB |               78000000 |                    [inverter_gf24_ExD[1](8)] |   2.548950 |    OKAY |
+|       858.250232s |        7.485936GB |               79000000 |                    [inverter_gf24_ExD[1](8)] |   2.749901 |    OKAY |
+|       870.502810s |        7.485936GB |               80000000 |                    [inverter_gf24_ExD[1](8)] |   2.875447 |    OKAY |
+|       882.065364s |        7.485936GB |               81000000 |                    [inverter_gf24_ExD[1](8)] |   2.851432 |    OKAY |
+|       893.864371s |        7.485936GB |               82000000 |                    [inverter_gf24_ExD[1](8)] |   3.248144 |    OKAY |
+|       905.700201s |        7.485936GB |               83000000 |                    [inverter_gf24_ExD[1](8)] |   3.055996 |    OKAY |
+|       917.842383s |        7.485936GB |               84000000 |                    [inverter_gf24_ExD[1](8)] |   2.988220 |    OKAY |
+|       929.976707s |        7.485936GB |               85000000 |                    [inverter_gf24_ExD[1](8)] |   3.099695 |    OKAY |
+|       941.529330s |        7.485936GB |               86000000 |                    [inverter_gf24_ExD[1](8)] |   3.216866 |    OKAY |
+|       953.769689s |        7.485936GB |               87000000 |                    [inverter_gf24_ExD[1](8)] |   3.025343 |    OKAY |
+|       965.308090s |        7.485936GB |               88000000 |                    [inverter_gf24_ExD[1](8)] |   2.884812 |    OKAY |
+|       977.096787s |        7.485936GB |               89000000 |                    [inverter_gf24_ExD[1](8)] |   3.037374 |    OKAY |
+|       989.151151s |        7.485936GB |               90000000 |                    [inverter_gf24_ExD[1](8)] |   2.680893 |    OKAY |
+|      1001.233607s |        7.485936GB |               91000000 |                    [inverter_gf24_ExD[1](8)] |   2.793225 |    OKAY |
+|      1013.107157s |        7.485936GB |               92000000 |                    [inverter_gf24_ExD[1](8)] |   2.849011 |    OKAY |
+|      1024.778341s |        7.485936GB |               93000000 |                    [inverter_gf24_ExD[1](8)] |   3.034190 |    OKAY |
+|      1036.799148s |        7.485936GB |               94000000 |                    [inverter_gf24_ExD[1](8)] |   3.164090 |    OKAY |
+|      1048.684935s |        7.485936GB |               95000000 |                    [inverter_gf24_ExD[1](8)] |   2.928408 |    OKAY |
+|      1060.817701s |        7.485936GB |               96000000 |                    [inverter_gf24_ExD[1](8)] |   2.866841 |    OKAY |
+|      1072.920391s |        7.485936GB |               97000000 |                    [inverter_gf24_ExD[1](8)] |   2.828040 |    OKAY |
+|      1085.071350s |        7.485936GB |               98000000 |                    [inverter_gf24_ExD[1](8)] |   2.836002 |    OKAY |
+|      1096.798782s |        7.485936GB |               99000000 |                    [inverter_gf24_ExD[1](8)] |   2.816146 |    OKAY |
+|      1108.970533s |        7.485936GB |              100000000 |                    [inverter_gf24_ExD[1](8)] |   2.800324 |    OKAY |
+Evaluation done in 1108.97 seconds!
