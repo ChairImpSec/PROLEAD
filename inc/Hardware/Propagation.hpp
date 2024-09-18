@@ -6,6 +6,7 @@
 #include "Hardware/Enabler.hpp"
 #include "Hardware/Probes.hpp"
 #include "Util/Settings.hpp"
+#include "Hardware/Circuit.hpp"
 
 namespace Hardware {
 /**
@@ -129,9 +130,7 @@ class Propagation {
    * changed to integrate new probing models into PROLEAD.
    */
   std::vector<ExtensionContainer> extension_indices_;
-
+  };
 
   uint64_t BackpropagateUntilBranch(const CircuitStruct& circuit, uint64_t signal_index);
-
-  };
 }  // namespace Hardware

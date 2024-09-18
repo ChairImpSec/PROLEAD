@@ -12,18 +12,16 @@
 #include "Util/CpuCoreSelector.hpp"
 #include "Util/FileParsing.hpp"
 #include "Util/Sharing.hpp"
+// #include "Hardware/Fault.hpp"
+#include "Types.hpp"
 
-enum class Analysis { none, univariate, multivariate, exclusive_multivariate };
-enum class Minimization { none, trivial, aggressive };
-enum class FaultType { none, stuck_at_0, stuck_at_1, toggle };
-enum class FaultAnalysis { none, only_fault_free_simulations, only_faulty_simulations, both};
 
 struct IncludeSettings {
   bool first_include;
   std::regex included_elements;
   std::regex excluded_elements;
   std::regex included_paths;
-  std::regex excluded_paths;  
+  std::regex excluded_paths;
 };
 
 struct FiniteFieldSettings {
@@ -44,11 +42,14 @@ struct PerformanceSettings {
 };
 
 struct HardwareSettings {
+  // TODO: init a member variable of Circuit class with that info or make citcuit aware of this.
+  // This allwow to perform the check, IsFaultOnSignalAllowed without giveing clock_signal_name from
+  // outside, which seems pointless to me.
   std::string clock_signal_name;
 };
 
 struct SoftwareSettings {
-  uint64_t number_of_pipeline_stages; 
+  uint64_t number_of_pipeline_stages;
   std::string compiler_flags;
   std::string location_of_cipher;
 };
@@ -85,14 +86,23 @@ struct SideChannelAnalysisSettings {
   std::vector<uint64_t> clock_cycles;
 };
 
+struct FaultProperties {
+  IncludeSettings locations;
+  FaultType fault_type;
+  double probability;
+  bool fault_logic_gates;
+  bool fault_storage_gates;
+};
+
 struct FaultInjectionSettings {
-  FaultType type;
+  FaultType type; // TODO: remove? included in fault_properties
+  std::vector<FaultProperties> fault_properties;
   FaultAnalysis analysis;
   uint64_t maximum_per_run;
   uint64_t minimum_per_run;
   uint64_t maximum_per_cycle;
-  uint64_t minimum_per_cycle;  
-  IncludeSettings locations;
+  uint64_t minimum_per_cycle;
+  IncludeSettings locations; // TODO: remove? included in fault_properties
   std::vector<uint64_t> clock_cycles;
 };
 
@@ -174,7 +184,7 @@ class Settings {
   bool IsDistanceSmallEnough(uint64_t distance) const;
   bool IsMultivariateEvaluationRequired() const;
   bool IsLocation(const std::string& signal_name) const;
-  
+
   uint64_t GetNumberOfTestClockCycles() const;
   uint64_t GetTestClockCycle(uint64_t index) const;
 

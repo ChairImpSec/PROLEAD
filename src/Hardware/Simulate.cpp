@@ -34,11 +34,12 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 
 	for (group_index = 0; group_index < number_of_groups; ++group_index) {
 		for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() / input_element_size; value_index++) {
-			it = SharedData.group_values_[group_index].begin() + value_index * input_element_size;
 			random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
-			SharedData.group_values_[group_index].insert(it, random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end());
+			std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), SharedData.group_values_[group_index].begin() + value_index * input_element_size);
 		}
 	}
+
+
 
 	for (group_index = 0; group_index < number_of_groups; ++group_index) {
 		for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup(); value_index++) {
@@ -66,9 +67,8 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 	std::vector<uint64_t> bitsliced_element(input_element_size);
 
 	for (auto& shared_value : SharedData.selected_group_values) {
+		std::fill(bitsliced_element.begin(), bitsliced_element.end(), 0);
 		for (bit_index = 0; bit_index < input_element_size; ++bit_index) {
-			bitsliced_element[bit_index] = 0;
-
 			for (group_index = 0; group_index < number_of_groups; ++group_index){
 				bitsliced_element[bit_index] |= SharedData.group_values_[group_index][shared_value.first[bit_index]] & Select[group_index];
 			}
@@ -119,7 +119,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		// ----------- applying always random inputs
 		for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
 			random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
-			
+
 			for (input_index = 0; input_index < input_element_size; ++input_index){
 				SharedData.signal_values_[element[input_index]] = random_bitsliced_polynomial[input_index];
 			}
@@ -151,7 +151,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 							break;
 						case TriStateBit::random_value:
 							SharedData.signal_values_[input_assignment.signal_indices_[input_index]] = ThreadPrng();
-							break;	
+							break;
 						default:
 							break;
 						}
@@ -187,7 +187,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 						Value = library.Evaluate(Circuit.Cells[CellIndex]->Type, OutputIndex, input_values);
 						if (!simulation.fault_set.empty()) {
 							simulation.fault_set[0].TryToInduceFaults(Value, Circuit.Cells[CellIndex]->Outputs[OutputIndex], clock_cycle);
-						}	
+						}
 						SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]] = Value;
 					}
 			}
@@ -220,7 +220,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 				for (std::pair<uint64_t, uint64_t>& end_condition_signal : simulation.end_condition_signals_) {
 					Active |= SharedData.signal_values_[end_condition_signal.first] ^ end_condition_signal.second;
 				}
-				
+
 			if (Active == 0)
 			{
 				if (NumberOfWaitedClockCycles == -1)
@@ -244,17 +244,17 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 
 	// evaluate the enabler
 	for (size_t enabler_index : enabler_evaluation_order){
-		
+
 		input_indices = enabler[enabler_index].GetInputSignalIndices();
 		input_values.resize(input_indices.size());
 
 		for (signal_index = 0; signal_index < input_indices.size(); ++signal_index){
 			input_values[signal_index] = (*(input_indices[signal_index]))[SimulationIndex];
 		}
-		
+
 		if (enabler[enabler_index].CheckFunctions()){
 			simulation.glitch_values_[enabler_index][SimulationIndex] = enabler[enabler_index].EvaluateGlitch(input_values);
-			simulation.propagation_values_[enabler_index][SimulationIndex] = enabler[enabler_index].EvaluatePropagation(input_values);		
+			simulation.propagation_values_[enabler_index][SimulationIndex] = enabler[enabler_index].EvaluatePropagation(input_values);
 		} else{
 			simulation.glitch_values_[enabler_index][SimulationIndex] = 0xffffffffffffffff;
 			simulation.propagation_values_[enabler_index][SimulationIndex] = 0xffffffffffffffff;
@@ -272,12 +272,12 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		for (std::pair<uint64_t, uint64_t>& fault_detection_flag : simulation.fault_detection_flags_) {
 			simulation.is_simulation_faulty_[SimulationIndex] |= SharedData.signal_values_[fault_detection_flag.first] ^ fault_detection_flag.second;
 		}
-		simulation.is_simulation_faulty_[SimulationIndex] = ~simulation.is_simulation_faulty_[SimulationIndex];		
+		simulation.is_simulation_faulty_[SimulationIndex] = ~simulation.is_simulation_faulty_[SimulationIndex];
 	}
 
 	if (number_of_output_shares) {
 		uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size();
-		std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));		
+		std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));
 		std::vector<uint64_t> bitsliced_unshared_output_value;
 		std::vector<TriStateBit> expected_unshared_output_value;
 		bitsliced_shared_output_value.resize(number_of_output_shares);
@@ -294,7 +294,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 			for (bit_index = 0; bit_index < 64; ++bit_index){
 				if ((simulation.is_simulation_faulty_[SimulationIndex] & SharedData.one_in_64_[bit_index]) == 0){
 					expected_unshared_output_value = simulation.expected_unshared_output_values_[simulation.selected_groups_[SimulationIndex * 64 + bit_index]][value_index];
-			
+
 					for (input_index = 0; input_index < expected_unshared_output_value.size(); ++ input_index){
 						if (((expected_unshared_output_value[input_index] == TriStateBit::zero_value) && (bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index])) || ((expected_unshared_output_value[input_index] == TriStateBit::one_value) && ((bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index]) == 0))) {
 							#pragma omp critical
@@ -302,7 +302,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 						}
 					}
 				}
-			}			
+			}
 		}
 	}
 }
@@ -316,8 +316,8 @@ void Hardware::Simulate::GenerateVCDfile(const Hardware::CircuitStruct &Circuit,
 		std::ofstream VCDFile(file_name + "_" + std::to_string(SimulationIndex * 64 + BitIndex) + ".vcd");
 		VCDFile << "$version \n PROLEAD \n$end \n$timescale \n 1ps \n$end" << std::endl;
 		VCDFile << "$scope module " << topmodule_name << " $end\n" << std::endl;
-		
-		for (int SignalIndex = 0; SignalIndex < Circuit.NumberOfSignals; ++SignalIndex){ 
+
+		for (int SignalIndex = 0; SignalIndex < Circuit.NumberOfSignals; ++SignalIndex){
 			SignalName = Circuit.Signals[SignalIndex]->Name;
 			if (SignalName != "1'b0" && SignalName != "1'b1" && SignalName != "1'h0" && SignalName != "1'h1"){
 				VCDFile << "$var wire 1 " << SignalName << " " << SignalName << " $end" << std::endl;
@@ -338,12 +338,12 @@ void Hardware::Simulate::WriteVCDfile(const Hardware::CircuitStruct &Circuit, ui
 
 	for (bit_index = 0; bit_index < 64; ++bit_index){
 		std::ofstream VCDFile;
-		VCDFile.open(file_name + "_" + std::to_string((SimulationIndex << 6) + bit_index) + ".vcd", std::ios_base::app);	
+		VCDFile.open(file_name + "_" + std::to_string((SimulationIndex << 6) + bit_index) + ".vcd", std::ios_base::app);
 		VCDFile << "#" << (2 * CycleIndex) * 1000 << std::endl;
 
 		for (signal_index = 0; signal_index < number_of_signals; ++signal_index){
 			signal_name = Circuit.Signals[signal_index]->Name;
-		
+
 			if (signal_name != "1'b0" && signal_name != "1'b1" && signal_name != "1'h0" && signal_name != "1'h1"){
 				if (signal_index == clock_signal_index){
 					VCDFile << "1" << signal_name << std::endl;
@@ -364,7 +364,7 @@ void Hardware::Simulate::FinalizeVCDfile(int CycleIndex, int SimulationIndex, st
 {
 	for (unsigned int BitIndex = 0; BitIndex < 64; BitIndex++){
 		std::ofstream VCDFile;
-		VCDFile.open(file_name + "_" + std::to_string(SimulationIndex * 64 + BitIndex) + ".vcd", std::ios_base::app);	
+		VCDFile.open(file_name + "_" + std::to_string(SimulationIndex * 64 + BitIndex) + ".vcd", std::ios_base::app);
 		VCDFile << "#" << (2 * CycleIndex) * 1000 << std::endl;
 		VCDFile.close();
 	}

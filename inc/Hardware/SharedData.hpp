@@ -9,6 +9,7 @@
 
 #include "Hardware/Definitions.hpp"
 #include "Util/Settings.hpp"
+#include "Hardware/Circuit.hpp"
 
 class SharedData {
  public:
@@ -23,5 +24,5 @@ class SharedData {
   std::vector<std::vector<InputAssignment>> input_sequence_;
   std::map<std::vector<uint64_t>, std::vector<std::vector<uint64_t>>>
       selected_group_values;
-      
+
 };

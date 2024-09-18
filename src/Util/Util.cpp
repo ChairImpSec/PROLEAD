@@ -112,17 +112,22 @@ uint64_t ComputeRequiredSampleSize(uint64_t number_of_groups,
 
 template <>
 void ContingencyTable<TableBucketVector>::Initialize(uint64_t number_of_probes,
+                                                     uint64_t number_of_groups,
                                                      bool is_in_compact_mode) {
   log_10_p_value_ = 0.0;
-
   if (is_in_compact_mode) {
     if (number_of_probes) {
+      bucket_.resize(number_of_probes + 1);
       uint64_t number_of_bits =
           static_cast<uint64_t>(std::log2(number_of_probes)) + 1;
       size_of_key_in_bytes_ = number_of_bits >> 3;
 
       if (number_of_bits & 0b111) {
         ++size_of_key_in_bytes_;
+      }
+
+      for (TableEntry& entry : bucket_) {
+        entry.data_ = std::make_unique<uint32_t[]>(number_of_groups);
       }
     } else {
       size_of_key_in_bytes_ = 0;
@@ -158,6 +163,11 @@ double_t ContingencyTable<TableBucketVector>::GetLog10pValue() const {
   return log_10_p_value_;
 }
 
+template <>
+void ContingencyTable<TableBucketVector>::IncrementSpecificCounter(
+    uint64_t key_index, uint64_t group_index) {
+  ++bucket_[key_index].data_[group_index];
+}
 
 template <>
 void ContingencyTable<TableBucketVector>::UpdateBucket(
@@ -178,7 +188,6 @@ void ContingencyTable<TableBucketVector>::UpdateBucket(
     bucket_.insert(it, std::move(observation));
   }
 }
-
 
 template <>
 void ContingencyTable<TableBucketVector>::UpdateBucket(
@@ -230,10 +239,9 @@ bool ContingencyTable<TableBucketVector>::
     AreExpectedFrequenciesHighEnoughForEvaluation(
         const std::vector<double_t>& expected_frequencies,
         double_t pooling_factor) const {
-  for (uint64_t index = 0; index < expected_frequencies.size(); ++index) {
-    if ((expected_frequencies[index] < 5.0) ||
-        ((expected_frequencies[index] < 5.0 * pooling_factor) &&
-         expected_frequencies[index] < 20.0)) {
+  for (double_t frequency : expected_frequencies) {
+    if ((frequency < 5.0) ||
+        ((frequency < 5.0 * pooling_factor) && frequency < 20.0)) {
       return false;
     }
   }

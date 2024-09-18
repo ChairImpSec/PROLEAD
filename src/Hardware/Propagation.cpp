@@ -26,7 +26,7 @@ namespace Hardware{
 
     template <class ExtensionContainer>
     Propagation<ExtensionContainer>::Propagation(uint64_t signal_index, std::vector<ExtensionContainer> extension_indies) : signal_index_(signal_index), extension_indices_(extension_indies) {}
-    
+
     template Propagation<RobustProbe>::Propagation(uint64_t, std::vector<RobustProbe>);
     template Propagation<RelaxedProbe>::Propagation(uint64_t, std::vector<RelaxedProbe>);
 
@@ -58,12 +58,12 @@ namespace Hardware{
     }
 
     template uint64_t Propagation<RobustProbe>::GetSignalIndex();
-    template uint64_t Propagation<RelaxedProbe>::GetSignalIndex();  
+    template uint64_t Propagation<RelaxedProbe>::GetSignalIndex();
 
     template <>
     std::vector<uint64_t> Propagation<RobustProbe>::GetExtensionIndices() {
         return extension_indices_;
-    }    
+    }
 
     template <>
     std::vector<uint64_t> Propagation<RelaxedProbe>::GetExtensionIndices(std::vector<Propagation>& propagations) {
@@ -76,7 +76,7 @@ namespace Hardware{
         while(!indices.empty()){
             index = indices.back();
             indices.pop_back();
-            
+
             std::vector<Propagation>::iterator it = std::lower_bound(propagations.begin(), propagations.end(), index, [](Propagation& propagation, uint64_t value) {
                 return propagation.GetSignalIndex() < value;
             });
@@ -117,7 +117,7 @@ namespace Hardware{
         while(!indices.empty()){
             index = indices.back();
             indices.pop_back();
-            
+
             std::vector<Propagation>::iterator it = std::lower_bound(propagations.begin(), propagations.end(), index, [](Propagation& propagation, uint64_t value) {
                 return propagation.GetSignalIndex() < value;
             });
@@ -170,15 +170,14 @@ namespace Hardware{
         return &extension_indices_[index];
     }
 
-    template <> 
-    uint64_t Propagation<RelaxedProbe>::BackpropagateUntilBranch(const CircuitStruct& circuit, uint64_t signal_index) {
+    uint64_t BackpropagateUntilBranch(const CircuitStruct& circuit, uint64_t signal_index) {
         uint64_t result = signal_index;
 
         while ((circuit.Signals[result]->Output != -1) && (circuit.GetNumberOfInputsForSignalsComputingCell(result) == 1) && (circuit.Signals[result]->is_extension_allowed)){
             result = circuit.Cells[circuit.Signals[result]->Output]->Inputs[0];
-        }   
+        }
 
-        return result;     
+        return result;
     }
 
     template <>
@@ -188,7 +187,7 @@ namespace Hardware{
         if (circuit.Signals[signal_index_]->is_extension_allowed){
             for (index = 0; index < circuit.GetNumberOfInputsForSignalsComputingCell(signal_index_); ++index) {
                 input_index = circuit.Cells[circuit.Signals[signal_index_]->Output]->Inputs[index];
-                    
+
                 if (propagations[input_index].extension_indices_.empty()){
                     propagations[input_index].Propagate(library, circuit, propagations);
                 }
@@ -206,10 +205,10 @@ namespace Hardware{
     }
 
     template <>
-    void Propagation<RelaxedProbe>::Propagate(const Library& library, const CircuitStruct& circuit, std::vector<Propagation>& propagations) {        
+    void Propagation<RelaxedProbe>::Propagate(const Library& library, const CircuitStruct& circuit, std::vector<Propagation>& propagations) {
         uint64_t index, input_index;
         uint64_t signal_index = BackpropagateUntilBranch(circuit, signal_index_);
-        
+
         if (circuit.Signals[signal_index]->is_extension_allowed){
             extension_indices_[0].enable_index_ = signal_index;
             ++extension_indices_[0].number_of_enable_indices_;
@@ -229,13 +228,13 @@ namespace Hardware{
                 }
             }
         }
-        
+
         if (circuit.Signals[signal_index]->is_analysis_allowed) {
             extension_indices_[0].signal_indices_.push_back(signal_index);
 
             if (extension_indices_[0].number_of_signal_indices_ == 0){
                 ++extension_indices_[0].number_of_signal_indices_;
-            } 
+            }
         }
     }
 
@@ -257,9 +256,9 @@ namespace Hardware{
                 }
             }
         }
-        
+
         return false;
-    }   
+    }
 
     template <>
     bool Propagation<RelaxedProbe>::IsObsolete(const Library& /*library*/, const CircuitStruct& circuit, const Settings& /*settings*/){
@@ -276,10 +275,10 @@ namespace Hardware{
         }
 
         return false;
-    }  
+    }
 
     template <>
-    Propagation<RelaxedProbe> Propagation<RelaxedProbe>::ExtendWithTime(uint64_t clock_cycle, std::vector<Probe>& probes, std::vector<Enabler<CustomOperation>>& enabler) {        
+    Propagation<RelaxedProbe> Propagation<RelaxedProbe>::ExtendWithTime(uint64_t clock_cycle, std::vector<Probe>& probes, std::vector<Enabler<CustomOperation>>& enabler) {
         Propagation<RelaxedProbe> propagation;
         std::vector<uint64_t> indices;
         uint64_t index;
@@ -312,7 +311,7 @@ namespace Hardware{
     }
 
     template <>
-    void Propagation<RelaxedProbe>::Finalize(std::vector<Propagation<RelaxedProbe>>& propagations) {    
+    void Propagation<RelaxedProbe>::Finalize(std::vector<Propagation<RelaxedProbe>>& propagations) {
         std::vector<Propagation<RelaxedProbe>>::iterator it;
 
         for (uint64_t& index : extension_indices_[0].propagation_indices_){
@@ -329,8 +328,8 @@ namespace Hardware{
     }
 
     template <>
-    void Propagation<RelaxedProbe>::UpdateNumberOfSignals(std::vector<Propagation<RelaxedProbe>>& propagations) { 
+    void Propagation<RelaxedProbe>::UpdateNumberOfSignals(std::vector<Propagation<RelaxedProbe>>& propagations) {
         extension_indices_[0].number_of_signal_indices_ = GetExtensionIndices(propagations).size();
         extension_indices_[0].number_of_enable_indices_ = GetEnableIndices(propagations).size();
-    } 
+    }
 }

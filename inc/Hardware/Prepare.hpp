@@ -10,7 +10,7 @@ namespace Hardware
 {
     namespace Prepare
     {
-        void MakeCircuitDepth(Library&, Hardware::CircuitStruct *);
+        void MakeCircuitDepth(Library&, CircuitStruct *);
         void Simulation(CircuitStruct& circuit, Settings&, Simulation *);
     }
 }

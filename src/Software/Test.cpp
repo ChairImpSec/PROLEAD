@@ -351,15 +351,9 @@ void Software::Test::FirstOrderTableUpdate(Software::ThreadSimulationStruct& Thr
 //***************************************************************************************
 void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper){
     uint64_t heuristic = 0;
-    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
-    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
     uint32_t clock_cycle;
     uint8_t id, register_index, partner_register_index, probed_bit, dependency;
     uint16_t extension_size;
-    TableEntry dataset;
-
-    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
     for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
         Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
@@ -627,26 +621,15 @@ void Software::Test::CompactFirstOrderTableUpdate(Software::ThreadSimulationStru
 
     }  
 
-    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
-        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
-    }
-
-    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
-    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
+    GlobalSet.contingency_table_.IncrementSpecificCounter(heuristic, ThreadSimulation.SelectedGroups[simulation_index]);
 }
 
 //***************************************************************************************
 void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, unsigned int simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<bool>>& HighOrderUnivariateRedundancy, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
     uint64_t heuristic = 0;
-    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
-    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
     uint32_t clock_cycle;
     uint8_t id, register_index, partner_register_index, probed_bit, dependency;
     uint16_t extension_size;
-    TableEntry dataset;
-
-    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
     for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
         Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
@@ -1017,12 +1000,7 @@ void Software::Test::CompactHigherOrderUnivariateTableUpdate(Software::ThreadSim
 
     }  
 
-    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
-        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
-    }
-
-    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
-    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
+    GlobalSet.contingency_table_.IncrementSpecificCounter(heuristic, ThreadSimulation.SelectedGroups[simulation_index]);
 }
 
 //***************************************************************************************
@@ -1972,15 +1950,9 @@ void Software::Test::HigherOrderMultivariateTableUpdate(Software::ThreadSimulati
 
 void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadSimulationStruct& ThreadSimulation, uint32_t simulation_index, Software::ProbingSetStruct& GlobalSet, Software::ProbingSetStruct& ProbingSet, std::vector<std::vector<std::vector<uint8_t>>>& ProbeValues, Software::HelperStruct& Helper, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe){
     uint64_t heuristic = 0;
-    uint64_t number_of_groups = ThreadSimulation.NumberOfGroups;
-    uint64_t size_of_key_in_bytes = (ProbingSet.NumberOfProbesInSet >> 8) + 1;
     uint32_t clock_cycle;
     uint8_t id, register_index, partner_register_index, probed_bit, dependency;
     uint16_t extension_size;
-    TableEntry dataset;
-
-    dataset.key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    dataset.data_ = std::make_unique<uint32_t[]>(number_of_groups);
 
     for (Software::ProbesStruct& probe : ProbingSet.StandardProbe){
         Software::Probing::ExtractAllProbeInfo(register_index, id, partner_register_index, clock_cycle, probed_bit, extension_size, dependency, probe);
@@ -2326,10 +2298,5 @@ void Software::Test::CompactHigherOrderMultivariateTableUpdate(Software::ThreadS
 
     }  
 
-    for(uint64_t i = 0; i < size_of_key_in_bytes; ++i){
-        dataset.key_[i] = (heuristic >> (i << 3)) & 0xff;
-    }
-
-    ++dataset.data_[ThreadSimulation.SelectedGroups[simulation_index]];
-    GlobalSet.contingency_table_.UpdateBucket(dataset, number_of_groups);
+    GlobalSet.contingency_table_.IncrementSpecificCounter(heuristic, ThreadSimulation.SelectedGroups[simulation_index]);
 }

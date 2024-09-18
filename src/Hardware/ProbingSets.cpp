@@ -3,6 +3,14 @@
 namespace Hardware{
 
 template <class ExtensionContainer>
+ProbingSet<ExtensionContainer>::ProbingSet() {
+  should_be_removed_ = false;
+};
+
+template ProbingSet<RobustProbe>::ProbingSet();
+template ProbingSet<RelaxedProbe>::ProbingSet();
+
+template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::operator<(
     const ProbingSet<ExtensionContainer>& other) const {
   return (probe_extension_indices_ < other.probe_extension_indices_);
@@ -30,38 +38,10 @@ template <class ExtensionContainer>
 void ProbingSet<ExtensionContainer>::SetProbes(std::vector<Probe*>& probe_addresses, std::vector<uint64_t>& probe_extension_indices) {
   probe_addresses_ = probe_addresses;
   probe_extension_indices_ = probe_extension_indices;
-} 
+}
 
 template void ProbingSet<RobustProbe>::SetProbes(std::vector<Probe*>&, std::vector<uint64_t>&);
 template void ProbingSet<RelaxedProbe>::SetProbes(std::vector<Probe*>&, std::vector<uint64_t>&);
-
-template <class ExtensionContainer>
-ProbingSet<ExtensionContainer>::ProbingSet() {
-  should_be_removed_ = false;
-};
-
-template ProbingSet<RobustProbe>::ProbingSet();
-template ProbingSet<RelaxedProbe>::ProbingSet();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::DeconstructTable() {
-  contingency_table_.Deconstruct();
-};
-
-template void ProbingSet<RobustProbe>::DeconstructTable();
-template void ProbingSet<RelaxedProbe>::DeconstructTable();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::Deconstruct() {
-  probe_addresses_.clear();
-  //probe_addresses_.shrink_to_fit();
-  probe_extension_indices_.clear();
-  //probe_extension_indices_.shrink_to_fit(); 
-  DeconstructTable();
-};
-
-template void ProbingSet<RobustProbe>::Deconstruct();
-template void ProbingSet<RelaxedProbe>::Deconstruct();
 
 template <class ExtensionContainer>
 std::vector<Probe*> ProbingSet<ExtensionContainer>::GetProbeAddresses() {
@@ -70,6 +50,14 @@ std::vector<Probe*> ProbingSet<ExtensionContainer>::GetProbeAddresses() {
 
 template std::vector<Probe*> ProbingSet<RobustProbe>::GetProbeAddresses();
 template std::vector<Probe*> ProbingSet<RelaxedProbe>::GetProbeAddresses();
+
+template <class ExtensionContainer>
+uint64_t ProbingSet<ExtensionContainer>::GetNumberOfProbeAddresses() { 
+  return probe_addresses_.size(); 
+}
+
+template uint64_t ProbingSet<RobustProbe>::GetNumberOfProbeAddresses();
+template uint64_t ProbingSet<RelaxedProbe>::GetNumberOfProbeAddresses();
 
 template <>
 size_t ProbingSet<RobustProbe>::GetNumberOfProbeExtensions(std::vector<Propagation<RobustProbe>>&) {
@@ -85,7 +73,7 @@ size_t ProbingSet<RelaxedProbe>::GetNumberOfProbeExtensions(std::vector<Propagat
     result += propagations[index].GetNumberOfEnableIndices();
   }
 
-  return result; 
+  return result;
 }
 
 template <class ExtensionContainer>
@@ -131,54 +119,11 @@ template std::vector<uint64_t> ProbingSet<RobustProbe>::GetProbeExtensions();
 template std::vector<uint64_t> ProbingSet<RelaxedProbe>::GetProbeExtensions();
 
 template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::Initialize(bool is_in_compact_mode, std::vector<Propagation<ExtensionContainer>>& propagations) {
-  contingency_table_.Initialize(GetNumberOfProbeExtensions(propagations), is_in_compact_mode);
+void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
+  should_be_removed_ = true;
 }
 
-template void ProbingSet<RobustProbe>::Initialize(bool, std::vector<Propagation<RobustProbe>>&);
-template void ProbingSet<RelaxedProbe>::Initialize(bool, std::vector<Propagation<RelaxedProbe>>&);
-
-template <class ExtensionContainer>
-double ProbingSet<ExtensionContainer>::GetGValue() {
-  return contingency_table_.GetLog10pValue();
-}
-
-template double ProbingSet<RobustProbe>::GetGValue();
-template double ProbingSet<RelaxedProbe>::GetGValue();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::ComputeGTest(uint64_t number_of_groups, uint64_t number_of_simulations, std::vector<double_t>& group_simulation_ratio) {
-  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations, group_simulation_ratio);
-}
-
-template void ProbingSet<RobustProbe>::ComputeGTest(uint64_t, uint64_t, std::vector<double_t>&);
-template void ProbingSet<RelaxedProbe>::ComputeGTest(uint64_t, uint64_t, std::vector<double_t>&);
-
-template <class ExtensionContainer>
-uint64_t ProbingSet<ExtensionContainer>::GetNumberOfEntries() {
-  return contingency_table_.GetNumberOfEntries();
-}
-
-template uint64_t ProbingSet<RobustProbe>::GetNumberOfEntries();
-template uint64_t ProbingSet<RelaxedProbe>::GetNumberOfEntries();
-
-template <class ExtensionContainer>
-std::string ProbingSet<ExtensionContainer>::PrintProbes(CircuitStruct& circuit) {
-  std::string cycle, name, result;
-  
-  for (Probe* probe : GetProbeAddresses()){
-    name = circuit.Signals[probe->GetSignalIndex()]->Name;
-    cycle = std::to_string(probe->GetCycle());
-    result += name + "(" + cycle + "), ";
-  }
-  
-  result.pop_back();
-  result.pop_back();
-  return result;
-}
-
-template std::string ProbingSet<RobustProbe>::PrintProbes(CircuitStruct&);
-template std::string ProbingSet<RelaxedProbe>::PrintProbes(CircuitStruct&);
+template void ProbingSet<RobustProbe>::MarkAsRemovable();
 
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::IsRemovable() {
@@ -186,13 +131,6 @@ bool ProbingSet<ExtensionContainer>::IsRemovable() {
 }
 
 template bool ProbingSet<RobustProbe>::IsRemovable();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
-  should_be_removed_ = true;
-}
-
-template void ProbingSet<RobustProbe>::MarkAsRemovable();
 
 template <class ExtensionContainer>
 bool ProbingSet<ExtensionContainer>::Includes(ProbingSet<ExtensionContainer>& other, std::vector<Propagation<ExtensionContainer>>& propagations) {
@@ -217,40 +155,74 @@ bool ProbingSet<ExtensionContainer>::Includes(ProbingSet<ExtensionContainer>& ot
 
 template bool ProbingSet<RobustProbe>::Includes(ProbingSet<RobustProbe>&, std::vector<Propagation<RobustProbe>>&);
 
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::Initialize(bool is_in_compact_mode, std::vector<Propagation<ExtensionContainer>>& propagations, uint64_t number_of_groups) {
+  contingency_table_.Initialize(GetNumberOfProbeExtensions(propagations), number_of_groups, is_in_compact_mode);
+}
+
+template void ProbingSet<RobustProbe>::Initialize(bool, std::vector<Propagation<RobustProbe>>&, uint64_t);
+template void ProbingSet<RelaxedProbe>::Initialize(bool, std::vector<Propagation<RelaxedProbe>>&, uint64_t);
+
+template <class ExtensionContainer>
+double ProbingSet<ExtensionContainer>::GetGValue() {
+  return contingency_table_.GetLog10pValue();
+}
+
+template double ProbingSet<RobustProbe>::GetGValue();
+template double ProbingSet<RelaxedProbe>::GetGValue();
+
+template <class ExtensionContainer>
+uint64_t ProbingSet<ExtensionContainer>::GetNumberOfEntries() {
+  return contingency_table_.GetNumberOfEntries();
+}
+
+template uint64_t ProbingSet<RobustProbe>::GetNumberOfEntries();
+template uint64_t ProbingSet<RelaxedProbe>::GetNumberOfEntries();
+
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::DeconstructTable() {
+  contingency_table_.Deconstruct();
+};
+
+template void ProbingSet<RobustProbe>::DeconstructTable();
+template void ProbingSet<RelaxedProbe>::DeconstructTable();
+
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::Deconstruct() {
+  probe_addresses_.clear();
+  probe_extension_indices_.clear();
+  DeconstructTable();
+};
+
+template void ProbingSet<RobustProbe>::Deconstruct();
+template void ProbingSet<RelaxedProbe>::Deconstruct();
+
+template <class ExtensionContainer>
+void ProbingSet<ExtensionContainer>::ComputeGTest(uint64_t number_of_groups, uint64_t number_of_simulations, std::vector<double_t>& group_simulation_ratio) {
+  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations, group_simulation_ratio);
+}
+
+template void ProbingSet<RobustProbe>::ComputeGTest(uint64_t, uint64_t, std::vector<double_t>&);
+template void ProbingSet<RelaxedProbe>::ComputeGTest(uint64_t, uint64_t, std::vector<double_t>&);
 
 
-template <>
-void ProbingSet<RobustProbe>::CompactTableUpdate(
-    const Settings& settings, Simulation& simulation, std::vector<Propagation<RobustProbe>>& propagations) {
-  uint64_t group_index;
-  TableBucketVector datasets;
-  size_t number_of_extended_probes = GetNumberOfProbeExtensions(propagations);
-  uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
-  std::vector<uint64_t> probe_extension_indices = GetProbeExtensions();
-  uint64_t probe_index, value, counter;
+template <class ExtensionContainer>
+std::string ProbingSet<ExtensionContainer>::PrintProbes(CircuitStruct& circuit) {
+  std::string cycle, name, result;
 
-  datasets.resize(simulation.considered_simulation_indices_.size());
-  for (uint64_t index = 0; index < simulation.considered_simulation_indices_.size(); ++index){
-    datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    datasets[index].data_ = std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
-    group_index = simulation.selected_groups_[simulation.considered_simulation_indices_[index]];
-    datasets[index].data_[group_index] = 1;
-    counter = 0;
-
-    for (probe_index = 0; probe_index < number_of_extended_probes; ++probe_index){
-      value = simulation.probe_values_[probe_extension_indices[probe_index]][simulation.considered_simulation_indices_[index] >> 6];
-      if ((value >> (simulation.considered_simulation_indices_[index] & 0b111111)) & 1) {
-        ++counter;
-      }
-    }
-
-    for (probe_index = 0; probe_index < size_of_key_in_bytes; ++probe_index) {
-      datasets[index].key_[probe_index] = (counter >> (probe_index << 3)) & 0xff;
-    }
+  for (Probe* probe : GetProbeAddresses()){
+    name = circuit.Signals[probe->GetSignalIndex()]->Name;
+    cycle = std::to_string(probe->GetCycle());
+    result += name + "(" + cycle + "), ";
   }
 
-  contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
+  result.pop_back();
+  result.pop_back();
+  return result;
 }
+
+template std::string ProbingSet<RobustProbe>::PrintProbes(CircuitStruct&);
+template std::string ProbingSet<RelaxedProbe>::PrintProbes(CircuitStruct&);
 
 template <>
 void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simulation& simulation, std::vector<Propagation<RelaxedProbe>>& propagations) {
@@ -279,7 +251,7 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
     datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
     datasets[index].data_ = std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
     datasets[index].data_[group_index] = 1;
-    counter = 0;  
+    counter = 0;
 
     for (probe_index = 0; probe_index < probe_extension_indices_.size(); ++probe_index) {
       enable_ctr = enable_bound;
@@ -288,7 +260,7 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
 
       if (propagations[indices.front()].GetProbeAddress(0)->number_of_enable_indices_){
         considered.insert(propagations[indices.front()].GetProbeAddress(0)->enable_index_);
-      }  
+      }
 
       while (!indices.empty()){
         probe = propagations[indices.front()].GetProbeAddress(0);
@@ -296,19 +268,19 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
 
         if (probe->propagation_indices_.empty()) {
           probe_extension_indices.insert(probe_extension_indices.end(), probe->signal_indices_.begin(), probe->signal_indices_.end());
-        } else {  
+        } else {
           if ((simulation.propagation_values_[probe->enable_index_][simulation.considered_simulation_indices_[index] >> 6] >> (simulation.considered_simulation_indices_[index] & 0b111111)) & 1) {
             for (bit_index = 0; bit_index < probe->propagation_indices_.size(); ++bit_index) {
               key_index = probe->propagation_indices_[bit_index];
               new_probe = propagations[key_index].GetProbeAddress(0);
-                
+
               if (new_probe->propagation_indices_.empty()){
                 probe_extension_indices.insert(probe_extension_indices.end(), new_probe->signal_indices_.begin(), new_probe->signal_indices_.end());
               }else{
                 if (considered.find(new_probe->enable_index_) == considered.end()){
                   indices.push(key_index);
                   considered.insert(new_probe->enable_index_);
-                }                
+                }
               }
             }
 
@@ -320,13 +292,13 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
           ++enable_ctr;
         }
       }
-                
+
       enable_bound += propagations[probe_extension_indices_[probe_index]].GetNumberOfEnableIndices();
     }
 
     std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(), probe_extension_indices.end()), probe_extension_indices.end());  
-      
+    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(), probe_extension_indices.end()), probe_extension_indices.end());
+
     number_of_extended_probes = probe_extension_indices.size();
 
     for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
@@ -335,12 +307,8 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
       }
     }
 
-    for (bit_index = 0; bit_index < size_of_key_in_bytes; ++bit_index) {
-      datasets[index].key_[bit_index] = (counter >> (bit_index << 3)) & 0xff;
-    }
+    contingency_table_.IncrementSpecificCounter(counter, group_index); 
   }
-
-  contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
 }
 
 template <>
@@ -406,7 +374,7 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
 
       if (propagations[indices.front()].GetProbeAddress(0)->number_of_enable_indices_){
         considered.insert(propagations[indices.front()].GetProbeAddress(0)->enable_index_);
-      }  
+      }
 
       while (!indices.empty()){
         probe = propagations[indices.front()].GetProbeAddress(0);
@@ -414,22 +382,22 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
 
         if (probe->propagation_indices_.empty()) {
           probe_extension_indices.insert(probe_extension_indices.end(), probe->signal_indices_.begin(), probe->signal_indices_.end());
-        } else {  
+        } else {
           tmp_index = enable_ctr  >> 3;
           datasets[index].key_[tmp_index] <<= 1;
-          
+
           if ((simulation.propagation_values_[probe->enable_index_][simulation.considered_simulation_indices_[index] >> 6] >> (simulation.considered_simulation_indices_[index] & 0b111111)) & 1) {
             for (bit_index = 0; bit_index < probe->propagation_indices_.size(); ++bit_index) {
               key_index = probe->propagation_indices_[bit_index];
               new_probe = propagations[key_index].GetProbeAddress(0);
-                
+
               if (new_probe->propagation_indices_.empty()){
                 probe_extension_indices.insert(probe_extension_indices.end(), new_probe->signal_indices_.begin(), new_probe->signal_indices_.end());
               }else{
                 if (considered.find(new_probe->enable_index_) == considered.end()){
                   indices.push(key_index);
                   considered.insert(new_probe->enable_index_);
-                }                
+                }
               }
             }
 
@@ -442,15 +410,15 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
           ++enable_ctr;
         }
       }
-                
+
       enable_bound += propagations[probe_extension_indices_[probe_index]].GetNumberOfEnableIndices();
     }
 
     std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(), probe_extension_indices.end()), probe_extension_indices.end());  
-      
+    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(), probe_extension_indices.end()), probe_extension_indices.end());
+
     number_of_extended_probes = probe_extension_indices.size();
-      
+
     for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
       tmp_index = (bit_index + all_enable_size) >> 3;
       datasets[index].key_[tmp_index] <<= 1;
@@ -472,7 +440,7 @@ uint64_t ProbingSet<RelaxedProbe>::GetHighestClockCycle(std::vector<Propagation<
   uint64_t clock_cycle, probe_index, result = 0;
 
   for (uint64_t index : GetProbeExtensions()){
-    probe_index = propagations[index].GetSignalIndex();    
+    probe_index = propagations[index].GetSignalIndex();
     clock_cycle = probe_extensions[probe_index].GetCycle();
 
     if (clock_cycle > result){
@@ -482,6 +450,17 @@ uint64_t ProbingSet<RelaxedProbe>::GetHighestClockCycle(std::vector<Propagation<
 
   return result;
 }
+
+template <>
+uint64_t ProbingSet<RobustProbe>::GetSizeOfKeyInBytes() {
+  return contingency_table_.GetSizeOfKeyInBytes();
+}  
+
+template <>
+void ProbingSet<RobustProbe>::IncrementSpecificCounter(uint64_t key_index, uint64_t group_index) {
+  contingency_table_.IncrementSpecificCounter(key_index, group_index);
+}
+
 
 template <class ExtensionContainer>
 size_t GetIndexOfMostLeakingProbingSet(std::vector<ProbingSet<ExtensionContainer>>& probing_sets, std::vector<bool>& bitmask) {
@@ -511,10 +490,10 @@ uint64_t GetNumberOfRequiredTraces(std::vector<ProbingSet<ExtensionContainer>>& 
   // Unfortunately not sorted so linear complexity
   for (ProbingSet<ExtensionContainer>& it : probing_sets){
     number_of_entries = it.GetNumberOfEntries();
-    
+
     if (number_of_entries > maximum) {
       maximum = number_of_entries;
-    }  
+    }
   }
 
   return ComputeRequiredSampleSize(settings.GetNumberOfGroups(), maximum, settings.side_channel_analysis.beta_threshold, settings.side_channel_analysis.effect_size);

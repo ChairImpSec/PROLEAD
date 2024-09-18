@@ -5,7 +5,7 @@ namespace Hardware {
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::SetColumnSize(
     std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit) {
-  std::string text = "  Probing Set with highest Information Leakage ";     
+  std::string text = "  Probing Set with highest Information Leakage ";
   column_size_ = text.length();
   std::vector<Probe> probes;
 
@@ -308,7 +308,7 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
     }
   }
 
-  for (uint64_t clock_cycle : settings.side_channel_analysis.clock_cycles) { 
+  for (uint64_t clock_cycle : settings.side_channel_analysis.clock_cycles) {
     --clock_cycle;
     if (set_available[clock_cycle]) {
       set_index = set_indices[clock_cycle];

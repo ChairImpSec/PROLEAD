@@ -227,18 +227,18 @@ std::vector<Polynomial> Sharing::Encode(Polynomial& polynomial,
   if (is_additive_masking) {
     fq_add(shared_polynomial_fq[0], shared_polynomial_fq[0], polynomial_fq,
            ctx_fq_);
+
+    for (uint64_t index = 1; index < number_of_shares; ++index) {
+      SampleRandomPolynomial(shared_polynomial_fq[index]);
+      fq_sub(shared_polynomial_fq[0], shared_polynomial_fq[0],
+             shared_polynomial_fq[index], ctx_fq_);
+    }
   } else {
     fq_one(shared_polynomial_fq[0], ctx_fq_);
     fq_mul(shared_polynomial_fq[0], shared_polynomial_fq[0], polynomial_fq,
            ctx_fq_);
-  }
 
-  for (uint64_t index = 1; index < number_of_shares; ++index) {
-    if (is_additive_masking) {
-      SampleRandomPolynomial(shared_polynomial_fq[index]);
-      fq_sub(shared_polynomial_fq[0], shared_polynomial_fq[0],
-             shared_polynomial_fq[index], ctx_fq_);
-    } else {
+    for (uint64_t index = 1; index < number_of_shares; ++index) {
       do {
         SampleRandomPolynomial(shared_polynomial_fq[index]);
       } while (fq_is_zero(shared_polynomial_fq[index], ctx_fq_));
@@ -272,16 +272,15 @@ Polynomial Sharing::Decode(std::vector<Polynomial> shared_polynomial,
   fq_init(polynomial_fq, ctx_fq_);
   fq_init(operand_fq, ctx_fq_);
 
-  if (!is_additive_masking) {
-    fq_one(polynomial_fq, ctx_fq_);
-  }
-
-  for (auto& share : shared_polynomial) {
-    ConvertPolynomialToFq(share, operand_fq);
-
-    if (is_additive_masking) {
+  if (is_additive_masking) {
+    for (auto& share : shared_polynomial) {
+      ConvertPolynomialToFq(share, operand_fq);
       fq_add(polynomial_fq, polynomial_fq, operand_fq, ctx_fq_);
-    } else {
+    }
+  } else {
+    fq_one(polynomial_fq, ctx_fq_);
+    for (auto& share : shared_polynomial) {
+      ConvertPolynomialToFq(share, operand_fq);
       fq_mul(polynomial_fq, polynomial_fq, operand_fq, ctx_fq_);
     }
   }

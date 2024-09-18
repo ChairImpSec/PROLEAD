@@ -8,7 +8,7 @@
 namespace po = boost::program_options;
 
 namespace Software {
-TEST_CASE("Test full verification (aes_rp_d1_binary)", "[aes_rp_d1_binary]") {
+TEST_CASE("Test full verification (aes_rp_d1_binary)", "[software][aes_rp_d1_binary]") {
   po::variables_map vm;
   vm.insert({"designfile",
              po::variable_value{
@@ -90,7 +90,7 @@ TEST_CASE("Test full verification (aes_rp_d1_binary)", "[aes_rp_d1_binary]") {
     }
 
     Prepare::Helper(probes, global_helper);
-	
+
     // We expect leakage in the first order if transitions are considered.
     settings.TestTransitional = 1;
     maximum_leakage = Analyze::All(settings, shared_data, global_helper,
@@ -134,7 +134,7 @@ SECTION("With transitions in compact mode") {
     }
 
     Prepare::Helper(probes, global_helper);
-	
+
     // We expect leakage in the first order if transitions are considered.
     settings.TestTransitional = 1;
     maximum_leakage = Analyze::All(settings, shared_data, global_helper,

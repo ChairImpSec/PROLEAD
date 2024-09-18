@@ -183,16 +183,19 @@ class ContingencyTable {
    * the number of probes and whether the table is in compact mode.
    *
    * @param number_of_probes The number of probes used in observations.
+   * @param number_of_groups The number of groups in the contingency table.
    * @param is_in_compact_mode Flag indicating if the table operates in compact
    * mode.
    */
-  void Initialize(uint64_t number_of_probes, bool is_in_compact_mode);
+  void Initialize(uint64_t number_of_probes, uint64_t number_of_groups, bool is_in_compact_mode);
 
   void Deconstruct();
 
   uint64_t GetSizeOfKeyInBytes() const;
   uint64_t GetNumberOfEntries() const;
   double_t GetLog10pValue() const;
+
+  void IncrementSpecificCounter(uint64_t key_index, uint64_t group_index);
 
   /**
    * @brief Updates the bucket with a single observation.

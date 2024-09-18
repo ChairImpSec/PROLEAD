@@ -106,7 +106,7 @@ TEST_CASE("Test full verification (lmdpl_and_d1_3_ANDs_induce_glitch)",
     Test test = TestLmdplAndd13AndsInduceGlitch(settings);
 
     // We expect leakage in the first order as the fault induces a glitch.
-    REQUIRE(test.Require(true, 354, 234, 414, 234));
+    REQUIRE(test.Require(true, 354, 234, 354, 234));
   }
 
   SECTION("Robust but Relaxed Probing Model with trivial minimization") {
@@ -114,7 +114,7 @@ TEST_CASE("Test full verification (lmdpl_and_d1_3_ANDs_induce_glitch)",
     Test test = TestLmdplAndd13AndsInduceGlitch(settings);
 
     // We expect leakage in the first order as the fault induces a glitch.
-    REQUIRE(test.Require(true, 354, 78, 414, 78));
+    REQUIRE(test.Require(true, 354, 78, 354, 78));
   }
 
   SECTION("Robust but Relaxed Probing Model with aggressive minimization") {
@@ -122,6 +122,6 @@ TEST_CASE("Test full verification (lmdpl_and_d1_3_ANDs_induce_glitch)",
     Test test = TestLmdplAndd13AndsInduceGlitch(settings);
 
     // We expect leakage in the first order as the fault induces a glitch.
-    REQUIRE(test.Require(true, 354, 78, 414, 78));
+    REQUIRE(test.Require(true, 354, 78, 354, 78));
   }
 }

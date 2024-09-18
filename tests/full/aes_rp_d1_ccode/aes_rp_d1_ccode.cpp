@@ -8,7 +8,7 @@
 namespace po = boost::program_options;
 
 namespace Software {
-TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[aes_rp_d1_ccode]") {
+TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[software][aes_rp_d1_ccode]") {
   po::variables_map vm;
   vm.insert(
       {"designfile",
@@ -48,7 +48,7 @@ TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[aes_rp_d1_ccode]") {
   std::vector<SharedDataStruct> shared_data;
   std::vector<ThreadSimulationStruct> global_thread_simulations;
   double maximum_leakage;
-  
+
   Settings settings2(settings_file_path, false);
   Read::SettingsFile(settings, settings2, probes, false);
 

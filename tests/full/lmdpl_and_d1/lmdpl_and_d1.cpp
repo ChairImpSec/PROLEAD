@@ -131,10 +131,10 @@ TEST_CASE("Test full verification (lmdpl_and_d1)", "[lmdpl_and_d1]") {
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 126, 78, 144, 78));
+      REQUIRE(test.Require(false, 126, 78, 126, 78));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 126, 78, 144, 975));
+      REQUIRE(test.Require(true, 126, 78, 126, 975));
     }
   }
 
@@ -147,10 +147,10 @@ TEST_CASE("Test full verification (lmdpl_and_d1)", "[lmdpl_and_d1]") {
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 126, 30, 144, 30));
+      REQUIRE(test.Require(false, 126, 30, 126, 30));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 126, 30, 144, 135));
+      REQUIRE(test.Require(true, 126, 30, 126, 135));
     }
   }
 
@@ -163,10 +163,10 @@ TEST_CASE("Test full verification (lmdpl_and_d1)", "[lmdpl_and_d1]") {
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 126, 30, 144, 30));
+      REQUIRE(test.Require(false, 126, 30, 126, 30));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 126, 30, 144, 135));
+      REQUIRE(test.Require(true, 126, 30, 126, 135));
     }
   }
 }

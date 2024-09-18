@@ -1,6 +1,6 @@
 #include "Hardware/SharedData.hpp"
 
-SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& settings) : one_in_64_(64), zero_in_64_(64), signal_values_(circuit.NumberOfSignals), register_values_(circuit.NumberOfRegValues), group_values_(settings.GetNumberOfGroups(), std::vector<uint64_t>(settings.GetNumberOfBitsPerGroup(), 0)) {    
+SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& settings) : one_in_64_(64), zero_in_64_(64), signal_values_(circuit.NumberOfSignals), register_values_(circuit.NumberOfRegValues), group_values_(settings.GetNumberOfGroups(), std::vector<uint64_t>(settings.GetNumberOfBitsPerGroup(), 0)) {
     uint64_t cycle_index, input_index, value_index, bitmask = 1;
     std::string signal_name;
 
@@ -10,9 +10,9 @@ SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& s
         bitmask <<= 1;
 	}
 
-    signal_values_[1] = 0xffffffffffffffff; 
-    signal_values_[3] = 0xffffffffffffffff; 
-    
+    signal_values_[1] = 0xffffffffffffffff;
+    signal_values_[3] = 0xffffffffffffffff;
+
     uint64_t size_of_input_element_in_bits = std::ceil(std::log2l(settings.input_finite_field.base)) * settings.input_finite_field.exponent;
     uint64_t number_of_clock_cycles = settings.GetCyclesForInputSequence();
     uint64_t number_of_assignments, input_sequence_size;
@@ -51,7 +51,7 @@ SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& s
             for (value_index = 0; value_index < input_assignment.signal_names_.size(); ++value_index) {
                 for (input_index = 0; input_index < (uint64_t)circuit.NumberOfSignals; ++input_index) {
                     signal_name = circuit.Signals[input_index]->Name;
-                    
+
                     if (signal_name == input_assignment.signal_names_[value_index]) {
                         input_assignment.signal_indices_[value_index] = input_index;
                         break;

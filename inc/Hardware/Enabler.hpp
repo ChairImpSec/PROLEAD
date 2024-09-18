@@ -37,9 +37,6 @@ class Enabler {
   uint64_t output_index_;
   unsigned int extended_probe_index_;
   std::vector<std::unique_ptr<uint64_t[]>*> input_addresses_;
-  
-  //  std::function<uint64_t(std::vector<uint64_t>&)> glitch_function_;
-  //  std::function<uint64_t(std::vector<uint64_t>&)> propagation_function_;
 };
 
 size_t SearchEnabler(unsigned int signal_index,

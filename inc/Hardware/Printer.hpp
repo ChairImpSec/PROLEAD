@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Hardware/ProbingSets.hpp"
+#include "Hardware/Circuit.hpp"
 
 namespace Hardware {
 
@@ -17,7 +18,7 @@ class Printer {
 
   void SetColumnSize(std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit);
 
-  void SetPath(std::string path);                   
+  void SetPath(std::string path);
   std::string PrintProbes(std::vector<Probe>& probes, const CircuitStruct& circuit);
   std::string PrintProbes(std::vector<Probe*>& probes, const CircuitStruct& circuit);
 

@@ -10,6 +10,7 @@
 #include "Hardware/Simulate.hpp"
 #include "Hardware/Enabler.hpp"
 #include "Hardware/FaultManager.hpp"
+#include "Hardware/Circuit.hpp"
 
 namespace Hardware {
 /**
@@ -127,6 +128,8 @@ class Adversaries {
    */
   std::vector<Probe> extended_probes_;
 
+  std::vector<UniqueProbe> unique_probes_;
+
   std::vector<Enabler<CustomOperation>> enabler_;
 
   /**
@@ -171,7 +174,6 @@ class Adversaries {
    * are considered.
    *
    * @brief Sets all possible standard probes
-   * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
   void SetStandardProbes();
@@ -182,10 +184,16 @@ class Adversaries {
    * This leads to a list of all extended probes which are considered.
    *
    * @brief Sets all possible extended probes
-   * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
   void SetExtendedProbes();
+
+  /**
+   *
+   * @brief Sets all possible unique probes
+   * @author Nicolai Müller
+   */
+  void SetUniqueProbes();
 
   void SetEnablers();
 
@@ -301,7 +309,7 @@ class Adversaries {
 
   double GetLeakageOfSet(size_t probing_set_index);
 
-  std::vector<uint64_t> GetProbingSets(); 
+  std::vector<uint64_t> GetProbingSets();
 
 
   /**

@@ -17,7 +17,7 @@ size_t Adversaries<ExtensionContainer>::GetNumberOfSpots() {
   for (Probe it : standard_probes_){
     spots.push_back(it.GetSignalIndex());
   }
-  
+
   std::sort(spots.begin(), spots.end());
   spots.erase(std::unique(spots.begin(), spots.end()), spots.end());
   return spots.size();
@@ -154,7 +154,7 @@ size_t Adversaries<ExtensionContainer>::SearchExtendedProbe(uint64_t signal_inde
 template <class ExtensionContainer>
 void Adversaries<ExtensionContainer>::SetPropagations() {
     uint64_t number_of_signals = circuit_.NumberOfSignals;
-    
+
     for (uint64_t index = 0; index < number_of_signals; ++index){
       propagations_.emplace_back(index);
     }
@@ -163,9 +163,9 @@ void Adversaries<ExtensionContainer>::SetPropagations() {
       propagation.Propagate(library_, circuit_, propagations_);
     }
 
-    propagations_.erase(std::remove_if(propagations_.begin(), propagations_.end(), [this](Propagation<ExtensionContainer> lhs) { 
-        return lhs.IsObsolete(this->library_, this->circuit_, this->settings_); 
-    }), propagations_.end()); 
+    propagations_.erase(std::remove_if(propagations_.begin(), propagations_.end(), [this](Propagation<ExtensionContainer> lhs) {
+        return lhs.IsObsolete(this->library_, this->circuit_, this->settings_);
+    }), propagations_.end());
 
     std::sort(propagations_.begin(), propagations_.end(), [](Propagation<ExtensionContainer>& lhs, Propagation<ExtensionContainer>& rhs) {
         return lhs.GetSignalIndex() < rhs.GetSignalIndex();
@@ -210,7 +210,7 @@ template <class ExtensionContainer>
 void Adversaries<ExtensionContainer>::SetStandardProbes() {
   uint64_t signal_index;
 
-  for (uint64_t clock_cycle : settings_.side_channel_analysis.clock_cycles) { 
+  for (uint64_t clock_cycle : settings_.side_channel_analysis.clock_cycles) {
     for (Propagation<ExtensionContainer>& propagation : propagations_) {
       signal_index = propagation.GetSignalIndex();
 
@@ -232,9 +232,9 @@ void Adversaries<RobustProbe>::SetExtendedProbes() {
     tmp_indices = it.GetExtensionIndices();
     indices.insert(indices.end(), tmp_indices.begin(), tmp_indices.end());
   }
-  
+
   std::sort(indices.begin(), indices.end());
-  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());  
+  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());
 
   for (uint64_t index : indices){
     for (uint64_t clock_cycle : settings_.side_channel_analysis.clock_cycles){
@@ -256,7 +256,7 @@ template <>
 void Adversaries<RelaxedProbe>::SetExtendedProbes() {
   std::vector<std::vector<uint64_t>> tmp_indices(GetNumberOfPropagations());
   std::vector<uint64_t> extension_indices, indices;
-  uint64_t enable_index, input_index, number_of_inputs;
+  uint64_t enable_index, input_index, signal_index, number_of_inputs;
 
   for (Propagation<RelaxedProbe>& propagation : propagations_) {
     extension_indices = propagation.GetExtensionIndices(propagations_);
@@ -267,13 +267,15 @@ void Adversaries<RelaxedProbe>::SetExtendedProbes() {
       number_of_inputs = circuit_.Cells[circuit_.Signals[enable_index]->Output]->NumberOfInputs;
 
       for (input_index = 0; input_index < number_of_inputs; ++input_index) {
-        indices.push_back(circuit_.Cells[circuit_.Signals[enable_index]->Output]->Inputs[input_index]);
+        signal_index = circuit_.Cells[circuit_.Signals[enable_index]->Output]->Inputs[input_index];
+        signal_index = BackpropagateUntilBranch(circuit_, signal_index);
+        indices.push_back(signal_index);
       }
     }
   }
 
   std::sort(indices.begin(), indices.end());
-  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());  
+  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());
 
   for (uint64_t index : indices) {
     for (uint64_t clock_cycle : settings_.side_channel_analysis.clock_cycles) {
@@ -283,12 +285,32 @@ void Adversaries<RelaxedProbe>::SetExtendedProbes() {
         extended_probes_.emplace_back(index, clock_cycle - 1);
       }
 
-      extended_probes_.emplace_back(index, clock_cycle);  
+      extended_probes_.emplace_back(index, clock_cycle);
     }
   }
 
   std::sort(extended_probes_.begin(), extended_probes_.end(), [](Probe& lhs, Probe& rhs) {return lhs < rhs;});
   extended_probes_.erase(std::unique(extended_probes_.begin(), extended_probes_.end(), [](Probe& lhs, Probe& rhs) { return lhs == rhs; }), extended_probes_.end());
+}
+
+template <>
+void Adversaries<RobustProbe>::SetUniqueProbes() {
+  uint64_t unique_index, extension_index, set_index;
+  std::vector<uint64_t> probing_set_indices;
+  unique_probes_.clear();
+
+  for (unique_index = 0; unique_index < GetNumberOfExtendedProbes(); ++unique_index) {
+    probing_set_indices.clear();
+    for (set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
+      for (extension_index = 0; extension_index < probing_sets_[set_index].GetNumberOfProbeExtensions(propagations_); ++extension_index) {
+        if (probing_sets_[set_index].GetExtendedProbeIndex(extension_index) == unique_index) {
+          probing_set_indices.push_back(set_index);
+        }
+      }
+    }
+
+    unique_probes_.emplace_back(extended_probes_[unique_index].GetSignalIndex(), extended_probes_[unique_index].GetCycle(), probing_set_indices);
+  }
 }
 
 template <>
@@ -309,8 +331,8 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
   }
 
   std::sort(indices.begin(), indices.end());
-  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());  
-  
+  indices.erase(std::unique(indices.begin(), indices.end()), indices.end());
+
   // Sorting
   std::vector<uint64_t>::iterator it;
   for (uint64_t signal : circuit_.GetSignals()){
@@ -330,12 +352,12 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
   for (size_t index = 0; index < settings_.GetNumberOfSimulationsPerStep() >> 6; ++index){
     simulation_.is_simulation_faulty_[index] = 0;
   }
-  
+
   simulation_.probe_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(GetNumberOfExtendedProbes());
   for (size_t index = 0; index < GetNumberOfExtendedProbes(); ++index){
     simulation_.probe_values_[index] = std::make_unique<uint64_t[]>(settings_.GetNumberOfSimulationsPerStep() >> 6);
   }
-    
+
 	simulation_.propagation_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(indices.size() * settings_.side_channel_analysis.clock_cycles.size());
   for (size_t index = 0; index < indices.size() * settings_.side_channel_analysis.clock_cycles.size(); ++index){
     simulation_.propagation_values_[index] = std::make_unique<uint64_t[]>(settings_.GetNumberOfSimulationsPerStep() >> 6);
@@ -363,7 +385,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       not_transformed_local.clear();
 
       number_of_inputs = circuit_.Cells[cell_index]->NumberOfInputs;
- 
+
 
       if (clock_cycle) {
         for (input_index = 0; input_index < number_of_inputs; ++input_index){
@@ -410,7 +432,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
             } else{
               input_addresses.push_back(&simulation_.constant_zero_[0]);
               not_transformed_local.push_back(-1);
-            }    
+            }
           }
       }
 
@@ -432,9 +454,9 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       }
     }
   }
-  
+
   std::vector<std::tuple<size_t, size_t, size_t>> pair_of_index_and_depth;
-  
+
   for (size_t i = 0; i < GetNumberOfEnablers(); ++i){
     pair_of_index_and_depth.push_back(std::make_tuple(i, (size_t)circuit_.Signals[extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetSignalIndex()]->Depth, extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetCycle()));
   }
@@ -454,23 +476,30 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
 
 template <class ExtensionContainer>
 void Adversaries<ExtensionContainer>::SetFaults() {
+  // FIXME: Replace all uses of this function by calling the ComputAllFaults function of the fault
+  // manager.
+  // I think this makes more sense.
+  // For now we make the AddXYZFault function public instead of private.
+  // TBD with nico.
+
   uint64_t number_of_signals = circuit_.NumberOfSignals;
   for (uint64_t clock_cycle : settings_.fault_injection.clock_cycles) {
     --clock_cycle;
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if (circuit_.Signals[index]->is_fault_allowed) {
+      const Hardware::SignalStruct * const signal = circuit_.Signals[index];
+      if (signal->is_fault_allowed) {
         switch (settings_.fault_injection.type)
         {
         case FaultType::stuck_at_0:
-          fault_manager_.AddStuckAtZeroFault(index, clock_cycle, 1.0);
+          fault_manager_.AddStuckAtZeroFault(signal, index, clock_cycle, 1.0);
           break;
         case FaultType::stuck_at_1:
-          fault_manager_.AddStuckAtOneFault(index, clock_cycle, 1.0);
-          break;  
+          fault_manager_.AddStuckAtOneFault(signal, index, clock_cycle, 1.0);
+          break;
         case FaultType::toggle:
-          fault_manager_.AddToggleFault(index, clock_cycle, 1.0);
-          break;                  
+          fault_manager_.AddToggleFault(signal, index, clock_cycle, 1.0);
+          break;
         default:
           throw std::runtime_error("Error while setting the faults. Unsupported fault type!");
           break;
@@ -481,7 +510,8 @@ void Adversaries<ExtensionContainer>::SetFaults() {
 }
 
 template <>
-Adversaries<RobustProbe>::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation) : library_(library), circuit_(circuit), settings_(settings), simulation_(simulation) {
+Adversaries<RobustProbe>::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation) : library_(library), circuit_(circuit), settings_(settings), simulation_(simulation), fault_manager_(FaultManager(settings.fault_injection, circuit)){
+
   SetPropagations();
   SetStandardProbes();
   SetExtendedProbes();
@@ -500,7 +530,7 @@ Adversaries<RobustProbe>::Adversaries(Library& library, CircuitStruct& circuit, 
 }
 
 template <>
-Adversaries<RelaxedProbe>::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation) : library_(library), circuit_(circuit), settings_(settings), simulation_(simulation) {
+Adversaries<RelaxedProbe>::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation) : library_(library), circuit_(circuit), settings_(settings), simulation_(simulation) , fault_manager_(FaultManager(settings.fault_injection, circuit)){
   SetPropagations();
   SetStandardProbes();
   SetExtendedProbes();
@@ -770,7 +800,38 @@ template <class ExtensionContainer> void Adversaries<ExtensionContainer>::Normal
   }
 }
 
-template <class ExtensionContainer> void Adversaries<ExtensionContainer>::CompactTest(std::vector<double_t>& group_simulation_ratio) {
+template <> 
+void Adversaries<RobustProbe>::CompactTest(std::vector<double_t>& group_simulation_ratio) {
+  uint64_t number_of_groups = settings_.GetNumberOfGroups();
+  uint64_t number_of_probing_sets = GetNumberOfProbingSets();
+  uint64_t number_of_simulations = simulation_.considered_simulation_indices_.size();
+  std::vector<std::vector<uint64_t>> counters(number_of_simulations, std::vector<uint64_t>(number_of_probing_sets, 0));
+
+  #pragma omp parallel for schedule(guided)
+  for (uint64_t index = 0; index < number_of_simulations; ++index) {
+    uint64_t simulation_index = simulation_.considered_simulation_indices_[index];
+
+    for (uint64_t unique_index = 0; unique_index < unique_probes_.size(); ++unique_index) {
+      if (simulation_.probe_values_[unique_index][simulation_index >> 6] & (1ULL << (simulation_index & 63))) {
+        for (uint64_t set_index : unique_probes_[unique_index].GetProbingSetIndices()) {
+          ++counters[index][set_index];
+        }
+      }
+    }
+  }
+
+  #pragma omp parallel for schedule(guided)
+  for (uint64_t set_index = 0; set_index < number_of_probing_sets; ++set_index) {
+    for (uint64_t index = 0; index < number_of_simulations; ++index) {
+      probing_sets_[set_index].IncrementSpecificCounter(counters[index][set_index], simulation_.selected_groups_[simulation_.considered_simulation_indices_[index]]); 
+    }
+
+    probing_sets_[set_index].ComputeGTest(number_of_groups, simulation_.number_of_processed_simulations, group_simulation_ratio);
+  }
+}
+
+template <> 
+void Adversaries<RelaxedProbe>::CompactTest(std::vector<double_t>& group_simulation_ratio) {
   #pragma omp parallel for schedule(guided)
   for (size_t set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
     if (probing_sets_[set_index].GetNumberOfProbeAddresses()){
@@ -805,7 +866,7 @@ void Adversaries<ExtensionContainer>::SetConsideredSimulations(std::vector<uint6
           ++simulation_.number_of_processed_simulations;
           simulation_index = (batch_index << 6) ^ bit_index;
           simulation_.considered_simulation_indices_.push_back(simulation_index);
-          ++number_of_simulations_per_group[simulation_.selected_groups_[simulation_index]]; 
+          ++number_of_simulations_per_group[simulation_.selected_groups_[simulation_index]];
         }
       }
     }
@@ -818,7 +879,7 @@ void Adversaries<ExtensionContainer>::SetConsideredSimulations(std::vector<uint6
           ++simulation_.number_of_processed_simulations;
           simulation_index = (batch_index << 6) ^ bit_index;
           simulation_.considered_simulation_indices_.push_back(simulation_index);
-          ++number_of_simulations_per_group[simulation_.selected_groups_[simulation_index]]; 
+          ++number_of_simulations_per_group[simulation_.selected_groups_[simulation_index]];
         }
       }
     }
@@ -830,7 +891,7 @@ void Adversaries<ExtensionContainer>::SetConsideredSimulations(std::vector<uint6
       simulation_.considered_simulation_indices_.push_back(simulation_index);
       ++number_of_simulations_per_group[simulation_.selected_groups_[simulation_index]];
     }
-        
+
     break;
   }
 }
@@ -858,6 +919,10 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(std::vector<SharedData>& shar
   printer_.PrintEvaluationHeader();
 
   simulation_.number_of_processed_simulations = 0;
+
+  if (settings_.IsCompactDistribution()) {
+    SetUniqueProbes();
+  }
 
   for (step_simulation_index = 0; step_simulation_index < (settings_.GetNumberOfSimulations() / settings_.GetNumberOfSimulationsPerStep()); ++step_simulation_index) {
     #pragma omp parallel for schedule(guided) private(thread_index)
@@ -942,7 +1007,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
       }
     }
 
-    if (settings_.IsRemoveFullProbingSets()) { 
+    if (settings_.IsRemoveFullProbingSets()) {
       number_of_remaining_probing_sets = RemoveProbingSetsWithEnoughTraces(simulation_.number_of_processed_simulations, maximum_g_value_deleted, printed_probing_set_deleted);
 
       if (number_of_remaining_probing_sets == 0) {
@@ -965,11 +1030,11 @@ double Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vect
   std::vector<Fault const*> faults;
   std::vector<uint64_t> number_of_faults_per_cycle(settings_.GetNumberOfClockCycles(), 0);
   uint64_t maximum, minimum;
-  std::string fault_message;  
+  std::string fault_message;
   double maximum_leakage = 0.0;
-  
+
   for (ProbingSet<ExtensionContainer>& it : probing_sets_) {
-    it.Initialize(false, propagations_);
+    it.Initialize(settings_.IsCompactDistribution(), propagations_, settings_.GetNumberOfGroups());
   }
 
   std::sort(probing_sets_.begin(), probing_sets_.end(), [this](ProbingSet<ExtensionContainer>& lhs, ProbingSet<ExtensionContainer>& rhs) {
@@ -991,10 +1056,10 @@ double Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vect
         for (uint64_t fault_index : combination_for_faults){
           Fault const* fault = fault_manager_.GetFault(fault_index);
           faults.push_back(fault);
-          ++number_of_faults_per_cycle[fault->GetClockCycle()];
-          fault_message += std::string(circuit_.Signals[fault->GetSignalIndex()]->Name) + " (" + std::to_string(fault->GetClockCycle()) + "), ";
+          ++number_of_faults_per_cycle[fault->GetFaultedClockCycle()];
+          fault_message += std::string(circuit_.Signals[fault->GetFaultedSignalIndex()]->Name) + " (" + std::to_string(fault->GetFaultedClockCycle()) + "), ";
         }
-        
+
         fault_message.pop_back();
         fault_message.back() = ']';
 
@@ -1006,7 +1071,7 @@ double Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(std::vect
 
           if (number_of_faults_per_cycle[test_cycle] < minimum) {
             minimum = number_of_faults_per_cycle[test_cycle];
-          } 
+          }
         }
 
         if (maximum <= settings_.fault_injection.maximum_per_cycle && minimum >= settings_.fault_injection.minimum_per_cycle) {
@@ -1053,7 +1118,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
   uint64_t number_of_probes_per_set = std::min(number_of_standard_probes, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)boost::math::binomial_coefficient<double>(number_of_standard_probes, number_of_probes_per_set);
   uint64_t number_of_probing_sets = std::min(maximum_number_of_probing_sets, settings_.GetNumberOfProbingSetsPerStep());
- 
+
   // TODO: Change this allocation as many sets are removed by InDistance;
   probing_sets_.resize(number_of_probing_sets);
 
@@ -1082,7 +1147,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
       if (leakage_per_run > maximum_leakage) {
         maximum_leakage = leakage_per_run;
       }
-      
+
       if (number_of_probing_sets != maximum_number_of_probing_sets) {
         #pragma omp parallel for schedule(guided)
         for (index = 0; index < GetNumberOfProbingSets(); ++index){
@@ -1091,7 +1156,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
           }
         }
       }
-      
+
       set_index = 0;
     }
   } while (std::prev_permutation(bitmask_for_probes.begin(), bitmask_for_probes.end()));
@@ -1108,7 +1173,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(std::
 
     if (leakage_per_run > maximum_leakage) {
       maximum_leakage = leakage_per_run;
-    } 
+    }
   }
 
   return maximum_leakage;
@@ -1163,7 +1228,7 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(std:
         }
       }
 
-      set_index = 0;  
+      set_index = 0;
     }
   } while (std::prev_permutation(bitmask_for_probes.begin(), bitmask_for_probes.end()));
 
@@ -1175,7 +1240,7 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(std:
 
     if (leakage_per_run > maximum_leakage) {
       maximum_leakage = leakage_per_run;
-    }      
+    }
   }
 
   return maximum_leakage;
@@ -1187,13 +1252,13 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(std::ve
   std::cout << number_of_spots << " different spots to probe detected!" << std::endl;
 
   std::cout << "Generate univariate probing sets..." << std::flush;
-  
+
   uint64_t bitmask_index, address_index, set_index = 0;
   uint64_t probe_step_index = 0;
   std::vector<Probe*> addresses_for_probes;
   std::vector<bool> bitmask_for_probes(number_of_spots, false);
   double maximum_leakage = 0.0;
-  double leakage_per_run; 
+  double leakage_per_run;
 
   uint64_t number_of_probes_per_set = std::min(number_of_spots, settings_.GetTestOrder());
   uint64_t maximum_number_of_probing_sets = (uint64_t)(settings_.side_channel_analysis.clock_cycles.size() * boost::math::binomial_coefficient<double>(number_of_spots, number_of_probes_per_set));
@@ -1237,8 +1302,8 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(std::ve
             }
           }
         }
-        
-        set_index = 0;   
+
+        set_index = 0;
       }
 
     } while (std::prev_permutation(bitmask_for_probes.begin(), bitmask_for_probes.end()));
@@ -1315,7 +1380,7 @@ double Adversaries<RelaxedProbe>::EvaluateUnivariateRobustProbingSecurity(std::v
           }
         }
 
-        set_index = 0;  
+        set_index = 0;
       }
 
     } while (std::prev_permutation(bitmask_for_probes.begin(), bitmask_for_probes.end()));

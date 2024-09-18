@@ -27,7 +27,7 @@ bool Probe::operator!=(const Probe& other) const {
 }
 
 uint64_t SearchProbe(uint64_t signal_index, uint64_t clock_cycle,
-                   std::vector<Probe>& probes) {
+                     std::vector<Probe>& probes) {
   Probe probe(signal_index, clock_cycle);
 
   std::vector<Probe>::iterator it = std::lower_bound(
@@ -45,6 +45,15 @@ uint64_t SearchProbe(uint64_t signal_index, uint64_t clock_cycle,
   }
 
   return (size_t)diff;
+}
+
+UniqueProbe::UniqueProbe(uint64_t signal_index, uint64_t clock_cycle,
+                         std::vector<uint64_t>& probing_set_indices)
+    : Probe(signal_index, clock_cycle),
+      probing_set_indices_(probing_set_indices) {}
+
+const std::vector<uint64_t>& UniqueProbe::GetProbingSetIndices() const {
+  return probing_set_indices_;
 }
 
 }  // namespace Hardware
