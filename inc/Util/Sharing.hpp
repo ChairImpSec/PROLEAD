@@ -128,25 +128,12 @@ class Sharing {
 
  private:
   /**
-   * @brief Converts a polynomial represented as coefficient vector to an fq_t
-   * polynomial.
-   * @param polynomial The polynomial represented as coefficient vector.
-   * @param polynomial_fq The converted polynomial stored as an fq_t.
-   */
-  void ConvertPolynomialToFq(Polynomial& polynomial, fq_t& polynomial_fq) const;
-
-  /**
    * @brief Converts an fq_t polynomial to a polynomial represented as
    * coefficient vector.
    * @param polynomial_fq The polynomial represented as an fq_t.
    * @param polynomial_fq The converted polynomial stored as coefficient vector.
    */
-  void ConvertFqToPolynomial(fq_t& polynomial_fq, Polynomial& polynomial) const;
-
-  Polynomial ConvertBitsetToPolynomial(
-      const boost::dynamic_bitset<>& bitset) const;
-  boost::dynamic_bitset<> ConvertPolynomialToBitset(
-      const Polynomial& polynomial) const;
+  void ConvertFqToPolynomial(fq_t& polynomial_fq, Polynomial& polynomial);
 
   void SampleRandomPolynomial(fq_t& random_polynomial_fq);
 
@@ -173,8 +160,6 @@ class Sharing {
    */
   bool IsInField(const Polynomial& polynomial) const;
 
-  uint64_t GetLengthOfElementsInBits() const;
-
   /**
    * @brief Encodes an unshared polynomial X into its shared representation
    * Sh(X).
@@ -185,7 +170,7 @@ class Sharing {
    * that it satisfies the additive sharing property. Further, 'o' denotes the
    * operation under the finite field.
    *
-   * @param polynomial The unshared polynomial to be encoded.
+   * @param polynomial_fq The unshared polynomial to be encoded.
    * @param number_of_shares The number of shares to generate, denoted as d.
    * @param is_additive_masking A boolean indicating the operation used:
    *        - true: The operation is additive, so '+' is used.
@@ -194,7 +179,7 @@ class Sharing {
    * * @return A vector of d polynomials representing the shared
    * representation Sh(X).
    */
-  std::vector<Polynomial> Encode(Polynomial& polynomial,
+  std::vector<Polynomial> Encode(fq_t& polynomial_fq,
                                  uint64_t number_of_shares,
                                  bool is_additive_masking);
 
@@ -213,16 +198,17 @@ class Sharing {
    * finite field.
    * @return The decoded (unshared) polynomial.
    */
-  Polynomial Decode(std::vector<Polynomial> shared_polynomial,
-                    bool is_additive_masking) const;
+  Polynomial Decode(std::vector<fq_t>& shared_polynomial_fq,
+                    bool is_additive_masking);
 
   uint64_t prime_base_;
   uint64_t extension_degree_;
   uint64_t size_coefficients_bits_;
-  boost::uniform_int<uint64_t> dist_;
-  boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> gen_;
+  uint64_t length_of_elements_in_bits_;
 
   fmpz_t prime_fmpz_;
   fq_ctx_t ctx_fq_;
+  flint_rand_t random_state_;
+  fmpz_mod_poly_t fmpz_poly_;
   fmpz_mod_ctx_t ctx_fmpz_mod_;
 };
