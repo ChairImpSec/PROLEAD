@@ -341,7 +341,6 @@ void ProbingSet<RobustProbe>::NormalTableUpdate(
 
 template <>
 void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simulation& simulation, std::vector<Propagation<RelaxedProbe>>& propagations) {
-  TableBucketVector datasets;
   uint64_t bit_index, group_index, key_index, probe_index, tmp_index;
   uint64_t number_of_extended_probes;
   uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
@@ -350,16 +349,17 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
   uint64_t enable_ctr, enable_bound;
   RelaxedProbe* probe;
   RelaxedProbe* new_probe;
-  std::set<uint64_t> considered;
+  std::vector<bool> is_enable_index_done(simulation.number_of_enablers_, false);
+
+  uint64_t number_of_simulations = simulation.considered_simulation_indices_.size();
+  TableBucketVector datasets(number_of_simulations);
 
   uint64_t all_enable_size = 0;
   for (uint64_t probe_extension_index : probe_extension_indices_) {
     all_enable_size += propagations[probe_extension_index].GetNumberOfEnableIndices();
   }
 
-  datasets.resize(simulation.considered_simulation_indices_.size());
-
-  for (uint64_t index = 0; index < simulation.considered_simulation_indices_.size(); ++index){
+  for (uint64_t index = 0; index < number_of_simulations; ++index){
     probe_extension_indices.clear();
     enable_bound = 0;
     group_index = simulation.selected_groups_[simulation.considered_simulation_indices_[index]];
@@ -369,11 +369,11 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
 
     for (probe_index = 0; probe_index < probe_extension_indices_.size(); ++probe_index) {
       enable_ctr = enable_bound;
-      considered.clear();
+      std::fill(is_enable_index_done.begin(), is_enable_index_done.end(), false);
       indices.push(probe_extension_indices_[probe_index]);
 
       if (propagations[indices.front()].GetProbeAddress(0)->number_of_enable_indices_){
-        considered.insert(propagations[indices.front()].GetProbeAddress(0)->enable_index_);
+        is_enable_index_done[propagations[indices.front()].GetProbeAddress(0)->enable_index_] = true;
       }
 
       while (!indices.empty()){
@@ -394,9 +394,9 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(const Settings& settings, Simul
               if (new_probe->propagation_indices_.empty()){
                 probe_extension_indices.insert(probe_extension_indices.end(), new_probe->signal_indices_.begin(), new_probe->signal_indices_.end());
               }else{
-                if (considered.find(new_probe->enable_index_) == considered.end()){
+                if (!is_enable_index_done[new_probe->enable_index_]){
                   indices.push(key_index);
-                  considered.insert(new_probe->enable_index_);
+                  is_enable_index_done[new_probe->enable_index_] = true;
                 }
               }
             }

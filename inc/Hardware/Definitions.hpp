@@ -58,6 +58,7 @@ class Simulation {
     std::string result_folder_name_;
     uint64_t clock_signal_index_;
     uint64_t number_of_clock_cycles_;
+    uint64_t number_of_enablers_;
     uint64_t number_of_processed_simulations;
     std::vector<std::vector<uint64_t>> always_random_inputs_indices_;
     std::vector<uint64_t> selected_groups_;

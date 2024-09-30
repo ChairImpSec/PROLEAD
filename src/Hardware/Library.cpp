@@ -428,7 +428,9 @@ Library::Library(std::string path, std::string name, bool is_relaxed) {
             << " cells from the library." << std::endl;
 }
 
-std::vector<Cell> Library::GetCells() const { return cells_; }
+Cell Library::GetCell(uint64_t index) const { 
+  return cells_[index]; 
+}
 
 size_t Library::GetNumberOfCells() const {return cells_.size();}
 

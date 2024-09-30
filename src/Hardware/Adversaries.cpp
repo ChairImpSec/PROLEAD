@@ -439,7 +439,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       list_of_probes.push_back(extended_probe_index);
       not_transformed_global.push_back(not_transformed_local);
 
-      Enabler<CustomOperation> enabler = Enabler<CustomOperation>(library_.GetCells()[circuit_.Cells[cell_index]->Type], output_index, extended_probe_index, input_addresses);
+      Enabler<CustomOperation> enabler = Enabler<CustomOperation>(library_.GetCell(circuit_.Cells[cell_index]->Type), output_index, extended_probe_index, input_addresses);
       // Sorted insert
       enabler_.insert(std::upper_bound(enabler_.begin(), enabler_.end(), enabler), enabler);
     }
@@ -984,6 +984,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
   printer_.PrintEvaluationHeader();
 
   simulation_.number_of_processed_simulations = 0;
+  simulation_.number_of_enablers_ = enablers.size();
 
   for (step_simulation_index = 0; step_simulation_index < (settings_.GetNumberOfSimulations() / settings_.GetNumberOfSimulationsPerStep()); ++step_simulation_index) {
     #pragma omp parallel for schedule(guided) private(thread_index)

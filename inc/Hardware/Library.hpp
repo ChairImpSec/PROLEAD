@@ -248,7 +248,7 @@ class Library {
 
   size_t GetNumberOfCells() const;
 
-  std::vector<Cell> GetCells() const;
+  Cell GetCell(uint64_t index) const;
 
   uint64_t Evaluate(unsigned int cell_index, unsigned int output_index, std::vector<uint64_t>& input_values) const;
 
