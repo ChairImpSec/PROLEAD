@@ -301,7 +301,7 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
                                                            probe_extensions);
     p_value = probing_sets[index].GetGValue();
 
-    if (p_value > p_values[clock_cycle]) {
+    if (p_value >= p_values[clock_cycle]) {
       set_indices[clock_cycle] = index;
       set_available[clock_cycle] = true;
       p_values[clock_cycle] = p_value;
