@@ -5,18 +5,12 @@ Sharing::Sharing(uint64_t prime_base, uint64_t extension_degree,
     : prime_base_(prime_base),
       extension_degree_(extension_degree),
       size_coefficients_bits_(std::ceil(std::log2l(prime_base))),
-      length_of_elements_in_bits_(size_coefficients_bits_ * extension_degree) {
+      length_of_elements_in_bits_(size_coefficients_bits_ * extension_degree),
+      dist_(0, std::numeric_limits<uint64_t>::max()),
+      gen_(rng, dist_) {
+
   fmpz_init(prime_fmpz_);
   fmpz_set_ui(prime_fmpz_, prime_base_);
-  flint_randinit(random_state_);
-
-  boost::uniform_int<uint64_t> dist_(0, std::numeric_limits<uint64_t>::max());
-  boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> gen_(
-      rng, dist_);
-
-  mp_limb_t seed1 = gen_();
-  mp_limb_t seed2 = gen_();
-  flint_randseed(random_state_, seed1, seed2);
 
   if (!irreducible_polynomial.empty()) {
     fmpz_mod_ctx_init(ctx_fmpz_mod_, prime_fmpz_);
@@ -42,7 +36,6 @@ Sharing::Sharing(uint64_t prime_base, uint64_t extension_degree,
 Sharing::~Sharing() {
   fmpz_clear(prime_fmpz_);
   fq_ctx_clear(ctx_fq_);
-  flint_randclear(random_state_);
   fmpz_mod_poly_clear(fmpz_poly_, ctx_fmpz_mod_);
   fmpz_mod_ctx_clear(ctx_fmpz_mod_);
 }
@@ -200,39 +193,66 @@ void Sharing::ConvertFqToPolynomial(fq_t& polynomial_fq,
   fmpz_clear(fmpz_coef);
 }
 
-void Sharing::SampleRandomPolynomial(fq_t& random_polynomial_fq) {
-  fmpz_mod_poly_randtest(fmpz_poly_, random_state_, extension_degree_,
-                         ctx_fmpz_mod_);
-  fq_set_fmpz_mod_poly(random_polynomial_fq, fmpz_poly_, ctx_fq_);
-}
+boost::dynamic_bitset<> Sharing::ConvertPolynomialToBitset(
+    const Polynomial& polynomial) const {
+  uint64_t number_of_bits = length_of_elements_in_bits_;
+  uint64_t bit_index, coefficient_index;
+  boost::dynamic_bitset<> bitset(number_of_bits);
 
-std::vector<uint64_t> Sharing::SampleRandomBitslicedPolynomial() {
-  uint64_t bit_index, coefficient_index, simulation_index, index;
-  std::vector<uint64_t> bitsliced_polynomial(length_of_elements_in_bits_, 0);
-
-  uint64_t coefficient;
-  fmpz_t fmpz_coef;
-  fmpz_init(fmpz_coef);
-
-  for (simulation_index = 0; simulation_index < 64; ++simulation_index) {
-    index = 0;
-    fmpz_mod_poly_randtest(fmpz_poly_, random_state_, extension_degree_, ctx_fmpz_mod_);
-    for (coefficient_index = 0; coefficient_index < extension_degree_;
-         ++coefficient_index) {
-      fmpz_mod_poly_get_coeff_fmpz(fmpz_coef, fmpz_poly_, index, ctx_fmpz_mod_);
-      coefficient = fmpz_get_ui(fmpz_coef);
-      for (bit_index = 0; bit_index < size_coefficients_bits_; ++bit_index) {
-        bitsliced_polynomial[index] <<= 1;
-        bitsliced_polynomial[index] |= coefficient & 1;
-        coefficient >>= 1;
-        ++index;
-      }
+  for (coefficient_index = 0; coefficient_index < polynomial.size();
+       ++coefficient_index) {
+    for (bit_index = 0; bit_index < size_coefficients_bits_; ++bit_index) {
+      bitset[coefficient_index * size_coefficients_bits_ + bit_index] =
+          (polynomial[coefficient_index] >> bit_index) & 1;
     }
   }
 
-  fmpz_clear(fmpz_coef);
+  return bitset;
+}
+
+
+void Sharing::SampleRandomPolynomial(fq_t& random_polynomial_fq) {
+  fmpz_mod_poly_t random_fmpz;
+  fmpz_mod_poly_init(random_fmpz, ctx_fmpz_mod_);
+
+  fmpz_t coefficient;
+  fmpz_init(coefficient);
+
+  for (uint64_t index = 0; index < extension_degree_; ++index) {
+    fmpz_set_ui(coefficient, gen_());
+    fmpz_mod_poly_set_coeff_fmpz(random_fmpz, index, coefficient,
+                                 ctx_fmpz_mod_);
+  }
+
+  fq_set_fmpz_mod_poly(random_polynomial_fq, random_fmpz, ctx_fq_);
+  fmpz_mod_poly_clear(random_fmpz, ctx_fmpz_mod_);
+  fmpz_clear(coefficient);
+}
+
+std::vector<uint64_t> Sharing::SampleRandomBitslicedPolynomial() {
+  uint64_t index, bit_index, bit_width = length_of_elements_in_bits_;
+  std::vector<uint64_t> bitsliced_polynomial(bit_width);
+  boost::dynamic_bitset<> bitset;
+  Polynomial polynomial(extension_degree_);
+
+  for (index = 0; index < 64; ++index) {
+    fq_t polynomial_fq;
+    fq_init(polynomial_fq, ctx_fq_);
+    SampleRandomPolynomial(polynomial_fq);
+    ConvertFqToPolynomial(polynomial_fq, polynomial);
+    bitset = ConvertPolynomialToBitset(polynomial);
+
+    for (bit_index = 0; bit_index < bit_width; ++bit_index) {
+      bitsliced_polynomial[bit_index] <<= 1;
+      bitsliced_polynomial[bit_index] |= bitset[bit_index];
+    }
+
+    fq_clear(polynomial_fq, ctx_fq_);
+  }
+
   return bitsliced_polynomial;
 }
+
 
 std::vector<Polynomial> Sharing::Encode(fq_t& polynomial_fq,
                                         uint64_t number_of_shares,

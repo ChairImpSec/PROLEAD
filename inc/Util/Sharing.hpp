@@ -135,6 +135,10 @@ class Sharing {
    */
   void ConvertFqToPolynomial(fq_t& polynomial_fq, Polynomial& polynomial);
 
+  boost::dynamic_bitset<> ConvertPolynomialToBitset(
+      const Polynomial& polynomial) const;
+
+
   void SampleRandomPolynomial(fq_t& random_polynomial_fq);
 
   /**
@@ -208,7 +212,8 @@ class Sharing {
 
   fmpz_t prime_fmpz_;
   fq_ctx_t ctx_fq_;
-  flint_rand_t random_state_;
   fmpz_mod_poly_t fmpz_poly_;
   fmpz_mod_ctx_t ctx_fmpz_mod_;
+  boost::uniform_int<uint64_t> dist_;
+  boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>> gen_;
 };
