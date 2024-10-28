@@ -4,7 +4,7 @@
 #include <catch2/catch.hpp>
 
 TEST_CASE("Benchmark sorting and merging of duplicates",
-          "[BenchmarkSortAndMergeDuplicates]") {
+          "[Benchmark][SortAndMergeDuplicates]") {
   uint64_t i, j;
   uint64_t number_of_groups = 2;
   uint64_t size_of_key_in_bytes =
@@ -40,7 +40,7 @@ TEST_CASE("Benchmark sorting and merging of duplicates",
 
 TEST_CASE(
     "Benchmark the update of bucket entries with entries from another bucket",
-    "[BenchmarkUpdateBucketWithBucket]") {
+    "[Benchmark][UpdateBucketWithBucket]") {
   uint64_t i, j;
   TableBucketVector bucket, observations;
   uint64_t number_of_groups, size_of_key_in_bytes, number_of_entries;
@@ -88,7 +88,7 @@ TEST_CASE(
 }
 
 TEST_CASE("Benchmark computation of required sample size",
-          "[BenchmarkComputeRequiredSampleSize]") {
+          "[Benchmark][ComputeRequiredSampleSize]") {
   uint64_t number_of_groups = GENERATE(2, 3);
   uint64_t number_of_entries =
       GENERATE(10, 100, 1000, 10000, 100000, 1000000, 10000000);
@@ -109,8 +109,8 @@ TEST_CASE("Benchmark computation of required sample size",
   };
 }
 
-TEST_CASE("Test the construction of simulated table entries",
-          "[ConstructTableEntries]") {
+TEST_CASE("Benchmark the construction of simulated table entries",
+          "[Benchmark][ConstructTableEntries]") {
   uint64_t number_of_groups = GENERATE(2, 3);
   uint64_t size_of_key_in_bytes = GENERATE(1, 64, 1024);
   uint64_t number_of_entries = GENERATE(64, 16384, 524288);

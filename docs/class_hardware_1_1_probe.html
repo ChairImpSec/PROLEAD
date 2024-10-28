@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -80,30 +80,45 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a probe that records the stable signal driven by a wire during a single clock cycle.  
+ <a href="class_hardware_1_1_probe.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_probes_8hpp_source.html">Probes.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Hardware::Probe:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_hardware_1_1_probe.png" usemap="#Hardware::Probe_map" alt=""/>
+  <map id="Hardware::Probe_map" name="Hardware::Probe_map">
+<area href="class_hardware_1_1_unique_probe.html" alt="Hardware::UniqueProbe" shape="rect" coords="0,56,146,80"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a04b89363bd3f89ac08727ea6ce2d9608"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#a04b89363bd3f89ac08727ea6ce2d9608">Probe</a> (uint64_t signal_index, uint64_t clock_cycle)</td></tr>
-<tr class="memdesc:a04b89363bd3f89ac08727ea6ce2d9608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contructs the probe by setting the probed signal and the clock cycle.  <br /></td></tr>
+<tr class="memdesc:a04b89363bd3f89ac08727ea6ce2d9608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> object.  <br /></td></tr>
 <tr class="separator:a04b89363bd3f89ac08727ea6ce2d9608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37e31062a3577b1b9f3f964476e5f45"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#aa37e31062a3577b1b9f3f964476e5f45">GetSignalIndex</a> ()</td></tr>
-<tr class="memdesc:aa37e31062a3577b1b9f3f964476e5f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the probed signal.  <br /></td></tr>
+<tr class="memdesc:aa37e31062a3577b1b9f3f964476e5f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the index of the probed signal.  <br /></td></tr>
 <tr class="separator:aa37e31062a3577b1b9f3f964476e5f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6959175f8584bbb51197d9d8b6466253"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#a6959175f8584bbb51197d9d8b6466253">GetCycle</a> ()</td></tr>
-<tr class="memdesc:a6959175f8584bbb51197d9d8b6466253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the clock cycle in which the probe records.  <br /></td></tr>
+<tr class="memdesc:a6959175f8584bbb51197d9d8b6466253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the clock cycle during which the probe records.  <br /></td></tr>
 <tr class="separator:a6959175f8584bbb51197d9d8b6466253"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9651d1a877a6321b4ce342e0c7007768"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#a9651d1a877a6321b4ce342e0c7007768">operator&lt;</a> (const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;other) const</td></tr>
+<tr class="memdesc:a9651d1a877a6321b4ce342e0c7007768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this probe with another probe.  <br /></td></tr>
 <tr class="separator:a9651d1a877a6321b4ce342e0c7007768"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae229e9efdcf3aab2b197f33ecb8deded"><td class="memItemLeft" align="right" valign="top"><a id="ae229e9efdcf3aab2b197f33ecb8deded" name="ae229e9efdcf3aab2b197f33ecb8deded"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;other) const</td></tr>
+<tr class="memitem:ae229e9efdcf3aab2b197f33ecb8deded"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#ae229e9efdcf3aab2b197f33ecb8deded">operator==</a> (const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;other) const</td></tr>
+<tr class="memdesc:ae229e9efdcf3aab2b197f33ecb8deded"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for equality between two probes.  <br /></td></tr>
 <tr class="separator:ae229e9efdcf3aab2b197f33ecb8deded"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40a8911345147f1d1e82e61b0ae0ff12"><td class="memItemLeft" align="right" valign="top"><a id="a40a8911345147f1d1e82e61b0ae0ff12" name="a40a8911345147f1d1e82e61b0ae0ff12"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;other) const</td></tr>
+<tr class="memitem:a40a8911345147f1d1e82e61b0ae0ff12"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probe.html#a40a8911345147f1d1e82e61b0ae0ff12">operator!=</a> (const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;other) const</td></tr>
+<tr class="memdesc:a40a8911345147f1d1e82e61b0ae0ff12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for inequality between two probes.  <br /></td></tr>
 <tr class="separator:a40a8911345147f1d1e82e61b0ae0ff12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class defines a probe that records the stable signal driven by one wire during a single clock cycle. A probe can be extended based on a propagation procedure in order to get a list of <a class="el" href="class_hardware_1_1_probe.html">Probe</a> elements. The difference to the <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a> class is that all probes have a notion of time, i.e. the clock cycle in which they record and that they do not store the propagation procedure. </p>
+<div class="textblock"><p>Represents a probe that records the stable signal driven by a wire during a single clock cycle. </p>
+<p>The <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> class is used to capture the value of a specific signal at a particular clock cycle. Probes can be extended based on a propagation procedure to generate a list of <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> elements. Unlike the <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a> class, the <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> class includes a notion of time (i.e., the clock cycle) in which the signal is recorded. It does not store the propagation procedure.</p>
+<dl class="section note"><dt>Note</dt><dd>Probes are comparable, and comparisons prioritize the clock cycle over the signal index. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a04b89363bd3f89ac08727ea6ce2d9608" name="a04b89363bd3f89ac08727ea6ce2d9608"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a04b89363bd3f89ac08727ea6ce2d9608">&#9670;&#160;</a></span>Probe()</h2>
@@ -131,15 +146,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
       </table>
 </div><div class="memdoc">
 
-<p>Contructs the probe by setting the probed signal and the clock cycle. </p>
+<p>Constructs a <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> object. </p>
+<p>This constructor initializes the probe by setting the signal index that is being monitored and the specific clock cycle during which the signal is recorded.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">signal_index</td><td>The index of the probed signal. </td></tr>
-    <tr><td class="paramname">clock_cycle</td><td>The clock cycle to record. </td></tr>
+    <tr><td class="paramname">signal_index</td><td>The index of the signal being probed. </td></tr>
+    <tr><td class="paramname">clock_cycle</td><td>The clock cycle during which the probe records the signal. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -159,9 +174,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
       </table>
 </div><div class="memdoc">
 
-<p>Returns the clock cycle in which the probe records. </p>
-<dl class="section return"><dt>Returns</dt><dd>The recorded clock cycle. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the clock cycle during which the probe records. </p>
+<p>This function returns the clock cycle during which the probe recorded the signal.</p>
+<dl class="section return"><dt>Returns</dt><dd>The clock cycle during which the probe records. </dd></dl>
 
 </div>
 </div>
@@ -180,9 +195,37 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
       </table>
 </div><div class="memdoc">
 
-<p>Returns the index of the probed signal. </p>
+<p>Retrieves the index of the probed signal. </p>
+<p>This function returns the index of the signal that the probe is monitoring.</p>
 <dl class="section return"><dt>Returns</dt><dd>The index of the probed signal. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+
+</div>
+</div>
+<a id="a40a8911345147f1d1e82e61b0ae0ff12" name="a40a8911345147f1d1e82e61b0ae0ff12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40a8911345147f1d1e82e61b0ae0ff12">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Hardware::Probe::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks for inequality between two probes. </p>
+<p>Overloads the inequality operator to compare two <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> objects.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the probes are not equal, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -201,13 +244,50 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We need to overload some operators for probes as we need to sort a list of probes and also to search for particular probes within a list. When comparing two <a class="el" href="class_hardware_1_1_probe.html">Probe</a> elements, the clock cycle has a higher priority than the signal index. </p>
+
+<p>Compares this probe with another probe. </p>
+<p>Overloads the less-than operator to enable sorting of probes. The comparison prioritizes the clock cycle over the signal index.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this probe occurs before the other probe, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="ae229e9efdcf3aab2b197f33ecb8deded" name="ae229e9efdcf3aab2b197f33ecb8deded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae229e9efdcf3aab2b197f33ecb8deded">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Hardware::Probe::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks for equality between two probes. </p>
+<p>Overloads the equality operator to compare two <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> objects.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probe.html" title="Represents a probe that records the stable signal driven by a wire during a single clock cycle.">Probe</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both probes are equal, false otherwise. </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_probes_8hpp_source.html">Probes.hpp</a></li>
-<li>PROLEAD/src/Hardware/Probes.cpp</li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_probes_8hpp_source.html">Probes.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/Probes.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

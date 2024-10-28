@@ -9,13 +9,13 @@ void Settings::ParseArrayOfTriStateBitVectors(
 
   if (SetValue(json_object, identifier, json_array)) {
     if ((json_array.size() == number_of_values) || !check_number_of_values) {
+      VerilogBitstringGrammar grammar;
       std::string value_string;
       uint64_t bit_width = 0;
 
       for (auto& array_value : json_array) {
         if (array_value.is_string()) {
           value_string = array_value.as_string().c_str();
-          VerilogBitstringGrammar grammar(value_string);
           values.push_back(grammar.Parse(value_string));
 
           if (bit_width == 0 || bit_width == values.back().size()) {
@@ -209,13 +209,14 @@ void Settings::ParseGroups(const boost::json::object& json_object,
 
   if (SetValue(json_object, SettingNames::GROUPS, groups_array)) {
     std::string value_string;
+    VerilogBitstringGrammar grammar;
     uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
                             input_finite_field.exponent;
 
     for (auto& group : groups_array) {
       if (group.is_string()) {
         value_string = group.as_string().c_str();
-        VerilogBitstringGrammar grammar(value_string);
+        
         groups.push_back(grammar.Parse(value_string));
 
         if (groups.back().size() % element_size) {
@@ -290,6 +291,7 @@ void Settings::ParseSignalNameValuePair(
   if (SetValue(json_object, identifier, json_array)) {
     std::string signal_name, signal_value;
     SignalNameGrammar name_grammar;
+    VerilogBitstringGrammar value_grammar;
     std::vector<TriStateBit> values;
     std::vector<std::string> names;
 
@@ -299,7 +301,6 @@ void Settings::ParseSignalNameValuePair(
             name_value_pair.as_object().contains("value")) {
           SetValue(name_value_pair.as_object(), "name", signal_name);
           SetValue(name_value_pair.as_object(), "value", signal_value);
-          VerilogBitstringGrammar value_grammar(signal_value);
           names = name_grammar.Parse(signal_name);
           values = value_grammar.Parse(signal_value);
 

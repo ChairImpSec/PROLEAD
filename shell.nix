@@ -20,4 +20,3 @@ pkgs.mkShell {
     catch2
   ];
 }
-

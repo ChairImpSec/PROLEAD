@@ -1,24 +1,8 @@
 var searchData=
 [
-  ['includes_0',['Includes',['../class_hardware_1_1_probing_set.html#a8404751d4894c75b39497ff2bc573169',1,'Hardware::ProbingSet']]],
-  ['includesettings_1',['IncludeSettings',['../struct_include_settings.html',1,'']]],
-  ['initialize_2',['Initialize',['../class_hardware_1_1_probing_set.html#aa57de2e7aa59076200503976aad8100c',1,'Hardware::ProbingSet::Initialize()'],['../class_contingency_table.html#a9870e0e5aa838cecf698507ea9d78f32',1,'ContingencyTable::Initialize()']]],
-  ['initialsim_5finputname_3',['InitialSim_InputName',['../struct_software_1_1_settings_struct.html#a3b3091acb206739ae3d194d062da4c42',1,'Software::SettingsStruct']]],
-  ['initialsim_5finputs_4',['InitialSim_Inputs',['../struct_software_1_1_settings_struct.html#a08e2daca325f444dab1e672744db043d',1,'Software::SettingsStruct']]],
-  ['initialsim_5fnumberofinputs_5',['InitialSim_NumberOfInputs',['../struct_software_1_1_settings_struct.html#aac884eae9d9f514e5e4b27a0e85ecb50',1,'Software::SettingsStruct']]],
-  ['initialsim_5fvalues_6',['InitialSim_Values',['../struct_software_1_1_settings_struct.html#a76123f2c50930e1cabfc444c08927633',1,'Software::SettingsStruct']]],
-  ['inputassignment_7',['InputAssignment',['../class_input_assignment.html',1,'']]],
-  ['inputassignmentgrammar_8',['InputAssignmentGrammar',['../class_input_assignment_grammar.html',1,'']]],
-  ['inputs_9',['Inputs',['../struct_hardware_1_1_circuit_struct.html#aef0a67d92fafc831432c241888774766',1,'Hardware::CircuitStruct']]],
-  ['instruction_10',['Instruction',['../structmulator_1_1_instruction.html',1,'mulator']]],
-  ['instructiondecoder_11',['InstructionDecoder',['../classmulator_1_1_instruction_decoder.html',1,'mulator']]],
-  ['integerrangegrammar_12',['IntegerRangeGrammar',['../class_integer_range_grammar.html',1,'']]],
-  ['irreduciblepolynomialgrammar_13',['IrreduciblePolynomialGrammar',['../class_irreducible_polynomial_grammar.html',1,'']]],
-  ['isequivalentto_14',['IsEquivalentTo',['../class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461',1,'Hardware::Operation']]],
-  ['isequivalenttooperation_15',['IsEquivalentToOperation',['../class_hardware_1_1_truth_table.html#a00984f25a0c451824aacb70ba919c7f5',1,'Hardware::TruthTable']]],
-  ['isremovable_16',['IsRemovable',['../class_hardware_1_1_probing_set.html#a43babe9c7d970e7467e3fcab289116c4',1,'Hardware::ProbingSet']]],
-  ['issamplesizesufficient_17',['IsSampleSizeSufficient',['../_util_8hpp.html#ac6e81c654202f1ed684e1548882290f6',1,'Util.cpp']]],
-  ['issignalfaulted_18',['IsSignalFaulted',['../class_fault.html#a7a1acd03a27d104e451251375e982251',1,'Fault']]],
-  ['iterate_19',['Iterate',['../class_hardware_1_1_iterate_enablers.html#a305b822cd42eb7f323b8c6b044d8d0e4',1,'Hardware::IterateEnablers']]],
-  ['iterateenablers_20',['IterateEnablers',['../class_hardware_1_1_iterate_enablers.html',1,'Hardware::IterateEnablers'],['../class_hardware_1_1_iterate_enablers.html#ac355f1f5006ae2a17e7a38bb44449ba4',1,'Hardware::IterateEnablers::IterateEnablers()']]]
+  ['hardware_0',['Hardware',['../struct_software_1_1_settings_struct.html#abbbd626be36d4ab4763d199aefd7458a',1,'Software::SettingsStruct']]],
+  ['hardwaresettings_1',['HardwareSettings',['../struct_hardware_settings.html',1,'']]],
+  ['helperstruct_2',['HelperStruct',['../struct_software_1_1_helper_struct.html',1,'Software']]],
+  ['horizontalbitsincluded_3',['HorizontalBitsIncluded',['../struct_software_1_1_helper_struct.html#a87b32f5727ac11512c4dcdb2ebb7a34c',1,'Software::HelperStruct']]],
+  ['horizontalprobesexcluded_4',['HorizontalProbesExcluded',['../struct_software_1_1_helper_struct.html#a5f2bbc2c2495c1356777ed70033441ad',1,'Software::HelperStruct']]]
 ];

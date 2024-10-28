@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -84,7 +84,7 @@ $(function() {
 <p>Defines a hardware circuit.  
  <a href="struct_hardware_1_1_circuit_struct.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_circuit_8hpp_source.html">Circuit.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -118,6 +118,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIsAnalysisAllowed<
 <tr class="memitem:a1af5d562bb9cca23cadcbaad0c8e7ad7"><td class="memItemLeft" align="right" valign="top"><a id="a1af5d562bb9cca23cadcbaad0c8e7ad7" name="a1af5d562bb9cca23cadcbaad0c8e7ad7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIsFaultAllowed</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings)</td></tr>
 <tr class="separator:a1af5d562bb9cca23cadcbaad0c8e7ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad686310193963ede323c88426c8ab819"><td class="memItemLeft" align="right" valign="top"><a id="ad686310193963ede323c88426c8ab819" name="ad686310193963ede323c88426c8ab819"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsFaultOnSignalAllowed</b> (size_t signal_index, size_t clock_signal_index) const</td></tr>
+<tr class="separator:ad686310193963ede323c88426c8ab819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -225,8 +228,8 @@ int **&#160;</td><td class="memItemRight" valign="bottom"><b>CellsInDepth</b> = 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_hardware_2_definitions_8hpp_source.html">Definitions.hpp</a></li>
-<li>PROLEAD/src/Hardware/Definitions.cpp</li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_circuit_8hpp_source.html">Circuit.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/Circuit.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

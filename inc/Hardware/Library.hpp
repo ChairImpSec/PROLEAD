@@ -6,6 +6,7 @@
 #include "Hardware/Operation.hpp"
 #include "Hardware/TruthTable.hpp"
 #include "Hardware/LibHelper.hpp"
+#include "Util/FileParsing.hpp"
 
 namespace Hardware {
 
@@ -99,13 +100,7 @@ class IterateEnablers {
   std::vector<uint64_t> norm_vector_num_, mod_vector_num_;
 };
 
-/*
- * Specifies the type of a cell in the cell-library.
- * At the moment, we just distinguish between combinational gates and sequential
- * memory cells (registers). Combinational gates are further split up into composed and atomic gates (like and or xor..)
- * Only when a gate is declared as atomic propagation and glitch functions are created, otherwise those statically return 1
- */
-enum class CellType {undefined, conservative_gate, relaxed_gate, sequential_gate};
+enum class CellType {undefined_gate, conservative_gate, relaxed_gate, sequential_gate};
 
 /*
  * This class specifies a single cell.
@@ -119,7 +114,7 @@ class Cell {
   Cell(const boost::json::value& value, bool is_relaxed);
 
   Cell( CellType type, std::vector<std::string> identifiers,
-       std::vector<std::string> inputs, std::vector<std::string> outputs,
+       std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
        std::vector<std::string> expressions);
 
   bool operator==(const Cell& other) const;
@@ -142,8 +137,6 @@ class Cell {
 
   CellType GetCellType() const;
   const std::vector<std::string> GetIdentifiers() const;
-  const std::vector<std::string> GetInputs() const;
-  const std::vector<std::string> GetOutputs() const;
 
   uint64_t GetNumberOfProbeExtensions() const {
     return probe_extension_.size();
@@ -153,22 +146,25 @@ class Cell {
     return predefined_functions_found_;
   }
 
+  uint64_t GetNumberOfIdentifiers() const;
+  uint64_t GetNumberOfInputs() const;
+  uint64_t GetNumberOfOutputs() const;
+  std::string GetIdentifier(uint64_t index) const;
+  std::string GetInput(uint64_t index) const;
+  std::string GetOutput(uint64_t index) const;
+
  private:
   CellType type_;
   std::vector<std::string> identifiers_;
-  std::vector<std::string> inputs_;
-  std::vector<std::string> outputs_;
+  std::vector<std::vector<std::string>> inputs_;
+  std::vector<std::vector<std::string>> outputs_;
   std::vector<Operation<CustomOperation>> operations_;
   std::vector<Operation<CustomOperation>> probe_extension_;
   std::vector<Operation<CustomOperation>> glitch_propagation_;
   bool predefined_functions_found_;
 
-
   void SetType(const boost::json::value& value, bool is_relaxed);
-  std::vector<std::string> ConvertJsonArrayToVector(const boost::json::array& json_array) const;
-
-
-  void SetOperations(std::vector<std::string>& expressions);
+  void SetOperations(const std::vector<std::string>& expressions);
 
   /**
    * @brief Generates propagation functions and glitch functions for a operation
@@ -229,34 +225,103 @@ class Cell {
 
 class Library {
  public:
+  /**
+   * @brief Constructs a new Library object.
+   * @param path The path to the library file. The library file is expected to be in the JSON format.
+   * @param name The name of the library.
+   * @param is_relaxed If true, the RR d-probing model is used, otherwise the robust d-probing model.
+   * @return A new Library object.
+   */
   Library(std::string path, std::string name, bool is_relaxed);
 
+  /**
+   * @brief Returns the number of defined cells in the library.
+   * @return The number of cells in the library.
+   */
+  uint64_t GetNumberOfCells() const;
 
-  bool IsCellRegister(unsigned int index) const;
+  /**
+   * @brief Checks is a cell is a sequential gate.
+   * @param index The index of the cell.
+   * @return True if the cell is a sequential gate, otherwise false.
+   */
+  bool IsCellRegister(uint64_t index) const;
 
-  size_t GetNumberOfCellIdentifiers(unsigned int index) const;
-
-  std::string GetCellIdentifier(unsigned int cell_index, unsigned int identifier_index) const;
-
-  size_t GetNumberOfCellInputs(unsigned int index) const;
-
-  size_t GetNumberOfCellOutputs(unsigned int index) const;
-
-  std::string GetCellInput(unsigned int cell_index, unsigned int input_index) const;
-
-  std::string GetCellOutput(unsigned int cell_index, unsigned int output_index) const;
-
-  size_t GetNumberOfCells() const;
-
+  /** 
+  * @brief Returns a particular cell of the library.
+  * @param index The index of the cell.
+  * @return The cell.
+  */
   Cell GetCell(uint64_t index) const;
 
-  uint64_t Evaluate(unsigned int cell_index, unsigned int output_index, std::vector<uint64_t>& input_values) const;
+  /**
+   * @brief Returns the index of the buffer cell in the library.
+   * @return The index of the buffer cell or -1 if the buffer cell is not defined.
+   */
+  int64_t GetBufferIndex() const;
 
-  int GetBufferIndex() const;
+  /**
+   * @brief Returns the number of different identifiers of a particular cell.
+   * @param index The index of the cell.
+   * @return The number of identifiers of the cell.
+   */
+  uint64_t GetNumberOfIdentifiers(uint64_t index) const;
+
+  /**
+   * @brief Returns the number of inputs of a particular cell.
+   * @param index The index of the cell.
+   * @return The number of inputs of the cell.
+   */
+  uint64_t GetNumberOfInputs(uint64_t index) const;
+
+  /**
+   * @brief Returns the number of outputs of a particular cell.
+   * @param index The index of the cell.
+   * @return The number of outputs of the cell.
+   */
+  uint64_t GetNumberOfOutputs(uint64_t index) const;
+
+  /**
+   * @brief Returns a particular identifier of a particular cell.
+   * @param index The index of the cell.
+   * @param identifier_index The index of the identifier.
+   * @return The identifier of the cell.
+   */
+  std::string GetIdentifier(uint64_t index, uint64_t identifier_index) const;
+
+  /**
+   * @brief Returns a particular input signal name of a particular cell.
+   * @param index The index of the cell.
+   * @param input_index The index of the input signal.
+   * @return The name of the input signal.
+   */
+  std::string GetInput(uint64_t index, uint64_t input_index) const;
+
+  /**
+   * @brief Returns a particular output signal name of a particular cell.
+   * @param index The index of the cell.
+   * @param output_index The index of the output signal.
+   * @return The name of the output signal.
+   */
+  std::string GetOutput(uint64_t index, uint64_t output_index) const;
+
+  /**
+   * @brief Evaluates a particular output function of a particular cell based on the given input values.
+   * @details The input values are provided in a bitsliced fashion. Every input values represents a single bit of 64 different inputs.
+   * @param cell_index The index of the cell.
+   * @param output_index The index of the output function.
+   * @param input_values The (bitsliced) input values for the cell.
+   * @return The (bitsliced) output value of the output function.
+   */
+  uint64_t Evaluate(uint64_t cell_index, uint64_t output_index, std::vector<uint64_t>& input_values) const;
 
  private:
-  std::vector<Cell> cells_;
-  int64_t buffer_index_;
-};
+  std::vector<Cell> cells_; ///< The cells in the library.
+  int64_t buffer_index_; ///< The index of the buffer cell in the library.
+
+  void ParseCells(boost::json::array::iterator it, bool is_relaxed);
+}; 
+
+std::vector<std::string> ConvertJsonArrayToVector(const boost::json::array& json_array);
 
 }  // namespace Hardware

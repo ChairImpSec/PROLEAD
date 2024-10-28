@@ -42,6 +42,15 @@ TEST_CASE("Benchmark the Boolean secret sharing",
       });
     };
   }
+
+  SECTION("Sampling") {
+    BENCHMARK_ADVANCED("sampling")
+    (Catch::Benchmark::Chronometer meter) {
+      meter.measure([&sharing] {
+        sharing.SampleRandomBitslicedPolynomial();
+      });
+    };    
+  }
 }
 
 TEST_CASE("Benchmark the secret sharing in Rijndael field",
@@ -82,5 +91,14 @@ TEST_CASE("Benchmark the secret sharing in Rijndael field",
         sharing.DecodeBitsliced(bitsliced_shared_elements, false);
       });
     };
+  }
+
+  SECTION("Sampling") {
+    BENCHMARK_ADVANCED("sampling")
+    (Catch::Benchmark::Chronometer meter) {
+      meter.measure([&sharing] {
+        sharing.SampleRandomBitslicedPolynomial();
+      });
+    };    
   }
 }

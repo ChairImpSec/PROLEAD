@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['validatedirectory_0',['ValidateDirectory',['../_program_options_8hpp.html#a926e90453750809d18fb29d4891dbc0c',1,'ProgramOptions.cpp']]],
-  ['validatefileending_1',['ValidateFileEnding',['../_program_options_8hpp.html#af9601b68a37319a11e69a67ff1908dbc',1,'ProgramOptions.cpp']]],
-  ['validatejson_2',['ValidateJson',['../_program_options_8hpp.html#aab4cbbe3cb9ba6d9d2df0474076efc63',1,'ProgramOptions.cpp']]],
-  ['validateplatform_3',['ValidatePlatform',['../_program_options_8hpp.html#a4403e080e313ccc7ce208eb8c71cd876',1,'ProgramOptions.cpp']]]
+  ['updatebucket_0',['UpdateBucket',['../class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e',1,'ContingencyTable::UpdateBucket(TableEntry &amp;observation, uint64_t number_of_groups)'],['../class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4',1,'ContingencyTable::UpdateBucket(TableBucketVector &amp;observations, uint64_t number_of_groups)']]],
+  ['updatebucketwithbucket_1',['UpdateBucketWithBucket',['../_util_8hpp.html#a2b790cb67673b8135277f064fd745ed3',1,'Util.hpp']]]
 ];

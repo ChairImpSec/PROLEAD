@@ -91,7 +91,7 @@ namespace Hardware {
      * @brief constructs a string from an operation and a variable amount of inputs.
      * For example operands: A,B,C and op = and => A and B and C
      * @param op a binary operation that concatinates the operands
-     * @param operands a list of operands 
+     * @param operands a list of operands
      * @author Simon Osterheider
     */
     static std::string ConstructExpression(std::string op, std::vector<std::string> operands);

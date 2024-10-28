@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -82,46 +82,427 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac4cd620b44a524395746d5ed996b3730"><td class="memItemLeft" align="right" valign="top"><a id="ac4cd620b44a524395746d5ed996b3730" name="ac4cd620b44a524395746d5ed996b3730"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Library</b> (std::string path, std::string name, bool is_relaxed)</td></tr>
+<tr class="memitem:ac4cd620b44a524395746d5ed996b3730"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#ac4cd620b44a524395746d5ed996b3730">Library</a> (std::string path, std::string name, bool is_relaxed)</td></tr>
+<tr class="memdesc:ac4cd620b44a524395746d5ed996b3730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a new <a class="el" href="class_hardware_1_1_library.html">Library</a> object.  <br /></td></tr>
 <tr class="separator:ac4cd620b44a524395746d5ed996b3730"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17339e6670fd1aa0a895a6a1e2292421"><td class="memItemLeft" align="right" valign="top"><a id="a17339e6670fd1aa0a895a6a1e2292421" name="a17339e6670fd1aa0a895a6a1e2292421"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsCellRegister</b> (unsigned int index) const</td></tr>
-<tr class="separator:a17339e6670fd1aa0a895a6a1e2292421"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe215c0486a60c68ee1be828dd465b01"><td class="memItemLeft" align="right" valign="top"><a id="abe215c0486a60c68ee1be828dd465b01" name="abe215c0486a60c68ee1be828dd465b01"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfCellIdentifiers</b> (unsigned int index) const</td></tr>
-<tr class="separator:abe215c0486a60c68ee1be828dd465b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d13c6e3b05a9bfc044ed40cf1b59613"><td class="memItemLeft" align="right" valign="top"><a id="a4d13c6e3b05a9bfc044ed40cf1b59613" name="a4d13c6e3b05a9bfc044ed40cf1b59613"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetCellIdentifier</b> (unsigned int cell_index, unsigned int identifier_index) const</td></tr>
-<tr class="separator:a4d13c6e3b05a9bfc044ed40cf1b59613"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00521bf1434cc555ebce026da67596a2"><td class="memItemLeft" align="right" valign="top"><a id="a00521bf1434cc555ebce026da67596a2" name="a00521bf1434cc555ebce026da67596a2"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfCellInputs</b> (unsigned int index) const</td></tr>
-<tr class="separator:a00521bf1434cc555ebce026da67596a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3304287e25046a0d4c44ef5cef76e4a"><td class="memItemLeft" align="right" valign="top"><a id="aa3304287e25046a0d4c44ef5cef76e4a" name="aa3304287e25046a0d4c44ef5cef76e4a"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfCellOutputs</b> (unsigned int index) const</td></tr>
-<tr class="separator:aa3304287e25046a0d4c44ef5cef76e4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22ca103d527496dc6703f91a3c985870"><td class="memItemLeft" align="right" valign="top"><a id="a22ca103d527496dc6703f91a3c985870" name="a22ca103d527496dc6703f91a3c985870"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetCellInput</b> (unsigned int cell_index, unsigned int input_index) const</td></tr>
-<tr class="separator:a22ca103d527496dc6703f91a3c985870"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a369ab1047dccb76fe60cf59941fadeb9"><td class="memItemLeft" align="right" valign="top"><a id="a369ab1047dccb76fe60cf59941fadeb9" name="a369ab1047dccb76fe60cf59941fadeb9"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetCellOutput</b> (unsigned int cell_index, unsigned int output_index) const</td></tr>
-<tr class="separator:a369ab1047dccb76fe60cf59941fadeb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5aa64ec8680fc9160a4c67b1a4b93078"><td class="memItemLeft" align="right" valign="top"><a id="a5aa64ec8680fc9160a4c67b1a4b93078" name="a5aa64ec8680fc9160a4c67b1a4b93078"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfCells</b> () const</td></tr>
-<tr class="separator:a5aa64ec8680fc9160a4c67b1a4b93078"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a46abb7c39bca74da9b8e3515c86ee5"><td class="memItemLeft" align="right" valign="top"><a id="a6a46abb7c39bca74da9b8e3515c86ee5" name="a6a46abb7c39bca74da9b8e3515c86ee5"></a>
-std::vector&lt; <a class="el" href="class_hardware_1_1_cell.html">Cell</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetCells</b> () const</td></tr>
-<tr class="separator:a6a46abb7c39bca74da9b8e3515c86ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c738235b5ca0038a931f23412ae5391"><td class="memItemLeft" align="right" valign="top"><a id="a4c738235b5ca0038a931f23412ae5391" name="a4c738235b5ca0038a931f23412ae5391"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>Evaluate</b> (unsigned int cell_index, unsigned int output_index, std::vector&lt; uint64_t &gt; &amp;input_values) const</td></tr>
-<tr class="separator:a4c738235b5ca0038a931f23412ae5391"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8396e1075e61a65be88357962b986b09"><td class="memItemLeft" align="right" valign="top"><a id="a8396e1075e61a65be88357962b986b09" name="a8396e1075e61a65be88357962b986b09"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GetBufferIndex</b> () const</td></tr>
-<tr class="separator:a8396e1075e61a65be88357962b986b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12dd99999674592c78d959494433eee2"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a12dd99999674592c78d959494433eee2">GetNumberOfCells</a> () const</td></tr>
+<tr class="memdesc:a12dd99999674592c78d959494433eee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of defined cells in the library.  <br /></td></tr>
+<tr class="separator:a12dd99999674592c78d959494433eee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e04aac369156109bfafda98baa3f6db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a8e04aac369156109bfafda98baa3f6db">IsCellRegister</a> (uint64_t index) const</td></tr>
+<tr class="memdesc:a8e04aac369156109bfafda98baa3f6db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks is a cell is a sequential gate.  <br /></td></tr>
+<tr class="separator:a8e04aac369156109bfafda98baa3f6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdbed0e6bd28c70db3d8d105e8e3a040"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_hardware_1_1_cell.html">Cell</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#abdbed0e6bd28c70db3d8d105e8e3a040">GetCell</a> (uint64_t index) const</td></tr>
+<tr class="memdesc:abdbed0e6bd28c70db3d8d105e8e3a040"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a particular cell of the library.  <br /></td></tr>
+<tr class="separator:abdbed0e6bd28c70db3d8d105e8e3a040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b16ffe0066d02bd3a67287f10f3e6f0"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a2b16ffe0066d02bd3a67287f10f3e6f0">GetBufferIndex</a> () const</td></tr>
+<tr class="memdesc:a2b16ffe0066d02bd3a67287f10f3e6f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the buffer cell in the library.  <br /></td></tr>
+<tr class="separator:a2b16ffe0066d02bd3a67287f10f3e6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7a84518ff00044cc5748c702d83a36b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#ab7a84518ff00044cc5748c702d83a36b">GetNumberOfIdentifiers</a> (uint64_t index) const</td></tr>
+<tr class="memdesc:ab7a84518ff00044cc5748c702d83a36b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of different identifiers of a particular cell.  <br /></td></tr>
+<tr class="separator:ab7a84518ff00044cc5748c702d83a36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a15541ea9877f3ed505249d0f1f37b6"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a5a15541ea9877f3ed505249d0f1f37b6">GetNumberOfInputs</a> (uint64_t index) const</td></tr>
+<tr class="memdesc:a5a15541ea9877f3ed505249d0f1f37b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of inputs of a particular cell.  <br /></td></tr>
+<tr class="separator:a5a15541ea9877f3ed505249d0f1f37b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a592e27a95d2644120c44c4b20336315a"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a592e27a95d2644120c44c4b20336315a">GetNumberOfOutputs</a> (uint64_t index) const</td></tr>
+<tr class="memdesc:a592e27a95d2644120c44c4b20336315a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of outputs of a particular cell.  <br /></td></tr>
+<tr class="separator:a592e27a95d2644120c44c4b20336315a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3564fa27a52594b4452cf9a541c85eed"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a3564fa27a52594b4452cf9a541c85eed">GetIdentifier</a> (uint64_t index, uint64_t identifier_index) const</td></tr>
+<tr class="memdesc:a3564fa27a52594b4452cf9a541c85eed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a particular identifier of a particular cell.  <br /></td></tr>
+<tr class="separator:a3564fa27a52594b4452cf9a541c85eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca4ad4a170c55a9918dea5fd0bde2b8f"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#aca4ad4a170c55a9918dea5fd0bde2b8f">GetInput</a> (uint64_t index, uint64_t input_index) const</td></tr>
+<tr class="memdesc:aca4ad4a170c55a9918dea5fd0bde2b8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a particular input signal name of a particular cell.  <br /></td></tr>
+<tr class="separator:aca4ad4a170c55a9918dea5fd0bde2b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ba55415a72ac7e67ce20636054e16e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a39ba55415a72ac7e67ce20636054e16e">GetOutput</a> (uint64_t index, uint64_t output_index) const</td></tr>
+<tr class="memdesc:a39ba55415a72ac7e67ce20636054e16e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a particular output signal name of a particular cell.  <br /></td></tr>
+<tr class="separator:a39ba55415a72ac7e67ce20636054e16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d29b800cbdf18b59a2ce32d90e539aa"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_library.html#a6d29b800cbdf18b59a2ce32d90e539aa">Evaluate</a> (uint64_t cell_index, uint64_t output_index, std::vector&lt; uint64_t &gt; &amp;input_values) const</td></tr>
+<tr class="memdesc:a6d29b800cbdf18b59a2ce32d90e539aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates a particular output function of a particular cell based on the given input values.  <br /></td></tr>
+<tr class="separator:a6d29b800cbdf18b59a2ce32d90e539aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac4cd620b44a524395746d5ed996b3730" name="ac4cd620b44a524395746d5ed996b3730"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4cd620b44a524395746d5ed996b3730">&#9670;&#160;</a></span>Library()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Hardware::Library::Library </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_relaxed</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs a new <a class="el" href="class_hardware_1_1_library.html">Library</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The path to the library file. The library file is expected to be in the JSON format. </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the library. </td></tr>
+    <tr><td class="paramname">is_relaxed</td><td>If true, the RR d-probing model is used, otherwise the robust d-probing model. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="class_hardware_1_1_library.html">Library</a> object. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6d29b800cbdf18b59a2ce32d90e539aa" name="a6d29b800cbdf18b59a2ce32d90e539aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d29b800cbdf18b59a2ce32d90e539aa">&#9670;&#160;</a></span>Evaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Hardware::Library::Evaluate </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>cell_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>output_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; uint64_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>input_values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Evaluates a particular output function of a particular cell based on the given input values. </p>
+<p>The input values are provided in a bitsliced fashion. Every input values represents a single bit of 64 different inputs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cell_index</td><td>The index of the cell. </td></tr>
+    <tr><td class="paramname">output_index</td><td>The index of the output function. </td></tr>
+    <tr><td class="paramname">input_values</td><td>The (bitsliced) input values for the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The (bitsliced) output value of the output function. </dd></dl>
+
+</div>
+</div>
+<a id="a2b16ffe0066d02bd3a67287f10f3e6f0" name="a2b16ffe0066d02bd3a67287f10f3e6f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b16ffe0066d02bd3a67287f10f3e6f0">&#9670;&#160;</a></span>GetBufferIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t Hardware::Library::GetBufferIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the index of the buffer cell in the library. </p>
+<dl class="section return"><dt>Returns</dt><dd>The index of the buffer cell or -1 if the buffer cell is not defined. </dd></dl>
+
+</div>
+</div>
+<a id="abdbed0e6bd28c70db3d8d105e8e3a040" name="abdbed0e6bd28c70db3d8d105e8e3a040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdbed0e6bd28c70db3d8d105e8e3a040">&#9670;&#160;</a></span>GetCell()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_hardware_1_1_cell.html">Cell</a> Hardware::Library::GetCell </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a particular cell of the library. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The cell. </dd></dl>
+
+</div>
+</div>
+<a id="a3564fa27a52594b4452cf9a541c85eed" name="a3564fa27a52594b4452cf9a541c85eed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3564fa27a52594b4452cf9a541c85eed">&#9670;&#160;</a></span>GetIdentifier()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Hardware::Library::GetIdentifier </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>identifier_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a particular identifier of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+    <tr><td class="paramname">identifier_index</td><td>The index of the identifier. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The identifier of the cell. </dd></dl>
+
+</div>
+</div>
+<a id="aca4ad4a170c55a9918dea5fd0bde2b8f" name="aca4ad4a170c55a9918dea5fd0bde2b8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca4ad4a170c55a9918dea5fd0bde2b8f">&#9670;&#160;</a></span>GetInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Hardware::Library::GetInput </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>input_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a particular input signal name of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+    <tr><td class="paramname">input_index</td><td>The index of the input signal. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The name of the input signal. </dd></dl>
+
+</div>
+</div>
+<a id="a12dd99999674592c78d959494433eee2" name="a12dd99999674592c78d959494433eee2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12dd99999674592c78d959494433eee2">&#9670;&#160;</a></span>GetNumberOfCells()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Hardware::Library::GetNumberOfCells </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of defined cells in the library. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of cells in the library. </dd></dl>
+
+</div>
+</div>
+<a id="ab7a84518ff00044cc5748c702d83a36b" name="ab7a84518ff00044cc5748c702d83a36b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7a84518ff00044cc5748c702d83a36b">&#9670;&#160;</a></span>GetNumberOfIdentifiers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Hardware::Library::GetNumberOfIdentifiers </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of different identifiers of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of identifiers of the cell. </dd></dl>
+
+</div>
+</div>
+<a id="a5a15541ea9877f3ed505249d0f1f37b6" name="a5a15541ea9877f3ed505249d0f1f37b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a15541ea9877f3ed505249d0f1f37b6">&#9670;&#160;</a></span>GetNumberOfInputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Hardware::Library::GetNumberOfInputs </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of inputs of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of inputs of the cell. </dd></dl>
+
+</div>
+</div>
+<a id="a592e27a95d2644120c44c4b20336315a" name="a592e27a95d2644120c44c4b20336315a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a592e27a95d2644120c44c4b20336315a">&#9670;&#160;</a></span>GetNumberOfOutputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint64_t Hardware::Library::GetNumberOfOutputs </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the number of outputs of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of outputs of the cell. </dd></dl>
+
+</div>
+</div>
+<a id="a39ba55415a72ac7e67ce20636054e16e" name="a39ba55415a72ac7e67ce20636054e16e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ba55415a72ac7e67ce20636054e16e">&#9670;&#160;</a></span>GetOutput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Hardware::Library::GetOutput </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>output_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a particular output signal name of a particular cell. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+    <tr><td class="paramname">output_index</td><td>The index of the output signal. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The name of the output signal. </dd></dl>
+
+</div>
+</div>
+<a id="a8e04aac369156109bfafda98baa3f6db" name="a8e04aac369156109bfafda98baa3f6db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e04aac369156109bfafda98baa3f6db">&#9670;&#160;</a></span>IsCellRegister()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Hardware::Library::IsCellRegister </td>
+          <td>(</td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks is a cell is a sequential gate. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the cell. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the cell is a sequential gate, otherwise false. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_library_8hpp_source.html">Library.hpp</a></li>
-<li>PROLEAD/src/Hardware/Library.cpp</li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_library_8hpp_source.html">Library.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/Library.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

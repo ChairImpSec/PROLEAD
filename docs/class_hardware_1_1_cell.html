@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -85,9 +85,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ecb57eaa8052cdd80f16805783bbec1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_cell.html#a5ecb57eaa8052cdd80f16805783bbec1">Cell</a> (const boost::json::value &amp;value, bool is_relaxed)</td></tr>
 <tr class="memdesc:a5ecb57eaa8052cdd80f16805783bbec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_hardware_1_1_cell.html">Cell</a> object from the information inside the json::value.  <br /></td></tr>
 <tr class="separator:a5ecb57eaa8052cdd80f16805783bbec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9f647aa1182d4e853ccf909b828ca0e"><td class="memItemLeft" align="right" valign="top"><a id="ab9f647aa1182d4e853ccf909b828ca0e" name="ab9f647aa1182d4e853ccf909b828ca0e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Cell</b> (CellType type, std::vector&lt; std::string &gt; identifiers, std::vector&lt; std::string &gt; inputs, std::vector&lt; std::string &gt; outputs, std::vector&lt; std::string &gt; expressions)</td></tr>
-<tr class="separator:ab9f647aa1182d4e853ccf909b828ca0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e245c244b65cf7b5aa5727f837c0c67"><td class="memItemLeft" align="right" valign="top"><a id="a3e245c244b65cf7b5aa5727f837c0c67" name="a3e245c244b65cf7b5aa5727f837c0c67"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Cell</b> (CellType type, std::vector&lt; std::string &gt; identifiers, std::vector&lt; std::vector&lt; std::string &gt; &gt; inputs, std::vector&lt; std::vector&lt; std::string &gt; &gt; outputs, std::vector&lt; std::string &gt; expressions)</td></tr>
+<tr class="separator:a3e245c244b65cf7b5aa5727f837c0c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0365e4d1b723281c89fa0b5f0d88425d"><td class="memItemLeft" align="right" valign="top"><a id="a0365e4d1b723281c89fa0b5f0d88425d" name="a0365e4d1b723281c89fa0b5f0d88425d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="class_hardware_1_1_cell.html">Cell</a> &amp;other) const</td></tr>
 <tr class="separator:a0365e4d1b723281c89fa0b5f0d88425d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,18 +106,30 @@ CellType&#160;</td><td class="memItemRight" valign="bottom"><b>GetCellType</b> (
 <tr class="memitem:a54ee47e3bc4342f04dbf3620579e0784"><td class="memItemLeft" align="right" valign="top"><a id="a54ee47e3bc4342f04dbf3620579e0784" name="a54ee47e3bc4342f04dbf3620579e0784"></a>
 const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetIdentifiers</b> () const</td></tr>
 <tr class="separator:a54ee47e3bc4342f04dbf3620579e0784"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b8b6c4b37180877c9d8a8ff7129916f"><td class="memItemLeft" align="right" valign="top"><a id="a5b8b6c4b37180877c9d8a8ff7129916f" name="a5b8b6c4b37180877c9d8a8ff7129916f"></a>
-const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetInputs</b> () const</td></tr>
-<tr class="separator:a5b8b6c4b37180877c9d8a8ff7129916f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae974a035bbdb0da3cfd615e9c716bb42"><td class="memItemLeft" align="right" valign="top"><a id="ae974a035bbdb0da3cfd615e9c716bb42" name="ae974a035bbdb0da3cfd615e9c716bb42"></a>
-const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetOutputs</b> () const</td></tr>
-<tr class="separator:ae974a035bbdb0da3cfd615e9c716bb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf4d07977e654c182488f83f45cca405"><td class="memItemLeft" align="right" valign="top"><a id="adf4d07977e654c182488f83f45cca405" name="adf4d07977e654c182488f83f45cca405"></a>
 uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfProbeExtensions</b> () const</td></tr>
 <tr class="separator:adf4d07977e654c182488f83f45cca405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad426c4208e0f41d51a764b8ed1ff8f1e"><td class="memItemLeft" align="right" valign="top"><a id="ad426c4208e0f41d51a764b8ed1ff8f1e" name="ad426c4208e0f41d51a764b8ed1ff8f1e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>HasPredefinedFunctions</b> () const</td></tr>
 <tr class="separator:ad426c4208e0f41d51a764b8ed1ff8f1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af81922e34161028ee8b310e3d30cf7a7"><td class="memItemLeft" align="right" valign="top"><a id="af81922e34161028ee8b310e3d30cf7a7" name="af81922e34161028ee8b310e3d30cf7a7"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfIdentifiers</b> () const</td></tr>
+<tr class="separator:af81922e34161028ee8b310e3d30cf7a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82e069615d1cab4b54a04ea0162b483d"><td class="memItemLeft" align="right" valign="top"><a id="a82e069615d1cab4b54a04ea0162b483d" name="a82e069615d1cab4b54a04ea0162b483d"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfInputs</b> () const</td></tr>
+<tr class="separator:a82e069615d1cab4b54a04ea0162b483d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92a9ddf4b4fe73d945418b6a56b1a24a"><td class="memItemLeft" align="right" valign="top"><a id="a92a9ddf4b4fe73d945418b6a56b1a24a" name="a92a9ddf4b4fe73d945418b6a56b1a24a"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfOutputs</b> () const</td></tr>
+<tr class="separator:a92a9ddf4b4fe73d945418b6a56b1a24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59f0f7ba87c92a2d5105e66716873845"><td class="memItemLeft" align="right" valign="top"><a id="a59f0f7ba87c92a2d5105e66716873845" name="a59f0f7ba87c92a2d5105e66716873845"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetIdentifier</b> (uint64_t index) const</td></tr>
+<tr class="separator:a59f0f7ba87c92a2d5105e66716873845"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addbbf0e239e018625f9ef65d8aa8feda"><td class="memItemLeft" align="right" valign="top"><a id="addbbf0e239e018625f9ef65d8aa8feda" name="addbbf0e239e018625f9ef65d8aa8feda"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetInput</b> (uint64_t index) const</td></tr>
+<tr class="separator:addbbf0e239e018625f9ef65d8aa8feda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92ffa20bb9b748c96818f59fb0482c58"><td class="memItemLeft" align="right" valign="top"><a id="a92ffa20bb9b748c96818f59fb0482c58" name="a92ffa20bb9b748c96818f59fb0482c58"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>GetOutput</b> (uint64_t index) const</td></tr>
+<tr class="separator:a92ffa20bb9b748c96818f59fb0482c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5ecb57eaa8052cdd80f16805783bbec1" name="a5ecb57eaa8052cdd80f16805783bbec1"></a>
@@ -261,8 +273,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>HasPredefinedFunction
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_library_8hpp_source.html">Library.hpp</a></li>
-<li>PROLEAD/src/Hardware/Library.cpp</li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_library_8hpp_source.html">Library.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/Library.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

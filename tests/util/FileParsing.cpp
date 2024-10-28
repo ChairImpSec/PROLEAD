@@ -45,10 +45,10 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
   InputAssignmentGrammar input_grammar;
   std::string input;
   std::vector<TriStateBit> expected;
+  VerilogBitstringGrammar grammar;
 
   SECTION("Test with valid deterministic binary string") {
     input = "8'b10100011";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::one_value,  TriStateBit::one_value,
                 TriStateBit::zero_value, TriStateBit::zero_value,
                 TriStateBit::zero_value, TriStateBit::one_value,
@@ -59,7 +59,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with inverted valid deterministic binary string") {
     input = "~8'b10100011";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::zero_value, TriStateBit::zero_value,
                 TriStateBit::one_value,  TriStateBit::one_value,
                 TriStateBit::one_value,  TriStateBit::zero_value,
@@ -70,7 +69,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with valid deterministic hex string") {
     input = "8'h43";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::one_value,  TriStateBit::one_value,
                 TriStateBit::zero_value, TriStateBit::zero_value,
                 TriStateBit::zero_value, TriStateBit::zero_value,
@@ -81,7 +79,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with inverted valid deterministic hex string") {
     input = "~8'h43";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::zero_value, TriStateBit::zero_value,
                 TriStateBit::one_value,  TriStateBit::one_value,
                 TriStateBit::one_value,  TriStateBit::one_value,
@@ -92,7 +89,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with valid probabilistic binary string") {
     input = "8'b00$01$$1";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::one_value,    TriStateBit::random_value,
                 TriStateBit::random_value, TriStateBit::one_value,
                 TriStateBit::zero_value,   TriStateBit::random_value,
@@ -103,7 +99,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with inverted valid probabilistic binary string") {
     input = "~8'b00$01$$1";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::zero_value,   TriStateBit::random_value,
                 TriStateBit::random_value, TriStateBit::zero_value,
                 TriStateBit::one_value,    TriStateBit::random_value,
@@ -114,7 +109,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with valid probabilistic hex string") {
     input = "8'hE$";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::random_value, TriStateBit::random_value,
                 TriStateBit::random_value, TriStateBit::random_value,
                 TriStateBit::zero_value,   TriStateBit::one_value,
@@ -125,7 +119,6 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
 
   SECTION("Test with inverted valid probabilistic hex string") {
     input = "~8'hE$";
-    VerilogBitstringGrammar grammar(input);
     expected = {TriStateBit::random_value, TriStateBit::random_value,
                 TriStateBit::random_value, TriStateBit::random_value,
                 TriStateBit::one_value,    TriStateBit::zero_value,
@@ -134,62 +127,96 @@ TEST_CASE("Test the VerilogBitstringGrammar parser",
     REQUIRE(input_grammar.Parse(input).signal_values_ == expected);
   }
 
+  SECTION("Test with valid undefined binary string") {
+    input = "8'b00X01XX1";
+    expected = {TriStateBit::one_value,       TriStateBit::undefined_value,
+                TriStateBit::undefined_value, TriStateBit::one_value,
+                TriStateBit::zero_value,      TriStateBit::undefined_value,
+                TriStateBit::zero_value,      TriStateBit::zero_value};
+    REQUIRE(grammar.Parse(input) == expected);
+  }
+
+  SECTION("Test with inverted valid undefined binary string") {
+    input = "~8'b00X01xx1";
+    expected = {TriStateBit::zero_value,      TriStateBit::undefined_value,
+                TriStateBit::undefined_value, TriStateBit::zero_value,
+                TriStateBit::one_value,       TriStateBit::undefined_value,
+                TriStateBit::one_value,       TriStateBit::one_value};
+    REQUIRE(grammar.Parse(input) == expected);
+  }
+
+  SECTION("Test with valid undefined hex string") {
+    input = "8'hEX";
+    expected = {TriStateBit::undefined_value, TriStateBit::undefined_value,
+                TriStateBit::undefined_value, TriStateBit::undefined_value,
+                TriStateBit::zero_value,      TriStateBit::one_value,
+                TriStateBit::one_value,       TriStateBit::one_value};
+    REQUIRE(grammar.Parse(input) == expected);
+  }
+
+  SECTION("Test with inverted valid undefined hex string") {
+    input = "~8'hEx";
+    expected = {TriStateBit::undefined_value, TriStateBit::undefined_value,
+                TriStateBit::undefined_value, TriStateBit::undefined_value,
+                TriStateBit::one_value,       TriStateBit::zero_value,
+                TriStateBit::zero_value,      TriStateBit::zero_value};
+    REQUIRE(grammar.Parse(input) == expected);
+  }
+
   SECTION("Test with invalid binary character") {
     input = "4'b1021";
-    VerilogBitstringGrammar grammar(input);
     REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
   }
 
   SECTION("Test with invalid hex string") {
     input = "4'hG";
-    VerilogBitstringGrammar grammar(input);
     REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
   }
 
   SECTION("Test with invalid length") {
     input = "-4'b1010";
-    VerilogBitstringGrammar grammar1(input);
+    VerilogBitstringGrammar grammar1;
     REQUIRE_THROWS_AS(grammar1.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
 
     input = "0'b1010";
-    VerilogBitstringGrammar grammar2(input);
+    VerilogBitstringGrammar grammar2;
     REQUIRE_THROWS_AS(grammar2.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
   }
 
   SECTION("Test without or invalid format identifier") {
     input = "3'011";
-    VerilogBitstringGrammar grammar1(input);
+    VerilogBitstringGrammar grammar1;
     REQUIRE_THROWS_AS(grammar1.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
 
     input = "2'h01";
-    VerilogBitstringGrammar grammar2(input);
+    VerilogBitstringGrammar grammar2;
     REQUIRE_THROWS_AS(grammar2.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
 
     input = "8'bbb";
-    VerilogBitstringGrammar grammar3(input);
+    VerilogBitstringGrammar grammar3;
     REQUIRE_THROWS_AS(grammar3.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
   }
 
   SECTION("Test size mismatch") {
     input = "4'b011";
-    VerilogBitstringGrammar grammar1(input);
+    VerilogBitstringGrammar grammar1;
     REQUIRE_THROWS_AS(grammar1.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
 
     input = "3'b011$";
-    VerilogBitstringGrammar grammar2(input);
+    VerilogBitstringGrammar grammar2;
     REQUIRE_THROWS_AS(grammar2.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
 
     input = "7'hd";
-    VerilogBitstringGrammar grammar3(input);
+    VerilogBitstringGrammar grammar3;
     REQUIRE_THROWS_AS(grammar3.Parse(input), std::invalid_argument);
     REQUIRE_THROWS_AS(input_grammar.Parse(input), std::invalid_argument);
   }

@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -81,9 +81,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa7ad30b076914c10d255bed3580f4555"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_contingency_table.html#aa7ad30b076914c10d255bed3580f4555">ContingencyTable</a> ()=default</td></tr>
 <tr class="memdesc:aa7ad30b076914c10d255bed3580f4555"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="class_contingency_table.html">ContingencyTable</a>.  <br /></td></tr>
 <tr class="separator:aa7ad30b076914c10d255bed3580f4555"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9870e0e5aa838cecf698507ea9d78f32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_contingency_table.html#a9870e0e5aa838cecf698507ea9d78f32">Initialize</a> (uint64_t number_of_probes, bool is_in_compact_mode)</td></tr>
-<tr class="memdesc:a9870e0e5aa838cecf698507ea9d78f32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the <a class="el" href="class_contingency_table.html">ContingencyTable</a> for a specific type of bucket container.  <br /></td></tr>
-<tr class="separator:a9870e0e5aa838cecf698507ea9d78f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67026bd924ce025b6803c4c2e8b50552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_contingency_table.html#a67026bd924ce025b6803c4c2e8b50552">Initialize</a> (uint64_t number_of_probes, uint64_t number_of_groups, bool is_in_compact_mode)</td></tr>
+<tr class="memdesc:a67026bd924ce025b6803c4c2e8b50552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the <a class="el" href="class_contingency_table.html">ContingencyTable</a> for a specific type of bucket container.  <br /></td></tr>
+<tr class="separator:a67026bd924ce025b6803c4c2e8b50552"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac79140f299e220f68d70d5d55ea7bc91"><td class="memItemLeft" align="right" valign="top"><a id="ac79140f299e220f68d70d5d55ea7bc91" name="ac79140f299e220f68d70d5d55ea7bc91"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Deconstruct</b> ()</td></tr>
 <tr class="separator:ac79140f299e220f68d70d5d55ea7bc91"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -96,6 +96,9 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfEntrie
 <tr class="memitem:a6b25015deb417ac8b24011881241604a"><td class="memItemLeft" align="right" valign="top"><a id="a6b25015deb417ac8b24011881241604a" name="a6b25015deb417ac8b24011881241604a"></a>
 double_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetLog10pValue</b> () const</td></tr>
 <tr class="separator:a6b25015deb417ac8b24011881241604a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2f55f7360eb1e84d4410ec1c345fdb1"><td class="memItemLeft" align="right" valign="top"><a id="af2f55f7360eb1e84d4410ec1c345fdb1" name="af2f55f7360eb1e84d4410ec1c345fdb1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>IncrementSpecificCounter</b> (uint64_t key_index, uint64_t group_index)</td></tr>
+<tr class="separator:af2f55f7360eb1e84d4410ec1c345fdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e4c5c42165ec52e10e71ead5ec1cb4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">UpdateBucket</a> (<a class="el" href="class_table_entry.html">TableEntry</a> &amp;observation, uint64_t number_of_groups)</td></tr>
 <tr class="memdesc:a3e4c5c42165ec52e10e71ead5ec1cb4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the bucket with a single observation.  <br /></td></tr>
 <tr class="separator:a3e4c5c42165ec52e10e71ead5ec1cb4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,8 +144,8 @@ template&lt;typename BucketContainer &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9870e0e5aa838cecf698507ea9d78f32" name="a9870e0e5aa838cecf698507ea9d78f32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9870e0e5aa838cecf698507ea9d78f32">&#9670;&#160;</a></span>Initialize()</h2>
+<a id="a67026bd924ce025b6803c4c2e8b50552" name="a67026bd924ce025b6803c4c2e8b50552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67026bd924ce025b6803c4c2e8b50552">&#9670;&#160;</a></span>Initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -154,6 +157,12 @@ template&lt;typename BucketContainer &gt; </div>
           <td>(</td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>number_of_probes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>number_of_groups</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -174,6 +183,7 @@ template&lt;typename BucketContainer &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">number_of_probes</td><td>The number of probes used in observations. </td></tr>
+    <tr><td class="paramname">number_of_groups</td><td>The number of groups in the contingency table. </td></tr>
     <tr><td class="paramname">is_in_compact_mode</td><td>Flag indicating if the table operates in compact mode. </td></tr>
   </table>
   </dd>
@@ -340,8 +350,8 @@ template&lt;typename BucketContainer &gt; </div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Util/<a class="el" href="_util_8hpp_source.html">Util.hpp</a></li>
-<li>PROLEAD/src/Util/Util.cpp</li>
+<li>PROLEAD_public/inc/Util/<a class="el" href="_util_8hpp_source.html">Util.hpp</a></li>
+<li>PROLEAD_public/src/Util/Util.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

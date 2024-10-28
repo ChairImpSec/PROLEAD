@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Util/Util.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Util/Util.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_c9b68666a9b924aea0812fef9b6ddf33.html">Util</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_69780d706d60b57dff1f4cb5156a7331.html">Util</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -134,72 +134,74 @@ $(function() {
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno"><a class="line" href="class_contingency_table.html#aa7ad30b076914c10d255bed3580f4555">  176</a></span>  <a class="code hl_function" href="class_contingency_table.html#aa7ad30b076914c10d255bed3580f4555">ContingencyTable</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a9870e0e5aa838cecf698507ea9d78f32">  189</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a9870e0e5aa838cecf698507ea9d78f32">Initialize</a>(uint64_t number_of_probes, <span class="keywordtype">bool</span> is_in_compact_mode);</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>  <span class="keywordtype">void</span> Deconstruct();</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  uint64_t GetSizeOfKeyInBytes() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  uint64_t GetNumberOfEntries() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  double_t GetLog10pValue() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">  217</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">UpdateBucket</a>(<a class="code hl_class" href="class_table_entry.html">TableEntry</a>&amp; observation, uint64_t number_of_groups);</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4">  238</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4">UpdateBucket</a>(<a class="code hl_typedef" href="_util_8hpp.html#a8827d1651a0e84c7e646967537fd2c1d">TableBucketVector</a>&amp; observations, uint64_t number_of_groups);</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="class_contingency_table.html#ab8b50c41d133b89cf78d64354af63c3f">  250</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#ab8b50c41d133b89cf78d64354af63c3f">SetLog10pValue</a>(uint64_t number_of_groups);</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a4c8448f4a5da8b719ff2baec770e2ede">  265</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a4c8448f4a5da8b719ff2baec770e2ede">SetLog10pValue</a>(uint64_t number_of_groups, uint64_t number_of_simulations,</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>                      std::vector&lt;double_t&gt;&amp; group_simulation_ratio);</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  uint64_t size_of_key_in_bytes_;</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  double_t log_10_p_value_;</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>  BucketContainer bucket_;</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>  <span class="keywordtype">void</span> SortBucket(uint64_t number_of_entries);</div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  uint64_t SumUpCounters(uint32_t* counters, uint64_t number_of_groups) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  <span class="keywordtype">void</span> SetExpectedFrequenciesOfAnEntry(</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>      <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; group_simulation_ratio,</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>      uint64_t number_of_simulations_per_entry,</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>      std::vector&lt;double_t&gt;&amp; expected_frequencies) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>  <span class="keywordtype">bool</span> AreExpectedFrequenciesHighEnoughForEvaluation(</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>      <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; expected_frequencies,</div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>      double_t pooling_factor) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>  <span class="keywordtype">void</span> UpdateGTestStatistic(uint32_t* counters,</div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>                            <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; expected_frequencies,</div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>                            double_t&amp; g_test_statistic) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span> </div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>  double_t SetGTestStatistic(uint64_t number_of_groups,</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>                             uint64_t number_of_simulations,</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>                             std::vector&lt;double_t&gt;&amp; group_simulation_ratio,</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>                             uint64_t&amp; degrees_of_freedom) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>  double_t ComputeLog10pValue(double_t g_test_statistic,</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>                              uint64_t degrees_of_freedom) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>};</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span> </div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span><span class="keywordtype">void</span> StartClock(timespec&amp; start);</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span><span class="keywordtype">double</span> EndClock(timespec&amp; start);</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="keywordtype">void</span> GenerateThreadRng(std::vector&lt;boost::mt19937&gt;&amp; rng,</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>                       uint64_t number_of_threads);</div>
-<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="keywordtype">void</span> ExtractCombinationFromBitmask(std::vector&lt;uint64_t&gt;&amp; combination,</div>
-<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>                                   std::vector&lt;bool&gt;&amp; bitmask);</div>
-<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span> </div>
-<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span><span class="keyword">namespace </span>Util {</div>
-<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>uint64_t PrintMemoryConsumption();</div>
-<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span><span class="keywordtype">void</span> PrintHorizontalLine(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> width);</div>
-<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="keywordtype">void</span> PrintRow(std::vector&lt;unsigned int&gt;&amp; width,</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>              std::vector&lt;std::string&gt;&amp; elements);</div>
-<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="keywordtype">void</span> GenerateThreadRng(std::vector&lt;boost::mt19937&gt;&amp;, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>);</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="keywordtype">void</span> ExtractCombinationFromBitmask(std::vector&lt;unsigned int&gt;&amp; combination,</div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>                                   std::vector&lt;bool&gt;&amp; bitmask);</div>
-<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>}  <span class="comment">// namespace Util</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a67026bd924ce025b6803c4c2e8b50552">  190</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a67026bd924ce025b6803c4c2e8b50552">Initialize</a>(uint64_t number_of_probes, uint64_t number_of_groups, <span class="keywordtype">bool</span> is_in_compact_mode);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  <span class="keywordtype">void</span> Deconstruct();</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  uint64_t GetSizeOfKeyInBytes() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  uint64_t GetNumberOfEntries() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>  double_t GetLog10pValue() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  <span class="keywordtype">void</span> IncrementSpecificCounter(uint64_t key_index, uint64_t group_index);</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">  220</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">UpdateBucket</a>(<a class="code hl_class" href="class_table_entry.html">TableEntry</a>&amp; observation, uint64_t number_of_groups);</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4">  241</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4">UpdateBucket</a>(<a class="code hl_typedef" href="_util_8hpp.html#a8827d1651a0e84c7e646967537fd2c1d">TableBucketVector</a>&amp; observations, uint64_t number_of_groups);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno"><a class="line" href="class_contingency_table.html#ab8b50c41d133b89cf78d64354af63c3f">  253</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#ab8b50c41d133b89cf78d64354af63c3f">SetLog10pValue</a>(uint64_t number_of_groups);</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno"><a class="line" href="class_contingency_table.html#a4c8448f4a5da8b719ff2baec770e2ede">  268</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_contingency_table.html#a4c8448f4a5da8b719ff2baec770e2ede">SetLog10pValue</a>(uint64_t number_of_groups, uint64_t number_of_simulations,</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                      std::vector&lt;double_t&gt;&amp; group_simulation_ratio);</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>  uint64_t size_of_key_in_bytes_;</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>  double_t log_10_p_value_;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  BucketContainer bucket_;</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>  <span class="keywordtype">void</span> SortBucket(uint64_t number_of_entries);</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>  uint64_t SumUpCounters(uint32_t* counters, uint64_t number_of_groups) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span> </div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>  <span class="keywordtype">void</span> SetExpectedFrequenciesOfAnEntry(</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>      <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; group_simulation_ratio,</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>      uint64_t number_of_simulations_per_entry,</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>      std::vector&lt;double_t&gt;&amp; expected_frequencies) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>  <span class="keywordtype">bool</span> AreExpectedFrequenciesHighEnoughForEvaluation(</div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>      <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; expected_frequencies,</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>      double_t pooling_factor) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span> </div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>  <span class="keywordtype">void</span> UpdateGTestStatistic(uint32_t* counters,</div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>                            <span class="keyword">const</span> std::vector&lt;double_t&gt;&amp; expected_frequencies,</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>                            double_t&amp; g_test_statistic) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>  double_t SetGTestStatistic(uint64_t number_of_groups,</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>                             uint64_t number_of_simulations,</div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>                             std::vector&lt;double_t&gt;&amp; group_simulation_ratio,</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>                             uint64_t&amp; degrees_of_freedom) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>  double_t ComputeLog10pValue(double_t g_test_statistic,</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>                              uint64_t degrees_of_freedom) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>};</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span><span class="keywordtype">void</span> StartClock(timespec&amp; start);</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="keywordtype">double</span> EndClock(timespec&amp; start);</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span><span class="keywordtype">void</span> GenerateThreadRng(std::vector&lt;boost::mt19937&gt;&amp; rng,</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>                       uint64_t number_of_threads);</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span><span class="keywordtype">void</span> ExtractCombinationFromBitmask(std::vector&lt;uint64_t&gt;&amp; combination,</div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                                   std::vector&lt;bool&gt;&amp; bitmask);</div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span> </div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="keyword">namespace </span>Util {</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>uint64_t PrintMemoryConsumption();</div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="keywordtype">void</span> PrintHorizontalLine(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> width);</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="keywordtype">void</span> PrintRow(std::vector&lt;unsigned int&gt;&amp; width,</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>              std::vector&lt;std::string&gt;&amp; elements);</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="keywordtype">void</span> GenerateThreadRng(std::vector&lt;boost::mt19937&gt;&amp;, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span>);</div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="keywordtype">void</span> ExtractCombinationFromBitmask(std::vector&lt;unsigned int&gt;&amp; combination,</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>                                   std::vector&lt;bool&gt;&amp; bitmask);</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span>}  <span class="comment">// namespace Util</span></div>
 <div class="ttc" id="a_util_8hpp_html_a2b790cb67673b8135277f064fd745ed3"><div class="ttname"><a href="_util_8hpp.html#a2b790cb67673b8135277f064fd745ed3">UpdateBucketWithBucket</a></div><div class="ttdeci">void UpdateBucketWithBucket(BucketContainer &amp;bucket, BucketContainer &amp;observations, uint64_t size_of_key_in_bytes, uint64_t number_of_groups)</div><div class="ttdoc">Merges elements from observations into bucket, updating existing entries and removing merged ones.</div></div>
 <div class="ttc" id="a_util_8hpp_html_a8827d1651a0e84c7e646967537fd2c1d"><div class="ttname"><a href="_util_8hpp.html#a8827d1651a0e84c7e646967537fd2c1d">TableBucketVector</a></div><div class="ttdeci">std::vector&lt; TableEntry &gt; TableBucketVector</div><div class="ttdoc">Stores the contingency table as a sorted list of TableEntry instances.</div><div class="ttdef"><b>Definition:</b> Util.hpp:76</div></div>
 <div class="ttc" id="a_util_8hpp_html_a8b4868ee62ffe6b478d33aa528f7e527"><div class="ttname"><a href="_util_8hpp.html#a8b4868ee62ffe6b478d33aa528f7e527">SortAndMergeDuplicates</a></div><div class="ttdeci">void SortAndMergeDuplicates(BucketContainer &amp;observations, uint64_t size_of_key_in_bytes, uint64_t number_of_groups)</div><div class="ttdoc">Sorts the elements in a bucket and merges duplicates.</div></div>
@@ -210,8 +212,8 @@ $(function() {
 <div class="ttc" id="aclass_contingency_table_html"><div class="ttname"><a href="class_contingency_table.html">ContingencyTable</a></div><div class="ttdef"><b>Definition:</b> Util.hpp:164</div></div>
 <div class="ttc" id="aclass_contingency_table_html_a3e4c5c42165ec52e10e71ead5ec1cb4e"><div class="ttname"><a href="class_contingency_table.html#a3e4c5c42165ec52e10e71ead5ec1cb4e">ContingencyTable::UpdateBucket</a></div><div class="ttdeci">void UpdateBucket(TableEntry &amp;observation, uint64_t number_of_groups)</div><div class="ttdoc">Updates the bucket with a single observation.</div></div>
 <div class="ttc" id="aclass_contingency_table_html_a4c8448f4a5da8b719ff2baec770e2ede"><div class="ttname"><a href="class_contingency_table.html#a4c8448f4a5da8b719ff2baec770e2ede">ContingencyTable::SetLog10pValue</a></div><div class="ttdeci">void SetLog10pValue(uint64_t number_of_groups, uint64_t number_of_simulations, std::vector&lt; double_t &gt; &amp;group_simulation_ratio)</div><div class="ttdoc">Calculates and sets the log base 10 p-value for PROLEAD.</div></div>
+<div class="ttc" id="aclass_contingency_table_html_a67026bd924ce025b6803c4c2e8b50552"><div class="ttname"><a href="class_contingency_table.html#a67026bd924ce025b6803c4c2e8b50552">ContingencyTable::Initialize</a></div><div class="ttdeci">void Initialize(uint64_t number_of_probes, uint64_t number_of_groups, bool is_in_compact_mode)</div><div class="ttdoc">Initializes the ContingencyTable for a specific type of bucket container.</div></div>
 <div class="ttc" id="aclass_contingency_table_html_a83ea8bb0b42522d75d583c9581f571d4"><div class="ttname"><a href="class_contingency_table.html#a83ea8bb0b42522d75d583c9581f571d4">ContingencyTable::UpdateBucket</a></div><div class="ttdeci">void UpdateBucket(TableBucketVector &amp;observations, uint64_t number_of_groups)</div><div class="ttdoc">Updates the bucket with multiple observations.</div></div>
-<div class="ttc" id="aclass_contingency_table_html_a9870e0e5aa838cecf698507ea9d78f32"><div class="ttname"><a href="class_contingency_table.html#a9870e0e5aa838cecf698507ea9d78f32">ContingencyTable::Initialize</a></div><div class="ttdeci">void Initialize(uint64_t number_of_probes, bool is_in_compact_mode)</div><div class="ttdoc">Initializes the ContingencyTable for a specific type of bucket container.</div></div>
 <div class="ttc" id="aclass_contingency_table_html_aa7ad30b076914c10d255bed3580f4555"><div class="ttname"><a href="class_contingency_table.html#aa7ad30b076914c10d255bed3580f4555">ContingencyTable::ContingencyTable</a></div><div class="ttdeci">ContingencyTable()=default</div><div class="ttdoc">Default constructor for ContingencyTable.</div></div>
 <div class="ttc" id="aclass_contingency_table_html_ab8b50c41d133b89cf78d64354af63c3f"><div class="ttname"><a href="class_contingency_table.html#ab8b50c41d133b89cf78d64354af63c3f">ContingencyTable::SetLog10pValue</a></div><div class="ttdeci">void SetLog10pValue(uint64_t number_of_groups)</div><div class="ttdoc">Calculates and sets the log base 10 p-value for PROLEAD_SW.</div></div>
 <div class="ttc" id="aclass_table_entry_html"><div class="ttname"><a href="class_table_entry.html">TableEntry</a></div><div class="ttdoc">Represents an entry in a contingency table, containing a key and associated data.</div><div class="ttdef"><b>Definition:</b> Util.hpp:57</div></div>

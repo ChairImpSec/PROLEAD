@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Util/FileParsing.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Util/FileParsing.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_c9b68666a9b924aea0812fef9b6ddf33.html">Util</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_69780d706d60b57dff1f4cb5156a7331.html">Util</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -99,7 +99,7 @@ $(function() {
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">namespace </span>phx = boost::phoenix;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">namespace </span>js = boost::json;</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">enum class</span> TriStateBit { zero_value, one_value, random_value, undefined_value };</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">enum class</span> TriStateBit { no_value, zero_value, one_value, random_value, undefined_value };</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">enum class</span> ValueType { arary, variable, standard };</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="class_input_assignment.html">   31</a></span><span class="keyword">class </span><a class="code hl_class" href="class_input_assignment.html">InputAssignment</a> {</div>
@@ -126,106 +126,106 @@ $(function() {
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>      range_;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>};</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="class_verilog_bitstring_grammar.html">   68</a></span><span class="keyword">class </span><a class="code hl_class" href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, std::vector&lt;TriStateBit&gt;(),</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                         qi::space_type&gt; {</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <a class="code hl_class" href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a>(<span class="keyword">const</span> std::string&amp; input_string);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  std::vector&lt;TriStateBit&gt; Parse(std::string&amp; tri_state_string);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  std::vector&lt;TriStateBit&gt; ConvertHexCharsToBinary(<span class="keyword">const</span> <span class="keywordtype">char</span>&amp; hex_char);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; bin_value,</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      hex_value;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  qi::rule&lt;std::string::iterator, std::vector&lt;TriStateBit&gt;(), qi::space_type&gt;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>      value;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  std::string input_string_;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keywordtype">bool</span> is_inverted;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  uint64_t number_of_bits;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  std::vector&lt;TriStateBit&gt; result;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>};</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="class_input_assignment_grammar.html">   87</a></span><span class="keyword">class </span><a class="code hl_class" href="class_input_assignment_grammar.html">InputAssignmentGrammar</a></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, InputAssignment(),</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                         qi::space_type&gt; {</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <a class="code hl_class" href="class_input_assignment_grammar.html">InputAssignmentGrammar</a>();</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a> Parse(std::string&amp; input_assignment_string);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; bin_value,</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>      hex_value, shared_value, constant_value, index, range;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  qi::rule&lt;std::string::iterator, <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a>(), qi::space_type&gt; value;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a> result_;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  int64_t left_index_, right_index_;</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>};</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="class_irreducible_polynomial_grammar.html">  112</a></span><span class="keyword">class </span><a class="code hl_class" href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator,</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>                         std::vector&lt;std::pair&lt;uint64_t, uint64_t&gt;&gt;(),</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                         qi::space_type&gt; {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <a class="code hl_class" href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a>();</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  std::vector&lt;uint64_t&gt; Parse(std::string&amp; polynomial_string, uint64_t base,</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                              uint64_t exponent);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  qi::rule&lt;std::string::iterator, uint64_t(), qi::space_type&gt; base_;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  qi::rule&lt;std::string::iterator, uint64_t(), qi::space_type&gt; exponent_;</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  qi::rule&lt;std::string::iterator, std::pair&lt;uint64_t, uint64_t&gt;(),</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>           qi::space_type&gt;</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>      monomial_;</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::pair&lt;uint64_t, uint64_t&gt;&gt;(),</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>           qi::space_type&gt;</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>      polynomial_;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>};</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno"><a class="line" href="class_signal_name_grammar.html">  141</a></span><span class="keyword">class </span><a class="code hl_class" href="class_signal_name_grammar.html">SignalNameGrammar</a></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, std::vector&lt;std::string&gt;(),</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                         qi::space_type&gt; {</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  <a class="code hl_class" href="class_signal_name_grammar.html">SignalNameGrammar</a>();</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::vector&lt;std::string&gt; Parse(std::string&amp; signal_name_string);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::string&gt;(), qi::space_type&gt;</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>      value;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::string&gt;(), qi::space_type&gt;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>      vector_name;</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; identifier;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; signal_name;</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>      signal_with_range;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>      signal_with_index;</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>      signal_without_index_or_range;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; index;</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  uint64_t left_index;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  std::string current_identifier;</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  std::vector&lt;std::string&gt; result;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>};</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>std::ifstream <a class="code hl_function" href="_file_parsing_8hpp.html#aec34c536035b11af93126f74274d6c5f">OpenFile</a>(<span class="keyword">const</span> std::filesystem::path&amp; path);</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>js::object <a class="code hl_function" href="_file_parsing_8hpp.html#aceef79cd06f9edf69cd603fcbd5af7df">ParseJsonFile</a>(<span class="keyword">const</span> std::filesystem::path&amp; path);</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="keywordtype">void</span> <a class="code hl_function" href="_file_parsing_8hpp.html#a7e414e38b139a09e5b4371bd9e01a10a">CheckValueType</a>(<span class="keyword">const</span> js::object&amp; json_object, <span class="keyword">const</span> std::string&amp; key,</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                    js::kind expected_type);</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="keywordtype">bool</span> <a class="code hl_function" href="_file_parsing_8hpp.html#a328b662b063a2b762e32768e25a72823">SetValue</a>(<span class="keyword">const</span> js::object&amp; json_object, <span class="keyword">const</span> std::string&amp; key,</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>              T&amp; variable);</div>
-<div class="ttc" id="a_file_parsing_8hpp_html_a328b662b063a2b762e32768e25a72823"><div class="ttname"><a href="_file_parsing_8hpp.html#a328b662b063a2b762e32768e25a72823">SetValue</a></div><div class="ttdeci">bool SetValue(const js::object &amp;json_object, const std::string &amp;key, T &amp;variable)</div><div class="ttdoc">Sets the value of a variable to the value of a JSON object's key.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:372</div></div>
-<div class="ttc" id="a_file_parsing_8hpp_html_a7e414e38b139a09e5b4371bd9e01a10a"><div class="ttname"><a href="_file_parsing_8hpp.html#a7e414e38b139a09e5b4371bd9e01a10a">CheckValueType</a></div><div class="ttdeci">void CheckValueType(const js::object &amp;json_object, const std::string &amp;key, js::kind expected_type)</div><div class="ttdoc">Checks if the type of a JSON object's value matches the expected type.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:360</div></div>
-<div class="ttc" id="a_file_parsing_8hpp_html_aceef79cd06f9edf69cd603fcbd5af7df"><div class="ttname"><a href="_file_parsing_8hpp.html#aceef79cd06f9edf69cd603fcbd5af7df">ParseJsonFile</a></div><div class="ttdeci">js::object ParseJsonFile(const std::filesystem::path &amp;path)</div><div class="ttdoc">Parses a JSON file.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:340</div></div>
-<div class="ttc" id="a_file_parsing_8hpp_html_aec34c536035b11af93126f74274d6c5f"><div class="ttname"><a href="_file_parsing_8hpp.html#aec34c536035b11af93126f74274d6c5f">OpenFile</a></div><div class="ttdeci">std::ifstream OpenFile(const std::filesystem::path &amp;path)</div><div class="ttdoc">Opens a file for reading.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:327</div></div>
-<div class="ttc" id="aclass_input_assignment_grammar_html"><div class="ttname"><a href="class_input_assignment_grammar.html">InputAssignmentGrammar</a></div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:89</div></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_verilog_bitstring_grammar.html">   69</a></span><span class="keyword">class </span><a class="code hl_class" href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, std::vector&lt;TriStateBit&gt;(),</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                         qi::space_type&gt; {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <a class="code hl_class" href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  std::vector&lt;TriStateBit&gt; Parse(std::string&amp; tri_state_string);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  std::vector&lt;TriStateBit&gt; ConvertHexCharsToBinary(<span class="keyword">const</span> <span class="keywordtype">char</span>&amp; hex_char);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; bin_value,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>      hex_value;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  qi::rule&lt;std::string::iterator, std::vector&lt;TriStateBit&gt;(), qi::space_type&gt;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>      value;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  std::string input_string_;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keywordtype">bool</span> is_inverted;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  uint64_t number_of_bits;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  std::vector&lt;TriStateBit&gt; result;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>};</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="class_input_assignment_grammar.html">   88</a></span><span class="keyword">class </span><a class="code hl_class" href="class_input_assignment_grammar.html">InputAssignmentGrammar</a></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, InputAssignment(),</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>                         qi::space_type&gt; {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <a class="code hl_class" href="class_input_assignment_grammar.html">InputAssignmentGrammar</a>();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a> Parse(std::string&amp; input_assignment_string);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; bin_value,</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>      hex_value, shared_value, constant_value, index, range;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  qi::rule&lt;std::string::iterator, <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a>(), qi::space_type&gt; value;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  <a class="code hl_class" href="class_input_assignment.html">InputAssignment</a> result_;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  int64_t left_index_, right_index_;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>};</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="class_irreducible_polynomial_grammar.html">  113</a></span><span class="keyword">class </span><a class="code hl_class" href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator,</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                         std::vector&lt;std::pair&lt;uint64_t, uint64_t&gt;&gt;(),</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                         qi::space_type&gt; {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <a class="code hl_class" href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a>();</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  std::vector&lt;uint64_t&gt; Parse(std::string&amp; polynomial_string, uint64_t base,</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                              uint64_t exponent);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  qi::rule&lt;std::string::iterator, uint64_t(), qi::space_type&gt; base_;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  qi::rule&lt;std::string::iterator, uint64_t(), qi::space_type&gt; exponent_;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  qi::rule&lt;std::string::iterator, std::pair&lt;uint64_t, uint64_t&gt;(),</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>           qi::space_type&gt;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>      monomial_;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::pair&lt;uint64_t, uint64_t&gt;&gt;(),</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>           qi::space_type&gt;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>      polynomial_;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>};</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="class_signal_name_grammar.html">  142</a></span><span class="keyword">class </span><a class="code hl_class" href="class_signal_name_grammar.html">SignalNameGrammar</a></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, std::vector&lt;std::string&gt;(),</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                         qi::space_type&gt; {</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <a class="code hl_class" href="class_signal_name_grammar.html">SignalNameGrammar</a>();</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::vector&lt;std::string&gt; Parse(std::string&amp; signal_name_string);</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::string&gt;(), qi::space_type&gt;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>      value;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  qi::rule&lt;std::string::iterator, std::vector&lt;std::string&gt;(), qi::space_type&gt;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>      vector_name;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; identifier;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; signal_name;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>      signal_with_range;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>      signal_with_index;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>      signal_without_index_or_range;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>  qi::rule&lt;std::string::iterator, std::string(), qi::space_type&gt; index;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  uint64_t left_index;</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  std::string current_identifier;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  std::vector&lt;std::string&gt; result;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>};</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>std::ifstream <a class="code hl_function" href="_file_parsing_8hpp.html#aec34c536035b11af93126f74274d6c5f">OpenFile</a>(<span class="keyword">const</span> std::filesystem::path&amp; path);</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>js::object <a class="code hl_function" href="_file_parsing_8hpp.html#aceef79cd06f9edf69cd603fcbd5af7df">ParseJsonFile</a>(<span class="keyword">const</span> std::filesystem::path&amp; path);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="keywordtype">void</span> <a class="code hl_function" href="_file_parsing_8hpp.html#a7e414e38b139a09e5b4371bd9e01a10a">CheckValueType</a>(<span class="keyword">const</span> js::object&amp; json_object, <span class="keyword">const</span> std::string&amp; key,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                    js::kind expected_type);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="keywordtype">bool</span> <a class="code hl_function" href="_file_parsing_8hpp.html#a328b662b063a2b762e32768e25a72823">SetValue</a>(<span class="keyword">const</span> js::object&amp; json_object, <span class="keyword">const</span> std::string&amp; key,</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>              T&amp; variable);</div>
+<div class="ttc" id="a_file_parsing_8hpp_html_a328b662b063a2b762e32768e25a72823"><div class="ttname"><a href="_file_parsing_8hpp.html#a328b662b063a2b762e32768e25a72823">SetValue</a></div><div class="ttdeci">bool SetValue(const js::object &amp;json_object, const std::string &amp;key, T &amp;variable)</div><div class="ttdoc">Sets the value of a variable to the value of a JSON object's key.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:376</div></div>
+<div class="ttc" id="a_file_parsing_8hpp_html_a7e414e38b139a09e5b4371bd9e01a10a"><div class="ttname"><a href="_file_parsing_8hpp.html#a7e414e38b139a09e5b4371bd9e01a10a">CheckValueType</a></div><div class="ttdeci">void CheckValueType(const js::object &amp;json_object, const std::string &amp;key, js::kind expected_type)</div><div class="ttdoc">Checks if the type of a JSON object's value matches the expected type.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:364</div></div>
+<div class="ttc" id="a_file_parsing_8hpp_html_aceef79cd06f9edf69cd603fcbd5af7df"><div class="ttname"><a href="_file_parsing_8hpp.html#aceef79cd06f9edf69cd603fcbd5af7df">ParseJsonFile</a></div><div class="ttdeci">js::object ParseJsonFile(const std::filesystem::path &amp;path)</div><div class="ttdoc">Parses a JSON file.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:344</div></div>
+<div class="ttc" id="a_file_parsing_8hpp_html_aec34c536035b11af93126f74274d6c5f"><div class="ttname"><a href="_file_parsing_8hpp.html#aec34c536035b11af93126f74274d6c5f">OpenFile</a></div><div class="ttdeci">std::ifstream OpenFile(const std::filesystem::path &amp;path)</div><div class="ttdoc">Opens a file for reading.</div><div class="ttdef"><b>Definition:</b> FileParsing.cpp:331</div></div>
+<div class="ttc" id="aclass_input_assignment_grammar_html"><div class="ttname"><a href="class_input_assignment_grammar.html">InputAssignmentGrammar</a></div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:90</div></div>
 <div class="ttc" id="aclass_input_assignment_html"><div class="ttname"><a href="class_input_assignment.html">InputAssignment</a></div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:31</div></div>
 <div class="ttc" id="aclass_integer_range_grammar_html"><div class="ttname"><a href="class_integer_range_grammar.html">IntegerRangeGrammar</a></div><div class="ttdoc">A grammar for parsing a range of integers.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:50</div></div>
-<div class="ttc" id="aclass_irreducible_polynomial_grammar_html"><div class="ttname"><a href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a></div><div class="ttdoc">Grammar definition for parsing irreducible polynomials.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:115</div></div>
-<div class="ttc" id="aclass_signal_name_grammar_html"><div class="ttname"><a href="class_signal_name_grammar.html">SignalNameGrammar</a></div><div class="ttdoc">A grammar for parsing a signal name.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:143</div></div>
-<div class="ttc" id="aclass_verilog_bitstring_grammar_html"><div class="ttname"><a href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a></div><div class="ttdoc">A grammar for parsing a Verilog bitstring with random values.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:70</div></div>
+<div class="ttc" id="aclass_irreducible_polynomial_grammar_html"><div class="ttname"><a href="class_irreducible_polynomial_grammar.html">IrreduciblePolynomialGrammar</a></div><div class="ttdoc">Grammar definition for parsing irreducible polynomials.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:116</div></div>
+<div class="ttc" id="aclass_signal_name_grammar_html"><div class="ttname"><a href="class_signal_name_grammar.html">SignalNameGrammar</a></div><div class="ttdoc">A grammar for parsing a signal name.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:144</div></div>
+<div class="ttc" id="aclass_verilog_bitstring_grammar_html"><div class="ttname"><a href="class_verilog_bitstring_grammar.html">VerilogBitstringGrammar</a></div><div class="ttdoc">A grammar for parsing a Verilog bitstring with random values.</div><div class="ttdef"><b>Definition:</b> FileParsing.hpp:71</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

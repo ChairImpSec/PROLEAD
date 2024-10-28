@@ -25,7 +25,7 @@ namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 namespace js = boost::json;
 
-enum class TriStateBit { zero_value, one_value, random_value, undefined_value };
+enum class TriStateBit { no_value, zero_value, one_value, random_value, undefined_value };
 enum class ValueType { arary, variable, standard };
 
 class InputAssignment {
@@ -62,14 +62,15 @@ class IntegerRangeGrammar
  * @brief A grammar for parsing a Verilog bitstring with random values.
  * @details The grammar is used to parse a Verilog bitstring in the form of
  * "2'b01" or "8'hab". Additionally, the grammar can parse bitstrings with
- * random values indicated by $ in the form of "2'b0$" or 8'h$$. The bitstring
- * is parsed as a vector of TriStateBit values with the parsed length.
+ * random values indicated by $ in the form of "2'b0$" or 8'h$$ or undefined
+ * values indicated by x in the form of "2'b0x" or 8'hxx. The bitstring is
+ * parsed as a vector of TriStateBit values with the parsed length.
  */
 class VerilogBitstringGrammar
     : public qi::grammar<std::string::iterator, std::vector<TriStateBit>(),
                          qi::space_type> {
  public:
-  VerilogBitstringGrammar(const std::string& input_string);
+  VerilogBitstringGrammar();
   std::vector<TriStateBit> Parse(std::string& tri_state_string);
 
  private:

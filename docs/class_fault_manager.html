@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -75,33 +75,35 @@ $(function() {
   <div class="headertitle"><div class="title">FaultManager Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Manages all Faults and the FaultSets which the adversary is allowed to chose.  
+ <a href="class_fault_manager.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_fault_manager_8hpp_source.html">FaultManager.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a03071cd0cb965335241a4a8be81a9474"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a03071cd0cb965335241a4a8be81a9474">AddStuckAtZeroFault</a> (uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
-<tr class="memdesc:a03071cd0cb965335241a4a8be81a9474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new StuckAtZero fault to the manager.  <br /></td></tr>
-<tr class="separator:a03071cd0cb965335241a4a8be81a9474"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa391a5206a0e3072a5a8cd5c44dd1b3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#aa391a5206a0e3072a5a8cd5c44dd1b3f">AddStuckAtOneFault</a> (uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
-<tr class="memdesc:aa391a5206a0e3072a5a8cd5c44dd1b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new StuckAtOne fault to the manager.  <br /></td></tr>
-<tr class="separator:aa391a5206a0e3072a5a8cd5c44dd1b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7445d3102249fad2fccf9b9b528ad8bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a7445d3102249fad2fccf9b9b528ad8bd">AddToggleFault</a> (uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
-<tr class="memdesc:a7445d3102249fad2fccf9b9b528ad8bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new Toggle fault to the manager.  <br /></td></tr>
-<tr class="separator:a7445d3102249fad2fccf9b9b528ad8bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1721d2a497b08a88e39c1c143af45e94"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a1721d2a497b08a88e39c1c143af45e94">FaultManager</a> (const <a class="el" href="struct_fault_injection_settings.html">FaultInjectionSettings</a> &amp;fault_injection_settings, const <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;circuit_to_be_faulted)</td></tr>
+<tr class="memdesc:a1721d2a497b08a88e39c1c143af45e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of a <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a> object.  <br /></td></tr>
+<tr class="separator:a1721d2a497b08a88e39c1c143af45e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a626868c5e39dde8da0af44a0eed959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a4a626868c5e39dde8da0af44a0eed959">AddFaultSet</a> (std::vector&lt; <a class="el" href="class_fault.html">Fault</a> const * &gt; &amp;faults)</td></tr>
 <tr class="memdesc:a4a626868c5e39dde8da0af44a0eed959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new <a class="el" href="class_fault_set.html">FaultSet</a> to the manager.  <br /></td></tr>
 <tr class="separator:a4a626868c5e39dde8da0af44a0eed959"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4936cc9a78548e12b2be62faf5b59791"><td class="memItemLeft" align="right" valign="top"><a id="a4936cc9a78548e12b2be62faf5b59791" name="a4936cc9a78548e12b2be62faf5b59791"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>GenerateFaultSets</b> ()</td></tr>
 <tr class="separator:a4936cc9a78548e12b2be62faf5b59791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeab3ca4b4326c5ea3e409b1475f6c4a6"><td class="memItemLeft" align="right" valign="top"><a id="aeab3ca4b4326c5ea3e409b1475f6c4a6" name="aeab3ca4b4326c5ea3e409b1475f6c4a6"></a>
-const <a class="el" href="class_fault.html">Fault</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>GetFault</b> (uint64_t index) const</td></tr>
-<tr class="separator:aeab3ca4b4326c5ea3e409b1475f6c4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53ff1299b16791fd811c9333a0fb8758"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a53ff1299b16791fd811c9333a0fb8758">SelectStrategyAndComputeAllFaults</a> (size_t clock_signal_index)</td></tr>
+<tr class="memdesc:a53ff1299b16791fd811c9333a0fb8758"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function porcesses the corresponding fault_injection_settings_ and wraps ComputeAllFaults to compute all possible faults based on fault_injection_settings_-&gt;fault_properties.  <br /></td></tr>
+<tr class="separator:a53ff1299b16791fd811c9333a0fb8758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8116011de7a9971bc2798438499fb02e"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::unique_ptr&lt; const <a class="el" href="class_fault.html">Fault</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a8116011de7a9971bc2798438499fb02e">GetFaults</a> () const</td></tr>
 <tr class="memdesc:a8116011de7a9971bc2798438499fb02e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of all faults.  <br /></td></tr>
 <tr class="separator:a8116011de7a9971bc2798438499fb02e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a761118d7d9173d498aba1ed20d02ca95"><td class="memItemLeft" align="right" valign="top"><a id="a761118d7d9173d498aba1ed20d02ca95" name="a761118d7d9173d498aba1ed20d02ca95"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults</b> () const</td></tr>
-<tr class="separator:a761118d7d9173d498aba1ed20d02ca95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeab3ca4b4326c5ea3e409b1475f6c4a6"><td class="memItemLeft" align="right" valign="top"><a id="aeab3ca4b4326c5ea3e409b1475f6c4a6" name="aeab3ca4b4326c5ea3e409b1475f6c4a6"></a>
+const <a class="el" href="class_fault.html">Fault</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>GetFault</b> (uint64_t index) const</td></tr>
+<tr class="separator:aeab3ca4b4326c5ea3e409b1475f6c4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cd6e39c2deee0416614ee9cf61fe6b7"><td class="memItemLeft" align="right" valign="top"><a id="a2cd6e39c2deee0416614ee9cf61fe6b7" name="a2cd6e39c2deee0416614ee9cf61fe6b7"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults</b> () const</td></tr>
+<tr class="separator:a2cd6e39c2deee0416614ee9cf61fe6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a737c555fd9a653d425108440398158da"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a> const * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a737c555fd9a653d425108440398158da">GetStuckAtZeroFaults</a> () const</td></tr>
 <tr class="memdesc:a737c555fd9a653d425108440398158da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of StuckAtZero faults.  <br /></td></tr>
 <tr class="separator:a737c555fd9a653d425108440398158da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,7 +116,56 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 <tr class="memitem:a5e967f4ee9d4a16f2f03affd75f0730e"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="class_fault_set.html">FaultSet</a> const * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a5e967f4ee9d4a16f2f03affd75f0730e">GetFaultSets</a> () const</td></tr>
 <tr class="memdesc:a5e967f4ee9d4a16f2f03affd75f0730e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of all <a class="el" href="class_fault.html" title="Faults are parameteriesed by a location (signal/position and time) and a fault type.">Fault</a> Sets (<a class="el" href="class_fault.html" title="Faults are parameteriesed by a location (signal/position and time) and a fault type.">Fault</a> Combination).  <br /></td></tr>
 <tr class="separator:a5e967f4ee9d4a16f2f03affd75f0730e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a60f0278035335f9959f6c0d694a272"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a4a60f0278035335f9959f6c0d694a272">AddStuckAtZeroFault</a> (const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
+<tr class="memdesc:a4a60f0278035335f9959f6c0d694a272"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new StuckAtZero fault to the manager.  <br /></td></tr>
+<tr class="separator:a4a60f0278035335f9959f6c0d694a272"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6983bd692f8662a3f13e6929f205aec5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a6983bd692f8662a3f13e6929f205aec5">AddStuckAtOneFault</a> (const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
+<tr class="memdesc:a6983bd692f8662a3f13e6929f205aec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new StuckAtOne fault to the manager.  <br /></td></tr>
+<tr class="separator:a6983bd692f8662a3f13e6929f205aec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06433cfa4cadc09933779015a3ed06d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html#a06433cfa4cadc09933779015a3ed06d5">AddToggleFault</a> (const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td></tr>
+<tr class="memdesc:a06433cfa4cadc09933779015a3ed06d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new Toggle fault to the manager.  <br /></td></tr>
+<tr class="separator:a06433cfa4cadc09933779015a3ed06d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Manages all Faults and the FaultSets which the adversary is allowed to chose. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1721d2a497b08a88e39c1c143af45e94" name="a1721d2a497b08a88e39c1c143af45e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1721d2a497b08a88e39c1c143af45e94">&#9670;&#160;</a></span>FaultManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">FaultManager::FaultManager </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_fault_injection_settings.html">FaultInjectionSettings</a> &amp;&#160;</td>
+          <td class="paramname"><em>fault_injection_settings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a> &amp;&#160;</td>
+          <td class="paramname"><em>circuit_to_be_faulted</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor of a <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fault_injection_settings</td><td>A pointer to the settings which should be used to instatntiat a object of the <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a> class. </td></tr>
+    <tr><td class="paramname">circuit_to_be_faulted</td><td>A pointer to the circuit which should be faulted by this <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4a626868c5e39dde8da0af44a0eed959" name="a4a626868c5e39dde8da0af44a0eed959"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4a626868c5e39dde8da0af44a0eed959">&#9670;&#160;</a></span>AddFaultSet()</h2>
@@ -142,8 +193,8 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 
 </div>
 </div>
-<a id="aa391a5206a0e3072a5a8cd5c44dd1b3f" name="aa391a5206a0e3072a5a8cd5c44dd1b3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa391a5206a0e3072a5a8cd5c44dd1b3f">&#9670;&#160;</a></span>AddStuckAtOneFault()</h2>
+<a id="a6983bd692f8662a3f13e6929f205aec5" name="a6983bd692f8662a3f13e6929f205aec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6983bd692f8662a3f13e6929f205aec5">&#9670;&#160;</a></span>AddStuckAtOneFault()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,6 +202,12 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
         <tr>
           <td class="memname">void FaultManager::AddStuckAtOneFault </td>
           <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const&#160;</td>
+          <td class="paramname"><em>signal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>signal_index</em>, </td>
         </tr>
@@ -177,6 +234,7 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 <p>Add a new StuckAtOne fault to the manager. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">signal</td><td>A pointer to the signal, which is faulted. </td></tr>
     <tr><td class="paramname">signal_index</td><td>The index of the signal/the position, which is faulted. </td></tr>
     <tr><td class="paramname">clock_cycle</td><td>The clock cycle in which the <a class="el" href="class_fault.html" title="Faults are parameteriesed by a location (signal/position and time) and a fault type.">Fault</a> is injected. </td></tr>
     <tr><td class="paramname">fault_probability</td><td>The probability with which the fault is induced. </td></tr>
@@ -186,8 +244,8 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 
 </div>
 </div>
-<a id="a03071cd0cb965335241a4a8be81a9474" name="a03071cd0cb965335241a4a8be81a9474"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a03071cd0cb965335241a4a8be81a9474">&#9670;&#160;</a></span>AddStuckAtZeroFault()</h2>
+<a id="a4a60f0278035335f9959f6c0d694a272" name="a4a60f0278035335f9959f6c0d694a272"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a60f0278035335f9959f6c0d694a272">&#9670;&#160;</a></span>AddStuckAtZeroFault()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,6 +253,12 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
         <tr>
           <td class="memname">void FaultManager::AddStuckAtZeroFault </td>
           <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const&#160;</td>
+          <td class="paramname"><em>signal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>signal_index</em>, </td>
         </tr>
@@ -221,6 +285,7 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 <p>Add a new StuckAtZero fault to the manager. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">signal</td><td>A pointer to the signal, which is faulted. </td></tr>
     <tr><td class="paramname">signal_index</td><td>The index of the signal/the position, which is faulted. </td></tr>
     <tr><td class="paramname">clock_cycle</td><td>The clock cycle in which the <a class="el" href="class_fault.html" title="Faults are parameteriesed by a location (signal/position and time) and a fault type.">Fault</a> is injected. </td></tr>
     <tr><td class="paramname">fault_probability</td><td>The probability with which the fault is induced. </td></tr>
@@ -230,8 +295,8 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 
 </div>
 </div>
-<a id="a7445d3102249fad2fccf9b9b528ad8bd" name="a7445d3102249fad2fccf9b9b528ad8bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7445d3102249fad2fccf9b9b528ad8bd">&#9670;&#160;</a></span>AddToggleFault()</h2>
+<a id="a06433cfa4cadc09933779015a3ed06d5" name="a06433cfa4cadc09933779015a3ed06d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06433cfa4cadc09933779015a3ed06d5">&#9670;&#160;</a></span>AddToggleFault()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -239,6 +304,12 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
         <tr>
           <td class="memname">void FaultManager::AddToggleFault </td>
           <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *const&#160;</td>
+          <td class="paramname"><em>signal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">uint64_t&#160;</td>
           <td class="paramname"><em>signal_index</em>, </td>
         </tr>
@@ -265,6 +336,7 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 <p>Add a new Toggle fault to the manager. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">signal</td><td>A pointer to the signal, which is faulted. </td></tr>
     <tr><td class="paramname">signal_index</td><td>The index of the signal/the position, which is faulted. </td></tr>
     <tr><td class="paramname">clock_cycle</td><td>The clock cycle in which the <a class="el" href="class_fault.html" title="Faults are parameteriesed by a location (signal/position and time) and a fault type.">Fault</a> is injected. </td></tr>
     <tr><td class="paramname">fault_probability</td><td>The probability with which the fault is induced. </td></tr>
@@ -374,9 +446,35 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfFaults
 
 </div>
 </div>
+<a id="a53ff1299b16791fd811c9333a0fb8758" name="a53ff1299b16791fd811c9333a0fb8758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53ff1299b16791fd811c9333a0fb8758">&#9670;&#160;</a></span>SelectStrategyAndComputeAllFaults()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FaultManager::SelectStrategyAndComputeAllFaults </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>clock_signal_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function porcesses the corresponding fault_injection_settings_ and wraps ComputeAllFaults to compute all possible faults based on fault_injection_settings_-&gt;fault_properties. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clock_signal_index</td><td>This parameter is to be removed, currently it is required to give the this function the name of the clock signal, since we assume that this is not faulted. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_fault_manager_8hpp_source.html">FaultManager.hpp</a></li>
-<li>PROLEAD/src/Hardware/<a class="el" href="_fault_manager_8cpp.html">FaultManager.cpp</a></li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_fault_manager_8hpp_source.html">FaultManager.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/<a class="el" href="src_2_hardware_2_fault_manager_8cpp.html">FaultManager.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

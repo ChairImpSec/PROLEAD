@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -76,11 +76,11 @@ $(function() {
 <p>This is the complete list of members for <a class="el" href="class_fault.html">Fault</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="class_fault.html#ad69fbf593af9517440f3798f45008e60">ComputeFaultEffect</a>(uint64_t fault_free_computation) const =0</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ad7b3120aa912d68485b13865bf19e6b4">Fault</a>(uint64_t signal_index, uint64_t clock_cycle, double fault_probability, FaultType fault_type)</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a8e801ad63908892834771e2a4eeaa34b">GetClockCycle</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ae9ffab8d18386115a47f64395c776558">GetFaultProbability</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a7c556bcd175d0f8f6b99f100383b21a5">GetFaultType</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#abf1ef98861ba7e7f5483cd975d6278d7">GetSignalIndex</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#a0547c4a8941126d7053c904ebf42c918">Fault</a>(const Hardware::SignalStruct *const signal, size_t signal_index, size_t clock_cycle, double fault_probability, FaultType fault_type)</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a0df0321f5d91bc46582c6645a8b8a647">GetFaultedClockCycle</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ac7c6164726fa434873c1a717cdb4eae7">GetFaultedSignalIndex</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#ae9ffab8d18386115a47f64395c776558">GetFaultProbability</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#a7c556bcd175d0f8f6b99f100383b21a5">GetFaultType</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a7a1acd03a27d104e451251375e982251">IsSignalFaulted</a>(uint64_t signal_index, uint64_t clock_cycle) const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->

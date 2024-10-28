@@ -18,7 +18,6 @@ namespace Hardware
     {
         void NonCommentFromFile(FILE*, char*, const char*);
         void fReadaWord(FileBufferStruct*, char*, char*);
-        int  MakeFormulaForCellInLibrary(CellTypeStruct*);
         int  TrimSignalName(char*, int*);
         int  SearchSignalName(CircuitStruct*, char*, char, Settings&);
         void DesignFile_Find_IO_Port(char*, char, int, int, Library&, CircuitStruct*, int, char*, CircuitStruct*, int*&, int&, int*&, int&);

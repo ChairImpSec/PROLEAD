@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -89,19 +89,16 @@ Inheritance diagram for VerilogBitstringGrammar:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a99ec21254e6f325afd75ebd636592429"><td class="memItemLeft" align="right" valign="top"><a id="a99ec21254e6f325afd75ebd636592429" name="a99ec21254e6f325afd75ebd636592429"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VerilogBitstringGrammar</b> (const std::string &amp;input_string)</td></tr>
-<tr class="separator:a99ec21254e6f325afd75ebd636592429"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae417220a659979320235571ab6737285"><td class="memItemLeft" align="right" valign="top"><a id="ae417220a659979320235571ab6737285" name="ae417220a659979320235571ab6737285"></a>
 std::vector&lt; TriStateBit &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Parse</b> (std::string &amp;tri_state_string)</td></tr>
 <tr class="separator:ae417220a659979320235571ab6737285"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A grammar for parsing a Verilog bitstring with random values. </p>
-<p>The grammar is used to parse a Verilog bitstring in the form of "2'b01" or "8'hab". Additionally, the grammar can parse bitstrings with random values indicated by $ in the form of "2'b0$" or 8'h$$. The bitstring is parsed as a vector of TriStateBit values with the parsed length. </p>
+<p>The grammar is used to parse a Verilog bitstring in the form of "2'b01" or "8'hab". Additionally, the grammar can parse bitstrings with random values indicated by $ in the form of "2'b0$" or 8'h$$ or undefined values indicated by x in the form of "2'b0x" or 8'hxx. The bitstring is parsed as a vector of TriStateBit values with the parsed length. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Util/<a class="el" href="_file_parsing_8hpp_source.html">FileParsing.hpp</a></li>
-<li>PROLEAD/src/Util/FileParsing.cpp</li>
+<li>PROLEAD_public/inc/Util/<a class="el" href="_file_parsing_8hpp_source.html">FileParsing.hpp</a></li>
+<li>PROLEAD_public/src/Util/FileParsing.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

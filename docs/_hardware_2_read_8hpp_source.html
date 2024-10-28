@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Hardware/Read.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Hardware/Read.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_ee333017a7dfb067d45b2e223bebac94.html">Hardware</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_ccfa6d7c543e74965df716356c654775.html">Hardware</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -88,27 +88,23 @@ $(function() {
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;Hardware/Definitions.hpp&quot;</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="_cpu_core_selector_8hpp.html">Util/CpuCoreSelector.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;Util/Settings.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>Hardware</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>{</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">namespace </span>Read</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordtype">void</span> NonCommentFromFile(FILE*, <span class="keywordtype">char</span>*, <span class="keyword">const</span> <span class="keywordtype">char</span>*);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordtype">void</span> fReadaWord(<a class="code hl_struct" href="struct_hardware_1_1_file_buffer_struct.html">Hardware::FileBufferStruct</a>*, <span class="keywordtype">char</span>*, <span class="keywordtype">char</span>*);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordtype">int</span>  MakeFormulaForCellInLibrary(<a class="code hl_struct" href="struct_hardware_1_1_cell_type_struct.html">Hardware::CellTypeStruct</a>*);</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Hardware/Circuit.hpp&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>Hardware</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">namespace </span>Read</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordtype">void</span> NonCommentFromFile(FILE*, <span class="keywordtype">char</span>*, <span class="keyword">const</span> <span class="keywordtype">char</span>*);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordtype">void</span> fReadaWord(FileBufferStruct*, <span class="keywordtype">char</span>*, <span class="keywordtype">char</span>*);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keywordtype">int</span>  TrimSignalName(<span class="keywordtype">char</span>*, <span class="keywordtype">int</span>*);</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keywordtype">int</span>  SearchSignalName(CircuitStruct*, <span class="keywordtype">char</span>*, <span class="keywordtype">char</span>, <a class="code hl_class" href="class_settings.html">Settings</a>&amp;);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordtype">void</span> DesignFile_Find_IO_Port(<span class="keywordtype">char</span>*, <span class="keywordtype">char</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <a class="code hl_class" href="class_hardware_1_1_library.html">Hardware::Library</a>&amp;, <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a>*, <span class="keywordtype">int</span>, <span class="keywordtype">char</span>*, <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a>*, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keywordtype">void</span> DesignFile_Find_Signal_Name(<span class="keywordtype">char</span>*, <span class="keywordtype">char</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <a class="code hl_class" href="class_settings.html">Settings</a>&amp;, <a class="code hl_class" href="class_hardware_1_1_library.html">Hardware::Library</a>&amp;, CircuitStruct*, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">char</span>*, <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a>*, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>&amp;);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordtype">void</span> DesignFile(<span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;, <a class="code hl_class" href="class_settings.html">Settings</a>&amp;, <a class="code hl_class" href="class_hardware_1_1_library.html">Hardware::Library</a>&amp;, <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a>*, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <a class="code hl_struct" href="struct_hardware_1_1_file_buffer_struct.html">Hardware::FileBufferStruct</a>*);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordtype">void</span> DesignFile_Find_IO_Port(<span class="keywordtype">char</span>*, <span class="keywordtype">char</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, Library&amp;, CircuitStruct*, <span class="keywordtype">int</span>, <span class="keywordtype">char</span>*, CircuitStruct*, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keywordtype">void</span> DesignFile_Find_Signal_Name(<span class="keywordtype">char</span>*, <span class="keywordtype">char</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <a class="code hl_class" href="class_settings.html">Settings</a>&amp;, Library&amp;, CircuitStruct*, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">char</span>*, CircuitStruct*, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>*&amp;, <span class="keywordtype">int</span>&amp;, <span class="keywordtype">int</span>&amp;);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keywordtype">void</span> DesignFile(<span class="keyword">const</span> std::string&amp;, <span class="keyword">const</span> std::string&amp;, <a class="code hl_class" href="class_settings.html">Settings</a>&amp;, Library&amp;, CircuitStruct*, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">int</span>, FileBufferStruct*);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    }</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>}</div>
 <div class="ttc" id="a_cpu_core_selector_8hpp_html"><div class="ttname"><a href="_cpu_core_selector_8hpp.html">CpuCoreSelector.hpp</a></div></div>
-<div class="ttc" id="aclass_hardware_1_1_library_html"><div class="ttname"><a href="class_hardware_1_1_library.html">Hardware::Library</a></div><div class="ttdef"><b>Definition:</b> Library.hpp:230</div></div>
-<div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> Settings.hpp:99</div></div>
-<div class="ttc" id="astruct_hardware_1_1_cell_type_struct_html"><div class="ttname"><a href="struct_hardware_1_1_cell_type_struct.html">Hardware::CellTypeStruct</a></div><div class="ttdef"><b>Definition:</b> Definitions.hpp:67</div></div>
-<div class="ttc" id="astruct_hardware_1_1_circuit_struct_html"><div class="ttname"><a href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a></div><div class="ttdoc">Defines a hardware circuit.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:138</div></div>
-<div class="ttc" id="astruct_hardware_1_1_file_buffer_struct_html"><div class="ttname"><a href="struct_hardware_1_1_file_buffer_struct.html">Hardware::FileBufferStruct</a></div><div class="ttdoc">Defines a buffer to read design files.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:54</div></div>
+<div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> Settings.hpp:109</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

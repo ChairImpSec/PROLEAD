@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Hardware/StuckAtZeroFault.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Hardware/StuckAtZeroFault.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_ee333017a7dfb067d45b2e223bebac94.html">Hardware</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_ccfa6d7c543e74965df716356c654775.html">Hardware</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -77,25 +77,29 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="_fault_8hpp.html">Hardware/Fault.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html">    6</a></span><span class="keyword">class </span><a class="code hl_class" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_fault.html">Fault</a> {</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html#a0df32e34ab51e03e6244a6d0ddf48132">   15</a></span>    <a class="code hl_function" href="class_stuck_at_zero_fault.html#a0df32e34ab51e03e6244a6d0ddf48132">StuckAtZeroFault</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> signal_index, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clock_cycle,</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                     <span class="keywordtype">double</span> fault_probability)</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        : <a class="code hl_class" href="class_fault.html">Fault</a>(signal_index, clock_cycle, fault_probability, FaultType::stuck_at_0) {}</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html#af87d8c44a2cd2ace9e6e4e19080dddb3">   25</a></span>    <span class="keyword">virtual</span> uint64_t <a class="code hl_function" href="class_stuck_at_zero_fault.html#af87d8c44a2cd2ace9e6e4e19080dddb3">ComputeFaultEffect</a>(uint64_t <span class="comment">/*fault_free_computation*/</span>)<span class="keyword"> const override </span>{</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    }</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>};</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="_fault_8hpp.html">Hardware/Fault.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html">   15</a></span><span class="keyword">class </span><a class="code hl_class" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_fault.html">Fault</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html#a27a78120b9e6b0eb9f13cd3141d49d20">   25</a></span>  <a class="code hl_function" href="class_stuck_at_zero_fault.html#a27a78120b9e6b0eb9f13cd3141d49d20">StuckAtZeroFault</a>(<span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a> *<span class="keyword">const</span> signal,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                   <span class="keywordtype">size_t</span> signal_index, <span class="keywordtype">size_t</span> clock_cycle,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                   <span class="keywordtype">double</span> fault_probability)</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>      : <a class="code hl_class" href="class_fault.html">Fault</a>(signal, signal_index, clock_cycle, fault_probability,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>              FaultType::stuck_at_0) {}</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">virtual</span> uint64_t</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="class_stuck_at_zero_fault.html#a64c9c2f7d24db9d08ed47346a756787f">   41</a></span>  <a class="code hl_function" href="class_stuck_at_zero_fault.html#a64c9c2f7d24db9d08ed47346a756787f">ComputeFaultEffect</a>([[maybe_unused]] uint64_t fault_free_computation)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  }</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>};</div>
 <div class="ttc" id="a_fault_8hpp_html"><div class="ttname"><a href="_fault_8hpp.html">Fault.hpp</a></div><div class="ttdoc">Declaration of the Fault class.</div></div>
-<div class="ttc" id="aclass_fault_html"><div class="ttname"><a href="class_fault.html">Fault</a></div><div class="ttdoc">Faults are parameteriesed by a location (signal/position and time) and a fault type.</div><div class="ttdef"><b>Definition:</b> Fault.hpp:23</div></div>
-<div class="ttc" id="aclass_stuck_at_zero_fault_html"><div class="ttname"><a href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:6</div></div>
-<div class="ttc" id="aclass_stuck_at_zero_fault_html_a0df32e34ab51e03e6244a6d0ddf48132"><div class="ttname"><a href="class_stuck_at_zero_fault.html#a0df32e34ab51e03e6244a6d0ddf48132">StuckAtZeroFault::StuckAtZeroFault</a></div><div class="ttdeci">StuckAtZeroFault(unsigned int signal_index, unsigned int clock_cycle, double fault_probability)</div><div class="ttdoc">Constructor of StuckAtZeroFault.</div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:15</div></div>
-<div class="ttc" id="aclass_stuck_at_zero_fault_html_af87d8c44a2cd2ace9e6e4e19080dddb3"><div class="ttname"><a href="class_stuck_at_zero_fault.html#af87d8c44a2cd2ace9e6e4e19080dddb3">StuckAtZeroFault::ComputeFaultEffect</a></div><div class="ttdeci">virtual uint64_t ComputeFaultEffect(uint64_t) const override</div><div class="ttdoc">Computes the effect of this fault on a given fault-free computation of a signal.</div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:25</div></div>
+<div class="ttc" id="aclass_fault_html"><div class="ttname"><a href="class_fault.html">Fault</a></div><div class="ttdoc">Faults are parameteriesed by a location (signal/position and time) and a fault type.</div><div class="ttdef"><b>Definition:</b> Fault.hpp:37</div></div>
+<div class="ttc" id="aclass_stuck_at_zero_fault_html"><div class="ttname"><a href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:15</div></div>
+<div class="ttc" id="aclass_stuck_at_zero_fault_html_a27a78120b9e6b0eb9f13cd3141d49d20"><div class="ttname"><a href="class_stuck_at_zero_fault.html#a27a78120b9e6b0eb9f13cd3141d49d20">StuckAtZeroFault::StuckAtZeroFault</a></div><div class="ttdeci">StuckAtZeroFault(const Hardware::SignalStruct *const signal, size_t signal_index, size_t clock_cycle, double fault_probability)</div><div class="ttdoc">Constructor of StuckAtZeroFault.</div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:25</div></div>
+<div class="ttc" id="aclass_stuck_at_zero_fault_html_a64c9c2f7d24db9d08ed47346a756787f"><div class="ttname"><a href="class_stuck_at_zero_fault.html#a64c9c2f7d24db9d08ed47346a756787f">StuckAtZeroFault::ComputeFaultEffect</a></div><div class="ttdeci">virtual uint64_t ComputeFaultEffect(uint64_t fault_free_computation) const override</div><div class="ttdoc">Computes the effect of this fault on a given fault-free computation of a signal.</div><div class="ttdef"><b>Definition:</b> StuckAtZeroFault.hpp:41</div></div>
+<div class="ttc" id="astruct_hardware_1_1_signal_struct_html"><div class="ttname"><a href="struct_hardware_1_1_signal_struct.html">Hardware::SignalStruct</a></div><div class="ttdef"><b>Definition:</b> Circuit.hpp:31</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

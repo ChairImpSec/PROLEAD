@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -80,69 +80,79 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>Defines a set of standard probes extended into a unified set of probe extensions.  
+ <a href="class_hardware_1_1_probing_set.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="_probing_sets_8hpp_source.html">ProbingSets.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:accb127cbb1f7f31740af91f08f1d1900"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#accb127cbb1f7f31740af91f08f1d1900">ProbingSet</a> ()</td></tr>
+<tr class="memdesc:accb127cbb1f7f31740af91f08f1d1900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for the <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> class.  <br /></td></tr>
+<tr class="separator:accb127cbb1f7f31740af91f08f1d1900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afba8fa285c25b325f6a112134fc1c383"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#afba8fa285c25b325f6a112134fc1c383">operator&lt;</a> (const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other) const</td></tr>
+<tr class="memdesc:afba8fa285c25b325f6a112134fc1c383"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this probing set with another probing set.  <br /></td></tr>
 <tr class="separator:afba8fa285c25b325f6a112134fc1c383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b4651c2b92e4ffb717666109c5d3fff"><td class="memItemLeft" align="right" valign="top"><a id="a3b4651c2b92e4ffb717666109c5d3fff" name="a3b4651c2b92e4ffb717666109c5d3fff"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other) const</td></tr>
+<tr class="memitem:a3b4651c2b92e4ffb717666109c5d3fff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a3b4651c2b92e4ffb717666109c5d3fff">operator==</a> (const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other) const</td></tr>
+<tr class="memdesc:a3b4651c2b92e4ffb717666109c5d3fff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for equality between two probing sets.  <br /></td></tr>
 <tr class="separator:a3b4651c2b92e4ffb717666109c5d3fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00b4b9a4d825e3153870f7929cf400c1"><td class="memItemLeft" align="right" valign="top"><a id="a00b4b9a4d825e3153870f7929cf400c1" name="a00b4b9a4d825e3153870f7929cf400c1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other) const</td></tr>
+<tr class="memitem:a00b4b9a4d825e3153870f7929cf400c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a00b4b9a4d825e3153870f7929cf400c1">operator!=</a> (const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other) const</td></tr>
+<tr class="memdesc:a00b4b9a4d825e3153870f7929cf400c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks for inequality between two probing sets.  <br /></td></tr>
 <tr class="separator:a00b4b9a4d825e3153870f7929cf400c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27c0a3654489d9e584360e63417c350d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a27c0a3654489d9e584360e63417c350d">SetProbes</a> (std::vector&lt; <a class="el" href="class_hardware_1_1_probe.html">Probe</a> * &gt; &amp;probe_addresses, std::vector&lt; uint64_t &gt; &amp;probe_extension_indices)</td></tr>
-<tr class="memdesc:a27c0a3654489d9e584360e63417c350d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contructs a probing set.  <br /></td></tr>
+<tr class="memdesc:a27c0a3654489d9e584360e63417c350d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the probing set with probes and their corresponding extensions.  <br /></td></tr>
 <tr class="separator:a27c0a3654489d9e584360e63417c350d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11e50b6417ab168a4f449ec9e89f3053"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_hardware_1_1_probe.html">Probe</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a11e50b6417ab168a4f449ec9e89f3053">GetProbeAddresses</a> ()</td></tr>
-<tr class="memdesc:a11e50b6417ab168a4f449ec9e89f3053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the addresses of all probes in the probing set.  <br /></td></tr>
+<tr class="memdesc:a11e50b6417ab168a4f449ec9e89f3053"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the addresses of all standard probes in the probing set.  <br /></td></tr>
 <tr class="separator:a11e50b6417ab168a4f449ec9e89f3053"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5a2c76ec82d2445f272eadce6214b5a"><td class="memItemLeft" align="right" valign="top"><a id="aa5a2c76ec82d2445f272eadce6214b5a" name="aa5a2c76ec82d2445f272eadce6214b5a"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfProbeAddresses</b> ()</td></tr>
-<tr class="separator:aa5a2c76ec82d2445f272eadce6214b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef78b2aa84e54c8ea6075a9c43a14ca"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#acef78b2aa84e54c8ea6075a9c43a14ca">GetNumberOfProbeAddresses</a> ()</td></tr>
+<tr class="memdesc:acef78b2aa84e54c8ea6075a9c43a14ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the number of probe addresses in the probing set.  <br /></td></tr>
+<tr class="separator:acef78b2aa84e54c8ea6075a9c43a14ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b9125600ad5ddecaa5fa1c6c1de249a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a9b9125600ad5ddecaa5fa1c6c1de249a">GetNumberOfProbeExtensions</a> (std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
-<tr class="memdesc:a9b9125600ad5ddecaa5fa1c6c1de249a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of probe-extensions.  <br /></td></tr>
+<tr class="memdesc:a9b9125600ad5ddecaa5fa1c6c1de249a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the number of probe extensions in the probing set.  <br /></td></tr>
 <tr class="separator:a9b9125600ad5ddecaa5fa1c6c1de249a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab7928c2f73a406915977817f229e25e"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#aab7928c2f73a406915977817f229e25e">GetExtendedProbeIndex</a> (size_t extended_probe_index)</td></tr>
-<tr class="memdesc:aab7928c2f73a406915977817f229e25e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a certain extended probe.  <br /></td></tr>
+<tr class="memdesc:aab7928c2f73a406915977817f229e25e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a specific extended probe.  <br /></td></tr>
 <tr class="separator:aab7928c2f73a406915977817f229e25e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abef6c380957f1efecfb1ebe2f440b586"><td class="memItemLeft" align="right" valign="top">ExtensionContainer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#abef6c380957f1efecfb1ebe2f440b586">GetFirstProbeExtension</a> ()</td></tr>
-<tr class="memdesc:abef6c380957f1efecfb1ebe2f440b586"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first probe-extension in the list.  <br /></td></tr>
+<tr class="memdesc:abef6c380957f1efecfb1ebe2f440b586"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the first probe extension in the sorted list.  <br /></td></tr>
 <tr class="separator:abef6c380957f1efecfb1ebe2f440b586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44d11958a7169b3b7cd60f58097b960a"><td class="memItemLeft" align="right" valign="top">ExtensionContainer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a44d11958a7169b3b7cd60f58097b960a">GetLastProbeExtension</a> ()</td></tr>
-<tr class="memdesc:a44d11958a7169b3b7cd60f58097b960a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the last probe-extension in the list.  <br /></td></tr>
+<tr class="memdesc:a44d11958a7169b3b7cd60f58097b960a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the last probe extension in the sorted list.  <br /></td></tr>
 <tr class="separator:a44d11958a7169b3b7cd60f58097b960a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d5753c275ce7321369e229d819d39e9"><td class="memItemLeft" align="right" valign="top"><a id="a5d5753c275ce7321369e229d819d39e9" name="a5d5753c275ce7321369e229d819d39e9"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetProbeExtension</b> (uint64_t index)</td></tr>
+<tr class="separator:a5d5753c275ce7321369e229d819d39e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78200eb8cba4af733ea53ab6d5a908c8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a78200eb8cba4af733ea53ab6d5a908c8">GetProbeExtensions</a> ()</td></tr>
-<tr class="memdesc:a78200eb8cba4af733ea53ab6d5a908c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list with all different probe extensions.  <br /></td></tr>
+<tr class="memdesc:a78200eb8cba4af733ea53ab6d5a908c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves all unique probe extensions.  <br /></td></tr>
 <tr class="separator:a78200eb8cba4af733ea53ab6d5a908c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad898a17c0188825c6d5a2686b95c360"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#aad898a17c0188825c6d5a2686b95c360">MarkAsRemovable</a> ()</td></tr>
-<tr class="memdesc:aad898a17c0188825c6d5a2686b95c360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the probing set as removable, i.e. strictly less informative compared to another set.  <br /></td></tr>
+<tr class="memdesc:aad898a17c0188825c6d5a2686b95c360"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the probing set as removable.  <br /></td></tr>
 <tr class="separator:aad898a17c0188825c6d5a2686b95c360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43babe9c7d970e7467e3fcab289116c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a43babe9c7d970e7467e3fcab289116c4">IsRemovable</a> ()</td></tr>
-<tr class="memdesc:a43babe9c7d970e7467e3fcab289116c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a probing set is already marked as removable.  <br /></td></tr>
+<tr class="memdesc:a43babe9c7d970e7467e3fcab289116c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the probing set is marked as removable.  <br /></td></tr>
 <tr class="separator:a43babe9c7d970e7467e3fcab289116c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8404751d4894c75b39497ff2bc573169"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a8404751d4894c75b39497ff2bc573169">Includes</a> (<a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a> &amp;other, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
-<tr class="memdesc:a8404751d4894c75b39497ff2bc573169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a probing set fully-includes another probing set.  <br /></td></tr>
+<tr class="memdesc:a8404751d4894c75b39497ff2bc573169"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the current probing set fully includes another probing set.  <br /></td></tr>
 <tr class="separator:a8404751d4894c75b39497ff2bc573169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa57de2e7aa59076200503976aad8100c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#aa57de2e7aa59076200503976aad8100c">Initialize</a> (bool is_in_compact_mode, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
-<tr class="memdesc:aa57de2e7aa59076200503976aad8100c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the contingency table.  <br /></td></tr>
-<tr class="separator:aa57de2e7aa59076200503976aad8100c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5268f9b2b9d7ae76767f7895873b2534"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a5268f9b2b9d7ae76767f7895873b2534">Initialize</a> (bool is_in_compact_mode, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations, uint64_t number_of_groups)</td></tr>
+<tr class="memdesc:a5268f9b2b9d7ae76767f7895873b2534"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the contingency table.  <br /></td></tr>
+<tr class="separator:a5268f9b2b9d7ae76767f7895873b2534"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a8a3ada4b391a84c399014fedb831da"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a8a8a3ada4b391a84c399014fedb831da">GetGValue</a> ()</td></tr>
-<tr class="memdesc:a8a8a3ada4b391a84c399014fedb831da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a particular extended probe is in the extension set..  <br /></td></tr>
+<tr class="memdesc:a8a8a3ada4b391a84c399014fedb831da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the value of -log10(p).  <br /></td></tr>
 <tr class="separator:a8a8a3ada4b391a84c399014fedb831da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad38d6e4b803fba97ba8bdc13a3fed4db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#ad38d6e4b803fba97ba8bdc13a3fed4db">ComputeGTest</a> (uint64_t number_of_groups, uint64_t number_of_simulations, std::vector&lt; double_t &gt; &amp;group_simulation_ratio)</td></tr>
 <tr class="memdesc:ad38d6e4b803fba97ba8bdc13a3fed4db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs the full g-test procedure.  <br /></td></tr>
 <tr class="separator:ad38d6e4b803fba97ba8bdc13a3fed4db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5650c2af52fb5c57e066093888c1d9c3"><td class="memItemLeft" align="right" valign="top"><a id="a5650c2af52fb5c57e066093888c1d9c3" name="a5650c2af52fb5c57e066093888c1d9c3"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfEntries</b> ()</td></tr>
+<tr class="memitem:a5650c2af52fb5c57e066093888c1d9c3"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a5650c2af52fb5c57e066093888c1d9c3">GetNumberOfEntries</a> ()</td></tr>
+<tr class="memdesc:a5650c2af52fb5c57e066093888c1d9c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the number of entries in the contingency table.  <br /></td></tr>
 <tr class="separator:a5650c2af52fb5c57e066093888c1d9c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d2a81e468e6397f70980b5759968168"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a3d2a81e468e6397f70980b5759968168">ComputeNumberOfRequiredTraces</a> (size_t number_of_groups, double beta_threshold, double effect_size)</td></tr>
-<tr class="memdesc:a3d2a81e468e6397f70980b5759968168"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the number of required traces.  <br /></td></tr>
-<tr class="separator:a3d2a81e468e6397f70980b5759968168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6f18b6f6314388df1ff02f362de9a0d"><td class="memItemLeft" align="right" valign="top"><a id="ae6f18b6f6314388df1ff02f362de9a0d" name="ae6f18b6f6314388df1ff02f362de9a0d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CompactTableUpdate</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
 <tr class="separator:ae6f18b6f6314388df1ff02f362de9a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abae08542e251d3d1a9379c2fcced3982"><td class="memItemLeft" align="right" valign="top"><a id="abae08542e251d3d1a9379c2fcced3982" name="abae08542e251d3d1a9379c2fcced3982"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>NormalTableUpdateWithAllSimulations</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
+<tr class="separator:abae08542e251d3d1a9379c2fcced3982"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97ab0c7dee071399865636d776a59fa0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_hardware_1_1_probing_set.html#a97ab0c7dee071399865636d776a59fa0">NormalTableUpdate</a> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations)</td></tr>
 <tr class="memdesc:a97ab0c7dee071399865636d776a59fa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the contingency table with new simulations in normal mode.  <br /></td></tr>
 <tr class="separator:a97ab0c7dee071399865636d776a59fa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,18 +168,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Deconstruct</b> ()</t
 <tr class="memitem:adceddb51db95fc0f2cfe0f8aa94c7324"><td class="memItemLeft" align="right" valign="top"><a id="adceddb51db95fc0f2cfe0f8aa94c7324" name="adceddb51db95fc0f2cfe0f8aa94c7324"></a>
 uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetHighestClockCycle</b> (std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;propagations, std::vector&lt; <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &gt; &amp;probe_extensions)</td></tr>
 <tr class="separator:adceddb51db95fc0f2cfe0f8aa94c7324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e3586b468d73d8412c82eb4af5a0df8"><td class="memItemLeft" align="right" valign="top"><a id="a6e3586b468d73d8412c82eb4af5a0df8" name="a6e3586b468d73d8412c82eb4af5a0df8"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetSizeOfKeyInBytes</b> ()</td></tr>
+<tr class="separator:a6e3586b468d73d8412c82eb4af5a0df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bc50d8df41ac7ed1df875d30f4500a0"><td class="memItemLeft" align="right" valign="top"><a id="a5bc50d8df41ac7ed1df875d30f4500a0" name="a5bc50d8df41ac7ed1df875d30f4500a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>IncrementSpecificCounter</b> (uint64_t key_index, uint64_t group_index)</td></tr>
+<tr class="separator:a5bc50d8df41ac7ed1df875d30f4500a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a404c940e765915f7716e3e8e206c89"><td class="memItemLeft" align="right" valign="top"><a id="a5a404c940e765915f7716e3e8e206c89" name="a5a404c940e765915f7716e3e8e206c89"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfProbeExtensions</b> (std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; RobustProbe &gt; &gt; &amp;)</td></tr>
 <tr class="separator:a5a404c940e765915f7716e3e8e206c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a955fb03d2e93bea7f4ba17407bfd3055"><td class="memItemLeft" align="right" valign="top"><a id="a955fb03d2e93bea7f4ba17407bfd3055" name="a955fb03d2e93bea7f4ba17407bfd3055"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetNumberOfProbeExtensions</b> (std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; <a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a> &gt; &gt; &amp;propagations)</td></tr>
 <tr class="separator:a955fb03d2e93bea7f4ba17407bfd3055"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34ebb5c5d11ee82f26ce7778c87f99d4"><td class="memItemLeft" align="right" valign="top"><a id="a34ebb5c5d11ee82f26ce7778c87f99d4" name="a34ebb5c5d11ee82f26ce7778c87f99d4"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>CompactTableUpdate</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; RobustProbe &gt; &gt; &amp;propagations)</td></tr>
-<tr class="separator:a34ebb5c5d11ee82f26ce7778c87f99d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73eeae288480a08c2ceaf730b7435bd8"><td class="memItemLeft" align="right" valign="top"><a id="a73eeae288480a08c2ceaf730b7435bd8" name="a73eeae288480a08c2ceaf730b7435bd8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>CompactTableUpdate</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; <a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a> &gt; &gt; &amp;propagations)</td></tr>
 <tr class="separator:a73eeae288480a08c2ceaf730b7435bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5599b720d7d4c9e83a4afaff0c51690"><td class="memItemLeft" align="right" valign="top"><a id="aa5599b720d7d4c9e83a4afaff0c51690" name="aa5599b720d7d4c9e83a4afaff0c51690"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>NormalTableUpdateWithAllSimulations</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; RobustProbe &gt; &gt; &amp;propagations)</td></tr>
+<tr class="separator:aa5599b720d7d4c9e83a4afaff0c51690"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9db850cdeb7a7aaadd1e0e89b9cfd6f3"><td class="memItemLeft" align="right" valign="top"><a id="a9db850cdeb7a7aaadd1e0e89b9cfd6f3" name="a9db850cdeb7a7aaadd1e0e89b9cfd6f3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>NormalTableUpdateWithAllSimulations</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; <a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a> &gt; &gt; &amp;propagations)</td></tr>
+<tr class="separator:a9db850cdeb7a7aaadd1e0e89b9cfd6f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a432e58e84905824c9f6e6df3f2afa0c8"><td class="memItemLeft" align="right" valign="top"><a id="a432e58e84905824c9f6e6df3f2afa0c8" name="a432e58e84905824c9f6e6df3f2afa0c8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>NormalTableUpdate</b> (const <a class="el" href="class_settings.html">Settings</a> &amp;settings, <a class="el" href="class_simulation.html">Simulation</a> &amp;simulation, std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; RobustProbe &gt; &gt; &amp;propagations)</td></tr>
 <tr class="separator:a432e58e84905824c9f6e6df3f2afa0c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,11 +201,47 @@ uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetHighestClockCy
 <tr class="memitem:a25c9c171fb976e2c60c7e472651e952a"><td class="memItemLeft" align="right" valign="top"><a id="a25c9c171fb976e2c60c7e472651e952a" name="a25c9c171fb976e2c60c7e472651e952a"></a>
 uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetHighestClockCycle</b> (std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; <a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a> &gt; &gt; &amp;propagations, std::vector&lt; <a class="el" href="class_hardware_1_1_probe.html">Probe</a> &gt; &amp;probe_extensions)</td></tr>
 <tr class="separator:a25c9c171fb976e2c60c7e472651e952a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea128210b14acbd1c5b59f928ffdb6b3"><td class="memItemLeft" align="right" valign="top"><a id="aea128210b14acbd1c5b59f928ffdb6b3" name="aea128210b14acbd1c5b59f928ffdb6b3"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>GetSizeOfKeyInBytes</b> ()</td></tr>
+<tr class="separator:aea128210b14acbd1c5b59f928ffdb6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd3765ef573d1c09d4dbafeefaf05c5e"><td class="memItemLeft" align="right" valign="top"><a id="afd3765ef573d1c09d4dbafeefaf05c5e" name="afd3765ef573d1c09d4dbafeefaf05c5e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>IncrementSpecificCounter</b> (uint64_t key_index, uint64_t group_index)</td></tr>
+<tr class="separator:afd3765ef573d1c09d4dbafeefaf05c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename ExtensionContainer&gt;<br />
-class Hardware::ProbingSet&lt; ExtensionContainer &gt;</div><p>This class defines a probing set, i.e. a set of multiple standard probes which are extended to a joint set of probe extensions. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+class Hardware::ProbingSet&lt; ExtensionContainer &gt;</div><p>Defines a set of standard probes extended into a unified set of probe extensions. </p>
+<p>The <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> class represents a set of probes (placed by a potential adversary) that are extended to create a joint set of probes (observed by a potential adversary). This class includes functionality for comparing, managing, and analyzing a probing set.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ExtensionContainer</td><td>The data structure used for storing the probe extensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="accb127cbb1f7f31740af91f08f1d1900" name="accb127cbb1f7f31740af91f08f1d1900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accb127cbb1f7f31740af91f08f1d1900">&#9670;&#160;</a></span>ProbingSet()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExtensionContainer &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">template <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::ProbingSet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor for the <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> class. </p>
+<p>Initializes an empty <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> object. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad38d6e4b803fba97ba8bdc13a3fed4db" name="ad38d6e4b803fba97ba8bdc13a3fed4db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad38d6e4b803fba97ba8bdc13a3fed4db">&#9670;&#160;</a></span>ComputeGTest()</h2>
 
@@ -222,62 +277,15 @@ template&lt;class ExtensionContainer &gt; </div>
 </div><div class="memdoc">
 
 <p>Performs the full g-test procedure. </p>
+<p>This method conducts the full g-test procedure, which is a statistical test used to analyze the distribution of probed signals.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">number_of_groups</td><td>The number of groups. </td></tr>
-    <tr><td class="paramname">number_of_simulations</td><td>The number of already performed simulations. </td></tr>
-    <tr><td class="paramname">frequencies</td><td>The pre-computed frequencies. </td></tr>
+    <tr><td class="paramname">number_of_groups</td><td>The number of groups to be tested. </td></tr>
+    <tr><td class="paramname">number_of_simulations</td><td>The number of simulations already performed. </td></tr>
+    <tr><td class="paramname">frequencies</td><td>The pre-computed frequencies for the g-test. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
-
-</div>
-</div>
-<a id="a3d2a81e468e6397f70980b5759968168" name="a3d2a81e468e6397f70980b5759968168"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d2a81e468e6397f70980b5759968168">&#9670;&#160;</a></span>ComputeNumberOfRequiredTraces()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename ExtensionContainer &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::ComputeNumberOfRequiredTraces </td>
-          <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>number_of_groups</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>beta_threshold</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>effect_size</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the number of required traces. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">number_of_groups</td><td>The number of groups. </td></tr>
-    <tr><td class="paramname">beta_threshold</td><td>The desired false-negative probability to achieve. </td></tr>
-    <tr><td class="paramname">effect_size</td><td>The desired effect size to achieve. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -299,15 +307,16 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a certain extended probe. </p>
+<p>Retrieves a specific extended probe. </p>
+<p>This method returns the index of a specific extended probe based on its position in the probe_extension_indices_ vector.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">extended_probe_index</td><td>The index (in probe_extension_indices_) of the extended probe to return. </td></tr>
+    <tr><td class="paramname">extended_probe_index</td><td>The index of the extended probe in the probe_extension_indices_ vector. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The index (in extended_probes_ (see adversary)) of the returned extended probe. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The index of the extended probe in the extended_probes_ vector. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_hardware_1_1_adversaries.html">Adversaries</a> </dd></dl>
 
 </div>
 </div>
@@ -328,9 +337,10 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the first probe-extension in the list. </p>
-<p>We remark that the probe_extension_indices list is sorted. Hence, if we need the extension with the smallest clock cycle we can just take the first element in the list. For example, finding the probe-extension with the smallest clock cycle is required to check the distance. </p><dl class="section return"><dt>Returns</dt><dd>The index (in extended_probes_ (see adversary)) of the returned extended probe. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the first probe extension in the sorted list. </p>
+<p>Since the probe_extension_indices_ list is sorted, this method returns the first probe extension, which is typically used for analyzing the smallest clock cycle among the extensions.</p>
+<dl class="section return"><dt>Returns</dt><dd>The index of the first extended probe in the extended_probes_ vector. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_hardware_1_1_adversaries.html">Adversaries</a> </dd></dl>
 
 </div>
 </div>
@@ -351,17 +361,9 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Checks if a particular extended probe is in the extension set.. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">index</td><td>The index of the extended probe to find. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the extended probe is in the extension set, False if not. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller</dd></dl>
-<p>Returns -log10(p). </p><dl class="section return"><dt>Returns</dt><dd>-log10(p) </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the value of -log10(p). </p>
+<p>This method returns the value of -log10(p), which is used in statistical analysis.</p>
+<dl class="section return"><dt>Returns</dt><dd>The computed value of -log10(p). </dd></dl>
 
 </div>
 </div>
@@ -382,9 +384,54 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the last probe-extension in the list. </p>
-<p>We remark that the probe_extension_indices list is sorted. Hence, if we need the extension with the highest clock cycle we can just take the last element in the list. For example, finding the probe-extension with the highest clock cycle is required to check the distance. </p><dl class="section return"><dt>Returns</dt><dd>The index (in extended_probes_ (see adversary)) of the returned extended probe. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the last probe extension in the sorted list. </p>
+<p>Since the probe_extension_indices_ list is sorted, this method returns the last probe extension, which is typically used for analyzing the highest clock cycle among the extensions.</p>
+<dl class="section return"><dt>Returns</dt><dd>The index of the last extended probe in the extended_probes_ vector. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_hardware_1_1_adversaries.html">Adversaries</a> </dd></dl>
+
+</div>
+</div>
+<a id="a5650c2af52fb5c57e066093888c1d9c3" name="a5650c2af52fb5c57e066093888c1d9c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5650c2af52fb5c57e066093888c1d9c3">&#9670;&#160;</a></span>GetNumberOfEntries()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExtensionContainer &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">template uint64_t <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::GetNumberOfEntries </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the number of entries in the contingency table. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of entries in the contingency table. </dd></dl>
+
+</div>
+</div>
+<a id="acef78b2aa84e54c8ea6075a9c43a14ca" name="acef78b2aa84e54c8ea6075a9c43a14ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acef78b2aa84e54c8ea6075a9c43a14ca">&#9670;&#160;</a></span>GetNumberOfProbeAddresses()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExtensionContainer &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">template uint64_t <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::GetNumberOfProbeAddresses </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the number of probe addresses in the probing set. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of probe addresses in the probing set. </dd></dl>
 
 </div>
 </div>
@@ -406,9 +453,27 @@ template&lt;typename ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the number of probe-extensions. </p>
-<dl class="section return"><dt>Returns</dt><dd>The number of probe-extensions. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the number of probe extensions in the probing set. </p>
+<p>This method calculates the (maximum) number of probe extensions based on the probe type specialization. For <code>RobustProbe</code>, it returns the size of the <code>probe_extension_indices_</code> vector, as each index corresponds to a distinct extension. For <code><a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a></code>, the method computes the total number of extensions by summing the signal and enable indices from the associated <code><a class="el" href="class_hardware_1_1_propagation.html">Propagation</a></code> objects.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">propagations</td><td>A vector of <code><a class="el" href="class_hardware_1_1_propagation.html">Propagation</a></code> objects, which are used to calculate the total number of extensions for <code><a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a></code> specializations. This parameter is unused for <code>RobustProbe</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The total maximum number of probe extensions. </dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ExtensionContainer</td><td>The type of the probe, either <code>RobustProbe</code> or <code><a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>The method's behavior differs based on the specialization:<ul>
+<li>For <code>RobustProbe</code>, it returns the count of elements in <code>probe_extension_indices_</code>.</li>
+<li>For <code><a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a></code>, it aggregates the number of signal and enable indices. </li>
+</ul>
+</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_hardware_1_1_propagation.html">Propagation</a> </dd></dl>
 
 </div>
 </div>
@@ -429,9 +494,9 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns the addresses of all probes in the probing set. </p>
-<dl class="section return"><dt>Returns</dt><dd>The adresses of all probes in the probing set. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves the addresses of all standard probes in the probing set. </p>
+<p>This method returns a vector containing the addresses of all standard probes within the probing set.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector of pointers to the standard probes in the probing set. </dd></dl>
 
 </div>
 </div>
@@ -452,9 +517,9 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Returns a list with all different probe extensions. </p>
-<dl class="section return"><dt>Returns</dt><dd>A list of different probe-extensions. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Retrieves all unique probe extensions. </p>
+<p>This method returns a list of all unique probe extensions in the probing set.</p>
+<dl class="section return"><dt>Returns</dt><dd>A vector containing the indices of unique probe extensions. </dd></dl>
 
 </div>
 </div>
@@ -486,20 +551,35 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether a probing set fully-includes another probing set. </p>
+<p>Checks whether the current probing set fully includes another probing set. </p>
+<p>This method determines if the current <code><a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a></code> (referred to as "this") fully includes another <code><a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a></code> (referred to as "other"). A probing set is said to fully include another if all the probe extensions in "other" are also present in "this", and the set of extensions in "this" spans a wider or equal range of clock cycles than those in "other".</p>
+<p>The inclusion check follows these steps:</p><ol type="1">
+<li>If either the current probing set or the other set is marked as removable, they cannot include one another.</li>
+<li>If the number of probe extensions in "this" is less than or equal to that in "other", "this" cannot include "other".</li>
+<li>If the range of clock cycles covered by "this" (from the first to the last probe extension) is wider or equal to that of "other", the method proceeds to the next step.</li>
+<li>Finally, if all probe extensions of "other" are found within "this", in the correct order, the method returns true, indicating that "this" fully includes "other". Otherwise, it returns false.</li>
+</ol>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">other</td><td>The other probing set which is maybe included. </td></tr>
+    <tr><td class="paramname">other</td><td>The other <code><a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a></code> to check for inclusion within the current set. </td></tr>
+    <tr><td class="paramname">propagations</td><td>A vector of <code><a class="el" href="class_hardware_1_1_propagation.html">Propagation</a></code> objects used to retrieve probe extension information. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if other is fully-included, False if not. </dd></dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the current probing set fully includes the other set, false otherwise. </dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">ExtensionContainer</td><td>The type of the probe extension, typically <code>RobustProbe</code> or <code><a class="el" href="class_hardware_1_1_relaxed_probe.html">RelaxedProbe</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This method ensures that "this" must have a wider or equal range of probe extensions and include all probe extensions of the "other" set in order to return true. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_hardware_1_1_probing_set.html#a9b9125600ad5ddecaa5fa1c6c1de249a" title="Retrieves the number of probe extensions in the probing set.">GetNumberOfProbeExtensions</a>, <a class="el" href="class_hardware_1_1_probing_set.html#abef6c380957f1efecfb1ebe2f440b586" title="Retrieves the first probe extension in the sorted list.">GetFirstProbeExtension</a>, <a class="el" href="class_hardware_1_1_probing_set.html#a44d11958a7169b3b7cd60f58097b960a" title="Retrieves the last probe extension in the sorted list.">GetLastProbeExtension</a>, <a class="el" href="class_hardware_1_1_probing_set.html#a43babe9c7d970e7467e3fcab289116c4" title="Checks if the probing set is marked as removable.">IsRemovable</a>, <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a> </dd></dl>
 
 </div>
 </div>
-<a id="aa57de2e7aa59076200503976aad8100c" name="aa57de2e7aa59076200503976aad8100c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa57de2e7aa59076200503976aad8100c">&#9670;&#160;</a></span>Initialize()</h2>
+<a id="a5268f9b2b9d7ae76767f7895873b2534" name="a5268f9b2b9d7ae76767f7895873b2534"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5268f9b2b9d7ae76767f7895873b2534">&#9670;&#160;</a></span>Initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -516,7 +596,13 @@ template&lt;class ExtensionContainer &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a>&lt; ExtensionContainer &gt; &gt; &amp;&#160;</td>
-          <td class="paramname"><em>propagations</em>&#160;</td>
+          <td class="paramname"><em>propagations</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>number_of_groups</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -527,13 +613,14 @@ template&lt;class ExtensionContainer &gt; </div>
 </div><div class="memdoc">
 
 <p>Initializes the contingency table. </p>
+<p>This method initializes the contingency table, which is used to store distributions of the observation set. The initialization can vary based on whether the system is operating in compact mode.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">is_in_compact_mode</td><td>decision whether PROLEAD operates in compact mode or not. </td></tr>
+    <tr><td class="paramname">is_in_compact_mode</td><td>A boolean indicating whether PROLEAD operates in compact mode. </td></tr>
+    <tr><td class="paramname">propagations</td><td>A vector of <a class="el" href="class_hardware_1_1_propagation.html">Propagation</a> objects containing the propagation procedures. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
@@ -554,8 +641,9 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Checks whether a probing set is already marked as removable. </p>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Checks if the probing set is marked as removable. </p>
+<p>This method checks whether the probing set has been flagged as removable.</p>
+<dl class="section return"><dt>Returns</dt><dd>True if the probing set is marked as removable, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -576,8 +664,9 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Marks the probing set as removable, i.e. strictly less informative compared to another set. </p>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
+<p>Marks the probing set as removable. </p>
+<p>This method flags the probing set as removable, indicating that it is strictly less informative compared to another set and can be discarded.</p>
+<dl class="section note"><dt>Note</dt><dd>This is typically used in optimization procedures to reduce the number of probing sets. </dd></dl>
 
 </div>
 </div>
@@ -627,6 +716,36 @@ template&lt;typename ExtensionContainer &gt; </div>
 
 </div>
 </div>
+<a id="a00b4b9a4d825e3153870f7929cf400c1" name="a00b4b9a4d825e3153870f7929cf400c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b4b9a4d825e3153870f7929cf400c1">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExtensionContainer &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">template bool <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a>&lt; ExtensionContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks for inequality between two probing sets. </p>
+<p>Overloads the inequality operator to compare two <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> objects based on their probe extensions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the probing sets are not equal, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="afba8fa285c25b325f6a112134fc1c383" name="afba8fa285c25b325f6a112134fc1c383"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afba8fa285c25b325f6a112134fc1c383">&#9670;&#160;</a></span>operator&lt;()</h2>
 
@@ -644,7 +763,46 @@ template&lt;class ExtensionContainer &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>We need to overload some operators for the probing sets as well to sort a list of probing sets and also to search for particular probing sets within a list. The operators are defined based on the probe-extensions, i.e. two probing sets are equal if there probe-extensions are equal. </p>
+
+<p>Compares this probing set with another probing set. </p>
+<p>Overloads the less-than operator to enable sorting of probing sets. The comparison is based on the probe extensions, meaning two probing sets are considered equal if their probe extensions are equal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if this probing set is less than the other, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a3b4651c2b92e4ffb717666109c5d3fff" name="a3b4651c2b92e4ffb717666109c5d3fff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b4651c2b92e4ffb717666109c5d3fff">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class ExtensionContainer &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">template bool <a class="el" href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a>&lt; ExtensionContainer &gt;::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_hardware_1_1_probing_set.html">ProbingSet</a>&lt; ExtensionContainer &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks for equality between two probing sets. </p>
+<p>Overloads the equality operator to compare two <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> objects based on their probe extensions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>The other <a class="el" href="class_hardware_1_1_probing_set.html" title="Defines a set of standard probes extended into a unified set of probe extensions.">ProbingSet</a> object to compare with. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both probing sets are equal, false otherwise. </dd></dl>
 
 </div>
 </div>
@@ -705,21 +863,21 @@ template&lt;class ExtensionContainer &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Contructs a probing set. </p>
+<p>Initializes the probing set with probes and their corresponding extensions. </p>
+<p>This method sets the probes and their corresponding extensions for the probing set.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">probe_addresses</td><td>A vector of probes storing all the probes placed by the adversary. </td></tr>
-    <tr><td class="paramname">probe_extension_indices</td><td>The list of resulting probe extensions. </td></tr>
+    <tr><td class="paramname">probe_addresses</td><td>A vector of pointers to the probes placed by the adversary. </td></tr>
+    <tr><td class="paramname">probe_extension_indices</td><td>A vector of indices representing the resulting probe extensions. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section author"><dt>Author</dt><dd>Nicolai Müller </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>PROLEAD/inc/Hardware/<a class="el" href="_probing_sets_8hpp_source.html">ProbingSets.hpp</a></li>
-<li>PROLEAD/src/Hardware/ProbingSets.cpp</li>
+<li>PROLEAD_public/inc/Hardware/<a class="el" href="_probing_sets_8hpp_source.html">ProbingSets.hpp</a></li>
+<li>PROLEAD_public/src/Hardware/ProbingSets.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

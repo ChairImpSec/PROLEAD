@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Hardware/Printer.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Hardware/Printer.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_ee333017a7dfb067d45b2e223bebac94.html">Hardware</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_ccfa6d7c543e74965df716356c654775.html">Hardware</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -80,84 +80,86 @@ $(function() {
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;Hardware/ProbingSets.hpp&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span>Hardware {</div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">The Printer class takes care of printing all necessary information to the</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">console or into files.</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExtensionContainer&gt;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="class_hardware_1_1_printer.html">   14</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_printer.html">Printer</a> {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  <a class="code hl_class" href="class_hardware_1_1_printer.html">Printer</a>();</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keywordtype">void</span> SetColumnSize(std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keywordtype">void</span> SetPath(std::string path);                   </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  std::string PrintProbes(std::vector&lt;Probe&gt;&amp; probes, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  std::string PrintProbes(std::vector&lt;Probe*&gt;&amp; probes, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  std::string PrintProbingSet(</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>      <a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&amp; probing_set,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="keywordtype">void</span> PrintProbingSetInformation(</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>      std::vector&lt;Probe&gt;&amp; standard_probes, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <span class="keywordtype">void</span> PrintEvaluationHeader();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="keywordtype">void</span> PrintEvaluationBody(</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      <a class="code hl_class" href="class_simulation.html">Simulation</a>&amp; simulation, <span class="keywordtype">double</span>&amp; maximum_g_value_deleted,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      std::string&amp; printed_probing_set_deleted, <span class="keywordtype">double</span> elapsed_time_period);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keywordtype">void</span> PrintReport(std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                   std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                   std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                   <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                   <a class="code hl_class" href="class_simulation.html">Simulation</a>&amp; simulation, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> probe_step_index);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keywordtype">void</span> PrintError(std::string error_message);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> column_size_;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  std::string path_;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <span class="keyword">const</span> std::string report_prefix_ = <span class="stringliteral">&quot;report_&quot;</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="keyword">const</span> std::string standard_error_text =</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>      <span class="stringliteral">&quot;We apologize for any inconvenience caused by the bug you encountered in &quot;</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      <span class="stringliteral">&quot;PROLEAD. Our team is committed to resolving this issue promptly to &quot;</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>      <span class="stringliteral">&quot;enhance your experience. Please reach out to me directly at &quot;</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      <span class="stringliteral">&quot;nicolai.mueller@rub.de so that we can assist you in fixing the problem. &quot;</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <span class="stringliteral">&quot;Thank you for bringing this to our attention.\n&quot;</span>;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  std::string PrintProbe(<a class="code hl_class" href="class_hardware_1_1_probe.html">Probe</a>&amp; probe, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  std::string PrintRelaxedExtension(</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>      ExtensionContainer&amp; probe, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  std::string PrintExtensions(</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>      <a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&amp; probing_set,</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>      std::vector&lt;Probe&gt;&amp; probe_extensions, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keywordtype">void</span> PrintMostLeakingSetsPerCycle(</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings, std::ofstream&amp; stream);</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">void</span> PrintMostLeakingSets(</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings, std::ofstream&amp; stream);</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>};</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>}  <span class="comment">// namespace Hardware</span></div>
-<div class="ttc" id="aclass_hardware_1_1_printer_html"><div class="ttname"><a href="class_hardware_1_1_printer.html">Hardware::Printer</a></div><div class="ttdef"><b>Definition:</b> Printer.hpp:14</div></div>
-<div class="ttc" id="aclass_hardware_1_1_probe_html"><div class="ttname"><a href="class_hardware_1_1_probe.html">Hardware::Probe</a></div><div class="ttdef"><b>Definition:</b> Probes.hpp:18</div></div>
-<div class="ttc" id="aclass_hardware_1_1_probing_set_html"><div class="ttname"><a href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a></div><div class="ttdef"><b>Definition:</b> ProbingSets.hpp:18</div></div>
-<div class="ttc" id="aclass_hardware_1_1_propagation_html"><div class="ttname"><a href="class_hardware_1_1_propagation.html">Hardware::Propagation</a></div><div class="ttdef"><b>Definition:</b> Propagation.hpp:47</div></div>
-<div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> Settings.hpp:99</div></div>
-<div class="ttc" id="aclass_simulation_html"><div class="ttname"><a href="class_simulation.html">Simulation</a></div><div class="ttdef"><b>Definition:</b> Definitions.hpp:223</div></div>
-<div class="ttc" id="astruct_hardware_1_1_circuit_struct_html"><div class="ttname"><a href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a></div><div class="ttdoc">Defines a hardware circuit.</div><div class="ttdef"><b>Definition:</b> Definitions.hpp:138</div></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="_probing_sets_8hpp.html">Hardware/ProbingSets.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;Hardware/Circuit.hpp&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>Hardware {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">The Printer class takes care of printing all necessary information to the</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">console or into files.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExtensionContainer&gt;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="class_hardware_1_1_printer.html">   15</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_printer.html">Printer</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <a class="code hl_class" href="class_hardware_1_1_printer.html">Printer</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <span class="keywordtype">void</span> SetColumnSize(std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  <span class="keywordtype">void</span> SetPath(std::string path);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  std::string PrintProbes(std::vector&lt;Probe&gt;&amp; probes, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  std::string PrintProbes(std::vector&lt;Probe*&gt;&amp; probes, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  std::string PrintProbingSet(</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>      <a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&amp; probing_set,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  <span class="keywordtype">void</span> PrintProbingSetInformation(</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>      std::vector&lt;Probe&gt;&amp; standard_probes, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="keywordtype">void</span> PrintEvaluationHeader();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <span class="keywordtype">void</span> PrintEvaluationBody(</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      <a class="code hl_class" href="class_simulation.html">Simulation</a>&amp; simulation, <span class="keywordtype">double</span>&amp; maximum_g_value_deleted,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      std::string&amp; printed_probing_set_deleted, <span class="keywordtype">double</span> elapsed_time_period);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="keywordtype">void</span> PrintReport(std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                   std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                   std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                   <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                   <a class="code hl_class" href="class_simulation.html">Simulation</a>&amp; simulation, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> probe_step_index);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keywordtype">void</span> PrintError(std::string error_message);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> column_size_;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  std::string path_;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="keyword">const</span> std::string report_prefix_ = <span class="stringliteral">&quot;report_&quot;</span>;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keyword">const</span> std::string standard_error_text =</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>      <span class="stringliteral">&quot;We apologize for any inconvenience caused by the bug you encountered in &quot;</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>      <span class="stringliteral">&quot;PROLEAD. Our team is committed to resolving this issue promptly to &quot;</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      <span class="stringliteral">&quot;enhance your experience. Please reach out to me directly at &quot;</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <span class="stringliteral">&quot;nicolai.mueller@rub.de so that we can assist you in fixing the problem. &quot;</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>      <span class="stringliteral">&quot;Thank you for bringing this to our attention.\n&quot;</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  std::string PrintProbe(<a class="code hl_class" href="class_hardware_1_1_probe.html">Probe</a>&amp; probe, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  std::string PrintRelaxedExtension(</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>      ExtensionContainer&amp; probe, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  std::string PrintExtensions(</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>      <a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&amp; probing_set,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>      std::vector&lt;Probe&gt;&amp; probe_extensions, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">void</span> PrintMostLeakingSetsPerCycle(</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings, std::ofstream&amp; stream);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">void</span> PrintMostLeakingSets(</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_propagation.html">Propagation&lt;ExtensionContainer&gt;</a>&gt;&amp; propagations, std::vector&lt;Probe&gt;&amp; probe_extensions,</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>      std::vector&lt;<a class="code hl_class" href="class_hardware_1_1_probing_set.html">ProbingSet&lt;ExtensionContainer&gt;</a>&gt;&amp; probing_sets,</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_circuit_struct.html">CircuitStruct</a>&amp; circuit, <span class="keyword">const</span> <a class="code hl_class" href="class_settings.html">Settings</a>&amp; settings, std::ofstream&amp; stream);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>};</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>}  <span class="comment">// namespace Hardware</span></div>
+<div class="ttc" id="a_probing_sets_8hpp_html"><div class="ttname"><a href="_probing_sets_8hpp.html">ProbingSets.hpp</a></div><div class="ttdoc">Declaration of the ProbingSet class.</div></div>
+<div class="ttc" id="aclass_hardware_1_1_printer_html"><div class="ttname"><a href="class_hardware_1_1_printer.html">Hardware::Printer</a></div><div class="ttdef"><b>Definition:</b> Printer.hpp:15</div></div>
+<div class="ttc" id="aclass_hardware_1_1_probe_html"><div class="ttname"><a href="class_hardware_1_1_probe.html">Hardware::Probe</a></div><div class="ttdoc">Represents a probe that records the stable signal driven by a wire during a single clock cycle.</div><div class="ttdef"><b>Definition:</b> Probes.hpp:35</div></div>
+<div class="ttc" id="aclass_hardware_1_1_probing_set_html"><div class="ttname"><a href="class_hardware_1_1_probing_set.html">Hardware::ProbingSet</a></div><div class="ttdoc">Defines a set of standard probes extended into a unified set of probe extensions.</div><div class="ttdef"><b>Definition:</b> ProbingSets.hpp:40</div></div>
+<div class="ttc" id="aclass_hardware_1_1_propagation_html"><div class="ttname"><a href="class_hardware_1_1_propagation.html">Hardware::Propagation</a></div><div class="ttdef"><b>Definition:</b> Propagation.hpp:48</div></div>
+<div class="ttc" id="aclass_settings_html"><div class="ttname"><a href="class_settings.html">Settings</a></div><div class="ttdef"><b>Definition:</b> Settings.hpp:109</div></div>
+<div class="ttc" id="aclass_simulation_html"><div class="ttname"><a href="class_simulation.html">Simulation</a></div><div class="ttdef"><b>Definition:</b> Definitions.hpp:53</div></div>
+<div class="ttc" id="astruct_hardware_1_1_circuit_struct_html"><div class="ttname"><a href="struct_hardware_1_1_circuit_struct.html">Hardware::CircuitStruct</a></div><div class="ttdoc">Defines a hardware circuit.</div><div class="ttdef"><b>Definition:</b> Circuit.hpp:49</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

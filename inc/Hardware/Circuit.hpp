@@ -9,36 +9,11 @@
 #define CellType_Gate 0
 #define CellType_Reg 1
 
-#define Operation_AND 0
-#define Operation_OR 1
-#define Operation_XOR 2
-#define Operation_NOT 3
-
 #define SignalType_input 0
 #define SignalType_output 1
 #define SignalType_wire 2
 
 namespace Hardware {
-
-struct OperationStruct {
-  unsigned char NumberOfClauses;
-  char* OperationOfClause;
-  unsigned char* NumberOfOperandsInClause;
-  unsigned char** OperandsInClause;
-};
-
-struct CellTypeStruct {
-  char GateOrReg;
-  unsigned char NumberOfCases;
-  char** Cases;
-  char NumberOfInputs;
-  char** Inputs;
-  char NumberOfOutputs;
-  char** Outputs;
-  char** Expresions;
-  Hardware::OperationStruct* Operations;
-  char Intermediate;
-};
 
 struct CellStruct {
   int Type;
@@ -51,23 +26,6 @@ struct CellStruct {
   int* Outputs;
   int* RegValueIndexes;
   char Deleted;
-
-    // Destructor
-  /*  ~CellStruct() {
-        if (Name != NULL) {
-            free(Name);  // Free the dynamically allocated name
-        }
-        if (NumberOfInputs) {
-            free(Inputs);  // Free the dynamically allocated inputs array
-        }
-        if (NumberOfOutputs) {
-            free(Outputs);  // Free the dynamically allocated outputs array
-        }
-        if (RegValueIndexes != NULL) {
-            free(RegValueIndexes);  // Free the dynamically allocated reg value indexes array
-        }
-    }*/
-
 };
 
 struct SignalStruct {
@@ -82,16 +40,6 @@ struct SignalStruct {
   bool is_analysis_allowed;
   bool is_fault_allowed;
   char Deleted;
-
-    // Destructor
- /*   ~SignalStruct() {
-        if (Name != NULL) {
-            free(Name);    // Free the dynamically allocated name
-        }
-        if (NumberOfInputs) {
-            free(Inputs);  // Free the dynamically allocated inputs array
-        }
-    }*/
 };
 
 /**
@@ -131,55 +79,6 @@ struct CircuitStruct {
   void SetIsAnalysisAllowed(const Settings& settings);
   void SetIsFaultAllowed(const Settings& settings);
   bool IsFaultOnSignalAllowed(size_t signal_index, size_t clock_signal_index) const;
-
-  // Destructor
- /*  ~CircuitStruct() {
-    // Free Signals
-    if (NumberOfSignals) {
-      for (int i = 0; i < NumberOfSignals; ++i) {
-        if (Signals[i] != NULL) {
-          free(Signals[i]);
-        }
-      }
-      if (Signals != NULL) {
-        free(Signals);
-      }
-    }
-
-    // Free Inputs and Outputs
-    if (NumberOfInputs)
-      free(Inputs);
-
-    if (NumberOfOutputs)
-      free(Outputs);
-
-    // Free Cells
-    if (Cells != NULL) {
-        for (int i = 0; i < NumberOfCells; ++i) {
-            if (Cells[i] != NULL) {
-                free(Cells[i]); // Free each individual CellStruct object
-            }
-        }
-        free(Cells); // Free the array of CellStruct pointers
-    }
-
-    // Free Gates and Regs
-    if (NumberOfGates)
-      free(Gates);
-
-    if (NumberOfRegs)
-      free(Regs);
-
-    // Free CellsInDepth and NumberOfCellsInDepth
-    if (CellsInDepth) {
-      for (int i = 0; i <= MaxDepth; ++i) {
-        if (NumberOfCellsInDepth[i])
-          free(CellsInDepth[i]);
-      }
-      free(CellsInDepth);
-    }
-    free(NumberOfCellsInDepth);
-  }*/
 };
 
 }  // namespace Hardware

@@ -14,5 +14,5 @@ namespace po = boost::program_options;
 
 namespace Software
 {
-    void Execute(const po::variables_map& vm);
+  void Execute(const po::variables_map& vm);
 }

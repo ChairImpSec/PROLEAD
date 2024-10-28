@@ -44,10 +44,10 @@ C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-f
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 
-CXX_BENCHMARK_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
-CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
-CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++17 $(INCLUDE_PYTHON3)
-CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++17 $(INCLUDE_PYTHON3)
+CXX_BENCHMARK_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++20 $(INCLUDE_PYTHON3)
+CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
 
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`

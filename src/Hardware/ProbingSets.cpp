@@ -119,6 +119,14 @@ template std::vector<uint64_t> ProbingSet<RobustProbe>::GetProbeExtensions();
 template std::vector<uint64_t> ProbingSet<RelaxedProbe>::GetProbeExtensions();
 
 template <class ExtensionContainer>
+uint64_t ProbingSet<ExtensionContainer>::GetProbeExtension(uint64_t index) {
+  return probe_extension_indices_[index];
+}
+
+template uint64_t ProbingSet<RobustProbe>::GetProbeExtension(uint64_t);
+template uint64_t ProbingSet<RelaxedProbe>::GetProbeExtension(uint64_t);
+
+template <class ExtensionContainer>
 void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
   should_be_removed_ = true;
 }
@@ -309,6 +317,159 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(const Settings& settings, Simu
 
     contingency_table_.IncrementSpecificCounter(counter, group_index); 
   }
+}
+
+template <>
+void ProbingSet<RobustProbe>::NormalTableUpdateWithAllSimulations(
+    const Settings& settings, Simulation& simulation, std::vector<Propagation<RobustProbe>>& propagations) {  
+  
+  const uint64_t number_of_bits_per_key_block = 8;
+  uint64_t group_index, key_value, probe_index;
+  uint64_t number_of_groups = settings.GetNumberOfGroups();
+  uint64_t number_of_extended_probes = GetNumberOfProbeExtensions(propagations);
+  uint64_t number_of_simulations = simulation.considered_simulation_indices_.size();
+  uint64_t number_of_blocks = number_of_simulations >> 6;
+
+  uint64_t number_of_bits;
+  uint64_t number_of_key_blocks = contingency_table_.GetSizeOfKeyInBytes();
+  std::vector<uint64_t> block_values(number_of_bits_per_key_block);
+
+  TableBucketVector datasets(number_of_simulations);
+  for (uint64_t index = 0; index < number_of_simulations; ++index) {
+    group_index = simulation.selected_groups_[index];
+    datasets[index].key_ = std::make_unique_for_overwrite<uint8_t[]>(number_of_key_blocks);
+    datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    datasets[index].data_[group_index] = 1;
+  }
+
+  for (uint64_t byte_index = 0; byte_index < number_of_key_blocks; ++byte_index) {
+    number_of_bits = std::min(number_of_bits_per_key_block, number_of_extended_probes);
+    number_of_extended_probes -= number_of_bits;
+
+    for (uint64_t block_index = 0; block_index < number_of_blocks; ++block_index) {
+      for (uint64_t bit_index = 0; bit_index < number_of_bits; ++bit_index) {
+        probe_index = GetProbeExtension(number_of_extended_probes + bit_index);
+        block_values[bit_index] = simulation.probe_values_[probe_index][block_index];
+      }
+
+      for (uint64_t simulation_index = block_index << 6; simulation_index < (block_index + 1) << 6; ++simulation_index) {
+        key_value = 0;
+        
+        for (uint64_t bit_index = 0; bit_index < number_of_bits; ++bit_index) {
+          key_value <<= 1;
+          key_value |= block_values[bit_index] & 1;
+          block_values[bit_index] >>= 1;
+        }
+
+        datasets[simulation_index].key_[byte_index] = key_value;
+      }
+    }
+  }
+
+  contingency_table_.UpdateBucket(datasets, number_of_groups);
+}
+
+template <>
+void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(const Settings& settings, Simulation& simulation, std::vector<Propagation<RelaxedProbe>>& propagations) {
+  uint64_t bit_index, group_index, key_index, probe_index, tmp_index;
+  uint64_t number_of_extended_probes;
+  uint64_t number_of_key_blocks = contingency_table_.GetSizeOfKeyInBytes();
+  uint64_t number_of_groups = settings.GetNumberOfGroups();
+  std::queue<uint64_t> indices;
+  std::vector<uint64_t> probe_extension_indices;
+  uint64_t enable_ctr, enable_bound;
+  RelaxedProbe* probe;
+  RelaxedProbe* new_probe;
+  std::vector<bool> is_enable_index_done(simulation.number_of_enablers_, false);
+
+  uint64_t number_of_simulations = simulation.considered_simulation_indices_.size();
+
+  uint64_t number_of_enablers = 0;
+  for (uint64_t probe_extension_index : probe_extension_indices_) {
+    number_of_enablers += propagations[probe_extension_index].GetNumberOfEnableIndices();
+  }
+
+  TableBucketVector datasets(number_of_simulations);
+  for (uint64_t index = 0; index < number_of_simulations; ++index) {
+    group_index = simulation.selected_groups_[index];
+    datasets[index].key_ = std::make_unique_for_overwrite<uint8_t[]>(number_of_key_blocks);
+    datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    datasets[index].data_[group_index] = 1;
+  }
+
+  for (uint64_t index = 0; index < number_of_simulations; ++index){
+    probe_extension_indices.clear();
+    enable_bound = 0;
+
+    for (probe_index = 0; probe_index < probe_extension_indices_.size(); ++probe_index) {
+      std::fill(is_enable_index_done.begin(), is_enable_index_done.end(), false);
+      indices.push(probe_extension_indices_[probe_index]);
+
+      enable_ctr = enable_bound;
+
+      if (propagations[indices.front()].GetProbeAddress(0)->number_of_enable_indices_){
+        is_enable_index_done[propagations[indices.front()].GetProbeAddress(0)->enable_index_] = true;
+      }
+
+      while (!indices.empty()){
+        probe = propagations[indices.front()].GetProbeAddress(0);
+        indices.pop();
+
+        if (probe->propagation_indices_.empty()) {
+          probe_extension_indices.insert(probe_extension_indices.end(), probe->signal_indices_.begin(), probe->signal_indices_.end());
+        } else {
+          tmp_index = enable_ctr  >> 3;
+          datasets[index].key_[tmp_index] <<= 1;
+
+          if ((simulation.propagation_values_[probe->enable_index_][simulation.considered_simulation_indices_[index] >> 6] >> (simulation.considered_simulation_indices_[index] & 0b111111)) & 1) {
+            for (bit_index = 0; bit_index < probe->propagation_indices_.size(); ++bit_index) {
+              key_index = probe->propagation_indices_[bit_index];
+              new_probe = propagations[key_index].GetProbeAddress(0);
+
+              if (new_probe->propagation_indices_.empty()){
+                probe_extension_indices.insert(probe_extension_indices.end(), new_probe->signal_indices_.begin(), new_probe->signal_indices_.end());
+              }else{
+                if (!is_enable_index_done[new_probe->enable_index_]){
+                  indices.push(key_index);
+                  is_enable_index_done[new_probe->enable_index_] = true;
+                }
+              }
+            }
+
+            datasets[index].key_[tmp_index] |= 1;
+          }else{
+            probe_extension_indices.insert(probe_extension_indices.end(), probe->signal_indices_.begin(), probe->signal_indices_.end());
+          }
+
+          ++enable_ctr;
+        }
+      }
+
+      enable_bound += propagations[probe_extension_indices_[probe_index]].GetNumberOfEnableIndices();
+    }
+
+    std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
+    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(), probe_extension_indices.end()), probe_extension_indices.end());
+
+
+
+
+
+
+
+
+    number_of_extended_probes = probe_extension_indices.size();
+
+
+
+    for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
+      tmp_index = (bit_index + number_of_enablers) >> 3;
+      datasets[index].key_[tmp_index] <<= 1;
+      datasets[index].key_[tmp_index] |= (simulation.probe_values_[probe_extension_indices[bit_index]][simulation.considered_simulation_indices_[index] >> 6] >> (simulation.considered_simulation_indices_[index] & 0b111111)) & 1;
+    }
+  }
+
+  contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
 }
 
 template <>

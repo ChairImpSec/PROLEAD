@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Hardware/FaultManager.hpp File Reference</title>
+<title>PROLEAD: PROLEAD_public/inc/Hardware/FaultManager.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_ee333017a7dfb067d45b2e223bebac94.html">Hardware</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_ccfa6d7c543e74965df716356c654775.html">Hardware</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -79,13 +79,15 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Declaration of the <a class="el" href="class_fault_manager.html">FaultManager</a> class.  
+<p>Declaration of the <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a> class.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="_fault_set_8hpp_source.html">Hardware/FaultSet.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;Hardware/Circuit.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="_fault_8hpp_source.html">Hardware/Fault.hpp</a>&quot;</code><br />
-<code>#include &quot;Hardware/StuckAtOneFault.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="_fault_set_8hpp_source.html">Hardware/FaultSet.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_stuck_at_one_fault_8hpp_source.html">Hardware/StuckAtOneFault.hpp</a>&quot;</code><br />
 <code>#include &quot;Hardware/StuckAtZeroFault.hpp&quot;</code><br />
 <code>#include &quot;Hardware/ToggleFault.hpp&quot;</code><br />
+<code>#include &quot;Util/Settings.hpp&quot;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 </div>
@@ -94,10 +96,11 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_fault_manager.html">FaultManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages all Faults and the FaultSets which the adversary is allowed to chose.  <a href="class_fault_manager.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Declaration of the <a class="el" href="class_fault_manager.html">FaultManager</a> class. </p>
+<div class="textblock"><p>Declaration of the <a class="el" href="class_fault_manager.html" title="Manages all Faults and the FaultSets which the adversary is allowed to chose.">FaultManager</a> class. </p>
 <dl class="section version"><dt>Version</dt><dd>0.0.1 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2024-08-02</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Felix Uhle </dd></dl>

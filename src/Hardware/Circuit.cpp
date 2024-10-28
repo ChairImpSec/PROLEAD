@@ -203,6 +203,23 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
         }
       }
     }
+
+    if (settings.IsRelaxedModel()) {
+      uint64_t signal_index;
+      for (uint64_t index = 0; index < number_of_signals; ++index) {
+        if (Signals[index]->is_probe_allowed) {
+          signal_index = index;
+          
+          while ((Signals[signal_index]->Output != -1) && (GetNumberOfInputsForSignalsComputingCell(signal_index) == 1) && (!Signals[signal_index]->Deleted)){
+            signal_index = Cells[Signals[signal_index]->Output]->Inputs[0];
+          }
+
+          if (Signals[signal_index]->Output != -1) {
+            Signals[signal_index]->is_probe_allowed = true;
+          }
+        }
+      }
+    }
   }
 
   for (uint64_t index = 0; index < number_of_signals; ++index) {

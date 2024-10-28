@@ -182,36 +182,28 @@ Operation<CustomOperation>::Operation() {}
 
 template <>
 Operation<CustomOperation>::Operation(std::string expression,
-                                      std::vector<std::string> input_names) {
-  std::string name, expression_copy = expression;
-  size_t index, pos;
-  amount_of_inputs_ = input_names.size();
-  uint64_t input_index;
+                                      std::vector<std::string> names) {
+  uint64_t index = 0;
+  std::string expression_copy = expression;
+  amount_of_inputs_ = names.size();
 
-  std::vector<std::string> sorted_input_names = input_names;
-  std::sort(sorted_input_names.begin(), sorted_input_names.end(), [](const std::string &a, const std::string &b) {
+  std::unordered_map<std::string, std::string> replacement;
+  for (const std::string& name : names) {
+    replacement[name] = "i" + std::to_string(index++);
+  }
+
+  std::vector<std::string> names_sorted_by_size = names;
+  std::sort(names_sorted_by_size.begin(), names_sorted_by_size.end(), [](const std::string &a, const std::string &b) {
     return a.size() > b.size();
   }); 
 
-  for (index = 0; index < sorted_input_names.size(); ++index) {
-    pos = expression.find(sorted_input_names[index]);
-
-    while (pos != std::string::npos) {
-      for (input_index = 0; input_index < input_names.size(); ++input_index) {
-        if (input_names[input_index] == sorted_input_names[index]) {
-          break;
-        }
-      }
-
-      name = "i" + std::to_string(input_index);
-      expression.replace(pos, sorted_input_names[index].length(), name);
-      pos = expression.find(sorted_input_names[index], pos + name.length() + 1);
-    }
+  for (const std::string& name : names_sorted_by_size) {
+    expression = boost::replace_all_copy(expression, name, replacement[name]);
   }
 
-  std::string::iterator start = expression.begin(), end = expression.end();
   ExpressionTree tree;
   BooleanExpressionGrammar parser;
+  std::string::iterator start = expression.begin(), end = expression.end();
   bool parsed = qi::phrase_parse(start, end, parser, qi::space, tree);
 
   if (!parsed || (start != end)) {
@@ -219,7 +211,7 @@ Operation<CustomOperation>::Operation(std::string expression,
         "Parsing of library operation \"" + expression_copy + "\" failed!";
     throw std::runtime_error(error_message);
   } else {
-    operation_ = CustomOperation(tree, input_names.size());
+    operation_ = CustomOperation(tree, amount_of_inputs_);
   }
 }
 
@@ -245,7 +237,7 @@ uint64_t Operation<CustomOperation>::Evaluate(
     switch (operation_.GetOperationInClause(index)) {
       case OperationType::None:
         throw std::runtime_error(
-            "Tried to evaluate a unset operation! It seems that you found a "
+            "Tried to evaluate an unset operation! It seems that you found a "
             "bug in PROLEAD. Please get in touch with me "
             "(nicolai.mueller@rub.de) so that we can fix this issue!");
         break;

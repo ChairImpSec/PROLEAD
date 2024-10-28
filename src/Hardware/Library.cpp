@@ -6,6 +6,15 @@
 
 namespace Hardware {
 
+std::vector<std::string> ConvertJsonArrayToVector(
+    const boost::json::array& json_array) {
+  std::vector<std::string> result;
+  for (auto& str : json_array) {
+    result.push_back(boost::json::value_to<std::string>(str));
+  }
+  return result;
+}
+
 IterateEnablers::IterateEnablers(size_t amount_inputs, bool with_glitches)
     : norm_vector_bool_(amount_inputs, 0),
     mod_vector_bool_(amount_inputs, 0), glitch_vector_bool_(amount_inputs, 0), 
@@ -87,15 +96,6 @@ std::vector<bool> IterateEnablers::GetIndexVector() const {
   return index_vector_;
 }
 
-
-
-
-
-
-
-
-
-
 void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
   boost::json::object value_object = value.as_object();
   std::string name = value.at("name").as_string().c_str();
@@ -109,7 +109,7 @@ void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
   if (type == "gate" || type == "conservative_gate" || type == "buffer") {
     type_ = CellType::conservative_gate;
   } else if (type == "relaxed_gate") {
-    if (is_relaxed) {
+    if (is_relaxed && GetNumberOfOutputs() == 1) {
       type_ = CellType::relaxed_gate;
     } else{
       type_ = CellType::conservative_gate;
@@ -121,24 +121,19 @@ void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
   }
 }
 
-std::vector<std::string> Cell::ConvertJsonArrayToVector(
-    const boost::json::array& json_array) const {
-  std::vector<std::string> result;
-  for (auto& str : json_array) {
-    result.push_back(boost::json::value_to<std::string>(str));
-  }
-  return result;
-}
-
-void Cell::SetOperations(std::vector<std::string>& expressions) {
+void Cell::SetOperations(const std::vector<std::string>& expressions) {
   std::vector<std::string> primary_signals;
   predefined_functions_found_ = false;
 
-  for (std::string& expression : expressions) {
-    primary_signals = inputs_;
+  for (const std::string& expression : expressions) {
+    for (const std::vector<std::string>& input_port : inputs_) {
+      primary_signals.insert(primary_signals.end(), input_port.begin(), input_port.end());
+    }
 
     if (type_ == CellType::sequential_gate) {
-      primary_signals.insert(primary_signals.end(), outputs_.begin(), outputs_.end());
+      for (const std::vector<std::string>& output_port : outputs_) {
+        primary_signals.insert(primary_signals.end(), output_port.begin(), output_port.end());
+      }
     }
 
     operations_.emplace_back(Operation<CustomOperation>(expression, primary_signals));
@@ -223,37 +218,38 @@ void Cell::GenerateRelaxedFunctions(Operation<CustomOperation>& operation) {
 
 Cell::Cell(const boost::json::value& value, bool is_relaxed) {
   boost::json::object value_object = value.as_object();
+  std::vector<std::string> inputs, outputs, expressions;
+  SignalNameGrammar grammar;
+  std::string name;
 
   if (!value_object.contains("name")) {
     throw std::runtime_error("Error while reading a cell. Name not found!");
+  } else {
+    name = value.at("name").as_string().c_str();
+  }
+
+  identifiers_ = ConvertJsonArrayToVector(value.at("aliases").as_array());
+  inputs = ConvertJsonArrayToVector(value.at("inputs").as_array());
+  outputs = ConvertJsonArrayToVector(value.at("outputs").as_array());
+
+  for (std::string& input : inputs) {
+    inputs_.emplace_back(grammar.Parse(input));
+  }
+
+  for (std::string& output : outputs) {
+    outputs_.emplace_back(grammar.Parse(output));
+  }
+
+  if (value_object.contains("equations")) {
+    expressions = ConvertJsonArrayToVector(value.at("equations").as_array());
   }
 
   SetType(value, is_relaxed);
-
-  identifiers_ = ConvertJsonArrayToVector(value.at("aliases").as_array());
-  inputs_ = ConvertJsonArrayToVector(value.at("inputs").as_array());
-  outputs_ = ConvertJsonArrayToVector(value.at("outputs").as_array());
-  std::vector<std::string> expressions = ConvertJsonArrayToVector(value.at("equations").as_array());
   SetOperations(expressions);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Cell::Cell(CellType type, std::vector<std::string> identifiers,
-           std::vector<std::string> inputs, std::vector<std::string> outputs,
+           std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
            std::vector<std::string> expressions)
     : type_(type), 
       identifiers_(identifiers),
@@ -340,14 +336,74 @@ CellType Cell::GetCellType() const { return type_; }
 
 const std::vector<std::string> Cell::GetIdentifiers() const { return identifiers_; }
 
-const std::vector<std::string> Cell::GetInputs() const { return inputs_; }
+uint64_t Cell::GetNumberOfIdentifiers() const { return identifiers_.size(); }
 
-const std::vector<std::string> Cell::GetOutputs() const { return outputs_; }
+uint64_t Cell::GetNumberOfInputs() const { 
+  uint64_t number_of_inputs = 0;
+
+  for (const std::vector<std::string>& input_port : inputs_) {
+    number_of_inputs += input_port.size();
+  }
+
+  return number_of_inputs; 
+}
+
+uint64_t Cell::GetNumberOfOutputs() const {
+    uint64_t number_of_outputs = 0;
+
+  for (const std::vector<std::string>& output_port : outputs_) {
+    number_of_outputs += output_port.size();
+  }
+
+  return number_of_outputs; 
+}
+
+std::string Cell::GetIdentifier(uint64_t index) const { return identifiers_[index]; }
+
+std::string Cell::GetInput(uint64_t index) const { 
+  uint64_t bit_index, count = 0;
+
+  for (uint64_t port_index = 0; port_index < inputs_.size(); ++port_index) {
+    if (index < count + inputs_[port_index].size()) {
+      bit_index = index - count;
+      return inputs_[port_index][bit_index];
+    }
+    count += inputs_[port_index].size();
+  }
+
+  throw std::out_of_range("Error while getting the input of a cell. Index out of range!");
+}
+
+std::string Cell::GetOutput(uint64_t index) const { 
+  uint64_t bit_index, count = 0;
+
+  for (uint64_t port_index = 0; port_index < outputs_.size(); ++port_index) {
+    if (index < count + outputs_[port_index].size()) {
+      bit_index = index - count;
+      return outputs_[port_index][bit_index];
+    }
+    count += outputs_[port_index].size();
+  }
+
+  throw std::out_of_range("Error while getting the output of a cell. Index out of range!");
+}
+
+void Library::ParseCells(boost::json::array::iterator it, bool is_relaxed) {
+  boost::json::array cells = it->at("cells").as_array();
+
+  for (const boost::json::value& cell : cells) {
+    cells_.emplace_back(cell, is_relaxed);
+    if (cell.at("type") == "buffer") {
+      std::string buffer_name = cell.at("name").as_string().c_str();
+      std::cout << "Successfully found buffer cell with name \"" + buffer_name +
+                       "\"."
+                << std::endl;
+      buffer_index_ = cells_.size() - 1;
+    }
+  }
+}
 
 Library::Library(std::string path, std::string name, bool is_relaxed) {
-  std::string predefined_cells, generated_cells;
-  uint64_t number_of_predifined_cells = 0;
-  uint64_t number_of_generated_cells = 0;
   std::ifstream file(path);
   if (file.fail()) {
     throw std::runtime_error("Error while opening the library file at \"" +
@@ -365,17 +421,16 @@ Library::Library(std::string path, std::string name, bool is_relaxed) {
   boost::json::monotonic_resource mr;
   boost::json::storage_ptr sp(&mr);
   boost::json::value json_data = boost::json::parse(data, sp, opt);
-  boost::json::array cells;
+  boost::json::array cells, rams;
   boost::json::array libraries = json_data.at("libraries").as_array();
 
-  auto it = std::find_if(
+  boost::json::array::iterator it = std::find_if(
       libraries.begin(), libraries.end(),
       [&](const boost::json::value& library) {
         return boost::json::value_to<std::string>(library.at("name")) == name;
       });
 
   if (it != libraries.end()) {
-    cells = it->at("cells").as_array();
     std::cout << "Successfully read the library with name \"" << name << "\"."
               << std::endl;
   } else {
@@ -383,47 +438,7 @@ Library::Library(std::string path, std::string name, bool is_relaxed) {
                              name + "\". Library not found!");
   }
 
-  for (const boost::json::value& cell : cells) {
-    cells_.emplace_back(cell, is_relaxed);
-    if (cell.at("type") == "buffer") {
-      std::string buffer_name = cell.at("name").as_string().c_str();
-      std::cout << "Successfully found buffer cell with name \"" + buffer_name +
-                       "\"."
-                << std::endl;
-      buffer_index_ = cells_.size() - 1;
-    }
-
-    if (cells_.back().GetCellType() == CellType::relaxed_gate) {
-      if (cells_.back().HasPredefinedFunctions()) {
-        predefined_cells +=
-            std::string(cell.at("name").as_string().c_str()) + ", ";
-        ++number_of_predifined_cells;
-      } else {
-        generated_cells +=
-            std::string(cell.at("name").as_string().c_str()) + ", ";
-        ++number_of_generated_cells;
-      }
-    }
-  }
-
-  if (is_relaxed) {
-    if (predefined_cells.length() > 2) {
-      predefined_cells.erase(predefined_cells.length() - 2);
-    }
-
-    if (generated_cells.length() > 2) {
-      generated_cells.erase(generated_cells.length() - 2);
-    }
-
-    std::cout << "Successfully found " << number_of_predifined_cells
-              << " relaxed cells with predefined functions [" + predefined_cells +
-                    "]."
-              << std::endl;
-    std::cout << "Successfully found " << number_of_generated_cells
-              << " relaxed cells without predefined functions [" +
-                    generated_cells + "]."
-              << std::endl;
-  }
+  ParseCells(it, is_relaxed);
   std::cout << "Successfully parsed " << cells_.size()
             << " cells from the library." << std::endl;
 }
@@ -432,41 +447,41 @@ Cell Library::GetCell(uint64_t index) const {
   return cells_[index]; 
 }
 
-size_t Library::GetNumberOfCells() const {return cells_.size();}
+uint64_t Library::GetNumberOfCells() const {return cells_.size();}
 
-bool Library::IsCellRegister(unsigned int index) const {
+bool Library::IsCellRegister(uint64_t index) const {
   return cells_[index].GetCellType() == CellType::sequential_gate;
 }
 
-size_t Library::GetNumberOfCellIdentifiers(unsigned int index) const {
-  return cells_[index].GetIdentifiers().size();
+uint64_t Library::GetNumberOfIdentifiers(uint64_t index) const {
+  return cells_[index].GetNumberOfIdentifiers();
 }
 
-std::string Library::GetCellIdentifier(unsigned int cell_index, unsigned int identifier_index) const{
-  return cells_[cell_index].GetIdentifiers()[identifier_index];
+std::string Library::GetIdentifier(uint64_t index, uint64_t identifier_index) const{
+  return cells_[index].GetIdentifier(identifier_index);
 }
 
-size_t Library::GetNumberOfCellInputs(unsigned int index)const {
-  return cells_[index].GetInputs().size();
+uint64_t Library::GetNumberOfInputs(uint64_t index) const {
+  return cells_[index].GetNumberOfInputs();
 }
 
-size_t Library::GetNumberOfCellOutputs(unsigned int index) const {
-  return cells_[index].GetOutputs().size();
+uint64_t Library::GetNumberOfOutputs(uint64_t index) const {
+  return cells_[index].GetNumberOfOutputs();
 }
 
-std::string Library::GetCellInput(unsigned int cell_index, unsigned int input_index) const {
-  return cells_[cell_index].GetInputs()[input_index];
+std::string Library::GetInput(uint64_t index, uint64_t input_index) const {
+  return cells_[index].GetInput(input_index);
 }
 
-std::string Library::GetCellOutput(unsigned int cell_index, unsigned int output_index) const {
-  return cells_[cell_index].GetOutputs()[output_index];
+std::string Library::GetOutput(uint64_t index, uint64_t output_index) const {
+  return cells_[index].GetOutput(output_index);
 }
 
-int Library::GetBufferIndex() const {
+int64_t Library::GetBufferIndex() const {
   return buffer_index_;
 }
 
-uint64_t Library::Evaluate(unsigned int cell_index, unsigned int output_index, std::vector<uint64_t>& input_values) const{
+uint64_t Library::Evaluate(uint64_t cell_index, uint64_t output_index, std::vector<uint64_t>& input_values) const{
   return cells_[cell_index].Evaluate(output_index, input_values);
 }
 

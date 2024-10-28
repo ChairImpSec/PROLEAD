@@ -2,8 +2,8 @@
  * @file ProbingSets.hpp
  * @brief Declaration of the ProbingSet class.
  *
- * @version 0.0.1
- * @date 2024-08-19
+ * @version 0.0.2
+ * @date 2024-10-16
  *
  * @author Nicolai Müller
  */
@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <execution>
 #include <queue>
-#include <variant>
+#include <memory>
 
 #include "Util/Util.hpp"
 #include "Util/Settings.hpp"
@@ -165,6 +165,8 @@ class ProbingSet {
    */
   ExtensionContainer GetLastProbeExtension();
 
+  uint64_t GetProbeExtension(uint64_t index);
+
   /**
    * @brief Retrieves all unique probe extensions.
    *
@@ -263,6 +265,10 @@ class ProbingSet {
   uint64_t GetNumberOfEntries();
 
   void CompactTableUpdate(
+      const Settings& settings, Simulation& simulation,
+      std::vector<Propagation<ExtensionContainer>>& propagations);
+
+  void NormalTableUpdateWithAllSimulations(
       const Settings& settings, Simulation& simulation,
       std::vector<Propagation<ExtensionContainer>>& propagations);
 

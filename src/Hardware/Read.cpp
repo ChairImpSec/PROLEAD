@@ -23,156 +23,6 @@ void Hardware::Read::NonCommentFromFile(FILE *FileHeader, char *Str, const char 
 
 }
 
-int Hardware::Read::MakeFormulaForCellInLibrary(CellTypeStruct *CellType)
-{
-    char *MyStr = (char *)malloc(Max_Name_Length * sizeof(char));
-    char *Str2 = (char *)malloc(Max_Name_Length * sizeof(char));
-    char *Str3 = (char *)malloc(Max_Name_Length * sizeof(char));
-	char *TempStr = (char *)malloc(Max_Name_Length * sizeof(char));
-	char *pos;
-    char *Start = NULL;
-    char *End = NULL;
-    char OperationIndex;
-    char *TempChar;
-    unsigned char *UTempChar;
-    // char **TempCharChar;
-    unsigned char **UTempCharChar;
-    char Intermediate;
-    int i, l;
-
-    Intermediate = CellType->NumberOfInputs + CellType->NumberOfOutputs;
-    CellType->Intermediate = Intermediate;
-    CellType->Operations = (OperationStruct *)malloc(CellType->NumberOfOutputs * sizeof(OperationStruct));
-
-    for (i = 0; i < CellType->NumberOfOutputs; i++)
-    {
-        CellType->Operations[i].NumberOfClauses = 0;
-        CellType->Operations[i].OperationOfClause = NULL;
-        CellType->Operations[i].NumberOfOperandsInClause = NULL;
-        CellType->Operations[i].OperandsInClause = NULL;
-
-        strncpy(MyStr, CellType->Expresions[i], Max_Name_Length - 1);
-        MyStr[Max_Name_Length - 1] = '\0';
-
-        do
-        {
-            TempChar = (char *)malloc((CellType->Operations[i].NumberOfClauses + 1) * sizeof(char));
-            memcpy(TempChar, CellType->Operations[i].OperationOfClause, CellType->Operations[i].NumberOfClauses * sizeof(char));
-            free(CellType->Operations[i].OperationOfClause);
-            CellType->Operations[i].OperationOfClause = TempChar;
-
-            UTempChar = (unsigned char *)calloc(CellType->Operations[i].NumberOfClauses + 1, sizeof(unsigned char));
-            memcpy(UTempChar, CellType->Operations[i].NumberOfOperandsInClause, CellType->Operations[i].NumberOfClauses * sizeof(unsigned char));
-            free(CellType->Operations[i].NumberOfOperandsInClause);
-            CellType->Operations[i].NumberOfOperandsInClause = UTempChar;
-
-            UTempCharChar = (unsigned char **)malloc((CellType->Operations[i].NumberOfClauses + 1) * sizeof(unsigned char *));
-            memcpy(UTempCharChar, CellType->Operations[i].OperandsInClause, CellType->Operations[i].NumberOfClauses * sizeof(unsigned char *));
-            free(CellType->Operations[i].OperandsInClause);
-            CellType->Operations[i].OperandsInClause = UTempCharChar;
-            CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses] = NULL;
-
-            pos = MyStr;
-            while ((*pos != ')') && (*pos != 0))
-            {
-                if (*pos == '(')
-                    Start = pos;
-                pos++;
-            }
-            End = pos;
-
-            if (*pos != 0)
-            {
-                memcpy(Str2, Start + 1, End - Start - 1);
-                Str2[End - Start - 1] = 0;
-            }
-            else
-            {
-                strncpy(Str2, MyStr, Max_Name_Length - 1);
-                Str2[Max_Name_Length - 1] = '\0';
-	    }
-
-            if (strstr(Str2, " and "))
-                OperationIndex = Operation_AND;
-            else if (strstr(Str2, " or "))
-                OperationIndex = Operation_OR;
-            else if (strstr(Str2, " xor "))
-                OperationIndex = Operation_XOR;
-            else if (strstr(Str2, "not "))
-                OperationIndex = Operation_NOT;
-            else
-            {
-                std::cout << "Error in Library file " << MyStr << std::endl;
-                free(MyStr);
-                free(Str2);
-                free(Str3);
-				free(TempStr);
-                return 1;
-            }
-
-            CellType->Operations[i].OperationOfClause[CellType->Operations[i].NumberOfClauses] = OperationIndex;
-
-            for (l = 0; l < CellType->NumberOfInputs; l++)
-                if (strstr(Str2, CellType->Inputs[l]))
-                {
-                    UTempChar = (unsigned char *)malloc((CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] + 1) * sizeof(unsigned char));
-                    memcpy(UTempChar, CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses], CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] * sizeof(unsigned char));
-                    free(CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses]);
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses] = UTempChar;
-
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses][CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]] = l;
-                    CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]++;
-                }
-
-            for (l = 0; l < CellType->NumberOfOutputs; l++)
-                if (strstr(Str2, CellType->Outputs[l]))
-                {
-                    UTempChar = (unsigned char *)malloc((CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] + 1) * sizeof(char));
-                    memcpy(UTempChar, CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses], CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] * sizeof(unsigned char));
-                    free(CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses]);
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses] = UTempChar;
-
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses][CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]] = CellType->NumberOfInputs + l;
-                    CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]++;
-                }
-
-            for (l = 0; l < CellType->Operations[i].NumberOfClauses; l++)
-            {
-                sprintf(Str3, "I%d", Intermediate + l + 1);
-                if (strstr(Str2, Str3))
-                {
-                    UTempChar = (unsigned char *)malloc((CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] + 1) * sizeof(unsigned char));
-                    memcpy(UTempChar, CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses], CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses] * sizeof(unsigned char));
-                    free(CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses]);
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses] = UTempChar;
-
-                    CellType->Operations[i].OperandsInClause[CellType->Operations[i].NumberOfClauses][CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]] = Intermediate + l;
-                    CellType->Operations[i].NumberOfOperandsInClause[CellType->Operations[i].NumberOfClauses]++;
-                }
-            }
-
-			if (*pos != 0){
-				sprintf(Start, "I%d", Intermediate + CellType->Operations[i].NumberOfClauses + 1);
-				strncpy(TempStr, End + 1, Max_Name_Length - 1);
-				TempStr[Max_Name_Length - 1] = '\0';
-				strcat(MyStr, TempStr);
-				CellType->Operations[i].NumberOfClauses++;
-			}else{
-				CellType->Operations[i].NumberOfClauses++;
-				break;
-			}
-
-			pos=MyStr;
-        } while (*pos != 0);
-    }
-
-    free(MyStr);
-    free(Str2);
-    free(Str3);
-	free(TempStr);
-    return 0;
-}
-
 void Hardware::Read::fReadaWord(Hardware::FileBufferStruct* FileBuffer, char *Buffer, char *Attribute)
 {
     //reset Buffer
@@ -429,12 +279,12 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 	{
 		if (strlen(Str1))
 		{
-			for (InputIndex = 0; InputIndex < (int)library.GetNumberOfCellInputs(CellTypeIndex); InputIndex++)
+			for (InputIndex = 0; InputIndex < (int)library.GetNumberOfInputs(CellTypeIndex); InputIndex++)
 			{
-				strncpy(Str2, library.GetCellInput(CellTypeIndex, InputIndex).c_str(), Max_Name_Length - 1);
+				strncpy(Str2, library.GetInput(CellTypeIndex, InputIndex).c_str(), Max_Name_Length - 1);
 				i = TrimSignalName(Str2);
 
-				if ((!strcmp(Str1 + 1, library.GetCellInput(CellTypeIndex, InputIndex).c_str())) ||
+				if ((!strcmp(Str1 + 1, library.GetInput(CellTypeIndex, InputIndex).c_str())) ||
 					(!strcmp(Str1 + 1, Str2)))
 				{
 					Buffer_int = (int *)malloc((NumberOfInputPorts + 1) * sizeof(int));
@@ -452,12 +302,12 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 
 			if (!NumberOfInputPorts) // the IO port NOT found in the Circuit->Inputs
 			{
-				for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfCellOutputs(CellTypeIndex); OutputIndex++)
+				for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfOutputs(CellTypeIndex); OutputIndex++)
 				{
-					strncpy(Str2, library.GetCellOutput(CellTypeIndex, OutputIndex).c_str(), Max_Name_Length - 1);
+					strncpy(Str2, library.GetOutput(CellTypeIndex, OutputIndex).c_str(), Max_Name_Length - 1);
 					i = TrimSignalName(Str2);
 
-					if ((!strcmp(Str1 + 1, library.GetCellOutput(CellTypeIndex, OutputIndex).c_str())) ||
+					if ((!strcmp(Str1 + 1, library.GetOutput(CellTypeIndex, OutputIndex).c_str())) ||
 						(!strcmp(Str1 + 1, Str2)))
 					{
 						Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
@@ -476,7 +326,7 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 				if (!NumberOfOutputPorts) // the IO port NOT found in the Circuit->Outputs
 				{
 					ErrorMessage = Str1 + 1;
-					ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + library.GetCellIdentifier(CellTypeIndex, CaseIndex) + "\"!";
+					ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + library.GetIdentifier(CellTypeIndex, CaseIndex) + "\"!";
 					throw std::runtime_error(ErrorMessage);
 				}
 			}
@@ -486,7 +336,7 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 			for (InputIndex = 0; InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
 				if (Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] == -1)
 				{
-					ErrorMessage = "Input port \"" + library.GetCellInput(CellTypeIndex, InputIndex) + "\" of cell \"" + (std::string)Circuit->Cells[Circuit->NumberOfCells]->Name + "\" cannot be left unconnected!";
+					ErrorMessage = "Input port \"" + library.GetInput(CellTypeIndex, InputIndex) + "\" of cell \"" + (std::string)Circuit->Cells[Circuit->NumberOfCells]->Name + "\" cannot be left unconnected!";
 					throw std::runtime_error(ErrorMessage);
 				}
 
@@ -764,7 +614,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 		{
 			if (!SubCircuitRead)
 			{
-				ErrorMessage = "Input port \"" + library.GetCellInput(CellTypeIndex, InputPorts[0]) + "\" of cell type \"" + library.GetCellIdentifier(CellTypeIndex, CaseIndex) + "\" cannot be left unconnected!";
+				ErrorMessage = "Input port \"" + library.GetInput(CellTypeIndex, InputPorts[0]) + "\" of cell type \"" + library.GetIdentifier(CellTypeIndex, CaseIndex) + "\" cannot be left unconnected!";
 				throw std::runtime_error(ErrorMessage);
 			}
 			else
@@ -809,10 +659,10 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 			Circuit->Cells[Circuit->NumberOfCells] = (CellStruct *)malloc(sizeof(CellStruct));
 			Circuit->Cells[Circuit->NumberOfCells]->Type = CellTypeIndex;
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfCellInputs(CellTypeIndex);
-			Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfCellInputs(CellTypeIndex) * sizeof(int));
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfCellOutputs(CellTypeIndex);
-			Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfCellOutputs(CellTypeIndex) * sizeof(int));
+			Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfInputs(CellTypeIndex);
+			Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfInputs(CellTypeIndex) * sizeof(int));
+			Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfOutputs(CellTypeIndex);
+			Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
 			Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
 
 			for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
@@ -1421,11 +1271,11 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                             {											
                                                 for (CellTypeIndex = 0; CellTypeIndex < (int)library.GetNumberOfCells(); CellTypeIndex++)
                                                 {
-                                                    for (CaseIndex = 0; CaseIndex < (int)library.GetNumberOfCellIdentifiers(CellTypeIndex); CaseIndex++)
-                                                        if (!strcmp(Str1, library.GetCellIdentifier(CellTypeIndex, CaseIndex).c_str()))
+                                                    for (CaseIndex = 0; CaseIndex < (int)library.GetNumberOfIdentifiers(CellTypeIndex); CaseIndex++)
+                                                        if (!strcmp(Str1, library.GetIdentifier(CellTypeIndex, CaseIndex).c_str()))
                                                             break;
 
-                                                    if (CaseIndex < (int)library.GetNumberOfCellIdentifiers(CellTypeIndex))
+                                                    if (CaseIndex < (int)library.GetNumberOfIdentifiers(CellTypeIndex))
                                                         break;
                                                 }
 
@@ -1438,10 +1288,10 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 
 													Circuit->Cells[Circuit->NumberOfCells] = (CellStruct *)malloc(sizeof(CellStruct));
 													Circuit->Cells[Circuit->NumberOfCells]->Type = CellTypeIndex;
-													Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfCellInputs(CellTypeIndex);
-													Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfCellInputs(CellTypeIndex) * sizeof(int));
-													Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfCellOutputs(CellTypeIndex);
-													Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfCellOutputs(CellTypeIndex) * sizeof(int));
+													Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfInputs(CellTypeIndex);
+													Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfInputs(CellTypeIndex) * sizeof(int));
+													Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfOutputs(CellTypeIndex);
+													Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
 													Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
 
 													for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
@@ -1465,8 +1315,8 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 													else // CellType_Reg
 													{
 														Circuit->Cells[Circuit->NumberOfCells]->Depth = 0;
-														Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes = (int *)malloc(library.GetNumberOfCellOutputs(CellTypeIndex) * sizeof(int));
-														for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfCellOutputs(CellTypeIndex); OutputIndex++)
+														Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
+														for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfOutputs(CellTypeIndex); OutputIndex++)
 															Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes[OutputIndex] = NumberOfRegValuesOffset + Circuit->NumberOfRegValues++;
 
 														TempRegs = (int *)malloc((Circuit->NumberOfRegs + 1) * sizeof(int));
@@ -1479,7 +1329,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 													}
 
 													Task = Task_find_module_name;
-													MyNumberofIO = library.GetNumberOfCellInputs(CellTypeIndex) + library.GetNumberOfCellOutputs(CellTypeIndex);
+													MyNumberofIO = library.GetNumberOfInputs(CellTypeIndex) + library.GetNumberOfOutputs(CellTypeIndex);
 													CurrentIO = 0;
 													SubCircuitRead = 0;
 												}

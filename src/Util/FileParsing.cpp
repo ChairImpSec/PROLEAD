@@ -45,6 +45,8 @@ std::vector<TriStateBit> VerilogBitstringGrammar::ConvertHexCharsToBinary(
     hex_int = 10 + (hex_char - 'a');
   } else if (hex_char >= 'A' && hex_char <= 'F') {
     hex_int = 10 + (hex_char - 'A');
+  } else if (hex_char == 'x' || hex_char == 'X') {
+    return std::vector<TriStateBit>(4, TriStateBit::undefined_value);
   } else if (hex_char == '$') {
     return std::vector<TriStateBit>(4, TriStateBit::random_value);
   } else {
@@ -66,11 +68,10 @@ std::vector<TriStateBit> VerilogBitstringGrammar::ConvertHexCharsToBinary(
   return hex_bin;
 }
 
-VerilogBitstringGrammar::VerilogBitstringGrammar(
-    const std::string& input_string)
-    : VerilogBitstringGrammar::base_type(value), input_string_(input_string) {
-  bin_value = qi::lit("'b") >> +qi::char_("01$");
-  hex_value = qi::lit("'h") >> +qi::char_("0-9a-fA-F$");
+VerilogBitstringGrammar::VerilogBitstringGrammar()
+    : VerilogBitstringGrammar::base_type(value) {
+  bin_value = qi::lit("'b") >> +qi::char_("01$xX");
+  hex_value = qi::lit("'h") >> +qi::char_("0-9a-fA-F$xX");
 
   value = -(qi::lit("~")[([&]() { is_inverted = true; })]) >>
           qi::uint_[([&](uint64_t number) { number_of_bits = number; })] >>
@@ -87,6 +88,8 @@ VerilogBitstringGrammar::VerilogBitstringGrammar(
                } else if ((tri_state_bit == '1' && !is_inverted) ||
                           (tri_state_bit == '0' && is_inverted)) {
                  result.push_back(TriStateBit::one_value);
+               } else if (tri_state_bit == 'x' || tri_state_bit == 'X') {
+                 result.push_back(TriStateBit::undefined_value);
                } else if (tri_state_bit == '$') {
                  result.push_back(TriStateBit::random_value);
                } else {
@@ -99,7 +102,7 @@ VerilogBitstringGrammar::VerilogBitstringGrammar(
            hex_value[([&](const std::string& tri_state_hex_string) {
              if (tri_state_hex_string.size() != (number_of_bits + 3) / 4) {
                throw std::invalid_argument(
-                   "Error while parsing the hexadecimal string" + input_string +
+                   "Error while parsing the hexadecimal string" + input_string_ +
                    ": Length mismatch");
              }
              for (char tri_state_hex_char : tri_state_hex_string) {
@@ -114,6 +117,7 @@ VerilogBitstringGrammar::VerilogBitstringGrammar(
 std::vector<TriStateBit> VerilogBitstringGrammar::Parse(
     std::string& tri_state_string) {
   std::string::iterator begin, end;
+  input_string_ = tri_state_string;
   begin = tri_state_string.begin();
   end = tri_state_string.end();
   result.clear();
@@ -132,7 +136,7 @@ std::vector<TriStateBit> VerilogBitstringGrammar::Parse(
 InputAssignmentGrammar::InputAssignmentGrammar()
     : InputAssignmentGrammar::base_type(value) {
   value = shared_value | (constant_value[([&](std::string& verilog_bitstring) {
-            VerilogBitstringGrammar verilog_grammar(verilog_bitstring);
+            VerilogBitstringGrammar verilog_grammar;
             result_.signal_values_ = verilog_grammar.Parse(verilog_bitstring);
           })]);
 

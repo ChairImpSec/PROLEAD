@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -75,14 +75,14 @@ $(function() {
 
 <p>This is the complete list of members for <a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html#af87d8c44a2cd2ace9e6e4e19080dddb3">ComputeFaultEffect</a>(uint64_t) const override</td><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ad7b3120aa912d68485b13865bf19e6b4">Fault</a>(uint64_t signal_index, uint64_t clock_cycle, double fault_probability, FaultType fault_type)</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a8e801ad63908892834771e2a4eeaa34b">GetClockCycle</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ae9ffab8d18386115a47f64395c776558">GetFaultProbability</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a7c556bcd175d0f8f6b99f100383b21a5">GetFaultType</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#abf1ef98861ba7e7f5483cd975d6278d7">GetSignalIndex</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html#a64c9c2f7d24db9d08ed47346a756787f">ComputeFaultEffect</a>(uint64_t fault_free_computation) const override</td><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#a0547c4a8941126d7053c904ebf42c918">Fault</a>(const Hardware::SignalStruct *const signal, size_t signal_index, size_t clock_cycle, double fault_probability, FaultType fault_type)</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a0df0321f5d91bc46582c6645a8b8a647">GetFaultedClockCycle</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#ac7c6164726fa434873c1a717cdb4eae7">GetFaultedSignalIndex</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault.html#ae9ffab8d18386115a47f64395c776558">GetFaultProbability</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault.html#a7c556bcd175d0f8f6b99f100383b21a5">GetFaultType</a>() const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="class_fault.html#a7a1acd03a27d104e451251375e982251">IsSignalFaulted</a>(uint64_t signal_index, uint64_t clock_cycle) const</td><td class="entry"><a class="el" href="class_fault.html">Fault</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html#a0df32e34ab51e03e6244a6d0ddf48132">StuckAtZeroFault</a>(unsigned int signal_index, unsigned int clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html#a27a78120b9e6b0eb9f13cd3141d49d20">StuckAtZeroFault</a>(const Hardware::SignalStruct *const signal, size_t signal_index, size_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_stuck_at_zero_fault.html">StuckAtZeroFault</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

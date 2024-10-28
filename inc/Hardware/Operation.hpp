@@ -3,9 +3,11 @@
 #define BOOST_SPIRIT_DEBUG
 #include <algorithm>
 #include <boost/phoenix.hpp>
-#include <boost/spirit/include/qi.hpp>
 #include <boost/variant.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/spirit/include/qi.hpp>
 #include <iostream>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -72,7 +74,7 @@ template <typename OperationContainer>
 class Operation {
  public:
   Operation();
-  Operation(std::string expression, std::vector<std::string> input_names);
+  Operation(std::string expression, std::vector<std::string> names);
   Operation(OperationType operation_type, std::vector<unsigned int>& input_signals);
   uint64_t Evaluate(std::vector<uint64_t> input_values) const; // Cannot be given as reference as the input vector is modified internally!
   /**

@@ -791,13 +791,24 @@ void Adversaries<ExtensionContainer>::RemoveUninformativeProbingSets() {
 }
 
 template <class ExtensionContainer> void Adversaries<ExtensionContainer>::NormalTest(std::vector<double_t>& group_simulation_ratio) {
-  #pragma omp parallel for schedule(guided)
-  for (size_t set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
-    if (probing_sets_[set_index].GetNumberOfProbeAddresses()){
-      probing_sets_[set_index].NormalTableUpdate(settings_, simulation_, propagations_);
-      probing_sets_[set_index].ComputeGTest(settings_.GetNumberOfGroups(), simulation_.number_of_processed_simulations, group_simulation_ratio);
+  if (simulation_.considered_simulation_indices_.size() == settings_.GetNumberOfSimulationsPerStep()) {
+    #pragma omp parallel for schedule(guided)
+    for (size_t set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
+      if (probing_sets_[set_index].GetNumberOfProbeAddresses()){
+        probing_sets_[set_index].NormalTableUpdateWithAllSimulations(settings_, simulation_, propagations_);
+        probing_sets_[set_index].ComputeGTest(settings_.GetNumberOfGroups(), simulation_.number_of_processed_simulations, group_simulation_ratio);
+      }
+    }
+  } else {
+    #pragma omp parallel for schedule(guided)
+    for (size_t set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
+      if (probing_sets_[set_index].GetNumberOfProbeAddresses()){
+        probing_sets_[set_index].NormalTableUpdate(settings_, simulation_, propagations_);
+        probing_sets_[set_index].ComputeGTest(settings_.GetNumberOfGroups(), simulation_.number_of_processed_simulations, group_simulation_ratio);
+      }
     }
   }
+
 }
 
 template <> 

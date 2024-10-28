@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>PROLEAD: PROLEAD/inc/Hardware/Operation.hpp Source File</title>
+<title>PROLEAD: PROLEAD_public/inc/Hardware/Operation.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -69,7 +69,7 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_f4b6cb72a16f12c9abd6b144ff30471b.html">PROLEAD</a></li><li class="navelem"><a class="el" href="dir_07ee6b359e161d082e53c1bddd9f6f3c.html">inc</a></li><li class="navelem"><a class="el" href="dir_ee333017a7dfb067d45b2e223bebac94.html">Hardware</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_696586db0b8a708c922c6867b383daee.html">PROLEAD_public</a></li><li class="navelem"><a class="el" href="dir_944cf9d86d30de3785def8d0e0087356.html">inc</a></li><li class="navelem"><a class="el" href="dir_ccfa6d7c543e74965df716356c654775.html">Hardware</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -81,99 +81,101 @@ $(function() {
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#define BOOST_SPIRIT_DEBUG</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;boost/phoenix.hpp&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;boost/spirit/include/qi.hpp&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;boost/variant.hpp&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;Hardware/LibHelper.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;boost/variant.hpp&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;boost/algorithm/string.hpp&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;boost/spirit/include/qi.hpp&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>qi = boost::spirit::qi;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span>phx = boost::phoenix;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>Hardware {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;Hardware/LibHelper.hpp&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>qi = boost::spirit::qi;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span>phx = boost::phoenix;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">enum class</span> OperationType { None, And, Or, Xor, Mux, Not, Constant_zero, Constant_one };</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>Hardware {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// Stores first the operation as string, and secondly the amount of inputs</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; operation_library;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; probe_extension_library;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; glitch_propagation_library;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="struct_hardware_1_1_expression_tree.html">   27</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a> {</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  OperationType operation;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  std::vector&lt;unsigned int&gt; variables;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  std::vector&lt;ExpressionTree&gt; subclauses;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; clause);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; left,</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>                 <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; right);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> variable);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>};</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="class_hardware_1_1_custom_operation.html">   40</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a> {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>(<a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; tree, <span class="keywordtype">size_t</span> number_of_inputs);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <span class="keywordtype">size_t</span> GetNumberOfClauses() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> GetNumberOfOperandsInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  OperationType GetOperationInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> GetOperandInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                                  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> input_index) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>(OperationType operation_type, std::vector&lt;unsigned int&gt; input_signals);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  std::vector&lt;OperationType&gt; operation_of_clause_;</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  std::vector&lt;std::vector&lt;unsigned int&gt;&gt; operands_in_clause_;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordtype">void</span> SetClause(OperationType operation, std::vector&lt;unsigned int&gt;&amp; operands);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_hardware_1_1_boolean_expression_grammar.html">   60</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_boolean_expression_grammar.html">BooleanExpressionGrammar</a></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, ExpressionTree(),</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                         qi::space_type&gt; {</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <a class="code hl_class" href="class_hardware_1_1_boolean_expression_grammar.html">BooleanExpressionGrammar</a>();</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  qi::rule&lt;std::string::iterator, <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(), qi::space_type&gt; or_term,</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>      xor_term, and_term, not_term, variable, const_zero, const_one, restart_parser;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>};</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> OperationContainer&gt;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="class_hardware_1_1_operation.html">   72</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a> {</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>();</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>(std::string expression, std::vector&lt;std::string&gt; input_names);</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>(OperationType operation_type, std::vector&lt;unsigned int&gt;&amp; input_signals);</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  uint64_t Evaluate(std::vector&lt;uint64_t&gt; input_values) <span class="keyword">const</span>; <span class="comment">// Cannot be given as reference as the input vector is modified internally!</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461">   85</a></span><span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code hl_function" href="class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461">IsEquivalentTo</a>(<a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>&amp; other);</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  OperationContainer GetOperationContainer(){</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordflow">return</span> operation_;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  }</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keywordtype">size_t</span> GetAmountInputs();</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">enum class</span> OperationType { None, And, Or, Xor, Mux, Not, Constant_zero, Constant_one };</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// Stores first the operation as string, and secondly the amount of inputs</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; operation_library;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; probe_extension_library;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">extern</span> std::vector&lt;std::pair&lt;std::string, std::vector&lt;std::string&gt;&gt;&gt; glitch_propagation_library;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="struct_hardware_1_1_expression_tree.html">   29</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a> {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  OperationType operation;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  std::vector&lt;unsigned int&gt; variables;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  std::vector&lt;ExpressionTree&gt; subclauses;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; clause);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op, <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; left,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                 <span class="keyword">const</span> <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; right);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(OperationType op);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> variable);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="class_hardware_1_1_custom_operation.html">   42</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a> {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>(<a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>&amp; tree, <span class="keywordtype">size_t</span> number_of_inputs);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keywordtype">size_t</span> GetNumberOfClauses() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> GetNumberOfOperandsInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  OperationType GetOperationInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> GetOperandInClause(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> clause_index,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                                  <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> input_index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>(OperationType operation_type, std::vector&lt;unsigned int&gt; input_signals);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code hl_class" href="class_hardware_1_1_custom_operation.html">CustomOperation</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  std::vector&lt;OperationType&gt; operation_of_clause_;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  std::vector&lt;std::vector&lt;unsigned int&gt;&gt; operands_in_clause_;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keywordtype">void</span> SetClause(OperationType operation, std::vector&lt;unsigned int&gt;&amp; operands);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>};</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="class_hardware_1_1_boolean_expression_grammar.html">   62</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_boolean_expression_grammar.html">BooleanExpressionGrammar</a></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    : <span class="keyword">public</span> qi::grammar&lt;std::string::iterator, ExpressionTree(),</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                         qi::space_type&gt; {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <a class="code hl_class" href="class_hardware_1_1_boolean_expression_grammar.html">BooleanExpressionGrammar</a>();</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  qi::rule&lt;std::string::iterator, <a class="code hl_struct" href="struct_hardware_1_1_expression_tree.html">ExpressionTree</a>(), qi::space_type&gt; or_term,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>      xor_term, and_term, not_term, variable, const_zero, const_one, restart_parser;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>};</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> OperationContainer&gt;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="class_hardware_1_1_operation.html">   74</a></span><span class="keyword">class </span><a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a> {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>();</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>(std::string expression, std::vector&lt;std::string&gt; names);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>(OperationType operation_type, std::vector&lt;unsigned int&gt;&amp; input_signals);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  uint64_t Evaluate(std::vector&lt;uint64_t&gt; input_values) <span class="keyword">const</span>; <span class="comment">// Cannot be given as reference as the input vector is modified internally!</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461">   87</a></span><span class="comment"></span>  <span class="keywordtype">bool</span> <a class="code hl_function" href="class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461">IsEquivalentTo</a>(<a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>&amp; other);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code hl_class" href="class_hardware_1_1_operation.html">Operation</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  OperationContainer GetOperationContainer(){</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">return</span> operation_;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  }</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  OperationContainer operation_;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  <span class="keywordtype">size_t</span> amount_of_inputs_;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>};</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>}  <span class="comment">// namespace Hardware</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keywordtype">size_t</span> GetAmountInputs();</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  OperationContainer operation_;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <span class="keywordtype">size_t</span> amount_of_inputs_;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>};</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
-<div class="ttc" id="aclass_hardware_1_1_boolean_expression_grammar_html"><div class="ttname"><a href="class_hardware_1_1_boolean_expression_grammar.html">Hardware::BooleanExpressionGrammar</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:62</div></div>
-<div class="ttc" id="aclass_hardware_1_1_custom_operation_html"><div class="ttname"><a href="class_hardware_1_1_custom_operation.html">Hardware::CustomOperation</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:40</div></div>
-<div class="ttc" id="aclass_hardware_1_1_operation_html"><div class="ttname"><a href="class_hardware_1_1_operation.html">Hardware::Operation</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:72</div></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>}  <span class="comment">// namespace Hardware</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="ttc" id="aclass_hardware_1_1_boolean_expression_grammar_html"><div class="ttname"><a href="class_hardware_1_1_boolean_expression_grammar.html">Hardware::BooleanExpressionGrammar</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:64</div></div>
+<div class="ttc" id="aclass_hardware_1_1_custom_operation_html"><div class="ttname"><a href="class_hardware_1_1_custom_operation.html">Hardware::CustomOperation</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:42</div></div>
+<div class="ttc" id="aclass_hardware_1_1_operation_html"><div class="ttname"><a href="class_hardware_1_1_operation.html">Hardware::Operation</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:74</div></div>
 <div class="ttc" id="aclass_hardware_1_1_operation_html_abc00af8eaf0ebe615c57e50b495c9461"><div class="ttname"><a href="class_hardware_1_1_operation.html#abc00af8eaf0ebe615c57e50b495c9461">Hardware::Operation::IsEquivalentTo</a></div><div class="ttdeci">bool IsEquivalentTo(Operation &amp;other)</div><div class="ttdoc">Checks if two operations return the same result for all possible operations.</div></div>
-<div class="ttc" id="astruct_hardware_1_1_expression_tree_html"><div class="ttname"><a href="struct_hardware_1_1_expression_tree.html">Hardware::ExpressionTree</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:27</div></div>
+<div class="ttc" id="astruct_hardware_1_1_expression_tree_html"><div class="ttname"><a href="struct_hardware_1_1_expression_tree.html">Hardware::ExpressionTree</a></div><div class="ttdef"><b>Definition:</b> Operation.hpp:29</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

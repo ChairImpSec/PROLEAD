@@ -21,7 +21,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.1-alpha</span>
+   <div id="projectname">PROLEAD<span id="projectnumber">&#160;3.0.3</span>
    </div>
   </td>
  </tr>
@@ -76,17 +76,19 @@ $(function() {
 <p>This is the complete list of members for <a class="el" href="class_fault_manager.html">FaultManager</a>, including all inherited members.</p>
 <table class="directory">
   <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a4a626868c5e39dde8da0af44a0eed959">AddFaultSet</a>(std::vector&lt; Fault const * &gt; &amp;faults)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#aa391a5206a0e3072a5a8cd5c44dd1b3f">AddStuckAtOneFault</a>(uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a03071cd0cb965335241a4a8be81a9474">AddStuckAtZeroFault</a>(uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a7445d3102249fad2fccf9b9b528ad8bd">AddToggleFault</a>(uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>GenerateFaultSets</b>() (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>GetFault</b>(uint64_t index) const (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a8116011de7a9971bc2798438499fb02e">GetFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a5e967f4ee9d4a16f2f03affd75f0730e">GetFaultSets</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>GetNumberOfFaults</b>() const (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a7b9876e79b465650fcd35dd5b743f873">GetStuckAtOneFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a737c555fd9a653d425108440398158da">GetStuckAtZeroFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
-  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#aa3e89e57e2030410d929466a9f26899d">GetToggleFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a6983bd692f8662a3f13e6929f205aec5">AddStuckAtOneFault</a>(const Hardware::SignalStruct *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a4a60f0278035335f9959f6c0d694a272">AddStuckAtZeroFault</a>(const Hardware::SignalStruct *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a06433cfa4cadc09933779015a3ed06d5">AddToggleFault</a>(const Hardware::SignalStruct *const signal, uint64_t signal_index, uint64_t clock_cycle, double fault_probability)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a1721d2a497b08a88e39c1c143af45e94">FaultManager</a>(const FaultInjectionSettings &amp;fault_injection_settings, const Hardware::CircuitStruct &amp;circuit_to_be_faulted)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>GenerateFaultSets</b>() (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>GetFault</b>(uint64_t index) const (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a8116011de7a9971bc2798438499fb02e">GetFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a5e967f4ee9d4a16f2f03affd75f0730e">GetFaultSets</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0" class="odd"><td class="entry"><b>GetNumberOfFaults</b>() const (defined in <a class="el" href="class_fault_manager.html">FaultManager</a>)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#a7b9876e79b465650fcd35dd5b743f873">GetStuckAtOneFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a737c555fd9a653d425108440398158da">GetStuckAtZeroFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="class_fault_manager.html#aa3e89e57e2030410d929466a9f26899d">GetToggleFaults</a>() const</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
+  <tr class="odd"><td class="entry"><a class="el" href="class_fault_manager.html#a53ff1299b16791fd811c9333a0fb8758">SelectStrategyAndComputeAllFaults</a>(size_t clock_signal_index)</td><td class="entry"><a class="el" href="class_fault_manager.html">FaultManager</a></td><td class="entry"></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
