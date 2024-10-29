@@ -126,6 +126,17 @@ class Sharing {
    */
   std::vector<uint64_t> SampleRandomBitslicedPolynomial();
 
+  /**
+   * @brief Samples a random bitsliced polynomialfor Boolean masking.
+   *
+   * As SampleRandomBitslicedPolynomial is slow, we provide a faster version
+   * only for Boolean masking.
+   *
+   * @return A std::vector<uint64_t> containing the bitsliced polynomial. Each
+   *         element in the vector represents a slice of the polynomial.
+   */
+  std::vector<uint64_t> SampleBooleanRandomBitslicedPolynomial();
+
  private:
   /**
    * @brief Converts an fq_t polynomial to a polynomial represented as
@@ -137,7 +148,6 @@ class Sharing {
 
   boost::dynamic_bitset<> ConvertPolynomialToBitset(
       const Polynomial& polynomial) const;
-
 
   void SampleRandomPolynomial(fq_t& random_polynomial_fq);
 
@@ -183,8 +193,7 @@ class Sharing {
    * * @return A vector of d polynomials representing the shared
    * representation Sh(X).
    */
-  std::vector<Polynomial> Encode(fq_t& polynomial_fq,
-                                 uint64_t number_of_shares,
+  std::vector<Polynomial> Encode(fq_t& polynomial_fq, uint64_t number_of_shares,
                                  bool is_additive_masking);
 
   /**

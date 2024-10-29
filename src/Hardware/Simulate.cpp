@@ -32,14 +32,21 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
   	std::vector<uint64_t>::iterator it;
 	std::vector<uint64_t> random_bitsliced_polynomial;
 
-	for (group_index = 0; group_index < number_of_groups; ++group_index) {
-		for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() / input_element_size; value_index++) {
-			random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
-			std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), SharedData.group_values_[group_index].begin() + value_index * input_element_size);
+	if (settings.input_finite_field.base == 2){
+		for (group_index = 0; group_index < number_of_groups; ++group_index) {
+			for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() / input_element_size; value_index++) {
+				random_bitsliced_polynomial = input_sharing.SampleBooleanRandomBitslicedPolynomial();
+				std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), SharedData.group_values_[group_index].begin() + value_index * input_element_size);
+			}
 		}
+	} else {
+		for (group_index = 0; group_index < number_of_groups; ++group_index) {
+			for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() / input_element_size; value_index++) {
+				random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+				std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), SharedData.group_values_[group_index].begin() + value_index * input_element_size);
+			}
+		}		
 	}
-
-
 
 	for (group_index = 0; group_index < number_of_groups; ++group_index) {
 		for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup(); value_index++) {
@@ -117,11 +124,21 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		}
 
 		// ----------- applying always random inputs
-		for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
-			random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+		if (settings.input_finite_field.base == 2) {
+			for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
+				random_bitsliced_polynomial = input_sharing.SampleBooleanRandomBitslicedPolynomial();
 
-			for (input_index = 0; input_index < input_element_size; ++input_index){
-				SharedData.signal_values_[element[input_index]] = random_bitsliced_polynomial[input_index];
+				for (input_index = 0; input_index < input_element_size; ++input_index){
+					SharedData.signal_values_[element[input_index]] = random_bitsliced_polynomial[input_index];
+				}
+			}
+		} else {
+			for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
+				random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+
+				for (input_index = 0; input_index < input_element_size; ++input_index){
+					SharedData.signal_values_[element[input_index]] = random_bitsliced_polynomial[input_index];
+				}
 			}
 		}
 

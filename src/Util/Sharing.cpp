@@ -253,6 +253,10 @@ std::vector<uint64_t> Sharing::SampleRandomBitslicedPolynomial() {
   return bitsliced_polynomial;
 }
 
+std::vector<uint64_t> Sharing::SampleBooleanRandomBitslicedPolynomial() {
+  std::vector<uint64_t> bitsliced_polynomial(length_of_elements_in_bits_, gen_());
+  return bitsliced_polynomial;
+}
 
 std::vector<Polynomial> Sharing::Encode(fq_t& polynomial_fq,
                                         uint64_t number_of_shares,
