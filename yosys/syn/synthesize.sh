@@ -31,7 +31,7 @@ then
 elif [[ $1 == "VERILOG" || $1 == "verilog" || $1 == "Verilog" ]]
 then
     # Run 1.) - 13.)
-    yosys -m ghdl -p 'read_verilog '"$2"'*.v; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; opt_clean; stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; select '"$3"'; insbuf -buf BUF A Y; write_verilog -noattr -selected design.v;';
+    yosys -p 'read_verilog '"$2"'*.v; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; opt_clean; stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; select '"$3"'; insbuf -buf BUF A Y; write_verilog -noattr -selected design.v;';
 else
     echo "Command " $1 " is not supported.";
 fi
