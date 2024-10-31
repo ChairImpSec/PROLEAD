@@ -102,8 +102,8 @@ VerilogBitstringGrammar::VerilogBitstringGrammar()
            hex_value[([&](const std::string& tri_state_hex_string) {
              if (tri_state_hex_string.size() != (number_of_bits + 3) / 4) {
                throw std::invalid_argument(
-                   "Error while parsing the hexadecimal string" + input_string_ +
-                   ": Length mismatch");
+                   "Error while parsing the hexadecimal string" +
+                   input_string_ + ": Length mismatch");
              }
              for (char tri_state_hex_char : tri_state_hex_string) {
                std::vector<TriStateBit> tri_state_bits =
@@ -125,8 +125,10 @@ std::vector<TriStateBit> VerilogBitstringGrammar::Parse(
   is_inverted = false;
 
   if (!qi::phrase_parse(begin, end, *this, qi::space)) {
-    throw std::invalid_argument(
-        "Error while parsing the Verilog bitstring: Parsing failed");
+    std::string error_message =
+        "Error while parsing the Verilog bitstring: \"" + tri_state_string +
+        "\". Invalid syntax!";
+    throw std::invalid_argument(error_message);
   }
 
   std::reverse(result.begin(), result.end());
@@ -187,8 +189,10 @@ InputAssignment InputAssignmentGrammar::Parse(
   result_.signal_values_.clear();
 
   if (!qi::phrase_parse(begin, end, *this, qi::space)) {
-    throw std::invalid_argument(
-        "Error while parsing an input assignment: Parsing failed");
+    std::string error_message =
+        "Error while parsing the input assignment: \"" + input_assignment_string +
+        "\". Invalid syntax!";
+    throw std::invalid_argument(error_message);
   }
 
   return result_;
@@ -214,7 +218,8 @@ IrreduciblePolynomialGrammar::IrreduciblePolynomialGrammar()
 
 std::vector<uint64_t> IrreduciblePolynomialGrammar::Parse(
     std::string& polynomial_string, uint64_t base, uint64_t exponent) {
-  std::string error_context = "Error while parsing an irreducible polynomial: ";
+  std::string error_context =
+      "Error while parsing the polynomial: " + polynomial_string + ". ";
   std::string galois_field =
       "GF(" + std::to_string(base) + "^" + std::to_string(exponent) + ")";
   std::string::iterator begin, end;
@@ -224,7 +229,7 @@ std::vector<uint64_t> IrreduciblePolynomialGrammar::Parse(
   end = polynomial_string.end();
 
   if (!qi::phrase_parse(begin, end, *this, qi::space, monomials)) {
-    throw std::invalid_argument(error_context + "Parsing failed!");
+    throw std::invalid_argument(error_context + "Invalid syntax!");
   }
 
   for (uint64_t index = 0; index <= exponent; ++index) {
@@ -251,15 +256,15 @@ std::vector<uint64_t> IrreduciblePolynomialGrammar::Parse(
 
   for (const std::pair<uint64_t, uint64_t>& monomial : monomials) {
     if (monomial.first >= base) {
-      throw std::invalid_argument(error_context + "Coefficient of term \"" +
+      throw std::invalid_argument(error_context + "Invalid coefficient: \"" +
                                   std::to_string(monomial.first) + "x^" +
-                                  std::to_string(monomial.second) +
-                                  "\" is not allowed in " + galois_field + "!");
+                                  std::to_string(monomial.second) + "\" in " +
+                                  galois_field + "!");
     } else if (monomial.second > exponent) {
-      throw std::invalid_argument(error_context + "Exponent of term \"" +
+      throw std::invalid_argument(error_context + "Invalid coefficient: \"" +
                                   std::to_string(monomial.first) + "x^" +
-                                  std::to_string(monomial.second) +
-                                  "\" is not allowed in " + galois_field + "!");
+                                  std::to_string(monomial.second) + "\" in " +
+                                  galois_field + "!");
     } else {
       coefficients.push_back(monomial.first);
     }
@@ -321,8 +326,10 @@ std::vector<std::string> SignalNameGrammar::Parse(
   bool success = qi::phrase_parse(begin, end, *this, qi::space);
 
   if (!success || (begin != end)) {
-    throw std::invalid_argument(
-        "Error while parsing the signal names: Parsing failed");
+    std::string error_message =
+        "Error while parsing signal name: \"" + signal_name_string +
+        "\". Invalid syntax!";
+    throw std::invalid_argument(error_message);
   }
 
   return result;
@@ -335,7 +342,7 @@ std::ifstream OpenFile(const std::filesystem::path& path) {
     std::string error_message =
         "Error while opening the file located at path \"" + path.string() +
         "\": ";
-    throw std::runtime_error(error_message + "File not found.");
+    throw std::runtime_error(error_message + "File not found!");
   }
 
   return stream;
