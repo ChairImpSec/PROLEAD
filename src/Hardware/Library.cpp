@@ -122,20 +122,20 @@ void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
 }
 
 void Cell::SetOperations(const std::vector<std::string>& expressions) {
-  std::vector<std::string> primary_signals;
   predefined_functions_found_ = false;
 
+  std::vector<std::string> primary_signals;
+  for (const std::vector<std::string>& input_port : inputs_) {
+    primary_signals.insert(primary_signals.end(), input_port.begin(), input_port.end());
+  }
+
+  if (type_ == CellType::sequential_gate) {
+    for (const std::vector<std::string>& output_port : outputs_) {
+      primary_signals.insert(primary_signals.end(), output_port.begin(), output_port.end());
+    }
+  }
+
   for (const std::string& expression : expressions) {
-    for (const std::vector<std::string>& input_port : inputs_) {
-      primary_signals.insert(primary_signals.end(), input_port.begin(), input_port.end());
-    }
-
-    if (type_ == CellType::sequential_gate) {
-      for (const std::vector<std::string>& output_port : outputs_) {
-        primary_signals.insert(primary_signals.end(), output_port.begin(), output_port.end());
-      }
-    }
-
     operations_.emplace_back(Operation<CustomOperation>(expression, primary_signals));
 
     if (type_ == CellType::relaxed_gate) {
