@@ -332,7 +332,7 @@ void Printer<ExtensionContainer>::PrintMostLeakingSets(
     std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
     std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
     const CircuitStruct& circuit, const Settings& settings, std::ofstream& stream) {
-  stream << "2.) Summary of the most leakging (and still active) probing sets: "
+  stream << "2.) Summary of the most leaking (and still active) probing sets: "
          << std::endl
          << std::endl;
   size_t index, set_index;
