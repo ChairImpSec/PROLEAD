@@ -10,13 +10,12 @@
 # 4.) Generic synthesis with a given top module
 # 5.) Mapping flip-flops to the library
 # 6.) Mapping logic to the library
-# 7.) Identify unused signals and cells and remove them
-# 8.) Print some statistics
-# 9.) Remove the keep hierarchy attribute
-# 10.) Flatten the netlist
+# 7.) Print some statistics
+# 8.) Remove the keep hierarchy attribute
+# 9.) Flatten the netlist
+# 10.) Identify unused signals and cells and remove them
 # 11.) Select the top module
-# 12.) Exchange all "assign" statements with buffer modules
-# 13.) Write the synthsized design without attributes
+# 12.) Write the synthsized design without attributes
 
 # Path to the Yosys library files
 LIBRARY_PATH="../lib/"
@@ -26,12 +25,18 @@ then
     # Analyze VHDL sources
     ghdl -a $2*.vhd
 
-    # Run 1.) - 13.)
-    yosys -m ghdl -p 'ghdl '"$3"'; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; clean; stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; select '"$3"'; insbuf -buf BUF A Y; write_verilog -noattr -selected design.v;';
+    # Run 1.) - 12.)
+    yosys -m ghdl -p 'ghdl '"$3"'; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; 
+    synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; 
+    stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; opt_clean -purge; select '"$3"'; 
+    write_verilog -noattr -selected design.v;';
 elif [[ $1 == "VERILOG" || $1 == "verilog" || $1 == "Verilog" ]]
 then
-    # Run 1.) - 13.)
-    yosys -p 'read_verilog '"$2"'*.v; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; opt_clean; stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; select '"$3"'; insbuf -buf BUF A Y; write_verilog -noattr -selected design.v;';
+    # Run 1.) - 12.)
+    yosys -p 'read_verilog '"$2"'*.v; read_verilog -lib '"$LIBRARY_PATH"'custom_cells.v; setattr -set keep_hierarchy 1; 
+    synth -top '"$3"'; dfflibmap -liberty '"$LIBRARY_PATH"'custom_cells.lib; abc -liberty '"$LIBRARY_PATH"'custom_cells.lib; 
+    stat -liberty '"$LIBRARY_PATH"'custom_cells.lib; setattr -set keep_hierarchy 0; flatten; opt_clean -purge; select '"$3"'; 
+    write_verilog -noattr -selected design.v;';
 else
     echo "Command " $1 " is not supported.";
 fi
