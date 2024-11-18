@@ -90,7 +90,7 @@
             "cells": [
                 {
                     "name": "and2",
-                    "aliases": ["AND3"],
+                    "aliases": ["AND2"],
                     "type": "relaxed_gate",
                     "inputs": ["A", "B"],
                     "outputs": ["Q"],
