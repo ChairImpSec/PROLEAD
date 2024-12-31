@@ -15,6 +15,7 @@
 #include <boost/phoenix/object.hpp>
 #include <boost/phoenix/operator.hpp>
 #include <boost/spirit/include/qi.hpp>
+#include <cassert>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -25,8 +26,26 @@ namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 namespace js = boost::json;
 
-enum class TriStateBit { no_value, zero_value, one_value, random_value, undefined_value };
+enum class TriStateBit {
+  no_value,
+  zero_value,
+  one_value,
+  random_value,
+  undefined_value
+};
 enum class ValueType { arary, variable, standard };
+
+class JsonSchema {
+ public: 
+  JsonSchema(const std::string& key, const std::string& type);
+  JsonSchema(const std::string& key, const std::string& type, const std::vector<JsonSchema>& children);
+  void Validate(const boost::json::object& json_object);
+
+ private:
+  std::string key_;
+  std::string type_;
+  std::vector<JsonSchema> children_;
+};
 
 class InputAssignment {
  public:

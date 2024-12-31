@@ -10,7 +10,7 @@
 #include <vector>
 
 #include "Util/CpuCoreSelector.hpp"
-#include "Util/FileParsing.hpp"
+#include "Util/SettingsSchema.hpp"
 #include "Util/Sharing.hpp"
 // #include "Hardware/Fault.hpp"
 #include "Types.hpp"
@@ -226,70 +226,3 @@ class Settings {
   void ParseSideChannelAnalysisSettings(const boost::json::object& json_object, const std::string& identifier, SideChannelAnalysisSettings& settings);
   void ParseFaultInjectionSettings(const boost::json::object& json_object, const std::string& identifier, FaultInjectionSettings& settings);
 };
-
-namespace SettingNames {
-
-extern const std::string BASE;
-extern const std::string EXPONENT;
-extern const std::string IS_ADDITIVE;
-extern const std::string EXCLUDED_ELEMENTS;
-extern const std::string IRREDUCIBLE_POLYNOMIAL;
-extern const std::string INPUT_FINITE_FIELD;
-extern const std::string OUTPUT_FINITE_FIELD;
-
-extern const std::string NUMBER_OF_THREADS;
-extern const std::string COMPACT_DISTRIBUTIONS;
-extern const std::string MINIMIZE_PROBING_SETS;
-extern const std::string REMOVE_FULL_PROBING_SETS;
-extern const std::string NUMBER_OF_ENTRIES_IN_REPORT;
-extern const std::string NUMBER_OF_PROBING_SETS_PER_STEP;
-extern const std::string PERFORMANCE;
-
-extern const std::string CLOCK_SIGNAL_NAME;
-extern const std::string HARDWARE;
-
-extern const std::string COMPILER_FLAGS;
-extern const std::string LOCATION_OF_CIPHER;
-extern const std::string NUMBER_OF_PIPELINE_STAGES;
-extern const std::string SOFTWARE;
-
-extern const std::string WAVEFORM_SIMULATION;
-extern const std::string NUMBER_OF_CLOCK_CYCLES;
-extern const std::string END_WAIT_CYCLES;
-extern const std::string END_CONDITION;
-extern const std::string GROUPS;
-extern const std::string ALWAYS_RANDOM_INPUTS;
-extern const std::string OUTPUT_SHARES;
-extern const std::string EXPECTED_OUTPUT;
-extern const std::string INPUT_SEQUENCE;
-extern const std::string FAULT_DETECTION_FLAGS;
-extern const std::string NUMBER_OF_SIMULATIONS;
-extern const std::string NUMBER_OF_SIMULATIONS_PER_STEP;
-extern const std::string NUMBER_OF_SIMULATIONS_PER_WRITE;
-extern const std::string SIMULATION;
-
-extern const std::string ALPHA_THRESHOLD;
-extern const std::string BETA_THRESHOLD;
-extern const std::string EFFECT_SIZE;
-extern const std::string ORDER_OF_TEST;
-extern const std::string RELAXED_MODEL;
-extern const std::string TRANSITIONAL_LEAKAGE;
-extern const std::string VARIATE;
-extern const std::string DISTANCE;
-extern const std::string CLOCK_CYCLES;
-extern const std::string PROBE_PLACEMENT;
-extern const std::string EXTENSION_ROUTES;
-extern const std::string OBSERVED_EXTENSIONS;
-extern const std::string SIDE_CHANNEL_ANALYSIS;
-
-extern const std::string MAXIMUM_NUMBER_OF_FAULTS_PER_RUN;
-extern const std::string MINIMUM_NUMBER_OF_FAULTS_PER_RUN;
-extern const std::string MAXIMUM_NUMBER_OF_FAULTS_PER_CYCLE;
-extern const std::string MINIMUM_NUMBER_OF_FAULTS_PER_CYCLE;
-extern const std::string FAULTED_CLOCK_CYCLES;
-extern const std::string FAULT_TYPE;
-extern const std::string FAULT_LOCATIONS;
-extern const std::string FAULT_INJECTION;
-extern const std::string FAULT_ANALYSIS;
-
-}  // namespace SettingNames

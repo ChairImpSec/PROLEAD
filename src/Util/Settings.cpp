@@ -183,13 +183,13 @@ void Settings::ParseSoftwareSettings(const boost::json::object& json_object,
                                  "\" not found!");
       }
 
-      SetValue(software_object, SettingNames::NUMBER_OF_PIPELINE_STAGES,
+      SetValue(software_object, SettingNames::PIPELINE_STAGES,
                settings.number_of_pipeline_stages);
 
       if (settings.number_of_pipeline_stages > 6) {
         throw std::out_of_range(
             error_context + "The maximum supported value for key \"" +
-            SettingNames::NUMBER_OF_PIPELINE_STAGES +
+            SettingNames::PIPELINE_STAGES +
             "\" is 6 (for the Cortex M7). If you require a higher number of "
             "pipeline stages please contact the Jannik Zeitschner "
             "(jannik.zeitschner@rub.de)!");
@@ -1116,8 +1116,13 @@ bool Settings::IsDistanceSmallEnough(uint64_t distance) const {
 Settings::Settings(const std::string& config_file_path, bool is_target_hardware)
     : is_target_hardware_(is_target_hardware) {
   boost::json::object json_object = ParseJsonFile(config_file_path);
+
   std::cout << "Successfully parsed the settings file at \"" << config_file_path
             << "\"." << std::endl;
+  settings_schema.Validate(json_object);
+  std::cout << "Successfully validated the settings file at \"" << config_file_path
+            << "\"." << std::endl;
+
   ParseFiniteField(json_object, SettingNames::INPUT_FINITE_FIELD,
                    input_finite_field);
   ParseFiniteField(json_object, SettingNames::OUTPUT_FINITE_FIELD,
@@ -1131,78 +1136,3 @@ Settings::Settings(const std::string& config_file_path, bool is_target_hardware)
   ParseFaultInjectionSettings(json_object, SettingNames::FAULT_INJECTION,
                               fault_injection);
 }
-
-const std::string SettingNames::BASE = "base";
-const std::string SettingNames::EXPONENT = "exponent";
-const std::string SettingNames::IS_ADDITIVE = "is_additive";
-const std::string SettingNames::EXCLUDED_ELEMENTS = "excluded_elements";
-const std::string SettingNames::IRREDUCIBLE_POLYNOMIAL =
-    "irreducible_polynomial";
-const std::string SettingNames::INPUT_FINITE_FIELD = "input_finite_field";
-const std::string SettingNames::OUTPUT_FINITE_FIELD = "output_finite_field";
-
-const std::string SettingNames::NUMBER_OF_THREADS = "max_number_of_threads";
-const std::string SettingNames::MINIMIZE_PROBING_SETS = "minimize_probing_sets";
-const std::string SettingNames::COMPACT_DISTRIBUTIONS = "compact_distributions";
-const std::string SettingNames::REMOVE_FULL_PROBING_SETS =
-    "remove_full_probing_sets";
-const std::string SettingNames::NUMBER_OF_ENTRIES_IN_REPORT =
-    "number_of_entries_in_report";
-const std::string SettingNames::NUMBER_OF_PROBING_SETS_PER_STEP =
-    "number_of_probing_sets_per_step";
-const std::string SettingNames::PERFORMANCE = "performance";
-
-const std::string SettingNames::CLOCK_SIGNAL_NAME = "clock_signal_name";
-const std::string SettingNames::HARDWARE = "hardware";
-
-const std::string SettingNames::COMPILER_FLAGS = "compiler_flags";
-const std::string SettingNames::LOCATION_OF_CIPHER = "location_of_cipher";
-const std::string SettingNames::NUMBER_OF_PIPELINE_STAGES =
-    "number_of_pipeline_stages";
-const std::string SettingNames::SOFTWARE = "software";
-
-const std::string SettingNames::WAVEFORM_SIMULATION = "waveform_simulation";
-const std::string SettingNames::NUMBER_OF_CLOCK_CYCLES =
-    "number_of_clock_cycles";
-const std::string SettingNames::END_WAIT_CYCLES = "end_wait_cycles";
-const std::string SettingNames::END_CONDITION = "end_condition";
-const std::string SettingNames::GROUPS = "groups";
-const std::string SettingNames::ALWAYS_RANDOM_INPUTS = "always_random_inputs";
-const std::string SettingNames::OUTPUT_SHARES = "output_shares";
-const std::string SettingNames::EXPECTED_OUTPUT = "expected_output";
-const std::string SettingNames::INPUT_SEQUENCE = "input_sequence";
-const std::string SettingNames::FAULT_DETECTION_FLAGS = "fault_detection_flags";
-const std::string SettingNames::NUMBER_OF_SIMULATIONS = "number_of_simulations";
-const std::string SettingNames::NUMBER_OF_SIMULATIONS_PER_STEP =
-    "number_of_simulations_per_step";
-const std::string SettingNames::NUMBER_OF_SIMULATIONS_PER_WRITE =
-    "number_of_simulations_per_write";
-const std::string SettingNames::SIMULATION = "simulation";
-
-const std::string SettingNames::EFFECT_SIZE = "effect_size";
-const std::string SettingNames::ALPHA_THRESHOLD = "alpha_threshold";
-const std::string SettingNames::BETA_THRESHOLD = "beta_threshold";
-const std::string SettingNames::ORDER_OF_TEST = "order";
-const std::string SettingNames::RELAXED_MODEL = "relaxed_model";
-const std::string SettingNames::TRANSITIONAL_LEAKAGE = "transitional_leakage";
-const std::string SettingNames::VARIATE = "variate";
-const std::string SettingNames::DISTANCE = "distance";
-const std::string SettingNames::CLOCK_CYCLES = "clock_cycles";
-const std::string SettingNames::PROBE_PLACEMENT = "probe_placement";
-const std::string SettingNames::EXTENSION_ROUTES = "extension_routes";
-const std::string SettingNames::OBSERVED_EXTENSIONS = "observed_extensions";
-const std::string SettingNames::SIDE_CHANNEL_ANALYSIS = "side_channel_analysis";
-
-const std::string SettingNames::FAULTED_CLOCK_CYCLES = "faulted_clock_cycles";
-const std::string SettingNames::FAULT_TYPE = "type";
-const std::string SettingNames::FAULT_LOCATIONS = "fault_locations";
-const std::string SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_RUN =
-    "maximum_number_of_faults_per_run";
-const std::string SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_RUN =
-    "minimum_number_of_faults_per_run";
-const std::string SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_CYCLE =
-    "maximum_number_of_faults_per_cycle";
-const std::string SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_CYCLE =
-    "minimum_number_of_faults_per_cycle";
-const std::string SettingNames::FAULT_INJECTION = "fault_injection";
-const std::string SettingNames::FAULT_ANALYSIS = "simulations_to_analyze";

@@ -1,5 +1,74 @@
 #include "Util/FileParsing.hpp"
 
+JsonSchema::JsonSchema(const std::string& key, const std::string& type)
+    : key_(key), type_(type) {}
+
+JsonSchema::JsonSchema(const std::string& key, const std::string& type,
+                       const std::vector<JsonSchema>& children)
+    : key_(key), type_(type), children_(children) {}
+
+void JsonSchema::Validate(const boost::json::object& json_object) {
+  std::string error_context = "Error while validating JSON: ";
+  std::string key, type;
+  for (const auto& pair : json_object) {
+    key = pair.key_c_str();
+
+    assert(std::is_sorted(children_.begin(), children_.end(),
+                          [](const JsonSchema& a, const JsonSchema& b) {
+                            return a.key_ < b.key_;
+                          }) &&
+           "Error while parsing the JSON object: Children are not sorted!");
+
+    auto child = std::find_if(
+        children_.begin(), children_.end(),
+        [&key](const JsonSchema& scheme) { return scheme.key_ == key; });
+
+    if (child != children_.end()) {
+      type = child->type_;
+      if (child->children_.empty()) {
+        if (type == "int") {
+          uint64_t variable;
+          SetValue(json_object, key, variable);
+        } else if (type == "double") {
+          double variable;
+          SetValue(json_object, key, variable);
+        } else if (type == "string") {
+          std::string variable;
+          SetValue(json_object, key, variable);
+        } else if (type == "bool") {
+          bool variable;
+          SetValue(json_object, key, variable);
+        } else if (type == "array") {
+          boost::json::array variable;
+          SetValue(json_object, key, variable);
+        } else {
+          throw std::invalid_argument(error_context + "Unknown data type \"" +
+                                      type + "\" for key \"" + key +
+                                      "\" in JSON scheme!");
+        }
+      } else {
+        if (type == "array") {
+          boost::json::array json_array;
+          SetValue(json_object, key, json_array);
+          for (const auto& array_element : json_array) {
+            child->children_[0].Validate(array_element.as_object());
+          }
+        } else if (type == "object") {
+          boost::json::object variable;
+          SetValue(json_object, key, variable);
+          child->Validate(variable);
+        } else {
+          throw std::invalid_argument(error_context + "Unknown data type \"" +
+                                      type_ + "\" in JSON scheme!");
+        }
+      }
+    } else {
+      throw std::invalid_argument(error_context + "Key \"" + key +
+                                  "\" not found!");
+    }
+  }
+}
+
 IntegerRangeGrammar::IntegerRangeGrammar(uint64_t maximum_value)
     : IntegerRangeGrammar::base_type(range_) {
   range_ =
@@ -189,9 +258,8 @@ InputAssignment InputAssignmentGrammar::Parse(
   result_.signal_values_.clear();
 
   if (!qi::phrase_parse(begin, end, *this, qi::space)) {
-    std::string error_message =
-        "Error while parsing the input assignment: \"" + input_assignment_string +
-        "\". Invalid syntax!";
+    std::string error_message = "Error while parsing the input assignment: \"" +
+                                input_assignment_string + "\". Invalid syntax!";
     throw std::invalid_argument(error_message);
   }
 
@@ -326,9 +394,8 @@ std::vector<std::string> SignalNameGrammar::Parse(
   bool success = qi::phrase_parse(begin, end, *this, qi::space);
 
   if (!success || (begin != end)) {
-    std::string error_message =
-        "Error while parsing signal name: \"" + signal_name_string +
-        "\". Invalid syntax!";
+    std::string error_message = "Error while parsing signal name: \"" +
+                                signal_name_string + "\". Invalid syntax!";
     throw std::invalid_argument(error_message);
   }
 
@@ -390,7 +457,7 @@ bool SetValue(const js::object& json_object, const std::string& key,
       if (json_object.at(key).as_int64() >= 0) {
         variable = (uint64_t)json_object.at(key).as_int64();
       } else {
-        error_message = "Error while copying the value of the key \"" + key +
+        error_message = "Error while parsing the value of the key \"" + key +
                         "\": Value is negative.";
         throw std::runtime_error(error_message);
       }
@@ -410,7 +477,7 @@ bool SetValue(const js::object& json_object, const std::string& key,
       CheckValueType(json_object, key, js::kind::object);
       variable = json_object.at(key).as_object();
     } else {
-      error_message = "Error while copying the value of the key \"" + key +
+      error_message = "Error while parsing the value of the key \"" + key +
                       "\": Unsupported data type.";
       throw std::runtime_error(error_message);
     }
