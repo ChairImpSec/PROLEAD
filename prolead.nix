@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "prolead";
-  version = "v3.0.3-alpha";
+  version = "v3.0.3";
 
   src = fetchFromGitHub {
     owner = "ChairImpSec";
     repo = "PROLEAD";
-    rev = "v3.0.3-alpha";
-    sha256 = "2nfUc9q/DnCsme+90wtzHWRFHsSOXQ0OHj/AqhgoerI=";
+    rev = "v3.0.3";
+    sha256 = "sha256-VYU/Q22pxjoloZA4J1LdJG1HfHesfxe0enWclwdF6RI=";
   };
 
   # Required for building
