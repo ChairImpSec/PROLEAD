@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   gnumake,
-  boost185,
+  boost186,
   flint,
   python310,
   catch2,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   # Required at runtime
   buildInputs = [
-    (boost185.override {
+    (boost186.override {
       enablePython = true;
       python = python310;
     })

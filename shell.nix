@@ -9,7 +9,7 @@ pkgs.mkShell {
     gcc
   ];
   buildInputs = with pkgs; [
-    (boost185.override {
+    (boost186.override {
       enablePython = true;
       python = python310;
     })
