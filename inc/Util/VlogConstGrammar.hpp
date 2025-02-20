@@ -9,11 +9,9 @@
  */
 #pragma once
 
-#include <algorithm>                    // For remove
 #include <boost/phoenix/phoenix.hpp>    // For e.g. _val
 #include <boost/spirit/include/qi.hpp>  // For e.g. lit
 #include <cmath>                        // For log2
-#include <string>                       // For stoi
 
 namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
@@ -51,6 +49,12 @@ class VlogConstGrammar
                          qi::space_type> {
  public:
   VlogConstGrammar();
+
+  /**
+   * @brief Parses a Verilog constant as a string into a vector of vlog_bit_t.
+   * @param vlog_const The Verilog constant as a string.
+   * @return The parsed Verilog constant as a vector of vlog_bit_t.
+   */
   std::vector<vlog_bit_t> Parse(std::string& vlog_const);
 
  private:
@@ -61,13 +65,69 @@ class VlogConstGrammar
   qi::rule<std::string::iterator, uint64_t(), qi::space_type> bin_nr, dec_nr,
       dec_val, hex_nr, rep_nr, width;
 
+  /**
+   * @brief Inverts a parsed Verilog constant, i.e. by changing every
+   * vlog_bit_t::zero to vlog_bit_t::one and vice versa.
+   * @param value The parsed Verilog constant.
+   * @return The inverted Verilog constant.
+   */
   std::vector<vlog_bit_t> Invert(std::vector<vlog_bit_t>& value);
+
+  /**
+   * @brief Repeats a parsed Verilog constant a given number of times.
+   * @param number_of_reps The number of repetitions.
+   * @param value The parsed Verilog constant.
+   * @return The repeated Verilog constant.
+   * @throws std::invalid_argument If the number of repetitions is zero.
+   */
   std::vector<vlog_bit_t> Repeat(uint64_t number_of_reps,
                                  std::vector<vlog_bit_t>& value);
-  std::vector<vlog_bit_t> Append(std::vector<std::vector<vlog_bit_t>>& values);
 
-  uint64_t ParseRepCount(uint64_t width_in_bits, uint64_t value);
+  /**
+   * @brief Flattens a vector of vectors of vlog_bit_t into a single vector by
+   * concatenating the vectors.
+   * @param values The vector of vectors of vlog_bit_t.
+   * @return The flattened vector of vlog_bit_t.
+   */
+  std::vector<vlog_bit_t> Flatten(std::vector<std::vector<vlog_bit_t>>& values);
+
+  /**
+   * @brief Checks if the width of an integer matches the expected width.
+   * @param width_in_bits The expected width in bits.
+   * @param value The integer to check.
+   * @return The integer to check.
+   * @throws std::invalid_argument If the width of the integer does not match
+   * the expected width.
+   */
+  uint64_t CheckWidth(uint64_t width_in_bits, uint64_t value);
+
+  /**
+   * @brief Parses a binary Verilog constant.
+   * @param width_in_bits The width of the Verilog constant in bits.
+   * @param value The binary Verilog constant as a string.
+   * @return The parsed Verilog constant as a vector of vlog_bit_t.
+   * @throws std::invalid_argument If the length of the binary constant does
+   * not match the expected width.
+   */
   std::vector<vlog_bit_t> ParseBin(uint64_t width_in_bits, std::string value);
+
+  /**
+   * @brief Parses a decimal Verilog constant.
+   * @param width_in_bits The width of the Verilog constant in bits.
+   * @param value The decimal Verilog constant as a string.
+   * @return The parsed Verilog constant as a vector of vlog_bit_t.
+   * @throws std::invalid_argument If the length of the decimal constant does
+   * not match the expected width.
+   */
   std::vector<vlog_bit_t> ParseDec(uint64_t width_in_bits, uint64_t value);
+
+  /**
+   * @brief Parses a hexadecimal Verilog constant.
+   * @param width_in_bits The width of the Verilog constant in bits.
+   * @param value The hexadecimal Verilog constant as a string.
+   * @return The parsed Verilog constant as a vector of vlog_bit_t.
+   * @throws std::invalid_argument If the length of the hexadecimal constant
+   * does not match the expected width.
+   */
   std::vector<vlog_bit_t> ParseHex(uint64_t width_in_bits, std::string value);
 };

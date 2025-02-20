@@ -30,7 +30,7 @@ std::vector<vlog_bit_t> VlogConstGrammar::Repeat(
   return repetition;
 }
 
-std::vector<vlog_bit_t> VlogConstGrammar::Append(
+std::vector<vlog_bit_t> VlogConstGrammar::Flatten(
     std::vector<std::vector<vlog_bit_t>>& values) {
   std::vector<vlog_bit_t> concatenation;
 
@@ -41,10 +41,9 @@ std::vector<vlog_bit_t> VlogConstGrammar::Append(
   return concatenation;
 }
 
-uint64_t VlogConstGrammar::ParseRepCount(uint64_t width_in_bits,
-                                         uint64_t value) {
+uint64_t VlogConstGrammar::CheckWidth(uint64_t width_in_bits, uint64_t value) {
   uint64_t width_of_value_in_bits =
-      (value == 0) ? 1 : static_cast<uint64_t>(std::log2(value)) + 1;
+      value ? static_cast<uint64_t>(std::log2(value)) + 1 : 1;
 
   if (width_of_value_in_bits != width_in_bits) {
     throw std::invalid_argument(
@@ -166,14 +165,14 @@ VlogConstGrammar::VlogConstGrammar() : VlogConstGrammar::base_type(expr) {
   dec_val = qi::uint_;
   hex_val = +qi::char_("0-9a-fA-F$xXzZ_");
   bin_nr = (width >> (qi::lit("'b") | qi::lit("'B")) >>
-            qi::bin)[qi::_val = phx::bind(&VlogConstGrammar::ParseRepCount,
-                                          this, qi::_1, qi::_2)];
+            qi::bin)[qi::_val = phx::bind(&VlogConstGrammar::CheckWidth, this,
+                                          qi::_1, qi::_2)];
   dec_nr = (width >> (qi::lit("'d") | qi::lit("'D")) >>
-            qi::uint_)[qi::_val = phx::bind(&VlogConstGrammar::ParseRepCount,
-                                            this, qi::_1, qi::_2)];
+            qi::uint_)[qi::_val = phx::bind(&VlogConstGrammar::CheckWidth, this,
+                                            qi::_1, qi::_2)];
   hex_nr = (width >> (qi::lit("'h") | qi::lit("'H")) >>
-            qi::hex)[qi::_val = phx::bind(&VlogConstGrammar::ParseRepCount,
-                                          this, qi::_1, qi::_2)];
+            qi::hex)[qi::_val = phx::bind(&VlogConstGrammar::CheckWidth, this,
+                                          qi::_1, qi::_2)];
   rep_nr = bin_nr | dec_nr | hex_nr;
 
   bin = (width >> (qi::lit("'b") | qi::lit("'B")) >>
@@ -192,10 +191,9 @@ VlogConstGrammar::VlogConstGrammar() : VlogConstGrammar::base_type(expr) {
   rep = (qi::lit("{") >> rep_nr >> qi::lit("{") >> expr >>
          qi::lit("}}"))[qi::_val = phx::bind(&VlogConstGrammar::Repeat, this,
                                              qi::_1, qi::_2)];
-  concat =
-      (qi::lit("{") >> (expr % qi::lit(",")) >>
-       qi::lit(
-           "}"))[qi::_val = phx::bind(&VlogConstGrammar::Append, this, qi::_1)];
+  concat = (qi::lit("{") >> (expr % qi::lit(",")) >>
+            qi::lit("}"))[qi::_val = phx::bind(&VlogConstGrammar::Flatten, this,
+                                               qi::_1)];
   expr = inv | reg | rep | concat;
 }
 
