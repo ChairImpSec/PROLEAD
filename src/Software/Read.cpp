@@ -197,9 +197,9 @@ void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& 
 	for (int group_index = 0; group_index < settings.NumberOfGroups; group_index++) {
 		settings.Group_Values[group_index] = (int*)malloc((settings.NumberOfGroupValues) * sizeof(int));
 		for (int j = 0; j < settings.NumberOfGroupValues; ++j) {
-			if (settings2.GetGroupBit(group_index, j) == TriStateBit::zero_value) {
+			if (settings2.GetGroupBit(group_index, j) == vlog_bit_t::zero) {
 				settings.Group_Values[group_index][j] = 0;
-			} else if (settings2.GetGroupBit(group_index, j) == TriStateBit::one_value) {
+			} else if (settings2.GetGroupBit(group_index, j) == vlog_bit_t::one) {
 				settings.Group_Values[group_index][j] = 1;
 			} else {
 				settings.Group_Values[group_index][j] = -1;
@@ -247,9 +247,9 @@ void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& 
 			}
 
 			for (uint64_t bit_index = 0; bit_index < settings2.GetSignalLengthPerAssignment(0, index); ++bit_index) {
-				if (settings2.GetAssignedConstantBit(0, index, bit_index) == TriStateBit::one_value) {
+				if (settings2.GetAssignedConstantBit(0, index, bit_index) == vlog_bit_t::one) {
 					settings.InitialSim_Values[index][bit_index >> 3] |= (1 << (bit_index % 8));
-				} else if (settings2.GetAssignedConstantBit(0, index, bit_index) == TriStateBit::zero_value) {
+				} else if (settings2.GetAssignedConstantBit(0, index, bit_index) == vlog_bit_t::zero) {
 					settings.InitialSim_Values[index][bit_index >> 3] &= ~(1 << (bit_index % 8));
 				} else {
 					throw std::invalid_argument("Error: Signal value pair is not assigned to constant value");

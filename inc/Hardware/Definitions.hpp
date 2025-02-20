@@ -66,7 +66,7 @@ class Simulation {
     std::vector<std::pair<uint64_t, uint64_t>> end_condition_signals_;
     std::vector<std::pair<uint64_t, uint64_t>> fault_detection_flags_;
     std::vector<std::vector<std::vector<uint64_t>>> output_share_signal_indices_;
-    std::vector<std::vector<std::vector<TriStateBit>>> expected_unshared_output_values_;
+    std::vector<std::vector<std::vector<vlog_bit_t>>> expected_unshared_output_values_;
     std::unique_ptr<std::unique_ptr<uint64_t[]>[]> probe_values_;
     std::unique_ptr<std::unique_ptr<uint64_t[]>[]> propagation_values_;
     std::unique_ptr<std::unique_ptr<uint64_t[]>[]> glitch_values_;

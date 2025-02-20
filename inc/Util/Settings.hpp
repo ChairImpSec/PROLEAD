@@ -29,7 +29,7 @@ struct FiniteFieldSettings {
   uint64_t exponent;
   bool is_additive;
   Polynomial irreducible_polynomial;
-  std::vector<std::vector<TriStateBit>> excluded_elements;
+  std::vector<std::vector<vlog_bit_t>> excluded_elements;
 };
 
 struct PerformanceSettings {
@@ -62,9 +62,9 @@ struct SimulationSettings {
   uint64_t number_of_simulations_per_step;
   uint64_t number_of_simulations_per_write;
   uint64_t end_condition_clock_cycles;
-  std::vector<std::vector<TriStateBit>> groups;
+  std::vector<std::vector<vlog_bit_t>> groups;
   std::vector<std::vector<std::string>> output_shares;
-  std::vector<std::vector<TriStateBit>> expected_outputs;
+  std::vector<std::vector<vlog_bit_t>> expected_outputs;
   std::vector<std::pair<std::string, bool>> end_condition_signals;
   std::vector<std::pair<std::string, bool>> fault_detection_flags;
   std::vector<std::vector<std::string>> always_random_input_signals;
@@ -152,12 +152,12 @@ class Settings {
   uint64_t GetEndConditionClockCycles() const;
   uint64_t GetNumberOfGroups() const;
   uint64_t GetNumberOfBitsPerGroup() const;
-  TriStateBit GetGroupBit(uint64_t group_index, uint64_t bit_index) const;
+  vlog_bit_t GetGroupBit(uint64_t group_index, uint64_t bit_index) const;
   uint64_t GetNumberOfOutputShares() const;
   uint64_t GetNumberOfBitsPerOutputShare() const;
   std::string GetOutputShareName(uint64_t share_index, uint64_t bit_index) const;
   uint64_t GetNumberOfExpectedOutputs() const;
-  TriStateBit GetExpectedOutputBit(uint64_t group_index, uint64_t bit_index) const;
+  vlog_bit_t GetExpectedOutputBit(uint64_t group_index, uint64_t bit_index) const;
   uint64_t GetNumberOfEndConditionSignalValuePairs() const;
   const std::vector<std::pair<std::string, bool>>& GetEndConditionSignalValuePairs() const;
   std::pair<std::string, bool> GetEndConditionSignalValuePair(uint64_t index) const;
@@ -200,7 +200,7 @@ class Settings {
   std::string GetEndConditionVectorName() const;
 
 
-  TriStateBit GetAssignedConstantBit(uint64_t clock_index, uint64_t assignment_index, uint64_t bit_index) const;
+  vlog_bit_t GetAssignedConstantBit(uint64_t clock_index, uint64_t assignment_index, uint64_t bit_index) const;
 
  private:
   bool is_target_hardware_;
@@ -209,12 +209,12 @@ class Settings {
   SoftwareSettings software;
   SimulationSettings simulation;
 
-  void ParseArrayOfTriStateBitVectors(const boost::json::object& json_object, const std::string& identifier, uint64_t number_of_values, bool required, bool check_number_of_values, std::vector<std::vector<TriStateBit>>& values);
+  void ParseArrayOfTriStateBitVectors(const boost::json::object& json_object, const std::string& identifier, uint64_t number_of_values, bool required, bool check_number_of_values, std::vector<std::vector<vlog_bit_t>>& values);
   void ParseFiniteField(const boost::json::object& json_object, const std::string& identifier, FiniteFieldSettings& settings);
   void ParsePerformanceSettings(const boost::json::object& json_object, const std::string& identifier, PerformanceSettings& settings);
   void ParseHardwareSettings(const boost::json::object& json_object, const std::string& identifier, HardwareSettings& settings);
   void ParseSoftwareSettings(const boost::json::object& json_object, const std::string& identifier, SoftwareSettings& settings);
-  void ParseGroups(const boost::json::object& json_object, std::vector<std::vector<TriStateBit>>& groups);
+  void ParseGroups(const boost::json::object& json_object, std::vector<std::vector<vlog_bit_t>>& groups);
   void ParseAlwaysRandomInputs(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals);
   void ParseSignalNameValuePair(const boost::json::object& json_object, const std::string& identifier, std::vector<std::pair<std::string, bool>>& name_value_pairs);
   void ParseEndCondition(const boost::json::object& json_object, uint64_t& end_condition_clock_cycles, std::vector<std::pair<std::string, bool>>& end_condition_signals);

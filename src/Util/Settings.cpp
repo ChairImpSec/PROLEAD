@@ -3,13 +3,13 @@
 void Settings::ParseArrayOfTriStateBitVectors(
     const boost::json::object& json_object, const std::string& identifier,
     uint64_t number_of_values, bool required, bool check_number_of_values,
-    std::vector<std::vector<TriStateBit>>& values) {
+    std::vector<std::vector<vlog_bit_t>>& values) {
   boost::json::array json_array;
   std::string error_context = "Error while parsing \"" + identifier + "\": ";
 
   if (SetValue(json_object, identifier, json_array)) {
     if ((json_array.size() == number_of_values) || !check_number_of_values) {
-      VerilogBitstringGrammar grammar;
+      VlogConstGrammar grammar;
       std::string value_string;
       uint64_t bit_width = 0;
 
@@ -202,14 +202,14 @@ void Settings::ParseSoftwareSettings(const boost::json::object& json_object,
 }
 
 void Settings::ParseGroups(const boost::json::object& json_object,
-                           std::vector<std::vector<TriStateBit>>& groups) {
+                           std::vector<std::vector<vlog_bit_t>>& groups) {
   std::string error_context =
       "Error while parsing \"" + SettingNames::GROUPS + "\": ";
   boost::json::array groups_array;
 
   if (SetValue(json_object, SettingNames::GROUPS, groups_array)) {
     std::string value_string;
-    VerilogBitstringGrammar grammar;
+    VlogConstGrammar grammar;
     uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
                             input_finite_field.exponent;
 
@@ -291,8 +291,8 @@ void Settings::ParseSignalNameValuePair(
   if (SetValue(json_object, identifier, json_array)) {
     std::string signal_name, signal_value;
     SignalNameGrammar name_grammar;
-    VerilogBitstringGrammar value_grammar;
-    std::vector<TriStateBit> values;
+    VlogConstGrammar value_grammar;
+    std::vector<vlog_bit_t> values;
     std::vector<std::string> names;
 
     for (auto& name_value_pair : json_array) {
@@ -305,9 +305,9 @@ void Settings::ParseSignalNameValuePair(
           values = value_grammar.Parse(signal_value);
 
           for (uint64_t index = 0; index < names.size(); ++index) {
-            if (values[index] == TriStateBit::zero_value) {
+            if (values[index] == vlog_bit_t::zero) {
               name_value_pairs.push_back(std::make_pair(names[index], false));
-            } else if (values[index] == TriStateBit::one_value) {
+            } else if (values[index] == vlog_bit_t::one) {
               name_value_pairs.push_back(std::make_pair(names[index], true));
             } else {
               throw std::invalid_argument(error_context +
@@ -931,7 +931,7 @@ uint64_t Settings::GetNumberOfBitsPerGroup() const {
   return simulation.groups[0].size();
 }
 
-TriStateBit Settings::GetGroupBit(uint64_t group_index,
+vlog_bit_t Settings::GetGroupBit(uint64_t group_index,
                                   uint64_t bit_index) const {
   return simulation.groups[group_index][bit_index];
 }
@@ -953,7 +953,7 @@ uint64_t Settings::GetNumberOfExpectedOutputs() const {
   return simulation.expected_outputs.size();
 }
 
-TriStateBit Settings::GetExpectedOutputBit(uint64_t group_index,
+vlog_bit_t Settings::GetExpectedOutputBit(uint64_t group_index,
                                            uint64_t bit_index) const {
   return simulation.expected_outputs[group_index][bit_index];
 }
@@ -1080,7 +1080,7 @@ bool Settings::IsAssignedToConstant(uint64_t clock_index,
               .signal_values_.empty();
 }
 
-TriStateBit Settings::GetAssignedConstantBit(uint64_t clock_index,
+vlog_bit_t Settings::GetAssignedConstantBit(uint64_t clock_index,
                                              uint64_t assignment_index,
                                              uint64_t bit_index) const {
   return simulation.input_sequence[clock_index][assignment_index]

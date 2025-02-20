@@ -52,10 +52,10 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup(); value_index++) {
 			switch (settings.GetGroupBit(group_index, value_index))
 			{
-			case TriStateBit::zero_value:
+			case vlog_bit_t::zero:
 				SharedData.group_values_[group_index][value_index] = 0x0000000000000000;
 				break;
-			case TriStateBit::one_value:
+			case vlog_bit_t::one:
 				SharedData.group_values_[group_index][value_index] = 0xffffffffffffffff;
 				break;
 			default:
@@ -160,13 +160,13 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 					for (input_index = 0; input_index < input_assignment.signal_values_.size(); ++input_index){
 						switch (input_assignment.signal_values_[input_index])
 						{
-						case TriStateBit::zero_value:
+						case vlog_bit_t::zero:
 							SharedData.signal_values_[input_assignment.signal_indices_[input_index]] = 0;
 							break;
-						case TriStateBit::one_value:
+						case vlog_bit_t::one:
 							SharedData.signal_values_[input_assignment.signal_indices_[input_index]] = FullOne;
 							break;
-						case TriStateBit::random_value:
+						case vlog_bit_t::random:
 							SharedData.signal_values_[input_assignment.signal_indices_[input_index]] = ThreadPrng();
 							break;
 						default:
@@ -296,7 +296,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size();
 		std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));
 		std::vector<uint64_t> bitsliced_unshared_output_value;
-		std::vector<TriStateBit> expected_unshared_output_value;
+		std::vector<vlog_bit_t> expected_unshared_output_value;
 		bitsliced_shared_output_value.resize(number_of_output_shares);
 
 		for (value_index = 0; value_index < number_of_group_values; ++value_index) {
@@ -313,7 +313,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 					expected_unshared_output_value = simulation.expected_unshared_output_values_[simulation.selected_groups_[SimulationIndex * 64 + bit_index]][value_index];
 
 					for (input_index = 0; input_index < expected_unshared_output_value.size(); ++ input_index){
-						if (((expected_unshared_output_value[input_index] == TriStateBit::zero_value) && (bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index])) || ((expected_unshared_output_value[input_index] == TriStateBit::one_value) && ((bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index]) == 0))) {
+						if (((expected_unshared_output_value[input_index] == vlog_bit_t::zero) && (bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index])) || ((expected_unshared_output_value[input_index] == vlog_bit_t::one) && ((bitsliced_unshared_output_value[input_index] & SharedData.one_in_64_[bit_index]) == 0))) {
 							#pragma omp critical
 							throw std::runtime_error("Error while simulating the circuit. The received output does not match the expected output!");
 						}

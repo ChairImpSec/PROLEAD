@@ -22,17 +22,12 @@
 #include <memory>
 #include <regex>
 
+#include "Util/VlogConstGrammar.hpp"
+
 namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 namespace js = boost::json;
 
-enum class TriStateBit {
-  no_value,
-  zero_value,
-  one_value,
-  random_value,
-  undefined_value
-};
 enum class ValueType { arary, variable, standard };
 
 class JsonSchema {
@@ -55,7 +50,7 @@ class InputAssignment {
   ValueType type_;
   std::vector<std::string> signal_names_;
   std::vector<uint64_t> signal_indices_;
-  std::vector<TriStateBit> signal_values_;
+  std::vector<vlog_bit_t> signal_values_;
 };
 
 /**
@@ -75,33 +70,6 @@ class IntegerRangeGrammar
   qi::rule<std::string::iterator, std::pair<uint64_t, uint64_t>(),
            qi::space_type>
       range_;
-};
-
-/**
- * @brief A grammar for parsing a Verilog bitstring with random values.
- * @details The grammar is used to parse a Verilog bitstring in the form of
- * "2'b01" or "8'hab". Additionally, the grammar can parse bitstrings with
- * random values indicated by $ in the form of "2'b0$" or 8'h$$ or undefined
- * values indicated by x in the form of "2'b0x" or 8'hxx. The bitstring is
- * parsed as a vector of TriStateBit values with the parsed length.
- */
-class VerilogBitstringGrammar
-    : public qi::grammar<std::string::iterator, std::vector<TriStateBit>(),
-                         qi::space_type> {
- public:
-  VerilogBitstringGrammar();
-  std::vector<TriStateBit> Parse(std::string& tri_state_string);
-
- private:
-  std::vector<TriStateBit> ConvertHexCharsToBinary(const char& hex_char);
-  qi::rule<std::string::iterator, std::string(), qi::space_type> bin_value,
-      hex_value;
-  qi::rule<std::string::iterator, std::vector<TriStateBit>(), qi::space_type>
-      value;
-  std::string input_string_;
-  bool is_inverted;
-  uint64_t number_of_bits;
-  std::vector<TriStateBit> result;
 };
 
 class InputAssignmentGrammar
