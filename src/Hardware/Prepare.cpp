@@ -11,6 +11,7 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
     short DepthIndex;
     char  all_have_depth;
     std::string ErrorMessage;
+    int PortIndex;
 
     for (DepthIndex = 1; DepthIndex <= Circuit->MaxDepth; DepthIndex++)
         free(Circuit->CellsInDepth[DepthIndex]);
@@ -110,6 +111,72 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
         ErrorMessage = "The depth of signal \"" + ErrorMessage + "\" could not be identified!";
         throw std::runtime_error(ErrorMessage);
     }
+
+    //-----------
+
+    for (CellIndex = 0; CellIndex < Circuit->NumberOfCells; CellIndex++)
+        Circuit->Cells[CellIndex]->Flag = 0;
+
+    for (RegIndex = 0; RegIndex < Circuit->NumberOfRegs; RegIndex++)
+    {
+        CellIndex = Circuit->Regs[RegIndex];
+
+        if (!Circuit->Cells[CellIndex]->Deleted)
+        {
+			PortIndex = library.GetClock(Circuit->Cells[CellIndex]->Type);
+			if (PortIndex != -1)
+			{
+				SignalIndex = Circuit->Cells[CellIndex]->Inputs[PortIndex];
+				SetCellFlag(library, Circuit, SignalIndex);
+			}
+		}
+    }
+
+    Circuit->ClockCellsInDepth = (int**)malloc((Circuit->MaxDepth + 1) * sizeof(int*));
+    Circuit->NumberOfClockCellsInDepth = (int*)calloc(Circuit->MaxDepth + 1, sizeof(int));
+
+	for (DepthIndex = 1; DepthIndex <= Circuit->MaxDepth; DepthIndex++)
+	{
+        Circuit->ClockCellsInDepth[DepthIndex] = (int*)malloc(Circuit->NumberOfCellsInDepth[DepthIndex] * sizeof(int));
+        Circuit->NumberOfClockCellsInDepth[DepthIndex] = 0;
+
+		for (i = 0; i < Circuit->NumberOfCellsInDepth[DepthIndex]; i++)
+		{
+			CellIndex = Circuit->CellsInDepth[DepthIndex][i];
+			if (Circuit->Cells[CellIndex]->Flag)
+			{
+				Circuit->ClockCellsInDepth[DepthIndex][Circuit->NumberOfClockCellsInDepth[DepthIndex]] = CellIndex;
+				Circuit->NumberOfClockCellsInDepth[DepthIndex]++;
+			}
+		}
+	}
+
+}
+
+void Hardware::Prepare::SetCellFlag(Library& library, Hardware::CircuitStruct* Circuit, int SignalIndex)
+{
+    int   CellIndex;
+    int   InputIndex;
+
+    if (SignalIndex != -1)
+    {
+		CellIndex = Circuit->Signals[SignalIndex]->Output;
+		if (CellIndex != -1)
+		{
+			if ((!Circuit->Cells[CellIndex]->Deleted) &&
+			    (!library.IsCellRegister(Circuit->Cells[CellIndex]->Type)) &&
+			    (!Circuit->Cells[CellIndex]->Flag))
+			{
+				Circuit->Cells[CellIndex]->Flag = 1;
+
+				for (InputIndex = 0; InputIndex < Circuit->Cells[CellIndex]->NumberOfInputs; InputIndex++)
+				{
+					SignalIndex = Circuit->Cells[CellIndex]->Inputs[InputIndex];
+					SetCellFlag(library, Circuit, SignalIndex);
+				}
+			}
+		}
+	}
 }
 
 

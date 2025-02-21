@@ -46,6 +46,7 @@ struct HardwareSettings {
   // This allwow to perform the check, IsFaultOnSignalAllowed without giveing clock_signal_name from
   // outside, which seems pointless to me.
   std::string clock_signal_name;
+  clk_edge_t clk_edge;
 };
 
 struct SoftwareSettings {
@@ -67,7 +68,8 @@ struct SimulationSettings {
   std::vector<std::vector<vlog_bit_t>> expected_outputs;
   std::vector<std::pair<std::string, bool>> end_condition_signals;
   std::vector<std::pair<std::string, bool>> fault_detection_flags;
-  std::vector<std::vector<std::string>> always_random_input_signals;
+  std::vector<std::vector<std::string>> always_random_input_signals_rising_edge;
+  std::vector<std::vector<std::string>> always_random_input_signals_falling_edge;
   std::vector<std::vector<InputAssignment>> input_sequence;
 };
 
@@ -132,6 +134,7 @@ class Settings {
   * Hardware setting getter and setter
   */
   std::string GetClockSignalName() const;
+  clk_edge_t GetClkEdge() const;
 
   /*
   * Software setting getter and setter
@@ -164,8 +167,10 @@ class Settings {
   uint64_t GetNumberOfFaultDetectionSignalValuePairs() const;
   const std::vector<std::pair<std::string, bool>>& GetFaultDetectionSignalValuePairs() const;
   std::pair<std::string, bool> GetFaultDetectionSignalValuePair(uint64_t index) const;
-  uint64_t GetNumberOfAlwaysRandomInputSignals() const;
-  const std::vector<std::string>& GetAlwaysRandomInputElement(uint64_t index) const;
+  uint64_t GetNumberOfAlwaysRandomInputSignalsRisingEdge() const;
+  const std::vector<std::string>& GetAlwaysRandomInputRisingEdgeElement(uint64_t index) const;
+  uint64_t GetNumberOfAlwaysRandomInputSignalsFallingEdge() const;
+  const std::vector<std::string>& GetAlwaysRandomInputFallingEdgeElement(uint64_t index) const;
   uint64_t GetCyclesForInputSequence() const;
   const std::vector<InputAssignment>& GetInputSequenceOfOneCycle(uint64_t index) const;
 
@@ -215,7 +220,10 @@ class Settings {
   void ParseHardwareSettings(const boost::json::object& json_object, const std::string& identifier, HardwareSettings& settings);
   void ParseSoftwareSettings(const boost::json::object& json_object, const std::string& identifier, SoftwareSettings& settings);
   void ParseGroups(const boost::json::object& json_object, std::vector<std::vector<vlog_bit_t>>& groups);
-  void ParseAlwaysRandomInputs(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals);
+  void ParseAlwaysRandomInputs(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_rising_edge, std::vector<std::vector<std::string>>& always_random_input_signals_falling_edge);
+  void ParseAlwaysRandomInputsRisingEdge(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_rising_edge);
+  void ParseAlwaysRandomInputsFallingEdge(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_falling_edge);
+  void ParseAlwaysRandomInputsBothEdges(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_rising_edge, std::vector<std::vector<std::string>>& always_random_input_signals_falling_edge);  
   void ParseSignalNameValuePair(const boost::json::object& json_object, const std::string& identifier, std::vector<std::pair<std::string, bool>>& name_value_pairs);
   void ParseEndCondition(const boost::json::object& json_object, uint64_t& end_condition_clock_cycles, std::vector<std::pair<std::string, bool>>& end_condition_signals);
   void ParseOutputShares(const boost::json::object& json_object, std::vector<std::vector<std::string>>& output_shares);

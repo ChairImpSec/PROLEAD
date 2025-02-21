@@ -7,6 +7,7 @@
 #include "Hardware/TruthTable.hpp"
 #include "Hardware/LibHelper.hpp"
 #include "Util/FileParsing.hpp"
+#include "Util/Types.hpp"
 
 namespace Hardware {
 
@@ -100,7 +101,10 @@ class IterateEnablers {
   std::vector<uint64_t> norm_vector_num_, mod_vector_num_;
 };
 
-enum class CellType {undefined_gate, conservative_gate, relaxed_gate, sequential_gate};
+
+
+
+enum class cell_t {undef, combinational, latch, relaxed, sequential};
 
 /*
  * This class specifies a single cell.
@@ -113,7 +117,7 @@ class Cell {
    */
   Cell(const boost::json::value& value, bool is_relaxed);
 
-  Cell( CellType type, std::vector<std::string> identifiers,
+  Cell( cell_t type, std::vector<std::string> identifiers,
        std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
        std::vector<std::string> expressions);
 
@@ -135,7 +139,10 @@ class Cell {
    */
   uint64_t EvaluateGlitch(uint64_t function_index, std::vector<uint64_t>& input_values) const; 
 
-  CellType GetCellType() const;
+  cell_t GetCellType() const;
+  clk_edge_t GetClkEdge() const;
+  int64_t GetClock() const;
+
   const std::vector<std::string> GetIdentifiers() const;
 
   uint64_t GetNumberOfProbeExtensions() const {
@@ -154,7 +161,9 @@ class Cell {
   std::string GetOutput(uint64_t index) const;
 
  private:
-  CellType type_;
+  int64_t clk_;
+  cell_t type_;
+  clk_edge_t clk_edge_;
   std::vector<std::string> identifiers_;
   std::vector<std::vector<std::string>> inputs_;
   std::vector<std::vector<std::string>> outputs_;
@@ -164,6 +173,8 @@ class Cell {
   bool predefined_functions_found_;
 
   void SetType(const boost::json::value& value, bool is_relaxed);
+  void SetClock(const boost::json::value& value);
+  void SetClkEdge(const boost::json::value& value);
   void SetOperations(const std::vector<std::string>& expressions);
 
   /**
@@ -247,6 +258,14 @@ class Library {
    */
   bool IsCellRegister(uint64_t index) const;
 
+  /**
+   * @brief Checks is a cell is a latch.
+   * @param index The index of the cell.
+   * @return True if the cell is a latch, otherwise false.
+   */
+  bool IsCellLatch(uint64_t index) const;
+
+
   /** 
   * @brief Returns a particular cell of the library.
   * @param index The index of the cell.
@@ -314,6 +333,20 @@ class Library {
    * @return The (bitsliced) output value of the output function.
    */
   uint64_t Evaluate(uint64_t cell_index, uint64_t output_index, std::vector<uint64_t>& input_values) const;
+
+  /**
+   * @brief Returns timing type of a particular cell.
+   * @param index The index of the cell.
+   * @return The timing type the cell.
+   */
+  clk_edge_t GetClkEdge(uint64_t index) const;
+
+  /**
+   * @brief Returns a particular clock port index of a particular cell.
+   * @param index The index of the cell.
+   * @return The port index of the input clock.
+   */
+  int64_t GetClock(uint64_t index) const;
 
  private:
   std::vector<Cell> cells_; ///< The cells in the library.

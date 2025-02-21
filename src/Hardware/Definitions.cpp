@@ -16,12 +16,12 @@ Simulation::Simulation(Hardware::CircuitStruct& circuit, Settings& settings){
 
     clock_signal_index_ = circuit.GetSignalIndexByName(settings.GetClockSignalName());
 
-    always_random_inputs_indices_.resize(settings.GetNumberOfAlwaysRandomInputSignals());
-    for (index = 0; index < settings.GetNumberOfAlwaysRandomInputSignals(); ++index) {
+    always_random_inputs_rising_edge_indices_.resize(settings.GetNumberOfAlwaysRandomInputSignalsRisingEdge());
+    for (index = 0; index < settings.GetNumberOfAlwaysRandomInputSignalsRisingEdge(); ++index) {
       fresh_mask_signal_names += "{";
-      for (const std::string& signal_name : settings.GetAlwaysRandomInputElement(index)) {
+      for (const std::string& signal_name : settings.GetAlwaysRandomInputRisingEdgeElement(index)) {
         signal_index = circuit.GetSignalIndexByName(signal_name);
-        always_random_inputs_indices_[index].push_back(signal_index);
+        always_random_inputs_rising_edge_indices_[index].push_back(signal_index);
         fresh_mask_signal_names += signal_name + ", ";
       }
 
@@ -31,12 +31,36 @@ Simulation::Simulation(Hardware::CircuitStruct& circuit, Settings& settings){
 
       fresh_mask_signal_names += "}, ";
     }
+	
+	if (fresh_mask_signal_names.length() > 2) {
+		fresh_mask_signal_names.erase(fresh_mask_signal_names.length() - 2);
+		std::cout << "Successfully matched " << always_random_inputs_rising_edge_indices_.size() <<
+			         " fresh mask signals (for rising edge) [" << fresh_mask_signal_names << "]." << std::endl;
+	}
+
+	fresh_mask_signal_names.clear();
+
+	always_random_inputs_falling_edge_indices_.resize(settings.GetNumberOfAlwaysRandomInputSignalsFallingEdge());
+	for (index = 0; index < settings.GetNumberOfAlwaysRandomInputSignalsFallingEdge(); ++index) {
+		fresh_mask_signal_names += "{";
+		for (const std::string& signal_name : settings.GetAlwaysRandomInputFallingEdgeElement(index)) {
+			signal_index = circuit.GetSignalIndexByName(signal_name);
+			always_random_inputs_falling_edge_indices_[index].push_back(signal_index);
+			fresh_mask_signal_names += signal_name + ", ";
+		}
+
+		if (fresh_mask_signal_names.length() > 2) {
+			fresh_mask_signal_names.erase(fresh_mask_signal_names.length() - 2);
+		}
+
+		fresh_mask_signal_names += "}, ";
+	}
 
     if (fresh_mask_signal_names.length() > 2) {
       fresh_mask_signal_names.erase(fresh_mask_signal_names.length() - 2);
+	  std::cout << "Successfully matched " << always_random_inputs_falling_edge_indices_.size() <<
+		           " fresh mask signals (for falling edge) [" << fresh_mask_signal_names << "]." << std::endl;
     }
-
-    std::cout << "Successfully matched " << always_random_inputs_indices_.size() << " fresh mask signals [" << fresh_mask_signal_names << "]." << std::endl;
 
     for (const std::pair<std::string, bool>& end_condition_signal : settings.GetEndConditionSignalValuePairs()) {
       signal_index = circuit.GetSignalIndexByName(end_condition_signal.first);

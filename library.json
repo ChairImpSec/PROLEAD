@@ -1,165 +1,179 @@
 {
-    "libraries":[  
+    "libraries": [
         {
             "name": "custom",
             "cells": [
                 {
                     "name": "dff",
-                    "aliases":["DFF"],
-                    "type":"register",
-                    "inputs":["C", "D"],
-                    "outputs":["Q"],
-                    "equations":["((not C) and Q) or (C and D)"]                
+                    "aliases": [
+                        "DFF"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "C",
+                        "D"
+                    ],
+                    "clock": "C",
+                    "outputs": [
+                        "Q"
+                    ],
+                    "equations": [
+                        "((not C) and Q) or (C and D)"
+                    ]
                 },
                 {
                     "name": "and",
-                    "aliases":["AND"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["A and B"]                
+                    "aliases": [
+                        "AND"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "A and B"
+                    ]
                 },
                 {
                     "name": "nand",
-                    "aliases":["NAND"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["not (A and B)"]                
+                    "aliases": [
+                        "NAND"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "not (A and B)"
+                    ]
                 },
                 {
                     "name": "or",
-                    "aliases":["OR"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["A or B"]                
+                    "aliases": [
+                        "OR"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "A or B"
+                    ]
                 },
                 {
                     "name": "nor",
-                    "aliases":["NOR"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["not (A or B)"]                
-                }, 
+                    "aliases": [
+                        "NOR"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "not (A or B)"
+                    ]
+                },
                 {
                     "name": "xor",
-                    "aliases":["XOR"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["A xor B"]                
-                },  
+                    "aliases": [
+                        "XOR"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "A xor B"
+                    ]
+                },
                 {
                     "name": "xnor",
-                    "aliases":["XNOR"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Y"],
-                    "equations":["not (A xor B)"]                
-                },   
+                    "aliases": [
+                        "XNOR"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "not (A xor B)"
+                    ]
+                },
                 {
                     "name": "not",
-                    "aliases":["NOT"],
-                    "type":"gate",
-                    "inputs":["A"],
-                    "outputs":["Y"],
-                    "equations":["not A"]                
-                },   
+                    "aliases": [
+                        "NOT"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "not A"
+                    ]
+                },
                 {
                     "name": "mux",
-                    "aliases":["Mux2"],
-                    "type":"gate",
-                    "inputs":["S", "A", "B"],
-                    "outputs":["Q"],
-                    "equations":["(S and B) or (A and (not S))"]                
-                },     
+                    "aliases": [
+                        "Mux2"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "S",
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Q"
+                    ],
+                    "equations": [
+                        "(S and B) or (A and (not S))"
+                    ]
+                },
                 {
                     "name": "buf",
-                    "aliases":["BUFF", "BUF"],
-                    "type":"buffer",
-                    "inputs":["A"],
-                    "outputs":["Y"],
-                    "equations":["not (not A)"]                
-                }                                      
-            ] 
-        },
-        {
-            "name": "enabler_test",
-            "cells": [
-                {
-                    "name": "and2",
-                    "aliases": ["AND2"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B"],
-                    "outputs": ["Q"],
-                    "equations": ["A and B"]
-                },
-                {
-                    "name": "or2",
-                    "aliases": ["OR2"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B"],
-                    "outputs": ["Q"],
-                    "equations": ["A or B"]
-                },
-                {
-                    "name": "xor2",
-                    "aliases": ["XOR2"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B"],
-                    "outputs": ["Q"],
-                    "equations": ["A xor B"]
-                },
-                {
-                    "name": "and3",
-                    "aliases": ["AND3"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B", "C"],
-                    "outputs": ["Q"],
-                    "equations": ["A and B and C"]
-                },
-                {
-                    "name": "or3",
-                    "aliases": ["OR3"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B", "C"],
-                    "outputs": ["Q"],
-                    "equations": ["A or B or C"]
-                },
-                {
-                    "name": "xor3",
-                    "aliases": ["XOR3"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B", "C"],
-                    "outputs": ["Q"],
-                    "equations": ["A xor B xor C"]
-                },
-                {
-                    "name": "and4",
-                    "aliases":["AND4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B", "C", "D"],
-                    "outputs":["Y"],
-                    "equations":["A and B and C and D"]                
-                },
-            
-                {
-                    "name": "or4",
-                    "aliases": ["OR4"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B", "C", "D"],
-                    "outputs": ["Y"],
-                    "equations": ["A or B or C or D"]                
-                },
-                {
-                    "name": "xor4",
-                    "aliases": ["XOR4"],
-                    "type": "relaxed_gate",
-                    "inputs": ["A", "B", "C", "D"],
-                    "outputs": ["Y"],
-                    "equations": ["A xor B xor C xor D"]                
+                    "aliases": [
+                        "BUFF",
+                        "BUF"
+                    ],
+                    "type": "buffer",
+                    "inputs": [
+                        "A"
+                    ],
+                    "outputs": [
+                        "Y"
+                    ],
+                    "equations": [
+                        "not (not A)"
+                    ]
                 }
             ]
         },
@@ -168,276 +182,745 @@
             "cells": [
                 {
                     "name": "not",
-                    "aliases":["INV_X1", "INV_X2", "INV_X4", "INV_X8", "INV_X16"],
-                    "type":"relaxed_gate",
-                    "inputs":["A"],
-                    "outputs":["ZN"],
-                    "equations":["not A"]                
+                    "aliases": [
+                        "INV_X1",
+                        "INV_X2",
+                        "INV_X4",
+                        "INV_X8",
+                        "INV_X16"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not A"
+                    ]
                 },
                 {
                     "name": "xnor2",
-                    "aliases":["XNOR2_X1", "XNOR2_X2", "XNOR2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["ZN"],
-                    "equations":["not (A xor B)"]                
+                    "aliases": [
+                        "XNOR2_X1",
+                        "XNOR2_X2",
+                        "XNOR2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A xor B)"
+                    ]
                 },
                 {
                     "name": "xor2",
-                    "aliases":["XOR2_X1", "XOR2_X2", "XOR2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A", "B"],
-                    "outputs":["Z"],
-                    "equations":["A xor B"]                
+                    "aliases": [
+                        "XOR2_X1",
+                        "XOR2_X2",
+                        "XOR2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A",
+                        "B"
+                    ],
+                    "outputs": [
+                        "Z"
+                    ],
+                    "equations": [
+                        "A xor B"
+                    ]
                 },
                 {
                     "name": "aoi22",
-                    "aliases":["AOI22_X1", "AOI22_X2", "AOI22_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "B1", "B2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((A1 and A2) or (B1 and B2))"]                
-                },   
+                    "aliases": [
+                        "AOI22_X1",
+                        "AOI22_X2",
+                        "AOI22_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((A1 and A2) or (B1 and B2))"
+                    ]
+                },
                 {
                     "name": "mux2",
-                    "aliases":["MUX2_X1", "MUX2_X2", "MUX2_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B", "S"],
-                    "outputs":["Z"],
-                    "equations":["(S and B) or (A and (not S))"]                
-                }, 
+                    "aliases": [
+                        "MUX2_X1",
+                        "MUX2_X2",
+                        "MUX2_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B",
+                        "S"
+                    ],
+                    "outputs": [
+                        "Z"
+                    ],
+                    "equations": [
+                        "(S and B) or (A and (not S))"
+                    ]
+                },
                 {
                     "name": "and4",
-                    "aliases":["AND4_X1", "AND4_X2", "AND4_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3", "A4"],
-                    "outputs":["ZN"],
-                    "equations":["A1 and A2 and A3 and A4"]                
+                    "aliases": [
+                        "AND4_X1",
+                        "AND4_X2",
+                        "AND4_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 and A2 and A3 and A4"
+                    ]
                 },
                 {
                     "name": "nor2",
-                    "aliases":["NOR2_X1", "NOR2_X2", "NOR2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 or A2)"]                
-                },  
+                    "aliases": [
+                        "NOR2_X1",
+                        "NOR2_X2",
+                        "NOR2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 or A2)"
+                    ]
+                },
                 {
                     "name": "nand2",
-                    "aliases":["NAND2_X1", "NAND2_X2", "NAND2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 and A2)"]                
-                },    
+                    "aliases": [
+                        "NAND2_X1",
+                        "NAND2_X2",
+                        "NAND2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 and A2)"
+                    ]
+                },
                 {
                     "name": "nand3",
-                    "aliases":["NAND3_X1", "NAND3_X2", "NAND3_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 and A2 and A3)"]                
-                },                
+                    "aliases": [
+                        "NAND3_X1",
+                        "NAND3_X2",
+                        "NAND3_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 and A2 and A3)"
+                    ]
+                },
                 {
                     "name": "nand4",
-                    "aliases":["NAND4_X1", "NAND4_X2", "NAND4_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3", "A4"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 and A2 and A3 and A4)"]                
-                }, 
+                    "aliases": [
+                        "NAND4_X1",
+                        "NAND4_X2",
+                        "NAND4_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 and A2 and A3 and A4)"
+                    ]
+                },
                 {
                     "name": "or2",
-                    "aliases":["OR2_X1", "OR2_X2", "OR2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2"],
-                    "outputs":["ZN"],
-                    "equations":["A1 or A2"]                
-                }, 
+                    "aliases": [
+                        "OR2_X1",
+                        "OR2_X2",
+                        "OR2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 or A2"
+                    ]
+                },
                 {
                     "name": "nor3",
-                    "aliases":["NOR3_X1", "NOR3_X2", "NOR3_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 or A2 or A3)"]                
-                },  
+                    "aliases": [
+                        "NOR3_X1",
+                        "NOR3_X2",
+                        "NOR3_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 or A2 or A3)"
+                    ]
+                },
                 {
                     "name": "aoi211",
-                    "aliases":["AOI211_X1", "AOI211_X2", "AOI211_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((C1 and C2) or B or A)"]                
-                },                 
+                    "aliases": [
+                        "AOI211_X1",
+                        "AOI211_X2",
+                        "AOI211_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((C1 and C2) or B or A)"
+                    ]
+                },
                 {
                     "name": "aoi221",
-                    "aliases":["AOI221_X1", "AOI221_X2", "AOI221_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B1", "B2", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((C1 and C2) or A or (B1 and B2))"]                
-                },  
+                    "aliases": [
+                        "AOI221_X1",
+                        "AOI221_X2",
+                        "AOI221_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B1",
+                        "B2",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((C1 and C2) or A or (B1 and B2))"
+                    ]
+                },
                 {
                     "name": "oai211",
-                    "aliases":["OAI211_X1", "OAI211_X2", "OAI211_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((C1 or C2) and A and B)"]                
-                },                 
+                    "aliases": [
+                        "OAI211_X1",
+                        "OAI211_X2",
+                        "OAI211_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((C1 or C2) and A and B)"
+                    ]
+                },
                 {
                     "name": "dff",
-                    "aliases":["DFF_X1", "DFF_X2", "DFF_X4"],
-                    "type":"register",
-                    "inputs":["D", "CK"],
-                    "outputs":["Q", "QN"],
-                    "equations":["((not CK) and Q) or (CK and D)", "((not CK) and (not Q)) or (CK and (not D))"]                
-                },  
+                    "aliases": [
+                        "DFF_X1",
+                        "DFF_X2",
+                        "DFF_X4"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "D",
+                        "CK"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "((not CK) and Q) or (CK and D)",
+                        "((not CK) and (not Q)) or (CK and (not D))"
+                    ]
+                },
+                {
+                    "name": "dffn",
+                    "aliases": [
+                        "DFFN_X1",
+                        "DFFN_X2",
+                        "DFFN_X4"
+                    ],
+                    "type": "register",
+                    "timing": "falling_edge",
+                    "inputs": [
+                        "D",
+                        "CK"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "(CK and Q) or ((not CK) and D)",
+                        "(CK and (not Q)) or ((not CK) and (not D))"
+                    ]
+                },
                 {
                     "name": "sdff",
-                    "aliases":["SDFF_X1", "SDFF_X2", "SDFF_X4"],
-                    "type":"register",
-                    "inputs":["D", "SI", "SE", "CK"],
-                    "outputs":["Q", "QN"],
-                    "equations":["((not CK) and Q) or (CK and (((not SE) and D) or (SE and SI)))", "((not CK) and (not Q)) or (CK and (((not SE) and (not D)) or (SE and (not SI))))"]                
-                },                 
+                    "aliases": [
+                        "SDFF_X1",
+                        "SDFF_X2",
+                        "SDFF_X4"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "D",
+                        "SI",
+                        "SE",
+                        "CK"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "((not CK) and Q) or (CK and (((not SE) and D) or (SE and SI)))",
+                        "((not CK) and (not Q)) or (CK and (((not SE) and (not D)) or (SE and (not SI))))"
+                    ]
+                },
                 {
                     "name": "oai21",
-                    "aliases":["OAI21_X1", "OAI21_X2", "OAI21_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B1", "B2"],
-                    "outputs":["ZN"],
-                    "equations":["not (A and (B1 or B2))"]                
-                },  
+                    "aliases": [
+                        "OAI21_X1",
+                        "OAI21_X2",
+                        "OAI21_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B1",
+                        "B2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A and (B1 or B2))"
+                    ]
+                },
                 {
                     "name": "aoi21",
-                    "aliases":["AOI21_X1", "AOI21_X2", "AOI21_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B1", "B2"],
-                    "outputs":["ZN"],
-                    "equations":["not (A or (B1 and B2))"]                
-                },  
+                    "aliases": [
+                        "AOI21_X1",
+                        "AOI21_X2",
+                        "AOI21_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B1",
+                        "B2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A or (B1 and B2))"
+                    ]
+                },
                 {
                     "name": "oai33",
-                    "aliases":["OAI33_X1", "OAI33_X2", "OAI33_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3", "B1", "B2", "B3"],
-                    "outputs":["ZN"],
-                    "equations":["not ((A1 or A2 or A3) and (B1 or B2 or B3))"]                
-                },                   
+                    "aliases": [
+                        "OAI33_X1",
+                        "OAI33_X2",
+                        "OAI33_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "B1",
+                        "B2",
+                        "B3"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((A1 or A2 or A3) and (B1 or B2 or B3))"
+                    ]
+                },
                 {
                     "name": "buf",
-                    "aliases":["BUF_X1", "BUF_X2", "BUF_X4", "BUF_X8", "CLKBUF_X1", "CLKBUF_X2", "CLKBUF_X4"],
-                    "type":"buffer",
-                    "inputs":["A"],
-                    "outputs":["Z"],
-                    "equations":["not (not A)"]                
-                }, 
+                    "aliases": [
+                        "BUF_X1",
+                        "BUF_X2",
+                        "BUF_X4",
+                        "BUF_X8",
+                        "CLKBUF_X1",
+                        "CLKBUF_X2",
+                        "CLKBUF_X4"
+                    ],
+                    "type": "buffer",
+                    "inputs": [
+                        "A"
+                    ],
+                    "outputs": [
+                        "Z"
+                    ],
+                    "equations": [
+                        "not (not A)"
+                    ]
+                },
                 {
                     "name": "and2",
-                    "aliases":["AND2_X1", "AND2_X2", "AND2_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2"],
-                    "outputs":["ZN"],
-                    "equations":["A1 and A2"]                
-                },                  
+                    "aliases": [
+                        "AND2_X1",
+                        "AND2_X2",
+                        "AND2_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 and A2"
+                    ]
+                },
                 {
                     "name": "oai22",
-                    "aliases":["OAI22_X1", "OAI22_X2", "OAI22_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "B1", "B2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((A1 or A2) and (B1 or B2))"]                
-                },    
+                    "aliases": [
+                        "OAI22_X1",
+                        "OAI22_X2",
+                        "OAI22_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((A1 or A2) and (B1 or B2))"
+                    ]
+                },
                 {
                     "name": "nor4",
-                    "aliases":["NOR4_X1", "NOR4_X2", "NOR4_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3", "A4"],
-                    "outputs":["ZN"],
-                    "equations":["not (A1 or A2 or A3 or A4)"]                
-                }, 
+                    "aliases": [
+                        "NOR4_X1",
+                        "NOR4_X2",
+                        "NOR4_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (A1 or A2 or A3 or A4)"
+                    ]
+                },
                 {
                     "name": "oai221",
-                    "aliases":["OAI221_X1", "OAI221_X2", "OAI221_X4"],
-                    "type":"gate",
-                    "inputs":["A", "B1", "B2", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not ((C1 or C2) and A and (B1 or B2))"]                
-                },  
+                    "aliases": [
+                        "OAI221_X1",
+                        "OAI221_X2",
+                        "OAI221_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A",
+                        "B1",
+                        "B2",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not ((C1 or C2) and A and (B1 or B2))"
+                    ]
+                },
                 {
                     "name": "aoi222",
-                    "aliases":["AOI222_X1", "AOI222_X2", "AOI222_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "B1", "B2", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not (((A1 and A2) or (B1 and B2)) or (C1 and C2))"]                
-                }, 
+                    "aliases": [
+                        "AOI222_X1",
+                        "AOI222_X2",
+                        "AOI222_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (((A1 and A2) or (B1 and B2)) or (C1 and C2))"
+                    ]
+                },
                 {
                     "name": "or3",
-                    "aliases":["OR3_X1", "OR3_X2", "OR3_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "A3"],
-                    "outputs":["ZN"],
-                    "equations":["A1 or A2 or A3"]                
-                },  
+                    "aliases": [
+                        "OR3_X1",
+                        "OR3_X2",
+                        "OR3_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 or A2 or A3"
+                    ]
+                },
                 {
                     "name": "and3",
-                    "aliases":["AND3_X1", "AND3_X2", "AND3_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2", "A3"],
-                    "outputs":["ZN"],
-                    "equations":["A1 and A2 and A3"]                
-                }, 
+                    "aliases": [
+                        "AND3_X1",
+                        "AND3_X2",
+                        "AND3_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 and A2 and A3"
+                    ]
+                },
                 {
                     "name": "oai222",
-                    "aliases":["OAI222_X1", "OAI222_X2", "OAI222_X4"],
-                    "type":"gate",
-                    "inputs":["A1", "A2", "B1", "B2", "C1", "C2"],
-                    "outputs":["ZN"],
-                    "equations":["not (((A1 or A2) and (B1 or B2)) and (C1 or C2))"]                
-                },   
+                    "aliases": [
+                        "OAI222_X1",
+                        "OAI222_X2",
+                        "OAI222_X4"
+                    ],
+                    "type": "gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "B1",
+                        "B2",
+                        "C1",
+                        "C2"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "not (((A1 or A2) and (B1 or B2)) and (C1 or C2))"
+                    ]
+                },
                 {
                     "name": "or4",
-                    "aliases":["OR4_X1", "OR4_X2", "OR4_X4"],
-                    "type":"relaxed_gate",
-                    "inputs":["A1", "A2", "A3", "A4"],
-                    "outputs":["ZN"],
-                    "equations":["A1 or A2 or A3 or A4"]                
-                },  
+                    "aliases": [
+                        "OR4_X1",
+                        "OR4_X2",
+                        "OR4_X4"
+                    ],
+                    "type": "relaxed_gate",
+                    "inputs": [
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4"
+                    ],
+                    "outputs": [
+                        "ZN"
+                    ],
+                    "equations": [
+                        "A1 or A2 or A3 or A4"
+                    ]
+                },
                 {
                     "name": "dll",
-                    "aliases":["DLL_X1", "DLL_X2", "DLL_X4"],
-                    "type":"gate",
-                    "inputs":["D", "GN"],
-                    "outputs":["Q"],
-                    "equations":["not (not D)"]                
-                },  
+                    "aliases": [
+                        "DLL_X1",
+                        "DLL_X2",
+                        "DLL_X4"
+                    ],
+                    "type": "latch",
+                    "inputs": [
+                        "D",
+                        "GN"
+                    ],
+                    "outputs": [
+                        "Q"
+                    ],
+                    "equations": [
+                        "((not GN) and D) or (GN and Q)"
+                    ]
+                },
                 {
                     "name": "dffr",
-                    "aliases":["DFFR_X1", "DFFR_X2", "DFFR_X4"],
-                    "type":"register",
-                    "inputs":["D", "CK", "RN"],
-                    "outputs":["Q", "QN"],
-                    "equations":["RN and (((not CK) and Q) or (CK and D))", "(not RN) or (((not CK) and (not Q)) or (CK and (not D)))"]                
-                }, 
+                    "aliases": [
+                        "DFFR_X1",
+                        "DFFR_X2",
+                        "DFFR_X4"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "D",
+                        "CK",
+                        "RN"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "RN and (((not CK) and Q) or (CK and D))",
+                        "(not RN) or (((not CK) and (not Q)) or (CK and (not D)))"
+                    ]
+                },
                 {
                     "name": "dffs",
-                    "aliases":["DFFS_X1", "DFFS_X2", "DFFS_X4"],
-                    "type":"register",
-                    "inputs":["D", "CK", "SN"],
-                    "outputs":["Q", "QN"],
-                    "equations":["(not SN) or (((not CK) and Q) or (CK and D))", "SN and (((not CK) and (not Q)) or (CK and (not D)))"]                
-                }, 
+                    "aliases": [
+                        "DFFS_X1",
+                        "DFFS_X2",
+                        "DFFS_X4"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "D",
+                        "CK",
+                        "SN"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "(not SN) or (((not CK) and Q) or (CK and D))",
+                        "SN and (((not CK) and (not Q)) or (CK and (not D)))"
+                    ]
+                },
                 {
                     "name": "sdffr",
-                    "aliases":["SDFFR_X1", "SDFFR_X2", "SDFFR_X4"],
-                    "type":"register",
-                    "inputs":["D", "SI", "SE", "CK", "RN"],
-                    "outputs":["Q", "QN"],
-                    "equations":["RN and (((not CK) and Q) or (CK and (((not SE) and D) or (SE and SI))))", "(not RN) or (((not CK) and (not Q)) or (CK and (((not SE) and (not D)) or (SE and (not SI)))))"]                
-                }                                                                                
+                    "aliases": [
+                        "SDFFR_X1",
+                        "SDFFR_X2",
+                        "SDFFR_X4"
+                    ],
+                    "type": "register",
+                    "timing": "rising_edge",
+                    "inputs": [
+                        "D",
+                        "SI",
+                        "SE",
+                        "CK",
+                        "RN"
+                    ],
+                    "clock": "CK",
+                    "outputs": [
+                        "Q",
+                        "QN"
+                    ],
+                    "equations": [
+                        "RN and (((not CK) and Q) or (CK and (((not SE) and D) or (SE and SI))))",
+                        "(not RN) or (((not CK) and (not Q)) or (CK and (((not SE) and (not D)) or (SE and (not SI)))))"
+                    ]
+                }
             ]
         }
     ]

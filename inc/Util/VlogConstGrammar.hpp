@@ -54,6 +54,7 @@ class VlogConstGrammar
    * @brief Parses a Verilog constant as a string into a vector of vlog_bit_t.
    * @param vlog_const The Verilog constant as a string.
    * @return The parsed Verilog constant as a vector of vlog_bit_t.
+   * @throws std::invalid_argument If the Verilog constant is invalid.
    */
   std::vector<vlog_bit_t> Parse(std::string& vlog_const);
 

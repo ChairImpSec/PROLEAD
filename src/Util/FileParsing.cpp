@@ -26,25 +26,28 @@ void JsonSchema::Validate(const boost::json::object& json_object) {
     if (child != children_.end()) {
       type = child->type_;
       if (child->children_.empty()) {
-        if (type == "int") {
-          uint64_t variable;
-          SetValue(json_object, key, variable);
-        } else if (type == "double") {
-          double variable;
-          SetValue(json_object, key, variable);
-        } else if (type == "string") {
-          std::string variable;
-          SetValue(json_object, key, variable);
-        } else if (type == "bool") {
-          bool variable;
-          SetValue(json_object, key, variable);
-        } else if (type == "array") {
-          boost::json::array variable;
-          SetValue(json_object, key, variable);
-        } else {
-          throw std::invalid_argument(error_context + "Unknown data type \"" +
-                                      type + "\" for key \"" + key +
-                                      "\" in JSON scheme!");
+        // TODO: Add validation of settings with multiple data types.
+        if ((key != "number_of_clock_cycles") && (key != "hold_for_cycles")) {
+          if (type == "int") {
+            uint64_t variable;
+            SetValue(json_object, key, variable);
+          } else if (type == "double") {
+            double variable;
+            SetValue(json_object, key, variable);
+          } else if (type == "string") {
+            std::string variable;
+            SetValue(json_object, key, variable);
+          } else if (type == "bool") {
+            bool variable;
+            SetValue(json_object, key, variable);
+          } else if (type == "array") {
+            boost::json::array variable;
+            SetValue(json_object, key, variable);
+          } else {
+            throw std::invalid_argument(error_context + "Unknown data type \"" +
+                                        type + "\" for key \"" + key +
+                                        "\" in JSON scheme!");
+          }
         }
       } else {
         if (type == "array") {

@@ -61,7 +61,8 @@ class Simulation {
     uint64_t number_of_enablers_;
     uint64_t number_of_probe_extensions_;
     uint64_t number_of_processed_simulations;
-    std::vector<std::vector<uint64_t>> always_random_inputs_indices_;
+    std::vector<std::vector<uint64_t>> always_random_inputs_rising_edge_indices_;
+    std::vector<std::vector<uint64_t>> always_random_inputs_falling_edge_indices_;
     std::vector<uint64_t> selected_groups_;
     std::vector<std::pair<uint64_t, uint64_t>> end_condition_signals_;
     std::vector<std::pair<uint64_t, uint64_t>> fault_detection_flags_;

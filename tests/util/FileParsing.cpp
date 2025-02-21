@@ -2,44 +2,6 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("Test the IntegerRangeGrammar parser", "[IntegerRangeGrammar]") {
-  IntegerRangeGrammar grammar(10);
-  std::string input;
-  std::pair<uint64_t, uint64_t> expected, result;
-
-  SECTION("Test with valid range") {
-    input = "1-5";
-    expected = std::make_pair(1, 5);
-    REQUIRE(grammar.Parse(input) == expected);
-  }
-
-  SECTION("Test with single valid integer") {
-    input = "5";
-    expected = std::make_pair(5, 5);
-    REQUIRE(grammar.Parse(input) == expected);
-  }
-
-  SECTION("Test with invalid range") {
-    input = "5-15";
-    REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
-  }
-
-  SECTION("Test with single invalid integer") {
-    input = "15";
-    REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
-  }
-
-  SECTION("Test with negative range") {
-    input = "-5-10";
-    REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
-  }
-
-  SECTION("Test with single negative integer") {
-    input = "-5";
-    REQUIRE_THROWS_AS(grammar.Parse(input), std::invalid_argument);
-  }
-}
-
 TEST_CASE("Test the SignalNameGrammar parser", "[SignalNameGrammar]") {
   SignalNameGrammar grammar;
   std::string input;

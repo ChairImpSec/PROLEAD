@@ -11,6 +11,7 @@ namespace Hardware
     namespace Prepare
     {
         void MakeCircuitDepth(Library&, CircuitStruct *);
+        void SetCellFlag(Library&, CircuitStruct*, int);
         void Simulation(CircuitStruct& circuit, Settings&, Simulation *);
     }
 }

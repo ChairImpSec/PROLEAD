@@ -22,6 +22,7 @@
 #include <memory>
 #include <regex>
 
+#include "Util/RangeGrammar.hpp"
 #include "Util/VlogConstGrammar.hpp"
 
 namespace qi = boost::spirit::qi;

@@ -137,6 +137,8 @@ void Settings::ParseHardwareSettings(const boost::json::object& json_object,
                                      HardwareSettings& settings) {
   std::string error_context = "Error while parsing \"" + identifier + "\": ";
   boost::json::object hardware_object;
+  std::string timing_string;
+  settings.clk_edge = clk_edge_t::rising;
 
   if (is_target_hardware_) {
     if (SetValue(json_object, identifier, hardware_object)) {
@@ -146,6 +148,22 @@ void Settings::ParseHardwareSettings(const boost::json::object& json_object,
                                  SettingNames::CLOCK_SIGNAL_NAME +
                                  "\" not found!");
       }
+
+      if (SetValue(hardware_object, SettingNames::CLOCK_EDGE_TYPE,
+                   timing_string)) {
+        if (timing_string == "rising_edge") {
+          settings.clk_edge = clk_edge_t::rising;
+        } else if (timing_string == "falling_edge") {
+          settings.clk_edge = clk_edge_t::falling;
+        } else if (timing_string == "both_edges") {
+          settings.clk_edge = clk_edge_t::both;
+        } else {
+          throw std::invalid_argument(error_context +
+                                      "Invalid argument for \"" +
+                                      SettingNames::CLOCK_EDGE_TYPE + "\"!");
+        }
+      }
+
     } else {
       throw std::runtime_error(error_context + "Key \"" + identifier +
                                "\" not found!");
@@ -216,7 +234,7 @@ void Settings::ParseGroups(const boost::json::object& json_object,
     for (auto& group : groups_array) {
       if (group.is_string()) {
         value_string = group.as_string().c_str();
-        
+
         groups.push_back(grammar.Parse(value_string));
 
         if (groups.back().size() % element_size) {
@@ -235,49 +253,301 @@ void Settings::ParseGroups(const boost::json::object& json_object,
 
 void Settings::ParseAlwaysRandomInputs(
     const boost::json::object& json_object,
-    std::vector<std::vector<std::string>>& always_random_input_signals) {
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_rising_edge,
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_falling_edge) {
   std::string error_context =
       "Error while parsing \"" + SettingNames::ALWAYS_RANDOM_INPUTS + "\": ";
   boost::json::array json_array;
 
   if (is_target_hardware_) {
     if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS, json_array)) {
-      SignalNameGrammar grammar;
-      std::vector<std::string> signal_names, parsed;
-      std::string signal_name;
-      uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
-                              input_finite_field.exponent;
-      uint64_t number_of_elements;
+      if (GetClkEdge() != clk_edge_t::both) {
+        SignalNameGrammar grammar;
+        std::vector<std::string> signal_names, parsed;
+        std::string signal_name;
+        uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
+                                input_finite_field.exponent;
+        uint64_t old_number_of_elements;
+        uint64_t number_of_elements;
+        std::vector<std::vector<std::string>>* target;
 
-      for (auto& input_signal : json_array) {
-        if (input_signal.is_string()) {
-          signal_name = input_signal.as_string().c_str();
-          parsed = grammar.Parse(signal_name);
-          signal_names.insert(signal_names.end(), parsed.begin(), parsed.end());
-
-          if (signal_names.size() % element_size) {
-            throw std::invalid_argument(error_context +
-                                        "Size mismatch after parsing \"" +
-                                        signal_name + "\"!");
-          }
+        if (GetClkEdge() == clk_edge_t::rising) {
+          target = &always_random_input_signals_rising_edge;
         } else {
-          throw std::invalid_argument(error_context + "Invalid format!");
+          target = &always_random_input_signals_falling_edge;
         }
-      }
 
-      number_of_elements = signal_names.size() / element_size;
-      always_random_input_signals.resize(number_of_elements);
+        for (auto& input_signal : json_array) {
+          if (input_signal.is_string()) {
+            signal_name = input_signal.as_string().c_str();
+            parsed = grammar.Parse(signal_name);
+            signal_names.insert(signal_names.end(), parsed.begin(),
+                                parsed.end());
 
-      for (uint64_t index = 0; index < number_of_elements; ++index) {
-        always_random_input_signals[index] = std::vector<std::string>(
-            signal_names.begin() + index * element_size,
-            signal_names.begin() + (index + 1) * element_size);
+            if (signal_names.size() % element_size) {
+              throw std::invalid_argument(error_context +
+                                          "Size mismatch after parsing \"" +
+                                          signal_name + "\"!");
+            }
+          } else {
+            throw std::invalid_argument(error_context + "Invalid format!");
+          }
+        }
+
+        old_number_of_elements = target->size();
+        number_of_elements = signal_names.size() / element_size;
+        target->resize(old_number_of_elements + number_of_elements);
+
+        for (uint64_t index = 0; index < number_of_elements; ++index) {
+          (*target)[old_number_of_elements + index] = std::vector<std::string>(
+              signal_names.begin() + index * element_size,
+              signal_names.begin() + (index + 1) * element_size);
+        }
+      } else {
+        throw std::runtime_error(
+            error_context + "Unsupported key \"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS +
+            "\" when timing is set to both edges! " +
+            "One of the following keys should be used: "
+            "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES + "\"");
       }
     }
   } else {
     if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS, json_array)) {
       throw std::runtime_error(error_context + "Unsupported key \"" +
                                SettingNames::ALWAYS_RANDOM_INPUTS + "\"!");
+    }
+  }
+}
+
+void Settings::ParseAlwaysRandomInputsRisingEdge(
+    const boost::json::object& json_object,
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_rising_edge) {
+  std::string error_context = "Error while parsing \"" +
+                              SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE +
+                              "\": ";
+  boost::json::array json_array;
+
+  if (is_target_hardware_) {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE,
+                 json_array)) {
+      if (GetClkEdge() != clk_edge_t::falling) {
+        SignalNameGrammar grammar;
+        std::vector<std::string> signal_names, parsed;
+        std::string signal_name;
+        uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
+                                input_finite_field.exponent;
+        uint64_t old_number_of_elements;
+        uint64_t number_of_elements;
+
+        for (auto& input_signal : json_array) {
+          if (input_signal.is_string()) {
+            signal_name = input_signal.as_string().c_str();
+            parsed = grammar.Parse(signal_name);
+            signal_names.insert(signal_names.end(), parsed.begin(),
+                                parsed.end());
+
+            if (signal_names.size() % element_size) {
+              throw std::invalid_argument(error_context +
+                                          "Size mismatch after parsing \"" +
+                                          signal_name + "\"!");
+            }
+          } else {
+            throw std::invalid_argument(error_context + "Invalid format!");
+          }
+        }
+
+        old_number_of_elements = always_random_input_signals_rising_edge.size();
+        number_of_elements = signal_names.size() / element_size;
+        always_random_input_signals_rising_edge.resize(old_number_of_elements +
+                                                       number_of_elements);
+
+        for (uint64_t index = 0; index < number_of_elements; ++index) {
+          always_random_input_signals_rising_edge[old_number_of_elements +
+                                                  index] =
+              std::vector<std::string>(
+                  signal_names.begin() + index * element_size,
+                  signal_names.begin() + (index + 1) * element_size);
+        }
+      } else {
+        throw std::runtime_error(
+            error_context + "Unsupported key \"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE +
+            "\" when timing is set to falling edge! " +
+            "The following keys should be used: "
+            "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE + "\"");
+      }
+    }
+  } else {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE,
+                 json_array)) {
+      throw std::runtime_error(error_context + "Unsupported key \"" +
+                               SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE +
+                               "\"!");
+    }
+  }
+}
+
+void Settings::ParseAlwaysRandomInputsFallingEdge(
+    const boost::json::object& json_object,
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_falling_edge) {
+  std::string error_context = "Error while parsing \"" +
+                              SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE +
+                              "\": ";
+  boost::json::array json_array;
+
+  if (is_target_hardware_) {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE,
+                 json_array)) {
+      if (GetClkEdge() != clk_edge_t::rising) {
+        SignalNameGrammar grammar;
+        std::vector<std::string> signal_names, parsed;
+        std::string signal_name;
+        uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
+                                input_finite_field.exponent;
+        uint64_t old_number_of_elements;
+        uint64_t number_of_elements;
+
+        for (auto& input_signal : json_array) {
+          if (input_signal.is_string()) {
+            signal_name = input_signal.as_string().c_str();
+            parsed = grammar.Parse(signal_name);
+            signal_names.insert(signal_names.end(), parsed.begin(),
+                                parsed.end());
+
+            if (signal_names.size() % element_size) {
+              throw std::invalid_argument(error_context +
+                                          "Size mismatch after parsing \"" +
+                                          signal_name + "\"!");
+            }
+          } else {
+            throw std::invalid_argument(error_context + "Invalid format!");
+          }
+        }
+
+        old_number_of_elements =
+            always_random_input_signals_falling_edge.size();
+        number_of_elements = signal_names.size() / element_size;
+        always_random_input_signals_falling_edge.resize(old_number_of_elements +
+                                                        number_of_elements);
+
+        for (uint64_t index = 0; index < number_of_elements; ++index) {
+          always_random_input_signals_falling_edge[old_number_of_elements +
+                                                   index] =
+              std::vector<std::string>(
+                  signal_names.begin() + index * element_size,
+                  signal_names.begin() + (index + 1) * element_size);
+        }
+      } else {
+        throw std::runtime_error(
+            error_context + "Unsupported key \"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE +
+            "\" when timing is set to rising edge! " +
+            "The following keys should be used: "
+            "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE + "\"");
+      }
+    }
+  } else {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE,
+                 json_array)) {
+      throw std::runtime_error(error_context + "Unsupported key \"" +
+                               SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE +
+                               "\"!");
+    }
+  }
+}
+
+void Settings::ParseAlwaysRandomInputsBothEdges(
+    const boost::json::object& json_object,
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_rising_edge,
+    std::vector<std::vector<std::string>>&
+        always_random_input_signals_falling_edge) {
+  std::string error_context = "Error while parsing \"" +
+                              SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES +
+                              "\": ";
+  boost::json::array json_array;
+
+  if (is_target_hardware_) {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES,
+                 json_array)) {
+      if (GetClkEdge() == clk_edge_t::both) {
+        SignalNameGrammar grammar;
+        std::vector<std::string> signal_names, parsed;
+        std::string signal_name;
+        uint64_t element_size = std::ceil(std::log2l(input_finite_field.base)) *
+                                input_finite_field.exponent;
+        uint64_t old_number_of_elements_rising;
+        uint64_t old_number_of_elements_falling;
+        uint64_t number_of_elements;
+
+        for (auto& input_signal : json_array) {
+          if (input_signal.is_string()) {
+            signal_name = input_signal.as_string().c_str();
+            parsed = grammar.Parse(signal_name);
+            signal_names.insert(signal_names.end(), parsed.begin(),
+                                parsed.end());
+
+            if (signal_names.size() % element_size) {
+              throw std::invalid_argument(error_context +
+                                          "Size mismatch after parsing \"" +
+                                          signal_name + "\"!");
+            }
+          } else {
+            throw std::invalid_argument(error_context + "Invalid format!");
+          }
+        }
+
+        old_number_of_elements_rising =
+            always_random_input_signals_rising_edge.size();
+        old_number_of_elements_falling =
+            always_random_input_signals_falling_edge.size();
+        number_of_elements = signal_names.size() / element_size;
+        always_random_input_signals_rising_edge.resize(
+            old_number_of_elements_rising + number_of_elements);
+        always_random_input_signals_falling_edge.resize(
+            old_number_of_elements_falling + number_of_elements);
+
+        for (uint64_t index = 0; index < number_of_elements; ++index) {
+          always_random_input_signals_rising_edge
+              [old_number_of_elements_rising + index] =
+                  std::vector<std::string>(
+                      signal_names.begin() + index * element_size,
+                      signal_names.begin() + (index + 1) * element_size);
+          always_random_input_signals_falling_edge
+              [old_number_of_elements_rising + index] =
+                  always_random_input_signals_rising_edge
+                      [old_number_of_elements_falling + index];
+        }
+      } else {
+        throw std::runtime_error(
+            error_context + "Unsupported key \"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES +
+            "\" when timing is set to rising or falling edge! " +
+            "The following keys should be used: "
+            "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE + "\"," + "\"" +
+            SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE + "\"");
+      }
+    }
+  } else {
+    if (SetValue(json_object, SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES,
+                 json_array)) {
+      throw std::runtime_error(error_context + "Unsupported key \"" +
+                               SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES +
+                               "\"!");
     }
   }
 }
@@ -490,21 +760,54 @@ void Settings::ParseInputSequence(
         input_sequence.push_back(inputs_per_cycle);
         inputs_per_cycle.clear();
 
+        double_t number_of_hold_cycles;
+
         if (clock_cycle_obj.contains("hold_for_cycles")) {
-          if (clock_cycle_obj.at("hold_for_cycles").is_int64()) {
-            if (clock_cycle_obj.at("hold_for_cycles").as_int64() > 0) {
-              for (int64_t index = 1;
-                   index < clock_cycle_obj.at("hold_for_cycles").as_int64();
-                   ++index) {
-                input_sequence.push_back(inputs_per_cycle);
+          if (clock_cycle_obj.at("hold_for_cycles").kind() == js::kind::int64) {
+            number_of_hold_cycles =
+                clock_cycle_obj.at("hold_for_cycles").as_int64();
+          } else if (clock_cycle_obj.at("hold_for_cycles").kind() ==
+                     js::kind::double_) {
+            number_of_hold_cycles =
+                clock_cycle_obj.at("hold_for_cycles").as_double();
+          } else {
+            throw std::runtime_error(
+                error_context + "While checking the value type of the Key \"" +
+                "hold_for_cycles" + "\": " +
+                "Value type does not match the expected type (either int or "
+                "double).");
+          }
+
+          if (number_of_hold_cycles > 0) {
+            if (GetClkEdge() == clk_edge_t::both) {
+              if (std::fmod(number_of_hold_cycles, 0.5) == 0.0) {
+                number_of_hold_cycles *= 2;
+              } else {
+                throw std::runtime_error(
+                    error_context +
+                    "Invalid argument for \"hold_for_cycles\"!");
               }
             } else {
-              throw std::runtime_error(
-                  error_context + "Invalid argument for \"hold_for_cycles\"!");
+              if (std::fmod(number_of_hold_cycles, 1.0) != 0.0) {
+                throw std::runtime_error(
+                    error_context +
+                    "Invalid argument for \"hold_for_cycles\"!");
+              }
+            }
+
+            for (uint64_t index = 1; index < (uint64_t)number_of_hold_cycles;
+                 ++index) {
+              input_sequence.push_back(inputs_per_cycle);
             }
           } else {
-            throw std::runtime_error(error_context +
-                                     "Invalid format in \"hold_for_cycles\"!");
+            throw std::runtime_error(
+                error_context +
+                "Invalid argument for \"hold_for_cycles\"! Should be "
+                "positive,");
+          }
+        } else {
+          if (GetClkEdge() == clk_edge_t::both) {
+            input_sequence.push_back(inputs_per_cycle);
           }
         }
       } else {
@@ -537,21 +840,79 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
   settings.number_of_simulations_per_write = 0;
 
   if (SetValue(json_object, identifier, simulation_object)) {
-    if (!SetValue(simulation_object, SettingNames::NUMBER_OF_CLOCK_CYCLES,
-                  settings.number_of_clock_cycles)) {
+    double_t number_of_clock_cycles = 0;
+
+    if (simulation_object.contains(SettingNames::NUMBER_OF_CLOCK_CYCLES)) {
+      if (simulation_object.at(SettingNames::NUMBER_OF_CLOCK_CYCLES).kind() ==
+          js::kind::int64) {
+        number_of_clock_cycles =
+            simulation_object.at(SettingNames::NUMBER_OF_CLOCK_CYCLES)
+                .as_int64();
+      } else if (simulation_object.at(SettingNames::NUMBER_OF_CLOCK_CYCLES)
+                     .kind() == js::kind::double_) {
+        number_of_clock_cycles =
+            simulation_object.at(SettingNames::NUMBER_OF_CLOCK_CYCLES)
+                .as_double();
+      } else {
+        throw std::runtime_error(error_context +
+                                 "while checking the value type of the Key \"" +
+                                 SettingNames::NUMBER_OF_CLOCK_CYCLES + "\": " +
+                                 "Value type does not match the expected type "
+                                 "(either int or double).");
+      }
+
+      if (number_of_clock_cycles > 0) {
+        if (GetClkEdge() == clk_edge_t::both) {
+          if (std::fmod(number_of_clock_cycles, 0.5) == 0.0) {
+            number_of_clock_cycles *= 2;
+          } else {
+            throw std::runtime_error(
+                error_context + "Invalid argument for the Key \"" +
+                SettingNames::NUMBER_OF_CLOCK_CYCLES + "\"");
+          }
+        } else {
+          if (std::fmod(number_of_clock_cycles, 1.0) != 0.0) {
+            throw std::runtime_error(
+                error_context + "Invalid argument for the Key \"" +
+                SettingNames::NUMBER_OF_CLOCK_CYCLES + "\"");
+          }
+        }
+
+        settings.number_of_clock_cycles = number_of_clock_cycles;
+        settings.end_condition_clock_cycles = settings.number_of_clock_cycles;
+      } else {
+        throw std::runtime_error(error_context +
+                                 "while checking the value type of the Key \"" +
+                                 SettingNames::NUMBER_OF_CLOCK_CYCLES +
+                                 "\": " + "Value should be positive.");
+      }
+    } else {
       throw std::runtime_error(error_context + "Key \"" +
                                SettingNames::NUMBER_OF_CLOCK_CYCLES +
                                "\" not found!");
-    } else {
-      settings.end_condition_clock_cycles = settings.number_of_clock_cycles;
     }
 
     SetValue(simulation_object, SettingNames::WAVEFORM_SIMULATION,
              settings.waveform_simulation);
     SetValue(simulation_object, SettingNames::END_WAIT_CYCLES,
              settings.number_of_wait_cycles);
+    if (GetClkEdge() == clk_edge_t::both) {
+      settings.number_of_wait_cycles <<= 1;
+    }
+
+    settings.always_random_input_signals_rising_edge.resize(0);
+    settings.always_random_input_signals_falling_edge.resize(0);
     ParseAlwaysRandomInputs(simulation_object,
-                            settings.always_random_input_signals);
+                            settings.always_random_input_signals_rising_edge,
+                            settings.always_random_input_signals_falling_edge);
+    ParseAlwaysRandomInputsRisingEdge(
+        simulation_object, settings.always_random_input_signals_rising_edge);
+    ParseAlwaysRandomInputsFallingEdge(
+        simulation_object, settings.always_random_input_signals_falling_edge);
+    ParseAlwaysRandomInputsBothEdges(
+        simulation_object, settings.always_random_input_signals_rising_edge,
+        settings.always_random_input_signals_falling_edge);
+
     ParseEndCondition(simulation_object, settings.end_condition_clock_cycles,
                       settings.end_condition_signals);
     ParseGroups(simulation_object, settings.groups);
@@ -610,18 +971,30 @@ void Settings::ParseClockCycles(const boost::json::object& json_object,
 
   if (SetValue(json_object, SettingNames::CLOCK_CYCLES, json_array)) {
     std::string range_string;
-    std::pair<uint64_t, uint64_t> borders;
-    IntegerRangeGrammar grammar(GetNumberOfClockCycles());
+    std::pair<double, double> borders;
+    RangeGrammar grammar;
 
     for (auto& range : json_array) {
       if (range.is_string()) {
         range_string = range.as_string().c_str();
         borders = grammar.Parse(range_string);
 
-        for (uint64_t index = borders.first; index <= borders.second; ++index) {
-          clock_cycles.push_back(index);
+        if (GetClkEdge() == clk_edge_t::both) {
+          borders.first *= 2;
+          borders.second *= 2;
         }
 
+        if ((std::fmod(borders.first, 1.0) == 0.0) &&
+            (std::fmod(borders.second, 1.0) == 0.0) &&
+            (borders.first <= borders.second) && (borders.first > 0) &&
+            (borders.second <= GetNumberOfClockCycles())) {
+          for (uint64_t index = borders.first; index <= borders.second;
+               ++index) {
+            clock_cycles.push_back(index);
+          }
+        } else {
+          throw std::invalid_argument(error_context + "Invalid range!");
+        }
       } else {
         throw std::invalid_argument(error_context + "Invalid format!");
       }
@@ -883,6 +1256,8 @@ std::string Settings::GetClockSignalName() const {
   return hardware.clock_signal_name;
 }
 
+clk_edge_t Settings::GetClkEdge() const { return hardware.clk_edge; }
+
 uint64_t Settings::GetNumberOfPipelineStages() const {
   return software.number_of_pipeline_stages;
 }
@@ -932,7 +1307,7 @@ uint64_t Settings::GetNumberOfBitsPerGroup() const {
 }
 
 vlog_bit_t Settings::GetGroupBit(uint64_t group_index,
-                                  uint64_t bit_index) const {
+                                 uint64_t bit_index) const {
   return simulation.groups[group_index][bit_index];
 }
 
@@ -954,7 +1329,7 @@ uint64_t Settings::GetNumberOfExpectedOutputs() const {
 }
 
 vlog_bit_t Settings::GetExpectedOutputBit(uint64_t group_index,
-                                           uint64_t bit_index) const {
+                                          uint64_t bit_index) const {
   return simulation.expected_outputs[group_index][bit_index];
 }
 
@@ -986,13 +1361,22 @@ std::pair<std::string, bool> Settings::GetFaultDetectionSignalValuePair(
   return simulation.fault_detection_flags[index];
 }
 
-uint64_t Settings::GetNumberOfAlwaysRandomInputSignals() const {
-  return simulation.always_random_input_signals.size();
+uint64_t Settings::GetNumberOfAlwaysRandomInputSignalsRisingEdge() const {
+  return simulation.always_random_input_signals_rising_edge.size();
 }
 
-const std::vector<std::string>& Settings::GetAlwaysRandomInputElement(
+const std::vector<std::string>& Settings::GetAlwaysRandomInputRisingEdgeElement(
     uint64_t index) const {
-  return simulation.always_random_input_signals[index];
+  return simulation.always_random_input_signals_rising_edge[index];
+}
+
+uint64_t Settings::GetNumberOfAlwaysRandomInputSignalsFallingEdge() const {
+  return simulation.always_random_input_signals_falling_edge.size();
+}
+
+const std::vector<std::string>&
+Settings::GetAlwaysRandomInputFallingEdgeElement(uint64_t index) const {
+  return simulation.always_random_input_signals_falling_edge[index];
 }
 
 const std::vector<InputAssignment>& Settings::GetInputSequenceOfOneCycle(
@@ -1081,8 +1465,8 @@ bool Settings::IsAssignedToConstant(uint64_t clock_index,
 }
 
 vlog_bit_t Settings::GetAssignedConstantBit(uint64_t clock_index,
-                                             uint64_t assignment_index,
-                                             uint64_t bit_index) const {
+                                            uint64_t assignment_index,
+                                            uint64_t bit_index) const {
   return simulation.input_sequence[clock_index][assignment_index]
       .signal_values_[bit_index];
 }
@@ -1120,8 +1504,8 @@ Settings::Settings(const std::string& config_file_path, bool is_target_hardware)
   std::cout << "Successfully parsed the settings file at \"" << config_file_path
             << "\"." << std::endl;
   settings_schema.Validate(json_object);
-  std::cout << "Successfully validated the settings file at \"" << config_file_path
-            << "\"." << std::endl;
+  std::cout << "Successfully validated the settings file at \""
+            << config_file_path << "\"." << std::endl;
 
   ParseFiniteField(json_object, SettingNames::INPUT_FINITE_FIELD,
                    input_finite_field);

@@ -115,7 +115,7 @@ std::vector<uint64_t> Adversaries<ExtensionContainer>::GetProbingSets(){
 
 template <class ExtensionContainer>
 std::string Adversaries<ExtensionContainer>::PrintProbingSet(size_t index, CircuitStruct& circuit){
-  return printer_.PrintProbingSet(probing_sets_[index], propagations_, extended_probes_, circuit);
+  return printer_.PrintProbingSet(probing_sets_[index], propagations_, extended_probes_, circuit, settings_);
 }
 
 template std::string Adversaries<RobustProbe>::PrintProbingSet(size_t, CircuitStruct&);
@@ -605,7 +605,7 @@ uint64_t Adversaries<ExtensionContainer>::RemoveProbingSetsWithEnoughTraces(uint
           if (g_value > maximum_g_value_deleted) {
             addresses = probing_sets_[index].GetProbeAddresses();
             maximum_g_value_deleted = g_value;
-            printed_probing_set_deleted = printer_.PrintProbes(addresses, circuit_);
+            printed_probing_set_deleted = printer_.PrintProbes(addresses, circuit_, settings_);
           }
         //}
 
@@ -926,7 +926,7 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(std::vector<SharedData>& shar
 
   // We use a PRNG that is thread safe
   GenerateThreadRng(thread_rng, settings_.GetNumberOfThreads());
-  printer_.SetColumnSize(probing_sets_, circuit_);
+  printer_.SetColumnSize(probing_sets_, circuit_, settings_);
   printer_.PrintEvaluationHeader();
 
   simulation_.number_of_processed_simulations = 0;
@@ -991,7 +991,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
 
   // We use a PRNG that is thread safe
   GenerateThreadRng(thread_rng, settings_.GetNumberOfThreads());
-  printer_.SetColumnSize(probing_sets_, circuit_);
+  printer_.SetColumnSize(probing_sets_, circuit_, settings_);
   printer_.PrintEvaluationHeader();
 
   simulation_.number_of_processed_simulations = 0;

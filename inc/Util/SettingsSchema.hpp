@@ -31,6 +31,7 @@ namespace SettingNames {
 
   extern const std::string HARDWARE;
   extern const std::string CLOCK_SIGNAL_NAME;
+  extern const std::string CLOCK_EDGE_TYPE;
 
   extern const std::string SIDE_CHANNEL_ANALYSIS;
   extern const std::string ALPHA_THRESHOLD;
@@ -53,6 +54,9 @@ namespace SettingNames {
 
   extern const std::string SIMULATION;
   extern const std::string ALWAYS_RANDOM_INPUTS;
+  extern const std::string ALWAYS_RANDOM_INPUTS_RISING_EDGE;
+  extern const std::string ALWAYS_RANDOM_INPUTS_FALLING_EDGE;
+  extern const std::string ALWAYS_RANDOM_INPUTS_BOTH_EDGES;
   extern const std::string END_CONDITION;
   extern const std::string END_WAIT_CYCLES;
   extern const std::string EXPECTED_OUTPUT;

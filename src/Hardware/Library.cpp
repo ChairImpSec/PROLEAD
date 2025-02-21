@@ -107,17 +107,72 @@ void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
   std::string type = value.at("type").as_string().c_str();
 
   if (type == "gate" || type == "conservative_gate" || type == "buffer") {
-    type_ = CellType::conservative_gate;
+    type_ = cell_t::combinational;
   } else if (type == "relaxed_gate") {
     if (is_relaxed && GetNumberOfOutputs() == 1) {
-      type_ = CellType::relaxed_gate;
+      type_ = cell_t::relaxed;
     } else{
-      type_ = CellType::conservative_gate;
+      type_ = cell_t::combinational;
     }
   } else if (type == "register") {
-    type_ = CellType::sequential_gate;
+    type_ = cell_t::sequential;
+  } else if (type == "latch") {
+    type_ = cell_t::latch;
   } else {
     throw std::runtime_error("Error while reading the type of cell \"" + name + "\". The type \"" + type + "\" is not valid!");
+  }
+}
+
+void Cell::SetClkEdge(const boost::json::value& value) {
+  boost::json::object value_object = value.as_object();
+  std::string name = value.at("name").as_string().c_str();
+
+  if (GetCellType() == cell_t::sequential) {
+    if (!value_object.contains("timing")) {
+      throw std::runtime_error("Error while reading the timing type of cell \"" + name + "\". Timing type not found!");
+    }
+    std::string timing = value.at("timing").as_string().c_str();
+
+    if (timing == "rising_edge") {
+      clk_edge_ = clk_edge_t::rising;
+    } else if (timing == "falling_edge") {
+      clk_edge_ = clk_edge_t::falling;
+    } else if (timing == "both") {
+      clk_edge_ = clk_edge_t::both;
+    } else {
+      throw std::runtime_error("Error while reading the timing of cell \"" + name + "\". The timing \"" + timing + "\" is invalid!");
+    }
+  } else {
+    clk_edge_ = clk_edge_t::undef;
+  }
+}
+
+void Cell::SetClock(const boost::json::value& value) {
+  boost::json::object value_object = value.as_object();
+  std::string name = value.at("name").as_string().c_str();
+  uint64_t port_index;
+
+  if (GetCellType() == cell_t::sequential) {
+    if (!value_object.contains("clock")) {
+      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock not found!");
+    }
+    std::string clock = value.at("clock").as_string().c_str();
+
+    for (port_index = 0; port_index < inputs_.size(); port_index++) {
+      if (GetInput(port_index) == clock) {
+        break;
+	    }
+    }
+
+    if (port_index >= inputs_.size()) {
+      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock \"" + clock + "\" is invalid!");
+    }
+
+    clk_ = port_index;
+  } else if (value_object.contains("clock")) {
+      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock should not be defiend!");
+  } else {
+    clk_ = -1;
   }
 }
 
@@ -129,7 +184,7 @@ void Cell::SetOperations(const std::vector<std::string>& expressions) {
     primary_signals.insert(primary_signals.end(), input_port.begin(), input_port.end());
   }
 
-  if (type_ == CellType::sequential_gate) {
+  if ((type_ == cell_t::sequential) || (type_ == cell_t::latch)) {
     for (const std::vector<std::string>& output_port : outputs_) {
       primary_signals.insert(primary_signals.end(), output_port.begin(), output_port.end());
     }
@@ -138,7 +193,7 @@ void Cell::SetOperations(const std::vector<std::string>& expressions) {
   for (const std::string& expression : expressions) {
     operations_.emplace_back(Operation<CustomOperation>(expression, primary_signals));
 
-    if (type_ == CellType::relaxed_gate) {
+    if (type_ == cell_t::relaxed) {
       for (uint64_t index = 0; index < operation_library.size(); ++index) {
         if (operations_.back() == Operation<CustomOperation>(operation_library[index].first, operation_library[index].second)) {
           glitch_propagation_.emplace_back(Operation<CustomOperation>(glitch_propagation_library[index].first, glitch_propagation_library[index].second));
@@ -245,10 +300,12 @@ Cell::Cell(const boost::json::value& value, bool is_relaxed) {
   }
 
   SetType(value, is_relaxed);
+  SetClkEdge(value);
+  SetClock(value);
   SetOperations(expressions);
 }
 
-Cell::Cell(CellType type, std::vector<std::string> identifiers,
+Cell::Cell(cell_t type, std::vector<std::string> identifiers,
            std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
            std::vector<std::string> expressions)
     : type_(type), 
@@ -332,7 +389,11 @@ bool Cell::DetectGlitches(Operation<CustomOperation>& op, std::vector<uint64_t> 
     return false;
 }
 
-CellType Cell::GetCellType() const { return type_; }
+cell_t Cell::GetCellType() const { return type_; }
+
+clk_edge_t Cell::GetClkEdge() const { return clk_edge_; }
+
+int64_t Cell::GetClock() const { return clk_; }
 
 const std::vector<std::string> Cell::GetIdentifiers() const { return identifiers_; }
 
@@ -450,7 +511,11 @@ Cell Library::GetCell(uint64_t index) const {
 uint64_t Library::GetNumberOfCells() const {return cells_.size();}
 
 bool Library::IsCellRegister(uint64_t index) const {
-  return cells_[index].GetCellType() == CellType::sequential_gate;
+  return cells_[index].GetCellType() == cell_t::sequential;
+}
+
+bool Library::IsCellLatch(uint64_t index) const {
+	return cells_[index].GetCellType() == cell_t::latch;
 }
 
 uint64_t Library::GetNumberOfIdentifiers(uint64_t index) const {
@@ -475,6 +540,14 @@ std::string Library::GetInput(uint64_t index, uint64_t input_index) const {
 
 std::string Library::GetOutput(uint64_t index, uint64_t output_index) const {
   return cells_[index].GetOutput(output_index);
+}
+
+clk_edge_t Library::GetClkEdge(uint64_t index) const {
+  return cells_[index].GetClkEdge();
+}
+
+int64_t Library::GetClock(uint64_t index) const {
+  return cells_[index].GetClock();
 }
 
 int64_t Library::GetBufferIndex() const {

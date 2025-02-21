@@ -6,9 +6,6 @@
 #include <cstdint>
 #include <vector>
 
-#define CellType_Gate 0
-#define CellType_Reg 1
-
 #define SignalType_input 0
 #define SignalType_output 1
 #define SignalType_wire 2
@@ -26,6 +23,7 @@ struct CellStruct {
   int* Outputs;
   int* RegValueIndexes;
   char Deleted;
+  char Flag;
 };
 
 struct SignalStruct {
@@ -67,6 +65,10 @@ struct CircuitStruct {
   int** CellsInDepth = NULL;  ///< The indices of cells with a specific depth.
   int* NumberOfCellsInDepth =
       NULL;  ///< The number of cells with a specific depth.
+  
+  int** ClockCellsInDepth = NULL;  ///< The indices of cells with a specific depth.
+  int* NumberOfClockCellsInDepth =
+          NULL;  ///< The number of cells with a specific depth.
 
   bool IsGateThatOutputsSignalDeleted(int signal_index);
   uint64_t GetNumberOfInputsForSignalsComputingCell(uint64_t signal_index) const;

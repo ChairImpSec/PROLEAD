@@ -36,6 +36,7 @@ const std::string SettingNames::REMOVE_FULL_PROBING_SETS =
 
 const std::string SettingNames::HARDWARE = "hardware";
 const std::string SettingNames::CLOCK_SIGNAL_NAME = "clock_signal_name";
+const std::string SettingNames::CLOCK_EDGE_TYPE = "timing";
 
 const std::string SettingNames::SIDE_CHANNEL_ANALYSIS = "side_channel_analysis";
 const std::string SettingNames::ALPHA_THRESHOLD = "alpha_threshold";
@@ -58,6 +59,12 @@ const std::string SettingNames::PIPELINE_STAGES = "pipeline_stages";
 
 const std::string SettingNames::SIMULATION = "simulation";
 const std::string SettingNames::ALWAYS_RANDOM_INPUTS = "always_random_inputs";
+const std::string SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE =
+    "always_random_inputs_rising_edge";
+const std::string SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE =
+    "always_random_inputs_falling_edge";
+const std::string SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES =
+    "always_random_inputs_both_edges";
 const std::string SettingNames::END_CONDITION = "end_condition";
 const std::string SettingNames::END_WAIT_CYCLES = "end_wait_cycles";
 const std::string SettingNames::EXPECTED_OUTPUT = "expected_output";
@@ -93,9 +100,10 @@ JsonSchema fault_injection_schema(
      JsonSchema(SettingNames::FAULT_ANALYSIS, "string"),
      JsonSchema(SettingNames::FAULT_TYPE, "string")});
 
-JsonSchema hardware_schema(SettingNames::HARDWARE, "object",
-                           {JsonSchema(SettingNames::CLOCK_SIGNAL_NAME,
-                                       "string")});
+JsonSchema hardware_schema(
+    SettingNames::HARDWARE, "object",
+    {JsonSchema(SettingNames::CLOCK_SIGNAL_NAME, "string"),
+     JsonSchema(SettingNames::CLOCK_EDGE_TYPE, "string")});
 
 JsonSchema input_finite_field_schema(
     SettingNames::INPUT_FINITE_FIELD, "object",
@@ -160,6 +168,9 @@ JsonSchema side_channel_analysis_schema(
 JsonSchema simulation_schema(
     SettingNames::SIMULATION, "object",
     {JsonSchema(SettingNames::ALWAYS_RANDOM_INPUTS, "array"),
+     JsonSchema(SettingNames::ALWAYS_RANDOM_INPUTS_BOTH_EDGES, "array"),
+     JsonSchema(SettingNames::ALWAYS_RANDOM_INPUTS_FALLING_EDGE, "array"),
+     JsonSchema(SettingNames::ALWAYS_RANDOM_INPUTS_RISING_EDGE, "array"),
      JsonSchema(SettingNames::END_CONDITION, "object",
                 {JsonSchema("clock_cycles", "int"),
                  JsonSchema("signals", "array",
@@ -189,11 +200,11 @@ JsonSchema simulation_schema(
      JsonSchema(SettingNames::OUTPUT_SHARES, "array"),
      JsonSchema(SettingNames::WAVEFORM_SIMULATION, "bool")});
 
-JsonSchema software_schema(
-    SettingNames::SOFTWARE, "object",
-    {JsonSchema(SettingNames::COMPILER_FLAGS, "string"),
-     JsonSchema(SettingNames::LOCATION_OF_CIPHER, "string"),
-     JsonSchema(SettingNames::PIPELINE_STAGES, "int")});
+JsonSchema software_schema(SettingNames::SOFTWARE, "object",
+                           {JsonSchema(SettingNames::COMPILER_FLAGS, "string"),
+                            JsonSchema(SettingNames::LOCATION_OF_CIPHER,
+                                       "string"),
+                            JsonSchema(SettingNames::PIPELINE_STAGES, "int")});
 
 JsonSchema settings_schema("", "object",
                            {fault_injection_schema, hardware_schema,

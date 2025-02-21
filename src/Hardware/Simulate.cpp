@@ -20,6 +20,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 	unsigned int clock_cycle;
 	std::vector<uint64_t> input_values;
 	std::vector<std::unique_ptr<uint64_t[]>*> input_indices;
+    std::vector<uint64_t> temp_signal_values_;
 
 	// assigning inputs (fixed/random/etc)
 	boost::uniform_int<uint64_t> ThreadDist(0, std::numeric_limits<uint64_t>::max());
@@ -31,6 +32,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 	uint64_t output_element_size = std::ceil(std::log2l(settings.output_finite_field.base)) * settings.output_finite_field.exponent;
   	std::vector<uint64_t>::iterator it;
 	std::vector<uint64_t> random_bitsliced_polynomial;
+	std::vector<std::vector<uint64_t>> *always_random_inputs_indices_;
 
 	if (settings.input_finite_field.base == 2){
 		for (group_index = 0; group_index < number_of_groups; ++group_index) {
@@ -45,7 +47,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 				random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
 				std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), SharedData.group_values_[group_index].begin() + value_index * input_element_size);
 			}
-		}		
+		}
 	}
 
 	for (group_index = 0; group_index < number_of_groups; ++group_index) {
@@ -94,38 +96,115 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		Hardware::Simulate::GenerateVCDfile(Circuit, SimulationIndex + simulation.number_of_processed_simulations / 64, "simulation", simulation.topmodule_name_);
 	}
 
+	if (settings.GetClkEdge() == clk_edge_t::rising)
+		SharedData.signal_values_[simulation.clock_signal_index_] = 0;
+	else if (settings.GetClkEdge() == clk_edge_t::falling)
+		SharedData.signal_values_[simulation.clock_signal_index_] = FullOne;
+
 	for (clock_cycle = 0; clock_cycle < settings.GetNumberOfClockCycles(); clock_cycle++)
 	{
-		SharedData.signal_values_[simulation.clock_signal_index_] = FullOne;
+		temp_signal_values_ = SharedData.signal_values_;
+
+		if (settings.GetClkEdge() == clk_edge_t::rising)
+			temp_signal_values_[simulation.clock_signal_index_] = FullOne;
+		else if (settings.GetClkEdge() == clk_edge_t::falling)
+			temp_signal_values_[simulation.clock_signal_index_] = 0;
+		else // if (settings.GetClkEdge() == clk_edge_t::falling)
+		{
+			if (clock_cycle & 1)
+				temp_signal_values_[simulation.clock_signal_index_] = FullOne;
+			else
+				temp_signal_values_[simulation.clock_signal_index_] = 0;
+		}
+
+		// ----------- evaluate the combinational circuit providing the clock of registers
+
+		for (DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++)
+		{
+			for (i = 0; i < Circuit.NumberOfClockCellsInDepth[DepthIndex]; i++)
+			{
+				CellIndex = Circuit.ClockCellsInDepth[DepthIndex][i];
+
+				if (!library.IsCellLatch(Circuit.Cells[CellIndex]->Type))
+				{
+					input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs);
+
+					for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+						input_values[InputIndex] = temp_signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+				}
+				else
+				{
+					input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs + Circuit.Cells[CellIndex]->NumberOfOutputs);
+
+					for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+						input_values[InputIndex] = temp_signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+
+					for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+						input_values[Circuit.Cells[CellIndex]->NumberOfInputs + OutputIndex] = temp_signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
+				}
+
+				for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+					if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
+					{
+						Value = library.Evaluate(Circuit.Cells[CellIndex]->Type, OutputIndex, input_values);
+						if (!simulation.fault_set.empty()) {
+							simulation.fault_set[0].TryToInduceFaults(Value, Circuit.Cells[CellIndex]->Outputs[OutputIndex], clock_cycle);
+						}
+						temp_signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]] = Value;
+					}
+			}
+		}
 
 		// ----------- evaluate the registers
 		for (RegIndex = 0; RegIndex < Circuit.NumberOfRegs; RegIndex++)
 		{
-			input_values.resize(Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfInputs + Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfOutputs);
+			CellIndex = Circuit.Regs[RegIndex];
+			input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs + Circuit.Cells[CellIndex]->NumberOfOutputs);
 
-			for (InputIndex = 0; InputIndex < Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfInputs; InputIndex++)
-				input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->Inputs[InputIndex]];
+			for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+				if (InputIndex == library.GetClock(Circuit.Cells[CellIndex]->Type))
+				{
+					if (library.GetClkEdge(Circuit.Cells[CellIndex]->Type) == clk_edge_t::rising)
+						input_values[InputIndex] = (~SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]]) &
+						                           temp_signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+			        else if (library.GetClkEdge(Circuit.Cells[CellIndex]->Type) == clk_edge_t::falling)
+						input_values[InputIndex] = (~SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]]) |
+						                           temp_signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+					else //if (library.GetClkEdge(Circuit.Cells[CellIndex]->Type) == clk_edge_t::falling)
+						input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]] ^
+						                           temp_signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+ 				}
+				else
+					input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
 
-			for (OutputIndex = 0; OutputIndex < Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfOutputs; OutputIndex++)
-				input_values[Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfInputs + OutputIndex] = SharedData.register_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->RegValueIndexes[OutputIndex]];
+			for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+				input_values[Circuit.Cells[CellIndex]->NumberOfInputs + OutputIndex] = SharedData.register_values_[Circuit.Cells[CellIndex]->RegValueIndexes[OutputIndex]];
 
-			for (OutputIndex = 0; OutputIndex < Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfOutputs; OutputIndex++)
+			for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
 			{
-				Value = library.Evaluate(Circuit.Cells[Circuit.Regs[RegIndex]]->Type, OutputIndex, input_values);
+				Value = library.Evaluate(Circuit.Cells[CellIndex]->Type, OutputIndex, input_values);
 				if (!simulation.fault_set.empty()) {
-					simulation.fault_set[0].TryToInduceFaults(Value, Circuit.Cells[Circuit.Regs[RegIndex]]->Outputs[OutputIndex], clock_cycle);
+					simulation.fault_set[0].TryToInduceFaults(Value, Circuit.Cells[CellIndex]->Outputs[OutputIndex], clock_cycle);
 				}
 
 				if (clock_cycle == 0)
-					SharedData.register_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->RegValueIndexes[OutputIndex]] = 0;
+					SharedData.register_values_[Circuit.Cells[CellIndex]->RegValueIndexes[OutputIndex]] = 0;
 				else
-					SharedData.register_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->RegValueIndexes[OutputIndex]] = Value;
+					SharedData.register_values_[Circuit.Cells[CellIndex]->RegValueIndexes[OutputIndex]] = Value;
 			}
 		}
 
+		 SharedData.signal_values_[simulation.clock_signal_index_] = temp_signal_values_[simulation.clock_signal_index_];
+
 		// ----------- applying always random inputs
+		if (SharedData.signal_values_[simulation.clock_signal_index_]) { // rising edge
+		  always_random_inputs_indices_ = &simulation.always_random_inputs_rising_edge_indices_;
+		} else { // falling edge
+		  always_random_inputs_indices_ = &simulation.always_random_inputs_falling_edge_indices_;
+		}
+
 		if (settings.input_finite_field.base == 2) {
-			for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
+			for (const std::vector<uint64_t>& element : *always_random_inputs_indices_){
 				random_bitsliced_polynomial = input_sharing.SampleBooleanRandomBitslicedPolynomial();
 
 				for (input_index = 0; input_index < input_element_size; ++input_index){
@@ -133,7 +212,7 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 				}
 			}
 		} else {
-			for (const std::vector<uint64_t>& element : simulation.always_random_inputs_indices_){
+			for (const std::vector<uint64_t>& element : *always_random_inputs_indices_){
 				random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
 
 				for (input_index = 0; input_index < input_element_size; ++input_index){
@@ -180,12 +259,13 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 		// ----------- applying the register outputs to the output signals
 		for (RegIndex = 0; RegIndex < Circuit.NumberOfRegs; RegIndex++)
 		{
-			for (OutputIndex = 0; OutputIndex < Circuit.Cells[Circuit.Regs[RegIndex]]->NumberOfOutputs; OutputIndex++)
-				if (Circuit.Cells[Circuit.Regs[RegIndex]]->Outputs[OutputIndex] != -1)
-					SharedData.signal_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->Outputs[OutputIndex]] = SharedData.register_values_[Circuit.Cells[Circuit.Regs[RegIndex]]->RegValueIndexes[OutputIndex]];
+			CellIndex = Circuit.Regs[RegIndex];
+			for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+				if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
+					SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]] = SharedData.register_values_[Circuit.Cells[CellIndex]->RegValueIndexes[OutputIndex]];
 		}
 
-		// ----------- evaluate the circuits :D
+		// ----------- evaluate the circuit
 
 		for (DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++)
 		{
@@ -193,10 +273,23 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 			{
 				CellIndex = Circuit.CellsInDepth[DepthIndex][i];
 
-				input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs);
+				if (!library.IsCellLatch(Circuit.Cells[CellIndex]->Type))
+				{
+					input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs);
 
-				for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
-					input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+					for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+						input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+				}
+				else
+				{
+					input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs + Circuit.Cells[CellIndex]->NumberOfOutputs);
+
+					for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+						input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+
+					for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+						input_values[Circuit.Cells[CellIndex]->NumberOfInputs + OutputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
+				}
 
 				for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
 					if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
@@ -209,8 +302,6 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 					}
 			}
 		}
-
-		SharedData.signal_values_[simulation.clock_signal_index_] = 0;
 
 		// ----------- storing the probe values in simualtion memory
 		while ((probe_index < extended_probes.size()) && (extended_probes[probe_index].GetCycle() < clock_cycle)){
@@ -255,6 +346,53 @@ void Hardware::Simulate::All(const Hardware::Library &library, const Hardware::C
 			{
 				// ClockCyclesTook = ClockCycle + 1;
 				break;
+			}
+		}
+
+		if (settings.GetClkEdge() == clk_edge_t::rising)
+			SharedData.signal_values_[simulation.clock_signal_index_] = 0;
+		else if (settings.GetClkEdge() == clk_edge_t::falling)
+			SharedData.signal_values_[simulation.clock_signal_index_] = FullOne;
+
+		if ((settings.GetClkEdge() == clk_edge_t::rising) ||
+			(settings.GetClkEdge() == clk_edge_t::falling))
+		{
+			// ----------- evaluate the combinational circuit providing the clock of registers
+
+			for (DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++)
+			{
+				for (i = 0; i < Circuit.NumberOfClockCellsInDepth[DepthIndex]; i++)
+				{
+					CellIndex = Circuit.ClockCellsInDepth[DepthIndex][i];
+
+					if (!library.IsCellLatch(Circuit.Cells[CellIndex]->Type))
+					{
+						input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs);
+
+						for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+							input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+					}
+					else
+					{
+						input_values.resize(Circuit.Cells[CellIndex]->NumberOfInputs + Circuit.Cells[CellIndex]->NumberOfOutputs);
+
+						for (InputIndex = 0; InputIndex < Circuit.Cells[CellIndex]->NumberOfInputs; InputIndex++)
+							input_values[InputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Inputs[InputIndex]];
+
+						for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+							input_values[Circuit.Cells[CellIndex]->NumberOfInputs + OutputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
+					}
+
+					for (OutputIndex = 0; OutputIndex < Circuit.Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+						if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
+						{
+							Value = library.Evaluate(Circuit.Cells[CellIndex]->Type, OutputIndex, input_values);
+							if (!simulation.fault_set.empty()) {
+								simulation.fault_set[0].TryToInduceFaults(Value, Circuit.Cells[CellIndex]->Outputs[OutputIndex], clock_cycle);
+							}
+							SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]] = Value;
+						}
+				}
 			}
 		}
 	}

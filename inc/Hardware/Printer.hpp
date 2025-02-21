@@ -16,16 +16,16 @@ class Printer {
  public:
   Printer();
 
-  void SetColumnSize(std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit);
+  void SetColumnSize(std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit, const Settings& settings);
 
   void SetPath(std::string path);
-  std::string PrintProbes(std::vector<Probe>& probes, const CircuitStruct& circuit);
-  std::string PrintProbes(std::vector<Probe*>& probes, const CircuitStruct& circuit);
+  std::string PrintProbes(std::vector<Probe>& probes, const CircuitStruct& circuit, const Settings& settings);
+  std::string PrintProbes(std::vector<Probe*>& probes, const CircuitStruct& circuit, const Settings& settings);
 
   std::string PrintProbingSet(
       ProbingSet<ExtensionContainer>& probing_set,
       std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
-      const CircuitStruct& circuit);
+      const CircuitStruct& circuit, const Settings& settings);
   void PrintProbingSetInformation(
       std::vector<Propagation<ExtensionContainer>>& propagations,
       std::vector<Probe>& standard_probes, std::vector<Probe>& probe_extensions,
@@ -55,15 +55,15 @@ void PrintError(std::string error_message);
       "nicolai.mueller@rub.de so that we can assist you in fixing the problem. "
       "Thank you for bringing this to our attention.\n";
 
-  std::string PrintProbe(Probe& probe, const CircuitStruct& circuit);
+  std::string PrintProbe(Probe& probe, const CircuitStruct& circuit, const Settings& settings);
   std::string PrintRelaxedExtension(
       ExtensionContainer& probe, std::vector<Probe>& probe_extensions,
       std::vector<Propagation<ExtensionContainer>>& propagations,
-      const CircuitStruct& circuit);
+      const CircuitStruct& circuit, const Settings& settings);
   std::string PrintExtensions(
       ProbingSet<ExtensionContainer>& probing_set,
       std::vector<Propagation<ExtensionContainer>>& propagations,
-      std::vector<Probe>& probe_extensions, const CircuitStruct& circuit);
+      std::vector<Probe>& probe_extensions, const CircuitStruct& circuit, const Settings& settings);
   void PrintMostLeakingSetsPerCycle(
       std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
       std::vector<ProbingSet<ExtensionContainer>>& probing_sets,

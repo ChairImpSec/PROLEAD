@@ -1300,19 +1300,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 													for (OutputIndex = 0;OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
 														Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] = -1;
 
-													if (!library.IsCellRegister(CellTypeIndex))
-													{
-														Circuit->Cells[Circuit->NumberOfCells]->Depth = -1;
-
-														TempGates = (int *)malloc((Circuit->NumberOfGates + 1) * sizeof(int));
-														memcpy(TempGates, Circuit->Gates, Circuit->NumberOfGates * sizeof(int));
-														free(Circuit->Gates);
-														Circuit->Gates = TempGates;
-
-														Circuit->Gates[Circuit->NumberOfGates] = Circuit->NumberOfCells + NumberOfCellsOffset;
-														Circuit->NumberOfGates++;
-													}
-													else // CellType_Reg
+													if (library.IsCellRegister(CellTypeIndex))
 													{
 														Circuit->Cells[Circuit->NumberOfCells]->Depth = 0;
 														Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
@@ -1326,6 +1314,18 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 
 														Circuit->Regs[Circuit->NumberOfRegs] = Circuit->NumberOfCells + NumberOfCellsOffset;
 														Circuit->NumberOfRegs++;
+													}
+													else // is a gate or a latch
+													{
+														Circuit->Cells[Circuit->NumberOfCells]->Depth = -1;
+
+														TempGates = (int *)malloc((Circuit->NumberOfGates + 1) * sizeof(int));
+														memcpy(TempGates, Circuit->Gates, Circuit->NumberOfGates * sizeof(int));
+														free(Circuit->Gates);
+														Circuit->Gates = TempGates;
+
+														Circuit->Gates[Circuit->NumberOfGates] = Circuit->NumberOfCells + NumberOfCellsOffset;
+														Circuit->NumberOfGates++;
 													}
 
 													Task = Task_find_module_name;
