@@ -111,12 +111,12 @@ ExtensionContainer ProbingSet<ExtensionContainer>::GetLastProbeExtension() {
 template RobustProbe ProbingSet<RobustProbe>::GetLastProbeExtension() ;
 
 template <class ExtensionContainer>
-std::vector<uint64_t> ProbingSet<ExtensionContainer>::GetProbeExtensions() {
+const std::vector<uint64_t>& ProbingSet<ExtensionContainer>::GetProbeExtensions() const{
   return probe_extension_indices_;
 }
 
-template std::vector<uint64_t> ProbingSet<RobustProbe>::GetProbeExtensions();
-template std::vector<uint64_t> ProbingSet<RelaxedProbe>::GetProbeExtensions();
+template const std::vector<uint64_t>& ProbingSet<RobustProbe>::GetProbeExtensions() const;
+template const std::vector<uint64_t>& ProbingSet<RelaxedProbe>::GetProbeExtensions() const;
 
 template <class ExtensionContainer>
 uint64_t ProbingSet<ExtensionContainer>::GetProbeExtension(uint64_t index) {

@@ -376,14 +376,8 @@ class Adversaries {
    */
   void EvaluateProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t& probe_step_index);
 
-  /**
-   * @brief Updates the contingency table with new simulations in compact mode.
-   * @param simulation The simulations to update.
-   * @param simulation_index The index of the current simulation.
-   * @author Nicolai Müller
-   */
-  //void CompactTableUpdate(Hardware::Simulation& simulation,
-  //                        uint64_t simulation_index);
+
+  void CompactTableUpdate(uint64_t simulation_index, std::vector<uint64_t>& counters);
 
   /**
    * @brief Evaluates all contingency tables in the compact mode.

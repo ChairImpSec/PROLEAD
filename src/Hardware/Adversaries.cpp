@@ -295,21 +295,17 @@ void Adversaries<RelaxedProbe>::SetExtendedProbes() {
 
 template <>
 void Adversaries<RobustProbe>::SetUniqueProbes() {
-  uint64_t unique_index, extension_index, set_index;
-  std::vector<uint64_t> probing_set_indices;
+  std::vector<std::vector<uint64_t>> probing_set_indices(GetNumberOfExtendedProbes());
   unique_probes_.clear();
 
-  for (unique_index = 0; unique_index < GetNumberOfExtendedProbes(); ++unique_index) {
-    probing_set_indices.clear();
-    for (set_index = 0; set_index < GetNumberOfProbingSets(); ++set_index) {
-      for (extension_index = 0; extension_index < probing_sets_[set_index].GetNumberOfProbeExtensions(propagations_); ++extension_index) {
-        if (probing_sets_[set_index].GetExtendedProbeIndex(extension_index) == unique_index) {
-          probing_set_indices.push_back(set_index);
-        }
-      }
+  for (uint64_t index = 0; index < GetNumberOfProbingSets(); ++index) {    
+    for (uint64_t extension_index : probing_sets_[index].GetProbeExtensions()) {
+      probing_set_indices[extension_index].push_back(index);
     }
+  }
 
-    unique_probes_.emplace_back(extended_probes_[unique_index].GetSignalIndex(), extended_probes_[unique_index].GetCycle(), probing_set_indices);
+  for (uint64_t index = 0; index < GetNumberOfExtendedProbes(); ++index) {
+    unique_probes_.emplace_back(extended_probes_[index].GetSignalIndex(), extended_probes_[index].GetCycle(), probing_set_indices[index]);
   }
 }
 
@@ -808,35 +804,45 @@ template <class ExtensionContainer> void Adversaries<ExtensionContainer>::Normal
       }
     }
   }
-
 }
 
 template <> 
-void Adversaries<RobustProbe>::CompactTest(std::vector<double_t>& group_simulation_ratio) {
-  uint64_t number_of_groups = settings_.GetNumberOfGroups();
+void Adversaries<RobustProbe>::CompactTableUpdate(uint64_t simulation_index, std::vector<uint64_t>& counters) {
   uint64_t number_of_probing_sets = GetNumberOfProbingSets();
-  uint64_t number_of_simulations = simulation_.considered_simulation_indices_.size();
-  std::vector<std::vector<uint64_t>> counters(number_of_simulations, std::vector<uint64_t>(number_of_probing_sets, 0));
+  uint64_t sim_idx1 = simulation_index >> 6;
+  uint64_t sim_idx2 = 1ULL << (simulation_index & 63);
+  std::fill(counters.begin(), counters.end(), 0);
 
-  #pragma omp parallel for schedule(guided)
-  for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    uint64_t simulation_index = simulation_.considered_simulation_indices_[index];
-
-    for (uint64_t unique_index = 0; unique_index < unique_probes_.size(); ++unique_index) {
-      if (simulation_.probe_values_[unique_index][simulation_index >> 6] & (1ULL << (simulation_index & 63))) {
-        for (uint64_t set_index : unique_probes_[unique_index].GetProbingSetIndices()) {
-          ++counters[index][set_index];
-        }
+  for (uint64_t index = 0; index < unique_probes_.size(); ++index) {
+    if (simulation_.probe_values_[index][sim_idx1] & sim_idx2) {
+      for (uint64_t set_index : unique_probes_[index].GetProbingSetIndices()) {
+        ++counters[set_index];
       }
     }
   }
 
+  for (uint64_t index = 0; index < number_of_probing_sets; ++index) {
+    #pragma omp atomic
+    probing_sets_[index].contingency_table_.bucket_[counters[index]].data_[simulation_.selected_groups_[simulation_index]]++;
+  }
+}
+
+template <> 
+void Adversaries<RobustProbe>::CompactTest(std::vector<double_t>& group_simulation_ratio) {
+  uint64_t thread_index;
+  uint64_t number_of_groups = settings_.GetNumberOfGroups();
+  uint64_t number_of_probing_sets = GetNumberOfProbingSets();
+  uint64_t number_of_simulations = simulation_.considered_simulation_indices_.size();
+  std::vector<std::vector<uint64_t>> counters(settings_.GetNumberOfThreads(), std::vector<uint64_t>(number_of_probing_sets));
+
+  #pragma omp parallel for schedule(guided) private(thread_index)
+  for (uint64_t index = 0; index < number_of_simulations; ++index) {
+    thread_index = omp_get_thread_num();
+    CompactTableUpdate(simulation_.considered_simulation_indices_[index], counters[thread_index]);
+  }
+
   #pragma omp parallel for schedule(guided)
   for (uint64_t set_index = 0; set_index < number_of_probing_sets; ++set_index) {
-    for (uint64_t index = 0; index < number_of_simulations; ++index) {
-      probing_sets_[set_index].IncrementSpecificCounter(counters[index][set_index], simulation_.selected_groups_[simulation_.considered_simulation_indices_[index]]); 
-    }
-
     probing_sets_[set_index].ComputeGTest(number_of_groups, simulation_.number_of_processed_simulations, group_simulation_ratio);
   }
 }

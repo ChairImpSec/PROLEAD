@@ -174,7 +174,8 @@ class ProbingSet {
    *
    * @return A vector containing the indices of unique probe extensions.
    */
-  std::vector<uint64_t> GetProbeExtensions();
+  const std::vector<uint64_t>& GetProbeExtensions() const;
+
 
   /**
    * @brief Marks the probing set as removable.
@@ -300,7 +301,7 @@ class ProbingSet {
 
   void IncrementSpecificCounter(uint64_t key_index, uint64_t group_index);
 
- private:
+ //private:
   /**
    * A vector of probes storing all the probes placed by the adversary. All
    * probes are stored based on their addresses related to the list of all

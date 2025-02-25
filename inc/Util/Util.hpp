@@ -268,7 +268,7 @@ class ContingencyTable {
   void SetLog10pValue(uint64_t number_of_groups, uint64_t number_of_simulations,
                       std::vector<double_t>& group_simulation_ratio);
 
- private:
+ //private:
   /**
    * @brief The size of the key in bytes.
    *
@@ -419,6 +419,8 @@ class ContingencyTable {
   double_t ComputeLog10pValue(double_t g_test_statistic,
                               uint64_t degrees_of_freedom) const;
 };
+
+
 
 void StartClock(timespec& start);
 double EndClock(timespec& start);
