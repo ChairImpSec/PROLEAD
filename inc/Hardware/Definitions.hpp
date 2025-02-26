@@ -2,9 +2,6 @@
 
 #include <bits/stdc++.h>
 
-// #include <unordered_map>
-// #include <cinttypes>
-// #include <map>
 #include <vector>
 #include <memory>
 
@@ -12,10 +9,6 @@
 #include "Hardware/Circuit.hpp"
 #include "Hardware/Library.hpp"
 #include "Util/Settings.hpp"
-
-// #include "Hardware/Library.hpp"
-// #include "Util/Sharing.hpp"
-// #include "Util/Util.hpp"
 
 #define Max_Name_Length 10000
 

@@ -1,6 +1,5 @@
 #include "Hardware/TruthTable.hpp"
 
-namespace Hardware {
 TruthTable::TruthTable(size_t amount_of_inputs) {
   amount_of_inputs_ = amount_of_inputs;
   table_ = std::vector<std::vector<bool>>(1 << amount_of_inputs, std::vector<bool>(2));
@@ -180,5 +179,3 @@ bool TruthTable::GetG(std::vector<bool> index) const {
 size_t TruthTable::GetAmountOfInputs() const {
   return amount_of_inputs_;
 }
-
-} // namespace Hardware

@@ -17,9 +17,7 @@
 namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
 
-namespace Hardware {
-
-enum class OperationType { None, And, Or, Xor, Mux, Not, Constant_zero, Constant_one };
+enum class op_t { undef, and_op, or_op, xor_op, not_op, zero_const, one_const };
 
 // Stores first the operation as string, and secondly the amount of inputs
 extern std::vector<std::pair<std::string, std::vector<std::string>>> operation_library;
@@ -27,15 +25,15 @@ extern std::vector<std::pair<std::string, std::vector<std::string>>> probe_exten
 extern std::vector<std::pair<std::string, std::vector<std::string>>> glitch_propagation_library;
 
 struct ExpressionTree {
-  OperationType operation;
+  op_t operation;
   std::vector<unsigned int> variables;
   std::vector<ExpressionTree> subclauses;
 
   ExpressionTree() = default;
-  ExpressionTree(OperationType op, const ExpressionTree& clause);
-  ExpressionTree(OperationType op, const ExpressionTree& left,
+  ExpressionTree(op_t op, const ExpressionTree& clause);
+  ExpressionTree(op_t op, const ExpressionTree& left,
                  const ExpressionTree& right);
-  ExpressionTree(OperationType op);
+  ExpressionTree(op_t op);
   ExpressionTree(unsigned int variable);
 };
 
@@ -45,18 +43,18 @@ class CustomOperation {
   CustomOperation(ExpressionTree& tree, size_t number_of_inputs);
   size_t GetNumberOfClauses() const;
   unsigned int GetNumberOfOperandsInClause(unsigned int clause_index) const;
-  OperationType GetOperationInClause(unsigned int clause_index) const;
+  op_t GetOperationInClause(unsigned int clause_index) const;
   unsigned int GetOperandInClause(unsigned int clause_index,
                                   unsigned int input_index) const;
 
-  CustomOperation(OperationType operation_type, std::vector<unsigned int> input_signals);
+  CustomOperation(op_t operation_type, std::vector<unsigned int> input_signals);
   bool operator==(const CustomOperation& other) const;
 
  private:
-  std::vector<OperationType> operation_of_clause_;
+  std::vector<op_t> operation_of_clause_;
   std::vector<std::vector<unsigned int>> operands_in_clause_;
 
-  void SetClause(OperationType operation, std::vector<unsigned int>& operands);
+  void SetClause(op_t operation, std::vector<unsigned int>& operands);
 };
 
 class BooleanExpressionGrammar
@@ -75,7 +73,7 @@ class Operation {
  public:
   Operation();
   Operation(std::string expression, std::vector<std::string> names);
-  Operation(OperationType operation_type, std::vector<unsigned int>& input_signals);
+  Operation(op_t operation_type, std::vector<unsigned int>& input_signals);
   uint64_t Evaluate(std::vector<uint64_t> input_values) const; // Cannot be given as reference as the input vector is modified internally!
   /**
    * @brief Checks if two operations return the same result for all possible operations
@@ -97,6 +95,4 @@ class Operation {
   OperationContainer operation_;
   size_t amount_of_inputs_;
 };
-
-}  // namespace Hardware
 

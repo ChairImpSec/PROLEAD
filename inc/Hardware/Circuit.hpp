@@ -13,13 +13,11 @@
 namespace Hardware {
 
 struct CellStruct {
-  int Type;
+  const Cell* type;
   char* Name;
   int Hierarchy;
   short Depth;
-  char NumberOfInputs;
   int* Inputs;
-  char NumberOfOutputs;
   int* Outputs;
   int* RegValueIndexes;
   char Deleted;

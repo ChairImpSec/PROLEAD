@@ -239,7 +239,7 @@ namespace Hardware{
     }
 
     template <>
-    bool Propagation<RobustProbe>::IsObsolete(const Library& library, const CircuitStruct& circuit, const Settings& settings){
+    bool Propagation<RobustProbe>::IsObsolete(const CircuitStruct& circuit, const Settings& settings){
         uint64_t signal_index = GetSignalIndex();
         if (!circuit.Signals[signal_index]->is_probe_allowed) {
             return true;
@@ -251,7 +251,7 @@ namespace Hardware{
 
         if (settings.GetMinimization() != Minimization::none){
             for (int index = 0; index < circuit.Signals[signal_index]->NumberOfInputs; ++index) {
-                if (!library.IsCellRegister(circuit.Cells[circuit.Signals[signal_index]->Inputs[index]]->Type)){
+                if (circuit.Cells[circuit.Signals[signal_index]->Inputs[index]]->type->GetType() != cell_t::sequential){
                     return true;
                 }
             }
@@ -261,7 +261,7 @@ namespace Hardware{
     }
 
     template <>
-    bool Propagation<RelaxedProbe>::IsObsolete(const Library& /*library*/, const CircuitStruct& circuit, const Settings& /*settings*/){
+    bool Propagation<RelaxedProbe>::IsObsolete(const CircuitStruct& circuit, const Settings& /*settings*/){
         uint64_t signal_index = GetSignalIndex();
 
         if (!extension_indices_[0].number_of_enable_indices_ && extension_indices_[0].propagation_indices_.empty() && !extension_indices_[0].number_of_signal_indices_) {
@@ -269,7 +269,7 @@ namespace Hardware{
         }
 
         if (circuit.Signals[signal_index]->Output != -1){
-            if (circuit.Cells[circuit.Signals[signal_index]->Output]->NumberOfInputs == 1){
+            if (circuit.Cells[circuit.Signals[signal_index]->Output]->type->GetNumberOfInputs() == 1){
                 return true;
             }
         }
@@ -281,28 +281,42 @@ namespace Hardware{
     Propagation<RelaxedProbe> Propagation<RelaxedProbe>::ExtendWithTime(uint64_t clock_cycle, std::vector<Probe>& probes, std::vector<Enabler<CustomOperation>>& enabler) {
         Propagation<RelaxedProbe> propagation;
         std::vector<uint64_t> indices;
-        uint64_t index;
-        propagation.signal_index_ = SearchProbe(signal_index_, clock_cycle, probes);
+        Probe probe ({signal_index_}, clock_cycle);
+
+        std::optional<uint64_t> probe_index = SearchProbe(probe, probes);
+
+        propagation.signal_index_ = *probe_index;
         propagation.extension_indices_.resize(1);
 
         if (clock_cycle){
             propagation.extension_indices_[0].signal_indices_.resize(2);
-            propagation.extension_indices_[0].signal_indices_[0] = SearchProbe(extension_indices_[0].signal_indices_[0], clock_cycle - 1, probes);
-            propagation.extension_indices_[0].signal_indices_[1] = SearchProbe(extension_indices_[0].signal_indices_[0], clock_cycle, probes);
+
+            Probe probe2 ({extension_indices_[0].signal_indices_[0]}, clock_cycle - 1);
+            probe_index = SearchProbe(probe2, probes);
+            propagation.extension_indices_[0].signal_indices_[0] = *probe_index;
+
+            Probe probe3 ({extension_indices_[0].signal_indices_[0]}, clock_cycle);
+            probe_index = SearchProbe(probe3, probes);
+            propagation.extension_indices_[0].signal_indices_[1] = *probe_index;
         }else{
             propagation.extension_indices_[0].signal_indices_.resize(1);
-            propagation.extension_indices_[0].signal_indices_[0] = SearchProbe(extension_indices_[0].signal_indices_[0], clock_cycle, probes);
+            Probe probe3 ({extension_indices_[0].signal_indices_[0]}, clock_cycle);
+            probe_index = SearchProbe(probe3, probes);
+            propagation.extension_indices_[0].signal_indices_[0] = *probe_index;
         }
 
         if (extension_indices_[0].number_of_enable_indices_){
-            index = SearchProbe(extension_indices_[0].enable_index_, clock_cycle, probes);
-            propagation.extension_indices_[0].enable_index_ = SearchEnabler(index, enabler);
+            Probe probe4 ({extension_indices_[0].enable_index_}, clock_cycle);
+            probe_index = SearchProbe(probe4, probes);
+            propagation.extension_indices_[0].enable_index_ =  SearchEnabler(*probe_index, enabler);
         }
 
         propagation.extension_indices_[0].number_of_enable_indices_ = extension_indices_[0].number_of_enable_indices_;
 
         for (uint64_t propagation_index : extension_indices_[0].propagation_indices_){
-            indices.push_back(SearchProbe(propagation_index, clock_cycle, probes));
+            Probe probe5 ({propagation_index}, clock_cycle);
+            probe_index = SearchProbe(probe5, probes);
+            indices.push_back(*probe_index);
         }
 
         propagation.extension_indices_[0].propagation_indices_ = indices;

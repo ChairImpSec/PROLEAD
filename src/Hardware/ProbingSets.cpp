@@ -219,9 +219,11 @@ std::string ProbingSet<ExtensionContainer>::PrintProbes(CircuitStruct& circuit) 
   std::string cycle, name, result;
 
   for (Probe* probe : GetProbeAddresses()){
-    name = circuit.Signals[probe->GetSignalIndex()]->Name;
-    cycle = std::to_string(probe->GetCycle());
-    result += name + "(" + cycle + "), ";
+    for (uint64_t probe_index : probe->GetSignalIndices()){
+      name = circuit.Signals[probe_index]->Name;
+      cycle = std::to_string(probe->GetCycle());
+      result += name + "(" + cycle + "), ";
+    }
   }
 
   result.pop_back();

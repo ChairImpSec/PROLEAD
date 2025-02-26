@@ -3,8 +3,7 @@
 #include "Hardware/Operation.hpp"
 #include "Hardware/LibHelper.hpp"
 
-namespace Hardware {
-  /**
+/**
    * Represents a truth table with a variable amount of input columns
    * and 2 output values F(Toggle), G(Glitch)
    * @author Simon Osterheider
@@ -118,5 +117,3 @@ namespace Hardware {
     */
     size_t amount_of_inputs_;
   };
-
-}   // namespace Hardware

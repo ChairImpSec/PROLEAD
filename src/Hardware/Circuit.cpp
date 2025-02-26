@@ -15,7 +15,7 @@ uint64_t Hardware::CircuitStruct::GetNumberOfInputsForSignalsComputingCell(
         "\" is a primary input, such a cell cannot be found!";
     throw std::logic_error(error_message);
   } else {
-    return Cells[Signals[signal_index]->Output]->NumberOfInputs;
+    return Cells[Signals[signal_index]->Output]->type->GetNumberOfInputs();
   }
 }
 
@@ -36,7 +36,7 @@ std::vector<uint64_t> Hardware::CircuitStruct::GetSignals() const {
 
   for (cell_index = 0; cell_index < NumberOfRegs; ++cell_index) {
     for (output_index = 0;
-         output_index < Cells[Regs[cell_index]]->NumberOfOutputs;
+         output_index < (int)Cells[Regs[cell_index]]->type->GetNumberOfOutputs();
          ++output_index) {
       if (Cells[Regs[cell_index]]->Outputs[output_index] != -1) {
         result.push_back(Cells[Regs[cell_index]]->Outputs[output_index]);
@@ -49,7 +49,7 @@ std::vector<uint64_t> Hardware::CircuitStruct::GetSignals() const {
          ++cell_index) {
       for (output_index = 0;
            output_index <
-           Cells[CellsInDepth[depth_index][cell_index]]->NumberOfOutputs;
+           (int)Cells[CellsInDepth[depth_index][cell_index]]->type->GetNumberOfOutputs();
            ++output_index) {
         result.push_back(Cells[CellsInDepth[depth_index][cell_index]]
                              ->Outputs[output_index]);
@@ -83,7 +83,7 @@ void Hardware::CircuitStruct::PropagateProbe(Library& library, uint64_t signal_i
   uint64_t input_index;
   Signals[signal_index]->is_probe_allowed = allowed;
 
-  if ((Signals[signal_index]->Output == -1) || library.IsCellRegister(Cells[Signals[signal_index]->Output]->Type)) {
+  if ((Signals[signal_index]->Output == -1) || Cells[Signals[signal_index]->Output]->type->IsRegister()) {
     Signals[signal_index]->is_probe_allowed = false;
   } else {
     for (uint64_t index = 0; index < GetNumberOfInputsForSignalsComputingCell(signal_index); ++index) {
@@ -97,7 +97,7 @@ void Hardware::CircuitStruct::PropagateExtension(Library& library, uint64_t sign
   uint64_t input_index;
   Signals[signal_index]->is_extension_allowed = allowed;
 
-  if ((Signals[signal_index]->Output == -1) || library.IsCellRegister(Cells[Signals[signal_index]->Output]->Type)) {
+  if ((Signals[signal_index]->Output == -1) || Cells[Signals[signal_index]->Output]->type->IsRegister()) {
     Signals[signal_index]->is_extension_allowed = false;
   } else {
     for (uint64_t index = 0; index < GetNumberOfInputsForSignalsComputingCell(signal_index); ++index) {
@@ -117,7 +117,7 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_probe_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -128,7 +128,7 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_probe_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -171,7 +171,7 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_probe_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -182,7 +182,7 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_probe_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -197,7 +197,7 @@ void Hardware::CircuitStruct::SetIsProbeAllowed(Library& library, const Settings
     for (uint64_t index = 0; index < number_of_signals; ++index) {
       uint64_t number_of_inputs = Signals[index]->NumberOfInputs;
       for (uint64_t input_index = 0; input_index < number_of_inputs; ++input_index) {
-        if (!library.IsCellRegister(Cells[Signals[index]->Inputs[input_index]]->Type)){
+        if (!Cells[Signals[index]->Inputs[input_index]]->type->IsRegister()){
           Signals[index]->is_probe_allowed = false;
           break;
         }
@@ -239,7 +239,7 @@ void Hardware::CircuitStruct::SetIsExtensionAllowed(Library& library, const Sett
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_extension_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -250,7 +250,7 @@ void Hardware::CircuitStruct::SetIsExtensionAllowed(Library& library, const Sett
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_extension_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -293,7 +293,7 @@ void Hardware::CircuitStruct::SetIsExtensionAllowed(Library& library, const Sett
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_extension_allowed = false;
       } else {
         signal_name = Signals[index]->Name;
@@ -304,7 +304,7 @@ void Hardware::CircuitStruct::SetIsExtensionAllowed(Library& library, const Sett
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((Signals[index]->Output == -1) || library.IsCellRegister(Cells[Signals[index]->Output]->Type)) {
+      if ((Signals[index]->Output == -1) || Cells[Signals[index]->Output]->type->IsRegister()) {
         Signals[index]->is_extension_allowed = false;
       } else {
         signal_name = Signals[index]->Name;

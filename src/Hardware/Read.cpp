@@ -254,8 +254,8 @@ int Hardware::Read::SearchSignalName(CircuitStruct* Circuit, char* SignalName, c
 	return(SignalIndex);
 }
 
-void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
-                                             Library& library, CircuitStruct* Circuit, int NumberOfSignalsOffset,
+void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, const Cell* CellTypeIndex, int CaseIndex,
+                                             CircuitStruct* Circuit, int NumberOfSignalsOffset,
                                              char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
                                              int* &InputPorts, int &NumberOfInputPorts, int* &OutputPorts, int &NumberOfOutputPorts)
 {
@@ -279,12 +279,12 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 	{
 		if (strlen(Str1))
 		{
-			for (InputIndex = 0; InputIndex < (int)library.GetNumberOfInputs(CellTypeIndex); InputIndex++)
+			for (InputIndex = 0; InputIndex < (int)CellTypeIndex->GetNumberOfInputs(); InputIndex++)
 			{
-				strncpy(Str2, library.GetInput(CellTypeIndex, InputIndex).c_str(), Max_Name_Length - 1);
+				strncpy(Str2, CellTypeIndex->GetInput(InputIndex).c_str(), Max_Name_Length - 1);
 				i = TrimSignalName(Str2);
 
-				if ((!strcmp(Str1 + 1, library.GetInput(CellTypeIndex, InputIndex).c_str())) ||
+				if ((!strcmp(Str1 + 1, CellTypeIndex->GetInput(InputIndex).c_str())) ||
 					(!strcmp(Str1 + 1, Str2)))
 				{
 					Buffer_int = (int *)malloc((NumberOfInputPorts + 1) * sizeof(int));
@@ -302,12 +302,12 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 
 			if (!NumberOfInputPorts) // the IO port NOT found in the Circuit->Inputs
 			{
-				for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfOutputs(CellTypeIndex); OutputIndex++)
+				for (OutputIndex = 0; OutputIndex < (int)CellTypeIndex->GetNumberOfOutputs(); OutputIndex++)
 				{
-					strncpy(Str2, library.GetOutput(CellTypeIndex, OutputIndex).c_str(), Max_Name_Length - 1);
+					strncpy(Str2, CellTypeIndex->GetOutput(OutputIndex).c_str(), Max_Name_Length - 1);
 					i = TrimSignalName(Str2);
 
-					if ((!strcmp(Str1 + 1, library.GetOutput(CellTypeIndex, OutputIndex).c_str())) ||
+					if ((!strcmp(Str1 + 1, CellTypeIndex->GetOutput(OutputIndex).c_str())) ||
 						(!strcmp(Str1 + 1, Str2)))
 					{
 						Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
@@ -326,21 +326,21 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 				if (!NumberOfOutputPorts) // the IO port NOT found in the Circuit->Outputs
 				{
 					ErrorMessage = Str1 + 1;
-					ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + library.GetIdentifier(CellTypeIndex, CaseIndex) + "\"!";
+					ErrorMessage = "IO port " + ErrorMessage + " not found in cell type \"" + CellTypeIndex->GetIdentifier(CaseIndex) + "\"!";
 					throw std::runtime_error(ErrorMessage);
 				}
 			}
 		}
 		else
 		{
-			for (InputIndex = 0; InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
+			for (InputIndex = 0; InputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfInputs(); InputIndex++)
 				if (Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] == -1)
 				{
-					ErrorMessage = "Input port \"" + library.GetInput(CellTypeIndex, InputIndex) + "\" of cell \"" + (std::string)Circuit->Cells[Circuit->NumberOfCells]->Name + "\" cannot be left unconnected!";
+					ErrorMessage = "Input port \"" + CellTypeIndex->GetInput(InputIndex) + "\" of cell \"" + (std::string)Circuit->Cells[Circuit->NumberOfCells]->Name + "\" cannot be left unconnected!";
 					throw std::runtime_error(ErrorMessage);
 				}
 
-			for (OutputIndex = 0; OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
+			for (OutputIndex = 0; OutputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfOutputs(); OutputIndex++)
 				if (Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] == -1)
 				{
 					Buffer_int = (int *)malloc((NumberOfOutputPorts + 1) * sizeof(int));
@@ -466,7 +466,7 @@ void Hardware::Read::DesignFile_Find_IO_Port(char* Str1, char SubCircuitRead, in
 	free(Str2);
 }
 
-void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead, int CellTypeIndex, int CaseIndex,
+void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead, const Cell* CellTypeIndex, int CaseIndex,
                                                  Settings& settings, Library& library, CircuitStruct* Circuit, int Task,
                                                  int NumberOfSignalsOffset, int NumberOfCellsOffset,
                                                  char* SubCircuitInstanceName, CircuitStruct* SubCircuit,
@@ -614,7 +614,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 		{
 			if (!SubCircuitRead)
 			{
-				ErrorMessage = "Input port \"" + library.GetInput(CellTypeIndex, InputPorts[0]) + "\" of cell type \"" + library.GetIdentifier(CellTypeIndex, CaseIndex) + "\" cannot be left unconnected!";
+				ErrorMessage = "Input port \"" + CellTypeIndex->GetInput(InputPorts[0]) + "\" of cell type \"" + CellTypeIndex->GetIdentifier(CaseIndex) + "\" cannot be left unconnected!";
 				throw std::runtime_error(ErrorMessage);
 			}
 			else
@@ -650,7 +650,11 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 
 		for (TempIndex = 0; TempIndex < NumberOfIOSignals; TempIndex++)
 		{
-			CellTypeIndex = library.GetBufferIndex(); // not necessary
+			std::optional<const Cell*> tmp = library.GetBuffer();
+
+			if (tmp) {
+				CellTypeIndex = *tmp;
+			}
 
 			TempCells = (CellStruct **)malloc((Circuit->NumberOfCells + 1) * sizeof(CellStruct *));
 			memcpy(TempCells, Circuit->Cells, Circuit->NumberOfCells * sizeof(CellStruct *));
@@ -658,17 +662,15 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 			Circuit->Cells = TempCells;
 
 			Circuit->Cells[Circuit->NumberOfCells] = (CellStruct *)malloc(sizeof(CellStruct));
-			Circuit->Cells[Circuit->NumberOfCells]->Type = CellTypeIndex;
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfInputs(CellTypeIndex);
-			Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfInputs(CellTypeIndex) * sizeof(int));
-			Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfOutputs(CellTypeIndex);
-			Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
+			Circuit->Cells[Circuit->NumberOfCells]->type = CellTypeIndex;
+			Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(CellTypeIndex->GetNumberOfInputs() * sizeof(int));
+			Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(CellTypeIndex->GetNumberOfOutputs() * sizeof(int));
 			Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
 
-			for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
+			for (InputIndex = 0;InputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfInputs(); InputIndex++)
 				Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] = -1;
 
-			for (OutputIndex = 0;OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
+			for (OutputIndex = 0;OutputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfOutputs(); OutputIndex++)
 				Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] = -1;
 
 			//if (Library->CellTypes[CellTypeIndex]->GateOrReg == CellType_Gate)
@@ -780,7 +782,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 						}
 
 						Circuit->Signals[SignalIndex]->Output = Circuit->NumberOfCells + NumberOfCellsOffset;
-						if (library.IsCellRegister(CellTypeIndex))
+						if (CellTypeIndex->IsRegister())
 							Circuit->Signals[SignalIndex]->Depth = 0;
 					}
 				}
@@ -822,7 +824,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 						Circuit->Signals[SignalIndex]->NumberOfInputs++;
 
 						CellIndex -= NumberOfCellsOffset;
-						for (InputIndex2 = 0; InputIndex2 < Circuit->Cells[CellIndex]->NumberOfInputs; InputIndex2++)
+						for (InputIndex2 = 0; InputIndex2 < (int)Circuit->Cells[CellIndex]->type->GetNumberOfInputs(); InputIndex2++)
 							if (Circuit->Cells[CellIndex]->Inputs[InputIndex2] == SignalIndex2WithOffset)
 								Circuit->Cells[CellIndex]->Inputs[InputIndex2] = SignalIndexWithOffset;
 					}
@@ -842,7 +844,7 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 						{
 							CellIndex -= NumberOfCellsOffset;
 
-							for (OutputIndex2 = 0; OutputIndex2 < Circuit->Cells[CellIndex]->NumberOfOutputs; OutputIndex2++)
+							for (OutputIndex2 = 0; OutputIndex2 < (int)Circuit->Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex2++)
 								if (Circuit->Cells[CellIndex]->Outputs[OutputIndex2] == SignalIndex2WithOffset)
 									Circuit->Cells[CellIndex]->Outputs[OutputIndex2] = SignalIndexWithOffset;
 						}
@@ -865,13 +867,13 @@ void Hardware::Read::DesignFile_Find_Signal_Name(char* Str1, char SubCircuitRead
 }
 
 void Hardware::Read::DesignFile(const std::string& design_file_name, const std::string& top_module_name,
-                                Settings& settings, Hardware::Library& library, Hardware::CircuitStruct* Circuit,
+                                Settings& settings, Library& library, Hardware::CircuitStruct* Circuit,
                                 int NumberOfSignalsOffset, int NumberOfCellsOffset, int NumberOfRegValuesOffset, Hardware::FileBufferStruct* FB)
 {
     FILE*          DesignFile;
     char           finished;
     char           ReadSignalsFinished;
-    int            CellTypeIndex = 0;
+    const Cell*    CellTypeIndex = NULL;
     int            CaseIndex = 0;
     char*          Str1 = (char*)malloc(Max_Name_Length * sizeof(char));
     char*          Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
@@ -1244,10 +1246,11 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                     {
                                         if (Task == Task_find_module_type)
                                         {
-                                            if (!strcmp(Str1, "assign"))
-                                                if (library.GetBufferIndex() > -1)
+                                            if (!strcmp(Str1, "assign")) {
+												std::optional<const Cell*> tmp2 = library.GetBuffer();
+                                                if (tmp2)
                                                 {
-                                                	CellTypeIndex = library.GetBufferIndex();
+                                                	CellTypeIndex = *tmp2;
 
                                                 	SubCircuitRead = 0;
 													NumberOfInputPorts = 0;
@@ -1267,44 +1270,35 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                                     free(SubCircuitInstanceName);
                                                     throw std::runtime_error("Buffer cell is not defined in the library for \"assign\" statements!");
                                                 }
-                                            else
-                                            {											
-                                                for (CellTypeIndex = 0; CellTypeIndex < (int)library.GetNumberOfCells(); CellTypeIndex++)
-                                                {
-                                                    for (CaseIndex = 0; CaseIndex < (int)library.GetNumberOfIdentifiers(CellTypeIndex); CaseIndex++)
-                                                        if (!strcmp(Str1, library.GetIdentifier(CellTypeIndex, CaseIndex).c_str()))
-                                                            break;
+											} else {	
+												std::string identifier = Str1;
+												std::optional<const Cell*> cell = library.GetCellByIdentifier(identifier);
 
-                                                    if (CaseIndex < (int)library.GetNumberOfIdentifiers(CellTypeIndex))
-                                                        break;
-                                                }
-
-												if (CellTypeIndex < (int)library.GetNumberOfCells())
+												if (cell)
 												{
+													CellTypeIndex = *cell;
 													TempCells = (CellStruct **)malloc((Circuit->NumberOfCells + 1) * sizeof(CellStruct *));
 													memcpy(TempCells, Circuit->Cells, Circuit->NumberOfCells * sizeof(CellStruct *));
 													free(Circuit->Cells);
 													Circuit->Cells = TempCells;
 
 													Circuit->Cells[Circuit->NumberOfCells] = (CellStruct *)malloc(sizeof(CellStruct));
-													Circuit->Cells[Circuit->NumberOfCells]->Type = CellTypeIndex;
-													Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs = library.GetNumberOfInputs(CellTypeIndex);
-													Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(library.GetNumberOfInputs(CellTypeIndex) * sizeof(int));
-													Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs = library.GetNumberOfOutputs(CellTypeIndex);
-													Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
+													Circuit->Cells[Circuit->NumberOfCells]->type = CellTypeIndex;
+													Circuit->Cells[Circuit->NumberOfCells]->Inputs = (int *)malloc(CellTypeIndex->GetNumberOfInputs() * sizeof(int));
+													Circuit->Cells[Circuit->NumberOfCells]->Outputs = (int *)malloc(CellTypeIndex->GetNumberOfOutputs() * sizeof(int));
 													Circuit->Cells[Circuit->NumberOfCells]->Deleted = 0;
 
-													for (InputIndex = 0;InputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfInputs; InputIndex++)
+													for (InputIndex = 0;InputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfInputs(); InputIndex++)
 														Circuit->Cells[Circuit->NumberOfCells]->Inputs[InputIndex] = -1;
 
-													for (OutputIndex = 0;OutputIndex < Circuit->Cells[Circuit->NumberOfCells]->NumberOfOutputs; OutputIndex++)
+													for (OutputIndex = 0;OutputIndex < (int)Circuit->Cells[Circuit->NumberOfCells]->type->GetNumberOfOutputs(); OutputIndex++)
 														Circuit->Cells[Circuit->NumberOfCells]->Outputs[OutputIndex] = -1;
 
-													if (library.IsCellRegister(CellTypeIndex))
+													if (CellTypeIndex->GetType() == cell_t::sequential)
 													{
 														Circuit->Cells[Circuit->NumberOfCells]->Depth = 0;
-														Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes = (int *)malloc(library.GetNumberOfOutputs(CellTypeIndex) * sizeof(int));
-														for (OutputIndex = 0; OutputIndex < (int)library.GetNumberOfOutputs(CellTypeIndex); OutputIndex++)
+														Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes = (int *)malloc(CellTypeIndex->GetNumberOfOutputs() * sizeof(int));
+														for (OutputIndex = 0; OutputIndex < (int)CellTypeIndex->GetNumberOfOutputs(); OutputIndex++)
 															Circuit->Cells[Circuit->NumberOfCells]->RegValueIndexes[OutputIndex] = NumberOfRegValuesOffset + Circuit->NumberOfRegValues++;
 
 														TempRegs = (int *)malloc((Circuit->NumberOfRegs + 1) * sizeof(int));
@@ -1329,7 +1323,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
 													}
 
 													Task = Task_find_module_name;
-													MyNumberofIO = library.GetNumberOfInputs(CellTypeIndex) + library.GetNumberOfOutputs(CellTypeIndex);
+													MyNumberofIO = CellTypeIndex->GetNumberOfInputs() + CellTypeIndex->GetNumberOfOutputs();
 													CurrentIO = 0;
 													SubCircuitRead = 0;
 												}
@@ -1442,7 +1436,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                         {
                                             if (Str1[0] == '.')
                                             {
-												DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, library, Circuit, NumberOfSignalsOffset,
+												DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Circuit, NumberOfSignalsOffset,
                                                                         SubCircuitInstanceName, &SubCircuit,
                                                                         InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
@@ -1510,7 +1504,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                     {
                                         if (Str1[0] == '.')
                                         {
-											DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, library, Circuit, NumberOfSignalsOffset,
+											DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Circuit, NumberOfSignalsOffset,
                                                                     SubCircuitInstanceName, &SubCircuit,
                                                                     InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 
@@ -1561,7 +1555,7 @@ void Hardware::Read::DesignFile(const std::string& design_file_name, const std::
                                     else if (Task == Task_find_comma)
                                     {
 										Str1[0] = 0;
-										DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, library, Circuit, NumberOfSignalsOffset,
+										DesignFile_Find_IO_Port(Str1, SubCircuitRead, CellTypeIndex, CaseIndex, Circuit, NumberOfSignalsOffset,
 																SubCircuitInstanceName, &SubCircuit,
 																InputPorts, NumberOfInputPorts, OutputPorts, NumberOfOutputPorts);
 

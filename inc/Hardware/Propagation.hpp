@@ -89,7 +89,7 @@ class Propagation {
    */
   std::vector<ExtensionContainer>& GetExtensionContainer();
 
-  bool IsObsolete(const Library& library, const CircuitStruct& circuit, const Settings& settings);
+  bool IsObsolete(const CircuitStruct& circuit, const Settings& settings);
 
   Propagation<ExtensionContainer> ExtendWithTime(
       uint64_t clock_cycle,

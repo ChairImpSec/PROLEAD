@@ -21,7 +21,6 @@ namespace Hardware{
     namespace Simulate{
 		/**
 		* @brief Performs the simulations.
-		* @param Library The cell library..
 		* @param Circuit The hardware circuit to analyze.
 		* @param Settings The general settings.
 		* @param SharedData The shared state of a simulation.
@@ -29,7 +28,7 @@ namespace Hardware{
 		* @param ThreadRng The rng assigned to a specific thread.
 		* @author Amir Moradi
 		*/
-        void All(const Hardware::Library&, const CircuitStruct&, const Settings&, SharedData&, std::vector<Probe>&, std::vector<Enabler<CustomOperation>>&, std::vector<size_t>&, Simulation&, int, boost::mt19937&);
+        void All(const CircuitStruct&, const Settings&, SharedData&, std::vector<Probe>&, std::vector<Enabler<CustomOperation>>&, std::vector<size_t>&, Simulation&, int, boost::mt19937&);
 
 		/**
 		* @brief Generate header for a .vcd file.

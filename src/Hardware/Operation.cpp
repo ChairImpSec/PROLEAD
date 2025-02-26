@@ -1,7 +1,5 @@
 #include "Hardware/Operation.hpp"
 
-namespace Hardware {
-
 std::vector<std::pair<std::string, std::vector<std::string>>> operation_library = {
     {"A1 and A2", {"A1", "A2"}},
     {"not (A1 and A2)", {"A1", "A2"}},
@@ -71,17 +69,17 @@ std::vector<std::pair<std::string, std::vector<std::string>>> probe_extension_li
     {"1", {}}
 };
 
-ExpressionTree::ExpressionTree(OperationType op, const ExpressionTree& clause)
+ExpressionTree::ExpressionTree(op_t op, const ExpressionTree& clause)
     : operation(op), subclauses({clause}) {}
 
-ExpressionTree::ExpressionTree(OperationType op, const ExpressionTree& left,
+ExpressionTree::ExpressionTree(op_t op, const ExpressionTree& left,
                                const ExpressionTree& right)
     : operation(op), subclauses({left, right}) {}
 
 ExpressionTree::ExpressionTree(unsigned int variable)
-    : operation(OperationType::None), variables({variable}) {}
+    : operation(op_t::undef), variables({variable}) {}
 
-ExpressionTree::ExpressionTree(OperationType op) : operation(op) {}
+ExpressionTree::ExpressionTree(op_t op) : operation(op) {}
 
 CustomOperation::CustomOperation(ExpressionTree& tree,
                                  size_t number_of_inputs) {
@@ -94,7 +92,7 @@ CustomOperation::CustomOperation(ExpressionTree& tree,
       leaf = &node->subclauses.back();
 
       if (leaf->subclauses.empty()) {
-        if (leaf->operation == Hardware::OperationType::None) {
+        if (leaf->operation == op_t::undef) {
           node->variables.push_back(leaf->variables[0]);
         } else {
           SetClause(leaf->operation, leaf->variables);
@@ -111,7 +109,7 @@ CustomOperation::CustomOperation(ExpressionTree& tree,
   SetClause(tree.operation, tree.variables);
 }
 
-CustomOperation::CustomOperation(OperationType operation_type,
+CustomOperation::CustomOperation(op_t operation_type,
                                  std::vector<unsigned int> input_signals) {
   operation_of_clause_.push_back(operation_type);
   operands_in_clause_.push_back(input_signals);
@@ -126,14 +124,14 @@ unsigned int CustomOperation::GetNumberOfOperandsInClause(
   return operands_in_clause_[clause_index].size();
 }
 
-void CustomOperation::SetClause(OperationType operation,
+void CustomOperation::SetClause(op_t operation,
                                 std::vector<unsigned int>& operands) {
   std::sort(operands.begin(), operands.end());
   operation_of_clause_.push_back(operation);
   operands_in_clause_.push_back(operands);
 }
 
-OperationType CustomOperation::GetOperationInClause(unsigned int clause_index) const {
+op_t CustomOperation::GetOperationInClause(unsigned int clause_index) const {
   return operation_of_clause_[clause_index];
 }
 
@@ -152,29 +150,29 @@ BooleanExpressionGrammar::BooleanExpressionGrammar()
   or_term =
       xor_term[qi::_val = qi::_1] >>
       *(qi::lit("or") >> xor_term[qi::_val = phx::construct<ExpressionTree>(
-                                      OperationType::Or, qi::_val, qi::_1)]);
+                                      op_t::or_op, qi::_val, qi::_1)]);
   xor_term =
       and_term[qi::_val = qi::_1] >>
       *(qi::lit("xor") >> and_term[qi::_val = phx::construct<ExpressionTree>(
-                                       OperationType::Xor, qi::_val, qi::_1)]);
+                                       op_t::xor_op, qi::_val, qi::_1)]);
   and_term =
       not_term[qi::_val = qi::_1] >>
       *(qi::lit("and") >> not_term[qi::_val = phx::construct<ExpressionTree>(
-                                       OperationType::And, qi::_val, qi::_1)]);
+                                       op_t::and_op, qi::_val, qi::_1)]);
   not_term =
       variable[qi::_val = qi::_1] | const_zero[qi::_val = qi::_1] |
       const_one[qi::_val = qi::_1] |
       (qi::lit("not") >> not_term[qi::_val = phx::construct<ExpressionTree>(
-                                      OperationType::Not, qi::_1)]) |
+                                      op_t::not_op, qi::_1)]) |
       ('(' >> or_term[qi::_val = qi::_1] >> ')');
 
   variable = 'i' >> qi::int_[qi::_val = phx::construct<ExpressionTree>(qi::_1)];
 
   const_zero = qi::lit("0")[qi::_val = phx::construct<ExpressionTree>(
-                                OperationType::Constant_zero)];
+                                op_t::zero_const)];
 
   const_one = qi::lit("1")[qi::_val = phx::construct<ExpressionTree>(
-                               OperationType::Constant_one)];
+                               op_t::one_const)];
 }
 
 template <>
@@ -217,7 +215,7 @@ Operation<CustomOperation>::Operation(std::string expression,
 
 template <>
 Operation<CustomOperation>::Operation(
-    OperationType operation_type, std::vector<unsigned int>& input_signals) {
+    op_t operation_type, std::vector<unsigned int>& input_signals) {
   operation_ = CustomOperation(operation_type, input_signals);
 }
 
@@ -235,28 +233,28 @@ uint64_t Operation<CustomOperation>::Evaluate(
     }
 
     switch (operation_.GetOperationInClause(index)) {
-      case OperationType::None:
+      case op_t::undef:
         throw std::runtime_error(
             "Tried to evaluate an unset operation! It seems that you found a "
             "bug in PROLEAD. Please get in touch with me "
             "(nicolai.mueller@rub.de) so that we can fix this issue!");
         break;
-      case OperationType::And:
+      case op_t::and_op:
         result &= input_values[operation_.GetOperandInClause(index, 1)];
         break;
-      case OperationType::Or:
+      case op_t::or_op:
         result |= input_values[operation_.GetOperandInClause(index, 1)];
         break;
-      case OperationType::Xor:
+      case op_t::xor_op:
         result ^= input_values[operation_.GetOperandInClause(index, 1)];
         break;
-      case OperationType::Not:
+      case op_t::not_op:
         result = ~result;
         break;
-      case OperationType::Constant_zero:
+      case op_t::zero_const:
         result = 0;
         break;
-      case OperationType::Constant_one:
+      case op_t::one_const:
         result = 0xffffffffffffffff;
         break;
       default:
@@ -292,5 +290,3 @@ bool Operation<CustomOperation>::operator==(
     const Operation<CustomOperation>& other) const {
   return operation_ == other.operation_;
 }
-
-}  // namespace Hardware

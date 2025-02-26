@@ -20,8 +20,8 @@ namespace Hardware
         void fReadaWord(FileBufferStruct*, char*, char*);
         int  TrimSignalName(char*, int*);
         int  SearchSignalName(CircuitStruct*, char*, char, Settings&);
-        void DesignFile_Find_IO_Port(char*, char, int, int, Library&, CircuitStruct*, int, char*, CircuitStruct*, int*&, int&, int*&, int&);
-        void DesignFile_Find_Signal_Name(char*, char, int, int, Settings&, Library&, CircuitStruct*, int, int, int, char*, CircuitStruct*, int*&, int&, int*&, int&, int&);
+        void DesignFile_Find_IO_Port(char*, char, const Cell*, int, CircuitStruct*, int, char*, CircuitStruct*, int*&, int&, int*&, int&);
+        void DesignFile_Find_Signal_Name(char*, char, const Cell*, int, Settings&, Library&, CircuitStruct*, int, int, int, char*, CircuitStruct*, int*&, int&, int*&, int&, int&);
         void DesignFile(const std::string&, const std::string&, Settings&, Library&, CircuitStruct*, int, int, int, FileBufferStruct*);
     }
 }

@@ -70,7 +70,7 @@ void FaultManager::ComputeAllFaults(
     const size_t index_of_gate = elements[i];
     const Hardware::CellStruct *const cell =
         this->circuit_to_be_faulted_.Cells[index_of_gate];
-    const size_t number_of_outputs = cell->NumberOfOutputs;
+    const size_t number_of_outputs = cell->type->GetNumberOfOutputs();
 
     for (size_t j = 0; j < number_of_outputs; ++j) {
 

@@ -11,7 +11,7 @@ class Enabler {
  public:
 
 
-  Enabler(Cell cell, uint64_t function_index, unsigned int extended_probe_index,
+  Enabler(const Cell* cell, uint64_t function_index, unsigned int extended_probe_index,
           std::vector<std::unique_ptr<uint64_t[]>*> input_addresses);
 
 
@@ -29,11 +29,11 @@ class Enabler {
   bool operator<(const Enabler<CustomOperation>& other) const;
 
   bool CheckFunctions() {
-    return cell_.GetNumberOfProbeExtensions() > 0;
+    return cell_->GetNumberOfProbeExtensions() > 0;
   }
 
  private:
-  Cell cell_;
+  const Cell* cell_;
   uint64_t output_index_;
   unsigned int extended_probe_index_;
   std::vector<std::unique_ptr<uint64_t[]>*> input_addresses_;

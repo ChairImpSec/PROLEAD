@@ -15,7 +15,7 @@ size_t Adversaries<ExtensionContainer>::GetNumberOfSpots() {
   std::vector<uint64_t> spots;
 
   for (Probe it : standard_probes_){
-    spots.push_back(it.GetSignalIndex());
+    spots.push_back(it.GetSignalIndices()[0]);
   }
 
   std::sort(spots.begin(), spots.end());
@@ -139,7 +139,7 @@ template std::vector<uint64_t> Adversaries<RelaxedProbe>::GetProbeExtensionsOfPr
 
 template <class ExtensionContainer>
 size_t Adversaries<ExtensionContainer>::SearchExtendedProbe(uint64_t signal_index, uint64_t clock_cycle) {
-  Probe probe(signal_index, clock_cycle);
+  Probe probe({signal_index}, clock_cycle);
   std::vector<Probe>::iterator it = std::lower_bound(extended_probes_.begin(), extended_probes_.end(), probe,[](const Probe& lhs, const Probe& rhs) { return lhs < rhs; });
   std::iterator_traits<std::vector<Probe>::iterator>::difference_type diff = std::distance(extended_probes_.begin(), it);
 
@@ -164,7 +164,7 @@ void Adversaries<ExtensionContainer>::SetPropagations() {
     }
 
     propagations_.erase(std::remove_if(propagations_.begin(), propagations_.end(), [this](Propagation<ExtensionContainer> lhs) {
-        return lhs.IsObsolete(this->library_, this->circuit_, this->settings_);
+        return lhs.IsObsolete(this->circuit_, this->settings_);
     }), propagations_.end());
 
     std::sort(propagations_.begin(), propagations_.end(), [](Propagation<ExtensionContainer>& lhs, Propagation<ExtensionContainer>& rhs) {
@@ -215,7 +215,8 @@ void Adversaries<ExtensionContainer>::SetStandardProbes() {
       signal_index = propagation.GetSignalIndex();
 
       if (circuit_.Signals[signal_index]->is_probe_allowed) {
-        standard_probes_.emplace_back(signal_index, clock_cycle - 1);
+        std::vector<uint64_t> signal_indices = {signal_index};
+        standard_probes_.emplace_back(signal_indices, clock_cycle - 1);
       }
     }
   }
@@ -241,10 +242,12 @@ void Adversaries<RobustProbe>::SetExtendedProbes() {
       --clock_cycle;
 
       if (settings_.IsTransitionalLeakage() && (clock_cycle != 0)) {
-        extended_probes_.emplace_back(index, clock_cycle - 1);
+        std::vector<uint64_t> signal_indices = {index};
+        extended_probes_.emplace_back(signal_indices, clock_cycle - 1);      
       }
 
-      extended_probes_.emplace_back(index, clock_cycle);
+      std::vector<uint64_t> signal_indices1 = {index};
+      extended_probes_.emplace_back(signal_indices1, clock_cycle);
     }
   }
 
@@ -264,7 +267,7 @@ void Adversaries<RelaxedProbe>::SetExtendedProbes() {
 
     if (propagation.GetNumberOfEnableIndices()) {
       enable_index = propagation.GetEnableIndex();
-      number_of_inputs = circuit_.Cells[circuit_.Signals[enable_index]->Output]->NumberOfInputs;
+      number_of_inputs = circuit_.Cells[circuit_.Signals[enable_index]->Output]->type->GetNumberOfInputs();
 
       for (input_index = 0; input_index < number_of_inputs; ++input_index) {
         signal_index = circuit_.Cells[circuit_.Signals[enable_index]->Output]->Inputs[input_index];
@@ -282,10 +285,12 @@ void Adversaries<RelaxedProbe>::SetExtendedProbes() {
       --clock_cycle;
 
       if (clock_cycle != 0) {
-        extended_probes_.emplace_back(index, clock_cycle - 1);
+        std::vector<uint64_t> signal_indices = {index};
+        extended_probes_.emplace_back(signal_indices, clock_cycle - 1);
       }
 
-      extended_probes_.emplace_back(index, clock_cycle);
+      std::vector<uint64_t> signal_indices1 = {index};
+      extended_probes_.emplace_back(signal_indices1, clock_cycle);
     }
   }
 
@@ -305,7 +310,7 @@ void Adversaries<RobustProbe>::SetUniqueProbes() {
   }
 
   for (uint64_t index = 0; index < GetNumberOfExtendedProbes(); ++index) {
-    unique_probes_.emplace_back(extended_probes_[index].GetSignalIndex(), extended_probes_[index].GetCycle(), probing_set_indices[index]);
+    unique_probes_.emplace_back(extended_probes_[index].GetSignalIndices(), extended_probes_[index].GetCycle(), probing_set_indices[index]);
   }
 }
 
@@ -380,8 +385,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       input_addresses.clear();
       not_transformed_local.clear();
 
-      number_of_inputs = circuit_.Cells[cell_index]->NumberOfInputs;
-
+      number_of_inputs = circuit_.Cells[cell_index]->type->GetNumberOfInputs();
 
       if (clock_cycle) {
         for (input_index = 0; input_index < number_of_inputs; ++input_index){
@@ -435,7 +439,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       list_of_probes.push_back(extended_probe_index);
       not_transformed_global.push_back(not_transformed_local);
 
-      Enabler<CustomOperation> enabler = Enabler<CustomOperation>(library_.GetCell(circuit_.Cells[cell_index]->Type), output_index, extended_probe_index, input_addresses);
+      Enabler<CustomOperation> enabler = Enabler<CustomOperation>(circuit_.Cells[cell_index]->type, output_index, extended_probe_index, input_addresses);
       // Sorted insert
       enabler_.insert(std::upper_bound(enabler_.begin(), enabler_.end(), enabler), enabler);
     }
@@ -454,7 +458,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
   std::vector<std::tuple<size_t, size_t, size_t>> pair_of_index_and_depth;
 
   for (size_t i = 0; i < GetNumberOfEnablers(); ++i){
-    pair_of_index_and_depth.push_back(std::make_tuple(i, (size_t)circuit_.Signals[extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetSignalIndex()]->Depth, extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetCycle()));
+    pair_of_index_and_depth.push_back(std::make_tuple(i, (size_t)circuit_.Signals[extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetSignalIndices()[0]]->Depth, extended_probes_[enabler_[i].GetExtendedProbeIndex()].GetCycle()));
   }
 
   std::sort(pair_of_index_and_depth.begin(), pair_of_index_and_depth.end(),[](const auto& a, const auto& b) {
@@ -507,7 +511,6 @@ void Adversaries<ExtensionContainer>::SetFaults() {
 
 template <>
 Adversaries<RobustProbe>::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation) : library_(library), circuit_(circuit), settings_(settings), simulation_(simulation), fault_manager_(FaultManager(settings.fault_injection, circuit)){
-
   SetPropagations();
   SetStandardProbes();
   SetExtendedProbes();
@@ -633,12 +636,17 @@ bool Adversaries<ExtensionContainer>::IsInDistance(std::vector<Probe*>& probe_ad
 
 template <>
 void Adversaries<RobustProbe>::ReplaceWireIndexWithListIndex(std::vector<uint64_t>& result, std::vector<uint64_t>& signal_indices, uint64_t clock_cycle, bool is_with_transitional_leakage) {
+  std::optional<uint64_t> probe_index;
 
   for (uint64_t index : signal_indices) {
-    result.push_back(SearchProbe(index, clock_cycle, extended_probes_));
+    Probe probe({index}, clock_cycle);
+    probe_index = SearchProbe(probe, extended_probes_);
+    result.push_back(*probe_index);
 
     if (is_with_transitional_leakage && (clock_cycle != 0)) {
-      result.push_back(SearchProbe(index, clock_cycle - 1, extended_probes_));
+      Probe probe1({index}, clock_cycle - 1);
+      probe_index = SearchProbe(probe1, extended_probes_);
+      result.push_back(*probe_index);
     }
   }
 
@@ -678,7 +686,9 @@ std::vector<uint64_t> Adversaries<RobustProbe>::GetSearchedIndices(uint64_t sign
 
 template <>
 std::vector<uint64_t> Adversaries<RelaxedProbe>::GetSearchedIndices(uint64_t signal_index, uint64_t clock_cycle) {
-    return { SearchProbe(signal_index, clock_cycle, extended_probes_) };
+  Probe probe({signal_index}, clock_cycle);
+  std::optional<uint64_t> probe_index = SearchProbe(probe, extended_probes_);
+  return { *probe_index };
 }
 
 template <class ExtensionContainer>
@@ -689,7 +699,7 @@ void Adversaries<ExtensionContainer>::AddProbingSet(std::vector<Probe*>& probe_a
   if (IsInDistance(probe_addresses)) {
     for (Probe* probe : probe_addresses) {
       clock_cycle = probe->GetCycle();
-      signal_index = probe->GetSignalIndex();
+      signal_index = probe->GetSignalIndices()[0];
       indices_to_search = GetSearchedIndices(signal_index, clock_cycle);
       ReplaceWireIndexWithListIndex(indices, indices_to_search, clock_cycle, settings_.IsTransitionalLeakage());
     }
@@ -945,7 +955,7 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(std::vector<SharedData>& shar
     #pragma omp parallel for schedule(guided) private(thread_index)
     for (simulation_index = 0; simulation_index < (settings_.GetNumberOfSimulationsPerStep() / 64); ++simulation_index) {
       thread_index = omp_get_thread_num();
-      Hardware::Simulate::All(library_, circuit_, settings_, shared_data[thread_index], extended_probes, enablers, enabler_evaluation_order, simulation_, simulation_index, thread_rng[thread_index]);
+      Hardware::Simulate::All(circuit_, settings_, shared_data[thread_index], extended_probes, enablers, enabler_evaluation_order, simulation_, simulation_index, thread_rng[thread_index]);
     }
 
     SetConsideredSimulations(number_of_simulations_per_group);
@@ -1007,7 +1017,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
     #pragma omp parallel for schedule(guided) private(thread_index)
     for (simulation_index = 0; simulation_index < (settings_.GetNumberOfSimulationsPerStep() / 64); ++simulation_index) {
       thread_index = omp_get_thread_num();
-      Hardware::Simulate::All(library_, circuit_, settings_, shared_data[thread_index], extended_probes, enablers, enabler_evaluation_order, simulation_, simulation_index, thread_rng[thread_index]);
+      Hardware::Simulate::All(circuit_, settings_, shared_data[thread_index], extended_probes, enablers, enabler_evaluation_order, simulation_, simulation_index, thread_rng[thread_index]);
     }
 
     SetConsideredSimulations(number_of_simulations_per_group);

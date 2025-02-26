@@ -53,22 +53,22 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
 
         for (CellIndex = 0; CellIndex < Circuit->NumberOfCells; CellIndex++)
             if (!Circuit->Cells[CellIndex]->Deleted)
-                if (!library.IsCellRegister(Circuit->Cells[CellIndex]->Type))
+                if (!Circuit->Cells[CellIndex]->type->IsRegister())
                     if (Circuit->Cells[CellIndex]->Depth == -1)
                     {
                         all_have_depth = 0;
                         DepthIndex = 0;
-                        for (i = 0; i < Circuit->Cells[CellIndex]->NumberOfInputs; i++)
+                        for (i = 0; i < (int)Circuit->Cells[CellIndex]->type->GetNumberOfInputs(); i++)
                             if (Circuit->Signals[Circuit->Cells[CellIndex]->Inputs[i]]->Depth == -1)
                                 break;
                             else if (DepthIndex < Circuit->Signals[Circuit->Cells[CellIndex]->Inputs[i]]->Depth)
                                 DepthIndex = Circuit->Signals[Circuit->Cells[CellIndex]->Inputs[i]]->Depth;
 
-                        if (i == Circuit->Cells[CellIndex]->NumberOfInputs) // all have depth
+                        if (i == (int)Circuit->Cells[CellIndex]->type->GetNumberOfInputs()) // all have depth
                         {
                             Circuit->Cells[CellIndex]->Depth = DepthIndex + 1;
 
-                            for (OutputIndex = 0; OutputIndex < Circuit->Cells[CellIndex]->NumberOfOutputs; OutputIndex++)
+                            for (OutputIndex = 0; OutputIndex < (int)Circuit->Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
                                 if (Circuit->Cells[CellIndex]->Outputs[OutputIndex] != -1)
                                     Circuit->Signals[Circuit->Cells[CellIndex]->Outputs[OutputIndex]]->Depth = Circuit->Cells[CellIndex]->Depth;
 
@@ -123,7 +123,7 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
 
         if (!Circuit->Cells[CellIndex]->Deleted)
         {
-			PortIndex = library.GetClock(Circuit->Cells[CellIndex]->Type);
+			PortIndex = Circuit->Cells[CellIndex]->type->GetClock();
 			if (PortIndex != -1)
 			{
 				SignalIndex = Circuit->Cells[CellIndex]->Inputs[PortIndex];
@@ -164,12 +164,12 @@ void Hardware::Prepare::SetCellFlag(Library& library, Hardware::CircuitStruct* C
 		if (CellIndex != -1)
 		{
 			if ((!Circuit->Cells[CellIndex]->Deleted) &&
-			    (!library.IsCellRegister(Circuit->Cells[CellIndex]->Type)) &&
+			    (!Circuit->Cells[CellIndex]->type->IsRegister()) &&
 			    (!Circuit->Cells[CellIndex]->Flag))
 			{
 				Circuit->Cells[CellIndex]->Flag = 1;
 
-				for (InputIndex = 0; InputIndex < Circuit->Cells[CellIndex]->NumberOfInputs; InputIndex++)
+				for (InputIndex = 0; InputIndex < (int)Circuit->Cells[CellIndex]->type->GetNumberOfInputs(); InputIndex++)
 				{
 					SignalIndex = Circuit->Cells[CellIndex]->Inputs[InputIndex];
 					SetCellFlag(library, Circuit, SignalIndex);

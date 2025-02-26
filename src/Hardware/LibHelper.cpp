@@ -1,8 +1,6 @@
 #include "Hardware/LibHelper.hpp"
 
-
-namespace Hardware {
-  void BitVectorFromNumber(std::vector<uint64_t>& result, size_t number) {
+void BitVectorFromNumber(std::vector<uint64_t>& result, size_t number) {
   for (size_t i = 0; i < result.size(); ++i) {
       result.at(i) = (number & (1 << i)) != 0;
   }
@@ -30,4 +28,3 @@ std::vector<bool> ConcatBoolVectors3(std::vector<bool> first, std::vector<bool>&
   }
   return first;
   }
-}

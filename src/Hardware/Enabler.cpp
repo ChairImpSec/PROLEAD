@@ -4,7 +4,7 @@ namespace Hardware {
 
 template <>
 Enabler<CustomOperation>::Enabler(
-    Cell cell, uint64_t output_index, unsigned int extended_probe_index,
+    const Cell* cell, uint64_t output_index, unsigned int extended_probe_index,
     std::vector<std::unique_ptr<uint64_t[]>*> input_addresses)
     : cell_(cell), output_index_(output_index), extended_probe_index_(extended_probe_index),
       input_addresses_(input_addresses) {}
@@ -23,13 +23,13 @@ void Enabler<CustomOperation>::SetInputAddress(
 template <>
 uint64_t Enabler<CustomOperation>::EvaluateGlitch(
     std::vector<uint64_t>& input_values) {
-  return cell_.EvaluateGlitch(output_index_, input_values);
+  return cell_->EvaluateGlitch(output_index_, input_values);
 }
 
 template <>
 uint64_t Enabler<CustomOperation>::EvaluatePropagation(
     std::vector<uint64_t>& input_values) {
-  return cell_.EvaluatePropagation(output_index_, input_values);    
+  return cell_->EvaluatePropagation(output_index_, input_values);    
 }
 
 template <>

@@ -40,30 +40,33 @@ template void Printer<RelaxedProbe>::SetPath(std::string);
 template <class ExtensionContainer>
 std::string Printer<ExtensionContainer>::PrintProbe(Probe& probe,
                                                     const CircuitStruct& circuit, const Settings& settings) {
-  unsigned int signal_index = probe.GetSignalIndex();
-  std::string signal_name, clock_cycle, error_message;
-
-  try {
-    signal_name = circuit.Signals[signal_index]->Name;
-  } catch (const std::out_of_range& e) {
-    error_message = "Tried to print a probe with an invalid signal index!\n" +
-                    standard_error_text;
-    throw std::out_of_range(error_message);
-  }
-
-  clock_cycle = std::to_string(probe.GetCycle());
-  if (settings.GetClkEdge() == clk_edge_t::both) {
-    clock_cycle = std::to_string((probe.GetCycle() + 1) / 2);
-    if (probe.GetCycle() % 2){
-        return signal_name + "(" + clock_cycle + ".0)";
-    } else {
-        return signal_name + "(" + clock_cycle + ".5)";
+  std::string signal_name, clock_cycle, error_message, result;                                                    
+  for (uint64_t signal_index : probe.GetSignalIndices()) {
+    try {
+      signal_name = circuit.Signals[signal_index]->Name;
+    } catch (const std::out_of_range& e) {
+      error_message = "Tried to print a probe with an invalid signal index!\n" +
+                      standard_error_text;
+      throw std::out_of_range(error_message);
     }
-  } else {
-    clock_cycle = std::to_string(probe.GetCycle() + 1);
+
+    clock_cycle = std::to_string(probe.GetCycle());
+    if (settings.GetClkEdge() == clk_edge_t::both) {
+      clock_cycle = std::to_string((probe.GetCycle() + 1) / 2);
+      if (probe.GetCycle() % 2){
+          return signal_name + "(" + clock_cycle + ".0)";
+      } else {
+          return signal_name + "(" + clock_cycle + ".5)";
+      }
+    } else {
+      clock_cycle = std::to_string(probe.GetCycle() + 1);
+    }
+
+    result += ", " + signal_name + "(" + clock_cycle + ")";
   }
-  
-  return signal_name + "(" + clock_cycle + ")";
+
+  result.erase(0, 2); 
+  return result;
 }
 
 template <class ExtensionContainer>
