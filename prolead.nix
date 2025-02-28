@@ -6,7 +6,7 @@
   gnumake,
   boost186,
   flint,
-  python310,
+  python312,
   catch2,
   gcc-arm-embedded,
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   buildInputs = [
     (boost186.override {
       enablePython = true;
-      python = python310;
+      python = python312;
     })
     flint
     python310

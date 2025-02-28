@@ -11,10 +11,10 @@ pkgs.mkShell {
   buildInputs = with pkgs; [
     (boost186.override {
       enablePython = true;
-      python = python310;
+      python = python312;
     })
     flint
-    python310
+    python312
     gcc-arm-embedded
     bear
     catch2
