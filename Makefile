@@ -52,7 +52,7 @@ CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-fr
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 LINK_FLINT = -lflint -lmpfr -lgmp -lm
-LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python310
+LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python312
 BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
 DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
