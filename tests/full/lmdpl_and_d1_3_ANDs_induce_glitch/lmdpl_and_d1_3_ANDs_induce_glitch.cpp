@@ -54,7 +54,7 @@ Test TestLmdplAndd13AndsInduceGlitch(Settings& settings) {
       "tests/full/lmdpl_and_d1_3_ANDs_induce_glitch";
 
   Hardware::CircuitStruct circuit;
-  Hardware::Library library(library_file_name, library_name,
+  Library library(library_file_name, library_name,
                             settings.side_channel_analysis.relaxed_model);
   Hardware::Read::DesignFile(design_file_name, topmodule_name, settings,
                              library, &circuit, 0, 0, 0, NULL);
