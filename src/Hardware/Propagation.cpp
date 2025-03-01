@@ -278,7 +278,7 @@ namespace Hardware{
     }
 
     template <>
-    Propagation<RelaxedProbe> Propagation<RelaxedProbe>::ExtendWithTime(uint64_t clock_cycle, std::vector<Probe>& probes, std::vector<Enabler<CustomOperation>>& enabler) {
+    Propagation<RelaxedProbe> Propagation<RelaxedProbe>::ExtendWithTime(uint64_t clock_cycle, std::vector<Probe>& probes, std::vector<Enabler>& enabler) {
         Propagation<RelaxedProbe> propagation;
         std::vector<uint64_t> indices;
         Probe probe ({signal_index_}, clock_cycle);

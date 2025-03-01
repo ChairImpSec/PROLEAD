@@ -1,4 +1,4 @@
-#include "Util/VlogConstGrammar.hpp"
+#include "Util/Grammars/VlogConstGrammar.hpp"
 
 #include <catch2/catch.hpp>
 

@@ -1,4 +1,4 @@
-#include "Util/RangeGrammar.hpp"
+#include "Util/Grammars/RangeGrammar.hpp"
 
 std::pair<double, double> RangeGrammar::Construct(double lhs, double rhs) {
   double first = std::min(lhs, rhs);

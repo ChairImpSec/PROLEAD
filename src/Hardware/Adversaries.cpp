@@ -88,17 +88,17 @@ template size_t Adversaries<RobustProbe>::GetNumberOfEnablers();
 template size_t Adversaries<RelaxedProbe>::GetNumberOfEnablers();
 
 template <>
-Enabler<CustomOperation> Adversaries<RelaxedProbe>::GetEnabler(size_t index){
+Enabler Adversaries<RelaxedProbe>::GetEnabler(size_t index){
   return enabler_[index];
 }
 
 template <class ExtensionContainer>
-std::vector<Enabler<CustomOperation>> Adversaries<ExtensionContainer>::GetEnablers() {
+std::vector<Enabler> Adversaries<ExtensionContainer>::GetEnablers() {
   return enabler_;
 }
 
-template std::vector<Enabler<CustomOperation>> Adversaries<RobustProbe>::GetEnablers();
-template std::vector<Enabler<CustomOperation>> Adversaries<RelaxedProbe>::GetEnablers();
+template std::vector<Enabler> Adversaries<RobustProbe>::GetEnablers();
+template std::vector<Enabler> Adversaries<RelaxedProbe>::GetEnablers();
 
 template <class ExtensionContainer>
 size_t Adversaries<ExtensionContainer>::GetNumberOfProbingSets() {
@@ -439,7 +439,7 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
       list_of_probes.push_back(extended_probe_index);
       not_transformed_global.push_back(not_transformed_local);
 
-      Enabler<CustomOperation> enabler = Enabler<CustomOperation>(circuit_.Cells[cell_index]->type, output_index, extended_probe_index, input_addresses);
+      Enabler enabler = Enabler(circuit_.Cells[cell_index]->type, output_index, extended_probe_index, input_addresses);
       // Sorted insert
       enabler_.insert(std::upper_bound(enabler_.begin(), enabler_.end(), enabler), enabler);
     }
@@ -936,7 +936,7 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(std::vector<SharedData>& shar
   std::string printed_probing_set_deleted;
   std::vector<Probe> extended_probes = GetProbeExtensions();
   std::vector<size_t> enabler_evaluation_order = enabler_evaluation_order_;
-  std::vector<Enabler<CustomOperation>> enablers = GetEnablers();
+  std::vector<Enabler> enablers = GetEnablers();
   std::cout << "Evaluate security under the robust probing model!" << std::endl;
   uint64_t number_of_remaining_probing_sets;
 
@@ -1001,7 +1001,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(std::vector<SharedData>& sha
   std::string printed_probing_set_deleted;
   std::vector<size_t> enabler_evaluation_order = enabler_evaluation_order_;
   std::vector<Probe> extended_probes = GetProbeExtensions();
-  std::vector<Enabler<CustomOperation>> enablers = GetEnablers();
+  std::vector<Enabler> enablers = GetEnablers();
   uint64_t number_of_remaining_probing_sets;
   std::cout << "Evaluate security under the relaxed robust probing model!" << std::endl;
 

@@ -42,7 +42,7 @@ enum class vlog_bit_t { zero, one, random, unknown, high_impedance };
  * - Inversion: ~expr
  *
  * @note Examples, are outlined as test cases under
- * tests/Util/VlogConstGrammar.cpp.
+ * tests/Util/Grammar/VlogConstGrammar.cpp.
  */
 class VlogConstGrammar
     : public qi::grammar<std::string::iterator, std::vector<vlog_bit_t>(),

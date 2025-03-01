@@ -72,42 +72,6 @@ void JsonSchema::Validate(const boost::json::object& json_object) {
   }
 }
 
-IntegerRangeGrammar::IntegerRangeGrammar(uint64_t maximum_value)
-    : IntegerRangeGrammar::base_type(range_) {
-  range_ =
-      (qi::int_ >> '-' >> qi::int_)
-          [phx::if_(qi::_1 <= qi::_2 && qi::_1 >= 0 && qi::_2 >= 0 &&
-                    qi::_1 <= maximum_value &&
-                    qi::_2 <= maximum_value)[qi::_val = phx::construct<
-                                                 std::pair<uint64_t, uint64_t>>(
-                                                 qi::_1, qi::_2)]
-               .else_[phx::throw_(std::invalid_argument(
-                   "Error while parsing the integer range: Invalid range"))]] |
-      qi::int_
-          [phx::if_(qi::_1 >= 0 &&
-                    qi::_1 <= maximum_value)[qi::_val = phx::construct<
-                                                 std::pair<uint64_t, uint64_t>>(
-                                                 qi::_1, qi::_1)]
-               .else_[phx::throw_(std::invalid_argument(
-                   "Error while parsing the integer range: Invalid range"))]];
-}
-
-std::pair<uint64_t, uint64_t> IntegerRangeGrammar::Parse(
-    std::string& integer_range_string) {
-  std::pair<uint64_t, uint64_t> range;
-  std::string::iterator begin, end;
-  begin = integer_range_string.begin();
-  end = integer_range_string.end();
-  bool success = qi::phrase_parse(begin, end, *this, qi::space, range);
-
-  if (!success || (begin != end)) {
-    throw std::invalid_argument(
-        "Error while parsing the integer range: Parsing failed");
-  }
-
-  return range;
-}
-
 InputAssignmentGrammar::InputAssignmentGrammar()
     : InputAssignmentGrammar::base_type(value) {
   value = shared_value | (constant_value[([&](std::string& verilog_bitstring) {

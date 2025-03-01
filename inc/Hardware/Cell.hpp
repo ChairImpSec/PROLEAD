@@ -2,12 +2,15 @@
 
 #include <boost/json.hpp>
 #include <memory>
+#include <optional> // for std::optional
 
-#include "Hardware/Operation.hpp"
+#include "Hardware/Expression.hpp"
 #include "Hardware/TruthTable.hpp"
-#include "Hardware/LibHelper.hpp"
 #include "Util/FileParsing.hpp"
 #include "Util/Types.hpp"
+
+namespace js = boost::json;
+
 
 class IterateEnablers {
   /**
@@ -113,13 +116,7 @@ class Cell {
    * @brief Construct a new Cell object from the information inside the json::value
    * @author Simon Osterheider
    */
-  Cell(const boost::json::value& value, bool is_relaxed);
-
-  Cell( cell_t type, std::vector<std::string> identifiers,
-       std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
-       std::vector<std::string> expressions);
-
-  bool operator==(const Cell& other) const;
+  Cell(const js::value& value, bool is_relaxed);
 
   void ChangeType(cell_t type) {
     type_ = type;
@@ -137,30 +134,26 @@ class Cell {
    * @brief Returns the output value for each output of the cell
    * @param operands in order a' a g_a b' b g_b ...
    */
-  uint64_t Evaluate(uint64_t output_index, std::vector<uint64_t>& input_values) const;
+  uint64_t Eval(uint64_t idx, const std::vector<uint64_t>& vals) const;
   /**
    * @brief Returns the output of all propagation functions
    * @param operands in order a' a g_a b' b g_b ...
    */
-  uint64_t EvaluatePropagation(uint64_t function_index, std::vector<uint64_t>& input_values) const; 
+  uint64_t EvalProp(uint64_t idx, const std::vector<uint64_t>& vals) const; 
   /**
    * @brief Returns the output of all glitch functions
    * @param operands in order a' a g_a b' b g_b ...
    */
-  uint64_t EvaluateGlitch(uint64_t function_index, std::vector<uint64_t>& input_values) const; 
+  uint64_t EvalGlitch(uint64_t idx, const std::vector<uint64_t>& vals) const; 
 
   cell_t GetType() const;
   clk_edge_t GetClkEdge() const;
-  int64_t GetClock() const;
+  std::optional<uint64_t> GetClock() const;
 
   const std::vector<std::string> GetIdentifiers() const;
 
   uint64_t GetNumberOfProbeExtensions() const {
-    return probe_extension_.size();
-  }
-
-  bool HasPredefinedFunctions() const {
-    return predefined_functions_found_;
+    return expr_glitch_ext_.size();
   }
 
   uint64_t GetNumberOfIdentifiers() const;
@@ -171,20 +164,19 @@ class Cell {
   std::string GetOutput(uint64_t index) const;
 
  private:
-  int64_t clk_;
+  std::optional<uint64_t> clk_;
   cell_t type_;
   clk_edge_t clk_edge_;
   std::vector<std::string> identifiers_;
-  std::vector<std::vector<std::string>> inputs_;
-  std::vector<std::vector<std::string>> outputs_;
-  std::vector<Operation<CustomOperation>> operations_;
-  std::vector<Operation<CustomOperation>> probe_extension_;
-  std::vector<Operation<CustomOperation>> glitch_propagation_;
-  bool predefined_functions_found_;
+  std::vector<std::string> inputs_;
+  std::vector<std::string> outputs_;
+  std::vector<std::vector<std::string>> mids_;
+  std::vector<std::vector<Expression>> mids_eqs_;
 
-  void SetType(const boost::json::value& value, bool is_relaxed);
-  void SetClock(const boost::json::value& value);
-  void SetClkEdge(const boost::json::value& value);
+  std::vector<Expression> expr_;
+  std::vector<Expression> expr_glitch_ext_;
+  std::vector<Expression> expr_probe_prop_;
+
   void SetOperations(const std::vector<std::string>& expressions);
 
   /**
@@ -192,13 +184,13 @@ class Cell {
    * @param op Operation the function are generated for
    * @author Simon Osterheider
    */
-  void GenerateRelaxedFunctions(Operation<CustomOperation>& operation);
+  void GenerateRelaxedFunctions(const Expression& expr);
   /**
    * @brief generates truth table with no glitchy inputs
    * @return TruthTable for F (toggle) output and G (glitch)
    * @author Simon Osterheider
    */
-  TruthTable GenerateSmallEnablers(Operation<CustomOperation>& op);
+  TruthTable GenerateSmallEnablers(const Expression& op);
   /**
    * @brief Detects if for the given normal and modifed inputs
    * a glitch can occur in the gate represented by the operation.
@@ -211,7 +203,7 @@ class Cell {
    * @return false A glitch can't occur at the gate for the given input transitions
    * @author Simon Osterheider
    */
-  static bool DetectGlitches(Operation<CustomOperation>& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed);
+  static bool DetectGlitches(const Expression& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed);
   /**
    * @brief Set the Propagation Function for the operation represented by the truthtable
    * Internally checks if the operation of the toggle output (f) from the table is the same for every input,
@@ -243,5 +235,3 @@ class Cell {
    */
   void LookupGlitchesSmallTable(TruthTable& table, TruthTable& small_table, IterateEnablers& it); 
 };
-
-std::vector<std::string> ConvertJsonArrayToVector(const boost::json::array& json_array);

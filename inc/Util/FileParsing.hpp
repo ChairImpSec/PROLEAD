@@ -22,8 +22,8 @@
 #include <memory>
 #include <regex>
 
-#include "Util/RangeGrammar.hpp"
-#include "Util/VlogConstGrammar.hpp"
+#include "Util/Grammars/RangeGrammar.hpp"
+#include "Util/Grammars/VlogConstGrammar.hpp"
 
 namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;
@@ -52,25 +52,6 @@ class InputAssignment {
   std::vector<std::string> signal_names_;
   std::vector<uint64_t> signal_indices_;
   std::vector<vlog_bit_t> signal_values_;
-};
-
-/**
- * @brief A grammar for parsing a range of integers.
- * @details The grammar is used to parse a range of integers in the form of "x"
- * or "x-y". The range is represented as a pair of integers, where the first
- * integer is the lower or equal to the second integer.
- */
-class IntegerRangeGrammar
-    : public qi::grammar<std::string::iterator, std::pair<uint64_t, uint64_t>(),
-                         qi::space_type> {
- public:
-  IntegerRangeGrammar(uint64_t maximum_value);
-  std::pair<uint64_t, uint64_t> Parse(std::string& integer_range_string);
-
- private:
-  qi::rule<std::string::iterator, std::pair<uint64_t, uint64_t>(),
-           qi::space_type>
-      range_;
 };
 
 class InputAssignmentGrammar

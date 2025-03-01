@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Hardware/Operation.hpp"
-#include "Hardware/LibHelper.hpp"
+#include "Hardware/Expression.hpp"
 
 /**
    * Represents a truth table with a variable amount of input columns
@@ -60,19 +59,8 @@
      * @param for_glitch if true will create function for G, else for F
      * @author Simon Osterheider
     */
-    Operation<CustomOperation> OperationFromTruthTable(bool for_glitch) const;
-    /**
-     * @brief Checks if The operation and table return the same output for all possible inputs
-     * The input for the operation will be mutated, because:
-     * The table uses order: a b c ... a' b' c' ... g_a g_b g_c ..
-     * While Operation uses a' a g_a b' b g_b ...
-     * @param op Operation to compare to. Should use ordering a' a g_a b' b g_b ...
-     * @param for_glitch if true will compare op to the G (glitch) output of table otherwise for F (toggle)
-     * @author Simon Osterheider
-     */
-    bool IsEquivalentToOperation(Operation<CustomOperation>& op, bool for_glitch) const;
+    Expression OperationFromTruthTable(bool for_glitch) const;
 
-    bool IsEquivalentToFunction(std::function<uint64_t(std::vector<uint64_t>&)> func, bool for_glitch, std::vector<uint64_t> dont_care_indexes = {}) const;
   private:
     /**
      * @brief returns a mutable reference to the row specified by the index

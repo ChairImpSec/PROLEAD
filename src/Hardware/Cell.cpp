@@ -4,15 +4,6 @@
 #include <fstream>
 #include <iostream>
 
-std::vector<std::string> ConvertJsonArrayToVector(
-    const boost::json::array& json_array) {
-  std::vector<std::string> result;
-  for (auto& str : json_array) {
-    result.push_back(boost::json::value_to<std::string>(str));
-  }
-  return result;
-}
-
 IterateEnablers::IterateEnablers(size_t amount_inputs, bool with_glitches)
     : norm_vector_bool_(amount_inputs, 0),
     mod_vector_bool_(amount_inputs, 0), glitch_vector_bool_(amount_inputs, 0), 
@@ -94,123 +85,34 @@ std::vector<bool> IterateEnablers::GetIndexVector() const {
   return index_vector_;
 }
 
-void Cell::SetType(const boost::json::value& value, bool is_relaxed) {
-  boost::json::object value_object = value.as_object();
-  std::string name = value.at("name").as_string().c_str();
-
-  if (!value_object.contains("type")) {
-    throw std::runtime_error("Error while reading the type of cell \"" + name + "\". Type not found!");
-  }
-
-  std::string type = value.at("type").as_string().c_str();
-
-  if (type == "gate" || type == "conservative_gate") {
-    type_ = cell_t::combinational;
-  } else if (type == "buffer") {
-    type_ = cell_t::buffer;
-  } else if (type == "relaxed_gate") {
-    if (is_relaxed && GetNumberOfOutputs() == 1) {
-      type_ = cell_t::relaxed;
-    } else{
-      type_ = cell_t::combinational;
-    }
-  } else if (type == "register") {
-    type_ = cell_t::sequential;
-  } else if (type == "latch") {
-    type_ = cell_t::latch;
-  } else {
-    throw std::runtime_error("Error while reading the type of cell \"" + name + "\". The type \"" + type + "\" is not valid!");
-  }
-}
-
-void Cell::SetClkEdge(const boost::json::value& value) {
-  boost::json::object value_object = value.as_object();
-  std::string name = value.at("name").as_string().c_str();
-
-  if (GetType() == cell_t::sequential) {
-    if (!value_object.contains("timing")) {
-      throw std::runtime_error("Error while reading the timing type of cell \"" + name + "\". Timing type not found!");
-    }
-    std::string timing = value.at("timing").as_string().c_str();
-
-    if (timing == "rising_edge") {
-      clk_edge_ = clk_edge_t::rising;
-    } else if (timing == "falling_edge") {
-      clk_edge_ = clk_edge_t::falling;
-    } else if (timing == "both") {
-      clk_edge_ = clk_edge_t::both;
-    } else {
-      throw std::runtime_error("Error while reading the timing of cell \"" + name + "\". The timing \"" + timing + "\" is invalid!");
-    }
-  } else {
-    clk_edge_ = clk_edge_t::undef;
-  }
-}
-
-void Cell::SetClock(const boost::json::value& value) {
-  boost::json::object value_object = value.as_object();
-  std::string name = value.at("name").as_string().c_str();
-  uint64_t port_index;
-
-  if (GetType() == cell_t::sequential) {
-    if (!value_object.contains("clock")) {
-      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock not found!");
-    }
-    std::string clock = value.at("clock").as_string().c_str();
-
-    for (port_index = 0; port_index < inputs_.size(); port_index++) {
-      if (GetInput(port_index) == clock) {
-        break;
-	    }
-    }
-
-    if (port_index >= inputs_.size()) {
-      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock \"" + clock + "\" is invalid!");
-    }
-
-    clk_ = port_index;
-  } else if (value_object.contains("clock")) {
-      throw std::runtime_error("Error while reading clock of cell \"" + name + "\". Clock should not be defiend!");
-  } else {
-    clk_ = -1;
-  }
-}
-
-void Cell::SetOperations(const std::vector<std::string>& expressions) {
-  predefined_functions_found_ = false;
-
-  std::vector<std::string> primary_signals;
-  for (const std::vector<std::string>& input_port : inputs_) {
-    primary_signals.insert(primary_signals.end(), input_port.begin(), input_port.end());
-  }
-
+void Cell::SetOperations(const std::vector<std::string>& expressions) {  
+  std::vector<std::string> primary_signals = inputs_;
   if ((type_ == cell_t::sequential) || (type_ == cell_t::latch)) {
-    for (const std::vector<std::string>& output_port : outputs_) {
-      primary_signals.insert(primary_signals.end(), output_port.begin(), output_port.end());
-    }
+    primary_signals.insert(primary_signals.end(), outputs_.begin(), outputs_.end());
   }
 
   for (const std::string& expression : expressions) {
-    operations_.emplace_back(Operation<CustomOperation>(expression, primary_signals));
+    expr_.emplace_back(expression, primary_signals);
 
     if (type_ == cell_t::relaxed) {
-      for (uint64_t index = 0; index < operation_library.size(); ++index) {
-        if (operations_.back() == Operation<CustomOperation>(operation_library[index].first, operation_library[index].second)) {
-          glitch_propagation_.emplace_back(Operation<CustomOperation>(glitch_propagation_library[index].first, glitch_propagation_library[index].second));
-          probe_extension_.emplace_back(Operation<CustomOperation>(probe_extension_library[index].first, probe_extension_library[index].second));
-          predefined_functions_found_ = true;
+      bool found = false;
+      for (uint64_t idx = 0; idx < expr_lib.size(); ++idx) {
+        if (expr_.back() == Expression(expr_lib[idx].first, expr_lib[idx].second)) {
+          expr_glitch_ext_.emplace_back(expr_glitch_ext_lib[idx].first, expr_glitch_ext_lib[idx].second);
+          expr_probe_prop_.emplace_back(expr_probe_prop_lib[idx].first, expr_probe_prop_lib[idx].second);
+          found = true;
           break;
         }
       }
 
-      if (!predefined_functions_found_) {
-          GenerateRelaxedFunctions(operations_.back());
+      if (!found) {
+          GenerateRelaxedFunctions(expr_.back());
       }
     }
   }
 }
 
-TruthTable Cell::GenerateSmallEnablers(Operation<CustomOperation>& op) {
+TruthTable Cell::GenerateSmallEnablers(const Expression& op) {
   // contains all rows of truth table that are not a transition, glitch or c != c'
   std::unordered_map<uint64_t, std::vector<std::vector<bool>>> valid_rows = {{0,{}}, {1,{}}}; 
   TruthTable truth_table(2*inputs_.size());
@@ -218,8 +120,8 @@ TruthTable Cell::GenerateSmallEnablers(Operation<CustomOperation>& op) {
 
   IterateEnablers it(inputs_.size(), false);
   do {
-    c = op.Evaluate(it.GetNormVectorNumb()) & 1;
-    c_mod = op.Evaluate(it.GetModVectorNumb()) & 1;
+    c = op.Eval(it.GetNormVectorNumb()) & 1;
+    c_mod = op.Eval(it.GetModVectorNumb()) & 1;
     if (c != c_mod) {
       truth_table.SetF(it.GetIndexVectorSmall(), true);
       if (DetectGlitches(op, it.GetNormVectorNumb(), it.GetModVectorNumb(), true)) {
@@ -245,8 +147,8 @@ TruthTable Cell::GenerateSmallEnablers(Operation<CustomOperation>& op) {
   return truth_table;
 }
 
-void Cell::GenerateRelaxedFunctions(Operation<CustomOperation>& operation) {
-  TruthTable small_table = GenerateSmallEnablers(operation);
+void Cell::GenerateRelaxedFunctions(const Expression& expr) {
+  TruthTable small_table = GenerateSmallEnablers(expr);
   
   TruthTable table(3*inputs_.size());
   IterateEnablers it(inputs_.size(), true);
@@ -267,70 +169,168 @@ void Cell::GenerateRelaxedFunctions(Operation<CustomOperation>& operation) {
     LookupGlitchesSmallTable(table, small_table, it);
   } while (it.Iterate());
 
-  glitch_propagation_.push_back(table.OperationFromTruthTable(true));
-  probe_extension_.push_back(table.OperationFromTruthTable(false));
+  expr_glitch_ext_.push_back(table.OperationFromTruthTable(true));
+  expr_probe_prop_.push_back(table.OperationFromTruthTable(false));
 }
 
-Cell::Cell(const boost::json::value& value, bool is_relaxed) {
-  boost::json::object value_object = value.as_object();
-  std::vector<std::string> inputs, outputs, expressions;
+Cell::Cell(const js::value& value, bool is_relaxed) {
+  std::string err_msg = "Error while reading cell ";
+  js::object obj = value.as_object();
+  std::vector<std::string>  expressions, parsed;
   SignalNameGrammar grammar;
   std::string name;
+  clk_ = std::nullopt;
 
-  if (!value_object.contains("name")) {
-    throw std::runtime_error("Error while reading a cell. Name not found!");
+  if (!obj.contains("name")) {
+    throw std::runtime_error(err_msg + ". Name not found!");
   } else {
     name = value.at("name").as_string().c_str();
   }
 
-  identifiers_ = ConvertJsonArrayToVector(value.at("aliases").as_array());
-  inputs = ConvertJsonArrayToVector(value.at("inputs").as_array());
-  outputs = ConvertJsonArrayToVector(value.at("outputs").as_array());
-
-  for (std::string& input : inputs) {
-    inputs_.emplace_back(grammar.Parse(input));
+  if (obj.contains("aliases") && obj["aliases"].is_array()) {
+    for (const auto& alias : obj["aliases"].as_array()) {
+      identifiers_.push_back(js::value_to<std::string>(alias));
+    }
+  } else {
+    throw std::runtime_error(err_msg + name + ". Invalid or missing aliasses!");
   }
 
-  for (std::string& output : outputs) {
-    outputs_.emplace_back(grammar.Parse(output));
+  if (obj.contains("inputs") && obj["inputs"].is_array()) {
+    for (const auto& input : obj["inputs"].as_array()) {
+      std::string input_str = js::value_to<std::string>(input);
+      parsed = grammar.Parse(input_str);
+      inputs_.insert(inputs_.end(), parsed.begin(), parsed.end());
+    }
+  } else {
+    throw std::runtime_error(err_msg + name + ". Invalid or missing inputs!");
   }
 
-  if (value_object.contains("equations")) {
-    expressions = ConvertJsonArrayToVector(value.at("equations").as_array());
+  if (obj.contains("intermediates")) {
+    if (obj["intermediates"].is_array()) {
+      std::vector<std::string> mids;
+      std::vector<std::vector<std::string>> mids_expr;
+      for (const auto& lvl : obj["intermediates"].as_array()) {
+        js::object lvl_obj = lvl.as_object();
+
+        if (!lvl_obj.contains("names") || !lvl_obj["names"].is_array()) {
+          throw std::runtime_error(err_msg + name + ". Invalid or missing \"names\" in \"intermediates\"!");
+        } else if (!lvl_obj.contains("equations") || !lvl_obj["equations"].is_array()){
+          throw std::runtime_error(err_msg + name + ". Invalid or missing \"equaitons\" in \"intermediates\"!");
+        } else {
+          for (const auto& ids : lvl_obj["names"].as_array()) {
+            std::string ids_str = js::value_to<std::string>(ids);
+            parsed = grammar.Parse(ids_str);
+            mids.insert(mids.end(), parsed.begin(), parsed.end());
+            parsed.clear();
+          }
+
+          mids_.push_back(mids);
+          mids.clear();
+
+          for (const auto& eqs : lvl_obj["equations"].as_array()) {
+            parsed.push_back(js::value_to<std::string>(eqs));
+          }
+
+          mids_expr.push_back(parsed);
+          parsed.clear();
+        }
+      }
+    } else {
+      throw std::runtime_error(err_msg + name + ". Invalid or missing intermediates!");
+    }
   }
 
-  SetType(value, is_relaxed);
-  SetClkEdge(value);
-  SetClock(value);
+  if (obj.contains("outputs") && obj["outputs"].is_array()) {
+    for (const auto& output : obj["outputs"].as_array()) {
+      std::string output_str = js::value_to<std::string>(output);
+      parsed = grammar.Parse(output_str);
+      outputs_.insert(outputs_.end(), parsed.begin(), parsed.end());
+    }
+  } else {
+    throw std::runtime_error(err_msg + name + ". Invalid or missing outputs!");
+  }
+
+  if (!obj.contains("type")) {
+    throw std::runtime_error(err_msg + name + ". Type not found!");
+  }
+
+  std::string type = value.at("type").as_string().c_str();
+
+  if (type == "gate" || type == "conservative_gate") {
+    type_ = cell_t::combinational;
+  } else if (type == "buffer") {
+    type_ = cell_t::buffer;
+  } else if (type == "relaxed_gate") {
+    if (is_relaxed && GetNumberOfOutputs() == 1) {
+      type_ = cell_t::relaxed;
+    } else{
+      type_ = cell_t::combinational;
+    }
+  } else if (type == "register") {
+    type_ = cell_t::sequential;
+  } else if (type == "latch") {
+    type_ = cell_t::latch;
+  } else {
+    throw std::runtime_error(err_msg + name + ". Invalid type \"" + type + "\"!");
+  }
+
+  if (obj.contains("equations") && obj["equations"].is_array()) {
+    for (const auto& expr : obj["equations"].as_array()) {
+      expressions.push_back(js::value_to<std::string>(expr));
+    }
+  } else {
+    throw std::runtime_error(err_msg + name + ". Invalid or missing equation!");
+  }
+
+  if (GetType() == cell_t::sequential) {
+    if (!obj.contains("timing")) {
+      throw std::runtime_error(err_msg + name + ". \"timing\" not found!");
+    }
+    std::string timing = value.at("timing").as_string().c_str();
+
+    if (timing == "rising_edge") {
+      clk_edge_ = clk_edge_t::rising;
+    } else if (timing == "falling_edge") {
+      clk_edge_ = clk_edge_t::falling;
+    } else if (timing == "both") {
+      clk_edge_ = clk_edge_t::both;
+    } else {
+      throw std::runtime_error(err_msg + name + ". Invalid timing \"" + timing + "\"!");
+    }
+  } else {
+    clk_edge_ = clk_edge_t::undef;
+  }
+
+  if (GetType() == cell_t::sequential) {
+    if (!obj.contains("clock")) {
+      throw std::runtime_error(err_msg + name + "\". \"clock\" not found!");
+    }
+
+    std::string clk = value.at("clock").as_string().c_str();
+    std::vector<std::string>::iterator it = std::find(inputs_.begin(), inputs_.end(), clk);
+
+    if (it == inputs_.end()) {
+      throw std::runtime_error(err_msg + name + ". Invalid clock \"" + clk + "\"!");
+    } else {
+      clk_ = std::distance(inputs_.begin(), it);
+    }
+  } else if (obj.contains("clock")) {
+      throw std::runtime_error(err_msg + name + ". Clock should not be defiend!");
+  }
+
   SetOperations(expressions);
 }
 
-Cell::Cell(cell_t type, std::vector<std::string> identifiers,
-           std::vector<std::vector<std::string>> inputs, std::vector<std::vector<std::string>> outputs,
-           std::vector<std::string> expressions)
-    : type_(type), 
-      identifiers_(identifiers),
-      inputs_(inputs),
-      outputs_(outputs) {
-  SetOperations(expressions);
+uint64_t Cell::Eval(uint64_t idx, const std::vector<uint64_t>& vals) const {
+  return expr_[idx].Eval(vals);
 }
 
-bool Cell::operator==(const Cell& other) const {
-  return (identifiers_ == other.identifiers_) && (type_ == other.type_) &&
-         (inputs_ == other.inputs_) && (outputs_ == other.outputs_) &&
-         (operations_ == other.operations_);
+uint64_t Cell::EvalGlitch(uint64_t idx, const std::vector<uint64_t>& vals) const {
+  return expr_glitch_ext_[idx].Eval(vals);
 }
 
-uint64_t Cell::Evaluate(uint64_t output_index, std::vector<uint64_t>& input_values) const {
-  return operations_[output_index].Evaluate(input_values);
-}
-
-uint64_t Cell::EvaluatePropagation(uint64_t function_index, std::vector<uint64_t>& input_values) const {
-  return probe_extension_[function_index].Evaluate(input_values);
-}
-
-uint64_t Cell::EvaluateGlitch(uint64_t function_index, std::vector<uint64_t>& input_values) const {
-  return glitch_propagation_[function_index].Evaluate(input_values);
+uint64_t Cell::EvalProp(uint64_t idx, const std::vector<uint64_t>& vals) const {
+  return expr_probe_prop_[idx].Eval(vals);
 }
 
 void Cell::LookupGlitchesSmallTable(TruthTable& table, TruthTable& small_table, IterateEnablers& it) {
@@ -359,7 +359,7 @@ void Cell::LookupGlitchesSmallTable(TruthTable& table, TruthTable& small_table, 
   table.SetG(it.GetIndexVector(), glitch);
 }
 
-bool Cell::DetectGlitches(Operation<CustomOperation>& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed) {
+bool Cell::DetectGlitches(const Expression& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed) {
   std::vector<size_t> flipped_indexes;
     for (size_t i = 0; i < norm_input.size(); ++i) {
         if (norm_input[i] != mod_input[i]) {
@@ -374,7 +374,7 @@ bool Cell::DetectGlitches(Operation<CustomOperation>& op, std::vector<uint64_t> 
         value_changed = false;
         for (auto flipped_index : flipped_indexes) {
             intermediate_input[flipped_index] = intermediate_input[flipped_index] ^ 1;
-            if ((op.Evaluate(intermediate_input) & 1) != (op.Evaluate(norm_input) & 1)) {
+            if ((op.Eval(intermediate_input) & 1) != (op.Eval(norm_input) & 1)) {
               if (transition_allowed) {
                 value_changed = true;
               } else {
@@ -393,58 +393,28 @@ cell_t Cell::GetType() const { return type_; }
 
 clk_edge_t Cell::GetClkEdge() const { return clk_edge_; }
 
-int64_t Cell::GetClock() const { return clk_; }
+std::optional<uint64_t> Cell::GetClock() const { return clk_; }
 
 const std::vector<std::string> Cell::GetIdentifiers() const { return identifiers_; }
 
 uint64_t Cell::GetNumberOfIdentifiers() const { return identifiers_.size(); }
 
 uint64_t Cell::GetNumberOfInputs() const { 
-  uint64_t number_of_inputs = 0;
-
-  for (const std::vector<std::string>& input_port : inputs_) {
-    number_of_inputs += input_port.size();
-  }
-
-  return number_of_inputs; 
+  return inputs_.size(); 
 }
 
 uint64_t Cell::GetNumberOfOutputs() const {
-    uint64_t number_of_outputs = 0;
-
-  for (const std::vector<std::string>& output_port : outputs_) {
-    number_of_outputs += output_port.size();
-  }
-
-  return number_of_outputs; 
+  return outputs_.size(); 
 }
 
 std::string Cell::GetIdentifier(uint64_t index) const { return identifiers_[index]; }
 
 std::string Cell::GetInput(uint64_t index) const { 
-  uint64_t bit_index, count = 0;
-
-  for (uint64_t port_index = 0; port_index < inputs_.size(); ++port_index) {
-    if (index < count + inputs_[port_index].size()) {
-      bit_index = index - count;
-      return inputs_[port_index][bit_index];
-    }
-    count += inputs_[port_index].size();
-  }
-
-  throw std::out_of_range("Error while getting the input of a cell. Index out of range!");
+  assert(index < inputs_.size() && "Error in Cell::GetInput: Index out of bounds!");
+  return inputs_[index];
 }
 
 std::string Cell::GetOutput(uint64_t index) const { 
-  uint64_t bit_index, count = 0;
-
-  for (uint64_t port_index = 0; port_index < outputs_.size(); ++port_index) {
-    if (index < count + outputs_[port_index].size()) {
-      bit_index = index - count;
-      return outputs_[port_index][bit_index];
-    }
-    count += outputs_[port_index].size();
-  }
-
-  throw std::out_of_range("Error while getting the output of a cell. Index out of range!");
+  assert(index < outputs_.size() && "Error in Cell::GetOutput: Index out of bounds!");
+  return outputs_[index];
 }

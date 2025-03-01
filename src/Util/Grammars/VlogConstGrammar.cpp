@@ -1,4 +1,4 @@
-#include "Util/VlogConstGrammar.hpp"
+#include "Util/Grammars/VlogConstGrammar.hpp"
 
 std::vector<vlog_bit_t> VlogConstGrammar::Invert(
     std::vector<vlog_bit_t>& value) {

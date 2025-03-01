@@ -72,9 +72,9 @@ class Adversaries {
 
   size_t GetNumberOfEnablers();
 
-  Enabler<CustomOperation> GetEnabler(size_t index);
+  Enabler GetEnabler(size_t index);
 
-  std::vector<Enabler<CustomOperation>> GetEnablers();
+  std::vector<Enabler> GetEnablers();
 
 
   /**
@@ -130,7 +130,7 @@ class Adversaries {
 
   std::vector<UniqueProbe> unique_probes_;
 
-  std::vector<Enabler<CustomOperation>> enabler_;
+  std::vector<Enabler> enabler_;
 
   /**
    * The list of all unique probes. Only required in the compact mode.

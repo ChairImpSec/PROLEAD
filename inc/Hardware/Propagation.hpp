@@ -94,7 +94,7 @@ class Propagation {
   Propagation<ExtensionContainer> ExtendWithTime(
       uint64_t clock_cycle,
       std::vector<Probe>& probes,
-      std::vector<Enabler<CustomOperation>>& enabler);
+      std::vector<Enabler>& enabler);
 
   void Finalize(std::vector<Propagation<ExtensionContainer>>& propagations);
   void UpdateNumberOfSignals(

@@ -10,8 +10,6 @@
  */
 #pragma once
 
-#include <optional>  // for std::optional
-
 #include "Hardware/Cell.hpp"
 
 class Library {

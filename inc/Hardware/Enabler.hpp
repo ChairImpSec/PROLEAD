@@ -2,11 +2,9 @@
 
 #include <memory>
 
-#include "Hardware/Operation.hpp"
+#include "Hardware/Expression.hpp"
 #include "Hardware/Library.hpp"
 
-namespace Hardware {
-template <typename OperationContainer>
 class Enabler {
  public:
 
@@ -25,8 +23,8 @@ class Enabler {
     return input_addresses_;
   }
 
-  bool operator==(const Enabler<CustomOperation>& other) const;
-  bool operator<(const Enabler<CustomOperation>& other) const;
+  bool operator==(const Enabler& other) const;
+  bool operator<(const Enabler& other) const;
 
   bool CheckFunctions() {
     return cell_->GetNumberOfProbeExtensions() > 0;
@@ -40,6 +38,5 @@ class Enabler {
 };
 
 size_t SearchEnabler(unsigned int signal_index,
-                     std::vector<Enabler<CustomOperation>>& enabler);
+                     std::vector<Enabler>& enabler);
 
-}  // namespace Hardware

@@ -28,7 +28,7 @@ namespace Hardware{
 		* @param ThreadRng The rng assigned to a specific thread.
 		* @author Amir Moradi
 		*/
-        void All(const CircuitStruct&, const Settings&, SharedData&, std::vector<Probe>&, std::vector<Enabler<CustomOperation>>&, std::vector<size_t>&, Simulation&, int, boost::mt19937&);
+        void All(const CircuitStruct&, const Settings&, SharedData&, std::vector<Probe>&, std::vector<Enabler>&, std::vector<size_t>&, Simulation&, int, boost::mt19937&);
 
 		/**
 		* @brief Generate header for a .vcd file.

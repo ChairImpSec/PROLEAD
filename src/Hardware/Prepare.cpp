@@ -11,7 +11,6 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
     short DepthIndex;
     char  all_have_depth;
     std::string ErrorMessage;
-    int PortIndex;
 
     for (DepthIndex = 1; DepthIndex <= Circuit->MaxDepth; DepthIndex++)
         free(Circuit->CellsInDepth[DepthIndex]);
@@ -123,10 +122,9 @@ void Hardware::Prepare::MakeCircuitDepth(Library& library, Hardware::CircuitStru
 
         if (!Circuit->Cells[CellIndex]->Deleted)
         {
-			PortIndex = Circuit->Cells[CellIndex]->type->GetClock();
-			if (PortIndex != -1)
-			{
-				SignalIndex = Circuit->Cells[CellIndex]->Inputs[PortIndex];
+            if (Circuit->Cells[CellIndex]->type->GetClock()) {
+                uint64_t port_idx = *Circuit->Cells[CellIndex]->type->GetClock();
+				SignalIndex = Circuit->Cells[CellIndex]->Inputs[port_idx];
 				SetCellFlag(library, Circuit, SignalIndex);
 			}
 		}

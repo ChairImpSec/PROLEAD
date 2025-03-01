@@ -26,67 +26,8 @@ std::vector<T> TruthTable::MutateVectorOrder(std::vector<T> const& inputs) {
 template std::vector<uint64_t> TruthTable::MutateVectorOrder<uint64_t>(std::vector<uint64_t> const& inputs);
 template std::vector<std::string> TruthTable::MutateVectorOrder<std::string>(std::vector<std::string> const& inputs);
 
-bool TruthTable::IsEquivalentToOperation(Operation<CustomOperation>& op, bool for_glitch) const {
-  if (amount_of_inputs_ != op.GetAmountInputs()) {
-    throw std::runtime_error("Truthtable and Operation have diffrent amount of inputs");
-  }
 
-  std::vector<bool> input_vector_bool(amount_of_inputs_);
-  std::vector<uint64_t> input_vector_num(amount_of_inputs_);
-  bool table_output, op_output;
-  for (uint64_t input_number = 0; input_number < (1ULL << amount_of_inputs_); ++input_number) {
-    BoolVectorFromNumber(input_vector_bool, input_number);
-    if (for_glitch) {
-      table_output = GetG(input_vector_bool);
-    } else {
-      table_output = GetF(input_vector_bool);
-    }
-    BitVectorFromNumber(input_vector_num, input_number);
-    op_output = op.Evaluate(MutateVectorOrder(input_vector_num)) & 1;
-    if (table_output != op_output) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool TruthTable::IsEquivalentToFunction(std::function<uint64_t(std::vector<uint64_t>&)> func, bool for_glitch, std::vector<uint64_t> dont_care_indexes) const {
-  std::vector<bool> input_vector_bool(amount_of_inputs_);
-  std::vector<uint64_t> input_vector_num(amount_of_inputs_);
-  bool table_output, function_output, skip_this_row;
-  for (uint64_t input_number = 0; input_number < (1ULL << amount_of_inputs_); ++input_number) {
-    skip_this_row = false;
-    BoolVectorFromNumber(input_vector_bool, input_number);
-    BitVectorFromNumber(input_vector_num, input_number);
-    std::vector<uint64_t> function_input = MutateVectorOrder(input_vector_num);
-    for (uint64_t i = 0; i < input_vector_bool.size(); ++i) {
-      if (function_input[i] == 0) continue;
-      for (uint64_t j = 0; j < dont_care_indexes.size(); ++j) {
-        if (i == dont_care_indexes[j]) skip_this_row = true;
-      }
-      if (skip_this_row) break;
-    }
-    if (skip_this_row) continue;
-    if (for_glitch) {
-      table_output = GetG(input_vector_bool);
-    } else {
-      table_output = GetF(input_vector_bool);
-    }
-    
-    std::sort(dont_care_indexes.begin(), dont_care_indexes.end(), std::greater<uint64_t>());
-    for (auto dont_care_index : dont_care_indexes) {
-      function_input.erase(function_input.begin() + dont_care_index);
-    }
-    
-    function_output = func(function_input) & 1;
-    if (table_output != function_output) {
-      return false;
-    }
-  }
-  return true;
-}
-
-Operation<CustomOperation> TruthTable::OperationFromTruthTable(bool for_glitch) const {
+Expression TruthTable::OperationFromTruthTable(bool for_glitch) const {
   if (GetAmountOfInputs() > 26) throw std::runtime_error("Truthtable doesn't support more than the alhpabet");
   std::vector<std::string> inputs(GetAmountOfInputs());
   char character;
@@ -117,7 +58,7 @@ Operation<CustomOperation> TruthTable::OperationFromTruthTable(bool for_glitch) 
     or_terms.push_back(TruthTable::ConstructExpression("and", and_terms));
   }
   std::string cnf_expr = TruthTable::ConstructExpression("or", or_terms);
-  return Operation<CustomOperation>(cnf_expr, MutateVectorOrder(inputs));
+  return Expression(cnf_expr, MutateVectorOrder(inputs));
 }
 
 std::string TruthTable::ConstructExpression(std::string op, std::vector<std::string> operands) {
