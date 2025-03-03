@@ -31,8 +31,6 @@ class Expression {
    */
   Expression(const std::string& expression, std::vector<std::string> names);
 
-  bool operator==(const Expression& other) const;
-
   /**
    * @brief Returns the number of inputs.
    * @return The number of inputs.

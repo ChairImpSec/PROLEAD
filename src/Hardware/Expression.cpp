@@ -256,25 +256,6 @@ Expression::Expression(const std::string& expr,
 
 uint64_t Expression::GetNumberOfInputs() const { return number_of_inputs_; }
 
-bool Expression::operator==(const Expression& other) const {
-  if (number_of_inputs_ != other.number_of_inputs_) {
-    return false;
-  } else {
-    std::vector<uint64_t> vals(number_of_inputs_);
-    for (uint64_t idx = 0; idx < (1ULL << number_of_inputs_); ++idx) {
-      for (uint64_t tmp = 0; tmp < number_of_inputs_; ++tmp) {
-        vals[tmp] = (idx & (1 << tmp)) != 0;
-      }
-
-      if ((Eval(vals) & 1) != (other.Eval(vals) & 1)) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
 uint64_t Expression::Eval(std::vector<uint64_t> vals) const {
   vals.reserve(vals.size() + clauses_.size());
   for (const auto& clause : clauses_) {

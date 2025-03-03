@@ -143,6 +143,7 @@ void Hardware::Simulate::All(const Hardware::CircuitStruct &Circuit, const Setti
 						input_values[Circuit.Cells[CellIndex]->type->GetNumberOfInputs() + OutputIndex] = temp_signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
 				}
 
+				Circuit.Cells[CellIndex]->type->Precomp(input_values);
 				for (OutputIndex = 0; OutputIndex < (int)Circuit.Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
 					if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
 					{
@@ -184,6 +185,7 @@ void Hardware::Simulate::All(const Hardware::CircuitStruct &Circuit, const Setti
 			for (OutputIndex = 0; OutputIndex < (int)Circuit.Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
 				input_values[Circuit.Cells[CellIndex]->type->GetNumberOfInputs() + OutputIndex] = SharedData.register_values_[Circuit.Cells[CellIndex]->RegValueIndexes[OutputIndex]];
 
+			Circuit.Cells[CellIndex]->type->Precomp(input_values);
 			for (OutputIndex = 0; OutputIndex < (int)Circuit.Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
 			{
 				Value = Circuit.Cells[CellIndex]->type->Eval(OutputIndex, input_values);
@@ -295,6 +297,7 @@ void Hardware::Simulate::All(const Hardware::CircuitStruct &Circuit, const Setti
 						input_values[Circuit.Cells[CellIndex]->type->GetNumberOfInputs() + OutputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
 				}
 
+				Circuit.Cells[CellIndex]->type->Precomp(input_values);
 				for (OutputIndex = 0; OutputIndex < (int)Circuit.Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
 					if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
 					{
@@ -387,6 +390,7 @@ void Hardware::Simulate::All(const Hardware::CircuitStruct &Circuit, const Setti
 							input_values[Circuit.Cells[CellIndex]->type->GetNumberOfInputs() + OutputIndex] = SharedData.signal_values_[Circuit.Cells[CellIndex]->Outputs[OutputIndex]];
 					}
 
+					Circuit.Cells[CellIndex]->type->Precomp(input_values);
 					for (OutputIndex = 0; OutputIndex < (int)Circuit.Cells[CellIndex]->type->GetNumberOfOutputs(); OutputIndex++)
 						if (Circuit.Cells[CellIndex]->Outputs[OutputIndex] != -1)
 						{

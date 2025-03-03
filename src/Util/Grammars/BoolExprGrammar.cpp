@@ -40,23 +40,23 @@ uint64_t BoolExprGrammar::SetClause(
 
 BoolExprGrammar::BoolExprGrammar() : BoolExprGrammar::base_type(or_term) {
   or_term = xor_term[qi::_val = qi::_1] >>
-            *(qi::lit("or") >>
+            *(qi::lit("|") >>
               xor_term[qi::_val = phx::bind(&BoolExprGrammar::SetClause, this,
                                             qi::_val, qi::_1, &Or)]);
   xor_term = and_term[qi::_val = qi::_1] >>
-             *(qi::lit("xor") >>
+             *(qi::lit("^") >>
                and_term[qi::_val = phx::bind(&BoolExprGrammar::SetClause, this,
                                              qi::_val, qi::_1, &Xor)]);
   and_term = not_term[qi::_val = qi::_1] >>
-             *(qi::lit("and") >>
+             *(qi::lit("&") >>
                not_term[qi::_val = phx::bind(&BoolExprGrammar::SetClause, this,
                                              qi::_val, qi::_1, &And)]);
   not_term = var[qi::_val = qi::_1] | zero | one |
-             (qi::lit("not") >>
+             (qi::lit("~") >>
               not_term[qi::_val = phx::bind(&BoolExprGrammar::SetClause, this,
                                             qi::_1, 0, &Not)]) |
              ('(' >> or_term >> ')')[qi::_val = qi::_1];
-  var = 'i' >> qi::int_;
+  var = qi::lit("i") >> qi::int_;
   zero = qi::lit("0")[qi::_val = phx::bind(&BoolExprGrammar::SetClause, this, 0,
                                            0, &Zero)];
   one = qi::lit(
@@ -71,6 +71,14 @@ std::vector<Clause> BoolExprGrammar::Parse(
   uint64_t idx = 0;
   number_of_inputs_ = names.size();
   clauses_.clear();
+
+  std::vector<std::string> old_op = {"not", "and", "xor", "or"};
+  std::vector<std::string> new_op = {"~", "&", "^", "|"};
+
+  for (idx = 0; idx < 4; ++idx) {
+    expr_copy = boost::replace_all_copy(expr_copy, old_op[idx], new_op[idx]);
+  }
+  idx = 0;
 
   for (const std::string& name : names) {
     new_names[name] = "i" + std::to_string(idx++);

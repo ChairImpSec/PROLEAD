@@ -42,10 +42,10 @@ class Clause {
 /**
  * @brief A grammar for parsing a Boolean expression.
  * @details The following operations are supported:
- * - or: Boolean or, i.e. i0 or i1
- * - xor: Boolean xor, i.e. i0 xor i1
- * - and: Boolean and, i.e. i0 and i1
- * - not: Boolean negate, i.e. not i0
+ * - |: Boolean or, i.e. i0 or i1
+ * - ^: Boolean xor, i.e. i0 xor i1
+ * - &: Boolean and, i.e. i0 and i1
+ * - ~: Boolean negate, i.e. not i0
  * - 0: Logic zero, false
  * - 1: Logic one, true
  *

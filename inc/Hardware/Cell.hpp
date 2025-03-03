@@ -130,6 +130,8 @@ class Cell {
     return type_ == cell_t::latch;
   }
 
+  void Precomp(std::vector<uint64_t>& vals) const;
+
   /**
    * @brief Returns the output value for each output of the cell
    * @param operands in order a' a g_a b' b g_b ...
@@ -170,27 +172,28 @@ class Cell {
   std::vector<std::string> identifiers_;
   std::vector<std::string> inputs_;
   std::vector<std::string> outputs_;
-  std::vector<std::vector<std::string>> mids_;
-  std::vector<std::vector<Expression>> mids_eqs_;
+  std::vector<std::string> mids_;
 
   std::vector<Expression> expr_;
+  std::vector<Expression> expr_mids_;
   std::vector<Expression> expr_glitch_ext_;
   std::vector<Expression> expr_probe_prop_;
 
-  void SetOperations(const std::vector<std::string>& expressions);
+  void SetExpressions(const std::vector<std::string>& expr_mids, const std::vector<std::string>& expr_outs);
 
   /**
    * @brief Generates propagation functions and glitch functions for a operation
    * @param op Operation the function are generated for
    * @author Simon Osterheider
    */
-  void GenerateRelaxedFunctions(const Expression& expr);
+  void GenerateRelaxedFunctions(const std::vector<Expression>& expr_mids, const Expression& expr);
   /**
    * @brief generates truth table with no glitchy inputs
    * @return TruthTable for F (toggle) output and G (glitch)
    * @author Simon Osterheider
    */
-  TruthTable GenerateSmallEnablers(const Expression& op);
+  TruthTable GenerateSmallEnablers(const std::vector<Expression>& expr_mids, const Expression& op);
+
   /**
    * @brief Detects if for the given normal and modifed inputs
    * a glitch can occur in the gate represented by the operation.
@@ -203,7 +206,7 @@ class Cell {
    * @return false A glitch can't occur at the gate for the given input transitions
    * @author Simon Osterheider
    */
-  static bool DetectGlitches(const Expression& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed);
+  static bool DetectGlitches(const std::vector<Expression>& expr_mids, const Expression& op, std::vector<uint64_t> const& norm_input, std::vector<uint64_t> const& mod_input, bool transition_allowed);
   /**
    * @brief Set the Propagation Function for the operation represented by the truthtable
    * Internally checks if the operation of the toggle output (f) from the table is the same for every input,
