@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       python = python312;
     })
     flint
-    python310
+    python312
     gcc-arm-embedded
   ];
 
