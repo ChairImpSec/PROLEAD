@@ -1,0 +1,1 @@
+./../../../../../../../release/PROLEAD -l ../../../../../../../libs/xilinx_fpga.json -n xilinx_fpga -d ../../../gate/design.v -m circuit -c config.json 2>&1 | tee Report.dat

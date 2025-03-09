@@ -1,0 +1,52 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "compact_distributions": true
+  },
+  "simulation": {
+    "groups": [
+      "8'h$$",
+      "8'h00"
+    ],
+    "number_of_clock_cycles": 10,
+    "always_random_inputs": [
+      "\\Zmul1xDI[0][3:0]",
+      "\\Zmul2xDI[0][3:0]",
+      "\\Zmul3xDI[0][3:0]",
+      "\\Zinv1xDI[0][1:0]",
+      "\\Zinv2xDI[0][1:0]",
+      "\\Zinv3xDI[0][1:0]"
+    ],
+    "output_shares": [
+      "\\QxDO[0][7:0]",
+      "\\QxDO[1][7:0]"
+    ],
+    "expected_output": [
+      "8'h$$",
+      "8'h63"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "\\XxDI[0][7:0]",
+            "value": "group_in0[7:0]"
+          },
+          {
+            "name": "\\XxDI[1][7:0]",
+            "value": "group_in1[7:0]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 100000000,
+    "number_of_simulations_per_step": 1000000
+  },
+  "hardware": {
+    "clock_signal_name": "ClkxCI"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "relaxed_model": true
+  }
+}

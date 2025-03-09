@@ -1,0 +1,34 @@
+Successfully parsed the settings file at "config.json".
+Successfully validated the settings file at "config.json".
+Successfully opened the library file at "../../../../../../../libs/nang45.json".
+Successfully read the library with name "nang45".
+Successfully parsed 35 cells from the library.
+Successfully found buffer cell with identifier "BUF_X1" and others.
+"circuit"...done
+Successfully matched 18 fresh mask signals (for rising edge) [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].
+Evaluate the circuit under the robust but relaxed probing model!
+586 different spots to probe detected!
+Generate univariate probing sets...5860 probing sets generated...done!
+-------------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+-------------------------------------------------------------------------------------------------------------------------------------
+|             5860 |             8440 |          5860 |                       4 |                      86 |               27.026280 |
+-------------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the relaxed robust probing model!
+----------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
+----------------------------------------------------------------------------------------------------------------------------------------
+|         8.504532s |        5.436856GB |        128000 / 423979 |                [mult_msb_gf4_mul_1_0_n75(6)] |   4.976625 |    OKAY |
+|        17.663322s |        8.380680GB |        256000 / 587690 |                [mult_msb_gf4_mul_1_0_n75(6)] |   5.378147 | LEAKAGE |
+|        26.911906s |       10.988672GB |        384000 / 707267 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |  21.731059 | LEAKAGE |
+|        36.312514s |       12.990140GB |        512000 / 804127 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |  19.480311 | LEAKAGE |
+|        45.766720s |       15.471616GB |        640000 / 883614 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |  11.278486 | LEAKAGE |
+|        55.386672s |       17.421556GB |        768000 / 956275 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |   8.606977 | LEAKAGE |
+|        65.157695s |       19.844064GB |       896000 / 1017191 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |   7.861229 | LEAKAGE |
+|        75.076105s |       21.692592GB |      1024000 / 1072544 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |   6.350961 | LEAKAGE |
+|        85.557952s |       23.671528GB |      1152000 / 1126587 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |   5.625088 | LEAKAGE |
+|        95.643176s |       25.740396GB |      1280000 / 1182481 |                [mul_y0y1_gf4_mul_1_1_n53(5)] |   4.178923 |    OKAY |
+|       105.923084s |       27.353272GB |      1408000 / 1243346 |                       [mult_msb_FFxDN[2](9)] |   3.932157 |    OKAY |
+|       116.513441s |       29.561684GB |      1536000 / 1285768 |                       [mult_msb_FFxDN[2](9)] |   4.119814 |    OKAY |
+Evaluation done in 116.515 seconds!

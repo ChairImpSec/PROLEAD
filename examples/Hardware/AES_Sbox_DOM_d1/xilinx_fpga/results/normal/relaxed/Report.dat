@@ -1,0 +1,30 @@
+Successfully parsed the settings file at "config.json".
+Successfully validated the settings file at "config.json".
+Successfully opened the library file at "../../../../../../../libs/xilinx_fpga.json".
+Successfully read the library with name "xilinx_fpga".
+Successfully parsed 10 cells from the library.
+Successfully found buffer cell with identifier "IBUF" and others.
+"circuit"..."lin_map"..."lin_map_0"..."inverter"..."shared_mul_gf2"..."gf2_mul__parameterized0_8"..."gf2_mul__parameterized0_9"..."shared_mul_gf2_3"..."gf2_mul__parameterized0_6"..."gf2_mul__parameterized0_7"..."shared_mul_gf2_4"..."gf2_mul__parameterized0"..."gf2_mul__parameterized0_5"..."shared_mul_gf4"..."shared_mul_gf4_1"..."shared_mul_gf4_2"...done
+Successfully matched 18 fresh mask signals (for rising edge) [{\Zmul1xDI[0][0]}, {\Zmul1xDI[0][1]}, {\Zmul1xDI[0][2]}, {\Zmul1xDI[0][3]}, {\Zmul2xDI[0][0]}, {\Zmul2xDI[0][1]}, {\Zmul2xDI[0][2]}, {\Zmul2xDI[0][3]}, {\Zmul3xDI[0][0]}, {\Zmul3xDI[0][1]}, {\Zmul3xDI[0][2]}, {\Zmul3xDI[0][3]}, {\Zinv1xDI[0][0]}, {\Zinv1xDI[0][1]}, {\Zinv2xDI[0][0]}, {\Zinv2xDI[0][1]}, {\Zinv3xDI[0][0]}, {\Zinv3xDI[0][1]}].
+Evaluate the circuit under the robust but relaxed probing model!
+212 different spots to probe detected!
+Generate univariate probing sets...2120 probing sets generated...done!
+-------------------------------------------------------------------------------------------------------------------------------------
+| #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+-------------------------------------------------------------------------------------------------------------------------------------
+|             2120 |             4900 |          2120 |                       2 |                      44 |               16.646226 |
+-------------------------------------------------------------------------------------------------------------------------------------
+
+Evaluate security under the relaxed robust probing model!
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|      Elapsed Time |      Required Ram |  Processed Simulations |                                                                                                                                                                     Probing Set with highest Information Leakage |  -log10(p) |  Status |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|         3.256749s |        3.966140GB |         128000 / 61200 |                                                                                                                                                  [\\masked_variant_pipelined_8_staged.mul_y0y1.FFxDN[1]_2[1](6)] |   3.156182 |    OKAY |
+|         7.044531s |        3.968104GB |         256000 / 83655 |                                                                                                                                            [\\masked_variant_pipelined_8_staged.inverter_gf24.QxDO124_out__6(7)] |   4.430958 |    OKAY |
+|        11.096197s |        3.970124GB |        384000 / 100844 |                                                                                                                                            [\\masked_variant_pipelined_8_staged.inverter_gf24.QxDO124_out__6(7)] |   3.039194 |    OKAY |
+|        15.364070s |        3.972704GB |        512000 / 115239 |                                                                                                                                                  [\\masked_variant_pipelined_8_staged.mul_y0y1.FFxDN[2]_0[1](6)] |   3.948623 |    OKAY |
+|        19.635233s |        3.974340GB |        640000 / 127947 |                                                                                                                                                                                           [\Y0xorY12xD[0][2](1)] |   3.594638 |    OKAY |
+|        24.027085s |        3.970172GB |        768000 / 139434 |                                                                                                                                                                                                  [\<const1>(10)] |   2.962197 |    OKAY |
+|        28.527836s |        3.976236GB |        896000 / 150004 |                                                                                                                                            [\\masked_variant_pipelined_8_staged.mul_y0y1.FFxDP[3][3]_i_4_n_0(4)] |   2.870355 |    OKAY |
+|        33.100672s |        3.976772GB |       1024000 / 159859 |                                                                                                                                                 [\\masked_variant_pipelined_8_staged.inverter_gf24.CxD[1][0](5)] |   2.418536 |    OKAY |
+Evaluation done in 33.1026 seconds!
