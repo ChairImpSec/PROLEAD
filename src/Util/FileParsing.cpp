@@ -210,66 +210,6 @@ std::vector<uint64_t> IrreduciblePolynomialGrammar::Parse(
   return coefficients;
 }
 
-SignalNameGrammar::SignalNameGrammar() : SignalNameGrammar::base_type(value) {
-  value = (vector_name | signal_name);
-  vector_name = qi::lit('{') >> (signal_name % ',') >> qi::lit('}');
-  signal_name =
-      signal_with_range | signal_with_index | signal_without_index_or_range;
-  signal_with_range =
-      identifier[([&](std::string id) { current_identifier = id; })] >>
-      qi::lit('[') >> qi::uint_[([&](uint64_t idx) { left_index = idx; })] >>
-      ':' >> qi::uint_[([&](uint64_t right_index) {
-        std::vector<std::string> tmp;
-
-        if (left_index > right_index) {
-          for (int64_t i = right_index; i <= (int64_t)left_index; ++i) {
-            tmp.push_back(current_identifier + "[" + std::to_string(i) + "]");
-          }
-        } else {
-          if (left_index < right_index) {
-            for (int64_t i = right_index; i >= (int64_t)left_index; --i) {
-              tmp.push_back(current_identifier + "[" + std::to_string(i) + "]");
-            }
-          } else {
-            tmp.push_back(current_identifier + "[" +
-                          std::to_string(left_index) + "]");
-          }
-        }
-        result.insert(result.begin(), tmp.begin(), tmp.end());
-      })] >>
-      qi::lit(']');
-  signal_with_index = index[([&](std::string id) {
-    std::vector<std::string> tmp = {id};
-    result.insert(result.begin(), tmp.begin(), tmp.end());
-  })];
-
-  signal_without_index_or_range = identifier[([&](std::string id) {
-    std::vector<std::string> tmp = {id};
-    result.insert(result.begin(), tmp.begin(), tmp.end());
-  })];
-
-  index = qi::raw[identifier >> qi::lit('[') >> qi::uint_ >> qi::lit(']')];
-  identifier = qi::lexeme[+(qi::char_("a-zA-Z_") >> *qi::char_("a-zA-Z0-9_"))];
-}
-
-std::vector<std::string> SignalNameGrammar::Parse(
-    std::string& signal_name_string) {
-  std::string::iterator begin, end;
-  begin = signal_name_string.begin();
-  end = signal_name_string.end();
-  result.clear();
-
-  bool success = qi::phrase_parse(begin, end, *this, qi::space);
-
-  if (!success || (begin != end)) {
-    std::string error_message = "Error while parsing signal name: \"" +
-                                signal_name_string + "\". Invalid syntax!";
-    throw std::invalid_argument(error_message);
-  }
-
-  return result;
-}
-
 std::ifstream OpenFile(const std::filesystem::path& path) {
   std::ifstream stream(path);
 

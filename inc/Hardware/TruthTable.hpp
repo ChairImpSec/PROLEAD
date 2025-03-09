@@ -14,7 +14,9 @@
    * @param amount_of_inputs amount of inputs for the truth table
    * @author Simon Osterheider
    */
-    TruthTable(size_t amount_of_inputs);
+    TruthTable(uint64_t amount_of_inputs);
+    TruthTable(const std::vector<bool>& init);
+
     /**
      * @brief Prints every row of the truth table. Counting upwards in binary but left bit is lsb
      * @author Simon Osterheider
@@ -50,7 +52,7 @@
      * @brief Returns the amount of inputs of the truth table, i.e. amount of input columns
      * @author Simon Osterheider
     */
-    size_t GetAmountOfInputs() const;
+    uint64_t GetAmountOfInputs() const;
     /**
      * @brief Constructs an Operation by first turning it into a cnf string
      * Before Turning into an Operation the order of inputs is mutated.
@@ -103,5 +105,5 @@
     /**
      * amount of input columns for the truth table
     */
-    size_t amount_of_inputs_;
+    uint64_t amount_of_inputs_;
   };

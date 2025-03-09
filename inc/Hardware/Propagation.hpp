@@ -2,11 +2,8 @@
 
 #include <set>
 
-#include "Hardware/Definitions.hpp"
 #include "Hardware/Enabler.hpp"
 #include "Hardware/Probes.hpp"
-#include "Util/Settings.hpp"
-#include "Hardware/Circuit.hpp"
 
 namespace Hardware {
 /**
@@ -23,10 +20,10 @@ using RobustProbe = uint64_t;
 class RelaxedProbe {
  public:
   uint64_t enable_index_;  ///< The index of the enabler in the enabler_
-                               ///< vector of the Adversaries class.
+                           ///< vector of the Adversaries class.
   uint64_t number_of_enable_indices_;  ///< The maximum number of enablers
-                                           ///< that must be evaluated when
-                                           ///< extending this relaxed probe.
+                                       ///< that must be evaluated when
+                                       ///< extending this relaxed probe.
   uint64_t number_of_signal_indices_;
   std::vector<uint64_t> signal_indices_;
   std::vector<uint64_t> propagation_indices_;
@@ -91,10 +88,9 @@ class Propagation {
 
   bool IsObsolete(const CircuitStruct& circuit, const Settings& settings);
 
-  Propagation<ExtensionContainer> ExtendWithTime(
-      uint64_t clock_cycle,
-      std::vector<Probe>& probes,
-      std::vector<Enabler>& enabler);
+  Propagation<ExtensionContainer> ExtendWithTime(uint64_t clock_cycle,
+                                                 std::vector<Probe>& probes,
+                                                 std::vector<Enabler>& enabler);
 
   void Finalize(std::vector<Propagation<ExtensionContainer>>& propagations);
   void UpdateNumberOfSignals(
@@ -112,7 +108,8 @@ class Propagation {
    * @param settings The settings read from the config file.
    * @author Nicolai Müller
    */
-  void Propagate(const Library& library, const CircuitStruct& circuit, std::vector<Propagation>& propagations);
+  void Propagate(const Library& library, const CircuitStruct& circuit,
+                 std::vector<Propagation>& propagations);
 
  private:
   /**
@@ -130,7 +127,8 @@ class Propagation {
    * changed to integrate new probing models into PROLEAD.
    */
   std::vector<ExtensionContainer> extension_indices_;
-  };
+};
 
-  uint64_t BackpropagateUntilBranch(const CircuitStruct& circuit, uint64_t signal_index);
+uint64_t BackpropagateUntilBranch(const CircuitStruct& circuit,
+                                  uint64_t signal_index);
 }  // namespace Hardware

@@ -1,6 +1,6 @@
 #include "Hardware/SharedData.hpp"
 
-SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& settings)
+SharedData::SharedData(const CircuitStruct& circuit, const Settings& settings)
     : one_in_64_(64),
       zero_in_64_(64),
       signal_values_(circuit.NumberOfSignals),
@@ -86,7 +86,7 @@ SharedData::SharedData(const Hardware::CircuitStruct& circuit, const Settings& s
            ++value_index) {
         for (input_index = 0; input_index < (uint64_t)circuit.NumberOfSignals;
              ++input_index) {
-          signal_name = circuit.Signals[input_index]->Name;
+          signal_name = circuit.signals_[input_index].Name;
 
           if (signal_name == input_assignment.signal_names_[value_index]) {
             input_assignment.signal_indices_[value_index] = input_index;

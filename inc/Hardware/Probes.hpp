@@ -15,8 +15,6 @@
 #include <optional>
 #include <vector>
 
-
-
 class Probe {
  public:
   Probe(const std::vector<uint64_t>& signal_indices, uint64_t clock_cycle);
@@ -34,7 +32,8 @@ class Probe {
   uint64_t clock_cycle_;  ///< The clock cycle during which the probe records.
 };
 
-std::optional<uint64_t> SearchProbe(const Probe& probe, const std::vector<Probe>& probes);
+std::optional<uint64_t> SearchProbe(const Probe& probe,
+                                    const std::vector<Probe>& probes);
 
 class UniqueProbe : public Probe {
  public:
@@ -51,7 +50,7 @@ class UniqueProbe : public Probe {
 using RobustProbe = uint64_t;
 
 struct RelaxedProbe {
-  uint64_t enable_index_; 
+  uint64_t enable_index_;
   uint64_t number_of_enable_indices_;
   uint64_t number_of_signal_indices_;
   std::vector<uint64_t> signal_indices_;

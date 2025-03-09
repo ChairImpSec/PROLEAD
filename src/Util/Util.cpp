@@ -462,7 +462,7 @@ void Util::PrintRow(std::vector<unsigned int>& width,
                     std::vector<std::string>& elements) {
   std::cout << '|';
 
-  for (size_t index = 0; index < elements.size(); ++index) {
+  for (uint64_t index = 0; index < elements.size(); ++index) {
     std::cout.width(width[index]);
     std::cout << (elements[index] + " |");
   }

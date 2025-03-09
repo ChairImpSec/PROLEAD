@@ -13,8 +13,6 @@
 
 #include "Hardware/Circuit.hpp"
 #include "Util/Types.hpp"
-#include <cstddef>
-#include <cstdint>
 
 // FIXME: We are faulting gates, thus we can have more than this faults!
 // See Fault Model Paper!
@@ -35,8 +33,7 @@
  * a fault type.
  */
 class Fault {
-
-public:
+ public:
   /**
    * @brief Constructor of Fault.
    *
@@ -46,15 +43,15 @@ public:
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_type The type of the Fault which is injected.
    */
-  Fault(const Hardware::SignalStruct *const signal, size_t signal_index,
-        size_t clock_cycle, double fault_probability, FaultType fault_type);
+  Fault(const SignalStruct *const signal, uint64_t signal_index,
+        uint64_t clock_cycle, double fault_probability, FaultType fault_type);
 
   /**
    * @brief Accessor function for signal index of this fault.
    *
    * @return The index of this fault.
    */
-  size_t GetFaultedSignalIndex() const;
+  uint64_t GetFaultedSignalIndex() const;
 
   // TODO: return pointer to signal
   // uint64_t GetFaultedSignal() const;
@@ -63,7 +60,7 @@ public:
    *
    * @return The clock cycle in which this fault should be injected.
    */
-  size_t GetFaultedClockCycle() const;
+  uint64_t GetFaultedClockCycle() const;
 
   /**
    * @brief Accessor function for the probability with that this fault occurs.
@@ -88,8 +85,8 @@ public:
    * simulator.
    * @return The value of a signal faulted with this fault.
    */
-  virtual uint64_t
-  ComputeFaultEffect([[maybe_unused]] uint64_t fault_free_computation) const = 0;
+  virtual uint64_t ComputeFaultEffect(
+      [[maybe_unused]] uint64_t fault_free_computation) const = 0;
 
   /**
    * @brief Checks if this fault is applied to a given signal and clock cycle.
@@ -100,19 +97,19 @@ public:
    */
   bool IsSignalFaulted(uint64_t signal_index, uint64_t clock_cycle) const;
 
-private:
+ private:
   /**
    * @brief A pointer to the signal, which should be faulted.
    *
    */
-  const Hardware::SignalStruct *const signal_;
+  const SignalStruct *const signal_;
 
   /**
    * @brief The index of the signal/the position, which should be faulted.
    *
    * TODO: to be removed, just work with pointer.
    */
-  const size_t signal_index_;
+  const uint64_t signal_index_;
 
   /**
    * @brief The clock cycle in which the fault should occur.
@@ -124,7 +121,7 @@ private:
   // the same if no feedback logic or disable logic is implemented. Furthermore,
   // we should only evalute false which are reachable, so faulting the third
   // logic stage in the first clock cycle makes no sense.
-  const size_t clock_cycle_;
+  const uint64_t clock_cycle_;
 
   /**
    * @brief The probability with that the fault is induced (required for random

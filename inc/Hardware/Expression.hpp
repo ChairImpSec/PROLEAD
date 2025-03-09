@@ -12,6 +12,7 @@
 
 #include "Hardware/LibHelper.hpp"
 #include "Util/Grammars/BoolExprGrammar.hpp"
+#include "Util/Grammars/SignalNameGrammar.hpp"
 
 extern std::vector<std::pair<std::string, std::vector<std::string>>> expr_lib;
 extern std::vector<std::pair<std::string, std::vector<std::string>>>
@@ -29,13 +30,9 @@ class Expression {
    * @param expression The Boolean expression.
    * @param names The names of the inputs.
    */
-  Expression(const std::string& expression, std::vector<std::string> names);
-
-  /**
-   * @brief Returns the number of inputs.
-   * @return The number of inputs.
-   */
-  uint64_t GetNumberOfInputs() const;
+  Expression(const std::string& expression,
+             const std::vector<std::string>& names,
+             const std::vector<std::pair<std::string, uint64_t>>& params);
 
   /**
    * @brief Evaluates the expression.
@@ -44,8 +41,7 @@ class Expression {
    */
   uint64_t Eval(std::vector<uint64_t> vals) const;
 
- private:
-  uint64_t number_of_inputs_;
+  // private:
   std::vector<Clause> clauses_;  ///< The clauses of the expression. Will be
                                  ///< evaluated sequentially.
 };

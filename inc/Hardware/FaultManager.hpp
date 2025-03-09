@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "Hardware/Circuit.hpp"
 #include "Hardware/Fault.hpp"
 #include "Hardware/FaultSet.hpp"
 #include "Hardware/StuckAtOneFault.hpp"
@@ -37,9 +36,9 @@ public:
    * faulted by this FaultManager.
    */
   // FaultManager(const FaultInjectionSettings *const fault_injection_settings,
-  //              const Hardware::CircuitStruct *const circuit_to_be_faulted);
+  //              const CircuitStruct *const circuit_to_be_faulted);
   FaultManager(const FaultInjectionSettings &fault_injection_settings,
-               const Hardware::CircuitStruct &circuit_to_be_faulted);
+               const CircuitStruct &circuit_to_be_faulted);
   /**
    * @brief Add a new FaultSet to the manager.
    *
@@ -62,14 +61,14 @@ public:
    * required to give the this function the name of the clock signal, since we
    * assume that this is not faulted.
    */
-  void SelectStrategyAndComputeAllFaults(size_t clock_signal_index);
+  void SelectStrategyAndComputeAllFaults(uint64_t clock_signal_index);
 
   // void ComputeAllFaultsExcludeFirst(
-  //     const std::function<void(const Hardware::SignalStruct *const, size_t,
-  //                              size_t)>
+  //     const std::function<void(const SignalStruct *const, uint64_t,
+  //                              uint64_t)>
   //         AddFaultFunction,
-  //     const int *const elements, const size_t number_of_elements,
-  //     const size_t clock_signal_index, const std::regex &include_element,
+  //     const int *const elements, const uint64_t number_of_elements,
+  //     const uint64_t clock_signal_index, const std::regex &include_element,
   //     const std::regex &exclude_elements);
 
   /**
@@ -83,7 +82,7 @@ public:
   const Fault *GetFault(uint64_t index) const;
 
   // TODO: write implementation and documentation
-  size_t GetNumberOfFaults() const;
+  uint64_t GetNumberOfFaults() const;
 
   /**
    * @brief Get the list of StuckAtZero faults.
@@ -124,7 +123,7 @@ public:
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddStuckAtZeroFault(const Hardware::SignalStruct *const signal,
+  void AddStuckAtZeroFault(const SignalStruct *const signal,
                            uint64_t signal_index, uint64_t clock_cycle,
                            double fault_probability);
 
@@ -136,7 +135,7 @@ public:
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddStuckAtOneFault(const Hardware::SignalStruct *const signal,
+  void AddStuckAtOneFault(const SignalStruct *const signal,
                           uint64_t signal_index, uint64_t clock_cycle,
                           double fault_probability);
 
@@ -148,7 +147,7 @@ public:
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddToggleFault(const Hardware::SignalStruct *const signal,
+  void AddToggleFault(const SignalStruct *const signal,
                       uint64_t signal_index, uint64_t clock_cycle,
                       double fault_probability);
 
@@ -163,8 +162,8 @@ private:
   /**
    * @brief A pointer to the CircuitStruct to which the faults are applied.
    */
-  // const Hardware::CircuitStruct *const circuit_to_be_faulted_;
-  const Hardware::CircuitStruct &circuit_to_be_faulted_;
+  // const CircuitStruct *const circuit_to_be_faulted_;
+  const CircuitStruct &circuit_to_be_faulted_;
 
   /**
    * @brief List of all faults managed by an instatntiation of the FaultManager
@@ -198,7 +197,7 @@ private:
    * @param fault_property Contains the settings which corresponds to injected
    * FaultType.
    */
-  const std::function<void(const Hardware::SignalStruct *const, size_t, size_t)>
+  const std::function<void(const SignalStruct *const, uint64_t, uint64_t)>
   ChoseAddFaultFunction(const FaultProperties &fault_property);
 
   /**
@@ -233,14 +232,14 @@ private:
    * be added.
    */
   void ComputeAllFaults(
-      const std::function<void(const Hardware::SignalStruct *const, size_t,
-                               size_t)>
+      const std::function<void(const SignalStruct *const, uint64_t,
+                               uint64_t)>
           AddFaultFunction,
 
       const std::function<bool(const std::string &, const std::regex &,
                                const std::regex &)>
           IncludeStrategy,
-      const int *const elements, const size_t number_of_elements,
-      const size_t clock_signal_index, const std::regex &include_element,
+      std::vector<uint64_t> elements, const uint64_t number_of_elements,
+      const uint64_t clock_signal_index, const std::regex &include_element,
       const std::regex &exclude_elements);
 };

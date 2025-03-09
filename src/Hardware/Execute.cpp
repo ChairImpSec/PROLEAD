@@ -1,8 +1,6 @@
 #include "Hardware/Execute.hpp"
 
 void Hardware::Execute(const po::variables_map& vm) {
-  Hardware::CircuitStruct circuit;
-
   std::string result_folder_name = vm["resultfolder"].as<std::string>();
   std::string library_file_name = vm["libraryfile"].as<std::string>();
   std::string design_file_name = vm["designfile"].as<std::string>();
@@ -11,17 +9,8 @@ void Hardware::Execute(const po::variables_map& vm) {
   std::string library_name = vm["libraryname"].as<std::string>();
 
   Settings settings(config_file_name, true);
-  Library library(library_file_name, library_name, settings.IsRelaxedModel());
-  Hardware::Read::DesignFile(design_file_name, topmodule_name, settings,
-                             library, &circuit, 0, 0, 0, NULL);
-
-  circuit.SetIsProbeAllowed(library, settings);
-  circuit.SetIsExtensionAllowed(library, settings);
-  circuit.SetIsAnalysisAllowed(settings);
-  circuit.SetIsFaultAllowed(settings);
-  std::cout << "done" << std::endl;
-
-  Hardware::Prepare::MakeCircuitDepth(library, &circuit);
+  Library library(library_file_name, library_name);
+  CircuitStruct circuit(design_file_name, topmodule_name, settings, library);
 
   std::vector<SharedData> shared_data(settings.GetNumberOfThreads(),
                                       SharedData(circuit, settings));

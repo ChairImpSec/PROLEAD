@@ -7,13 +7,11 @@
 #include <cinttypes>
 #include <vector>
 
-#include "Hardware/Definitions.hpp"
-#include "Util/Settings.hpp"
 #include "Hardware/Circuit.hpp"
 
 class SharedData {
  public:
-  SharedData(const Hardware::CircuitStruct& circuit, const Settings& settings);
+  SharedData(const CircuitStruct& circuit, const Settings& settings);
 
  //private:
   std::vector<uint64_t> one_in_64_;

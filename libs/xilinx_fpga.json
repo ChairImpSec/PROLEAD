@@ -1,0 +1,247 @@
+{
+  "libraries": [
+    {
+      "name": "xilinx_fpga",
+      "cells": [
+        {
+          "name": "BUF",
+          "aliases": [
+            "IBUF",
+            "OBUF",
+            "BUFG"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "I"
+          ],
+          "outputs": [
+            "O"
+          ],
+          "equations": [
+            "I"
+          ]
+        },
+        {
+          "name": "FDRE",
+          "aliases": [
+            "FDRE"
+          ],
+          "type": "register",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_C_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_D_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_R_INVERTED",
+              "default": "1'b0"
+            }
+          ],
+          "inputs": [
+            "C",
+            "CE",
+            "D",
+            "R"
+          ],
+          "clock": "C",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(not (R xor IS_R_INVERTED[0])) and (((not (C xor IS_C_INVERTED[0])) and Q) or ((C xor IS_C_INVERTED[0]) and CE and (D xor IS_D_INVERTED[0])))"
+          ]
+        },
+        {
+          "name": "GND",
+          "aliases": [
+            "GND"
+          ],
+          "type": "gate",
+          "outputs": [
+            "G"
+          ],
+          "inputs": [],
+          "equations": [
+            "0"
+          ]
+        },
+        {
+          "name": "VCC",
+          "aliases": [
+            "VCC"
+          ],
+          "type": "gate",
+          "outputs": [
+            "P"
+          ],
+          "inputs": [],
+          "equations": [
+            "1"
+          ]
+        },
+        {
+          "name": "LUT2",
+          "aliases": [
+            "LUT2"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "4'h0"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0",
+            "I1"
+          ],
+          "equations": [
+            "INIT[3:0]"
+          ]
+        },
+        {
+          "name": "LUT3",
+          "aliases": [
+            "LUT3"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "8'h00"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0",
+            "I1",
+            "I2"
+          ],
+          "equations": [
+            "INIT[7:0]"
+          ]
+        },
+        {
+          "name": "LUT4",
+          "aliases": [
+            "LUT4"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "16'h0000"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0",
+            "I1",
+            "I2",
+            "I3"
+          ],
+          "equations": [
+            "INIT[15:0]"
+          ]
+        },
+        {
+          "name": "LUT5",
+          "aliases": [
+            "LUT5"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "32'h00000000"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0",
+            "I1",
+            "I2",
+            "I3",
+            "I4"
+          ],
+          "equations": [
+            "INIT[31:0]"
+          ]
+        },
+        {
+          "name": "LUT6",
+          "aliases": [
+            "LUT6"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "64'h0000000000000000"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0",
+            "I1",
+            "I2",
+            "I3",
+            "I4",
+            "I5"
+          ],
+          "equations": [
+            "INIT[63:0]"
+          ]
+        },
+        {
+          "name": "LUT6_2",
+          "aliases": [
+            "LUT6_2"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "64'h0000000000000000"
+            }
+          ],
+          "outputs": [
+            "O1",
+            "O2"
+          ],
+          "inputs": [
+            "I0",
+            "I1",
+            "I2",
+            "I3",
+            "I4",
+            "I5"
+          ],
+          "equations": [
+            "{INIT[31:0], INIT[31:0]}",
+            "INIT[63:0]"
+          ]
+        }
+      ]
+    }
+  ]
+}

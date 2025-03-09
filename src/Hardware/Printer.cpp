@@ -4,7 +4,8 @@ namespace Hardware {
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::SetColumnSize(
-    std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit, const Settings& settings) {
+    std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
+    const CircuitStruct& circuit, const Settings& settings) {
   std::string text = "  Probing Set with highest Information Leakage ";
   column_size_ = text.length();
   std::vector<Probe> probes;
@@ -25,9 +26,11 @@ void Printer<ExtensionContainer>::SetColumnSize(
 }
 
 template void Printer<RobustProbe>::SetColumnSize(
-    std::vector<ProbingSet<RobustProbe>>&, const CircuitStruct&, const Settings&);
+    std::vector<ProbingSet<RobustProbe>>&, const CircuitStruct&,
+    const Settings&);
 template void Printer<RelaxedProbe>::SetColumnSize(
-    std::vector<ProbingSet<RelaxedProbe>>&, const CircuitStruct&, const Settings&);
+    std::vector<ProbingSet<RelaxedProbe>>&, const CircuitStruct&,
+    const Settings&);
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::SetPath(std::string path) {
@@ -38,12 +41,12 @@ template void Printer<RobustProbe>::SetPath(std::string);
 template void Printer<RelaxedProbe>::SetPath(std::string);
 
 template <class ExtensionContainer>
-std::string Printer<ExtensionContainer>::PrintProbe(Probe& probe,
-                                                    const CircuitStruct& circuit, const Settings& settings) {
-  std::string signal_name, clock_cycle, error_message, result;                                                    
+std::string Printer<ExtensionContainer>::PrintProbe(
+    Probe& probe, const CircuitStruct& circuit, const Settings& settings) {
+  std::string signal_name, clock_cycle, error_message, result;
   for (uint64_t signal_index : probe.GetSignalIndices()) {
     try {
-      signal_name = circuit.Signals[signal_index]->Name;
+      signal_name = circuit.signals_[signal_index].Name;
     } catch (const std::out_of_range& e) {
       error_message = "Tried to print a probe with an invalid signal index!\n" +
                       standard_error_text;
@@ -53,10 +56,10 @@ std::string Printer<ExtensionContainer>::PrintProbe(Probe& probe,
     clock_cycle = std::to_string(probe.GetCycle());
     if (settings.GetClkEdge() == clk_edge_t::both) {
       clock_cycle = std::to_string((probe.GetCycle() + 1) / 2);
-      if (probe.GetCycle() % 2){
-          return signal_name + "(" + clock_cycle + ".0)";
+      if (probe.GetCycle() % 2) {
+        return signal_name + "(" + clock_cycle + ".0)";
       } else {
-          return signal_name + "(" + clock_cycle + ".5)";
+        return signal_name + "(" + clock_cycle + ".5)";
       }
     } else {
       clock_cycle = std::to_string(probe.GetCycle() + 1);
@@ -65,13 +68,14 @@ std::string Printer<ExtensionContainer>::PrintProbe(Probe& probe,
     result += ", " + signal_name + "(" + clock_cycle + ")";
   }
 
-  result.erase(0, 2); 
+  result.erase(0, 2);
   return result;
 }
 
 template <class ExtensionContainer>
-std::string Printer<ExtensionContainer>::PrintProbes(std::vector<Probe>& probes,
-                                                     const CircuitStruct& circuit, const Settings& settings) {
+std::string Printer<ExtensionContainer>::PrintProbes(
+    std::vector<Probe>& probes, const CircuitStruct& circuit,
+    const Settings& settings) {
   std::string result;
 
   for (Probe& probe : probes) {
@@ -91,8 +95,9 @@ std::string Printer<ExtensionContainer>::PrintProbes(std::vector<Probe>& probes,
 }
 
 template <class ExtensionContainer>
-std::string Printer<ExtensionContainer>::PrintProbes(std::vector<Probe*>& probes,
-                                                     const CircuitStruct& circuit, const Settings& settings) {
+std::string Printer<ExtensionContainer>::PrintProbes(
+    std::vector<Probe*>& probes, const CircuitStruct& circuit,
+    const Settings& settings) {
   std::string result;
 
   for (Probe* probe : probes) {
@@ -111,9 +116,12 @@ std::string Printer<ExtensionContainer>::PrintProbes(std::vector<Probe*>& probes
   return "[" + result + "]";
 }
 
-template std::string Printer<RobustProbe>::PrintProbes(std::vector<Probe*>&, const CircuitStruct&, const Settings&);
-template std::string Printer<RelaxedProbe>::PrintProbes(std::vector<Probe*>&, const CircuitStruct&, const Settings&);
-
+template std::string Printer<RobustProbe>::PrintProbes(std::vector<Probe*>&,
+                                                       const CircuitStruct&,
+                                                       const Settings&);
+template std::string Printer<RelaxedProbe>::PrintProbes(std::vector<Probe*>&,
+                                                        const CircuitStruct&,
+                                                        const Settings&);
 
 template <>
 std::string Printer<RelaxedProbe>::PrintRelaxedExtension(
@@ -128,8 +136,8 @@ std::string Printer<RelaxedProbe>::PrintRelaxedExtension(
 
     for (unsigned int index : probe.propagation_indices_) {
       new_probe = propagations[index].GetProbeAddress(0);
-      result += PrintRelaxedExtension(*new_probe, probe_extensions, propagations,
-                                      circuit, settings);
+      result += PrintRelaxedExtension(*new_probe, probe_extensions,
+                                      propagations, circuit, settings);
     }
   }
 
@@ -143,13 +151,13 @@ std::string Printer<RelaxedProbe>::PrintRelaxedExtension(
     result = probes;
   }
 
-  size_t pos = result.find(",  else");
-  if (pos != std::string::npos){
+  uint64_t pos = result.find(",  else");
+  if (pos != std::string::npos) {
     result.replace(pos, 7, " else");
   }
 
   pos = result.find(", )");
-  if (pos != std::string::npos){
+  if (pos != std::string::npos) {
     result.replace(pos, 3, ")");
   }
 
@@ -160,7 +168,8 @@ template <>
 std::string Printer<RobustProbe>::PrintExtensions(
     ProbingSet<RobustProbe>& probing_set,
     std::vector<Propagation<RobustProbe>>&,
-    std::vector<Probe>& probe_extensions, const CircuitStruct& circuit, const Settings& settings) {
+    std::vector<Probe>& probe_extensions, const CircuitStruct& circuit,
+    const Settings& settings) {
   std::vector<Probe> probes;
 
   for (unsigned int index : probing_set.GetProbeExtensions()) {
@@ -174,19 +183,19 @@ template <>
 std::string Printer<RelaxedProbe>::PrintExtensions(
     ProbingSet<RelaxedProbe>& probing_set,
     std::vector<Propagation<RelaxedProbe>>& propagations,
-    std::vector<Probe>& probe_extensions, const CircuitStruct& circuit, const Settings& settings) {
+    std::vector<Probe>& probe_extensions, const CircuitStruct& circuit,
+    const Settings& settings) {
   std::vector<RelaxedProbe> probe_extensions_of_set;
   std::string result;
 
   for (unsigned int index : probing_set.GetProbeExtensions()) {
-    probe_extensions_of_set.push_back(
-        *propagations[index].GetProbeAddress(0));
+    probe_extensions_of_set.push_back(*propagations[index].GetProbeAddress(0));
   }
 
   for (RelaxedProbe probe : probe_extensions_of_set) {
-    result +=
-        PrintRelaxedExtension(probe, probe_extensions, propagations, circuit, settings) +
-        ", ";
+    result += PrintRelaxedExtension(probe, probe_extensions, propagations,
+                                    circuit, settings) +
+              ", ";
   }
 
   try {
@@ -206,19 +215,27 @@ std::string Printer<RelaxedProbe>::PrintExtensions(
 template <class ExtensionContainer>
 std::string Printer<ExtensionContainer>::PrintProbingSet(
     ProbingSet<ExtensionContainer>& probing_set,
-    std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
-    const CircuitStruct& circuit, const Settings& settings) {
+    std::vector<Propagation<ExtensionContainer>>& propagations,
+    std::vector<Probe>& probe_extensions, const CircuitStruct& circuit,
+    const Settings& settings) {
   std::vector<Probe> standard_probes_per_set;
 
   for (Probe* probe : probing_set.GetProbeAddresses()) {
     standard_probes_per_set.push_back(*probe);
   }
 
-  return "@" + PrintProbes(standard_probes_per_set, circuit, settings) + " ==> " + PrintExtensions(probing_set, propagations, probe_extensions, circuit, settings);
+  return "@" + PrintProbes(standard_probes_per_set, circuit, settings) +
+         " ==> " +
+         PrintExtensions(probing_set, propagations, probe_extensions, circuit,
+                         settings);
 }
 
-template std::string Printer<RobustProbe>::PrintProbingSet(ProbingSet<RobustProbe>&, std::vector<Propagation<RobustProbe>>&, std::vector<Probe>&, const CircuitStruct&, const Settings&);
-template std::string Printer<RelaxedProbe>::PrintProbingSet(ProbingSet<RelaxedProbe>&, std::vector<Propagation<RelaxedProbe>>&, std::vector<Probe>&, const CircuitStruct&, const Settings&);
+template std::string Printer<RobustProbe>::PrintProbingSet(
+    ProbingSet<RobustProbe>&, std::vector<Propagation<RobustProbe>>&,
+    std::vector<Probe>&, const CircuitStruct&, const Settings&);
+template std::string Printer<RelaxedProbe>::PrintProbingSet(
+    ProbingSet<RelaxedProbe>&, std::vector<Propagation<RelaxedProbe>>&,
+    std::vector<Probe>&, const CircuitStruct&, const Settings&);
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::PrintEvaluationHeader() {
@@ -287,18 +304,20 @@ void Printer<ExtensionContainer>::PrintEvaluationBody(
   Util::PrintRow(table_widths, table_body);
 }
 
-template void Printer<RobustProbe>::PrintEvaluationBody(std::vector<ProbingSet<RobustProbe>>&,
-    const CircuitStruct&, const Settings&, Simulation&, double&, std::string&,
-    double);
-template void Printer<RelaxedProbe>::PrintEvaluationBody(std::vector<ProbingSet<RelaxedProbe>>&,
-    const CircuitStruct&, const Settings&, Simulation&, double&, std::string&,
-    double);
+template void Printer<RobustProbe>::PrintEvaluationBody(
+    std::vector<ProbingSet<RobustProbe>>&, const CircuitStruct&,
+    const Settings&, Simulation&, double&, std::string&, double);
+template void Printer<RelaxedProbe>::PrintEvaluationBody(
+    std::vector<ProbingSet<RelaxedProbe>>&, const CircuitStruct&,
+    const Settings&, Simulation&, double&, std::string&, double);
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
-    std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
+    std::vector<Propagation<ExtensionContainer>>& propagations,
+    std::vector<Probe>& probe_extensions,
     std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-    const CircuitStruct& circuit, const Settings& settings, std::ofstream& stream) {
+    const CircuitStruct& circuit, const Settings& settings,
+    std::ofstream& stream) {
   unsigned int set_index;
   double p_value = 0.0;
   std::vector<double> p_values(settings.GetNumberOfClockCycles(), 0.0);
@@ -311,9 +330,9 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
          << std::endl
          << std::endl;
 
-  for (size_t index = 0; index < probing_sets.size(); ++index) {
-    uint64_t clock_cycle = probing_sets[index].GetHighestClockCycle(propagations,
-                                                           probe_extensions);
+  for (uint64_t index = 0; index < probing_sets.size(); ++index) {
+    uint64_t clock_cycle = probing_sets[index].GetHighestClockCycle(
+        propagations, probe_extensions);
     p_value = probing_sets[index].GetGValue();
 
     if (p_value >= p_values[clock_cycle]) {
@@ -329,10 +348,10 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
       set_index = set_indices[clock_cycle];
       stream << "Clock cycle ";
 
-	    clk = clock_cycle;
+      clk = clock_cycle;
       if (settings.IsTransitionalLeakage() && (!settings.IsRelaxedModel())) {
         clk++;
-	    }
+      }
 
       if (settings.GetClkEdge() == clk_edge_t::both) {
         if (clk & 1) {
@@ -340,15 +359,17 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
         } else {
           stream << (clk + 1) / 2 << ".5";
         }
-	    } else {
-	      stream << (clk + 1);
+      } else {
+        stream << (clk + 1);
       }
 
       stream << ": "
-             << PrintProbingSet(probing_sets[set_index], propagations, probe_extensions, circuit, settings)
+             << PrintProbingSet(probing_sets[set_index], propagations,
+                                probe_extensions, circuit, settings)
              << " -log10(p) = " << p_values[clock_cycle];
 
-      if (p_values[clock_cycle] > settings.side_channel_analysis.alpha_threshold) {
+      if (p_values[clock_cycle] >
+          settings.side_channel_analysis.alpha_threshold) {
         stream << " --> LEAKAGE" << std::endl;
       } else {
         stream << " --> OKAY" << std::endl;
@@ -361,15 +382,18 @@ void Printer<ExtensionContainer>::PrintMostLeakingSetsPerCycle(
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::PrintMostLeakingSets(
-    std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
+    std::vector<Propagation<ExtensionContainer>>& propagations,
+    std::vector<Probe>& probe_extensions,
     std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-    const CircuitStruct& circuit, const Settings& settings, std::ofstream& stream) {
+    const CircuitStruct& circuit, const Settings& settings,
+    std::ofstream& stream) {
   stream << "2.) Summary of the most leaking (and still active) probing sets: "
          << std::endl
          << std::endl;
-  size_t index, set_index;
-  size_t number_of_probing_sets = probing_sets.size();
-  size_t bound = std::min(number_of_probing_sets, settings.GetNumberOfEntriesInReport());
+  uint64_t index, set_index;
+  uint64_t number_of_probing_sets = probing_sets.size();
+  uint64_t bound =
+      std::min(number_of_probing_sets, settings.GetNumberOfEntriesInReport());
   std::vector<bool> set_unconsidered(number_of_probing_sets, true);
   double p_value;
 
@@ -378,7 +402,8 @@ void Printer<ExtensionContainer>::PrintMostLeakingSets(
     set_unconsidered[set_index] = false;
     p_value = probing_sets[set_index].GetGValue();
     stream << index + 1 << ": "
-           << PrintProbingSet(probing_sets[set_index], propagations, probe_extensions, circuit, settings)
+           << PrintProbingSet(probing_sets[set_index], propagations,
+                              probe_extensions, circuit, settings)
            << " -log10(p) = " << p_value;
 
     if (p_value > settings.side_channel_analysis.alpha_threshold) {
@@ -395,12 +420,14 @@ void Printer<ExtensionContainer>::PrintMostLeakingSets(
 
 template <class ExtensionContainer>
 void Printer<ExtensionContainer>::PrintReport(
-    std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
+    std::vector<Propagation<ExtensionContainer>>& propagations,
+    std::vector<Probe>& probe_extensions,
     std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
     const CircuitStruct& circuit, const Settings& settings,
     Simulation& simulation, unsigned int probe_step_index) {
   std::string file_name;
-  unsigned int number_of_simulations = simulation.number_of_processed_simulations;
+  unsigned int number_of_simulations =
+      simulation.number_of_processed_simulations;
 
   if (settings.GetNumberOfProbingSetsPerStep() == UINT_MAX) {
     file_name = path_ + "/" + report_prefix_ +
@@ -416,20 +443,24 @@ void Printer<ExtensionContainer>::PrintReport(
          << " simulations:" << std::endl
          << std::endl;
 
-  PrintMostLeakingSetsPerCycle(propagations, probe_extensions, probing_sets, circuit, settings, stream);
+  PrintMostLeakingSetsPerCycle(propagations, probe_extensions, probing_sets,
+                               circuit, settings, stream);
 
-  PrintMostLeakingSets(propagations, probe_extensions, probing_sets, circuit, settings, stream);
+  PrintMostLeakingSets(propagations, probe_extensions, probing_sets, circuit,
+                       settings, stream);
 
   stream.close();
   Util::PrintHorizontalLine(column_size_ + 89);
 }
 
 template void Printer<RobustProbe>::PrintReport(
-    std::vector<Propagation<RobustProbe>>&, std::vector<Probe>&, std::vector<ProbingSet<RobustProbe>>&,
-    const CircuitStruct&, const Settings&, Simulation&, unsigned int);
+    std::vector<Propagation<RobustProbe>>&, std::vector<Probe>&,
+    std::vector<ProbingSet<RobustProbe>>&, const CircuitStruct&,
+    const Settings&, Simulation&, unsigned int);
 template void Printer<RelaxedProbe>::PrintReport(
-    std::vector<Propagation<RelaxedProbe>>&, std::vector<Probe>&, std::vector<ProbingSet<RelaxedProbe>>&,
-    const CircuitStruct&, const Settings&, Simulation&, unsigned int);
+    std::vector<Propagation<RelaxedProbe>>&, std::vector<Probe>&,
+    std::vector<ProbingSet<RelaxedProbe>>&, const CircuitStruct&,
+    const Settings&, Simulation&, unsigned int);
 
 template <class ExtensionContainer>
 Printer<ExtensionContainer>::Printer() {}
@@ -449,9 +480,9 @@ void Printer<ExtensionContainer>::PrintProbingSetInformation(
       "Maximum #Probes per Set", "Average #Probes per Set"};
   std::vector<unsigned int> table_widths = {19, 19, 16, 26, 26, 26};
 
-  size_t full_table_width = 133;
+  uint64_t full_table_width = 133;
 
-  size_t minimum_number_of_probes_in_a_set =
+  uint64_t minimum_number_of_probes_in_a_set =
       std::min_element(probing_sets.begin(), probing_sets.end(),
                        [&propagations](ProbingSet<ExtensionContainer>& lhs,
                                        ProbingSet<ExtensionContainer>& rhs) {
@@ -460,7 +491,7 @@ void Printer<ExtensionContainer>::PrintProbingSetInformation(
                        })
           ->GetNumberOfProbeExtensions(propagations);
 
-  size_t maximum_number_of_probes_in_a_set =
+  uint64_t maximum_number_of_probes_in_a_set =
       std::max_element(probing_sets.begin(), probing_sets.end(),
                        [&propagations](ProbingSet<ExtensionContainer>& lhs,
                                        ProbingSet<ExtensionContainer>& rhs) {
@@ -472,7 +503,7 @@ void Printer<ExtensionContainer>::PrintProbingSetInformation(
   double average_number_of_probes_in_a_set = 0;
   double diff;
 
-  for (size_t index = 0; index < probing_sets.size(); ++index) {
+  for (uint64_t index = 0; index < probing_sets.size(); ++index) {
     diff = probing_sets[index].GetNumberOfProbeExtensions(propagations) -
            average_number_of_probes_in_a_set;
     average_number_of_probes_in_a_set += diff / (index + 1);
@@ -502,7 +533,7 @@ template void Printer<RelaxedProbe>::PrintProbingSetInformation(
     std::vector<Probe>&, std::vector<ProbingSet<RelaxedProbe>>&);
 
 template <class ExtensionContainer>
-void Printer<ExtensionContainer>::PrintError(std::string error_message){
+void Printer<ExtensionContainer>::PrintError(std::string error_message) {
   throw std::logic_error(error_message + "\n" + standard_error_text);
 }
 

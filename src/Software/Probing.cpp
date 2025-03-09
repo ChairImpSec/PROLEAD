@@ -671,7 +671,7 @@ void Software::Probing::Multivariate_AddCombinationToProbingSet(Software::Probin
 // **************************************************************************************************************************
 
 void Software::Probing::GetProbingSets(Software::ThreadSimulationStruct& ThreadSimulation, SettingsStruct& Settings, Software::TestStruct& Test, std::vector<std::tuple<uint32_t, uint32_t>>& OrderOverTwoCombination, std::vector<std::vector<uint32_t>>& ProbeInfoToStandardProbe, uint64_t SimulationIndex){
-	size_t SetIndex = 0;
+	uint64_t SetIndex = 0;
 	uint32_t StandardProbeIndex = 0;
 	int ProbeIndex = 0, CycleIndex = 0;
 	uint32_t NumberOfStandardProbes = ThreadSimulation.StandardProbesPerSimulation.at(SimulationIndex).size();
@@ -847,7 +847,7 @@ void Software::Probing::GetMultivariateProbingSets(std::vector<std::vector<Softw
 // **************************************************************************************************************************
 
 bool Software::Probing::InDistance(Software::SettingsStruct& Settings, std::vector<Software::ProbesStruct>& ProbingSet){
-    size_t ProbeIndex = 0;
+    uint64_t ProbeIndex = 0;
 	int Distance = 0;
 
 	std::vector<unsigned int> Cycles(ProbingSet.size());

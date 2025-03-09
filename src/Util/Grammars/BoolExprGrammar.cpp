@@ -1,13 +1,16 @@
 #include "Util/Grammars/BoolExprGrammar.hpp"
 
-std::function<uint64_t(uint64_t, uint64_t)> Zero =
-    [](uint64_t, uint64_t) { return 0; };
+std::function<uint64_t(uint64_t, uint64_t)> Zero = [](uint64_t, uint64_t) {
+  return 0;
+};
 
-std::function<uint64_t(uint64_t, uint64_t)> One =
-    [](uint64_t, uint64_t) { return 1; };
+std::function<uint64_t(uint64_t, uint64_t)> One = [](uint64_t, uint64_t) {
+  return 1;
+};
 
-std::function<uint64_t(uint64_t, uint64_t)> Not =
-    [](uint64_t lhs, uint64_t) { return ~lhs; };
+std::function<uint64_t(uint64_t, uint64_t)> Not = [](uint64_t lhs, uint64_t) {
+  return ~lhs;
+};
 
 std::function<uint64_t(uint64_t, uint64_t)> And =
     [](uint64_t lhs, uint64_t rhs) { return lhs & rhs; };
@@ -28,6 +31,14 @@ bool Clause::operator==(const Clause& other) const {
 }
 
 uint64_t Clause::Eval(const std::vector<uint64_t>& vals) const {
+  assert(((op_ == &Zero) || (op_ == &One) || (op_ == &Not) || (op_ == &And) ||
+          (op_ == &Or) || (op_ == &Xor)) &&
+         "Error in Clause::Eval: Undefined operation!");
+
+  assert(((lhs_idx_ < vals.size()) || vals.empty()) &&
+         "Error in Clause::Eval: Left operand out of bounds!");
+  assert(((rhs_idx_ < vals.size()) || vals.empty()) &&
+         "Error in Clause::Eval: Right operand out of bounds!");
   return (*op_)(vals[lhs_idx_], vals[rhs_idx_]);
 }
 

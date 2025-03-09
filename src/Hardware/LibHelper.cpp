@@ -1,13 +1,13 @@
 #include "Hardware/LibHelper.hpp"
 
-void BitVectorFromNumber(std::vector<uint64_t>& result, size_t number) {
-  for (size_t i = 0; i < result.size(); ++i) {
+void BitVectorFromNumber(std::vector<uint64_t>& result, uint64_t number) {
+  for (uint64_t i = 0; i < result.size(); ++i) {
       result.at(i) = (number & (1 << i)) != 0;
   }
 }
 
-void BoolVectorFromNumber(std::vector<bool>& result, size_t number) {
-  for (size_t i = 0; i < result.size(); ++i) {
+void BoolVectorFromNumber(std::vector<bool>& result, uint64_t number) {
+  for (uint64_t i = 0; i < result.size(); ++i) {
       result.at(i) = (number & (1 << i)) != 0;
   }
 }
@@ -27,4 +27,4 @@ std::vector<bool> ConcatBoolVectors3(std::vector<bool> first, std::vector<bool>&
     first.push_back(bit);
   }
   return first;
-  }
+}

@@ -21,8 +21,8 @@ public:
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with that the fault is induced.
    */
-  ToggleFault(const Hardware::SignalStruct *const signal, size_t signal_index,
-              size_t clock_cycle, double fault_probability)
+  ToggleFault(const SignalStruct *const signal, uint64_t signal_index,
+              uint64_t clock_cycle, double fault_probability)
       : Fault(signal, signal_index, clock_cycle, fault_probability,
               FaultType::toggle) {}
 

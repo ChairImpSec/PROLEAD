@@ -19,13 +19,11 @@ class Library {
    * @param path The path to the library file. The library file is expected to
    * be in the JSON format.
    * @param name The name of the library.
-   * @param is_relaxed If true, the RR d-probing model is used, otherwise the
-   * robust d-probing model.
    * @return A Library object.
    * @throws std::runtime_error If the library file cannot be opened or the
    * library with the given name is not found.
    */
-  Library(std::string path, std::string name, bool is_relaxed);
+  Library(std::string path, std::string name);
 
   /**
    * @brief Returns the cell with the given identifier.
@@ -34,7 +32,7 @@ class Library {
    * not defined.
    * @note The identifier should be unique for each cell in the library.
    */
-  std::optional<const Cell*> GetCellByIdentifier(const std::string& id) const;
+  std::optional<const Cell*> GetCellById(const std::string& id) const;
 
   /**
    * @brief Returns the buffer cell.
@@ -46,12 +44,4 @@ class Library {
   std::vector<Cell> cells_;  ///< The cells in the library.
   std::optional<const Cell*>
       buffer_;  ///< The index of the buffer cell in the library.
-
-  /**
-   * @brief Parses the cells from the library file.
-   * @param it The iterator pointing to the library in the JSON file.
-   * @param is_relaxed If true, the RR d-probing model is used, otherwise the
-   * robust d-probing model.
-   */
-  void ParseCells(boost::json::array::iterator it, bool is_relaxed);
 };

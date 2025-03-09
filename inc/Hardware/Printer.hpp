@@ -3,7 +3,7 @@
 #include <string>
 
 #include "Hardware/ProbingSets.hpp"
-#include "Hardware/Circuit.hpp"
+#include "Hardware/Simulate.hpp"
 
 namespace Hardware {
 
@@ -16,16 +16,22 @@ class Printer {
  public:
   Printer();
 
-  void SetColumnSize(std::vector<ProbingSet<ExtensionContainer>>& probing_sets, const CircuitStruct& circuit, const Settings& settings);
+  void SetColumnSize(std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
+                     const CircuitStruct& circuit, const Settings& settings);
 
   void SetPath(std::string path);
-  std::string PrintProbes(std::vector<Probe>& probes, const CircuitStruct& circuit, const Settings& settings);
-  std::string PrintProbes(std::vector<Probe*>& probes, const CircuitStruct& circuit, const Settings& settings);
+  std::string PrintProbes(std::vector<Probe>& probes,
+                          const CircuitStruct& circuit,
+                          const Settings& settings);
+  std::string PrintProbes(std::vector<Probe*>& probes,
+                          const CircuitStruct& circuit,
+                          const Settings& settings);
 
   std::string PrintProbingSet(
       ProbingSet<ExtensionContainer>& probing_set,
-      std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
-      const CircuitStruct& circuit, const Settings& settings);
+      std::vector<Propagation<ExtensionContainer>>& propagations,
+      std::vector<Probe>& probe_extensions, const CircuitStruct& circuit,
+      const Settings& settings);
   void PrintProbingSetInformation(
       std::vector<Propagation<ExtensionContainer>>& propagations,
       std::vector<Probe>& standard_probes, std::vector<Probe>& probe_extensions,
@@ -41,7 +47,7 @@ class Printer {
                    std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
                    const CircuitStruct& circuit, const Settings& settings,
                    Simulation& simulation, unsigned int probe_step_index);
-void PrintError(std::string error_message);
+  void PrintError(std::string error_message);
 
  private:
   unsigned int column_size_;
@@ -55,7 +61,8 @@ void PrintError(std::string error_message);
       "nicolai.mueller@rub.de so that we can assist you in fixing the problem. "
       "Thank you for bringing this to our attention.\n";
 
-  std::string PrintProbe(Probe& probe, const CircuitStruct& circuit, const Settings& settings);
+  std::string PrintProbe(Probe& probe, const CircuitStruct& circuit,
+                         const Settings& settings);
   std::string PrintRelaxedExtension(
       ExtensionContainer& probe, std::vector<Probe>& probe_extensions,
       std::vector<Propagation<ExtensionContainer>>& propagations,
@@ -63,14 +70,19 @@ void PrintError(std::string error_message);
   std::string PrintExtensions(
       ProbingSet<ExtensionContainer>& probing_set,
       std::vector<Propagation<ExtensionContainer>>& propagations,
-      std::vector<Probe>& probe_extensions, const CircuitStruct& circuit, const Settings& settings);
+      std::vector<Probe>& probe_extensions, const CircuitStruct& circuit,
+      const Settings& settings);
   void PrintMostLeakingSetsPerCycle(
-      std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
+      std::vector<Propagation<ExtensionContainer>>& propagations,
+      std::vector<Probe>& probe_extensions,
       std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-      const CircuitStruct& circuit, const Settings& settings, std::ofstream& stream);
+      const CircuitStruct& circuit, const Settings& settings,
+      std::ofstream& stream);
   void PrintMostLeakingSets(
-      std::vector<Propagation<ExtensionContainer>>& propagations, std::vector<Probe>& probe_extensions,
+      std::vector<Propagation<ExtensionContainer>>& propagations,
+      std::vector<Probe>& probe_extensions,
       std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-      const CircuitStruct& circuit, const Settings& settings, std::ofstream& stream);
+      const CircuitStruct& circuit, const Settings& settings,
+      std::ofstream& stream);
 };
 }  // namespace Hardware

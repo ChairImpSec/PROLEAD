@@ -234,7 +234,7 @@ double Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  s
 
         for(uint32_t thread = 0; thread < (uint32_t)Settings.Max_no_of_Threads; ++thread){
             GlobalProbingSetSize += GlobalTests.at(thread).GlobalProbingSets.size();
-            for (size_t i = 0; i < GlobalTests.at(thread).GlobalProbingSets.size(); ++i)
+            for (uint64_t i = 0; i < GlobalTests.at(thread).GlobalProbingSets.size(); ++i)
             {
                 if(GlobalTests.at(thread).GlobalProbingSets.at(i).contingency_table_.GetNumberOfEntries() > std::get<2>(LargestContingencyTableProbingSet)){
                     std::get<0>(LargestContingencyTableProbingSet) = thread;

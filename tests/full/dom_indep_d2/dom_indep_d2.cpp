@@ -1,6 +1,5 @@
 #include <catch2/catch.hpp>
 #include "Hardware/Adversaries.hpp"
-#include "Hardware/Prepare.hpp"
 
 class Test {
  public:
@@ -49,19 +48,8 @@ Test TestDomIndepd2(Settings& settings) {
   const std::string topmodule_name = "dom_indep_d2";
   const std::string result_folder_name = "tests/full/dom_indep_d2";
 
-  Hardware::CircuitStruct circuit;
-  Library library(library_file_name, library_name,
-                            settings.IsRelaxedModel());
-  Hardware::Read::DesignFile(design_file_name, topmodule_name, settings,
-                             library, &circuit, 0, 0, 0, NULL);
-  circuit.SetIsProbeAllowed(library, settings);
-  circuit.SetIsExtensionAllowed(library, settings);
-  circuit.SetIsAnalysisAllowed(settings);
-  circuit.SetIsFaultAllowed(settings);
-  std::cout << "done" << std::endl;
-
-  Hardware::Prepare::MakeCircuitDepth(library, &circuit);
-
+  Library library(library_file_name, library_name);
+  CircuitStruct circuit(design_file_name, topmodule_name, settings, library);
   std::vector<SharedData> shared_data(settings.GetNumberOfThreads(),
                                       SharedData(circuit, settings));
   Simulation simulation(circuit, settings);
