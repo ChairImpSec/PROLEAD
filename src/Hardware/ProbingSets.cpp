@@ -485,23 +485,23 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
   }
 
   for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    probe_extension_indices.clear();
     enable_bound = 0;
 
     for (probe_index = 0; probe_index < probe_extension_indices_.size();
          ++probe_index) {
+      probe_extension_indices.clear();
       std::fill(is_enable_index_done.begin(), is_enable_index_done.end(),
                 false);
       indices.push(probe_extension_indices_[probe_index]);
 
       enable_ctr = enable_bound;
 
-      if (propagations[indices.front()]
+      if (propagations[probe_extension_indices_[probe_index]]
               .GetProbeAddress(0)
               ->number_of_enable_indices_) {
-        is_enable_index_done
-            [propagations[indices.front()].GetProbeAddress(0)->enable_index_] =
-                true;
+        is_enable_index_done[propagations[probe_extension_indices_[probe_index]]
+                                 .GetProbeAddress(0)
+                                 ->enable_index_] = true;
       }
 
       while (!indices.empty()) {
@@ -513,13 +513,12 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
                                          probe->signal_indices_.begin(),
                                          probe->signal_indices_.end());
         } else {
-          tmp_index = enable_ctr >> 3;
-          datasets[index].key_[tmp_index] <<= 1;
+          uint64_t simulation_index =
+              simulation.considered_simulation_indices_[index];
 
-          if ((simulation.propagation_values_
-                   [probe->enable_index_]
-                   [simulation.considered_simulation_indices_[index] >> 6] >>
-               (simulation.considered_simulation_indices_[index] & 0b111111)) &
+          if ((simulation.propagation_values_[probe->enable_index_]
+                                             [simulation_index >> 6] >>
+               (simulation_index & 0b111111)) &
               1) {
             for (bit_index = 0; bit_index < probe->propagation_indices_.size();
                  ++bit_index) {
@@ -539,7 +538,8 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
               }
             }
 
-            datasets[index].key_[tmp_index] |= 1;
+            tmp_index = enable_ctr >> 3;
+            datasets[index].key_[tmp_index] |= 1 << (enable_ctr & 0b111);
           } else {
             probe_extension_indices.insert(probe_extension_indices.end(),
                                            probe->signal_indices_.begin(),
@@ -552,24 +552,26 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
 
       enable_bound += propagations[probe_extension_indices_[probe_index]]
                           .GetNumberOfEnableIndices();
-    }
+      std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
+      probe_extension_indices.erase(std::unique(probe_extension_indices.begin(),
+                                                probe_extension_indices.end()),
+                                    probe_extension_indices.end());
 
-    std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(),
-                                              probe_extension_indices.end()),
-                                  probe_extension_indices.end());
+      number_of_extended_probes = probe_extension_indices.size();
 
-    number_of_extended_probes = probe_extension_indices.size();
+      for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
+        tmp_index = (bit_index + enable_bound) >> 3;
+        datasets[index].key_[tmp_index] |=
+            ((simulation.probe_values_
+                  [probe_extension_indices[bit_index]]
+                  [simulation.considered_simulation_indices_[index] >> 6] >>
+              (simulation.considered_simulation_indices_[index] & 0b111111)) &
+             1)
+            << ((bit_index + enable_bound) & 0b111);
+      }
 
-    for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
-      tmp_index = (bit_index + number_of_enablers) >> 3;
-      datasets[index].key_[tmp_index] <<= 1;
-      datasets[index].key_[tmp_index] |=
-          (simulation.probe_values_
-               [probe_extension_indices[bit_index]]
-               [simulation.considered_simulation_indices_[index] >> 6] >>
-           (simulation.considered_simulation_indices_[index] & 0b111111)) &
-          1;
+      enable_bound += propagations[probe_extension_indices_[probe_index]]
+                          .GetNumberOfSignalIndices();
     }
   }
 
