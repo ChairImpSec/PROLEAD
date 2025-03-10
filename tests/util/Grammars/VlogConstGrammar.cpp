@@ -118,6 +118,14 @@ TEST_CASE("Test the parser for Verilog constants", "[VlogConstGrammar]") {
                 vlog_bit_t::one};
     input = "{{1'b1, 1'b0}, {1'b0, 1'b1}}";
     REQUIRE(grammar.Parse(input) == expected);
+
+    expected = {
+        vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::one,
+        vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero,
+        vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::one,
+        vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero, vlog_bit_t::zero};
+    input = "{8'b00001000, 8'b00001000}";
+    REQUIRE(grammar.Parse(input) == expected);
   }
 
   SECTION("Test with nested mixtures") {

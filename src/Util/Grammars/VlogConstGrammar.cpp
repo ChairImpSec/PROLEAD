@@ -194,7 +194,7 @@ VlogConstGrammar::VlogConstGrammar() : VlogConstGrammar::base_type(expr) {
   concat = (qi::lit("{") >> (expr % qi::lit(",")) >>
             qi::lit("}"))[qi::_val = phx::bind(&VlogConstGrammar::Flatten, this,
                                                qi::_1)];
-  expr = inv | reg | rep | concat;
+  expr = inv | reg | concat | rep;
 }
 
 std::vector<vlog_bit_t> VlogConstGrammar::Parse(std::string& vlog_const) {
