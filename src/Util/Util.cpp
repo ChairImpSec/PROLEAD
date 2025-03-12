@@ -1,89 +1,62 @@
 #include "Util/Util.hpp"
 
-int64_t CompareEntries(const TableEntry& lhs, const TableEntry& rhs,
-                       uint64_t size_of_key_in_bytes) {
-  uint8_t lhs_key, rhs_key;
-  for (uint64_t index = 0; index < size_of_key_in_bytes; ++index) {
-    lhs_key = lhs.key_[index];
-    rhs_key = rhs.key_[index];
-
-    if (lhs_key < rhs_key) {
-      return -1;
-    } else if (lhs_key > rhs_key) {
-      return 1;
-    }
-  }
-
-  return 0;
-}
-
-bool MergeEntries(const TableEntry& lhs, const TableEntry& rhs,
-                  uint64_t size_of_key_in_bytes, uint64_t number_of_groups) {
-  uint8_t* key_begin = lhs.key_.get();
-  uint8_t* key_end = key_begin + size_of_key_in_bytes;
-  uint8_t* rhs_key = rhs.key_.get();
-  uint32_t* data_begin = rhs.data_.get();
-  uint32_t* data_end = data_begin + number_of_groups;
-  uint32_t* lhs_data = lhs.data_.get();
-
-  if (std::equal(key_begin, key_end, rhs_key)) {
-    std::transform(data_begin, data_end, lhs_data, lhs_data,
-                   std::plus<uint32_t>());
-    return true;
-  }
-  return false;
-}
-
 template <>
-TableBucketVector::iterator SortAndMergeDuplicates(
-    TableBucketVector& observations, uint64_t size_of_key_in_bytes,
-    uint64_t number_of_groups) {
+void SortAndMergeDuplicates(TableBucketVector& observations,
+                            uint64_t size_of_key_in_bytes,
+                            uint64_t number_of_groups) {
   std::sort(
       observations.begin(), observations.end(),
       [size_of_key_in_bytes](const TableEntry& lhs, const TableEntry& rhs) {
-        return CompareEntries(lhs, rhs, size_of_key_in_bytes) < 0;
+        return std::memcmp(lhs.key_.get(), rhs.key_.get(),
+                           size_of_key_in_bytes) < 0;
       });
 
-  return std::unique(observations.begin(), observations.end(),
-                     [size_of_key_in_bytes, number_of_groups](TableEntry& lhs,
-                                                              TableEntry& rhs) {
-                       return MergeEntries(lhs, rhs, size_of_key_in_bytes,
-                                           number_of_groups);
-                     });
+  auto it = std::unique(
+      observations.begin(), observations.end(),
+      [size_of_key_in_bytes, number_of_groups](TableEntry& lhs,
+                                               TableEntry& rhs) {
+        if (std::memcmp(lhs.key_.get(), rhs.key_.get(), size_of_key_in_bytes) ==
+            0) {
+          for (uint64_t index = 0; index < number_of_groups; ++index) {
+            lhs.data_[index] += rhs.data_[index];
+          }
+          return true;
+        }
+        return false;
+      });
+
+  observations.erase(it, observations.end());
 }
 
 template <>
 void UpdateBucketWithBucket(TableBucketVector& bucket,
                             TableBucketVector& observations,
-                            TableBucketVector::iterator observations_end,
                             uint64_t size_of_key_in_bytes,
                             uint64_t number_of_groups) {
+  uint64_t index;
   int64_t comparison;
-  uint32_t *data_begin, *data_end, *bucket_data;
   TableBucketVector::iterator bucket_it = bucket.begin();
   TableBucketVector::iterator observations_it = observations.begin();
   TableBucketVector::iterator remaining_it = observations.begin();
 
-  while (bucket_it != bucket.end() && observations_it != observations_end) {
-    comparison =
-        CompareEntries(*bucket_it, *observations_it, size_of_key_in_bytes);
-
+  while (bucket_it != bucket.end() && observations_it != observations.end()) {
+    comparison = std::memcmp(bucket_it->key_.get(), observations_it->key_.get(),
+                             size_of_key_in_bytes);
     if (comparison < 0) {
       ++bucket_it;
     } else if (comparison > 0) {
       *remaining_it++ = std::move(*observations_it++);
     } else {
-      data_begin = observations_it->data_.get();
-      data_end = data_begin + number_of_groups;
-      bucket_data = bucket_it->data_.get();
-      std::transform(data_begin, data_end, bucket_data, bucket_data,
-                     std::plus<uint32_t>());
+      for (index = 0; index < number_of_groups; ++index) {
+        bucket_it->data_[index] += observations_it->data_[index];
+      }
+
       ++bucket_it;
       ++observations_it;
     }
   }
 
-  remaining_it = std::move(observations_it, observations_end, remaining_it);
+  remaining_it = std::move(observations_it, observations.end(), remaining_it);
   observations.resize(remaining_it - observations.begin());
 }
 
@@ -199,21 +172,18 @@ void ContingencyTable<TableBucketVector>::IncrementSpecificCounter(
 template <>
 void ContingencyTable<TableBucketVector>::UpdateBucket(
     TableEntry& observation, uint64_t number_of_groups) {
-  TableBucketVector::iterator it = std::lower_bound(
-      bucket_.begin(), bucket_.end(), observation,
-      [this](const TableEntry& lhs, const TableEntry& rhs) {
-        return CompareEntries(lhs, rhs, size_of_key_in_bytes_) < 0;
-      });
+  TableBucketVector::iterator it =
+      std::lower_bound(bucket_.begin(), bucket_.end(), observation,
+                       [this](const TableEntry& lhs, const TableEntry& rhs) {
+                         return std::memcmp(lhs.key_.get(), rhs.key_.get(),
+                                            size_of_key_in_bytes_) < 0;
+                       });
 
-  uint8_t* lhs_key = it->key_.get();
-  uint8_t* rhs_key = observation.key_.get();
-  uint32_t* lhs_data = it->data_.get();
-  uint32_t* rhs_data = observation.data_.get();
-
-  if (it != bucket_.end() &&
-      std::equal(lhs_key, lhs_key + size_of_key_in_bytes_, rhs_key)) {
-    std::transform(rhs_data, rhs_data + number_of_groups, lhs_data, lhs_data,
-                   std::plus<uint32_t>());
+  if (it != bucket_.end() && std::memcmp(it->key_.get(), observation.key_.get(),
+                                         size_of_key_in_bytes_) == 0) {
+    for (uint64_t index = 0; index < number_of_groups; ++index) {
+      it->data_[index] += observation.data_[index];
+    }
   } else {
     bucket_.insert(it, std::move(observation));
   }
@@ -223,11 +193,9 @@ template <>
 void ContingencyTable<TableBucketVector>::UpdateBucket(
     TableBucketVector& observations, uint64_t number_of_groups) {
   uint64_t number_of_entries = bucket_.size();
-  TableBucketVector::iterator observations_end = SortAndMergeDuplicates(
-      observations, size_of_key_in_bytes_, number_of_groups);
+  SortAndMergeDuplicates(observations, size_of_key_in_bytes_, number_of_groups);
   UpdateBucketWithBucket<TableBucketVector>(
-      bucket_, observations, observations_end, size_of_key_in_bytes_,
-      number_of_groups);
+      bucket_, observations, size_of_key_in_bytes_, number_of_groups);
   bucket_.reserve(number_of_entries + observations.size());
   std::move(observations.begin(), observations.end(),
             std::back_inserter(bucket_));
@@ -236,17 +204,23 @@ void ContingencyTable<TableBucketVector>::UpdateBucket(
 
 template <class BucketContainer>
 void ContingencyTable<BucketContainer>::SortBucket(uint64_t number_of_entries) {
-  std::inplace_merge(
-      bucket_.begin(), bucket_.begin() + number_of_entries, bucket_.end(),
-      [this](const TableEntry& lhs, const TableEntry& rhs) {
-        return CompareEntries(lhs, rhs, size_of_key_in_bytes_) < 0;
-      });
+  std::inplace_merge(bucket_.begin(), bucket_.begin() + number_of_entries,
+                     bucket_.end(),
+                     [this](const TableEntry& lhs, const TableEntry& rhs) {
+                       return std::memcmp(lhs.key_.get(), rhs.key_.get(),
+                                          size_of_key_in_bytes_) < 0;
+                     });
 }
 
 template <>
 uint64_t ContingencyTable<TableBucketVector>::SumUpCounters(
     uint32_t* counters, uint64_t number_of_groups) const {
-  return std::accumulate(counters, counters + number_of_groups, uint64_t(0));
+  uint64_t sum = 0;
+  for (uint64_t index = 0; index < number_of_groups; ++index) {
+    sum += counters[index];
+  }
+
+  return sum;
 }
 
 template <>
@@ -287,21 +261,6 @@ void ContingencyTable<TableBucketVector>::UpdateGTestStatistic(
       product = counters[index] * std::log(portion);
       g_test_statistic += product;
     }
-  }
-}
-
-template <>
-void ContingencyTable<TableBucketVector>::CompressCounters(
-    std::vector<uint32_t>& counters, const std::vector<uint64_t>& mapping,
-    uint64_t number_of_groups, uint64_t index) const {
-  uint32_t* ptr = bucket_[index].data_.get();
-  uint64_t compressed_group_index;
-  std::fill(counters.begin(), counters.end(), 0);
-
-  for (uint64_t group_index = 0; group_index < number_of_groups;
-       ++group_index) {
-    compressed_group_index = mapping[group_index];
-    counters[compressed_group_index] += ptr[group_index];
   }
 }
 
@@ -413,7 +372,6 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(
         SetGTestStatistic(number_of_groups, number_of_simulations,
                           group_simulation_ratio, degrees_of_freedom);
     log_10_p_value_ = ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
-
   } else {
     log_10_p_value_ = 0.0;
   }
@@ -510,4 +468,30 @@ void Util::PrintRow(std::vector<unsigned int>& width,
   }
 
   std::cout << std::endl;
+}
+
+void Util::GenerateThreadRng(std::vector<boost::mt19937>& thread_rng,
+                             unsigned int number_of_threads) {
+  unsigned int seed;
+
+  for (unsigned int thread_index = 0; thread_index < number_of_threads;
+       ++thread_index) {
+    seed = rand();
+    boost::mt19937 rng(seed);
+    thread_rng[thread_index] = rng;
+  }
+}
+
+void Util::ExtractCombinationFromBitmask(std::vector<unsigned int>& combination,
+                                         std::vector<bool>& bitmask) {
+  unsigned int combination_index = 0, index = 0;
+
+  while (combination_index != combination.size()) {
+    if (bitmask.at(index)) {
+      combination.at(combination_index) = index;
+      ++combination_index;
+    }
+
+    ++index;
+  }
 }

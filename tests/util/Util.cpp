@@ -6,8 +6,10 @@ TEST_CASE("Test sorting and merging of duplicates",
           "[SortAndMergeDuplicates]") {
   uint64_t i, j;
   uint64_t number_of_groups = 2;
-  uint64_t size_of_key_in_bytes = GENERATE(1, 2, 4, 8, 16, 32, 64, 128);
-  uint64_t number_of_entries = GENERATE(64, 1024, 2048, 4096, 8192, 16384);
+  uint64_t size_of_key_in_bytes =
+      GENERATE(1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024);
+  uint64_t number_of_entries = GENERATE(64, 1024, 2048, 4096, 8192, 16384,
+                                        32768, 65536, 131072, 262144, 524288);
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<uint8_t> dis(0, 255);
@@ -24,10 +26,8 @@ TEST_CASE("Test sorting and merging of duplicates",
     ++observations[i].data_[dis(gen) % number_of_groups];
   }
 
-  TableBucketVector::iterator it = SortAndMergeDuplicates(
-      observations, size_of_key_in_bytes, number_of_groups);
-  uint64_t distance = std::distance(observations.begin(), it);
-  for (i = 1; i < distance; ++i) {
+  SortAndMergeDuplicates(observations, size_of_key_in_bytes, number_of_groups);
+  for (i = 1; i < observations.size(); ++i) {
     REQUIRE(std::memcmp(observations[i - 1].key_.get(),
                         observations[i].key_.get(), size_of_key_in_bytes) < 0);
   }
@@ -72,8 +72,8 @@ TEST_CASE("Test the update of bucket entries with entries from another bucket",
   observations[1].data_[0] = 7;
   observations[1].data_[1] = 8;
 
-  UpdateBucketWithBucket(bucket, observations, observations.end(),
-                         size_of_key_in_bytes, number_of_groups);
+  UpdateBucketWithBucket(bucket, observations, size_of_key_in_bytes,
+                         number_of_groups);
 
   REQUIRE(bucket.size() == 2);
   REQUIRE(bucket[0].key_[0] == 0);
