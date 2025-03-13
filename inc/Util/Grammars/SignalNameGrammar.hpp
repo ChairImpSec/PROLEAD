@@ -9,10 +9,10 @@
  */
 #pragma once
 
-#include <boost/phoenix/phoenix.hpp>    // For e.g. _val
-#include <boost/spirit/include/qi.hpp>  // For e.g. lit
 #include <cinttypes>                    // For uint64_t
 #include <vector>                       // For std::vector
+
+#include "Util/Grammars/VlogConstGrammar.hpp"
 
 namespace qi = boost::spirit::qi;
 namespace phx = boost::phoenix;

@@ -73,6 +73,37 @@ std::vector<std::string> SignalNameGrammar::Parse(const std::string& signal) {
   std::string::iterator end = signal_copy.end();
   std::vector<std::string> parsed;
 
+  try {
+    VlogConstGrammar vlog_const_grammar;
+    std::vector<vlog_bit_t> vlog_const = vlog_const_grammar.Parse(signal_copy);
+    std::string concat_signal;
+
+    for (const vlog_bit_t& bit : vlog_const) {
+      switch (bit) {
+        case vlog_bit_t::zero:
+          concat_signal += "1'b0, ";
+          break;
+        case vlog_bit_t::one:
+          concat_signal += "1'b1, ";
+          break;
+        case vlog_bit_t::unknown:
+          concat_signal += "1'bx, ";
+          break;
+        case vlog_bit_t::high_impedance:
+          concat_signal += "1'bz, ";
+          break;
+        default:
+          throw std::invalid_argument("Error while parsing signal name \"" +
+                                      signal + "\": Invalid Verilog constant!");
+      }
+    }
+
+    concat_signal.pop_back();
+    signal_copy = "{" + concat_signal + "}";
+  } catch (const std::invalid_argument& e) {
+    signal_copy = signal;
+  }
+
   bool success = qi::phrase_parse(begin, end, *this, qi::space, parsed);
 
   if (!success || (begin != end)) {
