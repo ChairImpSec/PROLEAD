@@ -600,25 +600,21 @@ void Settings::ParseSignalNameValuePair(
   }
 }
 
-void Settings::ParseEndCondition(
-    const boost::json::object& json_object,
-    uint64_t& end_condition_clock_cycles,
+void Settings::ParseEndCondition(const boost::json::object& json_object,
     std::vector<std::pair<std::string, bool>>& end_condition_signals) {
   std::string error_context =
       "Error while parsing \"" + SettingNames::END_CONDITION + "\": ";
-  boost::json::object end_condition;
+  boost::json::array json_array;
 
-  if (SetValue(json_object, SettingNames::END_CONDITION, end_condition)) {
-    if (end_condition.contains("clock_cycles") &&
-        end_condition.contains("signals")) {
-      throw std::invalid_argument(
-          error_context + "Redundant keys \"clock_cycles\" and \"signals\"!");
-    } else if (end_condition.contains("clock_cycles") &&
-               !end_condition.contains("signals")) {
-      SetValue(end_condition, "clock_cycles", end_condition_clock_cycles);
-    } else if (!end_condition.contains("clock_cycles") &&
-               end_condition.contains("signals")) {
-      ParseSignalNameValuePair(end_condition, "signals", end_condition_signals);
+  if (SetValue(json_object, SettingNames::END_CONDITION, json_array)) {
+    for (auto& end_condition : json_array) {
+      if (end_condition.is_object()) {
+        ParseSignalNameValuePair(end_condition.as_object(),
+                                 SettingNames::END_CONDITION,
+                                 end_condition_signals);
+      } else {
+        throw std::invalid_argument(error_context + "Invalid format!");
+      }
     }
   }
 }
@@ -834,7 +830,6 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
   settings.waveform_simulation = false;
   settings.number_of_clock_cycles = 0;
   settings.number_of_wait_cycles = 0;
-  settings.end_condition_clock_cycles = 0;
   settings.number_of_simulations = 64;
   settings.number_of_simulations_per_step = 64;
   settings.number_of_simulations_per_write = 0;
@@ -879,7 +874,6 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
         }
 
         settings.number_of_clock_cycles = number_of_clock_cycles;
-        settings.end_condition_clock_cycles = settings.number_of_clock_cycles;
       } else {
         throw std::runtime_error(error_context +
                                  "while checking the value type of the Key \"" +
@@ -913,8 +907,7 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
         simulation_object, settings.always_random_input_signals_rising_edge,
         settings.always_random_input_signals_falling_edge);
 
-    ParseEndCondition(simulation_object, settings.end_condition_clock_cycles,
-                      settings.end_condition_signals);
+    ParseEndCondition(simulation_object, settings.end_condition_signals);
     ParseGroups(simulation_object, settings.groups);
     ParseOutputShares(simulation_object, settings.output_shares);
     ParseArrayOfTriStateBitVectors(
@@ -1294,10 +1287,6 @@ uint64_t Settings::GetNumberOfSimulationsPerWrite() const {
   return simulation.number_of_simulations_per_write;
 }
 
-uint64_t Settings::GetEndConditionClockCycles() const {
-  return simulation.end_condition_clock_cycles;
-}
-
 uint64_t Settings::GetNumberOfGroups() const {
   return simulation.groups.size();
 }
@@ -1469,10 +1458,6 @@ vlog_bit_t Settings::GetAssignedConstantBit(uint64_t clock_index,
                                             uint64_t bit_index) const {
   return simulation.input_sequence[clock_index][assignment_index]
       .signal_values_[bit_index];
-}
-
-bool Settings::EndConditionIsBasedOnClockCycles() const {
-  return simulation.end_condition_signals.empty();
 }
 
 std::string Settings::GetEndConditionVectorName() const {

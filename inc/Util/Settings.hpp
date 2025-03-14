@@ -62,7 +62,6 @@ struct SimulationSettings {
   uint64_t number_of_simulations;
   uint64_t number_of_simulations_per_step;
   uint64_t number_of_simulations_per_write;
-  uint64_t end_condition_clock_cycles;
   std::vector<std::vector<vlog_bit_t>> groups;
   std::vector<std::vector<std::string>> output_shares;
   std::vector<std::vector<vlog_bit_t>> expected_outputs;
@@ -152,7 +151,6 @@ class Settings {
   uint64_t GetNumberOfSimulations() const;
   uint64_t GetNumberOfSimulationsPerStep() const;
   uint64_t GetNumberOfSimulationsPerWrite() const;
-  uint64_t GetEndConditionClockCycles() const;
   uint64_t GetNumberOfGroups() const;
   uint64_t GetNumberOfBitsPerGroup() const;
   vlog_bit_t GetGroupBit(uint64_t group_index, uint64_t bit_index) const;
@@ -201,7 +199,6 @@ class Settings {
   ValueType GetAssignmentType(uint64_t clock_index, uint64_t assignment_index) const;
   std::string GetSignalVectorName(uint64_t clock_index, uint64_t assignment_index) const;
   bool IsAssignedToConstant(uint64_t clock_index, uint64_t assignment_index) const;
-  bool EndConditionIsBasedOnClockCycles() const;
   std::string GetEndConditionVectorName() const;
 
 
@@ -225,7 +222,7 @@ class Settings {
   void ParseAlwaysRandomInputsFallingEdge(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_falling_edge);
   void ParseAlwaysRandomInputsBothEdges(const boost::json::object& json_object, std::vector<std::vector<std::string>>& always_random_input_signals_rising_edge, std::vector<std::vector<std::string>>& always_random_input_signals_falling_edge);  
   void ParseSignalNameValuePair(const boost::json::object& json_object, const std::string& identifier, std::vector<std::pair<std::string, bool>>& name_value_pairs);
-  void ParseEndCondition(const boost::json::object& json_object, uint64_t& end_condition_clock_cycles, std::vector<std::pair<std::string, bool>>& end_condition_signals);
+  void ParseEndCondition(const boost::json::object& json_object, std::vector<std::pair<std::string, bool>>& end_condition_signals);
   void ParseOutputShares(const boost::json::object& json_object, std::vector<std::vector<std::string>>& output_shares);
   void ParseInputSequence(const boost::json::object& json_object, std::vector<std::vector<InputAssignment>>& input_sequence);
   void ParseSimulationSettings(const boost::json::object& json_object, const std::string& identifier, SimulationSettings& settings);

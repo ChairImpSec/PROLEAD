@@ -22,9 +22,6 @@ class Test {
     } else if (!leakage_expected && maximum_leakage_ >= 5.0) {
       return false;
     } else if (number_of_propagations != number_of_propagations_) {
-      std::cout << "number_of_propagations: " << number_of_propagations << " " << number_of_propagations_
-                << std::endl;
-                getchar();
       return false;
     } else if (number_of_standard_probes != number_of_standard_probes_) {
       return false;

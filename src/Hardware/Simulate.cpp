@@ -5,13 +5,6 @@ Simulation::Simulation(CircuitStruct& circuit, Settings& settings) {
   std::string fresh_mask_signal_names;
 
   number_of_clock_cycles_ = settings.GetNumberOfClockCycles();
-  if ((settings.GetEndConditionClockCycles()) &&
-      ((settings.GetEndConditionClockCycles() + 1 +
-        settings.GetNumberOfWaitCycles()) <
-       settings.GetEndConditionClockCycles()))
-    number_of_clock_cycles_ = settings.GetEndConditionClockCycles() + 1 +
-                              settings.GetNumberOfWaitCycles();
-
   number_of_processed_simulations = 0;
   selected_groups_.resize(settings.GetNumberOfSimulationsPerStep());
 
@@ -605,36 +598,26 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
     }
 
     // ----------- check the conditions to terminate the simulation
-    if (clock_cycle > settings.GetNumberOfClockCycles()) {
-      Active = 0;
-      if (settings.GetEndConditionClockCycles())
-        Active = (clock_cycle >= settings.GetEndConditionClockCycles())
-                     ? 0
-                     : FullOne;
-      else
-        for (std::pair<uint64_t, uint64_t>& end_condition_signal :
-             simulation.end_condition_signals_) {
-          Active |= SharedData.signal_values_[end_condition_signal.first] ^
-                    end_condition_signal.second;
-        }
+    Active = 0;
+    for (const std::pair<uint64_t, uint64_t>& end_condition_signal : simulation.end_condition_signals_) {
+      Active |= SharedData.signal_values_[end_condition_signal.first] ^ end_condition_signal.second;
+    }
 
-      if (Active == 0) {
-        if (NumberOfWaitedClockCycles == -1)
-          NumberOfWaitedClockCycles = 0;
-        else
-          NumberOfWaitedClockCycles++;
-      }
-
-      if (NumberOfWaitedClockCycles == (int)settings.GetNumberOfWaitCycles()) {
-        // ClockCyclesTook = ClockCycle;
-        break;
-      } else if ((clock_cycle == (settings.GetNumberOfClockCycles() - 1)) &&
-                 (NumberOfWaitedClockCycles <
-                  (int)settings.GetNumberOfWaitCycles())) {
-        // ClockCyclesTook = ClockCycle + 1;
-        break;
+    if (Active == 0 && !simulation.end_condition_signals_.empty()) {
+      if (NumberOfWaitedClockCycles == -1) {
+        NumberOfWaitedClockCycles = 0;
+      } else {
+        NumberOfWaitedClockCycles++;
       }
     }
+
+    if (NumberOfWaitedClockCycles == (int)settings.GetNumberOfWaitCycles()) {
+      // ClockCyclesTook = ClockCycle;
+      break;
+    } else if ((clock_cycle == (settings.GetNumberOfClockCycles() - 1)) && (NumberOfWaitedClockCycles < (int)settings.GetNumberOfWaitCycles())) {
+      // ClockCyclesTook = ClockCycle + 1;
+      break;
+    }  
 
     if (settings.GetClkEdge() == clk_edge_t::rising)
       SharedData.signal_values_[simulation.clock_signal_index_] = 0;

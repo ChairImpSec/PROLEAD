@@ -268,8 +268,8 @@ void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& 
 		settings.InitialSim_NumberOfInputs++;
 	}
 
-	if (settings2.EndConditionIsBasedOnClockCycles()) {
-		settings.EndSimCondition_ClockCycles = settings2.GetEndConditionClockCycles();
+	if (settings2.GetEndConditionSignalValuePairs().empty()) {
+		settings.EndSimCondition_ClockCycles = 0;
 		settings.EndSimCondition_NumberOfSignals = 0;
 	} else {
 		settings.EndSimCondition_ClockCycles = 0;
