@@ -1886,6 +1886,7 @@ int CircuitStruct::ReadDesignFile(
                           SubCircuit.MaxDepth = 0;
                           SubCircuit.CellsInDepth = NULL;
                           SubCircuit.NumberOfCellsInDepth = NULL;
+                          SubCircuit.cells_.clear();
 
                           NumberOfCellsSubCircuit = SubCircuit.ReadDesignFile(
                               design_file_name, Str1, settings, library,
