@@ -600,18 +600,49 @@ void Settings::ParseSignalNameValuePair(
   }
 }
 
-void Settings::ParseEndCondition(const boost::json::object& json_object,
+void Settings::ParseEndCondition(
+    const boost::json::object& json_object,
     std::vector<std::pair<std::string, bool>>& end_condition_signals) {
   std::string error_context =
       "Error while parsing \"" + SettingNames::END_CONDITION + "\": ";
   boost::json::array json_array;
 
   if (SetValue(json_object, SettingNames::END_CONDITION, json_array)) {
+    std::string signal_name, signal_value;
+    SignalNameGrammar name_grammar;
+    VlogConstGrammar value_grammar;
+    std::vector<vlog_bit_t> values;
+    std::vector<std::string> names;
+
     for (auto& end_condition : json_array) {
       if (end_condition.is_object()) {
-        ParseSignalNameValuePair(end_condition.as_object(),
-                                 SettingNames::END_CONDITION,
-                                 end_condition_signals);
+        if (end_condition.as_object().contains("name") &&
+            end_condition.as_object().contains("value")) {
+          SetValue(end_condition.as_object(), "name", signal_name);
+          SetValue(end_condition.as_object(), "value", signal_value);
+          names = name_grammar.Parse(signal_name);
+          values = value_grammar.Parse(signal_value);
+
+          for (uint64_t idx = 0; idx < names.size(); ++idx) {
+            if (values[idx] == vlog_bit_t::zero) {
+              end_condition_signals.push_back(
+                  std::make_pair(names[idx], false));
+            } else if (values[idx] == vlog_bit_t::one) {
+              end_condition_signals.push_back(std::make_pair(names[idx], true));
+            } else {
+              throw std::invalid_argument(error_context +
+                                          "Invalid argument for \"value\"!");
+            }
+          }
+        } else {
+          if (end_condition.as_object().contains("name")) {
+            throw std::invalid_argument(error_context +
+                                        "Key \"value\" not found!");
+          } else {
+            throw std::invalid_argument(error_context +
+                                        "Key \"name\" not found!");
+          }
+        }
       } else {
         throw std::invalid_argument(error_context + "Invalid format!");
       }
