@@ -5,7 +5,7 @@ std::function<uint64_t(uint64_t, uint64_t)> Zero = [](uint64_t, uint64_t) {
 };
 
 std::function<uint64_t(uint64_t, uint64_t)> One = [](uint64_t, uint64_t) {
-  return 1;
+  return UINT64_MAX;
 };
 
 std::function<uint64_t(uint64_t, uint64_t)> Not = [](uint64_t lhs, uint64_t) {

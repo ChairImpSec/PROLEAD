@@ -27,6 +27,7 @@
             "FDRE"
           ],
           "type": "register",
+          "timing": "rising_edge",
           "parameter": [
             {
               "name": "INIT",
@@ -56,7 +57,85 @@
             "Q"
           ],
           "equations": [
-            "(not (R xor IS_R_INVERTED[0])) and (((not (C xor IS_C_INVERTED[0])) and Q) or ((C xor IS_C_INVERTED[0]) and CE and (D xor IS_D_INVERTED[0])))"
+            "(not (R xor IS_R_INVERTED[0])) and (((not CE) and Q) or ((C xor IS_C_INVERTED[0]) and CE and (D xor IS_D_INVERTED[0])))"
+          ]
+        },
+        {
+          "name": "FDCE",
+          "aliases": [
+            "FDCE"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_C_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_CLR_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_D_INVERTED",
+              "default": "1'b0"
+            }
+          ],
+          "inputs": [
+            "C",
+            "CE",
+            "CLR",
+            "D"
+          ],
+          "clock": "C",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(not (CLR xor IS_CLR_INVERTED[0])) and (((not CE) and Q) or ((C xor IS_C_INVERTED[0]) and CE and (D xor IS_D_INVERTED[0])))"
+          ]
+        },
+        {
+          "name": "FDSE",
+          "aliases": [
+            "FDSE"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_C_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_S_INVERTED",
+              "default": "1'b0"
+            },
+            {
+              "name": "IS_D_INVERTED",
+              "default": "1'b0"
+            }
+          ],
+          "inputs": [
+            "C",
+            "CE",
+            "S",
+            "D"
+          ],
+          "clock": "C",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(S xor IS_S_INVERTED[0]) or (((not CE) and Q) or ((C xor IS_C_INVERTED[0]) and CE and (D xor IS_D_INVERTED[0])))"
           ]
         },
         {
@@ -85,6 +164,28 @@
           "inputs": [],
           "equations": [
             "1"
+          ]
+        },
+        {
+          "name": "LUT1",
+          "aliases": [
+            "LUT1"
+          ],
+          "type": "gate",
+          "parameter": [
+            {
+              "name": "INIT",
+              "default": "2'h0"
+            }
+          ],
+          "outputs": [
+            "O"
+          ],
+          "inputs": [
+            "I0"
+          ],
+          "equations": [
+            "INIT[1:0]"
           ]
         },
         {
