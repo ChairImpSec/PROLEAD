@@ -1,5 +1,13 @@
 #include "Hardware/Circuit.hpp"
 
+char *safe_strcpy(char *dest, const char *src, size_t size) {
+    if (size > 0) {
+        *dest = '\0';
+        return strncat(dest, src, size);
+    }
+    return dest;
+}
+
 std::string parseNextWord(std::string::iterator& it,
                           const std::string::iterator& end) {
   if (it == end)
@@ -35,7 +43,7 @@ void NonCommentFromFile(FILE* FileHeader, char* Str,
 
 void fReadaWord(FileBufferStruct* FileBuffer, char* Buffer, char* Attribute) {
   // reset Buffer
-  memset(Buffer, 0, 10);  // Max_Name_Length
+  memset(Buffer, 0, 10);  // Max_Name_Len
 
   static char Lastch = 0;
   char ch = 0;
@@ -142,8 +150,11 @@ void fReadaWord(FileBufferStruct* FileBuffer, char* Buffer, char* Attribute) {
 
 int TrimSignalName(char* SignalName, int* k) {
   int i, j, l;
-  char* Str = (char*)malloc(Max_Name_Length * sizeof(char));
+  static char* Str = NULL;
   char* ptr;
+
+  if (Str == NULL)
+  	Str = (char*)malloc(Max_Name_Len * sizeof(char));
 
   j = -1;
   l = strlen(SignalName);
@@ -154,7 +165,7 @@ int TrimSignalName(char* SignalName, int* k) {
 
     if (i >= 0) {
       SignalName[i] = 0;
-      strncpy(Str, &SignalName[i + 1], Max_Name_Length - 1);
+      safe_strcpy(Str, &SignalName[i + 1], Max_Name_Len - 1);
       Str[strlen(Str) - 1] = 0;
       ptr = strchr(Str, ':');
       if (ptr == NULL) {
@@ -168,7 +179,6 @@ int TrimSignalName(char* SignalName, int* k) {
     }
   }
 
-  free(Str);
   return (j);
 }
 
@@ -659,7 +669,7 @@ int CircuitStruct::SearchSignalName(char* SignalName, char Trim,
   if (Trim)
     size = strlen(SignalName);
   else
-    size = Max_Name_Length;
+    size = Max_Name_Len;
 
   no_of_Threads = ceil(NumberOfSignals / 10000);
   if (no_of_Threads > settings.GetNumberOfThreads())
@@ -686,8 +696,10 @@ int CircuitStruct::SearchSignalName(char* SignalName, char Trim,
   }
 
   if (SignalIndex == -1) {
-    char* newSignalName = (char*)malloc(Max_Name_Length * sizeof(char));
-    strncpy(newSignalName, SignalName, Max_Name_Length - 4);
+    static char* newSignalName = NULL;
+    if (newSignalName == NULL)
+      newSignalName = (char*)malloc(Max_Name_Len * sizeof(char));
+    safe_strcpy(newSignalName, SignalName, Max_Name_Len - 4);
     strcat(newSignalName, "[0]");
 
 #pragma omp parallel for shared(flag, SignalIndex)
@@ -707,8 +719,6 @@ int CircuitStruct::SearchSignalName(char* SignalName, char Trim,
         }
       }
     }
-
-    free(newSignalName);
   }
 
   return (SignalIndex);
@@ -724,9 +734,11 @@ void CircuitStruct::DesignFile_Find_IO_Port(
   int OutputIndex;
   int TempIndex;
   int i;
-  char* Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
   int* Buffer_int;
   std::string ErrorMessage;
+  static char* Str2 = NULL;
+  if (Str2 == NULL)
+    Str2 = (char*)malloc(Max_Name_Len * sizeof(char));
 
   NumberOfInputPorts = 0;
   NumberOfOutputPorts = 0;
@@ -739,8 +751,8 @@ void CircuitStruct::DesignFile_Find_IO_Port(
     if (strlen(Str1)) {
       for (InputIndex = 0; InputIndex < (int)CellTypeIndex->GetNumberOfInputs();
            InputIndex++) {
-        strncpy(Str2, CellTypeIndex->GetInput(InputIndex).c_str(),
-                Max_Name_Length - 1);
+        safe_strcpy(Str2, CellTypeIndex->GetInput(InputIndex).c_str(),
+                Max_Name_Len - 1);
         i = TrimSignalName(Str2);
 
         if ((!strcmp(Str1 + 1, CellTypeIndex->GetInput(InputIndex).c_str())) ||
@@ -763,8 +775,8 @@ void CircuitStruct::DesignFile_Find_IO_Port(
         for (OutputIndex = 0;
              OutputIndex < (int)CellTypeIndex->GetNumberOfOutputs();
              OutputIndex++) {
-          strncpy(Str2, CellTypeIndex->GetOutput(OutputIndex).c_str(),
-                  Max_Name_Length - 1);
+          safe_strcpy(Str2, CellTypeIndex->GetOutput(OutputIndex).c_str(),
+                  Max_Name_Len - 1);
           i = TrimSignalName(Str2);
 
           if ((!strcmp(Str1 + 1,
@@ -820,14 +832,14 @@ void CircuitStruct::DesignFile_Find_IO_Port(
   } else {
     if (strlen(Str1)) {
       TempIndex = strlen(SubCircuitInstanceName);
-      strncat(SubCircuitInstanceName, ".", Max_Name_Length - 1);
+      strncat(SubCircuitInstanceName, ".", Max_Name_Len - 1);
       if (Str1[1] == '\\')
-        strncat(SubCircuitInstanceName, Str1 + 2, Max_Name_Length - 1);
+        strncat(SubCircuitInstanceName, Str1 + 2, Max_Name_Len - 1);
       else
-        strncat(SubCircuitInstanceName, Str1 + 1, Max_Name_Length - 1);
+        strncat(SubCircuitInstanceName, Str1 + 1, Max_Name_Len - 1);
 
-      strncpy(Str1, "\\", Max_Name_Length - 1);
-      strncat(Str1, SubCircuitInstanceName, Max_Name_Length - 1);
+      safe_strcpy(Str1, "\\", Max_Name_Len - 1);
+      strncat(Str1, SubCircuitInstanceName, Max_Name_Len - 1);
       SubCircuitInstanceName[TempIndex] = '\0';
 
       for (InputIndex = 0; InputIndex < SubCircuit->NumberOfInputs;
@@ -836,7 +848,7 @@ void CircuitStruct::DesignFile_Find_IO_Port(
         if (SignalIndex > NumberOfConstants)
           SignalIndex -= NumberOfSignalsOffset;
 
-        strncpy(Str2, signals_[SignalIndex].Name, Max_Name_Length - 1);
+        safe_strcpy(Str2, signals_[SignalIndex].Name, Max_Name_Len - 1);
         i = TrimSignalName(Str2);
 
         if ((!strcmp(Str1, signals_[SignalIndex].Name)) ||
@@ -863,7 +875,7 @@ void CircuitStruct::DesignFile_Find_IO_Port(
           if (SignalIndex > NumberOfConstants)
             SignalIndex -= NumberOfSignalsOffset;
 
-          strncpy(Str2, signals_[SignalIndex].Name, Max_Name_Length - 1);
+          safe_strcpy(Str2, signals_[SignalIndex].Name, Max_Name_Len - 1);
           i = TrimSignalName(Str2);
 
           if ((!strcmp(Str1, signals_[SignalIndex].Name)) ||
@@ -924,8 +936,6 @@ void CircuitStruct::DesignFile_Find_IO_Port(
       }
     }
   }
-
-  free(Str2);
 }
 
 void CircuitStruct::DesignFile_Find_Signal_Name(
@@ -946,8 +956,6 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
   int OutputIndex2;
   int TempIndex;
   int* Buffer_int;
-  char* Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
-  char* Str3 = (char*)malloc(Max_Name_Length * sizeof(char));
   int Index1, Index2, IndexUpwards;
   int j;
   int* IOSignals = NULL;
@@ -956,6 +964,15 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
   char* strptr2;
   char doneone;
   std::string ErrorMessage;
+
+  static char* Str2 = NULL;
+  static char* Str3 = NULL;
+
+  if (Str2 == NULL)
+    Str2 = (char*)malloc(Max_Name_Len * sizeof(char));
+
+  if (Str3 == NULL)
+    Str3 = (char*)malloc(Max_Name_Len * sizeof(char));
 
   if (strlen(Str1)) {
     strptr = Str1;
@@ -969,7 +986,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
       strptr2 = strchr(strptr, ',');
       if (strptr2) *strptr2 = 0;
 
-      strncpy(Str2, strptr, Max_Name_Length - 1);
+      safe_strcpy(Str2, strptr, Max_Name_Len - 1);
       doneone = 0;
 
       SignalIndex = SearchSignalName(strptr, 1, settings);
@@ -977,7 +994,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
       if (SignalIndex != -1) {
         for (SignalIndex2 = SignalIndex - 1; SignalIndex2 >= 0;
              SignalIndex2--) {
-          strncpy(Str2, signals_[SignalIndex2].Name, Max_Name_Length - 1);
+          safe_strcpy(Str2, signals_[SignalIndex2].Name, Max_Name_Len - 1);
           TrimSignalName(Str2);
 
           if (strcmp(strptr, Str2)) break;
@@ -985,7 +1002,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
 
         for (SignalIndex = SignalIndex2 + 1; SignalIndex < NumberOfSignals;
              SignalIndex++) {
-          strncpy(Str2, signals_[SignalIndex].Name, Max_Name_Length - 1);
+          safe_strcpy(Str2, signals_[SignalIndex].Name, Max_Name_Len - 1);
           TrimSignalName(Str2);
 
           if (!strcmp(strptr, Str2)) {
@@ -1003,7 +1020,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
       }
 
       if (!doneone) {
-        strncpy(Str2, strptr, Max_Name_Length - 1);
+        safe_strcpy(Str2, strptr, Max_Name_Len - 1);
         Index1 = TrimSignalName(Str2, &Index2);
 
         if (Index1 <
@@ -1014,7 +1031,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
           if (SignalIndex != -1) {
             for (SignalIndex2 = SignalIndex - 1; SignalIndex2 >= 0;
                  SignalIndex2--) {
-              strncpy(Str2, signals_[SignalIndex2].Name, Max_Name_Length - 1);
+              safe_strcpy(Str2, signals_[SignalIndex2].Name, Max_Name_Len - 1);
               TrimSignalName(Str2);
 
               if (strcmp(strptr, Str2)) break;
@@ -1022,7 +1039,7 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
 
             for (SignalIndex = SignalIndex2 + 1; SignalIndex < NumberOfSignals;
                  SignalIndex++) {
-              strncpy(Str2, signals_[SignalIndex].Name, Max_Name_Length - 1);
+              safe_strcpy(Str2, signals_[SignalIndex].Name, Max_Name_Len - 1);
               TrimSignalName(Str2);
 
               if (!strcmp(strptr, Str2)) {
@@ -1162,10 +1179,9 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
 
       // if (!strcmp(Str1, "assign"))
       sprintf(Str2, "assign_%d", *NumberOfCells);
-      cells_[*NumberOfCells].Name = (char*)malloc(Max_Name_Length);
-      strncpy(cells_[*NumberOfCells].Name, Str2,
-              Max_Name_Length - 1);  // Str2 = "assign_%d"
-      cells_[*NumberOfCells].Name[Max_Name_Length - 1] = '\0';
+      cells_[*NumberOfCells].Name = (char*)malloc(Max_Name_Len);
+      safe_strcpy(cells_[*NumberOfCells].Name, Str2,
+              Max_Name_Len - 1);  // Str2 = "assign_%d"
 
       SignalIndex = IOSignals[TempIndex];
       OutputIndex = 0;
@@ -1344,8 +1360,6 @@ void CircuitStruct::DesignFile_Find_Signal_Name(
   }
 
   free(IOSignals);
-  free(Str2);
-  free(Str3);
 }
 
 int CircuitStruct::ReadDesignFile(
@@ -1358,8 +1372,8 @@ int CircuitStruct::ReadDesignFile(
   char ReadSignalsFinished;
   const Cell* CellTypeIndex = NULL;
   int CaseIndex = 0;
-  char* Str1 = (char*)malloc(Max_Name_Length * sizeof(char));
-  char* Str2 = (char*)malloc(Max_Name_Length * sizeof(char));
+  char* Str1 = (char*)malloc(Max_Name_Len * sizeof(char));
+  char* Str2 = (char*)malloc(Max_Name_Len * sizeof(char));
   char ch;
   int i, j;
   int MyNumberofIO = 0;
@@ -1376,7 +1390,7 @@ int CircuitStruct::ReadDesignFile(
 
   int NumberOfCellsSubCircuit;
   char SubCircuitRead = 0;
-  char* SubCircuitInstanceName = (char*)malloc(Max_Name_Length * sizeof(char));
+  char* SubCircuitInstanceName = (char*)malloc(Max_Name_Len * sizeof(char));
   int* InputPorts = NULL;
   int NumberOfInputPorts = 0;
   int* OutputPorts = NULL;
@@ -1390,7 +1404,7 @@ int CircuitStruct::ReadDesignFile(
   NumberOfOutputs = 0;
   NumberOfInputs = 0;
 
-  char* Phrase = (char*)malloc(Max_Name_Length * sizeof(char));
+  char* Phrase = (char*)malloc(Max_Name_Len * sizeof(char));
   char Task;
   char IO_port_found = 0;
 
@@ -1405,9 +1419,8 @@ int CircuitStruct::ReadDesignFile(
   // Signals = (SignalStruct **)malloc(NumberOfSignals * sizeof(SignalStruct
   // *));
 
-  signals_[0].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[0].Name, "1'b0", Max_Name_Length - 1);
-  signals_[0].Name[Max_Name_Length - 1] = '\0';
+  signals_[0].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[0].Name, "1'b0", Max_Name_Len - 1);
   signals_[0].Type = signal_t::wire;
   signals_[0].NumberOfInputs = 0;
   signals_[0].Inputs = NULL;
@@ -1418,9 +1431,8 @@ int CircuitStruct::ReadDesignFile(
   signals_[0].is_analysis_allowed = false;
   signals_[0].Deleted = 0;
 
-  signals_[1].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[1].Name, "1'b1", Max_Name_Length - 1);
-  signals_[1].Name[Max_Name_Length - 1] = '\0';
+  signals_[1].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[1].Name, "1'b1", Max_Name_Len - 1);
   signals_[1].Type = signal_t::wire;
   signals_[1].NumberOfInputs = 0;
   signals_[1].Inputs = NULL;
@@ -1431,9 +1443,8 @@ int CircuitStruct::ReadDesignFile(
   signals_[1].is_analysis_allowed = false;
   signals_[1].Deleted = 0;
 
-  signals_[2].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[2].Name, "1'h0", Max_Name_Length - 1);
-  signals_[2].Name[Max_Name_Length - 1] = '\0';
+  signals_[2].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[2].Name, "1'h0", Max_Name_Len - 1);
   signals_[2].Type = signal_t::wire;
   signals_[2].NumberOfInputs = 0;
   signals_[2].Inputs = NULL;
@@ -1444,9 +1455,8 @@ int CircuitStruct::ReadDesignFile(
   signals_[2].is_analysis_allowed = false;
   signals_[2].Deleted = 0;
 
-  signals_[3].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[3].Name, "1'h1", Max_Name_Length - 1);
-  signals_[3].Name[Max_Name_Length - 1] = '\0';
+  signals_[3].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[3].Name, "1'h1", Max_Name_Len - 1);
   signals_[3].Type = signal_t::wire;
   signals_[3].NumberOfInputs = 0;
   signals_[3].Inputs = NULL;
@@ -1457,9 +1467,8 @@ int CircuitStruct::ReadDesignFile(
   signals_[3].is_analysis_allowed = false;
   signals_[3].Deleted = 0;
 
-  signals_[4].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[4].Name, "1'bx", Max_Name_Length - 1);
-  signals_[4].Name[Max_Name_Length - 1] = '\0';
+  signals_[4].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[4].Name, "1'bx", Max_Name_Len - 1);
   signals_[4].Type = signal_t::wire;
   signals_[4].NumberOfInputs = 0;
   signals_[4].Inputs = NULL;
@@ -1470,9 +1479,8 @@ int CircuitStruct::ReadDesignFile(
   signals_[4].is_analysis_allowed = false;
   signals_[4].Deleted = 0;
 
-  signals_[5].Name = (char*)malloc(Max_Name_Length);
-  strncpy(signals_[5].Name, "1'hx", Max_Name_Length - 1);
-  signals_[5].Name[Max_Name_Length - 1] = '\0';
+  signals_[5].Name = (char*)malloc(Max_Name_Len);
+  safe_strcpy(signals_[5].Name, "1'hx", Max_Name_Len - 1);
   signals_[5].Type = signal_t::wire;
   signals_[5].NumberOfInputs = 0;
   signals_[5].Inputs = NULL;
@@ -1549,8 +1557,7 @@ int CircuitStruct::ReadDesignFile(
 
           if ((!strcmp(Str1, "input")) || (!strcmp(Str1, "output")) ||
               (!strcmp(Str1, "wire"))) {
-            strncpy(Phrase, Str1, Max_Name_Length - 1);
-            Phrase[Max_Name_Length - 1] = '\0';
+            safe_strcpy(Phrase, Str1, Max_Name_Len - 1);
             i = 0;
             Index1 = -1;
             Index2 = -1;
@@ -1604,10 +1611,9 @@ int CircuitStruct::ReadDesignFile(
                     signals_.resize(NumberOfSignals + 1);
 
                     signals_[NumberOfSignals].Name =
-                        (char*)malloc(Max_Name_Length);
-                    strncpy(signals_[NumberOfSignals].Name, Str2,
-                            Max_Name_Length - 1);
-                    signals_[NumberOfSignals].Name[Max_Name_Length - 1] = '\0';
+                        (char*)malloc(Max_Name_Len);
+                    safe_strcpy(signals_[NumberOfSignals].Name, Str2,
+                            Max_Name_Len - 1);
                     signals_[NumberOfSignals].NumberOfInputs = 0;
                     signals_[NumberOfSignals].Inputs = NULL;
                     signals_[NumberOfSignals].Output = -1;
@@ -1669,8 +1675,7 @@ int CircuitStruct::ReadDesignFile(
         //----------------------------------//
 
         if (FileBuffer.Index <= FileBuffer.Size) {
-          strncpy(Str2, Str1, Max_Name_Length - 1);
-          Str2[Max_Name_Length - 1] = '\0';
+          safe_strcpy(Str2, Str1, Max_Name_Len - 1);
 
           do {
             fReadaWord(&FileBuffer, Str1, NULL);
@@ -1918,48 +1923,47 @@ int CircuitStruct::ReadDesignFile(
                     } else if (Task == Task_find_module_name) {
                       if (!SubCircuitRead) {
                         cells_[NumberOfCells].Name =
-                            (char*)malloc(Max_Name_Length);
-                        strncpy(cells_[NumberOfCells].Name, Str1,
-                                Max_Name_Length - 1);
-                        cells_[NumberOfCells].Name[Max_Name_Length - 1] = '\0';
+                            (char*)malloc(Max_Name_Len);
+                        safe_strcpy(cells_[NumberOfCells].Name, Str1,
+                                Max_Name_Len - 1);
                       } else {
-                        strncpy(SubCircuitInstanceName, Str1,
-                                Max_Name_Length - 1);
+                        safe_strcpy(SubCircuitInstanceName, Str1,
+                                Max_Name_Len - 1);
 
                         for (SignalIndex = SubCircuit.NumberOfConstants;
                              SignalIndex < SubCircuit.NumberOfSignals;
                              SignalIndex++) {
-                          strncpy(Str1, "\\", Max_Name_Length - 1);
+                          safe_strcpy(Str1, "\\", Max_Name_Len - 1);
                           strncat(Str1, SubCircuitInstanceName,
-                                  Max_Name_Length - 1);
-                          strncat(Str1, ".", Max_Name_Length - 1);
+                                  Max_Name_Len - 1);
+                          strncat(Str1, ".", Max_Name_Len - 1);
                           if (SubCircuit.signals_[SignalIndex].Name[0] == '\\')
                             strncat(Str1,
                                     SubCircuit.signals_[SignalIndex].Name + 1,
-                                    Max_Name_Length - 1);
+                                    Max_Name_Len - 1);
                           else
                             strncat(Str1, SubCircuit.signals_[SignalIndex].Name,
-                                    Max_Name_Length - 1);
+                                    Max_Name_Len - 1);
 
-                          strncpy(SubCircuit.signals_[SignalIndex].Name, Str1,
-                                  Max_Name_Length - 1);
+                          safe_strcpy(SubCircuit.signals_[SignalIndex].Name, Str1,
+                                  Max_Name_Len - 1);
                         }
 
                         for (CellIndex = 0; CellIndex < NumberOfCellsSubCircuit;
                              CellIndex++) {
-                          strncpy(Str1, "\\", Max_Name_Length - 1);
+                          safe_strcpy(Str1, "\\", Max_Name_Len - 1);
                           strncat(Str1, SubCircuitInstanceName,
-                                  Max_Name_Length - 1);
-                          strncat(Str1, ".", Max_Name_Length - 1);
+                                  Max_Name_Len - 1);
+                          strncat(Str1, ".", Max_Name_Len - 1);
                           if (SubCircuit.cells_[CellIndex].Name[0] == '\\')
                             strncat(Str1, SubCircuit.cells_[CellIndex].Name + 1,
-                                    Max_Name_Length - 1);
+                                    Max_Name_Len - 1);
                           else
                             strncat(Str1, SubCircuit.cells_[CellIndex].Name,
-                                    Max_Name_Length - 1);
+                                    Max_Name_Len - 1);
 
-                          strncpy(SubCircuit.cells_[CellIndex].Name, Str1,
-                                  Max_Name_Length - 1);
+                          safe_strcpy(SubCircuit.cells_[CellIndex].Name, Str1,
+                                  Max_Name_Len - 1);
                         }
                       }
 
@@ -2166,10 +2170,8 @@ int CircuitStruct::ReadDesignFile(
   }
 
   // turn '1bx' and '1hx' to constant 0
-  strncpy(signals_[4].Name, "1'b0", Max_Name_Length - 1);
-  signals_[4].Name[Max_Name_Length - 1] = '\0';
-  strncpy(signals_[5].Name, "1'h0", Max_Name_Length - 1);
-  signals_[5].Name[Max_Name_Length - 1] = '\0';
+  safe_strcpy(signals_[4].Name, "1'b0", Max_Name_Len - 1);
+  safe_strcpy(signals_[5].Name, "1'h0", Max_Name_Len - 1);
   return NumberOfCells;
 }
 

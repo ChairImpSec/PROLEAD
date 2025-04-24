@@ -13,7 +13,7 @@
 #include "Util/Grammars/VlogConstGrammar.hpp"
 #include "Util/Settings.hpp"
 
-#define Max_Name_Length 10000
+#define Max_Name_Len 1000000
 
 #define FullOne 0xffffffffffffffff
 #define GroupInput 0x8000000000000000
