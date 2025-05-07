@@ -556,7 +556,7 @@ void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsS
 	PyList_Append(sys_path, PyUnicode_FromString(path_of_directory.c_str()));
 	
     /* create parameter array for compilation step*/
-    argv = new wchar_t*[settings.InitialSim_NumberOfInputs+4]; //inputs and name of function containing cipher
+    argv = new wchar_t*[settings.InitialSim_NumberOfInputs+5]; //inputs and name of function containing cipher
     argv[0] = new wchar_t[strlen(settings.funcContainingCipher.c_str())+1];
     mbstowcs(argv[0], settings.funcContainingCipher.c_str(), strlen(settings.funcContainingCipher.c_str()) + 1);
     argv[1] = new wchar_t[strlen(vm["binary"].as<std::string>().c_str())+1];
