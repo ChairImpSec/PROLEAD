@@ -517,16 +517,19 @@ void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsS
                           " -Wl,-Map," + vm["mapfile"].as<std::string>() + " -o " + vm["binary"].as<std::string>() + " " + vm["designfile"].as<std::string>();
 
 		boost::process::system(build_arm_binary);
+		std::cout << "Successfully created binary file at " << vm["binary"].as<std::string>() << std::endl;
 	}
 
-	const std::string create_asm = "arm-none-eabi-objdump " + vm["binary"].as<std::string>() + " -d"; 
-	boost::process::system(create_asm, boost::process::std_out > vm["asmfile"].as<std::string>());
+	if (std::filesystem::exists(vm["asmfile"].as<std::string>())) {
+		std::cout << "Assembly file already exists at: " << vm["asmfile"].as<std::string>() << std::endl;
+	} else {
+		const std::string create_asm = "arm-none-eabi-objdump " + vm["binary"].as<std::string>() + " -d"; 
+		boost::process::system(create_asm, boost::process::std_out > vm["asmfile"].as<std::string>());
+		std::cout << "Successfully created assmebly file at " << vm["asmfile"].as<std::string>() << std::endl;
+	}
 
 	wchar_t** argv;
 	std::string ErrorMessage;
-
-
-
 
     /*
     *   second step: parse arguments
