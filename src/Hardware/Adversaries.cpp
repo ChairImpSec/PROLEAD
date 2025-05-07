@@ -1475,6 +1475,7 @@ double Adversaries<RobustProbe>::EvaluateMultivariateRobustProbingSecurity(
             probing_sets_[index].Deconstruct();
           }
         }
+        probing_sets_.resize(number_of_probing_sets);
       }
 
       set_index = 0;
@@ -1559,6 +1560,7 @@ double Adversaries<RelaxedProbe>::EvaluateMultivariateRobustProbingSecurity(
             probing_sets_[index].Deconstruct();
           }
         }
+        probing_sets_.resize(number_of_probing_sets);
       }
 
       set_index = 0;
@@ -1634,6 +1636,7 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(
       if (set_index == number_of_probing_sets) {
         std::cout << GetNumberOfProbingSets()
                   << " probing sets generated...done!" << std::endl;
+
         if (settings_.GetMinimization() != Minimization::none) {
           RemoveUninformativeProbingSets();
         }
@@ -1652,7 +1655,8 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(
             if (probing_sets_[index].GetProbeAddresses().size()) {
               probing_sets_[index].Deconstruct();
             }
-          }
+          }         
+          probing_sets_.resize(number_of_probing_sets);
         }
 
         set_index = 0;
@@ -1749,6 +1753,7 @@ double Adversaries<RelaxedProbe>::EvaluateUnivariateRobustProbingSecurity(
               probing_sets_[index].Deconstruct();
             }
           }
+          probing_sets_.resize(number_of_probing_sets);
         }
 
         set_index = 0;
