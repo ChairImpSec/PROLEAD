@@ -1,0 +1,50 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "compact_distributions": true
+    },
+    "simulation": {
+        "groups": [
+            "128'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+            "128'hda39a3ee5e6b4b0d3255bfef95601890"
+        ],
+        "number_of_clock_cycles": 25210,
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "share1[127:0]",
+                        "value": "group_in0[127:0]",
+                        "type": "arr"
+                    },
+                    {
+                        "name": "share2[127:0]",
+                        "value": "group_in1[127:0]",
+                        "type": "arr"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 8192,
+        "number_of_simulations_per_step": 1024,
+        "number_of_simulations_per_write": 8192
+    },
+    "software": {
+        "compiler_flags": "-march=armv7-m -O3",
+        "location_of_cipher": "main",
+        "pipeline_stages": 3
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "transitional_leakage": false,
+        "clock_cycles": ["2853-5706"],
+        "probe_placement": {
+            "include": {
+                "signals": ".*"
+            },
+            "exclude": {
+                "signals": "VR.*|FULLHR|FULLVR.*|HR.*|MEM.*|MEMSHADOW*|PF.*"
+            }
+        }
+    }
+}

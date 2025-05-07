@@ -1,0 +1,1 @@
+./../../../../../release/PROLEAD -p sw -k ../../src/linker.ld -d ../../src/main.c -b ../../bin/binary.elf -f ../../bin/binary.map -a ../../bin/disassembled.txt -c config.json 2>&1 | tee Report.dat
