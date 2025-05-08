@@ -10,7 +10,7 @@ void Hardware::Execute(const po::variables_map& vm) {
   std::string library_name = vm["libraryname"].as<std::string>();
 
   std::string design_file_name;
-  if (design_file_names.size() != 1) {
+  if (design_file_names.size() == 1) {
     design_file_name = design_file_names[0];
   } else {
     throw std::runtime_error(
