@@ -1,0 +1,49 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "compact_distributions": false
+    },
+    "simulation": {
+        "groups": [
+            "1600'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+            "1600'h49A2EC5C7BFFF1EA3BA1307FE944F675C26504E72635F516E409C5A224F9411814263AAE22790C94C832CF1C8AE83E8CCB0ED04F555A7CB81166C47B95703661F270C98CF2FEBE6461AED9215A63E5059F56A5111A2FF20126C84703CD31B8435F55CFDB167CA5810321710D26E6A6A935D617233FA95AEB64FC8FD0B75A93309C05191BF7A630AD762E19D60CDA5B8CC44746A4A0E5FE90D46F8E7F2DA497FF57D05362054E288B4D49806F304715BDEEA95AA61E2698D58A47C033F9CCD584E7DDE140798F25F1"
+        ],
+        "number_of_clock_cycles": 3831,
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "input_s1[1599:0]",
+                        "value": "group_in0[1599:0]",
+                        "type": "arr"
+                    },
+                    {
+                        "name": "input_s2[1599:0]",
+                        "value": "group_in1[1599:0]",
+                        "type": "arr"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 8192,
+        "number_of_simulations_per_step": 1024,
+        "number_of_simulations_per_write": 8192
+    },
+    "software": {
+        "compiler_flags": "-march=armv7-m -O3",
+        "location_of_cipher": "main",
+        "pipeline_stages": 3
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "transitional_leakage": false,
+        "probe_placement": {
+            "include": {
+                "signals": ".*"
+            },
+            "exclude": {
+                "signals": "VR.*|FULLHR|FULLVR.*|HR.*|MEM.*|MEMSHADOW*|PF.*"
+            }
+        }
+    }
+}

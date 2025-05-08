@@ -16,14 +16,19 @@ ProgramOptions::ProgramOptions() {
           libraryname_option_default),
       libraryname_option_info)(
       designfile_option_name,
-      boost::program_options::value<std::string>()
-          ->default_value(designfile_option_default)
-          ->notifier([](const std::string& path_to_file) {
-            boost::filesystem::path file_path(path_to_file);
-            if (file_path.extension() == ".c") {
-              ValidateFileEnding(path_to_file, ".c");
-            } else {
-              ValidateFileEnding(path_to_file, ".v");
+      boost::program_options::value<std::vector<std::string>>()
+          ->multitoken()
+          ->default_value(std::vector<std::string>{designfile_option_default}, "")
+          ->notifier([](const std::vector<std::string>& paths_to_files) {
+            for (const auto& path_to_file : paths_to_files) {
+              boost::filesystem::path file_path(path_to_file);
+              if (file_path.extension() == ".c") {
+                ValidateFileEnding(path_to_file, ".c");
+              } else if (file_path.extension() == ".s") {
+                ValidateFileEnding(path_to_file, ".s");
+              } else {
+                ValidateFileEnding(path_to_file, ".v");
+              }
             }
           }),
       designfile_option_info)(

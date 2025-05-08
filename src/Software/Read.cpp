@@ -513,8 +513,15 @@ void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& 
 
 void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsStruct& settings){
 	if(settings.externalMake == "0") {
+		std::vector<std::string> design_files = vm["designfile"].as<std::vector<std::string>>();
+		std::string design_file_names = design_files[0];
+
+		for (uint64_t idx = 1; idx < design_files.size(); ++idx) {
+			design_file_names += " " + design_files[idx];
+		}
+
     	const std::string build_arm_binary = "arm-none-eabi-gcc " + settings.compilerFlags + " -Wl,-T" + vm["linkerfile"].as<std::string>() +
-                          " -Wl,-Map," + vm["mapfile"].as<std::string>() + " -o " + vm["binary"].as<std::string>() + " " + vm["designfile"].as<std::string>();
+                          " -Wl,-Map," + vm["mapfile"].as<std::string>() + " -o " + vm["binary"].as<std::string>() + " " + design_file_names;
 
 		boost::process::system(build_arm_binary);
 		std::cout << "Successfully created binary file at " << vm["binary"].as<std::string>() << std::endl;
@@ -572,6 +579,7 @@ void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsS
         argv[i+5] = new wchar_t[strlen(settings.InitialSim_InputName[i])+1];
         mbstowcs(argv[i+5], settings.InitialSim_InputName[i], strlen(settings.InitialSim_InputName[i]) + 1);
     }
+	
     PySys_SetArgv(settings.InitialSim_NumberOfInputs+5, argv);
 	PyObject* pName = NULL;
 	PyObject* pModule = NULL;

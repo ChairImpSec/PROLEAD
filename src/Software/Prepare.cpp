@@ -3,11 +3,11 @@
 void Software::Prepare::All(const po::variables_map& vm, Software::ConfigProbesStruct& probes, Software::SettingsStruct& settings, Settings& settings2, std::vector<Software::SharedDataStruct>& SharedInputData, Software::HelperStruct& GlobalHelper, std::vector<Software::ThreadSimulationStruct>& GlobalThreadSimulations){
   std::string result_folder_name = vm["resultfolder"].as<std::string>();
   std::string linker_file_name = vm["linkerfile"].as<std::string>();
-  std::string design_file_name = vm["designfile"].as<std::string>();
+  std::vector<std::string> design_file_names = vm["designfile"].as<std::vector<std::string>>();
 
 	bool ignore_makefile_config = false;
 
-	if(design_file_name == "design.v"){
+	if(design_file_names.size() == 1 && design_file_names[0] == "design.v"){
 		settings.externalBinaryInformation.resize(3);
 		settings.externalBinaryInformation.at(0) = vm["binary"].as<std::string>();
 		settings.externalBinaryInformation.at(1) = vm["mapfile"].as<std::string>();

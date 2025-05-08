@@ -1,0 +1,49 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "compact_distributions": false
+    },
+    "simulation": {
+        "groups": [
+            "800'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+            "800'h96E9EF117080B287760E0A93F3EF1941981A003415104BE7688DABAF879665AB1F0A97A39A599E1A91FA66610EFCF41B54D05CB18458689F1527178824247A224CF35ABF643697AFA7800BF078F539E542D0FF512F45F8F199BFA023FBC604F45DD431E5"
+        ],
+        "number_of_clock_cycles": 2040,
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "input_s1[799:0]",
+                        "value": "group_in0[799:0]",
+                        "type": "arr"
+                    },
+                    {
+                        "name": "input_s2[799:0]",
+                        "value": "group_in1[799:0]",
+                        "type": "arr"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 8192,
+        "number_of_simulations_per_step": 1024,
+        "number_of_simulations_per_write": 8192
+    },
+    "software": {
+        "compiler_flags": "-march=armv7-m -O3",
+        "location_of_cipher": "main",
+        "pipeline_stages": 3
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "transitional_leakage": false,
+        "probe_placement": {
+            "include": {
+                "signals": ".*"
+            },
+            "exclude": {
+                "signals": "VR.*|FULLHR|FULLVR.*|HR.*|MEM.*|MEMSHADOW*|PF.*"
+            }
+        }
+    }
+}

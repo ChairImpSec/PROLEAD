@@ -14,7 +14,8 @@ TEST_CASE("Test ProgramOptions Parse function", "[ProgramOptions]") {
     REQUIRE_FALSE(vm.count("help"));
     REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
     REQUIRE(vm["libraryname"].as<std::string>() == "NANG45");
-    REQUIRE(vm["designfile"].as<std::string>() == "design.v");
+    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
+            std::vector<std::string>{"design.v"});
     REQUIRE(vm["modulename"].as<std::string>() == "circuit");
     REQUIRE(vm["configfile"].as<std::string>() == "config.json");
     REQUIRE(vm["resultfolder"].as<std::string>() == ".");
@@ -33,7 +34,8 @@ TEST_CASE("Test ProgramOptions Parse function", "[ProgramOptions]") {
                           "--libraryname",
                           "custom_libraryname",
                           "--designfile",
-                          "custom_designfile.v",
+                          "custom_designfile1.v",
+                          "custom_designfile2.v",
                           "--modulename",
                           "custom_modulename",
                           "--configfile",
@@ -58,7 +60,9 @@ TEST_CASE("Test ProgramOptions Parse function", "[ProgramOptions]") {
     REQUIRE_FALSE(vm.count("help"));
     REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
     REQUIRE(vm["libraryname"].as<std::string>() == "custom_libraryname");
-    REQUIRE(vm["designfile"].as<std::string>() == "custom_designfile.v");
+    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
+            std::vector<std::string>{"custom_designfile1.v",
+                                     "custom_designfile2.v"});
     REQUIRE(vm["modulename"].as<std::string>() == "custom_modulename");
     REQUIRE(vm["configfile"].as<std::string>() == "config.json");
     REQUIRE(vm["resultfolder"].as<std::string>() == "../util");
@@ -102,7 +106,8 @@ TEST_CASE("Test ProgramOptions Parse function", "[ProgramOptions]") {
     REQUIRE_FALSE(vm.count("help"));
     REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
     REQUIRE(vm["libraryname"].as<std::string>() == "custom_libraryname");
-    REQUIRE(vm["designfile"].as<std::string>() == "custom_designfile.v");
+    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
+            std::vector<std::string>{"custom_designfile.v"});
     REQUIRE(vm["modulename"].as<std::string>() == "custom_modulename");
     REQUIRE(vm["configfile"].as<std::string>() == "config.json");
     REQUIRE(vm["resultfolder"].as<std::string>() == "../util");
