@@ -26,6 +26,8 @@ ProgramOptions::ProgramOptions() {
                 ValidateFileEnding(path_to_file, ".c");
               } else if (file_path.extension() == ".s") {
                 ValidateFileEnding(path_to_file, ".s");
+              } else if (file_path.extension() == ".S") {
+                ValidateFileEnding(path_to_file, ".S");
               } else {
                 ValidateFileEnding(path_to_file, ".v");
               }

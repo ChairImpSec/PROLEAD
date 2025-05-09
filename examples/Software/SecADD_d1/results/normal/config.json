@@ -1,0 +1,45 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "compact_distributions": false
+    },
+    "simulation": {
+        "groups": [
+            "1536'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+            "1536'h1b1fc4258a6d9e09e03aabfafa9003c84924a427667fcb10b6981e4eaf798264c96e175bdea6791676bed3477f819aecfc28eead89702576770e5a41c7782bf6c98f5b61f65425aacdd99e5ed0f99a70670412a3dc5d81b59c8c10aa2f9fd11906be92aa97af74914f243200cc04a461e0ae98990adf95dbf8f1a6951d49dd1c0e7b11ca2ea8b969606f537d880b28b7dd560dae07ef3ad23b796b5f0346092052867468e7a9db67d70931fb130439b107c02c28344d1c2eb8f97c86fdabd037"
+        ],
+        "number_of_clock_cycles": 4030,
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "input_s1[1535:0]",
+                        "value": "group_in0[1535:0]",
+                        "type": "arr"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 8192,
+        "number_of_simulations_per_step": 1024,
+        "number_of_simulations_per_write": 8192
+    },
+    "software": {
+        "compiler_flags": "-mcpu=cortex-m4 -mthumb -std=gnu99 -O3 -Wall -Wextra -Wshadow -fno-common -nostartfiles -ffreestanding",
+        "location_of_cipher": "main",
+        "pipeline_stages": 3
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "transitional_leakage": false,
+        "clock_cycles": ["1-4024"],
+        "probe_placement": {
+            "include": {
+                "signals": ".*"
+            },
+            "exclude": {
+                "signals": "VR.*|FULLHR|FULLVR.*|HR.*|MEM.*|MEMSHADOW*|PF.*"
+            }
+        }
+    }
+}

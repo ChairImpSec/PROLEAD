@@ -1,0 +1,44 @@
+{
+    "performance": {
+        "max_number_of_threads": "half",
+        "compact_distributions": true
+    },
+    "simulation": {
+        "groups": [
+            "1024'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+            "1024'h8d67e43dc0de79202f738d39305af0add85a39e91d238b13ae1315dfca6c5fe810a94fc4b5db61b6fefeab88c7f466a9274fd334dc53b5223a90928f8b9080d7a0788cd6108eabf80b7ceab70ca5f9fab8d0f9b6cabf839b6b14dcf8109df7964889cf3576ffd74efa999932a5df49f04d16bf2cdfcefbdf7693bf170d8a4e39"
+        ],
+        "number_of_clock_cycles": 52001,
+        "input_sequence": [
+            {
+                "signals": [
+                    {
+                        "name": "input_s1[1023:0]",
+                        "value": "group_in0[1023:0]",
+                        "type": "arr"
+                    }
+                ]
+            }
+        ],
+        "number_of_simulations": 8192,
+        "number_of_simulations_per_step": 1024,
+        "number_of_simulations_per_write": 8192
+    },
+    "software": {
+        "compiler_flags": "-mcpu=cortex-m4 -mthumb -std=gnu99 -O3 -Wall -Wextra -Wshadow -fno-common -nostartfiles -ffreestanding",
+        "location_of_cipher": "main",
+        "pipeline_stages": 3
+    },
+    "side_channel_analysis": {
+        "order": 1,
+        "transitional_leakage": false,
+        "probe_placement": {
+            "include": {
+                "signals": ".*"
+            },
+            "exclude": {
+                "signals": "VR.*|FULLHR|FULLVR.*|HR.*|MEM.*|MEMSHADOW*|PF.*"
+            }
+        }
+    }
+}
