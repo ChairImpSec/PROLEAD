@@ -1,0 +1,181 @@
+{
+  "libraries": [
+    {
+      "name": "custom",
+      "cells": [
+        {
+          "name": "dff",
+          "aliases": [
+            "DFF"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "C",
+            "D"
+          ],
+          "clock": "C",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "((not C) and Q) or (C and D)"
+          ]
+        },
+        {
+          "name": "and",
+          "aliases": [
+            "AND"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "A and B"
+          ]
+        },
+        {
+          "name": "nand",
+          "aliases": [
+            "NAND"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (A and B)"
+          ]
+        },
+        {
+          "name": "or",
+          "aliases": [
+            "OR"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "A or B"
+          ]
+        },
+        {
+          "name": "nor",
+          "aliases": [
+            "NOR"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (A or B)"
+          ]
+        },
+        {
+          "name": "xor",
+          "aliases": [
+            "XOR"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "A xor B"
+          ]
+        },
+        {
+          "name": "xnor",
+          "aliases": [
+            "XNOR"
+          ],
+          "type": "relaxed_gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (A xor B)"
+          ]
+        },
+        {
+          "name": "not",
+          "aliases": [
+            "NOT"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not A"
+          ]
+        },
+        {
+          "name": "mux",
+          "aliases": [
+            "Mux2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "S",
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(S and B) or (A and (not S))"
+          ]
+        },
+        {
+          "name": "buf",
+          "aliases": [
+            "BUFF",
+            "BUF"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (not A)"
+          ]
+        }
+      ]
+    }
+  ]
+}
