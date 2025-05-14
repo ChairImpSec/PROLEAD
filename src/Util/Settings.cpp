@@ -1114,63 +1114,59 @@ void Settings::ParseSideChannelAnalysisSettings(
   settings.variate = Analysis::univariate;
   settings.distance = 10;
 
-  if (SetValue(json_object, identifier, sca)) {
-    SetValue(sca, SettingNames::ORDER_OF_TEST, settings.order);
-    SetValue(sca, SettingNames::RELAXED_MODEL, settings.relaxed_model);
+  SetValue(json_object, identifier, sca);
+  SetValue(sca, SettingNames::ORDER_OF_TEST, settings.order);
+  SetValue(sca, SettingNames::RELAXED_MODEL, settings.relaxed_model);
 
-    SetValue(sca, SettingNames::TRANSITIONAL_LEAKAGE,
-             settings.transitional_leakage);
-    if (!settings.transitional_leakage && settings.relaxed_model) {
-      throw std::invalid_argument(error_context + "Invalid combination of \"" +
-                                  SettingNames::TRANSITIONAL_LEAKAGE +
-                                  "\" and \"" + SettingNames::RELAXED_MODEL +
-                                  "\"!");
-    }
-
-    SetValue(sca, SettingNames::EFFECT_SIZE, settings.effect_size);
-    if ((settings.effect_size < 0) || (settings.effect_size > 1)) {
-      throw std::invalid_argument(error_context + "Invalid argument for \"" +
-                                  SettingNames::EFFECT_SIZE + "\"!");
-    }
-
-    SetValue(sca, SettingNames::ALPHA_THRESHOLD, settings.alpha_threshold);
-    if ((settings.alpha_threshold < 0)) {
-      throw std::invalid_argument(error_context + "Invalid argument for \"" +
-                                  SettingNames::ALPHA_THRESHOLD + "\"!");
-    }
-
-    SetValue(sca, SettingNames::BETA_THRESHOLD, settings.beta_threshold);
-    if ((settings.beta_threshold < 0)) {
-      throw std::invalid_argument(error_context + "Invalid argument for \"" +
-                                  SettingNames::BETA_THRESHOLD + "\"!");
-    }
-
-    std::string variate_string;
-    if (SetValue(sca, SettingNames::VARIATE, variate_string)) {
-      if (variate_string == "univariate") {
-        settings.variate = Analysis::univariate;
-      } else if (variate_string == "multivariate") {
-        settings.variate = Analysis::multivariate;
-      } else if (variate_string == "exclusive_multivariate") {
-        settings.variate = Analysis::exclusive_multivariate;
-      } else {
-        throw std::invalid_argument(error_context + "Invalid argument for \"" +
-                                    SettingNames::VARIATE + "\"!");
-      }
-    }
-
-    ParseClockCycles(sca, SettingNames::CLOCK_CYCLES, settings.clock_cycles);
-    SetValue(sca, SettingNames::DISTANCE, settings.distance);
-    ParseIncludeSettings(sca, SettingNames::PROBE_PLACEMENT, true,
-                         settings.locations);
-    ParseIncludeSettings(sca, SettingNames::EXTENSION_ROUTES, true,
-                         settings.extension);
-    ParseIncludeSettings(sca, SettingNames::OBSERVED_EXTENSIONS, true,
-                         settings.analysis);
-  } else {
-    throw std::runtime_error(error_context + "Key \"" + identifier +
-                             "\" not found!");
+  SetValue(sca, SettingNames::TRANSITIONAL_LEAKAGE,
+           settings.transitional_leakage);
+  if (!settings.transitional_leakage && settings.relaxed_model) {
+    throw std::invalid_argument(error_context + "Invalid combination of \"" +
+                                SettingNames::TRANSITIONAL_LEAKAGE +
+                                "\" and \"" + SettingNames::RELAXED_MODEL +
+                                "\"!");
   }
+
+  SetValue(sca, SettingNames::EFFECT_SIZE, settings.effect_size);
+  if ((settings.effect_size < 0) || (settings.effect_size > 1)) {
+    throw std::invalid_argument(error_context + "Invalid argument for \"" +
+                                SettingNames::EFFECT_SIZE + "\"!");
+  }
+
+  SetValue(sca, SettingNames::ALPHA_THRESHOLD, settings.alpha_threshold);
+  if ((settings.alpha_threshold < 0)) {
+    throw std::invalid_argument(error_context + "Invalid argument for \"" +
+                                SettingNames::ALPHA_THRESHOLD + "\"!");
+  }
+
+  SetValue(sca, SettingNames::BETA_THRESHOLD, settings.beta_threshold);
+  if ((settings.beta_threshold < 0)) {
+    throw std::invalid_argument(error_context + "Invalid argument for \"" +
+                                SettingNames::BETA_THRESHOLD + "\"!");
+  }
+
+  std::string variate_string;
+  if (SetValue(sca, SettingNames::VARIATE, variate_string)) {
+    if (variate_string == "univariate") {
+      settings.variate = Analysis::univariate;
+    } else if (variate_string == "multivariate") {
+      settings.variate = Analysis::multivariate;
+    } else if (variate_string == "exclusive_multivariate") {
+      settings.variate = Analysis::exclusive_multivariate;
+    } else {
+      throw std::invalid_argument(error_context + "Invalid argument for \"" +
+                                  SettingNames::VARIATE + "\"!");
+    }
+  }
+
+  ParseClockCycles(sca, SettingNames::CLOCK_CYCLES, settings.clock_cycles);
+  SetValue(sca, SettingNames::DISTANCE, settings.distance);
+  ParseIncludeSettings(sca, SettingNames::PROBE_PLACEMENT, true,
+                       settings.locations);
+  ParseIncludeSettings(sca, SettingNames::EXTENSION_ROUTES, true,
+                       settings.extension);
+  ParseIncludeSettings(sca, SettingNames::OBSERVED_EXTENSIONS, true,
+                       settings.analysis);
 }
 
 void Settings::ParseFaultInjectionSettings(
