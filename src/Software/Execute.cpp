@@ -8,7 +8,9 @@ void Software::Execute(const po::variables_map& vm){
     std::vector<Software::SharedDataStruct> SharedData;
     std::vector<Software::ThreadSimulationStruct> GlobalThreadSimulations;
 
-    boost::json::object config_file = vm["configfile"].as<boost::json::object>();
+    std::string config_file_name = vm["configfile"].as<std::string>();
+    boost::json::object config_file = ValidateJson(config_file_name);
+
     Settings settings2(config_file, false);
 
     std::cout << "Start Software Leakage Evaluation" << std::endl << std::endl;

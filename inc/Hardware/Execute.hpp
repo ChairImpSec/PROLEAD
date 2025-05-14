@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Util/ProgramOptions.hpp"
 #include "Hardware/Adversaries.hpp"
-#include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
 

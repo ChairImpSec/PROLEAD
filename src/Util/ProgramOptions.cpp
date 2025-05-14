@@ -6,7 +6,7 @@ ProgramOptions::ProgramOptions() {
       boost::program_options::value<std::string>()
           ->default_value(libraryfile_option_default)
           ->notifier([](const std::string& path_to_file) {
-            return ValidateJson(path_to_file);
+            ValidateFileEnding(path_to_file, ".json");
           }),
       libraryfile_option_info)(
       libraryname_option_name,
@@ -41,7 +41,7 @@ ProgramOptions::ProgramOptions() {
       boost::program_options::value<std::string>()
           ->default_value(configfile_option_default)
           ->notifier([](const std::string& path_to_file) {
-            return ValidateJson(path_to_file);
+            ValidateFileEnding(path_to_file, ".json");
           }),
       configfile_option_info)(
       resultfolder_option_name,

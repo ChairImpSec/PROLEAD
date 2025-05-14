@@ -2,10 +2,10 @@
 
 void Hardware::Execute(const po::variables_map& vm) {
   std::string result_folder_name = vm["resultfolder"].as<std::string>();
-  boost::json::object library_file = vm["libraryfile"].as<boost::json::object>();
+  std::string library_file_name = vm["libraryfile"].as<std::string>();
   std::vector<std::string> design_file_names =
       vm["designfile"].as<std::vector<std::string>>();
-  boost::json::object config_file = vm["configfile"].as<boost::json::object>();
+  std::string config_file_name = vm["configfile"].as<std::string>();
   std::string topmodule_name = vm["modulename"].as<std::string>();
   std::string library_name = vm["libraryname"].as<std::string>();
 
@@ -18,6 +18,8 @@ void Hardware::Execute(const po::variables_map& vm) {
         "file should be provided!");
   }
 
+  boost::json::object library_file = ValidateJson(library_file_name);
+  boost::json::object config_file = ValidateJson(config_file_name);
   Settings settings(config_file, true);
   Library library(library_file, library_name);
   CircuitStruct circuit(design_file_name, topmodule_name, settings, library);
