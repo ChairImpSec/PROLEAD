@@ -1,23 +1,7 @@
 #include "Hardware/Library.hpp"
 
-Library::Library(std::string path, std::string name) {
-  std::ifstream file(path);
-  if (file.fail()) {
-    throw std::runtime_error("Error while opening the library file at \"" +
-                             path + "\". File not found!");
-  } else {
-    std::cout << "Successfully opened the library file at \"" << path << "\"."
-              << std::endl;
-  }
-
-  std::string data{std::istreambuf_iterator<char>(file),
-                   std::istreambuf_iterator<char>()};
-  js::parse_options opt;
-  opt.allow_comments = true;
-  js::monotonic_resource mr;
-  js::storage_ptr sp(&mr);
-  js::value json_data = js::parse(data, sp, opt);
-  js::array libs = json_data.at("libraries").as_array();
+Library::Library(const boost::json::object& library_file, std::string name) {
+  js::array libs = library_file.at("libraries").as_array();
 
   js::array::iterator it =
       std::find_if(libs.begin(), libs.end(), [&](const js::value& lib) {

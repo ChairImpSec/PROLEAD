@@ -23,7 +23,7 @@ class Library {
    * @throws std::runtime_error If the library file cannot be opened or the
    * library with the given name is not found.
    */
-  Library(std::string path, std::string name);
+  Library(const boost::json::object& library_file, std::string name);
 
   /**
    * @brief Returns the cell with the given identifier.

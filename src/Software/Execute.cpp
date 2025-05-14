@@ -8,8 +8,8 @@ void Software::Execute(const po::variables_map& vm){
     std::vector<Software::SharedDataStruct> SharedData;
     std::vector<Software::ThreadSimulationStruct> GlobalThreadSimulations;
 
-    std::string config_file_name = vm["configfile"].as<std::string>();
-    Settings settings2(config_file_name, false);
+    boost::json::object config_file = vm["configfile"].as<boost::json::object>();
+    Settings settings2(config_file, false);
 
     std::cout << "Start Software Leakage Evaluation" << std::endl << std::endl;
     Software::Prepare::All(vm, probes, settings, settings2, SharedData, GlobalHelper, GlobalThreadSimulations);

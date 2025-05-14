@@ -1,5 +1,6 @@
 #include <catch2/catch.hpp>
 
+#include "Util/ProgramOptions.hpp"
 #include "Hardware/Adversaries.hpp"
 
 class Test {
@@ -50,7 +51,8 @@ Test TestDomIndepd1FaultAsProbe(Settings& settings) {
   const std::string topmodule_name = "dom_indep_d1_fault_as_probe";
   const std::string result_folder_name = "tests/full/dom_indep_d1_fault_as_probe";
 
-  Library library(library_file_name, library_name);
+  boost::json::object library_file = ValidateJson(library_file_name);
+  Library library(library_file, library_name);
   CircuitStruct circuit(design_file_name, topmodule_name, settings, library);
   std::vector<SharedData> shared_data(settings.GetNumberOfThreads(),
                                       SharedData(circuit, settings));
@@ -83,8 +85,8 @@ TEST_CASE("Test full verification (dom_indep_d1_fault_as_probe)",
           "[dom_indep_d1_fault_as_probe]") {
   const std::string config_file_name =
       "tests/full/dom_indep_d1_fault_as_probe/dom_indep_d1_fault_as_probe.json";
-
-  Settings settings(config_file_name, true);
+  boost::json::object config_file = ValidateJson(config_file_name);
+  Settings settings(config_file, true);
 
   SECTION("Robust Probing Model with consideration of all simulations") {
     Test test = TestDomIndepd1FaultAsProbe(settings);

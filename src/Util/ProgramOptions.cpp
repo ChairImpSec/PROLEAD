@@ -6,9 +6,7 @@ ProgramOptions::ProgramOptions() {
       boost::program_options::value<std::string>()
           ->default_value(libraryfile_option_default)
           ->notifier([](const std::string& path_to_file) {
-            if (libraryfile_option_default != path_to_file) {
-              ValidateJson(path_to_file);
-            }
+            return ValidateJson(path_to_file);
           }),
       libraryfile_option_info)(
       libraryname_option_name,
@@ -18,7 +16,8 @@ ProgramOptions::ProgramOptions() {
       designfile_option_name,
       boost::program_options::value<std::vector<std::string>>()
           ->multitoken()
-          ->default_value(std::vector<std::string>{designfile_option_default}, "")
+          ->default_value(std::vector<std::string>{designfile_option_default},
+                          "")
           ->notifier([](const std::vector<std::string>& paths_to_files) {
             for (const auto& path_to_file : paths_to_files) {
               boost::filesystem::path file_path(path_to_file);
@@ -42,7 +41,7 @@ ProgramOptions::ProgramOptions() {
       boost::program_options::value<std::string>()
           ->default_value(configfile_option_default)
           ->notifier([](const std::string& path_to_file) {
-            ValidateJson(path_to_file);
+            return ValidateJson(path_to_file);
           }),
       configfile_option_info)(
       resultfolder_option_name,
@@ -105,14 +104,30 @@ boost::program_options::variables_map ProgramOptions::Parse(int argc,
 
 void ProgramOptions::PrintHelp() { std::cout << description << std::endl; }
 
-void ValidateJson(const std::string& path_to_json_file) {
+boost::json::object ValidateJson(const std::string& path_to_json_file) {
   try {
-    boost::property_tree::ptree pt;
-    boost::property_tree::read_json(path_to_json_file, pt);
-  } catch (const boost::property_tree::json_parser_error& e) {
-    throw boost::program_options::validation_error(
-        boost::program_options::validation_error::invalid_option_value,
-        e.what());
+    std::ifstream stream(path_to_json_file);
+    if (!stream.is_open()) {
+      throw std::runtime_error(
+          "Error while opening the file located at path \"" +
+          path_to_json_file + "\": File not found!");
+    }
+
+    std::string data{std::istreambuf_iterator<char>(stream),
+                     std::istreambuf_iterator<char>()};
+    std::string data_without_comments = std::regex_replace(
+        data, std::regex(R"(//.*?$)", std::regex::multiline), "");
+    data_without_comments = std::regex_replace(
+        data_without_comments, std::regex(R"(/\*[\s\S]*?\*/)"), "");
+    boost::json::value json_data = boost::json::parse(
+        data_without_comments,
+        boost::json::make_shared_resource<boost::json::monotonic_resource>());
+    return json_data.as_object();
+  } catch (const boost::system::system_error& e) {
+    std::string error_message =
+        "Error while parsing the JSON file located at path \"" +
+        path_to_json_file + "\": ";
+    throw std::runtime_error(error_message + e.what());
   }
 }
 

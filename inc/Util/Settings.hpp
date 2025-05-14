@@ -114,8 +114,7 @@ class Settings {
   SideChannelAnalysisSettings side_channel_analysis;
   FaultInjectionSettings fault_injection;
 
-  Settings(const std::string& config_file_path, bool is_hardware_target);
-
+  Settings(const boost::json::object& config_file, bool is_hardware_target);
 
   /*
   * Performance settings getter and setter

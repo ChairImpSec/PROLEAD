@@ -5,10 +5,10 @@
 #pragma once
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
 #include <boost/filesystem.hpp>
+#include <boost/json.hpp>
 #include <boost/program_options.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 #include <iostream>
+#include <regex>
 #include <string>
 
 /**
@@ -123,7 +123,7 @@ class ProgramOptions {
  * - If parsing fails due to a pt::json_parser_error, converts the error into
  *   a po::validation_error and throws it.
  */
-void ValidateJson(const std::string& path_to_json_file);
+boost::json::object ValidateJson(const std::string& path_to_json_file);
 
 /**
  * @brief Validates that a file at the specified path has the expected file

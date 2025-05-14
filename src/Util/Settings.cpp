@@ -1509,26 +1509,21 @@ bool Settings::IsDistanceSmallEnough(uint64_t distance) const {
   return is_distance_small_enough && is_no_unallowed_univariate_set;
 }
 
-Settings::Settings(const std::string& config_file_path, bool is_target_hardware)
+Settings::Settings(const boost::json::object& config_file, bool is_target_hardware)
     : is_target_hardware_(is_target_hardware) {
-  boost::json::object json_object = ParseJsonFile(config_file_path);
 
-  std::cout << "Successfully parsed the settings file at \"" << config_file_path
-            << "\"." << std::endl;
-  settings_schema.Validate(json_object);
-  std::cout << "Successfully validated the settings file at \""
-            << config_file_path << "\"." << std::endl;
-
-  ParseFiniteField(json_object, SettingNames::INPUT_FINITE_FIELD,
+  settings_schema.Validate(config_file);
+  std::cout << "Successfully validated the settings file." << std::endl;
+  ParseFiniteField(config_file, SettingNames::INPUT_FINITE_FIELD,
                    input_finite_field);
-  ParseFiniteField(json_object, SettingNames::OUTPUT_FINITE_FIELD,
+  ParseFiniteField(config_file, SettingNames::OUTPUT_FINITE_FIELD,
                    output_finite_field);
-  ParsePerformanceSettings(json_object, SettingNames::PERFORMANCE, performance);
-  ParseHardwareSettings(json_object, SettingNames::HARDWARE, hardware);
-  ParseSoftwareSettings(json_object, SettingNames::SOFTWARE, software);
-  ParseSimulationSettings(json_object, SettingNames::SIMULATION, simulation);
+  ParsePerformanceSettings(config_file, SettingNames::PERFORMANCE, performance);
+  ParseHardwareSettings(config_file, SettingNames::HARDWARE, hardware);
+  ParseSoftwareSettings(config_file, SettingNames::SOFTWARE, software);
+  ParseSimulationSettings(config_file, SettingNames::SIMULATION, simulation);
   ParseSideChannelAnalysisSettings(
-      json_object, SettingNames::SIDE_CHANNEL_ANALYSIS, side_channel_analysis);
-  ParseFaultInjectionSettings(json_object, SettingNames::FAULT_INJECTION,
+      config_file, SettingNames::SIDE_CHANNEL_ANALYSIS, side_channel_analysis);
+  ParseFaultInjectionSettings(config_file, SettingNames::FAULT_INJECTION,
                               fault_injection);
 }

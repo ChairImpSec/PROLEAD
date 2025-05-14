@@ -2,6 +2,7 @@
 #include <catch2/catch.hpp>
 #include <cstdint>
 
+#include "Util/ProgramOptions.hpp"
 #include "Software/Analyze.hpp"
 #include "Software/Prepare.hpp"
 
@@ -9,14 +10,14 @@ namespace po = boost::program_options;
 
 namespace Software {
 TEST_CASE("Test full verification (aes_rp_d1_binary)", "[software][aes_rp_d1_binary]") {
+  const std::string config_file_name =
+      "tests/full/aes_rp_d1_binary/aes_rp_d1_binary.json";
+  boost::json::object config_file = ValidateJson(config_file_name);
+
   po::variables_map vm;
   vm.insert({"designfile",
              po::variable_value{
                  std::string("tests/full/aes_rp_d1_binary/aes_rp_d1_binary_c.c"),
-                 false}});
-  vm.insert({"configfile",
-             po::variable_value{
-                 std::string("tests/full/aes_rp_d1_binary/aes_rp_d1_binary.json"),
                  false}});
   vm.insert(
       {"resultfolder",
@@ -39,7 +40,6 @@ TEST_CASE("Test full verification (aes_rp_d1_binary)", "[software][aes_rp_d1_bin
                  false}});
   vm.insert({"platform", po::variable_value{std::string("software"), false}});
 
-  const std::string settings_file_path = vm["configfile"].as<std::string>();
   const std::string result_folder_path = vm["resultfolder"].as<std::string>();
 
   ConfigProbesStruct probes;
@@ -53,7 +53,7 @@ TEST_CASE("Test full verification (aes_rp_d1_binary)", "[software][aes_rp_d1_bin
   settings.externalBinaryInformation[0] = vm["binary"].as<std::string>();
   settings.externalBinaryInformation[1] = vm["mapfile"].as<std::string>();
   settings.externalBinaryInformation[2] = vm["asmfile"].as<std::string>();
-  Settings settings2(settings_file_path, false);
+  Settings settings2(config_file, false);
   Read::SettingsFile(settings, settings2, probes, true);
 
   SECTION("With transitions in normal mode") {

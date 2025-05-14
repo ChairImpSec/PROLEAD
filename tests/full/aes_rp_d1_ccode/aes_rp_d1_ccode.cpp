@@ -2,6 +2,7 @@
 #include <catch2/catch.hpp>
 #include <cstdint>
 
+#include "Util/ProgramOptions.hpp"
 #include "Software/Analyze.hpp"
 #include "Software/Prepare.hpp"
 
@@ -9,15 +10,14 @@ namespace po = boost::program_options;
 
 namespace Software {
 TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[software][aes_rp_d1_ccode]") {
+    const std::string config_file_name =
+      "tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode.json";
+  boost::json::object config_file = ValidateJson(config_file_name);
   po::variables_map vm;
   vm.insert(
       {"designfile",
        po::variable_value{
            std::string("tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c"), false}});
-  vm.insert(
-      {"configfile",
-       po::variable_value{
-           std::string("tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode.json"), false}});
   vm.insert(
       {"resultfolder",
        po::variable_value{std::string("tests/full/aes_rp_d1_ccode/"), false}});
@@ -39,7 +39,6 @@ TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[software][aes_rp_d1_ccod
            std::string("tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode.txt"), false}});
   vm.insert({"platform", po::variable_value{std::string("software"), false}});
 
-  const std::string settings_file_path = vm["configfile"].as<std::string>();
   const std::string result_folder_path = vm["resultfolder"].as<std::string>();
 
   ConfigProbesStruct probes;
@@ -49,7 +48,7 @@ TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[software][aes_rp_d1_ccod
   std::vector<ThreadSimulationStruct> global_thread_simulations;
   double maximum_leakage;
 
-  Settings settings2(settings_file_path, false);
+  Settings settings2(config_file, false);
   Read::SettingsFile(settings, settings2, probes, false);
 
   SECTION("With transitions in normal mode") {
