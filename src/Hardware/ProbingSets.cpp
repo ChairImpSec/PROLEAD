@@ -307,8 +307,11 @@ void ProbingSet<RelaxedProbe>::CompactTableUpdate(
         simulation
             .selected_groups_[simulation.considered_simulation_indices_[index]];
     datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
     datasets[index].data_ =
         std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
+    std::memset(datasets[index].data_.get(), 0,
+                sizeof(uint32_t) * settings.GetNumberOfGroups());
     datasets[index].data_[group_index] = 1;
     counter = 0;
 
@@ -413,9 +416,11 @@ void ProbingSet<RobustProbe>::NormalTableUpdateWithAllSimulations(
   TableBucketVector datasets(number_of_simulations);
   for (uint64_t index = 0; index < number_of_simulations; ++index) {
     group_index = simulation.selected_groups_[index];
-    datasets[index].key_ =
-        std::make_unique_for_overwrite<uint8_t[]>(number_of_key_blocks);
+    datasets[index].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
+    std::memset(datasets[index].key_.get(), 0, number_of_key_blocks);
     datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    std::memset(datasets[index].data_.get(), 0,
+                sizeof(uint32_t) * number_of_groups);
     datasets[index].data_[group_index] = 1;
   }
 
@@ -478,9 +483,11 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
   TableBucketVector datasets(number_of_simulations);
   for (uint64_t index = 0; index < number_of_simulations; ++index) {
     group_index = simulation.selected_groups_[index];
-    datasets[index].key_ =
-        std::make_unique_for_overwrite<uint8_t[]>(number_of_key_blocks);
+    datasets[index].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
+    std::memset(datasets[index].key_.get(), 0, number_of_key_blocks);
     datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    std::memset(datasets[index].data_.get(), 0,
+                sizeof(uint32_t) * number_of_groups);
     datasets[index].data_[group_index] = 1;
   }
 
@@ -593,8 +600,12 @@ void ProbingSet<RobustProbe>::NormalTableUpdate(
   for (uint64_t index = 0;
        index < simulation.considered_simulation_indices_.size(); ++index) {
     datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
     datasets[index].data_ =
         std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
+    std::memset(datasets[index].data_.get(), 0,
+                sizeof(uint32_t) * settings.GetNumberOfGroups());
+
     group_index =
         simulation
             .selected_groups_[simulation.considered_simulation_indices_[index]];
@@ -650,8 +661,11 @@ void ProbingSet<RelaxedProbe>::NormalTableUpdate(
         simulation
             .selected_groups_[simulation.considered_simulation_indices_[index]];
     datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
     datasets[index].data_ =
         std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
+    std::memset(datasets[index].data_.get(), 0,
+                sizeof(uint32_t) * settings.GetNumberOfGroups());
     datasets[index].data_[group_index] = 1;
 
     for (probe_index = 0; probe_index < probe_extension_indices_.size();
