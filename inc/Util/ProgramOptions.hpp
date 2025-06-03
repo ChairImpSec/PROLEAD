@@ -8,6 +8,7 @@
 #include <boost/json.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
+#include <fstream>
 #include <regex>
 #include <string>
 
