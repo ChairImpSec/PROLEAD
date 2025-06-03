@@ -218,7 +218,7 @@ uint64_t BackpropagateUntilBranch(const CircuitStruct& circuit,
   uint64_t result = signal_index;
 
   while ((circuit.signals_[result].Output != -1) &&
-         (circuit.GetNumberOfInputsForSignalsComputingCell(result) == 1) &&
+         (circuit.cells_[circuit.signals_[result].Output].type->GetType() == cell_t::buffer) &&
          (circuit.signals_[result].is_extension_allowed)) {
     result = circuit.cells_[circuit.signals_[result].Output].Inputs[0];
   }
@@ -341,13 +341,12 @@ bool Propagation<RelaxedProbe>::IsObsolete(const CircuitStruct& circuit,
 
   if (!extension_indices_[0].number_of_enable_indices_ &&
       extension_indices_[0].propagation_indices_.empty() &&
-      !extension_indices_[0].number_of_signal_indices_) {
+      !extension_indices_[0].number_of_signal_indices_) { 
     return true;
   }
 
   if (circuit.signals_[signal_index].Output != -1) {
-    if (circuit.cells_[circuit.signals_[signal_index].Output]
-            .type->GetNumberOfInputs() == 1) {
+    if (circuit.cells_[circuit.signals_[signal_index].Output].type->GetType() == cell_t::buffer) {   
       return true;
     }
   }

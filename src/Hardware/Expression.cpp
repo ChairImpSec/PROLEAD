@@ -186,8 +186,8 @@ std::vector<std::pair<std::string, std::vector<std::string>>>
          "or g_C or g_D",
          {"A'", "A", "g_A", "B'", "B", "g_B", "C'", "C", "g_C", "D'", "D",
           "g_D"}},
-        {"1", {}},
-        {"1", {}}};
+        {"g_A", {"g_A"}},
+        {"g_A", {"g_A"}}};
 
 std::vector<std::pair<std::string, std::vector<std::string>>>
     expr_probe_prop_lib = {

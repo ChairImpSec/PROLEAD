@@ -121,7 +121,7 @@ TEST_CASE("Test full verification (dom_indep_d1_faulty_rand)",
     Test test = TestDomIndepd1FaultyRand(settings);
 
     // We expect leakage in the first order because of faulted randomness.
-    REQUIRE(test.Require(true, 30, 16, 30, 16));
+    REQUIRE(test.Require(true, 34, 20, 34, 20));
   }
 
   SECTION("Robust but Relaxed Probing Model with trivial minimization") {
@@ -130,7 +130,7 @@ TEST_CASE("Test full verification (dom_indep_d1_faulty_rand)",
     Test test = TestDomIndepd1FaultyRand(settings);
 
     // We expect leakage in the first order because of faulted randomness.
-    REQUIRE(test.Require(true, 30, 8, 30, 8));
+    REQUIRE(test.Require(true, 34, 8, 34, 8));
   }
 
   SECTION("Robust but Relaxed Probing Model with aggressive minimization") {
@@ -139,6 +139,6 @@ TEST_CASE("Test full verification (dom_indep_d1_faulty_rand)",
     Test test = TestDomIndepd1FaultyRand(settings);
 
     // We expect leakage in the first order because of faulted randomness.
-    REQUIRE(test.Require(true, 30, 8, 30, 8));
+    REQUIRE(test.Require(true, 34, 8, 34, 8));
   }
 }

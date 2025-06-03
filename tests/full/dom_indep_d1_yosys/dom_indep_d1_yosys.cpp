@@ -143,10 +143,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 16, 34, 16));
+      REQUIRE(test.Require(false, 38, 20, 38, 20));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 16, 34, 56));
+      REQUIRE(test.Require(true, 38, 20, 38, 90));
     }
   }
 
@@ -161,10 +161,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 8, 34, 8));
+      REQUIRE(test.Require(false, 38, 12, 38, 12));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 8, 34, 12));
+      REQUIRE(test.Require(true, 38, 12, 38, 30));
     }
   }
 
@@ -179,10 +179,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 8, 34, 8));
+      REQUIRE(test.Require(false, 38, 12, 38, 12));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 8, 34, 12));
+      REQUIRE(test.Require(true, 38, 12, 38, 30));
     }
   }
 
@@ -248,10 +248,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 16, 34, 16));
+      REQUIRE(test.Require(false, 38, 20, 38, 20));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 16, 34, 56));
+      REQUIRE(test.Require(true, 38, 20, 38, 90));
     }
   }
 
@@ -267,10 +267,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 8, 34, 8));
+      REQUIRE(test.Require(false, 38, 12, 38, 12));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 8, 34, 12));
+      REQUIRE(test.Require(true, 38, 12, 38, 30));
     }
   }
 
@@ -286,10 +286,10 @@ TEST_CASE("Test full verification (dom_indep_d1_yosys)", "[dom_indep_d1_yosys]")
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 34, 8, 34, 8));
+      REQUIRE(test.Require(false, 38, 12, 38, 12));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 34, 8, 34, 12));
+      REQUIRE(test.Require(true, 38, 12, 38, 30));
     }
   }
 }

@@ -29,7 +29,6 @@ Library::Library(const boost::json::object& library_file, std::string name) {
 
   for (Cell& cell : cells_) {
     if (cell.GetType() == cell_t::buffer) {
-      cell.ChangeType(cell_t::combinational);
       std::string id = cell.GetIdentifier(0);
       std::cout << "Successfully found buffer cell with identifier \"" + id +
                        "\" and others."

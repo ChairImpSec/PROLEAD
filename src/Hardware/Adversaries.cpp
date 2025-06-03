@@ -465,8 +465,8 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
           signal_index = circuit_.cells_[cell_index].Inputs[input_index];
 
           while ((circuit_.signals_[signal_index].Output != -1) &&
-                 (circuit_.GetNumberOfInputsForSignalsComputingCell(
-                      signal_index) == 1) &&
+                 (circuit_.cells_[circuit_.signals_[signal_index].Output]
+                      .type->GetType() == cell_t::buffer) &&
                  (!circuit_.signals_[signal_index].Deleted) &&
                  (signal_index != simulation_.clock_signal_index_)) {
             signal_index =
@@ -496,8 +496,8 @@ void Adversaries<RelaxedProbe>::SetEnablers() {
                              .Inputs[input_index];
 
           while ((circuit_.signals_[signal_index].Output != -1) &&
-                 (circuit_.GetNumberOfInputsForSignalsComputingCell(
-                      signal_index) == 1) &&
+                 (circuit_.cells_[circuit_.signals_[signal_index].Output]
+                      .type->GetType() == cell_t::buffer) &&
                  (!circuit_.signals_[signal_index].Deleted) &&
                  (signal_index != simulation_.clock_signal_index_)) {
             signal_index =
@@ -1655,7 +1655,7 @@ double Adversaries<RobustProbe>::EvaluateUnivariateRobustProbingSecurity(
             if (probing_sets_[index].GetProbeAddresses().size()) {
               probing_sets_[index].Deconstruct();
             }
-          }         
+          }
           probing_sets_.resize(number_of_probing_sets);
         }
 
