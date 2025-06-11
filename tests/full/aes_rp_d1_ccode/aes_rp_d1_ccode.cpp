@@ -17,7 +17,7 @@ TEST_CASE("Test full verification (aes_rp_d1_ccode)", "[software][aes_rp_d1_ccod
   vm.insert(
       {"designfile",
        po::variable_value{
-           std::string("tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c"), false}});
+           std::vector<std::string>({"tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c"}), false}});
   vm.insert(
       {"resultfolder",
        po::variable_value{std::string("tests/full/aes_rp_d1_ccode/"), false}});
