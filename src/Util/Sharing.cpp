@@ -211,15 +211,16 @@ boost::dynamic_bitset<> Sharing::ConvertPolynomialToBitset(
 }
 
 void Sharing::SampleRandomPolynomial(fq_t& random_polynomial_fq) {
-  fmpz_mod_poly_t random_fmpz;
-  fmpz_mod_poly_init(random_fmpz, ctx_fmpz_mod_);
-
-  for (uint64_t index = 0; index < extension_degree_; ++index) {
-    fmpz_mod_poly_set_coeff_ui(random_fmpz, index, gen_(), ctx_fmpz_mod_);
+  fmpz_mod_poly_t rand_fmpz;
+  fmpz_mod_poly_init2(rand_fmpz, extension_degree_, ctx_fmpz_mod_);
+  
+  for (uint64_t idx = 0; idx < extension_degree_; ++idx) {
+    fmpz_mod_poly_set_coeff_ui(rand_fmpz, idx, gen_(), ctx_fmpz_mod_); 
   }
 
-  fq_set_fmpz_mod_poly(random_polynomial_fq, random_fmpz, ctx_fq_);
-  fmpz_mod_poly_clear(random_fmpz, ctx_fmpz_mod_);
+  _fmpz_mod_poly_set_length(rand_fmpz, extension_degree_);
+  fq_set_fmpz_mod_poly(random_polynomial_fq, rand_fmpz, ctx_fq_);
+  fmpz_mod_poly_clear(rand_fmpz, ctx_fmpz_mod_);
 }
 
 std::vector<uint64_t> Sharing::SampleRandomBitslicedPolynomial() {
