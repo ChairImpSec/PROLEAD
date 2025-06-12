@@ -85,6 +85,10 @@ class Sharing {
       const std::vector<uint64_t>& bitsliced_polynomial,
       uint64_t number_of_shares, bool is_additive_masking);
 
+  std::vector<std::vector<uint64_t>> EncodeBooleanBitsliced(
+      const std::vector<uint64_t>& bitsliced_polynomial,
+      uint64_t number_of_shares);
+
   /**
    * @brief Decodes a bitsliced shared polynomial.
    *
@@ -114,6 +118,10 @@ class Sharing {
   std::vector<uint64_t> DecodeBitsliced(
       const std::vector<std::vector<uint64_t>>& bitsliced_shared_polynomial,
       bool is_additive_masking);
+
+  std::vector<uint64_t> DecodeBooleanBitsliced(
+      const std::vector<std::vector<uint64_t>>& bitsliced_shared_polynomial);
+
 
   /**
    * @brief Samples a random bitsliced polynomial.
@@ -174,50 +182,11 @@ class Sharing {
    */
   bool IsInField(const Polynomial& polynomial) const;
 
-  /**
-   * @brief Encodes an unshared polynomial X into its shared representation
-   * Sh(X).
-   *
-   * The probabilistic algorithm generates a shared representation Sh(X) = {X0,
-   * X1, ..., Xd-1} from the unshared polynomial X, where X0 = X o X1 o ... o
-   * Xd-1. Each Xi (i = 1 to d-1) is randomly sampled and X0 is computed such
-   * that it satisfies the additive sharing property. Further, 'o' denotes the
-   * operation under the finite field.
-   *
-   * @param polynomial_fq The unshared polynomial to be encoded.
-   * @param number_of_shares The number of shares to generate, denoted as d.
-   * @param is_additive_masking A boolean indicating the operation used:
-   *        - true: The operation is additive, so '+' is used.
-   *        - false: The operation is multiplicative, so '*' is used under the
-   * finite field.
-   * * @return A vector of d polynomials representing the shared
-   * representation Sh(X).
-   */
-  std::vector<Polynomial> Encode(fq_t& polynomial_fq, uint64_t number_of_shares,
-                                 bool is_additive_masking);
-
-  /**
-   * @brief Decodes a shared representation Sh(X) into its unshared polynomial
-   * X.
-   *
-   * The deterministic algorithm comutes the unshared polynomial as X = X0 o
-   * ,..., o Xd-1 based on Sh(X).
-   *
-   * @param shared_polynomial A vector of d polynomials representing the shared
-   * representation Sh(X).
-   * @param is_additive_masking A boolean indicating the operation used:
-   *        - true: The operation is additive, so '+' is used.
-   *        - false: The operation is multiplicative, so '*' is used under the
-   * finite field.
-   * @return The decoded (unshared) polynomial.
-   */
-  Polynomial Decode(std::vector<fq_t>& shared_polynomial_fq,
-                    bool is_additive_masking);
-
   uint64_t prime_base_;
   uint64_t extension_degree_;
   uint64_t size_coefficients_bits_;
   uint64_t length_of_elements_in_bits_;
+  uint64_t sampling_bound_;
 
   fmpz_t prime_fmpz_;
   fq_ctx_t ctx_fq_;
