@@ -2300,8 +2300,7 @@ void CircuitStruct::SetIsProbeAllowed(const Settings& settings) {
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((signals_[index].Output == -1) ||
-          cells_[signals_[index].Output].type->IsRegister()) {
+      if (signals_[index].Output == -1) {
         signals_[index].is_probe_allowed = false;
       } else {
         signal_name = signals_[index].Name;
@@ -2314,8 +2313,7 @@ void CircuitStruct::SetIsProbeAllowed(const Settings& settings) {
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((signals_[index].Output == -1) ||
-          cells_[signals_[index].Output].type->IsRegister()) {
+      if (signals_[index].Output == -1) {
         signals_[index].is_probe_allowed = false;
       } else {
         signal_name = signals_[index].Name;
@@ -2368,8 +2366,7 @@ void CircuitStruct::SetIsProbeAllowed(const Settings& settings) {
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((signals_[index].Output == -1) ||
-          cells_[signals_[index].Output].type->IsRegister()) {
+      if (signals_[index].Output == -1) {
         signals_[index].is_probe_allowed = false;
       } else {
         signal_name = signals_[index].Name;
@@ -2382,8 +2379,7 @@ void CircuitStruct::SetIsProbeAllowed(const Settings& settings) {
     }
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      if ((signals_[index].Output == -1) ||
-          cells_[signals_[index].Output].type->IsRegister()) {
+      if (signals_[index].Output == -1) {
         signals_[index].is_probe_allowed = false;
       } else {
         signal_name = signals_[index].Name;
