@@ -90,7 +90,7 @@ TEST_CASE("Test full verification (lmdpl_and_d1)", "[lmdpl_and_d1]") {
     Test test = TestLmdplAndd1(settings);
 
     // We expect leakage in the first order.
-    REQUIRE(test.Require(true, 33, 99, 48, 99));
+    REQUIRE(test.Require(true, 41, 123, 48, 123));
   }
 
   SECTION("Robust Probing Model with trivial minimization") {
@@ -120,10 +120,10 @@ TEST_CASE("Test full verification (lmdpl_and_d1)", "[lmdpl_and_d1]") {
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 144, 96, 144, 96));
+      REQUIRE(test.Require(false, 144, 120, 144, 120));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 144, 96, 144, 1488));
+      REQUIRE(test.Require(true, 144, 120, 144, 2340));
     }
   }
 

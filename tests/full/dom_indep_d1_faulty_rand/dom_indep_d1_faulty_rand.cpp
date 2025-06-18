@@ -94,7 +94,7 @@ TEST_CASE("Test full verification (dom_indep_d1_faulty_rand)",
     Test test = TestDomIndepd1FaultyRand(settings);
 
     // We expect leakage in the first order because of faulted randomness.
-    REQUIRE(test.Require(true, 10, 20, 14, 20));
+    REQUIRE(test.Require(true, 12, 24, 14, 24));
   }
 
   SECTION("Robust Probing Model with trivial minimization") {
@@ -121,7 +121,7 @@ TEST_CASE("Test full verification (dom_indep_d1_faulty_rand)",
     Test test = TestDomIndepd1FaultyRand(settings);
 
     // We expect leakage in the first order because of faulted randomness.
-    REQUIRE(test.Require(true, 34, 20, 34, 20));
+    REQUIRE(test.Require(true, 34, 24, 34, 24));
   }
 
   SECTION("Robust but Relaxed Probing Model with trivial minimization") {

@@ -97,10 +97,10 @@ TEST_CASE("Test full verification (dom_indep_d1_non_flatten)",
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 8, 16, 14, 16));
+      REQUIRE(test.Require(false, 10, 20, 14, 20));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 8, 16, 14, 56));
+      REQUIRE(test.Require(true, 10, 20, 14, 90));
     }
   }
 
@@ -145,10 +145,10 @@ TEST_CASE("Test full verification (dom_indep_d1_non_flatten)",
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 30, 16, 30, 16));
+      REQUIRE(test.Require(false, 30, 20, 30, 20));
     } else {
       // But we expect leakage in the second order.
-      REQUIRE(test.Require(true, 30, 16, 30, 56));
+      REQUIRE(test.Require(true, 30, 20, 30, 90));
     }
   }
 

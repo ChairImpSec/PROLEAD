@@ -97,10 +97,10 @@ TEST_CASE("Test full verification (dom_indep_d1_extension)",
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 8, 16, 24, 16));
+      REQUIRE(test.Require(false, 10, 20, 30, 20));
     } else {
       // We expect leakage in the second order.
-      REQUIRE(test.Require(true, 8, 16, 24, 56));
+      REQUIRE(test.Require(true, 10, 20, 30, 90));
     }
   }
 
@@ -145,10 +145,10 @@ TEST_CASE("Test full verification (dom_indep_d1_extension)",
 
     if (settings.GetTestOrder() == 1) {
       // We expect no leakage in the first order.
-      REQUIRE(test.Require(false, 30, 16, 45, 16));
+      REQUIRE(test.Require(false, 30, 20, 45, 20));
     } else {
       // We expect leakage in the second order.
-      REQUIRE(test.Require(true, 30, 16, 45, 56));
+      REQUIRE(test.Require(true, 30, 20, 45, 90));
     }
   }
 
