@@ -1,0 +1,2684 @@
+{
+  "libraries": [
+    {
+      "name": "sky130",
+      "cells": [
+        {
+          "name": "sky130_fd_sc_hd__o2bb2a",
+          "aliases": [
+            "sky130_fd_sc_hd__o2bb2a_4",
+            "sky130_fd_sc_hd__o2bb2a_1",
+            "sky130_fd_sc_hd__o2bb2a_2",
+            "sky130_fd_sc_hd__o2bb2a"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1_N",
+            "A2_N",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((not (A1_N and A2_N)) and (B1 or B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and4",
+          "aliases": [
+            "sky130_fd_sc_hd__and4_1",
+            "sky130_fd_sc_hd__and4",
+            "sky130_fd_sc_hd__and4_2",
+            "sky130_fd_sc_hd__and4_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A and B and C and D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a31oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a31oi_1",
+            "sky130_fd_sc_hd__a31oi_4",
+            "sky130_fd_sc_hd__a31oi",
+            "sky130_fd_sc_hd__a31oi_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2 and A3) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlygate4sd2",
+          "aliases": [
+            "sky130_fd_sc_hd__dlygate4sd2_1",
+            "sky130_fd_sc_hd__dlygate4sd2"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlrbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dlrbp",
+            "sky130_fd_sc_hd__dlrbp_1",
+            "sky130_fd_sc_hd__dlrbp_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "RESET_B",
+            "D",
+            "GATE"
+          ],
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "RESET_B and D",
+            "not(RESET_B and D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__mux2i",
+          "aliases": [
+            "sky130_fd_sc_hd__mux2i",
+            "sky130_fd_sc_hd__mux2i_2",
+            "sky130_fd_sc_hd__mux2i_4",
+            "sky130_fd_sc_hd__mux2i_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A0",
+            "A1",
+            "S"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A0 and (not S)) or (A1 and S))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a221o",
+          "aliases": [
+            "sky130_fd_sc_hd__a221o",
+            "sky130_fd_sc_hd__a221o_2",
+            "sky130_fd_sc_hd__a221o_1",
+            "sky130_fd_sc_hd__a221o_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or (B1 and B2) or C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlrtn",
+          "aliases": [
+            "sky130_fd_sc_hd__dlrtn",
+            "sky130_fd_sc_hd__dlrtn_2",
+            "sky130_fd_sc_hd__dlrtn_4",
+            "sky130_fd_sc_hd__dlrtn_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "RESET_B",
+            "D",
+            "GATE_N"
+          ],
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "RESET_B and D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o31ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o31ai_2",
+            "sky130_fd_sc_hd__o31ai_1",
+            "sky130_fd_sc_hd__o31ai",
+            "sky130_fd_sc_hd__o31ai_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2 or A3) and B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a2111o",
+          "aliases": [
+            "sky130_fd_sc_hd__a2111o_4",
+            "sky130_fd_sc_hd__a2111o_1",
+            "sky130_fd_sc_hd__a2111o",
+            "sky130_fd_sc_hd__a2111o_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1",
+            "D1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or B1 or C1 or D1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a41oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a41oi_1",
+            "sky130_fd_sc_hd__a41oi_2",
+            "sky130_fd_sc_hd__a41oi",
+            "sky130_fd_sc_hd__a41oi_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2 and A3 and A4) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a211o",
+          "aliases": [
+            "sky130_fd_sc_hd__a211o_4",
+            "sky130_fd_sc_hd__a211o_1",
+            "sky130_fd_sc_hd__a211o",
+            "sky130_fd_sc_hd__a211o_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or B1 or C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and3b",
+          "aliases": [
+            "sky130_fd_sc_hd__and3b_4",
+            "sky130_fd_sc_hd__and3b",
+            "sky130_fd_sc_hd__and3b_2",
+            "sky130_fd_sc_hd__and3b_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(not A_N) and B and C"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__fa",
+          "aliases": [
+            "sky130_fd_sc_hd__fa_1",
+            "sky130_fd_sc_hd__fa",
+            "sky130_fd_sc_hd__fa_2",
+            "sky130_fd_sc_hd__fa_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "CIN"
+          ],
+          "outputs": [
+            "COUT",
+            "SUM"
+          ],
+          "equations": [
+            "(A and B) or (A and CIN) or (B and CIN)",
+            "A xor B xor CIN"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or4b",
+          "aliases": [
+            "sky130_fd_sc_hd__or4b_2",
+            "sky130_fd_sc_hd__or4b",
+            "sky130_fd_sc_hd__or4b_4",
+            "sky130_fd_sc_hd__or4b_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A or B or C or (not D_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlrbn",
+          "aliases": [
+            "sky130_fd_sc_hd__dlrbn_2",
+            "sky130_fd_sc_hd__dlrbn",
+            "sky130_fd_sc_hd__dlrbn_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "RESET_B",
+            "D",
+            "GATE_N"
+          ],
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "RESET_B and D",
+            "not(RESET_B and D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlxbn",
+          "aliases": [
+            "sky130_fd_sc_hd__dlxbn_2",
+            "sky130_fd_sc_hd__dlxbn_1",
+            "sky130_fd_sc_hd__dlxbn"
+          ],
+          "type": "gate",
+          "inputs": [
+            "D",
+            "GATE_N"
+          ],
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "D",
+            "not(D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o311ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o311ai",
+            "sky130_fd_sc_hd__o311ai_0",
+            "sky130_fd_sc_hd__o311ai_4",
+            "sky130_fd_sc_hd__o311ai_2",
+            "sky130_fd_sc_hd__o311ai_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2 or A3) and B1 and C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a21oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a21oi_1",
+            "sky130_fd_sc_hd__a21oi",
+            "sky130_fd_sc_hd__a21oi_4",
+            "sky130_fd_sc_hd__a21oi_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and2b",
+          "aliases": [
+            "sky130_fd_sc_hd__and2b",
+            "sky130_fd_sc_hd__and2b_4",
+            "sky130_fd_sc_hd__and2b_1",
+            "sky130_fd_sc_hd__and2b_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(not A_N) and B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__xnor2",
+          "aliases": [
+            "sky130_fd_sc_hd__xnor2_1",
+            "sky130_fd_sc_hd__xnor2",
+            "sky130_fd_sc_hd__xnor2_4",
+            "sky130_fd_sc_hd__xnor2_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A xor B)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor3b",
+          "aliases": [
+            "sky130_fd_sc_hd__nor3b_1",
+            "sky130_fd_sc_hd__nor3b_2",
+            "sky130_fd_sc_hd__nor3b",
+            "sky130_fd_sc_hd__nor3b_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (A or B or (not C_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfxbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfxbp_2",
+            "sky130_fd_sc_hd__dfxbp",
+            "sky130_fd_sc_hd__dfxbp_1"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "(CLK and D) or ((not CLK) and Q)",
+            "(CLK and (not D)) or ((not CLK) and (not Q))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o21ba",
+          "aliases": [
+            "sky130_fd_sc_hd__o21ba_2",
+            "sky130_fd_sc_hd__o21ba_4",
+            "sky130_fd_sc_hd__o21ba_1",
+            "sky130_fd_sc_hd__o21ba"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and (not B1_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkinv",
+          "aliases": [
+            "sky130_fd_sc_hd__clkinv_1",
+            "sky130_fd_sc_hd__clkinv_16",
+            "sky130_fd_sc_hd__clkinv_2",
+            "sky130_fd_sc_hd__clkinv_4",
+            "sky130_fd_sc_hd__clkinv_8",
+            "sky130_fd_sc_hd__clkinv"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not A"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__xor2",
+          "aliases": [
+            "sky130_fd_sc_hd__xor2",
+            "sky130_fd_sc_hd__xor2_4",
+            "sky130_fd_sc_hd__xor2_2",
+            "sky130_fd_sc_hd__xor2_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A xor B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and3",
+          "aliases": [
+            "sky130_fd_sc_hd__and3_1",
+            "sky130_fd_sc_hd__and3_4",
+            "sky130_fd_sc_hd__and3_2",
+            "sky130_fd_sc_hd__and3"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A and B and C"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_inputiso1n",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_inputiso1n",
+            "sky130_fd_sc_hd__lpflow_inputiso1n_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "SLEEP_B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(A and SLEEP_B)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__xnor3",
+          "aliases": [
+            "sky130_fd_sc_hd__xnor3_1",
+            "sky130_fd_sc_hd__xnor3_2",
+            "sky130_fd_sc_hd__xnor3",
+            "sky130_fd_sc_hd__xnor3_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not (A xor B xor C)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__buf",
+          "aliases": [
+            "sky130_fd_sc_hd__buf_1",
+            "sky130_fd_sc_hd__buf",
+            "sky130_fd_sc_hd__buf_4",
+            "sky130_fd_sc_hd__buf_16",
+            "sky130_fd_sc_hd__buf_8",
+            "sky130_fd_sc_hd__buf_2",
+            "sky130_fd_sc_hd__buf_6",
+            "sky130_fd_sc_hd__buf_12"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not (not A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__inv",
+          "aliases": [
+            "sky130_fd_sc_hd__inv_8",
+            "sky130_fd_sc_hd__inv",
+            "sky130_fd_sc_hd__inv_1",
+            "sky130_fd_sc_hd__inv_12",
+            "sky130_fd_sc_hd__inv_4",
+            "sky130_fd_sc_hd__inv_16",
+            "sky130_fd_sc_hd__inv_2",
+            "sky130_fd_sc_hd__inv_6"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not A"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or3b",
+          "aliases": [
+            "sky130_fd_sc_hd__or3b_1",
+            "sky130_fd_sc_hd__or3b_4",
+            "sky130_fd_sc_hd__or3b_2",
+            "sky130_fd_sc_hd__or3b"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A or B or (not C_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkinvlp",
+          "aliases": [
+            "sky130_fd_sc_hd__clkinvlp_2",
+            "sky130_fd_sc_hd__clkinvlp",
+            "sky130_fd_sc_hd__clkinvlp_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not A"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o2bb2ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o2bb2ai_2",
+            "sky130_fd_sc_hd__o2bb2ai",
+            "sky130_fd_sc_hd__o2bb2ai_1",
+            "sky130_fd_sc_hd__o2bb2ai_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1_N",
+            "A2_N",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(not(A1_N and A2_N) and (B1 or B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a311o",
+          "aliases": [
+            "sky130_fd_sc_hd__a311o_2",
+            "sky130_fd_sc_hd__a311o_1",
+            "sky130_fd_sc_hd__a311o",
+            "sky130_fd_sc_hd__a311o_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2 and A3) or B1 or C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a22oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a22oi",
+            "sky130_fd_sc_hd__a22oi_1",
+            "sky130_fd_sc_hd__a22oi_2",
+            "sky130_fd_sc_hd__a22oi_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o32ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o32ai_1",
+            "sky130_fd_sc_hd__o32ai_4",
+            "sky130_fd_sc_hd__o32ai_2",
+            "sky130_fd_sc_hd__o32ai"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not((A1 or A2 or A3) and (B1 or B2)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_isobufsrckapwr",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_isobufsrckapwr_16",
+            "sky130_fd_sc_hd__lpflow_isobufsrckapwr"
+          ],
+          "type": "gate",
+          "inputs": [
+            "SLEEP",
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((not A) or SLEEP)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__mux2",
+          "aliases": [
+            "sky130_fd_sc_hd__mux2_8",
+            "sky130_fd_sc_hd__mux2_4",
+            "sky130_fd_sc_hd__mux2",
+            "sky130_fd_sc_hd__mux2_2",
+            "sky130_fd_sc_hd__mux2_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A0",
+            "A1",
+            "S"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((not S) and A0) or (S and A1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__ha",
+          "aliases": [
+            "sky130_fd_sc_hd__ha_1",
+            "sky130_fd_sc_hd__ha_4",
+            "sky130_fd_sc_hd__ha",
+            "sky130_fd_sc_hd__ha_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "COUT",
+            "SUM"
+          ],
+          "equations": [
+            "A and B",
+            "A xor B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a32oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a32oi_4",
+            "sky130_fd_sc_hd__a32oi_2",
+            "sky130_fd_sc_hd__a32oi",
+            "sky130_fd_sc_hd__a32oi_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2 and A3) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand2",
+          "aliases": [
+            "sky130_fd_sc_hd__nand2_2",
+            "sky130_fd_sc_hd__nand2_4",
+            "sky130_fd_sc_hd__nand2",
+            "sky130_fd_sc_hd__nand2_1",
+            "sky130_fd_sc_hd__nand2_8"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not (A and B)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o21a",
+          "aliases": [
+            "sky130_fd_sc_hd__o21a",
+            "sky130_fd_sc_hd__o21a_2",
+            "sky130_fd_sc_hd__o21a_1",
+            "sky130_fd_sc_hd__o21a_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor2b",
+          "aliases": [
+            "sky130_fd_sc_hd__nor2b",
+            "sky130_fd_sc_hd__nor2b_1",
+            "sky130_fd_sc_hd__nor2b_2",
+            "sky130_fd_sc_hd__nor2b_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A or (not B_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__xor3",
+          "aliases": [
+            "sky130_fd_sc_hd__xor3_2",
+            "sky130_fd_sc_hd__xor3_4",
+            "sky130_fd_sc_hd__xor3",
+            "sky130_fd_sc_hd__xor3_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A xor B xor C"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a2111oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a2111oi_1",
+            "sky130_fd_sc_hd__a2111oi",
+            "sky130_fd_sc_hd__a2111oi_0",
+            "sky130_fd_sc_hd__a2111oi_4",
+            "sky130_fd_sc_hd__a2111oi_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1",
+            "D1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not((A1 and A2) or B1 or C1 or D1))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand4",
+          "aliases": [
+            "sky130_fd_sc_hd__nand4_4",
+            "sky130_fd_sc_hd__nand4_2",
+            "sky130_fd_sc_hd__nand4",
+            "sky130_fd_sc_hd__nand4_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A and B and C and D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and2",
+          "aliases": [
+            "sky130_fd_sc_hd__and2_0",
+            "sky130_fd_sc_hd__and2_1",
+            "sky130_fd_sc_hd__and2",
+            "sky130_fd_sc_hd__and2_4",
+            "sky130_fd_sc_hd__and2_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A and B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o211a",
+          "aliases": [
+            "sky130_fd_sc_hd__o211a_2",
+            "sky130_fd_sc_hd__o211a_1",
+            "sky130_fd_sc_hd__o211a",
+            "sky130_fd_sc_hd__o211a_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and B1 and C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_clkinvkapwr",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr_2",
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr_1",
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr",
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr_16",
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr_4",
+            "sky130_fd_sc_hd__lpflow_clkinvkapwr_8"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not A"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o221ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o221ai_1",
+            "sky130_fd_sc_hd__o221ai_2",
+            "sky130_fd_sc_hd__o221ai",
+            "sky130_fd_sc_hd__o221ai_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2) and (B1 or B2) and C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a32o",
+          "aliases": [
+            "sky130_fd_sc_hd__a32o_2",
+            "sky130_fd_sc_hd__a32o_1",
+            "sky130_fd_sc_hd__a32o",
+            "sky130_fd_sc_hd__a32o_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2 and A3) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkdlybuf4s25",
+          "aliases": [
+            "sky130_fd_sc_hd__clkdlybuf4s25",
+            "sky130_fd_sc_hd__clkdlybuf4s25_2",
+            "sky130_fd_sc_hd__clkdlybuf4s25_1"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not (not (not (not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a21boi",
+          "aliases": [
+            "sky130_fd_sc_hd__a21boi_4",
+            "sky130_fd_sc_hd__a21boi",
+            "sky130_fd_sc_hd__a21boi_2",
+            "sky130_fd_sc_hd__a21boi_1",
+            "sky130_fd_sc_hd__a21boi_0"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2) or (not B1_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkbuf",
+          "aliases": [
+            "sky130_fd_sc_hd__clkbuf_1",
+            "sky130_fd_sc_hd__clkbuf_8",
+            "sky130_fd_sc_hd__clkbuf_16",
+            "sky130_fd_sc_hd__clkbuf",
+            "sky130_fd_sc_hd__clkbuf_2",
+            "sky130_fd_sc_hd__clkbuf_4"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not (not A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfstp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfstp_1",
+            "sky130_fd_sc_hd__dfstp_2",
+            "sky130_fd_sc_hd__dfstp",
+            "sky130_fd_sc_hd__dfstp_4"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "SET_B",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(CLK and (D or (not SET_B))) or ((not CLK) and Q)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o2111a",
+          "aliases": [
+            "sky130_fd_sc_hd__o2111a_2",
+            "sky130_fd_sc_hd__o2111a",
+            "sky130_fd_sc_hd__o2111a_1",
+            "sky130_fd_sc_hd__o2111a_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1",
+            "D1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and B1 and C1 and D1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o21ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o21ai_2",
+            "sky130_fd_sc_hd__o21ai_1",
+            "sky130_fd_sc_hd__o21ai_4",
+            "sky130_fd_sc_hd__o21ai",
+            "sky130_fd_sc_hd__o21ai_0"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not ((A1 or A2) and B1))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and4bb",
+          "aliases": [
+            "sky130_fd_sc_hd__and4bb_2",
+            "sky130_fd_sc_hd__and4bb_1",
+            "sky130_fd_sc_hd__and4bb_4",
+            "sky130_fd_sc_hd__and4bb"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B_N",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(not A_N) and (not B_N) and C and D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o2111ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o2111ai_2",
+            "sky130_fd_sc_hd__o2111ai",
+            "sky130_fd_sc_hd__o2111ai_4",
+            "sky130_fd_sc_hd__o2111ai_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1",
+            "D1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2) and B1 and C1 and D1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o32a",
+          "aliases": [
+            "sky130_fd_sc_hd__o32a",
+            "sky130_fd_sc_hd__o32a_1",
+            "sky130_fd_sc_hd__o32a_4",
+            "sky130_fd_sc_hd__o32a_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2 or A3) and (B1 or B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlymetal6s2s",
+          "aliases": [
+            "sky130_fd_sc_hd__dlymetal6s2s_1",
+            "sky130_fd_sc_hd__dlymetal6s2s"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not(not(not A)))))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand2b",
+          "aliases": [
+            "sky130_fd_sc_hd__nand2b_2",
+            "sky130_fd_sc_hd__nand2b_1",
+            "sky130_fd_sc_hd__nand2b",
+            "sky130_fd_sc_hd__nand2b_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((not A_N) and B)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o22a",
+          "aliases": [
+            "sky130_fd_sc_hd__o22a_4",
+            "sky130_fd_sc_hd__o22a_2",
+            "sky130_fd_sc_hd__o22a",
+            "sky130_fd_sc_hd__o22a_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and (B1 or B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o31a",
+          "aliases": [
+            "sky130_fd_sc_hd__o31a_2",
+            "sky130_fd_sc_hd__o31a_1",
+            "sky130_fd_sc_hd__o31a_4",
+            "sky130_fd_sc_hd__o31a"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2 or A3) and B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkdlybuf4s15",
+          "aliases": [
+            "sky130_fd_sc_hd__clkdlybuf4s15",
+            "sky130_fd_sc_hd__clkdlybuf4s15_2",
+            "sky130_fd_sc_hd__clkdlybuf4s15_1"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a41o",
+          "aliases": [
+            "sky130_fd_sc_hd__a41o_4",
+            "sky130_fd_sc_hd__a41o_2",
+            "sky130_fd_sc_hd__a41o",
+            "sky130_fd_sc_hd__a41o_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2 and A3 and A4) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor4b",
+          "aliases": [
+            "sky130_fd_sc_hd__nor4b_2",
+            "sky130_fd_sc_hd__nor4b_4",
+            "sky130_fd_sc_hd__nor4b_1",
+            "sky130_fd_sc_hd__nor4b"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "A and B and C and (not D_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand3",
+          "aliases": [
+            "sky130_fd_sc_hd__nand3",
+            "sky130_fd_sc_hd__nand3_2",
+            "sky130_fd_sc_hd__nand3_1",
+            "sky130_fd_sc_hd__nand3_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not ( A and B and C)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o311a",
+          "aliases": [
+            "sky130_fd_sc_hd__o311a_2",
+            "sky130_fd_sc_hd__o311a_4",
+            "sky130_fd_sc_hd__o311a",
+            "sky130_fd_sc_hd__o311a_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2 or A3) and B1 and C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand3b",
+          "aliases": [
+            "sky130_fd_sc_hd__nand3b_4",
+            "sky130_fd_sc_hd__nand3b",
+            "sky130_fd_sc_hd__nand3b_2",
+            "sky130_fd_sc_hd__nand3b_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not ((not A_N) and B and C))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or4bb",
+          "aliases": [
+            "sky130_fd_sc_hd__or4bb_2",
+            "sky130_fd_sc_hd__or4bb",
+            "sky130_fd_sc_hd__or4bb_1",
+            "sky130_fd_sc_hd__or4bb_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C_N",
+            "D_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A and B and (not C_N) and (not D_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlygate4sd1",
+          "aliases": [
+            "sky130_fd_sc_hd__dlygate4sd1_1",
+            "sky130_fd_sc_hd__dlygate4sd1"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or2b",
+          "aliases": [
+            "sky130_fd_sc_hd__or2b_2",
+            "sky130_fd_sc_hd__or2b_1",
+            "sky130_fd_sc_hd__or2b",
+            "sky130_fd_sc_hd__or2b_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A and (not B_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor3",
+          "aliases": [
+            "sky130_fd_sc_hd__nor3",
+            "sky130_fd_sc_hd__nor3_2",
+            "sky130_fd_sc_hd__nor3_4",
+            "sky130_fd_sc_hd__nor3_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A or B or C)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlymetal6s6s",
+          "aliases": [
+            "sky130_fd_sc_hd__dlymetal6s6s_1",
+            "sky130_fd_sc_hd__dlymetal6s6s"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not(not(not A)))))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor2",
+          "aliases": [
+            "sky130_fd_sc_hd__nor2_1",
+            "sky130_fd_sc_hd__nor2",
+            "sky130_fd_sc_hd__nor2_2",
+            "sky130_fd_sc_hd__nor2_8",
+            "sky130_fd_sc_hd__nor2_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not (A or B))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o221a",
+          "aliases": [
+            "sky130_fd_sc_hd__o221a_1",
+            "sky130_fd_sc_hd__o221a_4",
+            "sky130_fd_sc_hd__o221a",
+            "sky130_fd_sc_hd__o221a_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2) and (B1 or B2) and C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_inputiso0n",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_inputiso0n_1",
+            "sky130_fd_sc_hd__lpflow_inputiso0n"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "SLEEP_B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(A and SLEEP_B)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor4bb",
+          "aliases": [
+            "sky130_fd_sc_hd__nor4bb_2",
+            "sky130_fd_sc_hd__nor4bb",
+            "sky130_fd_sc_hd__nor4bb_4",
+            "sky130_fd_sc_hd__nor4bb_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C_N",
+            "D_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "A and B and (not C_N) and (not D_N)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__mux4",
+          "aliases": [
+            "sky130_fd_sc_hd__mux4_4",
+            "sky130_fd_sc_hd__mux4",
+            "sky130_fd_sc_hd__mux4_2",
+            "sky130_fd_sc_hd__mux4_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A0",
+            "A1",
+            "A2",
+            "A3",
+            "S0",
+            "S1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(((not S0) and (not S1)) and  A0) or (S0 and (not S1) and A1) or ((not S0) and S1 and A2) or (S0 and S1 and A3)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlygate4sd3",
+          "aliases": [
+            "sky130_fd_sc_hd__dlygate4sd3_1",
+            "sky130_fd_sc_hd__dlygate4sd3"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or2",
+          "aliases": [
+            "sky130_fd_sc_hd__or2_1",
+            "sky130_fd_sc_hd__or2",
+            "sky130_fd_sc_hd__or2_0",
+            "sky130_fd_sc_hd__or2_2",
+            "sky130_fd_sc_hd__or2_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A or B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand4bb",
+          "aliases": [
+            "sky130_fd_sc_hd__nand4bb",
+            "sky130_fd_sc_hd__nand4bb_1",
+            "sky130_fd_sc_hd__nand4bb_4",
+            "sky130_fd_sc_hd__nand4bb_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B_N",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((not A_N) and (not B_N) and C and D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__bufbuf",
+          "aliases": [
+            "sky130_fd_sc_hd__bufbuf_16",
+            "sky130_fd_sc_hd__bufbuf",
+            "sky130_fd_sc_hd__bufbuf_8"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__and4b",
+          "aliases": [
+            "sky130_fd_sc_hd__and4b",
+            "sky130_fd_sc_hd__and4b_4",
+            "sky130_fd_sc_hd__and4b_2",
+            "sky130_fd_sc_hd__and4b_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(not A_N) and B and C and D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfrtp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfrtp",
+            "sky130_fd_sc_hd__dfrtp_1",
+            "sky130_fd_sc_hd__dfrtp_4",
+            "sky130_fd_sc_hd__dfrtp_2"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "RESET_B",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(CLK and (D and (RESET_B))) or ((not CLK) and Q)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a21bo",
+          "aliases": [
+            "sky130_fd_sc_hd__a21bo_4",
+            "sky130_fd_sc_hd__a21bo",
+            "sky130_fd_sc_hd__a21bo_2",
+            "sky130_fd_sc_hd__a21bo_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1_N"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or (not B1_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or4",
+          "aliases": [
+            "sky130_fd_sc_hd__or4_1",
+            "sky130_fd_sc_hd__or4_2",
+            "sky130_fd_sc_hd__or4",
+            "sky130_fd_sc_hd__or4_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A or B or C or D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o211ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o211ai_1",
+            "sky130_fd_sc_hd__o211ai_4",
+            "sky130_fd_sc_hd__o211ai_2",
+            "sky130_fd_sc_hd__o211ai"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not ((A1 or A2) and B1 and C1))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__fahcin",
+          "aliases": [
+            "sky130_fd_sc_hd__fahcin",
+            "sky130_fd_sc_hd__fahcin_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "CIN"
+          ],
+          "outputs": [
+            "COUT",
+            "SUM"
+          ],
+          "equations": [
+            "(A and B) or (A and (not CIN)) or  (B and (not CIN))",
+            "A xor B xor (not CIN)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_clkbufkapwr",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr_1",
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr",
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr_4",
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr_16",
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr_2",
+            "sky130_fd_sc_hd__lpflow_clkbufkapwr_8"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__bufinv",
+          "aliases": [
+            "sky130_fd_sc_hd__bufinv_8",
+            "sky130_fd_sc_hd__bufinv_16",
+            "sky130_fd_sc_hd__bufinv"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__fah",
+          "aliases": [
+            "sky130_fd_sc_hd__fah",
+            "sky130_fd_sc_hd__fah_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "CI"
+          ],
+          "outputs": [
+            "COUT",
+            "SUM"
+          ],
+          "equations": [
+            "(A and B) or (A and CI)  or (B xor CI)",
+            "A xor B xor CI"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_isobufsrc",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_isobufsrc_2",
+            "sky130_fd_sc_hd__lpflow_isobufsrc_4",
+            "sky130_fd_sc_hd__lpflow_isobufsrc",
+            "sky130_fd_sc_hd__lpflow_isobufsrc_8",
+            "sky130_fd_sc_hd__lpflow_isobufsrc_1",
+            "sky130_fd_sc_hd__lpflow_isobufsrc_16"
+          ],
+          "type": "gate",
+          "inputs": [
+            "SLEEP",
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((not A) or SLEEP)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__fahcon",
+          "aliases": [
+            "sky130_fd_sc_hd__fahcon_1",
+            "sky130_fd_sc_hd__fahcon"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "CI"
+          ],
+          "outputs": [
+            "COUT_N",
+            "SUM"
+          ],
+          "equations": [
+            "not((A and B) or (B and (not CI)) or (A and (not CI)))",
+            "A xor B xor (not CI)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfbbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfbbp",
+            "sky130_fd_sc_hd__dfbbp_1"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "SET_B",
+            "RESET_B",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "(CLK and ((D and (RESET_B)) or (not SET_B))) or ((not CLK) and Q)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a21o",
+          "aliases": [
+            "sky130_fd_sc_hd__a21o_2",
+            "sky130_fd_sc_hd__a21o_1",
+            "sky130_fd_sc_hd__a21o_4",
+            "sky130_fd_sc_hd__a21o"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfsbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfsbp",
+            "sky130_fd_sc_hd__dfsbp_2",
+            "sky130_fd_sc_hd__dfsbp_1"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "SET_B",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "(CLK and (D or (not SET_B))) or ((not CLK) and Q)",
+            "not((CLK and (D or (not SET_B))) or ((not CLK) and Q))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__maj3",
+          "aliases": [
+            "sky130_fd_sc_hd__maj3",
+            "sky130_fd_sc_hd__maj3_1",
+            "sky130_fd_sc_hd__maj3_2",
+            "sky130_fd_sc_hd__maj3_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(A and B) or (A and C) or (B and C)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a221oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a221oi_2",
+            "sky130_fd_sc_hd__a221oi_1",
+            "sky130_fd_sc_hd__a221oi_4",
+            "sky130_fd_sc_hd__a221oi"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2) or (B1 and B2) or C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a2bb2o",
+          "aliases": [
+            "sky130_fd_sc_hd__a2bb2o",
+            "sky130_fd_sc_hd__a2bb2o_4",
+            "sky130_fd_sc_hd__a2bb2o_2",
+            "sky130_fd_sc_hd__a2bb2o_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1_N",
+            "A2_N",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "( ((not A1_N) and (not A2_N)) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__lpflow_inputiso1p",
+          "aliases": [
+            "sky130_fd_sc_hd__lpflow_inputiso1p_1",
+            "sky130_fd_sc_hd__lpflow_inputiso1p"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "SLEEP"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "(A and (not SLEEP))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfxtp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfxtp_2",
+            "sky130_fd_sc_hd__dfxtp_4",
+            "sky130_fd_sc_hd__dfxtp",
+            "sky130_fd_sc_hd__dfxtp_1"
+          ],
+          "type": "register",
+          "timing": "rising_edge",
+          "inputs": [
+            "D",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "(CLK and D) or ((not CLK) and Q)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlxbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dlxbp_1",
+            "sky130_fd_sc_hd__dlxbp"
+          ],
+          "type": "gate",
+          "inputs": [
+            "D",
+            "GATE"
+          ],
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "D",
+            "not D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o41a",
+          "aliases": [
+            "sky130_fd_sc_hd__o41a_4",
+            "sky130_fd_sc_hd__o41a",
+            "sky130_fd_sc_hd__o41a_2",
+            "sky130_fd_sc_hd__o41a_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 or A2 or A3 or A4) and B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a222oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a222oi_1",
+            "sky130_fd_sc_hd__a222oi"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2",
+            "C1",
+            "C2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2) or (B1 and B2) or (C1 and C2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlymetal6s4s",
+          "aliases": [
+            "sky130_fd_sc_hd__dlymetal6s4s_1",
+            "sky130_fd_sc_hd__dlymetal6s4s"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a311oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a311oi_1",
+            "sky130_fd_sc_hd__a311oi_2",
+            "sky130_fd_sc_hd__a311oi",
+            "sky130_fd_sc_hd__a311oi_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 and A2 and A3) or B1 or C1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nand4b",
+          "aliases": [
+            "sky130_fd_sc_hd__nand4b_2",
+            "sky130_fd_sc_hd__nand4b_1",
+            "sky130_fd_sc_hd__nand4b_4",
+            "sky130_fd_sc_hd__nand4b"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A_N",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not A_N) and B and C and D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlrtp",
+          "aliases": [
+            "sky130_fd_sc_hd__dlrtp_4",
+            "sky130_fd_sc_hd__dlrtp_1",
+            "sky130_fd_sc_hd__dlrtp",
+            "sky130_fd_sc_hd__dlrtp_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "RESET_B",
+            "D",
+            "GATE"
+          ],
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "D and RESET_B"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkdlybuf4s50",
+          "aliases": [
+            "sky130_fd_sc_hd__clkdlybuf4s50_2",
+            "sky130_fd_sc_hd__clkdlybuf4s50_1",
+            "sky130_fd_sc_hd__clkdlybuf4s50"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not(not(not A)))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a211oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a211oi_4",
+            "sky130_fd_sc_hd__a211oi_2",
+            "sky130_fd_sc_hd__a211oi_1",
+            "sky130_fd_sc_hd__a211oi"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "C1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "(not ((A1 and A2) or B1 or C1))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlxtn",
+          "aliases": [
+            "sky130_fd_sc_hd__dlxtn_1",
+            "sky130_fd_sc_hd__dlxtn_2",
+            "sky130_fd_sc_hd__dlxtn",
+            "sky130_fd_sc_hd__dlxtn_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "D",
+            "GATE_N"
+          ],
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o41ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o41ai_1",
+            "sky130_fd_sc_hd__o41ai",
+            "sky130_fd_sc_hd__o41ai_2",
+            "sky130_fd_sc_hd__o41ai_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "B1"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2 or A3 or A4) and B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o21bai",
+          "aliases": [
+            "sky130_fd_sc_hd__o21bai_1",
+            "sky130_fd_sc_hd__o21bai",
+            "sky130_fd_sc_hd__o21bai_4",
+            "sky130_fd_sc_hd__o21bai_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1_N"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2) and (not B1_N))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a22o",
+          "aliases": [
+            "sky130_fd_sc_hd__a22o_1",
+            "sky130_fd_sc_hd__a22o",
+            "sky130_fd_sc_hd__a22o_2",
+            "sky130_fd_sc_hd__a22o_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a2bb2oi",
+          "aliases": [
+            "sky130_fd_sc_hd__a2bb2oi_2",
+            "sky130_fd_sc_hd__a2bb2oi_1",
+            "sky130_fd_sc_hd__a2bb2oi_4",
+            "sky130_fd_sc_hd__a2bb2oi"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1_N",
+            "A2_N",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(((not A1_N) and (not A2_N)) or (B1 and B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dfrbp",
+          "aliases": [
+            "sky130_fd_sc_hd__dfrbp_1",
+            "sky130_fd_sc_hd__dfrbp_2",
+            "sky130_fd_sc_hd__dfrbp"
+          ],
+          "type": "register",
+          "inputs": [
+            "D",
+            "RESET_B",
+            "CLK"
+          ],
+          "clock": "CLK",
+          "outputs": [
+            "Q",
+            "Q_N"
+          ],
+          "equations": [
+            "(CLK and (D and (RESET_B))) or ((not CLK) and Q)",
+            "not((CLK and (D and (RESET_B))) or ((not CLK) and Q))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__clkdlybuf4s18",
+          "aliases": [
+            "sky130_fd_sc_hd__clkdlybuf4s18_2",
+            "sky130_fd_sc_hd__clkdlybuf4s18_1",
+            "sky130_fd_sc_hd__clkdlybuf4s18"
+          ],
+          "type": "buffer",
+          "inputs": [
+            "A"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "not(not A)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__o22ai",
+          "aliases": [
+            "sky130_fd_sc_hd__o22ai_4",
+            "sky130_fd_sc_hd__o22ai_2",
+            "sky130_fd_sc_hd__o22ai_1",
+            "sky130_fd_sc_hd__o22ai"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "B1",
+            "B2"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not((A1 or A2) and (B1 or B2))"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__conb",
+          "aliases": [
+            "sky130_fd_sc_hd__conb",
+            "sky130_fd_sc_hd__conb_1"
+          ],
+          "type": "gate",
+          "inputs": [],
+          "outputs": [
+            "HI",
+            "LO"
+          ],
+          "equations": [
+            "1",
+            "0"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__a31o",
+          "aliases": [
+            "sky130_fd_sc_hd__a31o_4",
+            "sky130_fd_sc_hd__a31o_1",
+            "sky130_fd_sc_hd__a31o",
+            "sky130_fd_sc_hd__a31o_2"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A1",
+            "A2",
+            "A3",
+            "B1"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "((A1 and A2 and A3) or B1)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__nor4",
+          "aliases": [
+            "sky130_fd_sc_hd__nor4_2",
+            "sky130_fd_sc_hd__nor4_1",
+            "sky130_fd_sc_hd__nor4_4",
+            "sky130_fd_sc_hd__nor4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "outputs": [
+            "Y"
+          ],
+          "equations": [
+            "not(A or B or C or D)"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__dlxtp",
+          "aliases": [
+            "sky130_fd_sc_hd__dlxtp",
+            "sky130_fd_sc_hd__dlxtp_1"
+          ],
+          "type": "gate",
+          "inputs": [
+            "D",
+            "GATE"
+          ],
+          "outputs": [
+            "Q"
+          ],
+          "equations": [
+            "D"
+          ]
+        },
+        {
+          "name": "sky130_fd_sc_hd__or3",
+          "aliases": [
+            "sky130_fd_sc_hd__or3_1",
+            "sky130_fd_sc_hd__or3",
+            "sky130_fd_sc_hd__or3_2",
+            "sky130_fd_sc_hd__or3_4"
+          ],
+          "type": "gate",
+          "inputs": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outputs": [
+            "X"
+          ],
+          "equations": [
+            "A or B or C"
+          ]
+        }
+      ]
+    }
+  ]
+}
