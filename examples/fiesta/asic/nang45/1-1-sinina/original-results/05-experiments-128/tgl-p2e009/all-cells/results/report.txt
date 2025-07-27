@@ -1,0 +1,451 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"circuit"...done
+Successfully matched 2 fresh mask signals [{port_r[0]}, {port_r[1]}].
+Successfully matched 2 fresh mask signals [{port_r[0]}, {port_r[1]}].
+
+G: 120	p: 0.00195312	np: 0.998047
+
+mul_n4
+mul_n4
+mul_n4
+mul_n5
+mul_n5
+mul_n5
+mul_n6
+mul_n6
+mul_n6
+mul_n1
+mul_n1
+mul_n1
+mul_n2
+mul_n2
+mul_n2
+mul_n3
+mul_n3
+mul_n3
+mul_n7
+mul_n7
+mul_n7
+mul_n8
+mul_n8
+mul_n8
+mul_n9
+mul_n9
+mul_n9
+mul_n10
+mul_n10
+mul_n10
+mul_n11
+mul_n11
+mul_n11
+mul_n12
+mul_n12
+mul_n12
+mul_xor2_4_port_a0[2]
+mul_xor2_4_port_a0[2]
+mul_xor2_4_port_a0[2]
+mul_xor2_4_port_a0[1]
+mul_xor2_4_port_a0[1]
+mul_xor2_4_port_a0[1]
+mul_xor2_4_port_a0[0]
+mul_xor2_4_port_a0[0]
+mul_xor2_4_port_a0[0]
+mul_xor2_6_port_a0[2]
+mul_xor2_6_port_a0[2]
+mul_xor2_6_port_a0[2]
+mul_xor2_6_port_a0[1]
+mul_xor2_6_port_a0[1]
+mul_xor2_6_port_a0[1]
+mul_xor2_6_port_a0[0]
+mul_xor2_6_port_a0[0]
+mul_xor2_6_port_a0[0]
+mul_N8
+mul_N8
+mul_N8
+mul_N9
+mul_N9
+mul_N9
+mul_N10
+mul_N10
+mul_N10
+mul_N11
+mul_N11
+mul_N11
+mul_N12
+mul_N12
+mul_N12
+mul_N13
+mul_N13
+mul_N13
+mul_xor2_4_port_z[2]
+mul_xor2_4_port_z[2]
+mul_xor2_4_port_z[2]
+mul_xor2_4_port_z[1]
+mul_xor2_4_port_z[1]
+mul_xor2_4_port_z[1]
+mul_xor2_4_port_z[0]
+mul_xor2_4_port_z[0]
+mul_xor2_4_port_z[0]
+mul_xor2_5_port_z[2]
+mul_xor2_5_port_z[2]
+mul_xor2_5_port_z[2]
+mul_xor2_5_port_z[1]
+mul_xor2_5_port_z[1]
+mul_xor2_5_port_z[1]
+mul_xor2_5_port_z[0]
+mul_xor2_5_port_z[0]
+mul_xor2_5_port_z[0]
+mul_xor2_6_port_z[2]
+mul_xor2_6_port_z[2]
+mul_xor2_6_port_z[2]
+mul_xor2_6_port_z[1]
+mul_xor2_6_port_z[1]
+mul_xor2_6_port_z[1]
+mul_xor2_6_port_z[0]
+mul_xor2_6_port_z[0]
+mul_xor2_6_port_z[0]
+mul_xor2_7_port_z[2]
+mul_xor2_7_port_z[2]
+mul_xor2_7_port_z[2]
+mul_xor2_7_port_z[1]
+mul_xor2_7_port_z[1]
+mul_xor2_7_port_z[1]
+mul_xor2_7_port_z[0]
+mul_xor2_7_port_z[0]
+mul_xor2_7_port_z[0]
+cor_maj_12_n3
+cor_maj_12_n3
+cor_maj_12_n3
+cor_maj_12_n2
+cor_maj_12_n2
+cor_maj_12_n2
+cor_maj_12_n1
+cor_maj_12_n1
+cor_maj_12_n1
+cor_maj_12_port_o
+cor_maj_12_port_o
+cor_maj_12_port_o
+cor_maj_13_n4
+cor_maj_13_n4
+cor_maj_13_n4
+cor_maj_13_n5
+cor_maj_13_n5
+cor_maj_13_n5
+cor_maj_13_n6
+cor_maj_13_n6
+cor_maj_13_n6
+cor_maj_13_port_o
+cor_maj_13_port_o
+cor_maj_13_port_o
+cor_maj_14_n4
+cor_maj_14_n4
+cor_maj_14_n4
+cor_maj_14_n5
+cor_maj_14_n5
+cor_maj_14_n5
+cor_maj_14_n6
+cor_maj_14_n6
+cor_maj_14_n6
+cor_maj_14_port_o
+cor_maj_14_port_o
+cor_maj_14_port_o
+cor_maj_15_n4
+cor_maj_15_n4
+cor_maj_15_n4
+cor_maj_15_n5
+cor_maj_15_n5
+cor_maj_15_n5
+cor_maj_15_n6
+cor_maj_15_n6
+cor_maj_15_n6
+cor_maj_15_port_o
+cor_maj_15_port_o
+cor_maj_15_port_o
+cor_maj_16_n4
+cor_maj_16_n4
+cor_maj_16_n4
+cor_maj_16_n5
+cor_maj_16_n5
+cor_maj_16_n5
+cor_maj_16_n6
+cor_maj_16_n6
+cor_maj_16_n6
+cor_maj_16_port_o
+cor_maj_16_port_o
+cor_maj_16_port_o
+cor_maj_17_n4
+cor_maj_17_n4
+cor_maj_17_n4
+cor_maj_17_n5
+cor_maj_17_n5
+cor_maj_17_n5
+cor_maj_17_n6
+cor_maj_17_n6
+cor_maj_17_n6
+cor_maj_17_port_o
+cor_maj_17_port_o
+cor_maj_17_port_o
+cor_maj_18_n4
+cor_maj_18_n4
+cor_maj_18_n4
+cor_maj_18_n5
+cor_maj_18_n5
+cor_maj_18_n5
+cor_maj_18_n6
+cor_maj_18_n6
+cor_maj_18_n6
+cor_maj_18_port_o
+cor_maj_18_port_o
+cor_maj_18_port_o
+cor_maj_19_n4
+cor_maj_19_n4
+cor_maj_19_n4
+cor_maj_19_n5
+cor_maj_19_n5
+cor_maj_19_n5
+cor_maj_19_n6
+cor_maj_19_n6
+cor_maj_19_n6
+cor_maj_19_port_o
+cor_maj_19_port_o
+cor_maj_19_port_o
+cor_maj_20_n4
+cor_maj_20_n4
+cor_maj_20_n4
+cor_maj_20_n5
+cor_maj_20_n5
+cor_maj_20_n5
+cor_maj_20_n6
+cor_maj_20_n6
+cor_maj_20_n6
+cor_maj_20_port_o
+cor_maj_20_port_o
+cor_maj_20_port_o
+cor_maj_21_n4
+cor_maj_21_n4
+cor_maj_21_n4
+cor_maj_21_n5
+cor_maj_21_n5
+cor_maj_21_n5
+cor_maj_21_n6
+cor_maj_21_n6
+cor_maj_21_n6
+cor_maj_21_port_o
+cor_maj_21_port_o
+cor_maj_21_port_o
+cor_maj_22_n4
+cor_maj_22_n4
+cor_maj_22_n4
+cor_maj_22_n5
+cor_maj_22_n5
+cor_maj_22_n5
+cor_maj_22_n6
+cor_maj_22_n6
+cor_maj_22_n6
+cor_maj_22_port_o
+cor_maj_22_port_o
+cor_maj_22_port_o
+cor_maj_23_n4
+cor_maj_23_n4
+cor_maj_23_n4
+cor_maj_23_n5
+cor_maj_23_n5
+cor_maj_23_n5
+cor_maj_23_n6
+cor_maj_23_n6
+cor_maj_23_n6
+cor_maj_23_port_o
+cor_maj_23_port_o
+cor_maj_23_port_o
+comp_port_c_0[2]
+comp_port_c_0[2]
+comp_port_c_0[2]
+comp_port_c_0[1]
+comp_port_c_0[1]
+comp_port_c_0[1]
+comp_port_c_0[0]
+comp_port_c_0[0]
+comp_port_c_0[0]
+comp_port_c_1[2]
+comp_port_c_1[2]
+comp_port_c_1[2]
+comp_port_c_1[1]
+comp_port_c_1[1]
+comp_port_c_1[1]
+comp_port_c_1[0]
+comp_port_c_1[0]
+comp_port_c_1[0]
+port_c_0[2]
+port_c_0[2]
+port_c_0[2]
+port_c_0[1]
+port_c_0[1]
+port_c_0[1]
+port_c_0[0]
+port_c_0[0]
+port_c_0[0]
+port_c_1[2]
+port_c_1[2]
+port_c_1[2]
+port_c_1[1]
+port_c_1[1]
+port_c_1[1]
+port_c_1[0]
+port_c_1[0]
+port_c_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[1]
+mul_port_c_1_1[1]
+mul_port_c_1_1[1]
+mul_port_c_1_1[2]
+mul_port_c_1_1[2]
+mul_port_c_1_1[2]
+mul_port_c_1_0[0]
+mul_port_c_1_0[0]
+mul_port_c_1_0[0]
+mul_port_c_1_0[1]
+mul_port_c_1_0[1]
+mul_port_c_1_0[1]
+mul_port_c_1_0[2]
+mul_port_c_1_0[2]
+mul_port_c_1_0[2]
+mul_port_c_0_1[0]
+mul_port_c_0_1[0]
+mul_port_c_0_1[0]
+mul_port_c_0_1[1]
+mul_port_c_0_1[1]
+mul_port_c_0_1[1]
+mul_port_c_0_1[2]
+mul_port_c_0_1[2]
+mul_port_c_0_1[2]
+mul_port_c_0_0[0]
+mul_port_c_0_0[0]
+mul_port_c_0_0[0]
+mul_port_c_0_0[1]
+mul_port_c_0_0[1]
+mul_port_c_0_0[1]
+mul_port_c_0_0[2]
+mul_port_c_0_0[2]
+mul_port_c_0_0[2]
+cor_port_v_1_1[0]
+cor_port_v_1_1[0]
+cor_port_v_1_1[0]
+cor_port_v_1_1[1]
+cor_port_v_1_1[1]
+cor_port_v_1_1[1]
+cor_port_v_1_1[2]
+cor_port_v_1_1[2]
+cor_port_v_1_1[2]
+cor_port_v_1_0[0]
+cor_port_v_1_0[0]
+cor_port_v_1_0[0]
+cor_port_v_1_0[1]
+cor_port_v_1_0[1]
+cor_port_v_1_0[1]
+cor_port_v_1_0[2]
+cor_port_v_1_0[2]
+cor_port_v_1_0[2]
+cor_port_v_0_1[0]
+cor_port_v_0_1[0]
+cor_port_v_0_1[0]
+cor_port_v_0_1[1]
+cor_port_v_0_1[1]
+cor_port_v_0_1[1]
+cor_port_v_0_1[2]
+cor_port_v_0_1[2]
+cor_port_v_0_1[2]
+cor_port_v_0_0[0]
+cor_port_v_0_0[0]
+cor_port_v_0_0[0]
+cor_port_v_0_0[1]
+cor_port_v_0_0[1]
+cor_port_v_0_0[1]
+cor_port_v_0_0[2]
+cor_port_v_0_0[2]
+cor_port_v_0_0[2]
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :2
+	Number of groups :3
+	Number of bits :1
+[+] Available fault locations: 360
+	Cycles:3
+	fault_positions: 120
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 0.00936445 seconds!
+	 Individual Faults: 360
+	 Faulted Cycles: 
+		1
+		2
+		3
+	 Effective Faults Per Thread: 
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		5
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		5
+		0
+	 Effective Faults Total: 
+		 Success 10
+		 Trials 128
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.01235576
+		p_u: 0.2303508
+-------------------------------------------------------------
+

@@ -1,0 +1,181 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"circuit"...done
+Successfully matched 2 fresh mask signals [{port_r[0]}, {port_r[1]}].
+Successfully matched 2 fresh mask signals [{port_r[0]}, {port_r[1]}].
+
+G: 30	p: 0.015625	np: 0.984375
+
+port_c_0[2]
+port_c_0[2]
+port_c_0[2]
+port_c_0[1]
+port_c_0[1]
+port_c_0[1]
+port_c_0[0]
+port_c_0[0]
+port_c_0[0]
+port_c_1[2]
+port_c_1[2]
+port_c_1[2]
+port_c_1[1]
+port_c_1[1]
+port_c_1[1]
+port_c_1[0]
+port_c_1[0]
+port_c_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[0]
+mul_port_c_1_1[1]
+mul_port_c_1_1[1]
+mul_port_c_1_1[1]
+mul_port_c_1_1[2]
+mul_port_c_1_1[2]
+mul_port_c_1_1[2]
+mul_port_c_1_0[0]
+mul_port_c_1_0[0]
+mul_port_c_1_0[0]
+mul_port_c_1_0[1]
+mul_port_c_1_0[1]
+mul_port_c_1_0[1]
+mul_port_c_1_0[2]
+mul_port_c_1_0[2]
+mul_port_c_1_0[2]
+mul_port_c_0_1[0]
+mul_port_c_0_1[0]
+mul_port_c_0_1[0]
+mul_port_c_0_1[1]
+mul_port_c_0_1[1]
+mul_port_c_0_1[1]
+mul_port_c_0_1[2]
+mul_port_c_0_1[2]
+mul_port_c_0_1[2]
+mul_port_c_0_0[0]
+mul_port_c_0_0[0]
+mul_port_c_0_0[0]
+mul_port_c_0_0[1]
+mul_port_c_0_0[1]
+mul_port_c_0_0[1]
+mul_port_c_0_0[2]
+mul_port_c_0_0[2]
+mul_port_c_0_0[2]
+cor_port_v_1_1[0]
+cor_port_v_1_1[0]
+cor_port_v_1_1[0]
+cor_port_v_1_1[1]
+cor_port_v_1_1[1]
+cor_port_v_1_1[1]
+cor_port_v_1_1[2]
+cor_port_v_1_1[2]
+cor_port_v_1_1[2]
+cor_port_v_1_0[0]
+cor_port_v_1_0[0]
+cor_port_v_1_0[0]
+cor_port_v_1_0[1]
+cor_port_v_1_0[1]
+cor_port_v_1_0[1]
+cor_port_v_1_0[2]
+cor_port_v_1_0[2]
+cor_port_v_1_0[2]
+cor_port_v_0_1[0]
+cor_port_v_0_1[0]
+cor_port_v_0_1[0]
+cor_port_v_0_1[1]
+cor_port_v_0_1[1]
+cor_port_v_0_1[1]
+cor_port_v_0_1[2]
+cor_port_v_0_1[2]
+cor_port_v_0_1[2]
+cor_port_v_0_0[0]
+cor_port_v_0_0[0]
+cor_port_v_0_0[0]
+cor_port_v_0_0[1]
+cor_port_v_0_0[1]
+cor_port_v_0_0[1]
+cor_port_v_0_0[2]
+cor_port_v_0_0[2]
+cor_port_v_0_0[2]
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :2
+	Number of groups :3
+	Number of bits :1
+[+] Available fault locations: 90
+	Cycles:3
+	fault_positions: 30
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 0.00634119 seconds!
+	 Individual Faults: 90
+	 Faulted Cycles: 
+		1
+		2
+		3
+	 Effective Faults Per Thread: 
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		8
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+		8
+		0
+		0
+		0
+		0
+		0
+		0
+		0
+	 Effective Faults Total: 
+		 Success 16
+		 Trials 128
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.032736018
+		p_u: 0.29408592
+-------------------------------------------------------------
+

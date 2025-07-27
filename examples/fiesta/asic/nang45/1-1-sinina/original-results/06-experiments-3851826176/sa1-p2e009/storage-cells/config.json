@@ -1,0 +1,139 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "waveform_simulation": false,
+    "groups": [
+      "2'b$$"
+    ],
+    "output_shares": [
+      "port_c_0[2:0]",
+      "port_c_1[2:0]"
+    ],
+    "expected_output": [
+      "3'b$$$"
+    ],
+    "number_of_clock_cycles": 4,
+    "always_random_inputs": [
+      "port_r[1:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "port_a_0[0]",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "port_a_0[1]",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "port_a_0[2]",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "port_a_1[0]",
+            "value": "group_in1[0]"
+          },
+          {
+            "name": "port_a_1[1]",
+            "value": "group_in1[0]"
+          },
+          {
+            "name": "port_a_1[2]",
+            "value": "group_in1[0]"
+          },
+          {
+            "name": "port_b_0[0]",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "port_b_0[1]",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "port_b_0[2]",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "port_b_1[0]",
+            "value": "group_in1[1]"
+          },
+          {
+            "name": "port_b_1[1]",
+            "value": "group_in1[1]"
+          },
+          {
+            "name": "port_b_1[2]",
+            "value": "group_in1[1]"
+          },
+          {
+            "name": "reset",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "reset",
+            "value": "1'b1"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 3851826176,
+    "number_of_simulations_per_step": 64
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "analysis_strategy": "fia_sampled",
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  },
+  "fault_injection": {
+    "type": "StuckAt1",
+    "minimum_number_of_faults_per_run": 1,
+    "maximum_number_of_faults_per_run": 1,
+    "minimum_number_of_faults_per_cycle": 1,
+    "maximum_number_of_faults_per_cycle": 1,
+    "clock_cycles": [
+      "1",
+      "2",
+      "3"
+    ],
+    "fault_locations": {
+      "include": {
+        "signals": ".*"
+      },
+      "exclude": {
+        "signals": "(?!)"
+      }
+    },
+    "confidence_level": 0.99999,
+    "max_size_of_combinations": 3,
+    "fault_properties": [
+      [
+        {
+          "type": "StuckAt1",
+          "probability": 0.001953125,
+          "fault_logic_gates": false,
+          "fault_storage_gates": true,
+          "fault_locations": {
+            "include": {
+              "signals": ".*"
+            },
+            "exclude": {
+              "signals": "(?!)"
+            }
+          }
+        }
+      ]
+    ]
+  }
+}
