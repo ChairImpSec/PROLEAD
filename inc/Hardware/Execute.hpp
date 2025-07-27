@@ -2,6 +2,8 @@
 
 #include "Util/ProgramOptions.hpp"
 #include "Hardware/Adversaries.hpp"
+#include "Hardware/SampledRFAdversary.hpp"
+#include "Hardware/gds/GDSScanner.hpp"
 
 namespace po = boost::program_options;
 

@@ -1,5 +1,28 @@
 #include "Util/Settings.hpp"
 
+void Settings::ParseStrategy(const boost::json::object& json_object,
+                             const std::string& identifier) {
+  std::string parsed_value;
+  std::string error_context = "Error while parsing \"" + identifier + "\": ";
+
+  if (SetValue(json_object, identifier, parsed_value)) {
+    if (is_target_hardware_) {
+      if (parsed_value == "sca") {
+        analysis_strategy = analysis_t::sca;
+      } else if (parsed_value == "fia") {
+        analysis_strategy = analysis_t::fia;
+      } else {
+        throw std::invalid_argument(error_context + "Invalid argument for \"" +
+                                    SettingNames::ANALYSIS_STRATEGY + "\"!");
+      }
+    } else {
+      throw std::runtime_error(error_context + "Key \"" +
+                               SettingNames::ANALYSIS_STRATEGY +
+                               "\" not found!");
+    }
+  }
+}
+
 void Settings::ParseArrayOfTriStateBitVectors(
     const boost::json::object& json_object, const std::string& identifier,
     uint64_t number_of_values, bool required, bool check_number_of_values,
@@ -1169,6 +1192,107 @@ void Settings::ParseSideChannelAnalysisSettings(
                        settings.analysis);
 }
 
+void Settings::ParseFaultAdversaries(
+    const boost::json::object& json_object,
+    std::vector<std::vector<FaultProperties>>& adversaries) {
+  std::string error_context =
+      "Error while parsing \"" + SettingNames::FIESTA_ADVERSARIES + "\": ";
+  boost::json::array adversaries_json, properties_json;
+
+  if (SetValue(json_object, SettingNames::FIESTA_ADVERSARIES,
+               adversaries_json)) {
+    boost::json::object adversary_obj, properties_obj;
+
+    for (auto& adversary : adversaries_json) {
+      if (adversary.is_object()) {
+        adversary_obj = adversary.as_object();
+        std::vector<FaultProperties> properties;
+
+        if (SetValue(adversary_obj, SettingNames::FIESTA_PROPERTIES,
+                     properties_json)) {
+          for (auto& property_json : properties_json) {
+            if (property_json.is_object()) {
+              properties_obj = property_json.as_object();
+              FaultProperties property;
+
+              ParseIncludeSettings(properties_obj,
+                                   SettingNames::FAULT_LOCATIONS, false,
+                                   property.locations);
+
+              std::string parsed_value;
+              if (SetValue(properties_obj, SettingNames::FAULT_TYPE,
+                           parsed_value)) {
+                if (parsed_value == "StuckAt0") {
+                  property.fault_type = FaultType::stuck_at_0;
+                } else if (parsed_value == "StuckAt1") {
+                  property.fault_type = FaultType::stuck_at_1;
+                } else if (parsed_value == "Toggle") {
+                  property.fault_type = FaultType::toggle;
+                } else {
+                  throw std::invalid_argument(error_context +
+                                              "Invalid argument for \"" +
+                                              SettingNames::FAULT_TYPE + "\"!");
+                }
+              } else {
+                throw std::runtime_error(error_context + "Key \"" +
+                                         SettingNames::FAULT_TYPE +
+                                         "\" not found!");
+              }
+
+              if (!SetValue(properties_obj,
+                            SettingNames::FIESTA_FAULT_PROBABILITY,
+                            property.probability)) {
+                throw std::invalid_argument(
+                    error_context + "Invalid argument for \"" +
+                    SettingNames::FIESTA_FAULT_PROBABILITY + "\"!");
+              }
+
+              if (property.probability <= 0 || property.probability > 1) {
+                throw std::invalid_argument(
+                    error_context + "Invalid argument for \"" +
+                    SettingNames::FIESTA_FAULT_PROBABILITY + "\"!");
+              }
+
+              if (!SetValue(properties_obj,
+                            SettingNames::FIESTA_TARGET_LOGIC_GATES,
+                            property.fault_logic_gates)) {
+                throw std::invalid_argument(
+                    error_context + "Invalid argument for \"" +
+                    SettingNames::FIESTA_TARGET_LOGIC_GATES + "\"!");
+              }
+
+              if (!SetValue(properties_obj,
+                            SettingNames::FIESTA_TARGET_STORAGE_GATES,
+                            property.fault_storage_gates)) {
+                throw std::invalid_argument(
+                    error_context + "Invalid argument for \"" +
+                    SettingNames::FIESTA_TARGET_STORAGE_GATES + "\"!");
+              }
+
+              properties.emplace_back(property);
+            } else {
+              throw std::runtime_error(error_context + "Invalid format!");
+            }
+          }
+
+          adversaries.emplace_back(properties);
+        } else {
+          throw std::runtime_error(error_context + "Key \"" +
+                                   SettingNames::FIESTA_PROPERTIES +
+                                   "\" not found!");
+        }
+
+      } else {
+        throw std::runtime_error(error_context + "Invalid format!");
+      }
+    }
+  } else {
+    throw std::runtime_error(error_context + "Key \"" +
+                             SettingNames::FIESTA_ADVERSARIES +
+                             "\" not found!");
+  }
+}
+
 void Settings::ParseFaultInjectionSettings(
     const boost::json::object& json_object, const std::string& identifier,
     FaultInjectionSettings& settings) {
@@ -1239,6 +1363,27 @@ void Settings::ParseFaultInjectionSettings(
           SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_CYCLE + "\" and \"" +
           SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_CYCLE + "\"!");
     }
+
+    if (SetValue(fi, SettingNames::FIESTA_CONFIDENCE_LEVEL,
+                 settings.confidence_level)) {
+      if (settings.confidence_level >= 1) {
+        throw std::invalid_argument(
+            error_context + "Invalid argument for\"" +
+            SettingNames::FIESTA_CONFIDENCE_LEVEL +
+            "\n\tConfidence level (gamma) >= 1" +
+            "is not possible due to the stochastic nature, " +
+            "for this an exhaustive approach is required!");
+      } else if (settings.confidence_level <= 0) {
+        throw std::invalid_argument(
+            error_context + "Invalid argument for\"" +
+            SettingNames::FIESTA_CONFIDENCE_LEVEL +
+            "\n\tConfidence level (gamm) <= 0 is pointless, " +
+            "since no guarantees are derived, " +
+            "but computation time is wasted!");
+      }
+    }
+
+    ParseFaultAdversaries(fi, settings.fault_adversaries);
   }
 }
 
@@ -1509,11 +1654,12 @@ bool Settings::IsDistanceSmallEnough(uint64_t distance) const {
   return is_distance_small_enough && is_no_unallowed_univariate_set;
 }
 
-Settings::Settings(const boost::json::object& config_file, bool is_target_hardware)
+Settings::Settings(const boost::json::object& config_file,
+                   bool is_target_hardware)
     : is_target_hardware_(is_target_hardware) {
-
   settings_schema.Validate(config_file);
   std::cout << "Successfully validated the settings file." << std::endl;
+  ParseStrategy(config_file, SettingNames::ANALYSIS_STRATEGY);
   ParseFiniteField(config_file, SettingNames::INPUT_FINITE_FIELD,
                    input_finite_field);
   ParseFiniteField(config_file, SettingNames::OUTPUT_FINITE_FIELD,

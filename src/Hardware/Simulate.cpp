@@ -1,5 +1,615 @@
 #include "Hardware/Simulate.hpp"
 
+size_t count_faultable_hw{0};
+
+void evaluateRegisterFaultFree(
+  const Library &library,
+  const CircuitStruct &Circuit,
+  Simulation &simulation,
+  SharedData &SharedData,
+	std::vector<uint64_t> &input_values,
+  size_t clock_cycle) {
+
+	uint64_t Value;
+
+  for (size_t RegIndex = 0; RegIndex < Circuit.regs_.size(); RegIndex++){
+    input_values.resize(Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs() + Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs());
+
+    for (size_t InputIndex = 0; InputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs(); InputIndex++){
+      input_values[InputIndex] = SharedData.signal_values_[Circuit.cells_[Circuit.regs_[RegIndex]].Inputs[InputIndex]];
+    }
+
+    for (size_t OutputIndex = 0; OutputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs(); OutputIndex++){
+      input_values[Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs() + OutputIndex] = SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]];
+    }
+
+    for (size_t OutputIndex = 0; OutputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs(); OutputIndex++){
+      Value = Circuit.cells_[Circuit.regs_[RegIndex]].Eval(OutputIndex, input_values);
+
+      if (clock_cycle == 0)
+        SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]] = 0;
+      else
+        SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]] = Value;
+    }
+  }
+}
+
+
+void evaluateRegisterFaulted(
+  const Library &library,
+  const CircuitStruct &Circuit,
+  Simulation &simulation,
+  SharedData &SharedData,
+	std::vector<uint64_t> &input_values,
+  size_t clock_cycle,
+  const std::vector<FaultSet> &fault_sets,
+  std::vector<std::vector<std::vector<FaultType>>> &fault_type){
+
+	uint64_t Value;
+
+  for (size_t RegIndex = 0; RegIndex < Circuit.regs_.size(); RegIndex++){
+    input_values.resize(Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs() + Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs());
+
+    for (size_t InputIndex = 0; InputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs(); InputIndex++){
+      input_values[InputIndex] = SharedData.signal_values_[Circuit.cells_[Circuit.regs_[RegIndex]].Inputs[InputIndex]];
+    }
+
+    for (size_t OutputIndex = 0; OutputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs(); OutputIndex++){
+      input_values[Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfInputs() + OutputIndex] = SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]];
+    }
+
+    for (size_t OutputIndex = 0; OutputIndex < Circuit.cells_[Circuit.regs_[RegIndex]].type->GetNumberOfOutputs(); OutputIndex++){
+      if (clock_cycle == 0) {
+			SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]] = 0;
+      }else{
+        Value = Circuit.cells_[Circuit.regs_[RegIndex]].Eval(OutputIndex, input_values);
+        for (size_t fault_idx = 0; fault_idx < 64; ++fault_idx) {
+
+          if (Circuit.cells_[Circuit.regs_[RegIndex]].Outputs[OutputIndex] != -1) {
+            const FaultType ft = fault_type[fault_idx][Circuit.cells_[Circuit.regs_[RegIndex]].Outputs[OutputIndex]][clock_cycle];
+            switch (ft) {
+              case FaultType::stuck_at_0:
+                Value &= ~(1ULL << fault_idx);
+                break;
+              case FaultType::stuck_at_1:
+                Value |= (1ULL << fault_idx);
+                break;
+              case FaultType::toggle:
+                Value ^= (1ULL << fault_idx);
+                break;
+              default:
+                break;
+            }
+          }
+        }
+			  SharedData.register_values_[Circuit.cells_[Circuit.regs_[RegIndex]].RegValueIndexes[OutputIndex]] = Value;
+      }
+    }
+  }
+}
+
+void applyAlwaysRandomInputs(
+  Simulation &simulation,
+  const Settings &settings,
+	std::vector<uint64_t> &random_bitsliced_polynomial,
+  uint64_t input_element_size,
+  Sharing &input_sharing,
+  SharedData &SharedData
+) {
+
+  std::vector<std::vector<uint64_t>>* always_random_inputs_indices;
+
+ // ----------- applying always random inputs
+    if (SharedData.signal_values_[simulation.clock_signal_index_]) {  // rising edge
+      always_random_inputs_indices = &simulation.always_random_inputs_rising_edge_indices_;
+    } else {  // falling edge
+      always_random_inputs_indices = &simulation.always_random_inputs_falling_edge_indices_;
+    }
+
+    if (settings.input_finite_field.base == 2) {
+      for (const std::vector<uint64_t>& element : *always_random_inputs_indices) {
+        random_bitsliced_polynomial = input_sharing.SampleBooleanRandomBitslicedPolynomial();
+
+        for (uint64_t in_idx = 0; in_idx < input_element_size; ++in_idx) {
+          SharedData.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+        }
+      }
+    } else {
+      for (const std::vector<uint64_t>& element : *always_random_inputs_indices) {
+        random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+
+        for (uint64_t in_idx = 0; in_idx < input_element_size; ++in_idx) {
+          SharedData.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+        }
+      }
+    }
+}
+
+void applyAlwaysRandomInputs(
+  Simulation &simulation,
+  const Settings &settings,
+	std::vector<uint64_t> &random_bitsliced_polynomial,
+  uint64_t input_element_size,
+  Sharing &input_sharing,
+  SharedData &shared_data,
+  SharedData &shared_data_faulted
+) {
+
+  std::vector<std::vector<uint64_t>>* always_random_inputs_indices;
+
+ // ----------- applying always random inputs
+    if (shared_data.signal_values_[simulation.clock_signal_index_]) {  // rising edge
+      always_random_inputs_indices = &simulation.always_random_inputs_rising_edge_indices_;
+    } else {  // falling edge
+      always_random_inputs_indices = &simulation.always_random_inputs_falling_edge_indices_;
+    }
+
+    if (settings.input_finite_field.base == 2) {
+      for (const std::vector<uint64_t>& element : *always_random_inputs_indices) {
+        random_bitsliced_polynomial = input_sharing.SampleBooleanRandomBitslicedPolynomial();
+
+        for (uint64_t in_idx = 0; in_idx < input_element_size; ++in_idx) {
+          shared_data.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+          shared_data_faulted.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+
+        }
+      }
+    } else {
+      for (const std::vector<uint64_t>& element : *always_random_inputs_indices) {
+        random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+
+        for (uint64_t in_idx = 0; in_idx < input_element_size; ++in_idx) {
+          shared_data.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+          shared_data_faulted.signal_values_[element[in_idx]] = random_bitsliced_polynomial[in_idx];
+        }
+      }
+    }
+}
+
+void applyInitialInputs(SharedData &shared_data,
+                        SharedData &shared_data_faulted,
+	                      boost::variate_generator<boost::mt19937 &, boost::uniform_int<uint64_t>> &ThreadPrng,
+                        size_t clock_cycle) {
+  // TODO: this requres an if conditioned on the clock cylce,
+  // the clock_cycle is selected in the outer most loop,
+  // can we chose if this function is evaluated directly after the clock_cycle iterator is
+  // increased.
+  //
+  // TODO: Use same inputs for both datastructures using pointers
+  //
+  // shared_data.inputs -> inputs <- shared_data_faulted.inputs
+  //
+
+  std::vector<uint64_t> input_values(64,0);
+  if (clock_cycle < shared_data.input_sequence_.size()){
+    for (InputAssignment& input_assignment : shared_data.input_sequence_[clock_cycle]){
+      if (input_assignment.signal_values_.empty()) {
+        if (input_assignment.is_inverted_){
+          for (size_t input_index = 0; input_index < input_assignment.signal_indices_.size(); ++input_index){
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = ~shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+
+            shared_data_faulted.signal_values_[input_assignment.signal_indices_[input_index]] = ~shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+          }
+        } else {
+          for (size_t input_index = 0; input_index < input_assignment.signal_indices_.size(); ++input_index){
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+            shared_data_faulted.signal_values_[input_assignment.signal_indices_[input_index]] = shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+
+            auto signal =  shared_data.signal_values_[input_assignment.signal_indices_[input_index]];
+            for (size_t i = 0; i < 64; ++i) {
+              input_values[i] = input_values[i] << 1;
+              input_values[i] = input_values[i] | (signal & 1);
+              signal = signal >> 1;
+            }
+          }
+        }
+        // TODO: compute inversion under the correct galois field
+      } else{
+        for (size_t input_index = 0; input_index < input_assignment.signal_values_.size(); ++input_index){
+          switch (input_assignment.signal_values_[input_index])
+          {
+          case vlog_bit_t::zero:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = 0;
+            shared_data_faulted.signal_values_[input_assignment.signal_indices_[input_index]] = 0;
+            break;
+          case vlog_bit_t::one:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = FullOne;
+            shared_data_faulted.signal_values_[input_assignment.signal_indices_[input_index]] = FullOne;
+            break;
+          case vlog_bit_t::random:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = ThreadPrng();
+            shared_data_faulted.signal_values_[input_assignment.signal_indices_[input_index]] = ThreadPrng();
+            break;
+          default:
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  // size_t count_faultable_hw{0};
+  // std::cout << "Signal" << std::endl;
+  // std::cout << "I: ";
+  // for (const auto & signal: input_values) {
+  //   std::cout << signal <<", ";
+  //   if(signal < 3){
+  //     ++count_faultable_hw;
+  //   }
+  // }
+  // std::cout << "(" << count_faultable_hw << ")" << std::endl;
+
+}
+
+void applyInitialInputs(SharedData &shared_data,
+	                      boost::variate_generator<boost::mt19937 &, boost::uniform_int<uint64_t>> &ThreadPrng,
+                        size_t clock_cycle) {
+  // TODO: this requres an if conditioned on the clock cylce,
+  // the clock_cycle is selected in the outer most loop,
+  // can we chose if this function is evaluated directly after the clock_cycle iterator is
+  // increased.
+  //
+  if (clock_cycle < shared_data.input_sequence_.size()){
+    for (InputAssignment& input_assignment : shared_data.input_sequence_[clock_cycle]){
+      if (input_assignment.signal_values_.empty()) {
+        if (input_assignment.is_inverted_){
+          for (size_t input_index = 0; input_index < input_assignment.signal_indices_.size(); ++input_index){
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = ~shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+          }
+        } else {
+          for (size_t input_index = 0; input_index < input_assignment.signal_indices_.size(); ++input_index){
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = shared_data.selected_group_values[input_assignment.group_indices_][input_assignment.share_index_][input_index];
+          }
+        }
+        // TODO: compute inversion under the correct galois field
+      } else{
+        for (size_t input_index = 0; input_index < input_assignment.signal_values_.size(); ++input_index){
+          switch (input_assignment.signal_values_[input_index])
+          {
+          case vlog_bit_t::zero:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = 0;
+            break;
+          case vlog_bit_t::one:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = FullOne;
+            break;
+          case vlog_bit_t::random:
+            shared_data.signal_values_[input_assignment.signal_indices_[input_index]] = ThreadPrng();
+            break;
+          default:
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+
+void ForwardsRegOutputs(const CircuitStruct &circuit, SharedData &shared_data) {
+  for (uint64_t reg_idx : circuit.regs_) {
+    for (uint64_t out_idx = 0; out_idx < circuit.cells_[reg_idx].type->GetNumberOfOutputs(); ++out_idx) {
+      if (circuit.cells_[reg_idx].Outputs[out_idx] != -1) {
+        shared_data.signal_values_[circuit.cells_[reg_idx].Outputs[out_idx]] = shared_data.register_values_[circuit.cells_[reg_idx].RegValueIndexes[out_idx]];
+      }
+    }
+  }
+}
+
+
+void EvaluteCircuitFaultFree(const CircuitStruct &circuit, Simulation &simulation, SharedData &shared_data, std::vector<uint64_t> &input_values, uint64_t clock_cycle) {
+	uint64_t cell_idx, idx, value;
+
+  for (uint64_t depth_idx = 1; depth_idx <= circuit.MaxDepth; ++depth_idx) {
+    for (uint64_t cell_idx = 0; cell_idx < circuit.NumberOfCellsInDepth[depth_idx]; ++cell_idx) {
+      idx = circuit.CellsInDepth[depth_idx][cell_idx];
+
+      if (!circuit.cells_[idx].type->IsLatch()) {
+        input_values.resize(circuit.cells_[idx].type->GetNumberOfInputs());
+
+        for (uint64_t in_idx = 0; in_idx < circuit.cells_[idx].type->GetNumberOfInputs(); ++in_idx){
+          input_values[in_idx] = shared_data.signal_values_[circuit.cells_[idx].Inputs[in_idx]];
+        }
+      } else {
+        input_values.resize(circuit.cells_[idx].type->GetNumberOfInputs() + circuit.cells_[idx].type->GetNumberOfOutputs());
+
+        for (uint64_t in_idx = 0; in_idx < circuit.cells_[idx].type->GetNumberOfInputs(); ++in_idx){
+          input_values[in_idx] = shared_data.signal_values_[circuit.cells_[idx].Inputs[in_idx]];
+        }
+
+        for (uint64_t out_idx = 0; out_idx < circuit.cells_[idx].type->GetNumberOfOutputs(); ++out_idx) {
+          input_values[circuit.cells_[idx].type->GetNumberOfInputs() + out_idx] = shared_data.signal_values_[circuit.cells_[idx].Outputs[out_idx]];
+        }
+      }
+
+      circuit.cells_[idx].Precomp(input_values);
+      for (uint64_t out_idx = 0; out_idx < circuit.cells_[idx].type->GetNumberOfOutputs(); ++out_idx) {
+        if (circuit.cells_[idx].Outputs[out_idx] != -1) {
+          value = circuit.cells_[idx].Eval(out_idx, input_values);
+          if (!simulation.fault_set_.empty()) {
+            simulation.fault_set_[0].TryToInduceFaults(value, circuit.cells_[idx].Outputs[out_idx], clock_cycle);
+          }
+          shared_data.signal_values_[circuit.cells_[idx].Outputs[out_idx]] = value;
+        }
+      }
+    }
+  }
+}
+
+void evaluteCircuitFaulted(
+  const Library &library,
+  const CircuitStruct &Circuit,
+  Simulation &simulation,
+  SharedData &SharedData,
+	std::vector<uint64_t> &input_values,
+	unsigned int clock_cycle,
+  const std::vector<FaultSet>& fault_sets,
+  std::vector<std::vector<std::vector<FaultType>>> &fault_type) {
+
+	uint64_t Value;
+
+  for (size_t DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++) {
+    for (size_t i = 0; i < Circuit.NumberOfCellsInDepth[DepthIndex]; i++) {
+      int CellIndex = Circuit.CellsInDepth[DepthIndex][i]; // TODO: int -> size_t
+
+      input_values.resize(Circuit.cells_[CellIndex].type->GetNumberOfInputs());
+
+      for (size_t InputIndex = 0; InputIndex < Circuit.cells_[CellIndex].type->GetNumberOfInputs(); InputIndex++){
+        input_values[InputIndex] = SharedData.signal_values_[Circuit.cells_[CellIndex].Inputs[InputIndex]];
+      }
+
+      for (size_t OutputIndex = 0; OutputIndex < Circuit.cells_[CellIndex].type->GetNumberOfOutputs(); OutputIndex++){
+
+        if (Circuit.cells_[CellIndex].Outputs[OutputIndex] != -1){
+          Value = Circuit.cells_[CellIndex].Eval(OutputIndex, input_values);
+          for(size_t fault_idx = 0; fault_idx < 64; ++fault_idx){
+            const FaultType ft = fault_type[fault_idx][Circuit.cells_[CellIndex].Outputs[OutputIndex]][clock_cycle];
+            switch (ft) {
+              case FaultType::stuck_at_0:
+                Value &= ~(1ULL << fault_idx);
+                break;
+              case FaultType::stuck_at_1:
+                Value |= (1ULL << fault_idx);
+                break;
+              case FaultType::toggle:
+                Value ^= (1ULL << fault_idx);
+                break;
+              default:
+                break;
+            }
+          }
+
+          SharedData.signal_values_[Circuit.cells_[CellIndex].Outputs[OutputIndex]] = Value;
+        }
+      }
+    }
+  }
+}
+
+void EvalEnabler(Simulation &simulation, std::vector<uint64_t> &enabler_evaluation_order, std::vector<Enabler> &enabler, std::vector<std::unique_ptr<uint64_t[]>*> &input_indices, int SimulationIndex) {
+	std::vector<uint64_t> input_values;
+
+  	for (uint64_t en_idx : enabler_evaluation_order){
+  		input_indices = enabler[en_idx].GetInputSignalIndices();
+  		input_values.resize(input_indices.size());
+
+  		for (uint64_t in_idx = 0; in_idx < input_indices.size(); ++in_idx){
+  			input_values[in_idx] = (*(input_indices[in_idx]))[SimulationIndex];
+  		}
+
+  		if (enabler[en_idx].CheckFunctions()){
+  			simulation.glitch_values_[en_idx][SimulationIndex] = enabler[en_idx].EvaluateGlitch(input_values);
+  			simulation.propagation_values_[en_idx][SimulationIndex] = enabler[en_idx].EvaluatePropagation(input_values);
+  		} else{
+  			simulation.glitch_values_[en_idx][SimulationIndex] = 0xffffffffffffffff;
+  			simulation.propagation_values_[en_idx][SimulationIndex] = 0xffffffffffffffff;
+  		}
+  	}
+}
+
+void InitGroupValues(const Settings &settings, SharedData &shared_data, Sharing &input_sharing,uint64_t input_element_size, uint64_t number_of_groups) {
+
+    std::vector<uint64_t>::iterator it;
+    std::vector<uint64_t> random_bitsliced_polynomial;
+  	for (size_t group_index = 0; group_index < number_of_groups; ++group_index) {
+  		for (size_t value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() / input_element_size; value_index++){
+
+        if(shared_data.group_values_.size() <= group_index){
+          throw std::runtime_error("Error 1 group_index" + std::to_string(group_index) + "size()" + std::to_string(shared_data.group_values_.size()));
+        }
+        if(shared_data.group_values_[group_index].size() <= value_index * input_element_size){
+          throw std::runtime_error("Error 2");
+        }
+
+        it = shared_data.group_values_[group_index].begin() + value_index * input_element_size;
+	      random_bitsliced_polynomial = input_sharing.SampleRandomBitslicedPolynomial();
+
+        if(random_bitsliced_polynomial.empty()){
+          throw std::runtime_error("Error 3");
+        }
+
+			  std::move(random_bitsliced_polynomial.begin(), random_bitsliced_polynomial.end(), shared_data.group_values_[group_index].begin() + value_index * input_element_size);
+  		}
+  	}
+
+  	for (size_t group_index = 0; group_index < number_of_groups; ++group_index) {
+  		for (size_t value_index = 0; value_index < settings.GetNumberOfBitsPerGroup(); value_index++) {
+  			switch (settings.GetGroupBit(group_index, value_index))
+  			{
+  			case vlog_bit_t::zero:
+  				shared_data.group_values_[group_index][value_index] = 0x0000000000000000;
+  				break;
+  			case vlog_bit_t::one:
+  				shared_data.group_values_[group_index][value_index] = 0xffffffffffffffff;
+  				break;
+  			default:
+  				break;
+  			}
+  		}
+  	}
+}
+
+
+void SelectGroupThreaded(boost::variate_generator<boost::mt19937 &, boost::uniform_int<uint64_t>> thread_prng, const SharedData &shared_data, std::vector<uint64_t> &select, Simulation &simulation, int simulation_index, uint64_t number_of_groups ) {
+  //  simulation.selected_groups_ probably needed per thread
+
+  for (size_t group_index = 0; group_index < number_of_groups; ++group_index) {
+    select[group_index] = 0;
+  }
+
+  for (size_t bit_index = 0; bit_index < 64; bit_index++) {
+    simulation.selected_groups_[simulation_index * 64 + bit_index] = thread_prng() % number_of_groups;
+    select[simulation.selected_groups_[simulation_index * 64 + bit_index]] |= shared_data.one_in_64_[bit_index];
+  }
+}
+
+
+void SelectGroup(boost::variate_generator<boost::mt19937 &, boost::uniform_int<uint64_t>> thread_prng, const SharedData &shared_data, std::vector<uint64_t> &select, Simulation &simulation, int simulation_index, uint64_t number_of_groups) {
+  //  simulation.selected_groups_ probably needed per thread
+
+  for (size_t group_index = 0; group_index < number_of_groups; ++group_index) {
+    select[group_index] = 0;
+  }
+
+  for (size_t bit_index = 0; bit_index < 64; bit_index++) {
+    simulation.selected_groups_[simulation_index * 64 + bit_index] = thread_prng() % number_of_groups;
+    select[simulation.selected_groups_[simulation_index * 64 + bit_index]] |= shared_data.one_in_64_[bit_index];
+  }
+}
+
+
+void ShareAndBitslice(SharedData &shared_data, Sharing &input_sharing, const std::vector<uint64_t> &select, const Settings &settings, uint64_t input_element_size, uint64_t number_of_groups) {
+
+	std::vector<uint64_t> bitsliced_element(input_element_size);
+
+  for (auto& shared_value : shared_data.selected_group_values) {
+    for (size_t bit_index = 0; bit_index < input_element_size; ++bit_index) {
+      bitsliced_element[bit_index] = 0;
+
+      for (size_t group_index = 0; group_index < number_of_groups; ++group_index){
+        bitsliced_element[bit_index] |= shared_data.group_values_[group_index][shared_value.first[bit_index]] & select[group_index];
+      }
+    }
+
+    if (shared_value.second.size() > 1){
+      shared_value.second = input_sharing.EncodeBitsliced(bitsliced_element, shared_value.second.size(), settings.input_finite_field.is_additive);
+    } else{
+      shared_value.second[0] = bitsliced_element;
+    }
+  }
+
+}
+
+void CheckFunctionalCorrectness(const Settings &settings, const Simulation &simulation,
+                                const SharedData& shared_data, Sharing &output_sharing,
+                                int SimulationIndex, uint64_t output_element_size) {
+
+  uint64_t number_of_output_shares = simulation.output_share_signal_indices_.size(); // 3
+  if (number_of_output_shares) {
+    uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size(); // 4
+    std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));
+    std::vector<uint64_t> bitsliced_unshared_output_value;
+    std::vector<vlog_bit_t> expected_unshared_output_value;
+    bitsliced_shared_output_value.resize(number_of_output_shares);
+
+    for (size_t value_index = 0; value_index < number_of_group_values; ++value_index) {
+      for (size_t share_index = 0; share_index < number_of_output_shares; ++share_index) {
+        for (size_t bit_index = 0; bit_index < output_element_size; ++bit_index) {
+          bitsliced_shared_output_value[share_index][bit_index] = shared_data.signal_values_[simulation.output_share_signal_indices_[share_index][value_index][bit_index]];
+        }
+      }
+
+      bitsliced_unshared_output_value = output_sharing.DecodeBitsliced(bitsliced_shared_output_value, settings.output_finite_field.is_additive);
+
+      for (size_t bit_index = 0; bit_index < 64; ++bit_index){
+        if ((simulation.is_simulation_faulty_[SimulationIndex] & shared_data.one_in_64_[bit_index]) == 0){
+          expected_unshared_output_value = simulation.expected_unshared_output_values_[simulation.selected_groups_[SimulationIndex * 64 + bit_index]][value_index];
+
+          for (size_t input_index = 0; input_index < expected_unshared_output_value.size(); ++ input_index){
+            if (
+              ((expected_unshared_output_value[input_index] == vlog_bit_t::zero) && (bitsliced_unshared_output_value[input_index] & shared_data.one_in_64_[bit_index]))
+              || ((expected_unshared_output_value[input_index] == vlog_bit_t::one) && ((bitsliced_unshared_output_value[input_index] & shared_data.one_in_64_[bit_index]) == 0))
+            ) {
+              int out{0};
+              if(expected_unshared_output_value[input_index] == vlog_bit_t::zero){
+                out = 0;
+              }else if (expected_unshared_output_value[input_index] == vlog_bit_t::one) {
+                out = 1;
+              }
+              else {
+                out = 1000;
+              }
+              std::cout << "Error in:\n\t bit_index " << bit_index <<
+                "\n\tValue inde " << value_index <<
+                "\n\tinput_index" << input_index <<
+                 "\n\tExpected output value " << out <<
+                 "\n\tOutput value " <<
+                (bitsliced_unshared_output_value[input_index] & shared_data.one_in_64_[bit_index]) <<
+                std::endl;
+                #pragma omp critical
+                throw std::runtime_error("Error while simulating the circuit. The received output does not match the expected output!");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+void CheckCorrectness(const Settings &settings, const Simulation &simulation, const SharedData& shared_data, Sharing &output_sharing, int SimulationIndex, uint64_t output_element_size) {
+  uint64_t number_of_output_shares = simulation.output_share_signal_indices_.size(); 
+
+  if (number_of_output_shares) {
+    uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size();
+    std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));
+    std::vector<uint64_t> bitsliced_output_value;
+    std::vector<vlog_bit_t> expected_output_value;
+    bitsliced_shared_output_value.resize(number_of_output_shares);
+
+    for (uint64_t val_idx = 0; val_idx < number_of_group_values; ++val_idx) {
+      for (uint64_t share_idx = 0; share_idx < number_of_output_shares; ++share_idx) {
+        for (uint64_t bit_idx = 0; bit_idx < output_element_size; ++bit_idx) {
+          bitsliced_shared_output_value[share_idx][bit_idx] = shared_data.signal_values_[simulation.output_share_signal_indices_[share_idx][val_idx][bit_idx]];
+        }
+      }
+
+      bitsliced_output_value = output_sharing.DecodeBitsliced(bitsliced_shared_output_value, settings.output_finite_field.is_additive);
+
+      for (uint64_t bit_idx = 0; bit_idx < 64; ++bit_idx){
+        if ((simulation.is_simulation_faulty_[SimulationIndex] & shared_data.one_in_64_[bit_idx]) == 0){
+          expected_output_value = simulation.expected_unshared_output_values_[simulation.selected_groups_[SimulationIndex * 64 + bit_idx]][val_idx];
+
+          for (uint64_t in_idx = 0; in_idx < expected_output_value.size(); ++ in_idx){
+            if (
+              ((expected_output_value[in_idx] == vlog_bit_t::zero) && (bitsliced_output_value[in_idx] & shared_data.one_in_64_[bit_idx]))
+              || ((expected_output_value[in_idx] == vlog_bit_t::one) && ((bitsliced_output_value[in_idx] & shared_data.one_in_64_[bit_idx]) == 0))
+            ) {
+              uint64_t out{0};
+              if(expected_output_value[in_idx] == vlog_bit_t::zero){
+                out = 0;
+              }else if (expected_output_value[in_idx] == vlog_bit_t::one) {
+                out = 1;
+              }
+              else {
+                out = 1000;
+              }
+              std::cout << "Error in:\n\t bit_index " << bit_idx <<
+                "\n\tValue inde " << val_idx <<
+                "\n\tinput_index" << in_idx <<
+                 "\n\tExpected output value " << out <<
+                 "\n\tOutput value " <<
+                (bitsliced_output_value[in_idx] & shared_data.one_in_64_[bit_idx]) <<
+                std::endl;
+                #pragma omp critical
+                throw std::runtime_error("Error while simulating the circuit. The received output does not match the expected output!");
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 Simulation::Simulation(CircuitStruct& circuit, Settings& settings) {
   uint64_t index, signal_index, signal_value;
   std::string fresh_mask_signal_names;
@@ -335,8 +945,8 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
              OutputIndex++)
           if (Circuit.cells_[CellIndex].Outputs[OutputIndex] != -1) {
             Value = Circuit.cells_[CellIndex].Eval(OutputIndex, input_values);
-            if (!simulation.fault_set.empty()) {
-              simulation.fault_set[0].TryToInduceFaults(
+            if (!simulation.fault_set_.empty()) {
+              simulation.fault_set_[0].TryToInduceFaults(
                   Value, Circuit.cells_[CellIndex].Outputs[OutputIndex],
                   clock_cycle);
             }
@@ -393,8 +1003,8 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
            (int)Circuit.cells_[reg_idx].type->GetNumberOfOutputs();
            OutputIndex++) {
         Value = Circuit.cells_[reg_idx].Eval(OutputIndex, input_values);
-        if (!simulation.fault_set.empty()) {
-          simulation.fault_set[0].TryToInduceFaults(
+        if (!simulation.fault_set_.empty()) {
+          simulation.fault_set_[0].TryToInduceFaults(
               Value, Circuit.cells_[reg_idx].Outputs[OutputIndex], clock_cycle);
         }
 
@@ -502,78 +1112,8 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
       }
     }
 
-    // ----------- applying the register outputs to the output signals
-    for (uint64_t reg_idx : Circuit.regs_) {
-      for (OutputIndex = 0;
-           OutputIndex <
-           (int)Circuit.cells_[reg_idx].type->GetNumberOfOutputs();
-           OutputIndex++) {
-        if (Circuit.cells_[reg_idx].Outputs[OutputIndex] != -1) {
-          SharedData
-              .signal_values_[Circuit.cells_[reg_idx].Outputs[OutputIndex]] =
-              SharedData.register_values_[Circuit.cells_[reg_idx]
-                                              .RegValueIndexes[OutputIndex]];
-        }
-      }
-    }
-
-    // ----------- evaluate the circuit
-
-    for (DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++) {
-      for (i = 0; i < Circuit.NumberOfCellsInDepth[DepthIndex]; i++) {
-        CellIndex = Circuit.CellsInDepth[DepthIndex][i];
-
-        if (!Circuit.cells_[CellIndex].type->IsLatch()) {
-          input_values.resize(
-              Circuit.cells_[CellIndex].type->GetNumberOfInputs());
-
-          for (InputIndex = 0;
-               InputIndex <
-               (int)Circuit.cells_[CellIndex].type->GetNumberOfInputs();
-               InputIndex++)
-            input_values[InputIndex] =
-                SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                              .Inputs[InputIndex]];
-        } else {
-          input_values.resize(
-              Circuit.cells_[CellIndex].type->GetNumberOfInputs() +
-              Circuit.cells_[CellIndex].type->GetNumberOfOutputs());
-
-          for (InputIndex = 0;
-               InputIndex <
-               (int)Circuit.cells_[CellIndex].type->GetNumberOfInputs();
-               InputIndex++)
-            input_values[InputIndex] =
-                SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                              .Inputs[InputIndex]];
-
-          for (OutputIndex = 0;
-               OutputIndex <
-               (int)Circuit.cells_[CellIndex].type->GetNumberOfOutputs();
-               OutputIndex++)
-            input_values[Circuit.cells_[CellIndex].type->GetNumberOfInputs() +
-                         OutputIndex] =
-                SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                              .Outputs[OutputIndex]];
-        }
-
-        Circuit.cells_[CellIndex].Precomp(input_values);
-        for (OutputIndex = 0;
-             OutputIndex <
-             (int)Circuit.cells_[CellIndex].type->GetNumberOfOutputs();
-             OutputIndex++)
-          if (Circuit.cells_[CellIndex].Outputs[OutputIndex] != -1) {
-            Value = Circuit.cells_[CellIndex].Eval(OutputIndex, input_values);
-            if (!simulation.fault_set.empty()) {
-              simulation.fault_set[0].TryToInduceFaults(
-                  Value, Circuit.cells_[CellIndex].Outputs[OutputIndex],
-                  clock_cycle);
-            }
-            SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                          .Outputs[OutputIndex]] = Value;
-          }
-      }
-    }
+    ForwardsRegOutputs(Circuit, SharedData);
+    EvaluteCircuitFaultFree(Circuit, simulation, SharedData, input_values, clock_cycle);
 
     // ----------- storing the probe values in simualtion memory
     while ((probe_index < extended_probes.size()) &&
@@ -626,90 +1166,11 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
 
     if ((settings.GetClkEdge() == clk_edge_t::rising) ||
         (settings.GetClkEdge() == clk_edge_t::falling)) {
-      // ----------- evaluate the combinational circuit providing the clock of
-      // registers
-
-      for (DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++) {
-        for (i = 0; i < Circuit.NumberOfClockCellsInDepth[DepthIndex]; i++) {
-          CellIndex = Circuit.ClockCellsInDepth[DepthIndex][i];
-
-          if (!Circuit.cells_[CellIndex].type->IsLatch()) {
-            input_values.resize(
-                Circuit.cells_[CellIndex].type->GetNumberOfInputs());
-
-            for (InputIndex = 0;
-                 InputIndex <
-                 (int)Circuit.cells_[CellIndex].type->GetNumberOfInputs();
-                 InputIndex++)
-              input_values[InputIndex] =
-                  SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                                .Inputs[InputIndex]];
-          } else {
-            input_values.resize(
-                Circuit.cells_[CellIndex].type->GetNumberOfInputs() +
-                Circuit.cells_[CellIndex].type->GetNumberOfOutputs());
-
-            for (InputIndex = 0;
-                 InputIndex <
-                 (int)Circuit.cells_[CellIndex].type->GetNumberOfInputs();
-                 InputIndex++)
-              input_values[InputIndex] =
-                  SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                                .Inputs[InputIndex]];
-
-            for (OutputIndex = 0;
-                 OutputIndex <
-                 (int)Circuit.cells_[CellIndex].type->GetNumberOfOutputs();
-                 OutputIndex++)
-              input_values[Circuit.cells_[CellIndex].type->GetNumberOfInputs() +
-                           OutputIndex] =
-                  SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                                .Outputs[OutputIndex]];
-          }
-
-          Circuit.cells_[CellIndex].Precomp(input_values);
-          for (OutputIndex = 0;
-               OutputIndex <
-               (int)Circuit.cells_[CellIndex].type->GetNumberOfOutputs();
-               OutputIndex++)
-            if (Circuit.cells_[CellIndex].Outputs[OutputIndex] != -1) {
-              Value = Circuit.cells_[CellIndex].Eval(OutputIndex, input_values);
-              if (!simulation.fault_set.empty()) {
-                simulation.fault_set[0].TryToInduceFaults(
-                    Value, Circuit.cells_[CellIndex].Outputs[OutputIndex],
-                    clock_cycle);
-              }
-              SharedData.signal_values_[Circuit.cells_[CellIndex]
-                                            .Outputs[OutputIndex]] = Value;
-            }
-        }
-      }
+      EvaluteCircuitFaultFree(Circuit, simulation, SharedData, input_values, clock_cycle);
     }
   }
 
-  // evaluate the enabler
-  for (uint64_t enabler_index : enabler_evaluation_order) {
-    input_indices = enabler[enabler_index].GetInputSignalIndices();
-    input_values.resize(input_indices.size());
-
-    for (signal_index = 0; signal_index < input_indices.size();
-         ++signal_index) {
-      input_values[signal_index] =
-          (*(input_indices[signal_index]))[SimulationIndex];
-    }
-
-    if (enabler[enabler_index].CheckFunctions()) {
-      simulation.glitch_values_[enabler_index][SimulationIndex] =
-          enabler[enabler_index].EvaluateGlitch(input_values);
-      simulation.propagation_values_[enabler_index][SimulationIndex] =
-          enabler[enabler_index].EvaluatePropagation(input_values);
-    } else {
-      simulation.glitch_values_[enabler_index][SimulationIndex] =
-          0xffffffffffffffff;
-      simulation.propagation_values_[enabler_index][SimulationIndex] =
-          0xffffffffffffffff;
-    }
-  }
+  EvalEnabler(simulation, enabler_evaluation_order, enabler, input_indices, SimulationIndex);
 
   if (settings.IsWaveformSimulation()) {
     Hardware::Simulate::FinalizeVCDfile(
@@ -717,9 +1178,6 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
         SimulationIndex + simulation.number_of_processed_simulations / 64,
         "simulation");
   }
-
-  uint64_t number_of_output_shares =
-      simulation.output_share_signal_indices_.size();
 
   if (!simulation.fault_detection_flags_.empty()) {
     simulation.is_simulation_faulty_[SimulationIndex] = 0;
@@ -733,59 +1191,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
         ~simulation.is_simulation_faulty_[SimulationIndex];
   }
 
-  if (number_of_output_shares) {
-    uint64_t number_of_group_values =
-        simulation.output_share_signal_indices_[0].size();
-    std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(
-        number_of_output_shares, std::vector<uint64_t>(output_element_size));
-    std::vector<uint64_t> bitsliced_unshared_output_value;
-    std::vector<vlog_bit_t> expected_unshared_output_value;
-    bitsliced_shared_output_value.resize(number_of_output_shares);
-
-    for (value_index = 0; value_index < number_of_group_values; ++value_index) {
-      for (share_index = 0; share_index < number_of_output_shares;
-           ++share_index) {
-        for (bit_index = 0; bit_index < output_element_size; ++bit_index) {
-          bitsliced_shared_output_value[share_index][bit_index] =
-              SharedData
-                  .signal_values_[simulation.output_share_signal_indices_
-                                      [share_index][value_index][bit_index]];
-        }
-      }
-
-      bitsliced_unshared_output_value = output_sharing.DecodeBitsliced(
-          bitsliced_shared_output_value,
-          settings.output_finite_field.is_additive);
-
-      for (bit_index = 0; bit_index < 64; ++bit_index) {
-        if ((simulation.is_simulation_faulty_[SimulationIndex] &
-             SharedData.one_in_64_[bit_index]) == 0) {
-          expected_unshared_output_value =
-              simulation.expected_unshared_output_values_
-                  [simulation.selected_groups_[SimulationIndex * 64 +
-                                               bit_index]][value_index];
-
-          for (input_index = 0;
-               input_index < expected_unshared_output_value.size();
-               ++input_index) {
-            if (((expected_unshared_output_value[input_index] ==
-                  vlog_bit_t::zero) &&
-                 (bitsliced_unshared_output_value[input_index] &
-                  SharedData.one_in_64_[bit_index])) ||
-                ((expected_unshared_output_value[input_index] ==
-                  vlog_bit_t::one) &&
-                 ((bitsliced_unshared_output_value[input_index] &
-                   SharedData.one_in_64_[bit_index]) == 0))) {
-#pragma omp critical
-              throw std::runtime_error(
-                  "Error while simulating the circuit. The received output "
-                  "does not match the expected output!");
-            }
-          }
-        }
-      }
-    }
-  }
+  CheckCorrectness(settings, simulation, SharedData, output_sharing, SimulationIndex, output_element_size);
 }
 
 void Hardware::Simulate::GenerateVCDfile(const CircuitStruct& Circuit,
@@ -867,4 +1273,138 @@ void Hardware::Simulate::FinalizeVCDfile(int CycleIndex, int SimulationIndex,
     VCDFile << "#" << (2 * CycleIndex) * 1000 << std::endl;
     VCDFile.close();
   }
+}
+
+void Hardware::Simulate::SimulateFaultedAndFaultFree2(const Library &library,
+                                                     const CircuitStruct &circuit,
+                                                     const Settings &settings,
+                                                     SharedData &shared_data,
+                                                     SharedData &shared_data_faulted,
+                                                     Simulation &simulation,
+                                                     uint64_t SimulationIndex,
+                                                     boost::mt19937 &ThreadRng,
+                                                     const std::vector<FaultSet> &fault_sets,
+                                                     uint64_t thread_index,
+                                                     std::vector<std::vector<std::vector<FaultType>>> &fault_type) {
+
+	uint64_t number_of_groups = settings.GetNumberOfGroups();
+
+	int NumberOfWaitedClockCycles;
+	uint64_t Active;
+	std::vector<uint64_t> Select(number_of_groups);
+	std::string ErrorMessage;
+	unsigned int clock_cycle;
+	std::vector<uint64_t> input_values;
+	std::vector<std::unique_ptr<uint64_t[]>*> input_indices;
+
+	// assigning inputs (fixed/random/etc)
+	boost::uniform_int<uint64_t> ThreadDist(0, std::numeric_limits<uint64_t>::max());
+	boost::variate_generator<boost::mt19937 &, boost::uniform_int<uint64_t>> ThreadPrng(ThreadRng, ThreadDist);
+
+	Sharing input_sharing(settings.input_finite_field.base, settings.input_finite_field.exponent, settings.input_finite_field.irreducible_polynomial, ThreadRng);
+	Sharing output_sharing(settings.output_finite_field.base, settings.output_finite_field.exponent, settings.output_finite_field.irreducible_polynomial, ThreadRng);
+	uint64_t input_element_size = std::ceil(std::log2l(settings.input_finite_field.base)) * settings.input_finite_field.exponent;
+	uint64_t output_element_size = std::ceil(std::log2l(settings.output_finite_field.base)) * settings.output_finite_field.exponent;
+	std::vector<uint64_t> random_bitsliced_polynomial;
+
+
+  // Inititgroup values
+  InitGroupValues(settings, shared_data, input_sharing, input_element_size, number_of_groups);
+
+  // std::cout << "[+] Init of group values completed!" << std::endl;
+
+  // Select Group
+  SelectGroupThreaded(ThreadPrng, shared_data, Select, simulation, SimulationIndex, number_of_groups);
+  // std::cout << "[+] Selection of group completed!" << std::endl;
+
+  // Sharing/Encoding
+  ShareAndBitslice(shared_data, input_sharing, Select, settings, input_element_size, number_of_groups);
+  // std::cout << "[+] Sharing and bitslicing completd!" << std::endl;
+  // TODO: is this neccessary? probably no init values which have inpact on compuation
+  //shared_data_faulted = shared_data;
+
+	NumberOfWaitedClockCycles = -1;
+
+  //waveform stuff is mostlikely not working anymore since we do not multithread simulations any
+  //more
+	if (settings.IsWaveformSimulation() && thread_index == 0){
+		Hardware::Simulate::GenerateVCDfile(circuit, SimulationIndex + simulation.number_of_processed_simulations / 64, "simulation", simulation.topmodule_name_);
+		Hardware::Simulate::GenerateVCDfile(circuit, SimulationIndex + simulation.number_of_processed_simulations / 64, "simulation-faulted", simulation.topmodule_name_);
+    // std::cout << "[+] Simulation step is written to VCD fiel" << std::endl;
+	}
+
+	for (clock_cycle = 0; clock_cycle < settings.GetNumberOfClockCycles(); clock_cycle++){
+    // std::cout << "Simulation: " << SimulationIndex << " Clock cycle: " << clock_cycle << std::endl;
+
+    // clock signal pos_edge
+		shared_data.signal_values_[simulation.clock_signal_index_] = FullOne;
+		shared_data_faulted.signal_values_[simulation.clock_signal_index_] = FullOne;
+
+		// ----------- evaluate the registers
+    // NOTE: This writes shared_data -> Do twice for faulted and non-faulted circuit.
+    evaluateRegisterFaultFree(library, circuit, simulation, shared_data, input_values, clock_cycle);
+    evaluateRegisterFaulted(library, circuit, simulation, shared_data_faulted, input_values, clock_cycle, fault_sets,  fault_type);
+
+    // Before here takes quite long
+    // std::cout << "[+] Registers are evaluatated!" << std::endl;
+
+		// ----------- applying always random inputs
+    // NOTE: This must be equal for both the faulted and non-faulted state
+    // --> We have call this once for faulted and non-faulted and dublicate it.
+    applyAlwaysRandomInputs(simulation, settings, random_bitsliced_polynomial, input_element_size, input_sharing, shared_data, shared_data_faulted);
+    // std::cout << "[+] Random inputs are applied!" << std::endl;
+
+		// ----------- applying the initial inputs
+    applyInitialInputs(shared_data, shared_data_faulted, ThreadPrng, clock_cycle);
+    // std::cout << "[+] Initial inputs are applied!" << std::endl;
+
+		// ----------- applying the register outputs to the output signals
+    ForwardsRegOutputs(circuit, shared_data);
+    ForwardsRegOutputs(circuit, shared_data_faulted);
+
+    // After here takes quite long
+    EvaluteCircuitFaultFree(circuit, simulation, shared_data, input_values, clock_cycle);
+    evaluteCircuitFaulted(library, circuit, simulation, shared_data_faulted, input_values, clock_cycle, fault_sets,  fault_type);
+
+    // clock signal neg_edge
+		shared_data.signal_values_[simulation.clock_signal_index_] = 0;
+		shared_data_faulted.signal_values_[simulation.clock_signal_index_] = 0;
+
+
+		// Here, we store the result during one clock cycle in a vcd file
+		if (settings.IsWaveformSimulation()&& thread_index == 0){
+			Hardware::Simulate::WriteVCDfile(circuit, simulation.clock_signal_index_, shared_data, SimulationIndex + simulation.number_of_processed_simulations / 64, clock_cycle, "simulation");
+			Hardware::Simulate::WriteVCDfile(circuit, simulation.clock_signal_index_, shared_data_faulted, SimulationIndex + simulation.number_of_processed_simulations / 64, clock_cycle, "simulation-faulted");
+      // std::cout << "[+] Clockcycle is written to VCD file!" << std::endl;
+		}
+
+		// ----------- check the conditions to terminate the simulation
+    Active = 0;
+    for (const std::pair<uint64_t, uint64_t>& end_condition_signal : simulation.end_condition_signals_) {
+      Active |= shared_data.signal_values_[end_condition_signal.first] ^ end_condition_signal.second;
+    }
+
+    if (Active == 0 && !simulation.end_condition_signals_.empty()) {
+      if (NumberOfWaitedClockCycles == -1) {
+        NumberOfWaitedClockCycles = 0;
+      } else {
+        NumberOfWaitedClockCycles++;
+      }
+    }
+
+    if (NumberOfWaitedClockCycles == (int)settings.GetNumberOfWaitCycles()) {
+      // ClockCyclesTook = ClockCycle;
+      break;
+    } else if ((clock_cycle == (settings.GetNumberOfClockCycles() - 1)) && (NumberOfWaitedClockCycles < (int)settings.GetNumberOfWaitCycles())) {
+      // ClockCyclesTook = ClockCycle + 1;
+      break;
+		}
+	}
+
+	if (settings.IsWaveformSimulation()&& thread_index == 0){
+		Hardware::Simulate::FinalizeVCDfile(settings.GetNumberOfClockCycles(), SimulationIndex + simulation.number_of_processed_simulations / 64, "simulation");
+		Hardware::Simulate::FinalizeVCDfile(settings.GetNumberOfClockCycles(), SimulationIndex + simulation.number_of_processed_simulations / 64, "simulation-faulted");
+	}
+
+  CheckCorrectness(settings, simulation, shared_data, output_sharing, SimulationIndex, output_element_size);
 }

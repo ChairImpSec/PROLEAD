@@ -583,7 +583,7 @@ void Adversaries<ExtensionContainer>::SetFaults() {
     --clock_cycle;
 
     for (uint64_t index = 0; index < number_of_signals; ++index) {
-      const SignalStruct* const signal = &circuit_.signals_[index];
+      const SignalStruct& signal = circuit_.signals_[index];
       if (circuit_.signals_[index].is_fault_allowed) {
         switch (settings_.fault_injection.type) {
           case FaultType::stuck_at_0:
@@ -1384,9 +1384,9 @@ double Adversaries<ExtensionContainer>::EvaluateProbingSetsUnderFaults(
         if (maximum <= settings_.fault_injection.maximum_per_cycle &&
             minimum >= settings_.fault_injection.minimum_per_cycle) {
           std::cout << fault_message << std::endl;
-          simulation_.fault_set.emplace_back(faults);
+          simulation_.fault_set_.emplace_back(faults);
           EvaluateProbingSets(shared_data, start_time, probe_step_index);
-          simulation_.fault_set.pop_back();
+          simulation_.fault_set_.pop_back();
 
           if (GetMaximumLeakage() > maximum_leakage) {
             maximum_leakage = GetMaximumLeakage();

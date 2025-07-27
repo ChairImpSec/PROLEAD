@@ -67,8 +67,9 @@ std::vector<std::vector<uint64_t>> Sharing::EncodeBitsliced(
       number_of_shares, std::vector<uint64_t>(length_of_elements_in_bits_, 0));
   std::vector<Polynomial> shared_poly(number_of_shares,
                                       Polynomial(extension_degree_));
-  uint64_t idx, coeff;
-  
+  uint64_t idx;
+  mp_limb_t coeff;
+
   fq_t poly_fq;
   fq_init2(poly_fq, ctx_fq_);
 
@@ -170,7 +171,7 @@ std::vector<uint64_t> Sharing::DecodeBitsliced(
   std::vector<fq_t> shared_poly_fq(number_of_shares);
   Polynomial result(extension_degree_);
   fq_t polynomial_fq, result_fq;
-  uint64_t coeff;
+  mp_limb_t coeff;
 
   fq_init2(result_fq, ctx_fq_);
   fq_init2(polynomial_fq, ctx_fq_);

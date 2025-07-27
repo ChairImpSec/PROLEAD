@@ -7,3 +7,4 @@ enum class FaultType { none, stuck_at_0, stuck_at_1, toggle };
 enum class FaultAnalysis { none, only_fault_free_simulations, only_faulty_simulations, both};
 
 enum class clk_edge_t {undef, rising, falling, both};
+enum class analysis_t {sca, fia};

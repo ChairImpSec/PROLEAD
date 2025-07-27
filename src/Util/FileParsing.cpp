@@ -10,6 +10,7 @@ JsonSchema::JsonSchema(const std::string& key, const std::string& type,
 void JsonSchema::Validate(const boost::json::object& json_object) {
   std::string error_context = "Error while validating JSON: ";
   std::string key, type;
+  
   for (const auto& pair : json_object) {
     key = pair.key_c_str();
 
@@ -25,6 +26,8 @@ void JsonSchema::Validate(const boost::json::object& json_object) {
 
     if (child != children_.end()) {
       type = child->type_;
+      std::cout << "Found child with key: " << key << " and type: " << type
+                << std::endl;
       if (child->children_.empty()) {
         // TODO: Add validation of settings with multiple data types.
         if ((key != "number_of_clock_cycles") && (key != "hold_for_cycles")) {

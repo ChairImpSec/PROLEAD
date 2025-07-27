@@ -1,145 +1,156 @@
 #include "Util/ProgramOptions.hpp"
 
-#include <catch2/catch.hpp>
+#include <boost/test/unit_test.hpp>
 
-TEST_CASE("Test ProgramOptions Parse function", "[ProgramOptions]") {
-  SECTION("No command line options given.") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
+namespace utf = boost::unit_test;
 
-    boost::program_options::variables_map vm =
-        program_options.Parse(argc, const_cast<char**>(argv));
+BOOST_AUTO_TEST_SUITE(test_program_options)
 
-    REQUIRE_FALSE(vm.count("help"));
-    REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
-    REQUIRE(vm["libraryname"].as<std::string>() == "NANG45");
-    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
-            std::vector<std::string>{"design.v"});
-    REQUIRE(vm["modulename"].as<std::string>() == "circuit");
-    REQUIRE(vm["configfile"].as<std::string>() == "config.json");
-    REQUIRE(vm["resultfolder"].as<std::string>() == ".");
-    REQUIRE(vm["linkerfile"].as<std::string>() == "linker.ld");
-    REQUIRE(vm["binary"].as<std::string>() == "binary.elf");
-    REQUIRE(vm["mapfile"].as<std::string>() == "binary.map");
-    REQUIRE(vm["asmfile"].as<std::string>() == "disassembled.txt");
-    REQUIRE(vm["platform"].as<std::string>() == "hardware");
-  }
+BOOST_AUTO_TEST_CASE(test_no_options, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
 
-  SECTION("Custom command line options given by full option identifiers.") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call",
-                          "--libraryfile",
-                          "library.json",
-                          "--libraryname",
-                          "custom_libraryname",
-                          "--designfile",
-                          "custom_designfile1.v",
-                          "custom_designfile2.v",
-                          "--modulename",
-                          "custom_modulename",
-                          "--configfile",
-                          "config.json",
-                          "--resultfolder",
-                          "../util",
-                          "--linkerfile",
-                          "custom_linkerfile.ld",
-                          "--binary",
-                          "custom_binary.elf",
-                          "--mapfile",
-                          "custom_mapfile.map",
-                          "--asmfile",
-                          "custom_asmfile.txt",
-                          "--platform",
-                          "software"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
+  boost::program_options::variables_map vm =
+      program_options.Parse(argc, const_cast<char**>(argv));
 
-    boost::program_options::variables_map vm =
-        program_options.Parse(argc, const_cast<char**>(argv));
-
-    REQUIRE_FALSE(vm.count("help"));
-    REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
-    REQUIRE(vm["libraryname"].as<std::string>() == "custom_libraryname");
-    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
-            std::vector<std::string>{"custom_designfile1.v",
-                                     "custom_designfile2.v"});
-    REQUIRE(vm["modulename"].as<std::string>() == "custom_modulename");
-    REQUIRE(vm["configfile"].as<std::string>() == "config.json");
-    REQUIRE(vm["resultfolder"].as<std::string>() == "../util");
-    REQUIRE(vm["linkerfile"].as<std::string>() == "custom_linkerfile.ld");
-    REQUIRE(vm["binary"].as<std::string>() == "custom_binary.elf");
-    REQUIRE(vm["mapfile"].as<std::string>() == "custom_mapfile.map");
-    REQUIRE(vm["asmfile"].as<std::string>() == "custom_asmfile.txt");
-    REQUIRE(vm["platform"].as<std::string>() == "software");
-  }
-
-  SECTION("Custom command line options given by abbreviations.") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call",
-                          "-l",
-                          "library.json",
-                          "-n",
-                          "custom_libraryname",
-                          "-d",
-                          "custom_designfile.v",
-                          "-m",
-                          "custom_modulename",
-                          "-c",
-                          "config.json",
-                          "-r",
-                          "../util",
-                          "-k",
-                          "custom_linkerfile.ld",
-                          "-b",
-                          "custom_binary.elf",
-                          "-f",
-                          "custom_mapfile.map",
-                          "-a",
-                          "custom_asmfile.txt",
-                          "-p",
-                          "software"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
-
-    boost::program_options::variables_map vm =
-        program_options.Parse(argc, const_cast<char**>(argv));
-
-    REQUIRE_FALSE(vm.count("help"));
-    REQUIRE(vm["libraryfile"].as<std::string>() == "library.json");
-    REQUIRE(vm["libraryname"].as<std::string>() == "custom_libraryname");
-    REQUIRE(vm["designfile"].as<std::vector<std::string>>() ==
-            std::vector<std::string>{"custom_designfile.v"});
-    REQUIRE(vm["modulename"].as<std::string>() == "custom_modulename");
-    REQUIRE(vm["configfile"].as<std::string>() == "config.json");
-    REQUIRE(vm["resultfolder"].as<std::string>() == "../util");
-    REQUIRE(vm["linkerfile"].as<std::string>() == "custom_linkerfile.ld");
-    REQUIRE(vm["binary"].as<std::string>() == "custom_binary.elf");
-    REQUIRE(vm["mapfile"].as<std::string>() == "custom_mapfile.map");
-    REQUIRE(vm["asmfile"].as<std::string>() == "custom_asmfile.txt");
-    REQUIRE(vm["platform"].as<std::string>() == "software");
-  }
-
-  SECTION("Unknown option") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call", "--unknown_option", "unknown_argument"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
-    REQUIRE_THROWS_AS(program_options.Parse(argc, const_cast<char**>(argv)),
-                      boost::program_options::unknown_option);
-  }
-
-  SECTION("Duplicated option") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call", "-designfile", "design.v", "-designfile",
-                          "design.v"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
-    REQUIRE_THROWS_AS(program_options.Parse(argc, const_cast<char**>(argv)),
-                      boost::program_options::error);
-  }
-
-  SECTION("Invalid platform option") {
-    ProgramOptions program_options;
-    const char* argv[] = {"call", "--platform", "invalid_platform"};
-    int argc = sizeof(argv) / sizeof(argv[0]);
-    REQUIRE_THROWS_AS(program_options.Parse(argc, const_cast<char**>(argv)),
-                      boost::program_options::validation_error);
-  }
+  BOOST_CHECK(vm.count("help") == 0);
+  BOOST_CHECK(vm["libraryfile"].as<std::string>() == "libs/nang45.json");
+  BOOST_CHECK(vm["libraryname"].as<std::string>() == "nang45");
+  BOOST_CHECK(vm["designfile"].as<std::vector<std::string>>() ==
+              std::vector<std::string>{"design.v"});
+  BOOST_CHECK(vm.count("layoutfile") == 0);
+  BOOST_CHECK(vm["modulename"].as<std::string>() == "circuit");
+  BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
+  BOOST_CHECK(vm["resultfolder"].as<std::string>() == ".");
+  BOOST_CHECK(vm["linkerfile"].as<std::string>() == "linker.ld");
+  BOOST_CHECK(vm["binary"].as<std::string>() == "binary.elf");
+  BOOST_CHECK(vm["mapfile"].as<std::string>() == "binary.map");
+  BOOST_CHECK(vm["asmfile"].as<std::string>() == "disassembled.txt");
+  BOOST_CHECK(vm["platform"].as<std::string>() == "hardware");
 }
+
+BOOST_AUTO_TEST_CASE(test_full_identifiers, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call",
+                        "--libraryfile",
+                        "library.json",
+                        "--libraryname",
+                        "custom_libraryname",
+                        "--designfile",
+                        "custom_designfile1.v",
+                        "custom_designfile2.v",
+                        "--layoutfile",
+                        "custom_layoutfile.gds",
+                        "--modulename",
+                        "custom_modulename",
+                        "--configfile",
+                        "config.json",
+                        "--resultfolder",
+                        "../util",
+                        "--linkerfile",
+                        "custom_linkerfile.ld",
+                        "--binary",
+                        "custom_binary.elf",
+                        "--mapfile",
+                        "custom_mapfile.map",
+                        "--asmfile",
+                        "custom_asmfile.txt",
+                        "--platform",
+                        "software"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+
+  boost::program_options::variables_map vm =
+      program_options.Parse(argc, const_cast<char**>(argv));
+
+  BOOST_CHECK(vm.count("help") == 0);
+  BOOST_CHECK(vm["libraryfile"].as<std::string>() == "library.json");
+  BOOST_CHECK(vm["libraryname"].as<std::string>() == "custom_libraryname");
+  BOOST_CHECK((vm["designfile"].as<std::vector<std::string>>() ==
+               std::vector<std::string>{"custom_designfile1.v",
+                                        "custom_designfile2.v"}));
+  BOOST_CHECK(vm["layoutfile"].as<std::string>() == "custom_layoutfile.gds");
+  BOOST_CHECK(vm["modulename"].as<std::string>() == "custom_modulename");
+  BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
+  BOOST_CHECK(vm["resultfolder"].as<std::string>() == "../util");
+  BOOST_CHECK(vm["linkerfile"].as<std::string>() == "custom_linkerfile.ld");
+  BOOST_CHECK(vm["binary"].as<std::string>() == "custom_binary.elf");
+  BOOST_CHECK(vm["mapfile"].as<std::string>() == "custom_mapfile.map");
+  BOOST_CHECK(vm["asmfile"].as<std::string>() == "custom_asmfile.txt");
+  BOOST_CHECK(vm["platform"].as<std::string>() == "software");
+}
+
+BOOST_AUTO_TEST_CASE(test_abbreviations, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call",
+                        "-l",
+                        "library.json",
+                        "-n",
+                        "custom_libraryname",
+                        "-d",
+                        "custom_designfile.v",
+                        "-y",
+                        "custom_layoutfile.gds",
+                        "-m",
+                        "custom_modulename",
+                        "-c",
+                        "config.json",
+                        "-r",
+                        "../util",
+                        "-k",
+                        "custom_linkerfile.ld",
+                        "-b",
+                        "custom_binary.elf",
+                        "-f",
+                        "custom_mapfile.map",
+                        "-a",
+                        "custom_asmfile.txt",
+                        "-p",
+                        "software"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+
+  boost::program_options::variables_map vm =
+      program_options.Parse(argc, const_cast<char**>(argv));
+
+  BOOST_CHECK(vm.count("help") == 0);
+  BOOST_CHECK(vm["libraryfile"].as<std::string>() == "library.json");
+  BOOST_CHECK(vm["libraryname"].as<std::string>() == "custom_libraryname");
+  BOOST_CHECK(vm["designfile"].as<std::vector<std::string>>() ==
+              std::vector<std::string>{"custom_designfile.v"});
+  BOOST_CHECK(vm["layoutfile"].as<std::string>() == "custom_layoutfile.gds");
+  BOOST_CHECK(vm["modulename"].as<std::string>() == "custom_modulename");
+  BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
+  BOOST_CHECK(vm["resultfolder"].as<std::string>() == "../util");
+  BOOST_CHECK(vm["linkerfile"].as<std::string>() == "custom_linkerfile.ld");
+  BOOST_CHECK(vm["binary"].as<std::string>() == "custom_binary.elf");
+  BOOST_CHECK(vm["mapfile"].as<std::string>() == "custom_mapfile.map");
+  BOOST_CHECK(vm["asmfile"].as<std::string>() == "custom_asmfile.txt");
+  BOOST_CHECK(vm["platform"].as<std::string>() == "software");
+}
+
+BOOST_AUTO_TEST_CASE(test_unknown_option, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call", "--unknown_option", "unknown_argument"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  BOOST_CHECK_THROW(program_options.Parse(argc, const_cast<char**>(argv)),
+                    boost::program_options::unknown_option);
+}
+
+BOOST_AUTO_TEST_CASE(test_duplicated_option, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call", "-designfile", "design.v", "-designfile",
+                        "design.v"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  BOOST_CHECK_THROW(program_options.Parse(argc, const_cast<char**>(argv)),
+                    boost::program_options::error);
+}
+
+BOOST_AUTO_TEST_CASE(test_invalid_platform, *utf::label("program_options")) {
+  ProgramOptions program_options;
+  const char* argv[] = {"call", "--platform", "invalid_platform"};
+  int argc = sizeof(argv) / sizeof(argv[0]);
+  BOOST_CHECK_THROW(program_options.Parse(argc, const_cast<char**>(argv)),
+                    boost::program_options::validation_error);
+}
+
+BOOST_AUTO_TEST_SUITE_END()

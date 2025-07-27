@@ -28,6 +28,7 @@ RELEASE_SRC = src
 
 LIB_DIR = lib
 
+
 # Output directories for release and debug configurations.
 # If both point to the same directory, the final binaries will be suffixed with "_release" and "_debug".
 BENCHMARK_DIR = benchmark
@@ -53,10 +54,11 @@ CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-fr
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 LINK_FLINT = -lflint -lmpfr -lgmp -lm
 LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python312
-BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
-RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
-DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
-TEST_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST)
+LINK_GDSTK = -lgdstk -lclipper -lqhull_r -lz
+BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
+RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
+DEBUG_LINK_FLAGS = -L$(LIB_DIR) -fsanitize=address -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
+TEST_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
 
 # Output file name
 OUTPUT = PROLEAD

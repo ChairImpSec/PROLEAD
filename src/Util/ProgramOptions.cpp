@@ -37,6 +37,12 @@ ProgramOptions::ProgramOptions() {
       boost::program_options::value<std::string>()->default_value(
           modulename_option_default),
       modulename_option_info)(
+      layoutfile_option_name,
+      boost::program_options::value<std::string>()->notifier(
+          [](const std::string& path_to_file) {
+            ValidateFileEnding(path_to_file, ".gds");
+          }),
+      layoutfile_option_info)(
       configfile_option_name,
       boost::program_options::value<std::string>()
           ->default_value(configfile_option_default)

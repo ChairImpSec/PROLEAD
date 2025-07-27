@@ -41,7 +41,7 @@ class Simulation {
   std::unique_ptr<std::unique_ptr<uint64_t[]>[]> constant_zero_;
   std::unique_ptr<uint64_t[]> is_simulation_faulty_;
   std::vector<uint64_t> considered_simulation_indices_;
-  std::vector<FaultSet> fault_set;
+  std::vector<FaultSet> fault_set_;
 };
 
 namespace Hardware {
@@ -58,6 +58,29 @@ namespace Simulate {
 void All(const CircuitStruct&, const Settings&, SharedData&,
          std::vector<Probe>&, std::vector<Enabler>&, std::vector<uint64_t>&,
          Simulation&, int, boost::mt19937&);
+
+		/**
+		* @brief Performs the faulted and fault free (golden) simulations.
+		* @param Library The cell library..
+		* @param Circuit The hardware circuit to analyze.
+		* @param Settings The general settings.
+		* @param SharedData The shared state of a simulation.
+		* @param Simulation The simulation settings.
+		* @param ThreadRng The rng assigned to a specific thread.
+		* @author Felix Uhle
+		*/
+      void SimulateFaultedAndFaultFree2(const Library &library,
+                                       const CircuitStruct &circuit,
+                                       const Settings &settings,
+                                       SharedData &shared_data,
+                                       SharedData &shared_data_faulted,
+                                       Simulation &simulation,
+                                       uint64_t SimulationIndex,
+                                       boost::mt19937 &ThreadRng,
+                                       const std::vector<FaultSet> &fault_sets,
+                                       uint64_t thread_index,
+                                       std::vector<std::vector<std::vector<FaultType>>> &fault_type
+                                       );
 
 /**
  * @brief Generate header for a .vcd file.

@@ -7,8 +7,8 @@
 #include <boost/filesystem.hpp>
 #include <boost/json.hpp>
 #include <boost/program_options.hpp>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <regex>
 #include <string>
 
@@ -61,15 +61,18 @@ class ProgramOptions {
   constexpr static auto libraryfile_option_name = "libraryfile,l";
   constexpr static auto libraryfile_option_info =
       "specifies the path to the standard-cell library file (.json file)";
-  constexpr static auto libraryfile_option_default = "library.json";
+  constexpr static auto libraryfile_option_default = "libs/nang45.json";
   constexpr static auto libraryname_option_name = "libraryname,n";
   constexpr static auto libraryname_option_info =
       "specifies the the standard-cell library name";
-  constexpr static auto libraryname_option_default = "NANG45";
+  constexpr static auto libraryname_option_default = "nang45";
   constexpr static auto designfile_option_name = "designfile,d";
   constexpr static auto designfile_option_info =
       "specifies the path to the implementation file (either .v or .c file)";
   constexpr static auto designfile_option_default = "design.v";
+  constexpr static auto layoutfile_option_name = "layoutfile,y";
+  constexpr static auto layoutfile_option_info =
+      "specifies the path to the layout file (.gds file)";
   constexpr static auto modulename_option_name = "modulename,m";
   constexpr static auto modulename_option_info =
       "specifies the name of the top module";

@@ -3,6 +3,8 @@
 #include "Util/FileParsing.hpp"
 
 namespace SettingNames {
+  extern const std::string ANALYSIS_STRATEGY;
+
   extern const std::string FAULT_INJECTION;
   extern const std::string FAULTED_CLOCK_CYCLES;
   extern const std::string FAULT_LOCATIONS;
@@ -69,6 +71,14 @@ namespace SettingNames {
   extern const std::string NUMBER_OF_SIMULATIONS_PER_WRITE;
   extern const std::string OUTPUT_SHARES;
   extern const std::string WAVEFORM_SIMULATION;
+
+  extern const std::string FIESTA_ADVERSARIES;
+  extern const std::string FIESTA_CONFIDENCE_LEVEL;
+  extern const std::string FIESTA_FAULT_PROBABILITY;
+  extern const std::string FIESTA_PROPERTIES;
+  extern const std::string FIESTA_TARGET_LOGIC_GATES;
+  extern const std::string FIESTA_TARGET_STORAGE_GATES;
+
 }  // namespace SettingNames
 
 extern JsonSchema fault_injection_schema;

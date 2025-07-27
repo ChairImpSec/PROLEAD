@@ -8,6 +8,7 @@
 #include <flint/fmpz_mod.h>
 #include <flint/fmpz_mod_poly.h>
 #include <flint/fq.h>
+#include <gmp.h>
 
 #include <boost/dynamic_bitset.hpp>
 #include <boost/random.hpp>

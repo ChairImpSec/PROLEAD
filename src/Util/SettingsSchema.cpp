@@ -1,4 +1,5 @@
 #include "Util/SettingsSchema.hpp"
+const std::string SettingNames::ANALYSIS_STRATEGY = "analysis_strategy";
 
 const std::string SettingNames::FAULT_INJECTION = "fault_injection";
 const std::string SettingNames::FAULTED_CLOCK_CYCLES = "clock_cycles";
@@ -81,18 +82,44 @@ const std::string SettingNames::NUMBER_OF_SIMULATIONS_PER_WRITE =
 const std::string SettingNames::OUTPUT_SHARES = "output_shares";
 const std::string SettingNames::WAVEFORM_SIMULATION = "waveform_simulation";
 
+const std::string SettingNames::FIESTA_ADVERSARIES = "adversaries";
+const std::string SettingNames::FIESTA_CONFIDENCE_LEVEL = "confidence_level";
+const std::string SettingNames::FIESTA_FAULT_PROBABILITY = "probability";
+const std::string SettingNames::FIESTA_PROPERTIES = "properties";
+const std::string SettingNames::FIESTA_TARGET_LOGIC_GATES =
+    "target_logic_gates";
+const std::string SettingNames::FIESTA_TARGET_STORAGE_GATES =
+    "target_storage_gates";
+
 JsonSchema fault_injection_schema(
     SettingNames::FAULT_INJECTION, "object",
-    {JsonSchema(SettingNames::FAULTED_CLOCK_CYCLES, "array"),
-     JsonSchema(SettingNames::FAULT_LOCATIONS, "object",
-                {JsonSchema("exclude", "object",
-                            {
-                                JsonSchema("signals", "string"),
-                            }),
-                 JsonSchema("include", "object",
-                            {
-                                JsonSchema("signals", "string"),
-                            })}),
+    {JsonSchema(
+         SettingNames::FIESTA_ADVERSARIES, "array",
+         {JsonSchema(
+             "", "object",
+             {JsonSchema(
+                 SettingNames::FIESTA_PROPERTIES, "array",
+                 {JsonSchema(
+                     "", "object",
+                     {JsonSchema(SettingNames::FAULT_LOCATIONS, "object",
+                                 {JsonSchema("exclude", "object",
+                                             {JsonSchema("signals", "string")}),
+                                  JsonSchema("include", "object",
+                                             {JsonSchema("signals",
+                                                         "string")})}),
+                      JsonSchema(SettingNames::FIESTA_FAULT_PROBABILITY,
+                                 "double"),
+                      JsonSchema(SettingNames::FAULT_TYPE, "string"),
+                      JsonSchema(SettingNames::FIESTA_TARGET_LOGIC_GATES,
+                                 "bool"),
+                      JsonSchema(SettingNames::FIESTA_TARGET_STORAGE_GATES,
+                                 "bool")})})})}),
+     JsonSchema(SettingNames::FAULTED_CLOCK_CYCLES, "array"),
+     JsonSchema(SettingNames::FIESTA_CONFIDENCE_LEVEL, "double"),
+     JsonSchema(
+         SettingNames::FAULT_LOCATIONS, "object",
+         {JsonSchema("exclude", "object", {JsonSchema("signals", "string")}),
+          JsonSchema("include", "object", {JsonSchema("signals", "string")})}),
      JsonSchema(SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_CYCLE, "int"),
      JsonSchema(SettingNames::MAXIMUM_NUMBER_OF_FAULTS_PER_RUN, "int"),
      JsonSchema(SettingNames::MINIMUM_NUMBER_OF_FAULTS_PER_CYCLE, "int"),
@@ -205,9 +232,9 @@ JsonSchema software_schema(SettingNames::SOFTWARE, "object",
                                        "string"),
                             JsonSchema(SettingNames::PIPELINE_STAGES, "int")});
 
-JsonSchema settings_schema("", "object",
-                           {fault_injection_schema, hardware_schema,
-                            input_finite_field_schema,
-                            output_finite_field_schema, performance_schema,
-                            side_channel_analysis_schema, simulation_schema,
-                            software_schema});
+JsonSchema settings_schema(
+    "", "object",
+    {JsonSchema(SettingNames::ANALYSIS_STRATEGY, "string"),
+     fault_injection_schema, hardware_schema, input_finite_field_schema,
+     output_finite_field_schema, performance_schema,
+     side_channel_analysis_schema, simulation_schema, software_schema});
