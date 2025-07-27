@@ -1,0 +1,7 @@
+{
+    "number_of_effective_faults": "561436",
+    "probability_faults_non_correctable": {
+        "p_l": "0.5592428400831122",
+        "p_u": "0.56362752015161388"
+    }
+}
