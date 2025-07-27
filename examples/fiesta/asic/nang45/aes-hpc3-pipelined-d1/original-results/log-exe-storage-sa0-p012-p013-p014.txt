@@ -1,0 +1,130 @@
+
+    Entering directory: ./sa0-p2e014/storage-cells
+
+Skipping ignored directory: ./sa0-p2e01/logic-cells
+Skipping ignored directory: ./sa0-p2e01/all-cells
+Skipping ignored directory: ./sa0-p2e01/storage-cells
+Skipping ignored directory: ./sa0-p2e014/logic-cells
+Skipping ignored directory: ./sa0-p2e014/all-cells
+Entering directory: ./sa0-p2e014/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 274	p: 6.10351e-05	np: 0.999939
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 63020
+	Cycles:230
+	fault_positions: 274
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 308.557 seconds!
+	 Individual Faults: 63020
+	 Effective Faults Total:
+		 Success 836305
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.83466567
+		p_u: 0.83793535
+-------------------------------------------------------------
+
+
+Entering directory: ./sa0-p2e013/storage-cells
+
+
+
+Skipping ignored directory: ./sa0-p2e010/logic-cells
+Skipping ignored directory: ./sa0-p2e010/all-cells
+Skipping ignored directory: ./sa0-p2e010/storage-cells
+Skipping ignored directory: ./sa0-p2e013/logic-cells
+Skipping ignored directory: ./sa0-p2e013/all-cells
+Entering directory: ./sa0-p2e013/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 274	p: 0.00012207	np: 0.999878
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 63020
+	Cycles:230
+	fault_positions: 274
+[0.00332495] Step:  7405/15624, Simulation: 0/0
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 308.793 seconds!
+	 Individual Faults: 63020
+	 Effective Faults Total:
+		 Success 973547
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.97283131
+		p_u: 0.97425005
+-------------------------------------------------------------
+
+    Entering directory: ./sa0-p2e012/storage-cells
+
+
+Skipping ignored directory: ./sa0-p2e015/logic-cells
+Skipping ignored directory: ./sa0-p2e015/all-cells
+Skipping ignored directory: ./sa0-p2e015/storage-cells
+Skipping ignored directory: ./sa0-p2e012/logic-cells
+Skipping ignored directory: ./sa0-p2e012/all-cells
+Entering directory: ./sa0-p2e012/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 274	p: 0.000244141	np: 0.999756
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 63020
+	Cycles:230
+	fault_positions: 274
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 308.289 seconds!
+	 Individual Faults: 63020
+	 Faulted Cycles:
+	 Effective Faults Total:
+		 Success 999264
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.99913691
+		p_u: 0.99937769
+-------------------------------------------------------------
