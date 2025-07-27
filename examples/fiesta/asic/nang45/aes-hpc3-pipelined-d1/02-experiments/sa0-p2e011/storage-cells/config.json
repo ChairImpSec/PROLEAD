@@ -1,0 +1,173 @@
+{
+  "analysis_strategy": "fia",
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "waveform_simulation": false,
+    "end_condition": [
+      {
+        "name": "done",
+        "value": "1'b1"
+      }
+    ],
+    "groups": [
+      "256'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+    ],
+    "output_shares": [
+      "ciphertext_s0[127:0]",
+      "ciphertext_s1[127:0]"
+    ],
+    "expected_output": [
+      "128'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+    ],
+    "number_of_clock_cycles": 1138,
+    "always_random_inputs": [
+      "Fresh[67:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "plaintext_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "plaintext_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "start",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "plaintext_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "start",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext_s0[127:0]",
+            "value": "group_in0[127:0]"
+          },
+          {
+            "name": "key_s0[127:0]",
+            "value": "group_in0[255:128]"
+          },
+          {
+            "name": "plaintext_s1[127:0]",
+            "value": "group_in1[127:0]"
+          },
+          {
+            "name": "key_s1[127:0]",
+            "value": "group_in1[255:128]"
+          },
+          {
+            "name": "start",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s0[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "plaintext_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key_s1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1000000,
+    "number_of_simulations_per_step": 64
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  },
+  "fault_injection": {
+    "adversaries": [
+      {
+        "properties": [
+          {
+            "fault_locations": {
+              "exclude": {
+                "signals": ".*"
+              },
+              "include": {
+                "signals": ".*"
+              }
+            },
+            "probability": 0.00048828125,
+            "type": "StuckAt0",
+            "target_logic_gates": false,
+            "target_storage_gates": true
+          }
+        ]
+      }
+    ],
+    "clock_cycles": [
+      "1-1138"
+    ],
+    "confidence_level": 0.999999,
+    "fault_locations": {
+      "exclude": {
+        "signals": ".*"
+      },
+      "include": {
+        "signals": ".*"
+      }
+    },
+    "maximum_number_of_faults_per_cycle": 0,
+    "maximum_number_of_faults_per_run": 0,
+    "minimum_number_of_faults_per_cycle": 0,
+    "minimum_number_of_faults_per_run": 0,
+    "simulations_to_analyze": "OnlyFaulty",
+    "type": "StuckAt0"
+  }
+}
