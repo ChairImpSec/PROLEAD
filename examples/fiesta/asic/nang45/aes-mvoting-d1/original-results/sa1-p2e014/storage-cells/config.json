@@ -1,0 +1,225 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "waveform_simulation": false,
+    "end_condition": {
+      "signals": [
+        {
+          "name": "done",
+          "value": "1'b1"
+        }
+      ]
+    },
+    "groups": [
+      "256'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+    ],
+    "output_shares": [
+      "ciphertext[127:0]"
+    ],
+    "expected_output": [
+      "128'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+    ],
+    "number_of_clock_cycles": 230,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "plaintext1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset1",
+            "value": "1'b0"
+          },
+          {
+            "name": "plaintext2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset2",
+            "value": "1'b0"
+          },
+          {
+            "name": "plaintext3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset3",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset1",
+            "value": "1'b1"
+          },
+          {
+            "name": "plaintext2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset2",
+            "value": "1'b1"
+          },
+          {
+            "name": "plaintext3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "reset3",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext1[127:0]",
+            "value": "group_in0[127:0]"
+          },
+          {
+            "name": "key1[127:0]",
+            "value": "group_in0[255:128]"
+          },
+          {
+            "name": "reset1",
+            "value": "1'b0"
+          },
+          {
+            "name": "plaintext2[127:0]",
+            "value": "group_in0[127:0]"
+          },
+          {
+            "name": "key2[127:0]",
+            "value": "group_in0[255:128]"
+          },
+          {
+            "name": "reset2",
+            "value": "1'b0"
+          },
+          {
+            "name": "plaintext3[127:0]",
+            "value": "group_in0[127:0]"
+          },
+          {
+            "name": "key3[127:0]",
+            "value": "group_in0[255:128]"
+          },
+          {
+            "name": "reset3",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "plaintext1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key1[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "plaintext2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key2[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "plaintext3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          },
+          {
+            "name": "key3[127:0]",
+            "value": "128'h00000000000000000000000000000000"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1000000,
+    "number_of_simulations_per_step": 64
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "analysis_strategy": "fia_sampled",
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  },
+  "fault_injection": {
+    "type": "StuckAt0",
+    "minimum_number_of_faults_per_run": 1,
+    "maximum_number_of_faults_per_run": 1,
+    "minimum_number_of_faults_per_cycle": 1,
+    "maximum_number_of_faults_per_cycle": 1,
+    "clock_cycles": [
+      "1-230"
+    ],
+    "fault_locations": {
+      "include": {
+        "signals": ".*"
+      },
+      "exclude": {
+        "signals": "(?!)"
+      }
+    },
+    "confidence_level": 0.99999,
+    "max_size_of_combinations": 2,
+    "fault_properties": [
+      [
+        {
+          "type": "StuckAt1",
+          "probability": 6.103515625e-05,
+          "fault_logic_gates": false,
+          "fault_storage_gates": true,
+          "fault_locations": {
+            "include": {
+              "signals": ".*"
+            },
+            "exclude": {
+              "signals": "(?!)"
+            }
+          }
+        }
+      ]
+    ]
+  }
+}

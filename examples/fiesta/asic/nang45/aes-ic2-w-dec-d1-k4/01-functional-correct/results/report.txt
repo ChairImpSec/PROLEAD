@@ -1,0 +1,338 @@
+Found child with key: analysis_strategy and type: string
+Found child with key: performance and type: object
+Found child with key: max_number_of_threads and type: string
+Found child with key: minimize_probing_sets and type: string
+Found child with key: simulation and type: object
+Found child with key: waveform_simulation and type: bool
+Found child with key: end_condition and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: groups and type: array
+Found child with key: output_shares and type: array
+Found child with key: expected_output and type: array
+Found child with key: number_of_clock_cycles and type: int
+Found child with key: input_sequence and type: array
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: number_of_simulations and type: int
+Found child with key: number_of_simulations_per_step and type: int
+Found child with key: hardware and type: object
+Found child with key: clock_signal_name and type: string
+Found child with key: side_channel_analysis and type: object
+Found child with key: order and type: int
+Found child with key: transitional_leakage and type: bool
+Found child with key: fault_injection and type: object
+Found child with key: adversaries and type: array
+Found child with key: properties and type: array
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: probability and type: double
+Found child with key: type and type: string
+Found child with key: target_logic_gates and type: bool
+Found child with key: target_storage_gates and type: bool
+Found child with key: clock_cycles and type: array
+Found child with key: confidence_level and type: double
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: maximum_number_of_faults_per_cycle and type: int
+Found child with key: maximum_number_of_faults_per_run and type: int
+Found child with key: minimum_number_of_faults_per_cycle and type: int
+Found child with key: minimum_number_of_faults_per_run and type: int
+Found child with key: simulations_to_analyze and type: string
+Found child with key: type and type: string
+Successfully validated the settings file.
+Successfully read the library with name "nang45".
+Successfully parsed 35 cells from the library.
+Successfully found buffer cell with identifier "BUF_X1" and others.
+"circuit"...done
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 6485540
+	Cycles:230
+	fault_positions: 28198
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 18.0758 seconds!
+	 Individual Faults: 6485540
+	 Faulted Cycles: 
+		1
+		2
+		3
+		4
+		5
+		6
+		7
+		8
+		9
+		10
+		11
+		12
+		13
+		14
+		15
+		16
+		17
+		18
+		19
+		20
+		21
+		22
+		23
+		24
+		25
+		26
+		27
+		28
+		29
+		30
+		31
+		32
+		33
+		34
+		35
+		36
+		37
+		38
+		39
+		40
+		41
+		42
+		43
+		44
+		45
+		46
+		47
+		48
+		49
+		50
+		51
+		52
+		53
+		54
+		55
+		56
+		57
+		58
+		59
+		60
+		61
+		62
+		63
+		64
+		65
+		66
+		67
+		68
+		69
+		70
+		71
+		72
+		73
+		74
+		75
+		76
+		77
+		78
+		79
+		80
+		81
+		82
+		83
+		84
+		85
+		86
+		87
+		88
+		89
+		90
+		91
+		92
+		93
+		94
+		95
+		96
+		97
+		98
+		99
+		100
+		101
+		102
+		103
+		104
+		105
+		106
+		107
+		108
+		109
+		110
+		111
+		112
+		113
+		114
+		115
+		116
+		117
+		118
+		119
+		120
+		121
+		122
+		123
+		124
+		125
+		126
+		127
+		128
+		129
+		130
+		131
+		132
+		133
+		134
+		135
+		136
+		137
+		138
+		139
+		140
+		141
+		142
+		143
+		144
+		145
+		146
+		147
+		148
+		149
+		150
+		151
+		152
+		153
+		154
+		155
+		156
+		157
+		158
+		159
+		160
+		161
+		162
+		163
+		164
+		165
+		166
+		167
+		168
+		169
+		170
+		171
+		172
+		173
+		174
+		175
+		176
+		177
+		178
+		179
+		180
+		181
+		182
+		183
+		184
+		185
+		186
+		187
+		188
+		189
+		190
+		191
+		192
+		193
+		194
+		195
+		196
+		197
+		198
+		199
+		200
+		201
+		202
+		203
+		204
+		205
+		206
+		207
+		208
+		209
+		210
+		211
+		212
+		213
+		214
+		215
+		216
+		217
+		218
+		219
+		220
+		221
+		222
+		223
+		224
+		225
+		226
+		227
+		228
+		229
+		230
+	 Effective Faults Per Thread: 
+		0
+		0
+		0
+		0
+		0
+		64
+	 Effective Faults Total: 
+		 Success 64
+		 Trials 64
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.79716167
+		p_u: 1
+-------------------------------------------------------------
+

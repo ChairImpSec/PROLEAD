@@ -1,0 +1,279 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json".
+Successfully read the library with name "skywater-pdk-libs-sky130_fd_sc_hd-v3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd2".
+Successfully found buffer cell with name "sky130_fd_sc_hd__buf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s25".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s15".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd1".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__lpflow_clkbufkapwr".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufinv".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s50".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s18".
+Successfully parsed 126 cells from the library.
+"AES"...done
+Successfully matched 0 fresh mask signals [].
+Adv(0)
+Successfully matched 0 fresh mask signals [].
+
+G: 1	p: 0.25	np: 0.75
+
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 230
+	Cycles:230
+	fault_positions: 1
+[0.00294893] Step:  1989/15624, Simulation: 0/0
+[  0.377512] Step:  1990/15624, Simulation: 0/0
+[  0.741236] Step:  1991/15624, Simulation: 0/0
+[   1.22553] Step:  1992/15624, Simulation: 0/0
+[    1.6027] Step:  1993/15624, Simulation: 0/0
+[    1.9824] Step:  1994/15624, Simulation: 0/0
+[   2.46238] Step:  1995/15624, Simulation: 0/0
+[   3.00857] Step:  1996/15624, Simulation: 0/0
+[   3.65532] Step:  1997/15624, Simulation: 0/0
+[   4.30328] Step:  1998/15624, Simulation: 0/0
+[   5.05774] Step:  1999/15624, Simulation: 0/0
+[   5.71698] Step:  2000/15624, Simulation: 0/0
+[   6.77704] Step:  2001/15624, Simulation: 0/0
+[   7.54045] Step:  2002/15624, Simulation: 0/0
+[   8.15103] Step:  2003/15624, Simulation: 0/0
+[   8.76878] Step:  2004/15624, Simulation: 0/0
+[   9.38629] Step:  2005/15624, Simulation: 0/0
+[   10.0103] Step:  2006/15624, Simulation: 0/0

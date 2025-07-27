@@ -1,0 +1,1 @@
+./../../../../../../../release/PROLEAD -l ./../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json -d ../../../00-design/gate/aes-sky130.v -n skywater-pdk-libs-sky130_fd_sc_hd-v3  -m AES -c config.json 2>&1 | tee results/Report.txt

@@ -1,0 +1,272 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json".
+Successfully read the library with name "skywater-pdk-libs-sky130_fd_sc_hd-v3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd2".
+Successfully found buffer cell with name "sky130_fd_sc_hd__buf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s25".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s15".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd1".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__lpflow_clkbufkapwr".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufinv".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s50".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s18".
+Successfully parsed 126 cells from the library.
+"AES"...done
+Successfully matched 0 fresh mask signals [].
+Adv(0)
+Successfully matched 0 fresh mask signals [].
+
+G: 1	p: 0.5	np: 0.5
+
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+_0639_
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 230
+	Cycles:230
+	fault_positions: 1
+[0.00299362] Step:  2763/15624, Simulation: 0/0
+[  0.362271] Step:  2764/15624, Simulation: 0/0
+[  0.719457] Step:  2765/15624, Simulation: 0/0
+[   1.07723] Step:  2766/15624, Simulation: 0/0
+[   1.43475] Step:  2767/15624, Simulation: 0/0
+[   1.79624] Step:  2768/15624, Simulation: 0/0
+[   2.15035] Step:  2769/15624, Simulation: 0/0
+[   2.50435] Step:  2770/15624, Simulation: 0/0
+[   3.13075] Step:  2771/15624, Simulation: 0/0
+[   3.79948] Step:  2772/15624, Simulation: 0/0
+[   4.41036] Step:  2773/15624, Simulation: 0/0

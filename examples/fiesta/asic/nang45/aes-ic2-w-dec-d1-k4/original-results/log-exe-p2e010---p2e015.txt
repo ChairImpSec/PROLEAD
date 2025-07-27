@@ -1,0 +1,247 @@
+
+
+Entering directory: ./sa0-p2e010/storage-cells
+
+Skipping ignored directory: ./sa0-p2e010/logic-cells
+Skipping ignored directory: ./sa0-p2e010/all-cells
+Entering directory: ./sa0-p2e010/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 0.000976562	np: 0.999023
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 9819.44 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 88914
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.087661774
+		p_u: 0.090177201
+-------------------------------------------------------------
+
+
+
+Entering directory: ./sa0-p2e011/storage-cells
+
+Skipping ignored directory: ./sa0-p2e011/logic-cells
+Skipping ignored directory: ./sa0-p2e011/all-cells
+Entering directory: ./sa0-p2e011/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 0.000488281	np: 0.999512
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 15034.2 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 22709
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.022056817
+		p_u: 0.023373932
+-------------------------------------------------------------
+
+
+
+Entering directory: ./sa0-p2e012/storage-cells
+
+Skipping ignored directory: ./sa0-p2e012/logic-cells
+Skipping ignored directory: ./sa0-p2e012/all-cells
+Entering directory: ./sa0-p2e012/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 0.000244141	np: 0.999756
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 11995.2 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 5689
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.0053628579
+		p_u: 0.0060283597
+-------------------------------------------------------------
+
+
+
+Entering directory: ./sa0-p2e013/storage-cells
+
+Skipping ignored directory: ./sa0-p2e013/logic-cells
+Skipping ignored directory: ./sa0-p2e013/all-cells
+Entering directory: ./sa0-p2e013/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 0.00012207	np: 0.999878
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 11526.2 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 1396
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.0012371867
+		p_u: 0.0015681736
+-------------------------------------------------------------
+
+
+
+Entering directory: ./sa0-p2e014/storage-cells
+
+Skipping ignored directory: ./sa0-p2e01/logic-cells
+Skipping ignored directory: ./sa0-p2e01/all-cells
+Skipping ignored directory: ./sa0-p2e01/storage-cells
+Skipping ignored directory: ./sa0-p2e014/logic-cells
+Skipping ignored directory: ./sa0-p2e014/all-cells
+Entering directory: ./sa0-p2e014/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 6.10351e-05	np: 0.999939
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 12760.9 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 379
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 0.00029910599
+		p_u: 0.00047232976
+-------------------------------------------------------------
+
+
+
+Entering directory: ./sa0-p2e015/storage-cells
+
+Skipping ignored directory: ./sa0-p2e015/logic-cells
+Skipping ignored directory: ./sa0-p2e015/all-cells
+Entering directory: ./sa0-p2e015/storage-cells
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 566	p: 3.05176e-05	np: 0.999969
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 130180
+	Cycles:230
+	fault_positions: 566
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 14240.2 seconds!
+	 Individual Faults: 130180
+	 Effective Faults Total:
+		 Success 41
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault:
+		p_l: 1.8605765e-05
+		p_u: 7.6998636e-05
+-------------------------------------------------------------
+
+
+

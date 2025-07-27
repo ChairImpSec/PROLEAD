@@ -1,0 +1,618 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../library.json".
+Successfully read the library with name "NANG45".
+Successfully found buffer cell with name "buf".
+Successfully parsed 34 cells from the library.
+"aes"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 1440	p: 1.19209e-07	np: 1
+
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 331200
+	Cycles:230
+	fault_positions: 1440
+[0.00947422] Step:  5441/15624, Simulation: 0/0
+[    2.2422] Step:  5442/15624, Simulation: 0/0
+[   5.23576] Step:  5443/15624, Simulation: 0/0
+[   7.83371] Step:  5444/15624, Simulation: 0/0
+[   10.3202] Step:  5445/15624, Simulation: 0/0
+[   12.7773] Step:  5446/15624, Simulation: 0/0
+[   15.2421] Step:  5447/15624, Simulation: 0/0
+[    17.709] Step:  5448/15624, Simulation: 0/0
+[   20.1282] Step:  5449/15624, Simulation: 0/0
+[   22.6192] Step:  5450/15624, Simulation: 0/0
+[   25.0239] Step:  5451/15624, Simulation: 0/0
+[   27.4812] Step:  5452/15624, Simulation: 0/0
+[   30.0303] Step:  5453/15624, Simulation: 0/0
+[   32.5895] Step:  5454/15624, Simulation: 0/0
+[   34.5727] Step:  5455/15624, Simulation: 0/0
+[   36.3529] Step:  5456/15624, Simulation: 0/0
+[   38.4442] Step:  5457/15624, Simulation: 0/0
+[   40.2651] Step:  5458/15624, Simulation: 0/0
+[   42.0812] Step:  5459/15624, Simulation: 0/0
+[   44.0347] Step:  5460/15624, Simulation: 0/0
+[   45.8415] Step:  5461/15624, Simulation: 0/0
+[   48.0151] Step:  5462/15624, Simulation: 0/0
+[   49.9826] Step:  5463/15624, Simulation: 0/0
+[   51.7687] Step:  5464/15624, Simulation: 0/0
+[   53.6124] Step:  5465/15624, Simulation: 0/0
+[   55.6508] Step:  5466/15624, Simulation: 0/0
+[   57.4892] Step:  5467/15624, Simulation: 0/0
+[   59.2495] Step:  5468/15624, Simulation: 0/0
+[   61.2001] Step:  5469/15624, Simulation: 0/0
+[   63.3191] Step:  5470/15624, Simulation: 0/0
+[   65.3479] Step:  5471/15624, Simulation: 0/0
+[   67.2708] Step:  5472/15624, Simulation: 0/0
+[    69.286] Step:  5473/15624, Simulation: 0/0
+[    71.038] Step:  5474/15624, Simulation: 0/0
+[   72.9622] Step:  5475/15624, Simulation: 0/0
+[   74.9504] Step:  5476/15624, Simulation: 0/0
+[   76.8474] Step:  5477/15624, Simulation: 0/0
+[   78.6403] Step:  5478/15624, Simulation: 0/0
+[   80.5698] Step:  5479/15624, Simulation: 0/0
+[   82.7449] Step:  5480/15624, Simulation: 0/0
+[   84.9529] Step:  5481/15624, Simulation: 0/0
+[   86.8599] Step:  5482/15624, Simulation: 0/0
+[   88.7919] Step:  5483/15624, Simulation: 0/0
+[   91.1379] Step:  5484/15624, Simulation: 0/0
+[     93.12] Step:  5485/15624, Simulation: 0/0
+[   94.9266] Step:  5486/15624, Simulation: 0/0
+[    96.846] Step:  5487/15624, Simulation: 0/0
+[   98.8223] Step:  5488/15624, Simulation: 0/0
+[    100.43] Step:  5489/15624, Simulation: 0/0
+[   102.044] Step:  5490/15624, Simulation: 0/0
+[   103.692] Step:  5491/15624, Simulation: 0/0
+[   105.287] Step:  5492/15624, Simulation: 0/0
+[   106.907] Step:  5493/15624, Simulation: 0/0
+[   108.543] Step:  5494/15624, Simulation: 0/0
+[   110.182] Step:  5495/15624, Simulation: 0/0
+[   111.868] Step:  5496/15624, Simulation: 0/0
+[   113.499] Step:  5497/15624, Simulation: 0/0
+[   115.137] Step:  5498/15624, Simulation: 0/0
+[    116.77] Step:  5499/15624, Simulation: 0/0
+[   118.402] Step:  5500/15624, Simulation: 0/0
+[   120.085] Step:  5501/15624, Simulation: 0/0
+[   121.752] Step:  5502/15624, Simulation: 0/0
+[   123.409] Step:  5503/15624, Simulation: 0/0
+[   125.116] Step:  5504/15624, Simulation: 0/0
+[    126.78] Step:  5505/15624, Simulation: 0/0
+[   128.468] Step:  5506/15624, Simulation: 0/0
+[    130.19] Step:  5507/15624, Simulation: 0/0
+[     131.9] Step:  5508/15624, Simulation: 0/0
+[   133.596] Step:  5509/15624, Simulation: 0/0
+[   135.293] Step:  5510/15624, Simulation: 0/0
+[   136.949] Step:  5511/15624, Simulation: 0/0
+[   138.639] Step:  5512/15624, Simulation: 0/0
+[   140.323] Step:  5513/15624, Simulation: 0/0
+[   142.062] Step:  5514/15624, Simulation: 0/0
+[   143.714] Step:  5515/15624, Simulation: 0/0
+[   145.353] Step:  5516/15624, Simulation: 0/0
+[   146.991] Step:  5517/15624, Simulation: 0/0
+[   148.618] Step:  5518/15624, Simulation: 0/0
+[    150.26] Step:  5519/15624, Simulation: 0/0
+[   151.912] Step:  5520/15624, Simulation: 0/0
+[   153.569] Step:  5521/15624, Simulation: 0/0
+[   155.235] Step:  5522/15624, Simulation: 0/0
+[   156.871] Step:  5523/15624, Simulation: 0/0
+[   158.538] Step:  5524/15624, Simulation: 0/0
+[   160.219] Step:  5525/15624, Simulation: 0/0
+[   161.877] Step:  5526/15624, Simulation: 0/0
+[   163.538] Step:  5527/15624, Simulation: 0/0
+[   165.233] Step:  5528/15624, Simulation: 0/0
+[   166.897] Step:  5529/15624, Simulation: 0/0
+[   168.585] Step:  5530/15624, Simulation: 0/0
+[   170.315] Step:  5531/15624, Simulation: 0/0
+[   172.073] Step:  5532/15624, Simulation: 0/0
+[   173.789] Step:  5533/15624, Simulation: 0/0
+[   175.481] Step:  5534/15624, Simulation: 0/0
+[   177.165] Step:  5535/15624, Simulation: 0/0
+[   178.837] Step:  5536/15624, Simulation: 0/0
+[   180.531] Step:  5537/15624, Simulation: 0/0
+[   182.257] Step:  5538/15624, Simulation: 0/0
+[   183.946] Step:  5539/15624, Simulation: 0/0
+[   185.609] Step:  5540/15624, Simulation: 0/0
+[   187.271] Step:  5541/15624, Simulation: 0/0
+[   188.901] Step:  5542/15624, Simulation: 0/0
+[   190.546] Step:  5543/15624, Simulation: 0/0
+[   192.187] Step:  5544/15624, Simulation: 0/0
+[   193.835] Step:  5545/15624, Simulation: 0/0
+[   195.457] Step:  5546/15624, Simulation: 0/0
+[   197.085] Step:  5547/15624, Simulation: 0/0
+[   198.724] Step:  5548/15624, Simulation: 0/0
+[   200.426] Step:  5549/15624, Simulation: 0/0
+[   202.069] Step:  5550/15624, Simulation: 0/0
+[   203.741] Step:  5551/15624, Simulation: 0/0
+[   205.406] Step:  5552/15624, Simulation: 0/0
+[   207.045] Step:  5553/15624, Simulation: 0/0
+[   208.755] Step:  5554/15624, Simulation: 0/0
+[   210.414] Step:  5555/15624, Simulation: 0/0
+[   212.127] Step:  5556/15624, Simulation: 0/0
+[   213.837] Step:  5557/15624, Simulation: 0/0
+[   215.543] Step:  5558/15624, Simulation: 0/0
+[   217.275] Step:  5559/15624, Simulation: 0/0
+[   218.974] Step:  5560/15624, Simulation: 0/0
+[    220.69] Step:  5561/15624, Simulation: 0/0
+[   222.405] Step:  5562/15624, Simulation: 0/0
+[   224.155] Step:  5563/15624, Simulation: 0/0
+[    225.86] Step:  5564/15624, Simulation: 0/0
+[   227.536] Step:  5565/15624, Simulation: 0/0
+[   229.225] Step:  5566/15624, Simulation: 0/0
+[   230.903] Step:  5567/15624, Simulation: 0/0
+[   232.596] Step:  5568/15624, Simulation: 0/0
+[   234.254] Step:  5569/15624, Simulation: 0/0
+[   235.953] Step:  5570/15624, Simulation: 0/0
+[   237.649] Step:  5571/15624, Simulation: 0/0
+[   239.345] Step:  5572/15624, Simulation: 0/0
+[   241.047] Step:  5573/15624, Simulation: 0/0
+[   242.725] Step:  5574/15624, Simulation: 0/0
+[   244.412] Step:  5575/15624, Simulation: 0/0
+[   246.086] Step:  5576/15624, Simulation: 0/0
+[   247.752] Step:  5577/15624, Simulation: 0/0
+[   249.493] Step:  5578/15624, Simulation: 0/0
+[   251.219] Step:  5579/15624, Simulation: 0/0
+[   252.925] Step:  5580/15624, Simulation: 0/0
+[   254.709] Step:  5581/15624, Simulation: 0/0
+[   256.437] Step:  5582/15624, Simulation: 0/0
+[   258.189] Step:  5583/15624, Simulation: 0/0
+[   259.919] Step:  5584/15624, Simulation: 0/0
+[   261.646] Step:  5585/15624, Simulation: 0/0
+[   263.331] Step:  5586/15624, Simulation: 0/0
+[   265.032] Step:  5587/15624, Simulation: 0/0
+[    266.72] Step:  5588/15624, Simulation: 0/0
+[   268.421] Step:  5589/15624, Simulation: 0/0
+[   270.091] Step:  5590/15624, Simulation: 0/0
+[   271.735] Step:  5591/15624, Simulation: 0/0
+[   273.427] Step:  5592/15624, Simulation: 0/0
+[   275.109] Step:  5593/15624, Simulation: 0/0
+[   276.796] Step:  5594/15624, Simulation: 0/0
+[   278.508] Step:  5595/15624, Simulation: 0/0
+[   280.266] Step:  5596/15624, Simulation: 0/0
+[   281.966] Step:  5597/15624, Simulation: 0/0
+[   283.664] Step:  5598/15624, Simulation: 0/0
+[   285.354] Step:  5599/15624, Simulation: 0/0
+[   287.025] Step:  5600/15624, Simulation: 0/0
+[   288.742] Step:  5601/15624, Simulation: 0/0
+[   290.455] Step:  5602/15624, Simulation: 0/0
+[   292.175] Step:  5603/15624, Simulation: 0/0
+[   293.868] Step:  5604/15624, Simulation: 0/0
+[    295.57] Step:  5605/15624, Simulation: 0/0
+[   297.253] Step:  5606/15624, Simulation: 0/0
+[   298.973] Step:  5607/15624, Simulation: 0/0
+[   300.657] Step:  5608/15624, Simulation: 0/0
+[   302.332] Step:  5609/15624, Simulation: 0/0
+[   303.982] Step:  5610/15624, Simulation: 0/0
+[   305.644] Step:  5611/15624, Simulation: 0/0
+[   307.299] Step:  5612/15624, Simulation: 0/0
+[   308.973] Step:  5613/15624, Simulation: 0/0
+[   310.664] Step:  5614/15624, Simulation: 0/0
+[   312.342] Step:  5615/15624, Simulation: 0/0
+[   313.993] Step:  5616/15624, Simulation: 0/0
+[   315.707] Step:  5617/15624, Simulation: 0/0
+[    317.37] Step:  5618/15624, Simulation: 0/0
+[   319.051] Step:  5619/15624, Simulation: 0/0
+[   320.724] Step:  5620/15624, Simulation: 0/0
+[   322.399] Step:  5621/15624, Simulation: 0/0
+[   324.102] Step:  5622/15624, Simulation: 0/0
+[   325.787] Step:  5623/15624, Simulation: 0/0
+[   327.486] Step:  5624/15624, Simulation: 0/0
+[   329.225] Step:  5625/15624, Simulation: 0/0
+[    330.92] Step:  5626/15624, Simulation: 0/0
+[   332.643] Step:  5627/15624, Simulation: 0/0
+[    334.35] Step:  5628/15624, Simulation: 0/0
+[   336.061] Step:  5629/15624, Simulation: 0/0
+[    337.78] Step:  5630/15624, Simulation: 0/0
+[    339.51] Step:  5631/15624, Simulation: 0/0
+[   341.242] Step:  5632/15624, Simulation: 0/0
+[   342.955] Step:  5633/15624, Simulation: 0/0
+[   344.689] Step:  5634/15624, Simulation: 0/0
+[   346.396] Step:  5635/15624, Simulation: 0/0
+[   348.084] Step:  5636/15624, Simulation: 0/0
+[   349.805] Step: 12341/15624, Simulation: 0/0
+[   351.497] Step: 12342/15624, Simulation: 0/0
+[   353.177] Step: 12343/15624, Simulation: 0/0
+[   354.875] Step: 12344/15624, Simulation: 0/0
+[   356.559] Step: 12345/15624, Simulation: 0/0
+[   358.229] Step: 12346/15624, Simulation: 0/0
+[   359.883] Step: 12347/15624, Simulation: 0/0
+[   361.559] Step: 12348/15624, Simulation: 0/0
+[   363.233] Step: 12349/15624, Simulation: 0/0
+[   364.906] Step: 12350/15624, Simulation: 0/0
+[     366.6] Step: 12351/15624, Simulation: 0/0
+[   368.294] Step: 12352/15624, Simulation: 0/0
+[   369.957] Step: 12353/15624, Simulation: 0/0
+[   371.655] Step: 12354/15624, Simulation: 0/0
+[   373.325] Step: 12355/15624, Simulation: 0/0
+[   375.012] Step: 12356/15624, Simulation: 0/0
+[   376.717] Step: 12357/15624, Simulation: 0/0
+[   378.445] Step: 12358/15624, Simulation: 0/0
+[   380.199] Step: 12359/15624, Simulation: 0/0
+[   381.924] Step: 12360/15624, Simulation: 0/0
+[   383.641] Step: 12361/15624, Simulation: 0/0
+[   385.367] Step: 12362/15624, Simulation: 0/0
+[   387.062] Step: 12363/15624, Simulation: 0/0
+[   388.763] Step: 12364/15624, Simulation: 0/0
+[    390.49] Step: 12365/15624, Simulation: 0/0
+[   392.228] Step: 12366/15624, Simulation: 0/0
+[    393.97] Step: 12367/15624, Simulation: 0/0
+[   395.727] Step: 12368/15624, Simulation: 0/0
+[   397.499] Step: 12369/15624, Simulation: 0/0
+[   399.264] Step: 12370/15624, Simulation: 0/0
+[   401.026] Step: 12371/15624, Simulation: 0/0
+[    402.83] Step: 12372/15624, Simulation: 0/0
+[   404.552] Step: 12373/15624, Simulation: 0/0
+[   406.339] Step: 12374/15624, Simulation: 0/0
+[   408.097] Step: 12375/15624, Simulation: 0/0
+[   409.835] Step: 12376/15624, Simulation: 0/0
+[   411.574] Step: 12377/15624, Simulation: 0/0
+[   413.339] Step: 12378/15624, Simulation: 0/0
+[   415.067] Step: 12379/15624, Simulation: 0/0
+[    416.79] Step: 12380/15624, Simulation: 0/0
+[   418.501] Step: 12381/15624, Simulation: 0/0
+[   420.236] Step: 12382/15624, Simulation: 0/0
+[   421.985] Step: 12383/15624, Simulation: 0/0
+[   423.682] Step: 12384/15624, Simulation: 0/0
+[   425.396] Step: 12385/15624, Simulation: 0/0
+[   427.087] Step: 12386/15624, Simulation: 0/0
+[   428.789] Step: 12387/15624, Simulation: 0/0
+[   430.567] Step: 12388/15624, Simulation: 0/0
+[   432.275] Step: 12389/15624, Simulation: 0/0
+[   433.982] Step: 12390/15624, Simulation: 0/0
+[     435.7] Step: 12391/15624, Simulation: 0/0
+[   437.439] Step: 12392/15624, Simulation: 0/0
+[   439.146] Step: 12393/15624, Simulation: 0/0
+[    440.88] Step: 12394/15624, Simulation: 0/0
+[   442.612] Step: 12395/15624, Simulation: 0/0
+[   444.327] Step: 12396/15624, Simulation: 0/0
+[   446.047] Step: 12397/15624, Simulation: 0/0
+[   447.798] Step: 12398/15624, Simulation: 0/0
+[   449.564] Step: 12399/15624, Simulation: 0/0
+[   451.328] Step: 12400/15624, Simulation: 0/0
+[   453.079] Step: 12401/15624, Simulation: 0/0
+[    454.82] Step: 12402/15624, Simulation: 0/0
+[   456.568] Step: 12403/15624, Simulation: 0/0
+[    458.34] Step: 12404/15624, Simulation: 0/0
+[   460.139] Step: 14215/15624, Simulation: 0/0
+[   461.892] Step: 14216/15624, Simulation: 0/0
+[    463.72] Step: 14217/15624, Simulation: 0/0
+[   465.479] Step: 14218/15624, Simulation: 0/0
+[   467.248] Step: 14219/15624, Simulation: 0/0
+[   469.031] Step: 14220/15624, Simulation: 0/0
+[   470.812] Step: 14221/15624, Simulation: 0/0
+[   472.571] Step: 14222/15624, Simulation: 0/0
+[   474.309] Step: 14223/15624, Simulation: 0/0
+[   476.047] Step: 14224/15624, Simulation: 0/0
+[   477.769] Step: 14225/15624, Simulation: 0/0
+[   479.482] Step: 14226/15624, Simulation: 0/0
+[   481.228] Step: 14227/15624, Simulation: 0/0
+[   482.952] Step: 14228/15624, Simulation: 0/0
+[   484.679] Step: 14229/15624, Simulation: 0/0
+[   486.398] Step: 14230/15624, Simulation: 0/0
+[   488.121] Step: 14231/15624, Simulation: 0/0
+[   489.838] Step: 14232/15624, Simulation: 0/0
+[   491.594] Step: 14233/15624, Simulation: 0/0
+[     493.3] Step: 14234/15624, Simulation: 0/0
+[   495.016] Step: 14235/15624, Simulation: 0/0
+[   496.741] Step: 14236/15624, Simulation: 0/0
+[    498.48] Step: 14237/15624, Simulation: 0/0
+[   500.216] Step: 14238/15624, Simulation: 0/0
+[   501.973] Step: 14239/15624, Simulation: 0/0
+[   503.707] Step: 14240/15624, Simulation: 0/0
+[   505.463] Step: 14241/15624, Simulation: 0/0
+[   507.205] Step: 14242/15624, Simulation: 0/0
+[   508.964] Step: 15176/15624, Simulation: 0/0
+[   510.715] Step: 15177/15624, Simulation: 0/0
+[   512.435] Step: 15178/15624, Simulation: 0/0
+[   514.226] Step: 15179/15624, Simulation: 0/0
+[   515.991] Step: 15180/15624, Simulation: 0/0
+[   517.785] Step: 15181/15624, Simulation: 0/0
+[   519.561] Step: 15182/15624, Simulation: 0/0
+[   521.358] Step: 15183/15624, Simulation: 0/0
+[   523.136] Step: 15184/15624, Simulation: 0/0
+[   524.938] Step: 15553/15624, Simulation: 0/0
+[   526.682] Step: 15554/15624, Simulation: 0/0
+[   528.451] Step: 15594/15624, Simulation: 0/0
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 530.857 seconds!
+	 Individual Faults: 331200
+	 Faulted Cycles: 
+		1
+		2
+		3
+		4
+		5
+		6
+		7
+		8
+		9
+		10
+		11
+		12
+		13
+		14
+		15
+		16
+		17
+		18
+		19
+		20
+		21
+		22
+		23
+		24
+		25
+		26
+		27
+		28
+		29
+		30
+		31
+		32
+		33
+		34
+		35
+		36
+		37
+		38
+		39
+		40
+		41
+		42
+		43
+		44
+		45
+		46
+		47
+		48
+		49
+		50
+		51
+		52
+		53
+		54
+		55
+		56
+		57
+		58
+		59
+		60
+		61
+		62
+		63
+		64
+		65
+		66
+		67
+		68
+		69
+		70
+		71
+		72
+		73
+		74
+		75
+		76
+		77
+		78
+		79
+		80
+		81
+		82
+		83
+		84
+		85
+		86
+		87
+		88
+		89
+		90
+		91
+		92
+		93
+		94
+		95
+		96
+		97
+		98
+		99
+		100
+		101
+		102
+		103
+		104
+		105
+		106
+		107
+		108
+		109
+		110
+		111
+		112
+		113
+		114
+		115
+		116
+		117
+		118
+		119
+		120
+		121
+		122
+		123
+		124
+		125
+		126
+		127
+		128
+		129
+		130
+		131
+		132
+		133
+		134
+		135
+		136
+		137
+		138
+		139
+		140
+		141
+		142
+		143
+		144
+		145
+		146
+		147
+		148
+		149
+		150
+		151
+		152
+		153
+		154
+		155
+		156
+		157
+		158
+		159
+		160
+		161
+		162
+		163
+		164
+		165
+		166
+		167
+		168
+		169
+		170
+		171
+		172
+		173
+		174
+		175
+		176
+		177
+		178
+		179
+		180
+		181
+		182
+		183
+		184
+		185
+		186
+		187
+		188
+		189
+		190
+		191
+		192
+		193
+		194
+		195
+		196
+		197
+		198
+		199
+		200
+		201
+		202
+		203
+		204
+		205
+		206
+		207
+		208
+		209
+		210
+		211
+		212
+		213
+		214
+		215
+		216
+		217
+		218
+		219
+		220
+		221
+		222
+		223
+		224
+		225
+		226
+		227
+		228
+		229
+		230
+	 Effective Faults Per Thread: 
+		214
+		222
+		216
+		231
+		213
+		212
+		233
+		224
+		206
+		206
+		218
+		169
+		231
+		229
+		206
+		211
+		216
+		191
+		206
+		227
+		185
+		212
+		221
+		227
+		223
+		177
+		224
+		219
+		232
+		192
+		231
+		219
+		216
+		182
+		210
+		225
+		177
+		229
+		189
+		223
+		226
+		210
+		186
+		212
+		207
+		221
+		194
+		213
+		204
+		232
+		212
+		219
+	 Effective Faults Total: 
+		 Success 11030
+		 Trials 1000000
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.010574669
+		p_u: 0.011498398
+-------------------------------------------------------------
+

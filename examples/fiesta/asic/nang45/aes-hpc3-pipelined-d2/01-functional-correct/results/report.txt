@@ -1,0 +1,143 @@
+Found child with key: analysis_strategy and type: string
+Found child with key: performance and type: object
+Found child with key: max_number_of_threads and type: string
+Found child with key: minimize_probing_sets and type: string
+Found child with key: simulation and type: object
+Found child with key: waveform_simulation and type: bool
+Found child with key: end_condition and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: groups and type: array
+Found child with key: output_shares and type: array
+Found child with key: expected_output and type: array
+Found child with key: number_of_clock_cycles and type: int
+Found child with key: always_random_inputs and type: array
+Found child with key: input_sequence and type: array
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: number_of_simulations and type: int
+Found child with key: number_of_simulations_per_step and type: int
+Found child with key: hardware and type: object
+Found child with key: clock_signal_name and type: string
+Found child with key: side_channel_analysis and type: object
+Found child with key: order and type: int
+Found child with key: transitional_leakage and type: bool
+Found child with key: fault_injection and type: object
+Found child with key: adversaries and type: array
+Found child with key: properties and type: array
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: probability and type: double
+Found child with key: type and type: string
+Found child with key: target_logic_gates and type: bool
+Found child with key: target_storage_gates and type: bool
+Found child with key: clock_cycles and type: array
+Found child with key: confidence_level and type: double
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: maximum_number_of_faults_per_cycle and type: int
+Found child with key: maximum_number_of_faults_per_run and type: int
+Found child with key: minimum_number_of_faults_per_cycle and type: int
+Found child with key: minimum_number_of_faults_per_run and type: int
+Found child with key: simulations_to_analyze and type: string
+Found child with key: type and type: string
+Successfully validated the settings file.
+Successfully read the library with name "nang45".
+Successfully parsed 35 cells from the library.
+Successfully found buffer cell with identifier "BUF_X1" and others.
+"circuit"...done
+Successfully matched 204 fresh mask signals (for rising edge) [{Fresh[0]}, {Fresh[1]}, {Fresh[2]}, {Fresh[3]}, {Fresh[4]}, {Fresh[5]}, {Fresh[6]}, {Fresh[7]}, {Fresh[8]}, {Fresh[9]}, {Fresh[10]}, {Fresh[11]}, {Fresh[12]}, {Fresh[13]}, {Fresh[14]}, {Fresh[15]}, {Fresh[16]}, {Fresh[17]}, {Fresh[18]}, {Fresh[19]}, {Fresh[20]}, {Fresh[21]}, {Fresh[22]}, {Fresh[23]}, {Fresh[24]}, {Fresh[25]}, {Fresh[26]}, {Fresh[27]}, {Fresh[28]}, {Fresh[29]}, {Fresh[30]}, {Fresh[31]}, {Fresh[32]}, {Fresh[33]}, {Fresh[34]}, {Fresh[35]}, {Fresh[36]}, {Fresh[37]}, {Fresh[38]}, {Fresh[39]}, {Fresh[40]}, {Fresh[41]}, {Fresh[42]}, {Fresh[43]}, {Fresh[44]}, {Fresh[45]}, {Fresh[46]}, {Fresh[47]}, {Fresh[48]}, {Fresh[49]}, {Fresh[50]}, {Fresh[51]}, {Fresh[52]}, {Fresh[53]}, {Fresh[54]}, {Fresh[55]}, {Fresh[56]}, {Fresh[57]}, {Fresh[58]}, {Fresh[59]}, {Fresh[60]}, {Fresh[61]}, {Fresh[62]}, {Fresh[63]}, {Fresh[64]}, {Fresh[65]}, {Fresh[66]}, {Fresh[67]}, {Fresh[68]}, {Fresh[69]}, {Fresh[70]}, {Fresh[71]}, {Fresh[72]}, {Fresh[73]}, {Fresh[74]}, {Fresh[75]}, {Fresh[76]}, {Fresh[77]}, {Fresh[78]}, {Fresh[79]}, {Fresh[80]}, {Fresh[81]}, {Fresh[82]}, {Fresh[83]}, {Fresh[84]}, {Fresh[85]}, {Fresh[86]}, {Fresh[87]}, {Fresh[88]}, {Fresh[89]}, {Fresh[90]}, {Fresh[91]}, {Fresh[92]}, {Fresh[93]}, {Fresh[94]}, {Fresh[95]}, {Fresh[96]}, {Fresh[97]}, {Fresh[98]}, {Fresh[99]}, {Fresh[100]}, {Fresh[101]}, {Fresh[102]}, {Fresh[103]}, {Fresh[104]}, {Fresh[105]}, {Fresh[106]}, {Fresh[107]}, {Fresh[108]}, {Fresh[109]}, {Fresh[110]}, {Fresh[111]}, {Fresh[112]}, {Fresh[113]}, {Fresh[114]}, {Fresh[115]}, {Fresh[116]}, {Fresh[117]}, {Fresh[118]}, {Fresh[119]}, {Fresh[120]}, {Fresh[121]}, {Fresh[122]}, {Fresh[123]}, {Fresh[124]}, {Fresh[125]}, {Fresh[126]}, {Fresh[127]}, {Fresh[128]}, {Fresh[129]}, {Fresh[130]}, {Fresh[131]}, {Fresh[132]}, {Fresh[133]}, {Fresh[134]}, {Fresh[135]}, {Fresh[136]}, {Fresh[137]}, {Fresh[138]}, {Fresh[139]}, {Fresh[140]}, {Fresh[141]}, {Fresh[142]}, {Fresh[143]}, {Fresh[144]}, {Fresh[145]}, {Fresh[146]}, {Fresh[147]}, {Fresh[148]}, {Fresh[149]}, {Fresh[150]}, {Fresh[151]}, {Fresh[152]}, {Fresh[153]}, {Fresh[154]}, {Fresh[155]}, {Fresh[156]}, {Fresh[157]}, {Fresh[158]}, {Fresh[159]}, {Fresh[160]}, {Fresh[161]}, {Fresh[162]}, {Fresh[163]}, {Fresh[164]}, {Fresh[165]}, {Fresh[166]}, {Fresh[167]}, {Fresh[168]}, {Fresh[169]}, {Fresh[170]}, {Fresh[171]}, {Fresh[172]}, {Fresh[173]}, {Fresh[174]}, {Fresh[175]}, {Fresh[176]}, {Fresh[177]}, {Fresh[178]}, {Fresh[179]}, {Fresh[180]}, {Fresh[181]}, {Fresh[182]}, {Fresh[183]}, {Fresh[184]}, {Fresh[185]}, {Fresh[186]}, {Fresh[187]}, {Fresh[188]}, {Fresh[189]}, {Fresh[190]}, {Fresh[191]}, {Fresh[192]}, {Fresh[193]}, {Fresh[194]}, {Fresh[195]}, {Fresh[196]}, {Fresh[197]}, {Fresh[198]}, {Fresh[199]}, {Fresh[200]}, {Fresh[201]}, {Fresh[202]}, {Fresh[203]}].
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :3
+	Number of groups :128
+	Number of bits :1
+[+] Available fault locations: 16349
+	Cycles:1
+	fault_positions: 16349
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 21.4674 seconds!
+	 Individual Faults: 16349
+	 Faulted Cycles: 
+		1
+	 Effective Faults Per Thread: 
+		0
+		0
+		0
+		0
+		0
+		0
+	 Effective Faults Total: 
+		 Success 0
+		 Trials 64
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0
+		p_u: 0.20283833
+-------------------------------------------------------------
+
