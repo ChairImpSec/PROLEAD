@@ -1,0 +1,58 @@
+Successfully parsed the settings file at "config.json".
+Successfully opened the library file at "./../../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json".
+Successfully read the library with name "skywater-pdk-libs-sky130_fd_sc_hd-v3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd2".
+Successfully found buffer cell with name "sky130_fd_sc_hd__buf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s25".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s15".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd1".
+Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd3".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufbuf".
+Successfully found buffer cell with name "sky130_fd_sc_hd__lpflow_clkbufkapwr".
+Successfully found buffer cell with name "sky130_fd_sc_hd__bufinv".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s50".
+Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s18".
+Successfully parsed 126 cells from the library.
+"circuit"...done
+Successfully matched 0 fresh mask signals [].
+Successfully matched 0 fresh mask signals [].
+
+G: 3	p: 0.0625	np: 0.9375
+
+y1
+y2
+q
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :1
+	Number of bits :1
+[+] Available fault locations: 3
+	Cycles:1
+	fault_positions: 3
+[0.000523004] Step: 0/0, Simulation: 0/0
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 0.000850441 seconds!
+	 Individual Faults: 3
+	 Faulted Cycles: 
+		1
+	 Effective Faults Per Thread: 
+		7
+		0
+		0
+		0
+		0
+		0
+	 Effective Faults Total: 
+		 Success 7
+		 Trials 64
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.010443841
+		p_u: 0.36133176
+-------------------------------------------------------------
+

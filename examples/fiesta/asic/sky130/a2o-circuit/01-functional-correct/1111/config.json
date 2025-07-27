@@ -1,0 +1,90 @@
+{
+  "analysis_strategy": "fia",
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "waveform_simulation": false,
+    "groups": [
+      "4'b1111"
+    ],
+    "output_shares": [
+      "q"
+    ],
+    "expected_output": [
+      "1'b0"
+    ],
+    "number_of_clock_cycles": 1,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "a",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "b",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "c",
+            "value": "group_in0[2]"
+          },
+          {
+            "name": "d",
+            "value": "group_in0[3]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 64,
+    "number_of_simulations_per_step": 64
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  },
+  "fault_injection": {
+    "adversaries": [
+      {
+        "properties": [
+          {
+            "fault_locations": {
+              "exclude": {
+                "signals": ".*"
+              },
+              "include": {
+                "signals": ".*"
+              }
+            },
+            "probability": 0.25,
+            "type": "StuckAt0",
+            "target_logic_gates": true,
+            "target_storage_gates": true
+          }
+        ]
+      }
+    ],
+    "clock_cycles": ["1"],
+    "confidence_level": 0.999999,
+    "fault_locations": {
+      "exclude": {
+        "signals": ".*"
+      },
+      "include": {
+        "signals": ".*"
+      }
+    },
+    "maximum_number_of_faults_per_cycle": 0,
+    "maximum_number_of_faults_per_run": 0,
+    "minimum_number_of_faults_per_cycle": 0,
+    "minimum_number_of_faults_per_run": 0,
+    "simulations_to_analyze": "OnlyFaulty",
+    "type": "StuckAt0"
+  }
+}

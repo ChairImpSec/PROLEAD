@@ -1,0 +1,94 @@
+Found child with key: analysis_strategy and type: string
+Found child with key: performance and type: object
+Found child with key: max_number_of_threads and type: string
+Found child with key: minimize_probing_sets and type: string
+Found child with key: simulation and type: object
+Found child with key: groups and type: array
+Found child with key: output_shares and type: array
+Found child with key: expected_output and type: array
+Found child with key: number_of_clock_cycles and type: int
+Found child with key: always_random_inputs and type: array
+Found child with key: input_sequence and type: array
+Found child with key: signals and type: array
+Found child with key: name and type: string
+Found child with key: value and type: string
+Found child with key: number_of_simulations and type: int
+Found child with key: number_of_simulations_per_step and type: int
+Found child with key: hardware and type: object
+Found child with key: clock_signal_name and type: string
+Found child with key: side_channel_analysis and type: object
+Found child with key: order and type: int
+Found child with key: transitional_leakage and type: bool
+Found child with key: fault_injection and type: object
+Found child with key: adversaries and type: array
+Found child with key: properties and type: array
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: probability and type: double
+Found child with key: type and type: string
+Found child with key: target_logic_gates and type: bool
+Found child with key: target_storage_gates and type: bool
+Found child with key: clock_cycles and type: array
+Found child with key: confidence_level and type: double
+Found child with key: fault_locations and type: object
+Found child with key: exclude and type: object
+Found child with key: signals and type: string
+Found child with key: include and type: object
+Found child with key: signals and type: string
+Found child with key: maximum_number_of_faults_per_cycle and type: int
+Found child with key: maximum_number_of_faults_per_run and type: int
+Found child with key: minimum_number_of_faults_per_cycle and type: int
+Found child with key: minimum_number_of_faults_per_run and type: int
+Found child with key: simulations_to_analyze and type: string
+Found child with key: type and type: string
+Successfully validated the settings file.
+Successfully read the library with name "sky130".
+Successfully parsed 126 cells from the library.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd2_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__buf_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s25" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkbuf_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s15" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd1_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd3_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__bufbuf_16" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__lpflow_clkbufkapwr_1" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__bufinv_8" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s50_2" and others.
+Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s18_2" and others.
+"circuit"...done
+[ ] Prepare simulation engin...
+[+] Simulation enging is prepared with:
+	Number of shares :1
+	Number of groups :8
+	Number of bits :1
+[+] Available fault locations: 159
+	Cycles:1
+	fault_positions: 159
+
+
+-------------------- Evaluation Completed --------------------
+	 Computation Time: 0.0017804 seconds!
+	 Individual Faults: 159
+	 Faulted Cycles: 
+		1
+	 Effective Faults Per Thread: 
+		0
+		0
+		0
+		0
+		0
+		64
+	 Effective Faults Total: 
+		 Success 64
+		 Trials 64
+
+
+	Probability faults lead to non correctable fault: 
+		p_l: 0.79716167
+		p_u: 1
+-------------------------------------------------------------
+

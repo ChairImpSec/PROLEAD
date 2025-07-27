@@ -1,0 +1,1 @@
+./../../../../../../../release/PROLEAD -l ./../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json  -n skywater-pdk-libs-sky130_fd_sc_hd-v3 -d ../../../00-design/gate/sbox.nl.v -m sbox -c config.json 2>&1| tee ./results/report.txt

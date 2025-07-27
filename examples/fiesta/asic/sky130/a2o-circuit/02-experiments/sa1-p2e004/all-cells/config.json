@@ -1,0 +1,89 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "waveform_simulation": false,
+    "groups": [
+      "4'b$$$$"
+    ],
+    "output_shares": [
+      "q"
+    ],
+    "expected_output": [
+      "1'b$"
+    ],
+    "number_of_clock_cycles": 1,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "a",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "b",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "c",
+            "value": "group_in0[2]"
+          },
+          {
+            "name": "d",
+            "value": "group_in0[3]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 64,
+    "number_of_simulations_per_step": 64
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "analysis_strategy": "fia_sampled",
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  },
+  "fault_injection": {
+    "type": "StuckAt0",
+    "minimum_number_of_faults_per_run": 1,
+    "maximum_number_of_faults_per_run": 1,
+    "minimum_number_of_faults_per_cycle": 1,
+    "maximum_number_of_faults_per_cycle": 1,
+    "clock_cycles": [
+      "1"
+    ],
+    "fault_locations": {
+      "include": {
+        "signals": ".*"
+      },
+      "exclude": {
+        "signals": "(?!)"
+      }
+    },
+    "confidence_level": 0.99999,
+    "max_size_of_combinations": 3,
+    "fault_properties": [
+      [
+        {
+          "type": "StuckAt1",
+          "probability": 0.0625,
+          "fault_logic_gates": true,
+          "fault_storage_gates": true,
+          "fault_locations": {
+            "include": {
+              "signals": ".*"
+            },
+            "exclude": {
+              "signals": "(?!)"
+            }
+          }
+        }
+      ]
+    ]
+  }
+}
