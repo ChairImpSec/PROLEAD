@@ -36,7 +36,7 @@ RELEASE_DIR = release
 DEBUG_DIR = debug
 TEST_DIR = test
 
-EXCLUDED_FILES := test/obj_test/tests/full/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c
+EXCLUDED_FILES := test/obj_test/tests/full/prolead_sw/aes_rp_d1_ccode/aes_rp_d1_ccode_c.c
 
 # Compiler options
 INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
