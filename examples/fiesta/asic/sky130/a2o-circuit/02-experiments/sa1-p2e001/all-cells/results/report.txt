@@ -67,34 +67,13 @@ Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s50_2
 Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s18_2" and others.
 "circuit"...done
 [ ] Prepare simulation engin...
-[+] Simulation enging is prepared with:
-	Number of shares :1
-	Number of groups :1
-	Number of bits :1
-[+] Available fault locations: 3
-	Cycles:1
-	fault_positions: 3
-
-
--------------------- Evaluation Completed --------------------
-	 Computation Time: 0.000840728 seconds!
-	 Individual Faults: 3
-	 Faulted Cycles: 
-		1
-	 Effective Faults Per Thread: 
-		0
-		36
-		0
-		0
-		0
-		0
-	 Effective Faults Total: 
-		 Success 36
-		 Trials 64
-
-
-	Probability faults lead to non correctable fault: 
-		p_l: 0.26551912
-		p_u: 0.83025558
--------------------------------------------------------------
-
+[2025-08-05 17:04:55.696377] [0x00007f85403b2b00] [info]    -------------------------------
+[2025-08-05 17:04:55.696382] [0x00007f85403b2b00] [info]    |      #Faults |   #Positions |
+[2025-08-05 17:04:55.696384] [0x00007f85403b2b00] [info]    -------------------------------
+[2025-08-05 17:04:55.696385] [0x00007f85403b2b00] [info]    |            3 |            3 |
+[2025-08-05 17:04:55.696386] [0x00007f85403b2b00] [info]    -------------------------------
+[2025-08-05 17:04:55.945569] [0x00007f85403b2b00] [info]    ---------------------------------------------------------------------------------------------------------------
+[2025-08-05 17:04:55.945587] [0x00007f85403b2b00] [info]    |       Elapsed Time |        Used Memory | Effective Faults (Success / Trials) |  Lower Bound |  Upper Bound |
+[2025-08-05 17:04:55.945590] [0x00007f85403b2b00] [info]    ---------------------------------------------------------------------------------------------------------------
+[2025-08-05 17:04:55.945611] [0x00007f85403b2b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    574394 / 1048576 |   0.54540604 |   0.55016209 |
+[2025-08-05 17:04:55.945614] [0x00007f85403b2b00] [info]    ---------------------------------------------------------------------------------------------------------------

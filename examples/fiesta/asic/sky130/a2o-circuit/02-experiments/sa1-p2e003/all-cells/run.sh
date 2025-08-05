@@ -1,1 +1,1 @@
-../../../../../../../../release/PROLEAD -l ./../../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json -n skywater-pdk-libs-sky130_fd_sc_hd-v3 -d ../../../../00-design/gate/design.v -m circuit -c config.json 2>&1 | tee results/report.txt
+"$PROLEAD" -l "$PROLEAD_LIB/sky130.json" -n "sky130" -d ../../../00-design/gate/design.v -m circuit -c config.json 2>&1 | tee results/report.txt

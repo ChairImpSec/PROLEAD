@@ -43,47 +43,47 @@
   "hardware": {
     "clock_signal_name": "clk"
   },
-  "analysis_strategy": "fia_sampled",
+  "analysis_strategy": "fia",
   "side_channel_analysis": {
     "order": 1,
     "transitional_leakage": true
   },
   "fault_injection": {
-    "type": "StuckAt0",
-    "minimum_number_of_faults_per_run": 1,
-    "maximum_number_of_faults_per_run": 1,
-    "minimum_number_of_faults_per_cycle": 1,
-    "maximum_number_of_faults_per_cycle": 1,
-    "clock_cycles": [
-      "1"
+    "adversaries": [
+      {
+        "properties": [
+          {
+            "fault_locations": {
+              "exclude": {
+                "signals": ".*"
+              },
+              "include": {
+                "signals": ".*"
+              }
+            },
+            "probability": 0.125,
+            "type": "StuckAt1",
+            "target_logic_gates": true,
+            "target_storage_gates": true
+          }
+        ]
+      }
     ],
+    "clock_cycles": ["1"],
+    "confidence_level": 0.999999,
     "fault_locations": {
-      "include": {
+      "exclude": {
         "signals": ".*"
       },
-      "exclude": {
-        "signals": "(?!)"
+      "include": {
+        "signals": ".*"
       }
     },
-    "confidence_level": 0.99999,
-    "max_size_of_combinations": 3,
-    "fault_properties": [
-      [
-        {
-          "type": "StuckAt1",
-          "probability": 0.125,
-          "fault_logic_gates": true,
-          "fault_storage_gates": true,
-          "fault_locations": {
-            "include": {
-              "signals": ".*"
-            },
-            "exclude": {
-              "signals": "(?!)"
-            }
-          }
-        }
-      ]
-    ]
+    "maximum_number_of_faults_per_cycle": 0,
+    "maximum_number_of_faults_per_run": 0,
+    "minimum_number_of_faults_per_cycle": 0,
+    "minimum_number_of_faults_per_run": 0,
+    "simulations_to_analyze": "OnlyFaulty",
+    "type": "StuckAt1"
   }
 }
