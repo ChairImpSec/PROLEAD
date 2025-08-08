@@ -45,15 +45,17 @@ C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -DNDEBUG -g -f
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 
-CXX_BENCHMARK_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
-CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -DNDEBUG -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
-CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c++20 $(INCLUDE_PYTHON3)
-CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+CXX_BENCHMARK_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -DBOOST_LOG_DYN_LINK -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+CXX_RELEASE_FLAGS = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -DBOOST_LOG_DYN_LINK -DNDEBUG -g -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+CXX_DEBUG_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -DBOOST_LOG_DYN_LINK -fsanitize=address -DDEBUG_BUILD -std=c++20 $(INCLUDE_PYTHON3)
+CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -DBOOST_LOG_DYN_LINK -fno-omit-frame-pointer -std=c++20 $(INCLUDE_PYTHON3)
+
 
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 LINK_FLINT = -lflint -lmpfr -lgmp -lm
-LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python312
+LINK_BOOST = -lboost_log -lboost_log_setup -lboost_thread -lboost_system -lpthread -lboost_filesystem -lboost_program_options -lboost_python312
+# LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python312
 LINK_GDSTK = -lgdstk -lclipper -lqhull_r -lz
 BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
 RELEASE_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
@@ -140,19 +142,19 @@ MAKEFLAGS += --no-print-directory
 ######################################
 # targets for the user
 
-all: debug release
+all: release
 
 benchmark:
-	@+make compile D=3 OUTPUT_DIRECTORY=$(BENCHMARK_DIR) SRC_DIRS=$(BENCHMARK_SRC) -j8
+	@+make compile D=3 OUTPUT_DIRECTORY=$(BENCHMARK_DIR) SRC_DIRS=$(BENCHMARK_SRC)
 
 test:
-	@+make compile D=2 OUTPUT_DIRECTORY=$(TEST_DIR) SRC_DIRS=$(TEST_SRC) -j8
+	@+make compile D=2 OUTPUT_DIRECTORY=$(TEST_DIR) SRC_DIRS=$(TEST_SRC)
 
 debug:
-	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR) SRC_DIRS=$(DEBUG_SRC) -j8
+	@+make compile D=1 OUTPUT_DIRECTORY=$(DEBUG_DIR) SRC_DIRS=$(DEBUG_SRC)
 
 release:
-	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR) SRC_DIRS=$(RELEASE_SRC) -j8
+	@+make compile D=0 OUTPUT_DIRECTORY=$(RELEASE_DIR) SRC_DIRS=$(RELEASE_SRC)
 
 clean:
 	@echo  Removing build artifacts...
