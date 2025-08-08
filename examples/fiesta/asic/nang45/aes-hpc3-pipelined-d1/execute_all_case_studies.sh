@@ -6,6 +6,7 @@ START_DIR="${1:-.}"
 # List of directories to ignore, separated by spaces
 IGNORE_DIRS=(
   "original-results"
+  "tgl"
   )  # replace with actual directories to ignore
 
 # Function to check if any part of the directory path contains an ignored directory

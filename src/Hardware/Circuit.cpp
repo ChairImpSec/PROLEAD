@@ -475,7 +475,7 @@ CircuitStruct::CircuitStruct(const std::string& design_file_name,
   SetIsExtensionAllowed(settings);
   SetIsAnalysisAllowed(settings);
   SetIsFaultAllowed(settings);
-  std::cout << "done" << std::endl;
+  BOOST_LOG_TRIVIAL(info) << topmodule_name << " is read!";
 
   for (uint64_t idx = 0; idx < cells_.size(); ++idx) {
     if (cells_[idx].type->GetType() != cell_t::sequential) {
@@ -1398,7 +1398,7 @@ int CircuitStruct::ReadDesignFile(
   FileBufferStruct FileBuffer;
   struct stat file_status;
 
-  std::cout << "\"" << top_module_name << "\"..." << std::flush;
+  BOOST_LOG_TRIVIAL(info) << "Reading \"" << top_module_name << "\"...";
 
   NumberOfSignals = 0;
   NumberOfOutputs = 0;

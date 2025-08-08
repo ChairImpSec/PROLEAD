@@ -430,24 +430,19 @@ void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
   }
 }
 
+
+uint64_t EstimateMemoryConsumption() {
+  struct rusage ru { };
+  if (getrusage(RUSAGE_SELF, &ru) != 0) return 0;
+#if defined(__APPLE__)
+  return ru.ru_maxrss / 1024;
+#else
+  return ru.ru_maxrss;
+#endif
+}
+
 uint64_t Util::PrintMemoryConsumption() {
-  std::ifstream status("/proc/self/status");
-  std::string line, number;
-  uint64_t ram = 0;
-
-  if (status.is_open()) {
-    while (getline(status, line)) {
-      if (line.find("VmSize") != std::string::npos) {
-        number = line.substr(7, line.length());
-        ram = std::stoll(number.substr(0, number.length() - 2));
-        break;
-      }
-    }
-    status.close();
-  } else {
-    throw std::logic_error("Status file not found!");
-  }
-
+  uint64_t ram = EstimateMemoryConsumption();
   return ram;
 }
 

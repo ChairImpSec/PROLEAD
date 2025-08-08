@@ -12,6 +12,7 @@
 #include "Hardware/TruthTable.hpp"
 #include "Util/Grammars/VlogConstGrammar.hpp"
 #include "Util/Settings.hpp"
+#include <boost/log/trivial.hpp>
 
 #define Max_Name_Len 1000000
 

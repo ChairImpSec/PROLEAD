@@ -1,18 +1,22 @@
 #include "Hardware/SampledRFAdversary.hpp"
+#include "Hardware/Logger.hpp"
 #include "Util/Util.hpp"
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <numeric>
 #include <ostream>
 #include <stdexcept>
+#include <string>
 #include <utility>
 
 SampledRFAdversary::SampledRFAdversary(const Library &library,
                                                  const CircuitStruct &circuit,
                                                  const Settings &settings,
                                                  Simulation &simulation,
-                                                 const size_t idx_adversary) :
+                                                 const size_t idx_adversary,
+                                                 Logger logger) :
   number_of_effective_cases_{0},
   library_{library},
   circuit_{circuit},
@@ -21,17 +25,22 @@ SampledRFAdversary::SampledRFAdversary(const Library &library,
   settings_{settings},
   simulation_{simulation},
   number_of_effective_cases_per_thread_(settings.GetNumberOfThreads(), 0),
-  fault_manager_{settings.fault_injection, circuit}
+  fault_manager_{settings.fault_injection, circuit},
+  logger_{logger}
 {
 
 
+  this->logger_.PrintInitialMessage(
+    "Prepare statistical evaluation of adversary " +
+    std::to_string(idx_adversary) +
+    " in the general random fault model!"
+  );
+
   // TODO: move all functions used to initialize the fault manage in the constructor of it.
   fault_manager_.SelectStrategyAndComputeAllFaults(simulation_.clock_signal_index_, idx_adversary);
-  // NOTE: DEBUG print only
-  // for(const auto &f  : fault_manager_.GetFaults()){
-  //
-  //   std::cout << circuit_.signals_[f->GetFaultedSignalIndex()].Name << std::endl;;
-  // }
+  this->logger_.PrintInfoMessage(
+    "All possible faults are derived from configuration file.\n"
+  );
 
 	simulation_.is_simulation_faulty_ = std::make_unique<uint64_t[]>(settings_.GetNumberOfSimulationsPerStep() >> 6);
   for (size_t index = 0; index < settings_.GetNumberOfSimulationsPerStep() >> 6; ++index){
@@ -117,134 +126,93 @@ void SampledRFAdversary::MultithreadedAnalysis(std::vector<boost::mt19937>& thre
                                                     size_t number_of_group_values,
                                                     size_t number_of_output_shares,
                                                     size_t output_element_size,
-                                                    timespec &start_time){
+                                                    std::vector<std::mt19937>& gen_fault_combination
+                                               ){
 
-  // Start Multithreading
-  //
-  // TODO: is this okay to be used in multithreaded environment?
-  // std::vector<boost::mt19937> gen_fault_combination(settings_.GetNumberOfThreads());
-  std::vector<std::mt19937> gen_fault_combination(settings_.GetNumberOfThreads());
-  const size_t max_num_steps = (settings_.GetNumberOfSimulations() / settings_.GetNumberOfSimulationsPerStep());
-  const size_t max_num_sims  = (settings_.GetNumberOfSimulationsPerStep() / 64);
 
   #pragma omp parallel for schedule(guided)
-  for (size_t step_simulation_index = 0;
-       step_simulation_index < max_num_steps;
-       ++step_simulation_index) {
+  for (size_t simulation_index = 0;
+       simulation_index < settings_.GetNumberOfVectorizedSimulationsPerStep();
+       ++simulation_index) {
 
     size_t thread_index = omp_get_thread_num();
     std::vector<FaultSet> fault_sets;
+    this->fault_manager_.SampleRandomFaultVector(gen_fault_combination[thread_index], fault_sets);
 
-    for (size_t simulation_index = 0;
-         simulation_index < max_num_sims;
-         ++simulation_index) {
+    const size_t number_of_signals = circuit_.NumberOfSignals;
+    const size_t number_of_clock_cycles_ = settings_.GetNumberOfClockCycles();
+    std::vector<std::vector<std::vector<FaultType>>> fault_type_(64, std::vector<std::vector<FaultType>>(number_of_signals, std::vector<FaultType>(number_of_clock_cycles_, FaultType::none))); // [bit_index][signal_index][clock_index]
 
-      if(thread_index == 0){
-        std::cout << "[" << std::setw(10) << EndClock(start_time) << "]";
-        std::cout << " Step: " << std::setw(std::to_string(max_num_steps).length()) <<
-          step_simulation_index << "/" << max_num_steps - 1;
-        std::cout << ", Simulation: " << std::setw(std::to_string(max_num_sims).length()) <<
-          simulation_index << "/" << max_num_sims - 1 << std::endl;
+    for(size_t bit_index = 0; bit_index < 64; ++bit_index){
+      for (uint64_t index = 0; index < fault_sets[bit_index].GetNumberOfFaultsInSet(); ++index) {
+        const Fault* fault = fault_sets[bit_index].GetFault(index);
+        fault_type_[bit_index][fault->GetFaultedSignalIndex()][fault->GetFaultedClockCycle()] = fault->GetFaultType();
       }
 
-
-
-      this->fault_manager_.SampleRandomFaultVector(gen_fault_combination[thread_index], fault_sets);
-      // std::cout << "F: ";
-      // for (const auto & fs : fault_sets) {
-      //   std::cout << fs.GetNumberOfFaultsInSet() << ", ";
-      // }
-      // std::cout << std::endl;
-      // std::cout << "FaultSets are selected!" << std::endl;
-
-      const size_t number_of_signals = circuit_.NumberOfSignals;
-      const size_t number_of_clock_cycles_ = settings_.GetNumberOfClockCycles();
-      std::vector<std::vector<std::vector<FaultType>>> fault_type_(64, std::vector<std::vector<FaultType>>(number_of_signals, std::vector<FaultType>(number_of_clock_cycles_, FaultType::none))); // [bit_index][signal_index][clock_index]
-
-      for(size_t bit_index = 0; bit_index < 64; ++bit_index){
-
-        for (uint64_t index = 0; index < fault_sets[bit_index].GetNumberOfFaultsInSet(); ++index) {
-          const Fault* fault = fault_sets[bit_index].GetFault(index);
-          fault_type_[bit_index][fault->GetFaultedSignalIndex()][fault->GetFaultedClockCycle()] = fault->GetFaultType();
-        }
-
-      }
-
-      this->number_of_effective_cases_per_thread_[thread_index] += CountEffectiveFaultInSimulation(fault_sets,
-                                      thread_rng,
-                                      number_of_group_values,
-                                      number_of_output_shares,
-                                      output_element_size,
-                                      thread_index,
-                                      simulation_index,
-                                      fault_type_);
-
-      // std::cout << "Effective Cases are computed!" << std::endl;
     }
+
+    this->number_of_effective_cases_per_thread_[thread_index] += CountEffectiveFaultInSimulation(fault_sets,
+                                    thread_rng,
+                                    number_of_group_values,
+                                    number_of_output_shares,
+                                    output_element_size,
+                                    thread_index,
+                                    simulation_index,
+                                    fault_type_);
+
   }
 }
 
 
 void SampledRFAdversary::MergeMultithreadedResults(){
+  size_t num_eff_faults_accumulation{0};
   for (const auto num : this->number_of_effective_cases_per_thread_) {
-    // std::cout << "Thread: " << num << std::endl;
-    this->number_of_effective_cases_ += num;
+     num_eff_faults_accumulation += num;
   }
+  this->number_of_effective_cases_ = num_eff_faults_accumulation;
 }
 
+void SampledRFAdversary::PrintDetailsOfAnalyisThatWillBeComputed() {
+  std::vector<TableCell> table_cells_header{
+    {"#Used Threads", 13},
+    {"#Faults", 12},
+    {"#Positions", 12},
+    {"Confidence Level", 16},
+    {"Fault Probability (min / max)", 30}
+  };
+
+
+  std::vector<TableCell> table_cells_row{
+    {std::to_string(this->settings_.GetNumberOfThreads()),13},
+    {std::to_string(this->fault_manager_.GetNumberOfFaults()), 12},
+    {std::to_string(this->fault_manager_.GetNumberOfFaultsPerClockCycle()), 12},
+    {std::to_string(this->settings_.GetConfidenceLevel()), 16},
+    {
+      std::to_string(fault_manager_.GetMinProbability()) +
+      " / " +
+      std::to_string(fault_manager_.GetMaxProbability()), 30
+    }
+    // {std::to_string(this->settings_.confidence), 30}
+  };
+
+  this->logger_.PrintInfoMessage("Properties of the analysis:");
+  this->logger_.PrintHeader(table_cells_header);
+  this->logger_.PrintRowWithSeparation(table_cells_row, true);
+}
 
 void SampledRFAdversary::EvaluateRandomFaultAdversary(){
 
   // Prepare timer
-  struct timespec start_time;
-  StartClock(start_time);
+  StartClock(this->start_time_);
 
-  // TODO: should we use a new logger e.g. the boost one?
-  // Add a output for the folder which both simulators use as destination.
-
-  // 1. For all FaultSets (implement this using some iterator!):
-  // 1.1 Simulate golden circuit for x inputs   (in Simulate.cpp)
-  // 1.2 Simulate faulty circuit for x inputs   (in Simulate.cpp)
-  // 1.3 For each golden_sim != faulty_sim:
-  // 1.3.1 increase counter of current FaultSet
-  // 1.4 if FaultSet.number_of_effective_simulations_ > 0:
-  // 1.4.1 guaranteed_success_probability_ += FaultSet.fault_probability
-  // 1.5 else
-  // 1.5.1 Compute confidence intervall (pl, pu) using tries: x, hits: 0, given confidence level.
-  // 1.5.2 update lower_bound_part_success_probability_ += (pl*FaultSet.fault_probability) = 0;
-  // 1.5.2 update upper_bound_part_success_probability_ += (pu*FaultSet.fault_probability);
-  // 2. compute lower_bound_success_probability_ = guaranteed_success_probability_ +
-  //                                              lower_bound_part_success_probability_   ;
-  // 3. compute upper_bound_success_probability_ = guaranteed_success_probability_ +
-  //                                              upper_bound_part_success_probability_   ;
-
-  // std::cout << "[ ] Determine probability of |fault_set_| > max_size_of_combinations..." << std::endl;
-  // fault_manager_.DetermineProbabilityOfNonEvaluatedFaultSets();
-  // std::cout << "[+] Probability of |fault_set_| > max_size_of_combinations determined!" << std::endl;
-
-  std::cout << "[ ] Prepare simulation engin..." << std::endl;
   // Prepare Multithreading
   omp_set_num_threads(settings_.GetNumberOfThreads());
-  // simulation_.fault_set_ = std::vector<FaultSet *>(settings_.GetNumberOfThreads(), nullptr);
-
-
-  // TODO: use for testcase
-  // std::cout <<  "Faults: " << fault_manager_.GetNumberOfFaults() << std::endl;
-  // boost::mt19937 gen;
-  // double average =0;
-  // for (size_t i =0 ; i < 1000000; ++i) {
-  //   const FaultSet fs = this->fault_manager_.SampleRandomFault(gen);
-  //   average += fs.GetNumberOfFaultsInSet();
-  // }
-  // std::cout << average/1000000 << std::endl;
-  // return;
 
   // Prepare Simulation
   std::vector<uint64_t> number_of_simulations_per_group(settings_.GetNumberOfGroups(), 0.0);
   std::vector<double_t> group_simulation_ratio(settings_.GetNumberOfGroups());
   std::vector<boost::mt19937> thread_rng(settings_.GetNumberOfThreads());
   GenerateThreadRng(thread_rng, settings_.GetNumberOfThreads());// We use a PRNG that is thread safe
-
 
   // Retrive size of output elements to be checked
   size_t output_element_size = std::ceil(std::log2l(settings_.output_finite_field.base)) * settings_.output_finite_field.exponent;
@@ -256,44 +224,53 @@ void SampledRFAdversary::EvaluateRandomFaultAdversary(){
   } else {
     throw std::invalid_argument("At least one output is required which should be checked for faults!");
   }
-  std::cout << "[+] Simulation enging is prepared with:" << std::endl;
-  std::cout << "\tNumber of shares :"  << number_of_output_shares << std::endl;
-  std::cout << "\tNumber of groups :"  << number_of_group_values << std::endl;
-  std::cout << "\tNumber of bits :"  << output_element_size << std::endl;
 
-  std::cout << "[+] Available fault locations: " << fault_manager_.GetNumberOfFaults();
-  std::cout << "\n\t" << "Cycles:" << this->settings_.fault_injection.clock_cycles.size();
-  std::cout << "\n\t"  << "fault_positions: " << this->fault_manager_.GetNumberOfFaultsPerClockCycle();
-  std::cout << std::endl;
+  PrintDetailsOfAnalyisThatWillBeComputed();
 
   simulation_.number_of_processed_simulations = 0;
 
-  MultithreadedAnalysis(thread_rng,
+  std::vector<std::mt19937> gen_fault_combination(settings_.GetNumberOfThreads());
+
+  this->logger_.PrintInfoMessage("Analysis is starting...");
+  this->logger_.PrintHeader(SampledRFAdversary::GetFinalReportHeader());
+
+  for (size_t step_simulation_index = 0;
+       step_simulation_index < settings_.GetNumberOfSimulationSteps();
+       ++step_simulation_index) {
+    MultithreadedAnalysis(thread_rng,
                         number_of_group_values,
                         number_of_output_shares,
                         output_element_size,
-                        start_time);
+                        gen_fault_combination);
+    simulation_.number_of_processed_simulations += settings_.GetNumberOfSimulationsPerStep();
 
-  MergeMultithreadedResults();
+    MergeMultithreadedResults();
+    ComputeConfidenceInterval();
+    ReportStep(step_simulation_index);
 
+
+  }
+
+  this->logger_.PrintInfoMessage("Analysis has finished!\n");
+  Report();
+
+}
+
+void SampledRFAdversary::ComputeConfidenceInterval(){
   this->lower_bound_success_probability_ =
     boost::math::binomial_distribution<>::find_lower_bound_on_p(
-      this->settings_.GetNumberOfSimulations(),
+      this->simulation_.number_of_processed_simulations,
       this->number_of_effective_cases_,
       (1-this->settings_.fault_injection.confidence_level)/2
     );
 
   this->upper_bound_success_probability_ =
     boost::math::binomial_distribution<>::find_upper_bound_on_p(
-      this->settings_.GetNumberOfSimulations(),
+      this->simulation_.number_of_processed_simulations,
       this->number_of_effective_cases_,
       (1-this->settings_.fault_injection.confidence_level)/2
     );
-
-
-  Report(start_time);
 }
-
 
 void SampledRFAdversary::WriteJsonOutput(size_t idx_adversary) {
     boost::property_tree::ptree root;
@@ -312,37 +289,58 @@ void SampledRFAdversary::WriteJsonOutput(size_t idx_adversary) {
 }
 
 
-void SampledRFAdversary::Report(timespec &start_time){
+std::vector<TableCell> SampledRFAdversary::GetFinalReportHeader(){
+  std::vector<TableCell> table_cells_header{
+    {"Elapsed Time", 18},
+    {"Used Memory", 18},
+    {"#Effective Faults", 17},
+    {"Lower Bound", 11},
+    {"Upper Bound", 11},
+    {"Interval Size", 13}
+  };
+  return table_cells_header;
+}
 
-  std::cout << "\n\n-------------------- Evaluation Completed --------------------" << std::endl;
-  std::cout << "\t Computation Time: " << EndClock(start_time) << " seconds!" << std::endl;
-  std::cout << "\t Individual Faults: " << fault_manager_.GetFaults().size() << std::endl;
-  std::cout << "\t Faulted Cycles: " ;
-  for (const auto& clk : settings_.fault_injection.clock_cycles){
-      std::cout << "\n\t\t" << clk;
-  }
-  std::cout << std::endl;
-
-  std::cout << "\t Effective Faults Per Thread: ";
-  for (const auto& num : this->number_of_effective_cases_per_thread_) {
-    std::cout << "\n\t\t" << num;
-  }
-  std::cout << std::endl;
-
-  std::cout << "\t Effective Faults Total: ";
-  std::cout << "\n\t\t Success " << this->number_of_effective_cases_;
-  std::cout << "\n\t\t Trials " << this->settings_.GetNumberOfSimulations();
-  std::cout << std::endl;
-
+std::vector<TableCell> SampledRFAdversary::GetFinalReportRow(){
   const size_t precision{8};
-  // 1. Here the assumption is that the faults are induced in each clock cycle.
-  // Adversary tries each cycle
-  std::cout << "\n\n\tProbability faults lead to non correctable fault: ";
-  std::cout << std::setprecision(precision) << "\n\t\tp_l: " << lower_bound_success_probability_;
-  std::cout << std::setprecision(precision) << "\n\t\tp_u: " << upper_bound_success_probability_;
+  const uint64_t width_of_successes{std::log10(settings_.GetNumberOfSimulations())+1};
+  std::string trials =  std::to_string(this->simulation_.number_of_processed_simulations);
+  if (width_of_successes - trials.size() > 0) {
+    const std::string padding_of_trials = std::string(width_of_successes - trials.size() ,' ');
+    trials = padding_of_trials + trials;
+  }
 
-  std::cout << "\n-------------------------------------------------------------\n" << std::endl;
+  std::vector<TableCell> logging_row{
+    this->logger_.GetTimeCell(EndClock(this->start_time_), 18),
+    this->logger_.GetMemoryCell(EstimateMemoryConsumption(), 18),
+    // TODO: we need to fix the width of the number of performed simulations
+    TableCell(std::to_string(this->number_of_effective_cases_) + " / " + trials,17),
+    TableCell(std::format("{:.{}f}",  lower_bound_success_probability_, precision),11),
+    TableCell(std::format("{:.{}f}",  upper_bound_success_probability_, precision),11),
+    TableCell(std::format("{:.{}f}",  upper_bound_success_probability_ - lower_bound_success_probability_, precision),13)
+  };
+  return logging_row;
+}
 
+void SampledRFAdversary::ReportStep(size_t step_simulation_index){
+  std::vector<TableCell> logging_row = GetFinalReportRow();
+  if (step_simulation_index == settings_.GetNumberOfSimulationSteps() - 1) {
+    this->logger_.PrintRowWithSeparation(logging_row);
+  }
+  else{
+    this->logger_.PrintRow(logging_row);
+  }
+}
+
+void SampledRFAdversary::Report(){
+
+  this->logger_.PrintInfoMessage("Final Report:");
+  this->logger_.PrintHeader(SampledRFAdversary::GetFinalReportHeader());
+
+  std::vector<TableCell> logging_row = SampledRFAdversary::GetFinalReportRow();
+
+  this->logger_.PrintRowWithSeparation(logging_row, true);
+  this->logger_.PrintFinalMessage("Evaluation done in " + std::to_string(EndClock(this->start_time_)) + " seconds.");
 }
 
 double SampledRFAdversary::GetLowerBound() const {

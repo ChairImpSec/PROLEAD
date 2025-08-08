@@ -11,6 +11,7 @@
 #pragma once
 
 #include "Hardware/Cell.hpp"
+#include <boost/log/trivial.hpp>
 
 class Library {
  public:

@@ -9,8 +9,7 @@ Library::Library(const boost::json::object& library_file, std::string name) {
       });
 
   if (it != libs.end()) {
-    std::cout << "Successfully read the library with name \"" << name << "\"."
-              << std::endl;
+    BOOST_LOG_TRIVIAL(info) << "Successfully read the library with name \"" << name << "\".";
   } else {
     throw std::runtime_error("Error while reading the library with name \"" +
                              name + "\". Library not found!");
@@ -22,17 +21,14 @@ Library::Library(const boost::json::object& library_file, std::string name) {
     cells_.emplace_back(cell);
   }
 
-  std::cout << "Successfully parsed " << cells_.size()
-            << " cells from the library." << std::endl;
+  BOOST_LOG_TRIVIAL(info) << "Successfully parsed " << cells_.size() << " cells from the library.";
 
   buffer_ = std::nullopt;
 
   for (Cell& cell : cells_) {
     if (cell.GetType() == cell_t::buffer) {
       std::string id = cell.GetIdentifier(0);
-      std::cout << "Successfully found buffer cell with identifier \"" + id +
-                       "\" and others."
-                << std::endl;
+      BOOST_LOG_TRIVIAL(info) << "Successfully found buffer cell with identifier \"" + id + "\" and others.";
       buffer_ = &cell;
     }
   }
