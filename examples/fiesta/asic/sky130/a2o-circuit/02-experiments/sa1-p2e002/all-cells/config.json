@@ -37,8 +37,8 @@
         ]
       }
     ],
-    "number_of_simulations": 64,
-    "number_of_simulations_per_step": 64
+    "number_of_simulations": 1048576,
+    "number_of_simulations_per_step": 65536
   },
   "hardware": {
     "clock_signal_name": "clk"

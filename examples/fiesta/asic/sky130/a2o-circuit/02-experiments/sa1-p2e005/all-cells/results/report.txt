@@ -1,58 +1,112 @@
-Successfully parsed the settings file at "config.json".
-Successfully opened the library file at "./../../../../../../../../skywater-pdk-libs-sky130_fd_sc_hd-v3.json".
-Successfully read the library with name "skywater-pdk-libs-sky130_fd_sc_hd-v3".
-Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd2".
-Successfully found buffer cell with name "sky130_fd_sc_hd__buf".
-Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s25".
-Successfully found buffer cell with name "sky130_fd_sc_hd__clkbuf".
-Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s15".
-Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd1".
-Successfully found buffer cell with name "sky130_fd_sc_hd__dlygate4sd3".
-Successfully found buffer cell with name "sky130_fd_sc_hd__bufbuf".
-Successfully found buffer cell with name "sky130_fd_sc_hd__lpflow_clkbufkapwr".
-Successfully found buffer cell with name "sky130_fd_sc_hd__bufinv".
-Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s50".
-Successfully found buffer cell with name "sky130_fd_sc_hd__clkdlybuf4s18".
-Successfully parsed 126 cells from the library.
-"circuit"...done
-Successfully matched 0 fresh mask signals [].
-Successfully matched 0 fresh mask signals [].
+[2025-08-07 14:31:47.572595] [0x00007fea4f514b00] [info]    Found child with key: performance and type: object
+[2025-08-07 14:31:47.572605] [0x00007fea4f514b00] [info]    Found child with key: max_number_of_threads and type: string
+[2025-08-07 14:31:47.572607] [0x00007fea4f514b00] [info]    Found child with key: minimize_probing_sets and type: string
+[2025-08-07 14:31:47.572608] [0x00007fea4f514b00] [info]    Found child with key: simulation and type: object
+[2025-08-07 14:31:47.572610] [0x00007fea4f514b00] [info]    Found child with key: waveform_simulation and type: bool
+[2025-08-07 14:31:47.572611] [0x00007fea4f514b00] [info]    Found child with key: groups and type: array
+[2025-08-07 14:31:47.572613] [0x00007fea4f514b00] [info]    Found child with key: output_shares and type: array
+[2025-08-07 14:31:47.572614] [0x00007fea4f514b00] [info]    Found child with key: expected_output and type: array
+[2025-08-07 14:31:47.572615] [0x00007fea4f514b00] [info]    Found child with key: number_of_clock_cycles and type: int
+[2025-08-07 14:31:47.572615] [0x00007fea4f514b00] [info]    Found child with key: input_sequence and type: array
+[2025-08-07 14:31:47.572617] [0x00007fea4f514b00] [info]    Found child with key: signals and type: array
+[2025-08-07 14:31:47.572618] [0x00007fea4f514b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:31:47.572619] [0x00007fea4f514b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:31:47.572620] [0x00007fea4f514b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:31:47.572621] [0x00007fea4f514b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:31:47.572621] [0x00007fea4f514b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:31:47.572622] [0x00007fea4f514b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:31:47.572623] [0x00007fea4f514b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:31:47.572623] [0x00007fea4f514b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:31:47.572625] [0x00007fea4f514b00] [info]    Found child with key: number_of_simulations and type: int
+[2025-08-07 14:31:47.572626] [0x00007fea4f514b00] [info]    Found child with key: number_of_simulations_per_step and type: int
+[2025-08-07 14:31:47.572627] [0x00007fea4f514b00] [info]    Found child with key: hardware and type: object
+[2025-08-07 14:31:47.572628] [0x00007fea4f514b00] [info]    Found child with key: clock_signal_name and type: string
+[2025-08-07 14:31:47.572629] [0x00007fea4f514b00] [info]    Found child with key: analysis_strategy and type: string
+[2025-08-07 14:31:47.572630] [0x00007fea4f514b00] [info]    Found child with key: side_channel_analysis and type: object
+[2025-08-07 14:31:47.572631] [0x00007fea4f514b00] [info]    Found child with key: order and type: int
+[2025-08-07 14:31:47.572632] [0x00007fea4f514b00] [info]    Found child with key: transitional_leakage and type: bool
+[2025-08-07 14:31:47.572633] [0x00007fea4f514b00] [info]    Found child with key: fault_injection and type: object
+[2025-08-07 14:31:47.572635] [0x00007fea4f514b00] [info]    Found child with key: adversaries and type: array
+[2025-08-07 14:31:47.572636] [0x00007fea4f514b00] [info]    Found child with key: properties and type: array
+[2025-08-07 14:31:47.572637] [0x00007fea4f514b00] [info]    Found child with key: fault_locations and type: object
+[2025-08-07 14:31:47.572638] [0x00007fea4f514b00] [info]    Found child with key: exclude and type: object
+[2025-08-07 14:31:47.572639] [0x00007fea4f514b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:31:47.572640] [0x00007fea4f514b00] [info]    Found child with key: include and type: object
+[2025-08-07 14:31:47.572641] [0x00007fea4f514b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:31:47.572642] [0x00007fea4f514b00] [info]    Found child with key: probability and type: double
+[2025-08-07 14:31:47.572643] [0x00007fea4f514b00] [info]    Found child with key: type and type: string
+[2025-08-07 14:31:47.572644] [0x00007fea4f514b00] [info]    Found child with key: target_logic_gates and type: bool
+[2025-08-07 14:31:47.572645] [0x00007fea4f514b00] [info]    Found child with key: target_storage_gates and type: bool
+[2025-08-07 14:31:47.572646] [0x00007fea4f514b00] [info]    Found child with key: clock_cycles and type: array
+[2025-08-07 14:31:47.572647] [0x00007fea4f514b00] [info]    Found child with key: confidence_level and type: double
+[2025-08-07 14:31:47.572648] [0x00007fea4f514b00] [info]    Found child with key: fault_locations and type: object
+[2025-08-07 14:31:47.572649] [0x00007fea4f514b00] [info]    Found child with key: exclude and type: object
+[2025-08-07 14:31:47.572650] [0x00007fea4f514b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:31:47.572650] [0x00007fea4f514b00] [info]    Found child with key: include and type: object
+[2025-08-07 14:31:47.572651] [0x00007fea4f514b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:31:47.572652] [0x00007fea4f514b00] [info]    Found child with key: maximum_number_of_faults_per_cycle and type: int
+[2025-08-07 14:31:47.572653] [0x00007fea4f514b00] [info]    Found child with key: maximum_number_of_faults_per_run and type: int
+[2025-08-07 14:31:47.572654] [0x00007fea4f514b00] [info]    Found child with key: minimum_number_of_faults_per_cycle and type: int
+[2025-08-07 14:31:47.572655] [0x00007fea4f514b00] [info]    Found child with key: minimum_number_of_faults_per_run and type: int
+[2025-08-07 14:31:47.572656] [0x00007fea4f514b00] [info]    Found child with key: simulations_to_analyze and type: string
+[2025-08-07 14:31:47.572657] [0x00007fea4f514b00] [info]    Found child with key: type and type: string
+[2025-08-07 14:31:47.572659] [0x00007fea4f514b00] [info]    Successfully validated the settings file.
+[2025-08-07 14:31:47.572822] [0x00007fea4f514b00] [info]    Successfully read the library with name "sky130".
+[2025-08-07 14:31:47.574651] [0x00007fea4f514b00] [info]    Successfully parsed 126 cells from the library.
+[2025-08-07 14:31:47.574653] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd2_1" and others.
+[2025-08-07 14:31:47.574654] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__buf_1" and others.
+[2025-08-07 14:31:47.574655] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s25" and others.
+[2025-08-07 14:31:47.574655] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkbuf_1" and others.
+[2025-08-07 14:31:47.574656] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s15" and others.
+[2025-08-07 14:31:47.574657] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd1_1" and others.
+[2025-08-07 14:31:47.574658] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__dlygate4sd3_1" and others.
+[2025-08-07 14:31:47.574658] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__bufbuf_16" and others.
+[2025-08-07 14:31:47.574659] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__lpflow_clkbufkapwr_1" and others.
+[2025-08-07 14:31:47.574660] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__bufinv_8" and others.
+[2025-08-07 14:31:47.574661] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s50_2" and others.
+[2025-08-07 14:31:47.574661] [0x00007fea4f514b00] [info]    Successfully found buffer cell with identifier "sky130_fd_sc_hd__clkdlybuf4s18_2" and others.
+[2025-08-07 14:31:47.574699] [0x00007fea4f514b00] [info]    Reading "circuit"...
+[2025-08-07 14:31:47.574822] [0x00007fea4f514b00] [info]    circuit is read!
+[2025-08-07 14:31:47.575041] [0x00007fea4f514b00] [info]    --------------------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.575044] [0x00007fea4f514b00] [info]    Prepare statistical evaluation of adversary 0 in the general random fault model!
+[2025-08-07 14:31:47.575053] [0x00007fea4f514b00] [info]    All possible faults are derived from configuration file.
 
-G: 3	p: 0.03125	np: 0.96875
+[2025-08-07 14:31:47.575080] [0x00007fea4f514b00] [info]    Properties of the analysis:
+[2025-08-07 14:31:47.575092] [0x00007fea4f514b00] [info]    ---------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.575094] [0x00007fea4f514b00] [info]    | #Used Threads |      #Faults |   #Positions | Confidence Level |  Fault Probability (min / max) |
+[2025-08-07 14:31:47.575095] [0x00007fea4f514b00] [info]    ---------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.575097] [0x00007fea4f514b00] [info]    |             6 |            3 |            3 |         0.999999 |            0.312500 / 0.312500 |
+[2025-08-07 14:31:47.575098] [0x00007fea4f514b00] [info]    ---------------------------------------------------------------------------------------------------
 
-y1
-y2
-q
-[ ] Prepare simulation engin...
-[+] Simulation enging is prepared with:
-	Number of shares :1
-	Number of groups :1
-	Number of bits :1
-[+] Available fault locations: 3
-	Cycles:1
-	fault_positions: 3
-[0.000516541] Step: 0/0, Simulation: 0/0
+[2025-08-07 14:31:47.575106] [0x00007fea4f514b00] [info]    Analysis is starting...
+[2025-08-07 14:31:47.575110] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.575112] [0x00007fea4f514b00] [info]    |       Elapsed Time |        Used Memory | Effective Faults (Success / Trials) |  Lower Bound |  Upper Bound | Interval Size |
+[2025-08-07 14:31:47.575113] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.594269] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                     28896 /   65536 |   0.43143889 |   0.45042644 |    0.01898756 |
+[2025-08-07 14:31:47.610892] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                     57908 /  131072 |   0.43509695 |   0.44852348 |    0.01342653 |
+[2025-08-07 14:31:47.627859] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                     87350 /  196608 |   0.43880568 |   0.44977370 |    0.01096802 |
+[2025-08-07 14:31:47.643223] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    116216 /  262144 |   0.43858438 |   0.44808038 |    0.00949601 |
+[2025-08-07 14:31:47.659395] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    145225 /  327680 |   0.43894790 |   0.44744080 |    0.00849290 |
+[2025-08-07 14:31:47.674651] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    174190 /  393216 |   0.43911427 |   0.44686661 |    0.00775234 |
+[2025-08-07 14:31:47.690940] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    203303 /  458752 |   0.43957869 |   0.44675609 |    0.00717740 |
+[2025-08-07 14:31:47.706205] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    232389 /  524288 |   0.43989168 |   0.44660553 |    0.00671385 |
+[2025-08-07 14:31:47.722009] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    261536 /  589824 |   0.44025018 |   0.44658021 |    0.00633003 |
+[2025-08-07 14:31:47.735105] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    290608 /  655360 |   0.44043145 |   0.44643659 |    0.00600514 |
+[2025-08-07 14:31:47.749981] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    319643 /  720896 |   0.44053532 |   0.44626089 |    0.00572557 |
+[2025-08-07 14:31:47.765117] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    348470 /  786432 |   0.44036300 |   0.44584439 |    0.00548139 |
+[2025-08-07 14:31:47.781028] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    377572 /  851968 |   0.44054416 |   0.44581055 |    0.00526640 |
+[2025-08-07 14:31:47.797836] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    406516 /  917504 |   0.44053096 |   0.44560562 |    0.00507466 |
+[2025-08-07 14:31:47.813485] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    435726 /  983040 |   0.44079297 |   0.44569572 |    0.00490275 |
+[2025-08-07 14:31:47.830131] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    464798 / 1048576 |   0.44089326 |   0.44564033 |    0.00474706 |
+[2025-08-07 14:31:47.830143] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.830146] [0x00007fea4f514b00] [info]    Analysis has finished!
 
+[2025-08-07 14:31:47.830148] [0x00007fea4f514b00] [info]    Final Report:
+[2025-08-07 14:31:47.830152] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.830155] [0x00007fea4f514b00] [info]    |       Elapsed Time |        Used Memory | Effective Faults (Success / Trials) |  Lower Bound |  Upper Bound | Interval Size |
+[2025-08-07 14:31:47.830157] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:31:47.830164] [0x00007fea4f514b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 019MB |                    464798 / 1048576 |   0.44089326 |   0.44564033 |    0.00474706 |
+[2025-08-07 14:31:47.830167] [0x00007fea4f514b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
 
--------------------- Evaluation Completed --------------------
-	 Computation Time: 0.00080221 seconds!
-	 Individual Faults: 3
-	 Faulted Cycles: 
-		1
-	 Effective Faults Per Thread: 
-		3
-		0
-		0
-		0
-		0
-		0
-	 Effective Faults Total: 
-		 Success 3
-		 Trials 64
-
-
-	Probability faults lead to non correctable fault: 
-		p_l: 0.00049700354
-		p_u: 0.2679633
--------------------------------------------------------------
-
+[2025-08-07 14:31:47.830175] [0x00007fea4f514b00] [info]    Evaluation done in 0.255109 seconds.
+[2025-08-07 14:31:47.830178] [0x00007fea4f514b00] [info]    --------------------------------------------------------------------------------------------------------------------------------------------

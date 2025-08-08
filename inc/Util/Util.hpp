@@ -22,6 +22,7 @@
 
 #include "boost/generator_iterator.hpp"
 #include "boost/random.hpp"
+#include <sys/resource.h>
 
 /**
  * @brief Represents an observation set made by a set of probes.
@@ -429,6 +430,7 @@ void GenerateThreadRng(std::vector<boost::mt19937>& rng,
 void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
                                    std::vector<bool>& bitmask);
 
+uint64_t EstimateMemoryConsumption();
 namespace Util {
 uint64_t PrintMemoryConsumption();
 void PrintHorizontalLine(unsigned int width);
@@ -437,4 +439,5 @@ void PrintRow(std::vector<unsigned int>& width,
 void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
 void ExtractCombinationFromBitmask(std::vector<unsigned int>& combination,
                                    std::vector<bool>& bitmask);
+
 }  // namespace Util

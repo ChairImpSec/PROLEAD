@@ -1163,6 +1163,7 @@ void Adversaries<RobustProbe>::EvaluateProbingSets(
   }
 
   for (step_simulation_index = 0;
+      // TODO: suggestion use: settings_.GetNumberOfSimulationSteps()
        step_simulation_index < (settings_.GetNumberOfSimulations() /
                                 settings_.GetNumberOfSimulationsPerStep());
        ++step_simulation_index) {
@@ -1254,6 +1255,7 @@ void Adversaries<RelaxedProbe>::EvaluateProbingSets(
   simulation_.number_of_enablers_ = enablers.size();
 
   for (step_simulation_index = 0;
+      // TODO: suggestion use: settings_.GetNumberOfSimulationSteps()
        step_simulation_index < (settings_.GetNumberOfSimulations() /
                                 settings_.GetNumberOfSimulationsPerStep());
        ++step_simulation_index) {

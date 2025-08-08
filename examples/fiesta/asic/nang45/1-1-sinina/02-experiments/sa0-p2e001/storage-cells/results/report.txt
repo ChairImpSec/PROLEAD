@@ -1,0 +1,125 @@
+[2025-08-07 14:37:24.698371] [0x00007f2f52d14b00] [info]    Found child with key: analysis_strategy and type: string
+[2025-08-07 14:37:24.698383] [0x00007f2f52d14b00] [info]    Found child with key: performance and type: object
+[2025-08-07 14:37:24.698386] [0x00007f2f52d14b00] [info]    Found child with key: max_number_of_threads and type: string
+[2025-08-07 14:37:24.698387] [0x00007f2f52d14b00] [info]    Found child with key: minimize_probing_sets and type: string
+[2025-08-07 14:37:24.698389] [0x00007f2f52d14b00] [info]    Found child with key: simulation and type: object
+[2025-08-07 14:37:24.698393] [0x00007f2f52d14b00] [info]    Found child with key: waveform_simulation and type: bool
+[2025-08-07 14:37:24.698394] [0x00007f2f52d14b00] [info]    Found child with key: groups and type: array
+[2025-08-07 14:37:24.698396] [0x00007f2f52d14b00] [info]    Found child with key: output_shares and type: array
+[2025-08-07 14:37:24.698397] [0x00007f2f52d14b00] [info]    Found child with key: expected_output and type: array
+[2025-08-07 14:37:24.698398] [0x00007f2f52d14b00] [info]    Found child with key: number_of_clock_cycles and type: int
+[2025-08-07 14:37:24.698400] [0x00007f2f52d14b00] [info]    Found child with key: always_random_inputs and type: array
+[2025-08-07 14:37:24.698401] [0x00007f2f52d14b00] [info]    Found child with key: input_sequence and type: array
+[2025-08-07 14:37:24.698403] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: array
+[2025-08-07 14:37:24.698407] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698409] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698411] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698412] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698413] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698414] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698415] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698416] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698417] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698418] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698419] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698420] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698421] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698422] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698423] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698424] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698425] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698426] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698427] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698428] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698429] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698430] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698431] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698432] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698434] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698436] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698439] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: array
+[2025-08-07 14:37:24.698441] [0x00007f2f52d14b00] [info]    Found child with key: name and type: string
+[2025-08-07 14:37:24.698442] [0x00007f2f52d14b00] [info]    Found child with key: value and type: string
+[2025-08-07 14:37:24.698444] [0x00007f2f52d14b00] [info]    Found child with key: number_of_simulations and type: int
+[2025-08-07 14:37:24.698446] [0x00007f2f52d14b00] [info]    Found child with key: number_of_simulations_per_step and type: int
+[2025-08-07 14:37:24.698448] [0x00007f2f52d14b00] [info]    Found child with key: hardware and type: object
+[2025-08-07 14:37:24.698449] [0x00007f2f52d14b00] [info]    Found child with key: clock_signal_name and type: string
+[2025-08-07 14:37:24.698450] [0x00007f2f52d14b00] [info]    Found child with key: side_channel_analysis and type: object
+[2025-08-07 14:37:24.698451] [0x00007f2f52d14b00] [info]    Found child with key: order and type: int
+[2025-08-07 14:37:24.698453] [0x00007f2f52d14b00] [info]    Found child with key: transitional_leakage and type: bool
+[2025-08-07 14:37:24.698454] [0x00007f2f52d14b00] [info]    Found child with key: fault_injection and type: object
+[2025-08-07 14:37:24.698456] [0x00007f2f52d14b00] [info]    Found child with key: adversaries and type: array
+[2025-08-07 14:37:24.698458] [0x00007f2f52d14b00] [info]    Found child with key: properties and type: array
+[2025-08-07 14:37:24.698460] [0x00007f2f52d14b00] [info]    Found child with key: fault_locations and type: object
+[2025-08-07 14:37:24.698461] [0x00007f2f52d14b00] [info]    Found child with key: exclude and type: object
+[2025-08-07 14:37:24.698462] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:37:24.698463] [0x00007f2f52d14b00] [info]    Found child with key: include and type: object
+[2025-08-07 14:37:24.698465] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:37:24.698466] [0x00007f2f52d14b00] [info]    Found child with key: probability and type: double
+[2025-08-07 14:37:24.698467] [0x00007f2f52d14b00] [info]    Found child with key: type and type: string
+[2025-08-07 14:37:24.698468] [0x00007f2f52d14b00] [info]    Found child with key: target_logic_gates and type: bool
+[2025-08-07 14:37:24.698469] [0x00007f2f52d14b00] [info]    Found child with key: target_storage_gates and type: bool
+[2025-08-07 14:37:24.698471] [0x00007f2f52d14b00] [info]    Found child with key: clock_cycles and type: array
+[2025-08-07 14:37:24.698472] [0x00007f2f52d14b00] [info]    Found child with key: confidence_level and type: double
+[2025-08-07 14:37:24.698473] [0x00007f2f52d14b00] [info]    Found child with key: fault_locations and type: object
+[2025-08-07 14:37:24.698475] [0x00007f2f52d14b00] [info]    Found child with key: exclude and type: object
+[2025-08-07 14:37:24.698476] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:37:24.698477] [0x00007f2f52d14b00] [info]    Found child with key: include and type: object
+[2025-08-07 14:37:24.698478] [0x00007f2f52d14b00] [info]    Found child with key: signals and type: string
+[2025-08-07 14:37:24.698479] [0x00007f2f52d14b00] [info]    Found child with key: maximum_number_of_faults_per_cycle and type: int
+[2025-08-07 14:37:24.698481] [0x00007f2f52d14b00] [info]    Found child with key: maximum_number_of_faults_per_run and type: int
+[2025-08-07 14:37:24.698482] [0x00007f2f52d14b00] [info]    Found child with key: minimum_number_of_faults_per_cycle and type: int
+[2025-08-07 14:37:24.698483] [0x00007f2f52d14b00] [info]    Found child with key: minimum_number_of_faults_per_run and type: int
+[2025-08-07 14:37:24.698484] [0x00007f2f52d14b00] [info]    Found child with key: simulations_to_analyze and type: string
+[2025-08-07 14:37:24.698486] [0x00007f2f52d14b00] [info]    Found child with key: type and type: string
+[2025-08-07 14:37:24.698489] [0x00007f2f52d14b00] [info]    Successfully validated the settings file.
+[2025-08-07 14:37:24.698835] [0x00007f2f52d14b00] [info]    Successfully read the library with name "nang45".
+[2025-08-07 14:37:24.700143] [0x00007f2f52d14b00] [info]    Successfully parsed 35 cells from the library.
+[2025-08-07 14:37:24.700151] [0x00007f2f52d14b00] [info]    Successfully found buffer cell with identifier "BUF_X1" and others.
+[2025-08-07 14:37:24.700206] [0x00007f2f52d14b00] [info]    Reading "circuit"...
+[2025-08-07 14:37:24.704241] [0x00007f2f52d14b00] [info]    circuit is read!
+[2025-08-07 14:37:24.705096] [0x00007f2f52d14b00] [info]    Successfully matched 2 fresh mask signals (for rising edge) [{port_r[0]}, {port_r[1]}].
+
+[2025-08-07 14:37:24.705218] [0x00007f2f52d14b00] [info]    --------------------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:24.705221] [0x00007f2f52d14b00] [info]    Prepare statistical evaluation of adversary 0 in the general random fault model!
+[2025-08-07 14:37:24.705286] [0x00007f2f52d14b00] [info]    All possible faults are derived from configuration file.
+
+[2025-08-07 14:37:24.705335] [0x00007f2f52d14b00] [info]    Properties of the analysis:
+[2025-08-07 14:37:24.705339] [0x00007f2f52d14b00] [info]    ---------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:24.705344] [0x00007f2f52d14b00] [info]    | #Used Threads |      #Faults |   #Positions | Confidence Level |  Fault Probability (min / max) |
+[2025-08-07 14:37:24.705357] [0x00007f2f52d14b00] [info]    ---------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:24.705359] [0x00007f2f52d14b00] [info]    |             6 |           90 |           30 |         0.999999 |            0.500000 / 0.500000 |
+[2025-08-07 14:37:24.705362] [0x00007f2f52d14b00] [info]    ---------------------------------------------------------------------------------------------------
+
+[2025-08-07 14:37:24.705385] [0x00007f2f52d14b00] [info]    Analysis is starting...
+[2025-08-07 14:37:24.705390] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:24.705392] [0x00007f2f52d14b00] [info]    |       Elapsed Time |        Used Memory | Effective Faults (Success / Trials) |  Lower Bound |  Upper Bound | Interval Size |
+[2025-08-07 14:37:24.705394] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:24.861806] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 023MB |                     47237 /   65536 |   0.71214545 |   0.72930354 |    0.01715809 |
+[2025-08-07 14:37:24.982574] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 023MB |                     94449 /  131072 |   0.71449501 |   0.72662750 |    0.01213249 |
+[2025-08-07 14:37:25.090407] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 023MB |                    141703 /  196608 |   0.71576868 |   0.72567218 |    0.00990350 |
+[2025-08-07 14:37:25.197558] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:00 |   0TB    0GB 023MB |                    188900 /  262144 |   0.71629385 |   0.72487135 |    0.00857750 |
+[2025-08-07 14:37:25.307945] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    236166 /  327680 |   0.71687518 |   0.72454574 |    0.00767057 |
+[2025-08-07 14:37:25.418847] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    283380 /  393216 |   0.71716227 |   0.72416466 |    0.00700239 |
+[2025-08-07 14:37:25.526622] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    330603 /  458752 |   0.71740806 |   0.72389096 |    0.00648290 |
+[2025-08-07 14:37:25.634873] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    377738 /  524288 |   0.71743857 |   0.72350384 |    0.00606526 |
+[2025-08-07 14:37:25.753848] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    424959 /  589824 |   0.71761920 |   0.72333745 |    0.00571825 |
+[2025-08-07 14:37:25.874702] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    472010 /  655360 |   0.71751151 |   0.72293775 |    0.00542624 |
+[2025-08-07 14:37:25.995840] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    519065 /  720896 |   0.71743521 |   0.72261000 |    0.00517480 |
+[2025-08-07 14:37:26.118424] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:01 |   0TB    0GB 023MB |                    566352 /  786432 |   0.71767237 |   0.72262613 |    0.00495375 |
+[2025-08-07 14:37:26.238126] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:02 |   0TB    0GB 023MB |                    613432 /  851968 |   0.71763341 |   0.72239348 |    0.00476008 |
+[2025-08-07 14:37:26.361405] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:02 |   0TB    0GB 023MB |                    660750 /  917504 |   0.71786335 |   0.72244952 |    0.00458617 |
+[2025-08-07 14:37:26.487940] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:02 |   0TB    0GB 023MB |                    707651 /  983040 |   0.71764014 |   0.72207222 |    0.00443208 |
+[2025-08-07 14:37:26.607559] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:02 |   0TB    0GB 023MB |                    754911 / 1048576 |   0.71779034 |   0.72208129 |    0.00429094 |
+[2025-08-07 14:37:26.607577] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:26.607581] [0x00007f2f52d14b00] [info]    Analysis has finished!
+
+[2025-08-07 14:37:26.607584] [0x00007f2f52d14b00] [info]    Final Report:
+[2025-08-07 14:37:26.607587] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:26.607590] [0x00007f2f52d14b00] [info]    |       Elapsed Time |        Used Memory | Effective Faults (Success / Trials) |  Lower Bound |  Upper Bound | Interval Size |
+[2025-08-07 14:37:26.607593] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+[2025-08-07 14:37:26.607600] [0x00007f2f52d14b00] [info]    |   0 days, 00:00:02 |   0TB    0GB 023MB |                    754911 / 1048576 |   0.71779034 |   0.72208129 |    0.00429094 |
+[2025-08-07 14:37:26.607603] [0x00007f2f52d14b00] [info]    -------------------------------------------------------------------------------------------------------------------------------
+
+[2025-08-07 14:37:26.607610] [0x00007f2f52d14b00] [info]    Evaluation done in 1.902305 seconds.
+[2025-08-07 14:37:26.607613] [0x00007f2f52d14b00] [info]    --------------------------------------------------------------------------------------------------------------------------------------------

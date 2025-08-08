@@ -1451,8 +1451,20 @@ uint64_t Settings::GetNumberOfSimulations() const {
   return simulation.number_of_simulations;
 }
 
+uint64_t Settings::GetNumberOfVectorizedSimulations() const {
+  return simulation.number_of_simulations / 64;
+}
+
 uint64_t Settings::GetNumberOfSimulationsPerStep() const {
   return simulation.number_of_simulations_per_step;
+}
+
+uint64_t Settings::GetNumberOfVectorizedSimulationsPerStep() const {
+  return simulation.number_of_simulations_per_step / 64;
+}
+
+uint64_t Settings::GetNumberOfSimulationSteps() const{
+  return simulation.number_of_simulations / simulation.number_of_simulations_per_step;
 }
 
 uint64_t Settings::GetNumberOfSimulationsPerWrite() const {
@@ -1625,6 +1637,10 @@ bool Settings::IsAssignedToConstant(uint64_t clock_index,
               .signal_values_.empty();
 }
 
+double Settings::GetConfidenceLevel() const {
+  return this->fault_injection.confidence_level;
+}
+
 vlog_bit_t Settings::GetAssignedConstantBit(uint64_t clock_index,
                                             uint64_t assignment_index,
                                             uint64_t bit_index) const {
@@ -1658,7 +1674,7 @@ Settings::Settings(const boost::json::object& config_file,
                    bool is_target_hardware)
     : is_target_hardware_(is_target_hardware) {
   settings_schema.Validate(config_file);
-  std::cout << "Successfully validated the settings file." << std::endl;
+  BOOST_LOG_TRIVIAL(info) << "Successfully validated the settings file.";
   ParseStrategy(config_file, SettingNames::ANALYSIS_STRATEGY);
   ParseFiniteField(config_file, SettingNames::INPUT_FINITE_FIELD,
                    input_finite_field);

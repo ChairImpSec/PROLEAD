@@ -116,7 +116,7 @@
       }
     ],
     "clock_cycles": [
-      "1"
+      "1-230"
     ],
     "confidence_level": 0.999999,
     "fault_locations": {

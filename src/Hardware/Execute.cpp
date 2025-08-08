@@ -1,4 +1,5 @@
 #include "Hardware/Execute.hpp"
+#include <boost/log/trivial.hpp>
 
 void Hardware::Execute(const po::variables_map& vm) {
   std::string result_folder_name = vm["resultfolder"].as<std::string>();
@@ -30,6 +31,11 @@ void Hardware::Execute(const po::variables_map& vm) {
   simulation.topmodule_name_ = topmodule_name;
   simulation.result_folder_name_ = result_folder_name;
 
+  // TODO: move this somewhere else:
+  constexpr uint64_t max_terminal_width{120};
+  constexpr uint64_t padding{1};
+  Logger logger{padding, max_terminal_width};
+
 
 
   if (settings.analysis_strategy == analysis_t::fia) {
@@ -59,7 +65,7 @@ void Hardware::Execute(const po::variables_map& vm) {
 
 
     for (uint64_t adv_idx = 0; adv_idx < settings.fault_injection.fault_adversaries.size(); ++adv_idx) {
-      SampledRFAdversary adversary(library, circuit, settings, simulation, adv_idx);
+      SampledRFAdversary adversary(library, circuit, settings, simulation, adv_idx, logger);
       adversary.EvaluateRandomFaultAdversary();
       adversary.WriteJsonOutput(adv_idx);
 
@@ -69,6 +75,28 @@ void Hardware::Execute(const po::variables_map& vm) {
         max_index = adv_idx;
       }
     }
+
+    if (settings.fault_injection.fault_adversaries.size() > 1) {
+      const size_t precision{8};
+
+      BOOST_LOG_TRIVIAL(info) << "Strongest found adversary:";
+      std::vector<TableCell> logging_header{
+        TableCell("Adversary Index", 15),
+        TableCell("Upper Bound",11),
+        TableCell("Lower Bound",11),
+        TableCell("Interval Size",13)
+      };
+      std::vector<TableCell> logging_row{
+        TableCell(std::to_string(max_index),15),
+        TableCell(std::format("{:.{}f}", max_lower, precision),11),
+        TableCell(std::format("{:.{}f}", max_upper, precision),11),
+        TableCell(std::format("{:.{}f}", max_upper - max_lower, precision),13)
+      };
+      logger.PrintHeader(logging_header);
+      logger.PrintRowWithSeparation(logging_row);
+      logger.PrintFinalMessage("All evaluations are completed!");
+    }
+
   } else {
     if (settings.IsRelaxedModel()) {
       std::cout

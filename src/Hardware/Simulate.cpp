@@ -1,4 +1,5 @@
 #include "Hardware/Simulate.hpp"
+#include <boost/log/trivial.hpp>
 
 size_t count_faultable_hw{0};
 
@@ -557,7 +558,7 @@ void CheckFunctionalCorrectness(const Settings &settings, const Simulation &simu
 
 
 void CheckCorrectness(const Settings &settings, const Simulation &simulation, const SharedData& shared_data, Sharing &output_sharing, int SimulationIndex, uint64_t output_element_size) {
-  uint64_t number_of_output_shares = simulation.output_share_signal_indices_.size(); 
+  uint64_t number_of_output_shares = simulation.output_share_signal_indices_.size();
 
   if (number_of_output_shares) {
     uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size();
@@ -643,7 +644,7 @@ Simulation::Simulation(CircuitStruct& circuit, Settings& settings) {
 
   if (fresh_mask_signal_names.length() > 2) {
     fresh_mask_signal_names.erase(fresh_mask_signal_names.length() - 2);
-    std::cout << "Successfully matched "
+    BOOST_LOG_TRIVIAL(info) << "Successfully matched "
               << always_random_inputs_rising_edge_indices_.size()
               << " fresh mask signals (for rising edge) ["
               << fresh_mask_signal_names << "]." << std::endl;
@@ -673,10 +674,10 @@ Simulation::Simulation(CircuitStruct& circuit, Settings& settings) {
 
   if (fresh_mask_signal_names.length() > 2) {
     fresh_mask_signal_names.erase(fresh_mask_signal_names.length() - 2);
-    std::cout << "Successfully matched "
+    BOOST_LOG_TRIVIAL(info) << "Successfully matched "
               << always_random_inputs_falling_edge_indices_.size()
               << " fresh mask signals (for falling edge) ["
-              << fresh_mask_signal_names << "]." << std::endl;
+              << fresh_mask_signal_names << "].";
   }
 
   for (const std::pair<std::string, bool>& end_condition_signal :
@@ -1157,7 +1158,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
     } else if ((clock_cycle == (settings.GetNumberOfClockCycles() - 1)) && (NumberOfWaitedClockCycles < (int)settings.GetNumberOfWaitCycles())) {
       // ClockCyclesTook = ClockCycle + 1;
       break;
-    }  
+    }
 
     if (settings.GetClkEdge() == clk_edge_t::rising)
       SharedData.signal_values_[simulation.clock_signal_index_] = 0;

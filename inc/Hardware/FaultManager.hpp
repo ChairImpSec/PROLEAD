@@ -50,9 +50,6 @@ public:
   // faults with the manager.
   void AddFaultSet(std::vector<Fault const *> &faults);
 
-
-  void DetermineProbabilityOfNonEvaluatedFaultSets();
-
   bool RedundantFaultLocation() const;
   /**
    * @brief This function porcesses the corresponding fault_injection_settings_
@@ -65,9 +62,7 @@ public:
    */
   void SelectStrategyAndComputeAllFaults(uint64_t clock_signal_index, uint64_t idx_adversary);
 
-  void RegisterFaultSetGenerator();
 
-  bool GenerateFaultSetsForNextStep();
 
   /**
    * @brief Get the list of all faults.
@@ -126,11 +121,9 @@ public:
    */
   const std::vector<ToggleFault const *> &GetToggleFaults() const;
 
-  double GetProbabilityOfNonEvaluatedFaultSets() const;
 
-  double GetProbabilityOfNoFaultToOccur() const;
-
-  uint64_t GetMaxOrderOfFaultSet() const;
+  double GetMaxProbability() const;
+  double GetMinProbability() const;
 
   /**
    * @brief Add a new StuckAtZero fault to the manager.
@@ -168,49 +161,12 @@ public:
                       uint64_t signal_index, uint64_t clock_cycle,
                       double fault_probability);
 
-  void SetSizeOfFaultSets(uint64_t size_of_fault_sets);
 
   FaultSet SampleRandomFault(std::mt19937 &gen);
   void SampleRandomFaultVector(std::mt19937 &gen, std::vector<FaultSet> &fault_sets);
 
 private:
 
-  // It might be interesting to not only use this for cases we do not evaluate,
-  // but also as for cases which are acutally evaluated
-  struct FaultLUT {
-    uint64_t g;  // number of faults with the same probability (to get active) p
-    double p;  //
-    double np; // not p
-
-    // TODO: it might make sense to compute only the first sqrt(g) elements or something like this
-    // to imporve performance.
-    //
-    // Think about how to improve this, but for now build trivial
-    // std::vector<double> p_to_the_power_of; // p^k with k \in [0,g]
-    // std::vector<double> not_p_to_the_power_of;  // (1-p)^k with k \in [0,g]
-
-
-    FaultLUT(uint64_t gg, double pp) : g(gg), p(pp), np(1-pp){};
-  };
-
-  std::vector<FaultLUT> similar_faults_;
-
-  void ComputeCombinations(const std::vector<FaultLUT>& fault_types,
-                           uint64_t r_max,
-                           std::vector<std::vector<std::vector<std::vector<uint64_t>>>>& combination_table);
-
-
-  std::vector<std::vector<uint64_t>> GetCombinationsForR(const std::vector<std::vector<std::vector<std::vector<uint64_t>>>>& combination_table, uint64_t r, uint64_t n);
-
-  double ComputeProbabilityOfOneCombination(const std::vector<uint64_t> &combination,
-                                            const std::vector<FaultLUT> &fault_types);
-
-  double ComputeProbabilityOfAnyCombinationToOccur(uint64_t r_min,
-                                                   uint64_t r_max,
-                                                   const std::vector<FaultLUT> &fault_types,
-                                                   const std::vector<std::vector<std::vector<std::vector<uint64_t>>>>& combination_table);
-
-  double ComputeProbabilityOfNoCombinationToOccur(const std::vector<FaultLUT> & fault_types);
   /**
    * @brief Selets the function object which corresponds to the FaultType
    * defined by the input.
@@ -309,4 +265,7 @@ private:
   double probability_of_non_evaluated_fault_sets_;
 
   double probability_of_no_fault_to_occur_;
+
+  double min_fault_probability_{1};
+  double max_fault_probability_{0};
 };

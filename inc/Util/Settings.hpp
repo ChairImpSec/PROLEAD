@@ -148,7 +148,7 @@ struct FaultInjectionSettings {
 };
 
 class Settings {
- public:
+public:
   FiniteFieldSettings input_finite_field;
   FiniteFieldSettings output_finite_field;
   SideChannelAnalysisSettings side_channel_analysis;
@@ -156,6 +156,12 @@ class Settings {
   analysis_t analysis_strategy;
 
   Settings(const boost::json::object& config_file, bool is_hardware_target);
+
+
+  /*
+  * FautlInjection settings getter and setter
+  */
+  double GetConfidenceLevel() const;
 
   /*
   * Performance settings getter and setter
@@ -190,7 +196,10 @@ class Settings {
   uint64_t GetNumberOfWaitCycles() const;
   uint64_t GetNumberOfSimulations() const;
   uint64_t GetNumberOfSimulationsPerStep() const;
+  uint64_t GetNumberOfVectorizedSimulations() const;
+  uint64_t GetNumberOfVectorizedSimulationsPerStep() const;
   uint64_t GetNumberOfSimulationsPerWrite() const;
+  uint64_t GetNumberOfSimulationSteps () const;
   uint64_t GetNumberOfGroups() const;
   uint64_t GetNumberOfBitsPerGroup() const;
   vlog_bit_t GetGroupBit(uint64_t group_index, uint64_t bit_index) const;

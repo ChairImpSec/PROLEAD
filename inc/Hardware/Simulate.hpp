@@ -15,6 +15,7 @@
 #include "Util/Sharing.hpp"
 #include "boost/generator_iterator.hpp"
 #include "boost/random.hpp"
+#include "boost/log/trivial.hpp"
 
 class Simulation {
  public:
