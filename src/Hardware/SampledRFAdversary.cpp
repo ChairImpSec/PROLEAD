@@ -1,5 +1,5 @@
 #include "Hardware/SampledRFAdversary.hpp"
-#include "Hardware/Logger.hpp"
+#include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 #include <algorithm>
 #include <cmath>
@@ -12,19 +12,19 @@
 #include <utility>
 
 SampledRFAdversary::SampledRFAdversary(const Library &library,
-                                                 const CircuitStruct &circuit,
-                                                 const Settings &settings,
-                                                 Simulation &simulation,
-                                                 const size_t idx_adversary,
-                                                 Logger logger) :
+                                       const CircuitStruct &circuit,
+                                       const Settings &settings,
+                                       Simulation &simulation,
+                                       const size_t idx_adversary,
+                                       Logger logger) :
   number_of_effective_cases_{0},
+  number_of_effective_cases_per_thread_(settings.GetNumberOfThreads(), 0),
   library_{library},
   circuit_{circuit},
+  settings_{settings},
   shared_data_{std::vector<SharedData>(settings.GetNumberOfThreads(), SharedData(circuit, settings))},
   shared_data_faulted_{std::vector<SharedData>(settings.GetNumberOfThreads(), SharedData(circuit, settings))},
-  settings_{settings},
   simulation_{simulation},
-  number_of_effective_cases_per_thread_(settings.GetNumberOfThreads(), 0),
   fault_manager_{settings.fault_injection, circuit},
   logger_{logger}
 {
@@ -92,7 +92,7 @@ size_t SampledRFAdversary::CountEffectiveFaultsInSimulatedVector(size_t number_o
   return number_of_faults;
 }
 
-size_t SampledRFAdversary::CountEffectiveFaultInSimulation(const std::vector<FaultSet> &fault_sets,
+size_t SampledRFAdversary::CountEffectiveFaultInSimulation(//const std::vector<FaultSet> &fault_sets,
                                                         std::vector<boost::mt19937> &thread_rng,
                                                         size_t number_of_group_values,
                                                         size_t number_of_output_shares,
@@ -102,7 +102,7 @@ size_t SampledRFAdversary::CountEffectiveFaultInSimulation(const std::vector<Fau
                                                         std::vector<std::vector<std::vector<FaultType>>> &fault_type) {
 
 
-  Hardware::Simulate::SimulateFaultedAndFaultFree2(library_,
+  Hardware::Simulate::SimulateFaultedAndFaultFree2(//library_,
                                                   circuit_,
                                                   settings_,
                                                   shared_data_[thread_index],
@@ -110,7 +110,7 @@ size_t SampledRFAdversary::CountEffectiveFaultInSimulation(const std::vector<Fau
                                                   simulation_,
                                                   simulation_index,
                                                   thread_rng[thread_index],
-                                                  fault_sets,
+                                                  //fault_sets,
                                                   thread_index,
                                                   fault_type);
 
@@ -146,12 +146,12 @@ void SampledRFAdversary::MultithreadedAnalysis(std::vector<boost::mt19937>& thre
     for(size_t bit_index = 0; bit_index < 64; ++bit_index){
       for (uint64_t index = 0; index < fault_sets[bit_index].GetNumberOfFaultsInSet(); ++index) {
         const Fault* fault = fault_sets[bit_index].GetFault(index);
-        fault_type_[bit_index][fault->GetFaultedSignalIndex()][fault->GetFaultedClockCycle()] = fault->GetFaultType();
+        fault_type_[bit_index][fault->GetSignals()[0]->id][fault->GetCycle()] = fault->GetType();
       }
 
     }
 
-    this->number_of_effective_cases_per_thread_[thread_index] += CountEffectiveFaultInSimulation(fault_sets,
+    this->number_of_effective_cases_per_thread_[thread_index] += CountEffectiveFaultInSimulation(//fault_sets,
                                     thread_rng,
                                     number_of_group_values,
                                     number_of_output_shares,
@@ -210,7 +210,7 @@ void SampledRFAdversary::EvaluateRandomFaultAdversary(){
 
   // Prepare Simulation
   std::vector<uint64_t> number_of_simulations_per_group(settings_.GetNumberOfGroups(), 0.0);
-  std::vector<double_t> group_simulation_ratio(settings_.GetNumberOfGroups());
+  std::vector<double> group_simulation_ratio(settings_.GetNumberOfGroups());
   std::vector<boost::mt19937> thread_rng(settings_.GetNumberOfThreads());
   GenerateThreadRng(thread_rng, settings_.GetNumberOfThreads());// We use a PRNG that is thread safe
 
@@ -303,7 +303,7 @@ std::vector<TableCell> SampledRFAdversary::GetFinalReportHeader(){
 
 std::vector<TableCell> SampledRFAdversary::GetFinalReportRow(){
   const size_t precision{8};
-  const uint64_t width_of_successes{std::log10(settings_.GetNumberOfSimulations())+1};
+  const uint64_t width_of_successes{static_cast<uint64_t>(std::ceil(std::log10(settings_.GetNumberOfSimulations())))};
   std::string trials =  std::to_string(this->simulation_.number_of_processed_simulations);
   if (width_of_successes - trials.size() > 0) {
     const std::string padding_of_trials = std::string(width_of_successes - trials.size() ,' ');
@@ -312,7 +312,7 @@ std::vector<TableCell> SampledRFAdversary::GetFinalReportRow(){
 
   std::vector<TableCell> logging_row{
     this->logger_.GetTimeCell(EndClock(this->start_time_), 18),
-    this->logger_.GetMemoryCell(EstimateMemoryConsumption(), 18),
+    this->logger_.GetMemoryCell(GetUsedMemory(), 18),
     // TODO: we need to fix the width of the number of performed simulations
     TableCell(std::to_string(this->number_of_effective_cases_) + " / " + trials,17),
     TableCell(std::format("{:.{}f}",  lower_bound_success_probability_, precision),11),

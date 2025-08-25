@@ -19,7 +19,6 @@ BOOST_AUTO_TEST_CASE(test_no_options, *utf::label("program_options")) {
   BOOST_CHECK(vm["libraryname"].as<std::string>() == "nang45");
   BOOST_CHECK(vm["designfile"].as<std::vector<std::string>>() ==
               std::vector<std::string>{"design.v"});
-  BOOST_CHECK(vm.count("layoutfile") == 0);
   BOOST_CHECK(vm["modulename"].as<std::string>() == "circuit");
   BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
   BOOST_CHECK(vm["resultfolder"].as<std::string>() == ".");
@@ -40,8 +39,6 @@ BOOST_AUTO_TEST_CASE(test_full_identifiers, *utf::label("program_options")) {
                         "--designfile",
                         "custom_designfile1.v",
                         "custom_designfile2.v",
-                        "--layoutfile",
-                        "custom_layoutfile.gds",
                         "--modulename",
                         "custom_modulename",
                         "--configfile",
@@ -69,7 +66,6 @@ BOOST_AUTO_TEST_CASE(test_full_identifiers, *utf::label("program_options")) {
   BOOST_CHECK((vm["designfile"].as<std::vector<std::string>>() ==
                std::vector<std::string>{"custom_designfile1.v",
                                         "custom_designfile2.v"}));
-  BOOST_CHECK(vm["layoutfile"].as<std::string>() == "custom_layoutfile.gds");
   BOOST_CHECK(vm["modulename"].as<std::string>() == "custom_modulename");
   BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
   BOOST_CHECK(vm["resultfolder"].as<std::string>() == "../util");
@@ -89,8 +85,6 @@ BOOST_AUTO_TEST_CASE(test_abbreviations, *utf::label("program_options")) {
                         "custom_libraryname",
                         "-d",
                         "custom_designfile.v",
-                        "-y",
-                        "custom_layoutfile.gds",
                         "-m",
                         "custom_modulename",
                         "-c",
@@ -117,7 +111,6 @@ BOOST_AUTO_TEST_CASE(test_abbreviations, *utf::label("program_options")) {
   BOOST_CHECK(vm["libraryname"].as<std::string>() == "custom_libraryname");
   BOOST_CHECK(vm["designfile"].as<std::vector<std::string>>() ==
               std::vector<std::string>{"custom_designfile.v"});
-  BOOST_CHECK(vm["layoutfile"].as<std::string>() == "custom_layoutfile.gds");
   BOOST_CHECK(vm["modulename"].as<std::string>() == "custom_modulename");
   BOOST_CHECK(vm["configfile"].as<std::string>() == "config.json");
   BOOST_CHECK(vm["resultfolder"].as<std::string>() == "../util");

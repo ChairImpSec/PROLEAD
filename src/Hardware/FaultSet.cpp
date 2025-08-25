@@ -32,10 +32,10 @@ Fault const *FaultSet::GetFault(uint64_t index) const {
   return this->faults_[index];
 };
 
-void FaultSet::TryToInduceFaults(uint64_t &value, uint64_t signal_index, uint64_t clock_cycle) {
+void FaultSet::TryToInduceFaults(uint64_t &value, const SignalStruct* signal, uint64_t cycle) {
   for (const Fault *fault : faults_) {
-    if (fault->IsSignalFaulted(signal_index, clock_cycle)) {
-      value = fault->ComputeFaultEffect(value);
+    if (fault->IsFaulty(std::vector<const SignalStruct*>{signal}, cycle)) {
+      value = fault->Eval(value);
     }
   }
 }

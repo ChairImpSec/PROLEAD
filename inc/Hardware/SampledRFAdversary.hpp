@@ -15,7 +15,7 @@
 #include "Hardware/Library.hpp"
 #include "Hardware/SharedData.hpp"
 #include "Hardware/Simulate.hpp"
-#include <Hardware/Logger.hpp>
+#include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
 #include "boost/random.hpp"
@@ -81,7 +81,7 @@ private:
                                              size_t thread_index) const;
 
 
-  size_t CountEffectiveFaultInSimulation(const std::vector<FaultSet> &fault_sets,
+  size_t CountEffectiveFaultInSimulation(//const std::vector<FaultSet> &fault_sets,
                                        std::vector<boost::mt19937> &thread_rng,
                                        size_t number_of_group_values,
                                        size_t number_of_output_shares,
@@ -151,12 +151,12 @@ private:
    */
   FaultManager fault_manager_;
 
+  Logger logger_;
 
   /**
    * @brief The time at which the analysis has started
    */
   struct timespec start_time_;
 
-  Logger logger_;
 
 };

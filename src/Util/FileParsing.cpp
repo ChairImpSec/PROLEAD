@@ -246,6 +246,16 @@ js::object ParseJsonFile(const std::filesystem::path& path) {
   }
 }
 
+void WriteJsonFile(const std::filesystem::path& path, const boost::property_tree::ptree& content) {
+  try {
+    boost::property_tree::write_json(path, content);
+    BOOST_LOG_TRIVIAL(trace) << "JSON file written successfully to: " << path.string();
+  } catch (std::exception &e) {
+    throw std::runtime_error("Error while writing to the JSON file located at path: "
+      "\"" + path.string() + "\": " + e.what());
+  } 
+}  
+
 void CheckValueType(const js::object& json_object, const std::string& key,
                     js::kind expected_type) {
   if (json_object.at(key).kind() != expected_type) {

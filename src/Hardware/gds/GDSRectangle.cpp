@@ -9,10 +9,10 @@ GDSRectangle::GDSRectangle(Coordinate center, Coordinate radius, Coordinate offs
 
 
 bool GDSRectangle::HasOverlap(const Gate &gate) const {
-    bool gate_is_left_of_emfi_rect = gate.bbox.max.x < this->square_.min.x;
-    bool gate_is_above_of_emfi_rect = gate.bbox.max.y < this->square_.min.y;
-    bool gate_is_right_of_emfi_rect = this->square_.max.x < gate.bbox.min.x;
-    bool gate_is_below_of_emfi_rect = this->square_.max.y < gate.bbox.min.y;
+    bool gate_is_left_of_emfi_rect = gate.bbox.max_.x < this->square_.min_.x;
+    bool gate_is_above_of_emfi_rect = gate.bbox.max_.y < this->square_.min_.y;
+    bool gate_is_right_of_emfi_rect = this->square_.max_.x < gate.bbox.min_.x;
+    bool gate_is_below_of_emfi_rect = this->square_.max_.y < gate.bbox.min_.y;
 
     bool no_overlap = gate_is_left_of_emfi_rect || gate_is_right_of_emfi_rect ||
                       gate_is_above_of_emfi_rect || gate_is_below_of_emfi_rect;
@@ -21,10 +21,10 @@ bool GDSRectangle::HasOverlap(const Gate &gate) const {
 }
 
 bool GDSRectangle::FullyCoversGate(const Gate &gate) const {
-  bool left  = this->square_.min.x < gate.bbox.min.x;
-  bool right = gate.bbox.max.x < this->square_.max.x;
-  bool bottom = this->square_.min.y < gate.bbox.min.y;
-  bool top = gate.bbox.max.y < this->square_.max.y;
+  bool left  = this->square_.min_.x < gate.bbox.min_.x;
+  bool right = gate.bbox.max_.x < this->square_.max_.x;
+  bool bottom = this->square_.min_.y < gate.bbox.min_.y;
+  bool top = gate.bbox.max_.y < this->square_.max_.y;
 
   bool gate_is_fully_covered = left && right && bottom && top;
 
@@ -34,26 +34,26 @@ bool GDSRectangle::FullyCoversGate(const Gate &gate) const {
 
 void GDSRectangle::MoveXBy(const double delta_center_x) {
     this->center_ += Coordinate(delta_center_x, 0);
-    this->square_.min += Coordinate(delta_center_x, 0);
-    this->square_.max += Coordinate(delta_center_x, 0);
+    this->square_.min_ += Coordinate(delta_center_x, 0);
+    this->square_.max_ += Coordinate(delta_center_x, 0);
 }
 
 void GDSRectangle::MoveYBy(const double delta_center_y) {
     this->center_ += Coordinate(0, delta_center_y);
-    this->square_.min += Coordinate(0, delta_center_y);
-    this->square_.max += Coordinate(0, delta_center_y);
+    this->square_.min_ += Coordinate(0, delta_center_y);
+    this->square_.max_ += Coordinate(0, delta_center_y);
 }
 
 void GDSRectangle::MoveBy(const Coordinate &delta_center) {
     this->center_ += delta_center;
-    this->square_.min += delta_center;
-    this->square_.max += delta_center;
+    this->square_.min_ += delta_center;
+    this->square_.max_ += delta_center;
 }
 
 void GDSRectangle::MoveTo(const Coordinate &center) {
     this->center_ = center + this->offset_;
-    this->square_.min = center_- radius_ + this->offset_;
-    this->square_.max = center_+ radius_ + this->offset_;
+    this->square_.min_ = center_- radius_ + this->offset_;
+    this->square_.max_ = center_+ radius_ + this->offset_;
 }
 
 void GDSRectangle::ResetX(){

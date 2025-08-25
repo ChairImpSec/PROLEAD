@@ -810,7 +810,7 @@ void Settings::ParseInputSequence(
         input_sequence.push_back(inputs_per_cycle);
         inputs_per_cycle.clear();
 
-        double_t number_of_hold_cycles;
+        double number_of_hold_cycles;
 
         if (clock_cycle_obj.contains("hold_for_cycles")) {
           if (clock_cycle_obj.at("hold_for_cycles").kind() == js::kind::int64) {
@@ -889,7 +889,7 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
   settings.number_of_simulations_per_write = 0;
 
   if (SetValue(json_object, identifier, simulation_object)) {
-    double_t number_of_clock_cycles = 0;
+    double number_of_clock_cycles = 0;
 
     if (simulation_object.contains(SettingNames::NUMBER_OF_CLOCK_CYCLES)) {
       if (simulation_object.at(SettingNames::NUMBER_OF_CLOCK_CYCLES).kind() ==
@@ -1286,11 +1286,11 @@ void Settings::ParseFaultAdversaries(
         throw std::runtime_error(error_context + "Invalid format!");
       }
     }
-  } else {
+  } /*else {
     throw std::runtime_error(error_context + "Key \"" +
                              SettingNames::FIESTA_ADVERSARIES +
                              "\" not found!");
-  }
+  }*/
 }
 
 void Settings::ParseFaultInjectionSettings(

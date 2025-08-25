@@ -12,19 +12,17 @@
 
 namespace util {
 
+// TODO: incorperate somehow the logger.
 void print_all_cells(const gdstk::Library& lib) {
-    std::cout << "--------------------------------------------------------------------------------" << std::endl;
-    std::cout << "Parsed cells: " << std::endl;
+    BOOST_LOG_TRIVIAL(trace) << "Parsed cells: ";
     for (size_t i = 0; i < lib.cell_array.count; ++i) {
         gdstk::Vec2 min;
         gdstk::Vec2 max;
         lib.cell_array[i]->bounding_box(min, max);
-        std::cout << std::setw(4) << i;
-        std::cout << std::setw(36) << lib.cell_array[i]->name;
-        std::cout << std::setw(10) << " - BBox: ((" << min.x << ", " << min.y << "), (" << max.x << ", " << max.y << "))";
-        std::cout << std::endl;
+        BOOST_LOG_TRIVIAL(trace) << std::setw(4) << i <<
+          std::setw(36) << lib.cell_array[i]->name <<
+          std::setw(10) << " - BBox: ((" << min.x << ", " << min.y << "), (" << max.x << ", " << max.y << "))";
     }
-    std::cout << "--------------------------------------------------------------------------------\n" << std::endl;
 }
 
 void print_all_references(const gdstk::Library& lib, const std::string top_level_name) {
@@ -101,8 +99,6 @@ gdstk::Library ParseGDS(const std::string & path){
   gdstk::Library lib = read_gds(path.c_str(), unit, precision, nullptr, &error_code);
   if(error_code != gdstk::ErrorCode::NoError) {exit(EXIT_FAILURE);}
 
-  util::print_all_cells(lib);
-  // util::print_all_references(lib, top_level_name);
 
   return lib;
 }

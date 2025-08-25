@@ -14,7 +14,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "Hardware/Fault.hpp"
+#include "Hardware/Target.hpp"
 
 class FaultSet {
  public:
@@ -66,8 +66,7 @@ class FaultSet {
    */
   void FaultSetWasEffective(uint64_t number);
 
-  void TryToInduceFaults(uint64_t &value, uint64_t signal_index,
-                         uint64_t clock_cycle);
+  void TryToInduceFaults(uint64_t &value, const SignalStruct* signal, uint64_t cycle);
 
  private:
   const std::vector<Fault const *> faults_;

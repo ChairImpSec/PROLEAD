@@ -10,7 +10,6 @@
 
 #include "Hardware/Enabler.hpp"
 #include "Hardware/FaultSet.hpp"
-#include "Hardware/Probes.hpp"
 #include "Hardware/SharedData.hpp"
 #include "Util/Sharing.hpp"
 #include "boost/generator_iterator.hpp"
@@ -57,7 +56,7 @@ namespace Simulate {
  * @author Amir Moradi
  */
 void All(const CircuitStruct&, const Settings&, SharedData&,
-         std::vector<Probe>&, std::vector<Enabler>&, std::vector<uint64_t>&,
+         std::vector<const Probe*>&, std::vector<Enabler>&,
          Simulation&, int, boost::mt19937&);
 
 		/**
@@ -70,7 +69,7 @@ void All(const CircuitStruct&, const Settings&, SharedData&,
 		* @param ThreadRng The rng assigned to a specific thread.
 		* @author Felix Uhle
 		*/
-      void SimulateFaultedAndFaultFree2(const Library &library,
+      void SimulateFaultedAndFaultFree2(//const Library &library,
                                        const CircuitStruct &circuit,
                                        const Settings &settings,
                                        SharedData &shared_data,
@@ -78,7 +77,7 @@ void All(const CircuitStruct&, const Settings&, SharedData&,
                                        Simulation &simulation,
                                        uint64_t SimulationIndex,
                                        boost::mt19937 &ThreadRng,
-                                       const std::vector<FaultSet> &fault_sets,
+                                       //const std::vector<FaultSet> &fault_sets,
                                        uint64_t thread_index,
                                        std::vector<std::vector<std::vector<FaultType>>> &fault_type
                                        );

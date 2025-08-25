@@ -40,7 +40,7 @@ class Expression {
    * @return The result of the evaluation.
    */
   uint64_t Eval(std::vector<uint64_t> vals) const;
-
+  
   // private:
   std::vector<Clause> clauses_;  ///< The clauses of the expression. Will be
                                  ///< evaluated sequentially.

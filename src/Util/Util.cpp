@@ -60,48 +60,27 @@ void UpdateBucketWithBucket(TableBucketVector& bucket,
   observations.resize(remaining_it - observations.begin());
 }
 
-bool IsSampleSizeSufficient(uint64_t number_of_samples,
-                            uint64_t number_of_groups,
-                            uint64_t number_of_entries, double_t beta_threshold,
-                            double_t effect_size) {
-  uint64_t degrees_of_freedom =
-      (number_of_groups - 1) * (number_of_entries - 1);
-
-  if (degrees_of_freedom) {
-    boost::math::chi_squared_distribution<> distribution(degrees_of_freedom);
-    double_t critical_value = boost::math::quantile(
-        boost::math::complement(distribution, beta_threshold));
-    double_t non_centrality_parameter =
-        number_of_samples * effect_size * effect_size;
-    boost::math::non_central_chi_squared_distribution<> dist(
-        degrees_of_freedom, non_centrality_parameter);
-    return boost::math::cdf(dist, critical_value) <= beta_threshold;
-  } else {
-    return false;
-  }
-}
-
 uint64_t ComputeRequiredSampleSize(uint64_t number_of_groups,
                                    uint64_t number_of_entries,
-                                   double_t beta_threshold,
-                                   double_t effect_size) {
+                                   double beta_threshold,
+                                   double effect_size) {
   uint64_t degrees_of_freedom =
       (number_of_groups - 1) * (number_of_entries - 1);
 
   if (degrees_of_freedom) {
     boost::math::chi_squared_distribution<> distribution(degrees_of_freedom);
-    double_t critical_value = boost::math::quantile(
+    double critical_value = boost::math::quantile(
         boost::math::complement(distribution, beta_threshold));
 
-    auto finder = [&](double_t ncp) {
+    auto finder = [&](double ncp) {
       boost::math::non_central_chi_squared_distribution<> dist(
           degrees_of_freedom, ncp);
       return boost::math::cdf(dist, critical_value) - beta_threshold;
     };
 
     boost::uintmax_t number_of_iterations = 50;
-    boost::math::tools::eps_tolerance<double_t> tolerance(30);
-    std::pair<double_t, double_t> bound =
+    boost::math::tools::eps_tolerance<double> tolerance(30);
+    std::pair<double, double> bound =
         boost::math::tools::bracket_and_solve_root(
             finder, 10.0, 2.0, false, tolerance, number_of_iterations);
     return std::ceil(bound.first / (effect_size * effect_size));
@@ -159,7 +138,7 @@ uint64_t ContingencyTable<TableBucketVector>::GetNumberOfEntries() const {
 }
 
 template <>
-double_t ContingencyTable<TableBucketVector>::GetLog10pValue() const {
+double ContingencyTable<TableBucketVector>::GetLog10pValue() const {
   return log_10_p_value_;
 }
 
@@ -225,9 +204,9 @@ uint64_t ContingencyTable<TableBucketVector>::SumUpCounters(
 
 template <>
 void ContingencyTable<TableBucketVector>::SetExpectedFrequenciesOfAnEntry(
-    const std::vector<double_t>& group_simulation_ratio,
+    const std::vector<double>& group_simulation_ratio,
     uint64_t number_of_simulations_per_entry,
-    std::vector<double_t>& expected_frequencies) const {
+    std::vector<double>& expected_frequencies) const {
   for (uint64_t index = 0; index < expected_frequencies.size(); ++index) {
     expected_frequencies[index] =
         group_simulation_ratio[index] * number_of_simulations_per_entry;
@@ -237,9 +216,9 @@ void ContingencyTable<TableBucketVector>::SetExpectedFrequenciesOfAnEntry(
 template <>
 bool ContingencyTable<TableBucketVector>::
     AreExpectedFrequenciesHighEnoughForEvaluation(
-        const std::vector<double_t>& expected_frequencies,
-        double_t pooling_factor) const {
-  for (double_t frequency : expected_frequencies) {
+        const std::vector<double>& expected_frequencies,
+        double pooling_factor) const {
+  for (double frequency : expected_frequencies) {
     if ((frequency < 5.0) ||
         ((frequency < 5.0 * pooling_factor) && frequency < 20.0)) {
       return false;
@@ -251,9 +230,9 @@ bool ContingencyTable<TableBucketVector>::
 
 template <>
 void ContingencyTable<TableBucketVector>::UpdateGTestStatistic(
-    uint32_t* counters, const std::vector<double_t>& expected_frequencies,
-    double_t& g_test_statistic) const {
-  double_t portion = 0.0, product = 0.0;
+    uint32_t* counters, const std::vector<double>& expected_frequencies,
+    double& g_test_statistic) const {
+  double portion = 0.0, product = 0.0;
 
   for (uint64_t index = 0; index < expected_frequencies.size(); ++index) {
     if (counters[index]) {
@@ -265,9 +244,9 @@ void ContingencyTable<TableBucketVector>::UpdateGTestStatistic(
 }
 
 template <>
-double_t ContingencyTable<TableBucketVector>::SetGTestStatistic(
+double ContingencyTable<TableBucketVector>::SetGTestStatistic(
     uint64_t number_of_groups, uint64_t number_of_simulations,
-    std::vector<double_t>& group_simulation_ratio,
+    std::vector<double>& group_simulation_ratio,
     uint64_t& degrees_of_freedom) const {
   uint32_t* counters;
   uint32_t* counters_of_pooled_entry = new uint32_t[number_of_groups]();
@@ -275,9 +254,9 @@ double_t ContingencyTable<TableBucketVector>::SetGTestStatistic(
   uint64_t number_of_entries = bucket_.size();
   uint64_t number_entries_in_pooled_table = 0;
   uint64_t number_of_simulations_per_entry;
-  double_t g_test_statistic = 0.0;
-  double_t pooling_factor = (double_t)number_of_simulations / number_of_entries;
-  std::vector<double_t> expected_frequencies(number_of_groups, 0.0);
+  double g_test_statistic = 0.0;
+  double pooling_factor = (double)number_of_simulations / number_of_entries;
+  std::vector<double> expected_frequencies(number_of_groups, 0.0);
 
   for (index = 0; index < number_of_entries; ++index) {
     counters = bucket_[index].data_.get();
@@ -327,11 +306,11 @@ double_t ContingencyTable<TableBucketVector>::SetGTestStatistic(
 }
 
 template <>
-double_t ContingencyTable<TableBucketVector>::ComputeLog10pValue(
-    double_t g_test_statistic, uint64_t degrees_of_freedom) const {
+double ContingencyTable<TableBucketVector>::ComputeLog10pValue(
+    double g_test_statistic, uint64_t degrees_of_freedom) const {
   if (degrees_of_freedom) {
     boost::math::chi_squared_distribution<> distribution(degrees_of_freedom);
-    double_t p_value = boost::math::cdf(
+    double p_value = boost::math::cdf(
         boost::math::complement(distribution, g_test_statistic));
     return -std::log10(p_value);
   } else {
@@ -348,7 +327,7 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(
   uint64_t index;
 
   std::vector<uint64_t> number_of_simulations_per_group(number_of_groups, 0);
-  std::vector<double_t> group_simulation_ratio(number_of_groups, 0.0);
+  std::vector<double> group_simulation_ratio(number_of_groups, 0.0);
 
   for (const TableEntry& entry : bucket_) {
     for (index = 0; index < number_of_groups; ++index) {
@@ -363,12 +342,12 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(
                  number_of_simulations_per_group.end(),
                  group_simulation_ratio.begin(),
                  [number_of_simulations](uint64_t x) {
-                   return static_cast<double_t>(x) /
-                          static_cast<double_t>(number_of_simulations);
+                   return static_cast<double>(x) /
+                          static_cast<double>(number_of_simulations);
                  });
 
   if (number_of_entries != 1) {
-    double_t g_test_statistic =
+    double g_test_statistic =
         SetGTestStatistic(number_of_groups, number_of_simulations,
                           group_simulation_ratio, degrees_of_freedom);
     log_10_p_value_ = ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
@@ -380,12 +359,12 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(
 template <>
 void ContingencyTable<TableBucketVector>::SetLog10pValue(
     uint64_t number_of_groups, uint64_t number_of_simulations,
-    std::vector<double_t>& group_simulation_ratio) {
+    std::vector<double>& group_simulation_ratio) {
   uint64_t degrees_of_freedom;
   uint64_t number_of_entries = bucket_.size();
 
   if (number_of_entries != 1) {
-    double_t g_test_statistic =
+    double g_test_statistic =
         SetGTestStatistic(number_of_groups, number_of_simulations,
                           group_simulation_ratio, degrees_of_freedom);
     log_10_p_value_ = ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
@@ -396,13 +375,21 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(
 
 void StartClock(timespec& start) { clock_gettime(CLOCK_REALTIME, &start); }
 
-double_t EndClock(timespec& start) {
+double EndClock(timespec& start) {
   struct timespec end;
   clock_gettime(CLOCK_REALTIME, &end);
   int64_t time_in_seconds = end.tv_sec - start.tv_sec;
   int64_t time_in_nanoseconds = end.tv_nsec - start.tv_nsec;
-  double_t elapsed_time_period = time_in_seconds + time_in_nanoseconds * 1e-9;
+  double elapsed_time_period = time_in_seconds + time_in_nanoseconds * 1e-9;
   return elapsed_time_period;
+}
+
+std::string GetTimestamp() {
+  auto now = std::chrono::system_clock::now();
+  std::time_t timestamp = std::chrono::system_clock::to_time_t(now);
+  std::string result = std::ctime(&timestamp);
+  result.pop_back(); // Remove the newline character
+  return result;
 }
 
 void GenerateThreadRng(std::vector<boost::mt19937>& thread_rng,
@@ -430,8 +417,7 @@ void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
   }
 }
 
-
-uint64_t EstimateMemoryConsumption() {
+uint64_t GetUsedMemory() {
   struct rusage ru { };
   if (getrusage(RUSAGE_SELF, &ru) != 0) return 0;
 #if defined(__APPLE__)
@@ -439,54 +425,4 @@ uint64_t EstimateMemoryConsumption() {
 #else
   return ru.ru_maxrss;
 #endif
-}
-
-uint64_t Util::PrintMemoryConsumption() {
-  uint64_t ram = EstimateMemoryConsumption();
-  return ram;
-}
-
-void Util::PrintHorizontalLine(unsigned int width) {
-  std::cout.width(width);
-  std::cout.fill('-');
-  std::cout << '-' << std::endl;
-  std::cout.fill(' ');
-}
-
-void Util::PrintRow(std::vector<unsigned int>& width,
-                    std::vector<std::string>& elements) {
-  std::cout << '|';
-
-  for (size_t index = 0; index < elements.size(); ++index) {
-    std::cout.width(width[index]);
-    std::cout << (elements[index] + " |");
-  }
-
-  std::cout << std::endl;
-}
-
-void Util::GenerateThreadRng(std::vector<boost::mt19937>& thread_rng,
-                             unsigned int number_of_threads) {
-  unsigned int seed;
-
-  for (unsigned int thread_index = 0; thread_index < number_of_threads;
-       ++thread_index) {
-    seed = rand();
-    boost::mt19937 rng(seed);
-    thread_rng[thread_index] = rng;
-  }
-}
-
-void Util::ExtractCombinationFromBitmask(std::vector<unsigned int>& combination,
-                                         std::vector<bool>& bitmask) {
-  unsigned int combination_index = 0, index = 0;
-
-  while (combination_index != combination.size()) {
-    if (bitmask.at(index)) {
-      combination.at(combination_index) = index;
-      ++combination_index;
-    }
-
-    ++index;
-  }
 }

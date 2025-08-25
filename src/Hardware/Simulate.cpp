@@ -4,9 +4,9 @@
 size_t count_faultable_hw{0};
 
 void evaluateRegisterFaultFree(
-  const Library &library,
+  // const Library &library,
   const CircuitStruct &Circuit,
-  Simulation &simulation,
+  // Simulation &simulation,
   SharedData &SharedData,
 	std::vector<uint64_t> &input_values,
   size_t clock_cycle) {
@@ -37,13 +37,13 @@ void evaluateRegisterFaultFree(
 
 
 void evaluateRegisterFaulted(
-  const Library &library,
+  // const Library &library,
   const CircuitStruct &Circuit,
-  Simulation &simulation,
+  // Simulation &simulation,
   SharedData &SharedData,
 	std::vector<uint64_t> &input_values,
   size_t clock_cycle,
-  const std::vector<FaultSet> &fault_sets,
+  // const std::vector<FaultSet> &fault_sets,
   std::vector<std::vector<std::vector<FaultType>>> &fault_type){
 
 	uint64_t Value;
@@ -297,10 +297,11 @@ void ForwardsRegOutputs(const CircuitStruct &circuit, SharedData &shared_data) {
 
 
 void EvaluteCircuitFaultFree(const CircuitStruct &circuit, Simulation &simulation, SharedData &shared_data, std::vector<uint64_t> &input_values, uint64_t clock_cycle) {
-	uint64_t cell_idx, idx, value;
+  uint64_t idx;
+  uint64_t value;
 
-  for (uint64_t depth_idx = 1; depth_idx <= circuit.MaxDepth; ++depth_idx) {
-    for (uint64_t cell_idx = 0; cell_idx < circuit.NumberOfCellsInDepth[depth_idx]; ++cell_idx) {
+  for (short depth_idx = 1; depth_idx <= circuit.MaxDepth; ++depth_idx) {
+    for (int cell_idx = 0; cell_idx < circuit.NumberOfCellsInDepth[depth_idx]; ++cell_idx) {
       idx = circuit.CellsInDepth[depth_idx][cell_idx];
 
       if (!circuit.cells_[idx].type->IsLatch()) {
@@ -326,7 +327,7 @@ void EvaluteCircuitFaultFree(const CircuitStruct &circuit, Simulation &simulatio
         if (circuit.cells_[idx].Outputs[out_idx] != -1) {
           value = circuit.cells_[idx].Eval(out_idx, input_values);
           if (!simulation.fault_set_.empty()) {
-            simulation.fault_set_[0].TryToInduceFaults(value, circuit.cells_[idx].Outputs[out_idx], clock_cycle);
+            simulation.fault_set_[0].TryToInduceFaults(value, &circuit.signals_[circuit.cells_[idx].Outputs[out_idx]], clock_cycle);
           }
           shared_data.signal_values_[circuit.cells_[idx].Outputs[out_idx]] = value;
         }
@@ -335,20 +336,20 @@ void EvaluteCircuitFaultFree(const CircuitStruct &circuit, Simulation &simulatio
   }
 }
 
-void evaluteCircuitFaulted(
-  const Library &library,
+void EvaluteCircuitFaulted(
+  // const Library &library,
   const CircuitStruct &Circuit,
-  Simulation &simulation,
+  // Simulation &simulation,
   SharedData &SharedData,
 	std::vector<uint64_t> &input_values,
 	unsigned int clock_cycle,
-  const std::vector<FaultSet>& fault_sets,
+  // const std::vector<FaultSet>& fault_sets,
   std::vector<std::vector<std::vector<FaultType>>> &fault_type) {
 
 	uint64_t Value;
 
-  for (size_t DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++) {
-    for (size_t i = 0; i < Circuit.NumberOfCellsInDepth[DepthIndex]; i++) {
+  for (short DepthIndex = 1; DepthIndex <= Circuit.MaxDepth; DepthIndex++) {
+    for (int i = 0; i < Circuit.NumberOfCellsInDepth[DepthIndex]; i++) {
       int CellIndex = Circuit.CellsInDepth[DepthIndex][i]; // TODO: int -> size_t
 
       input_values.resize(Circuit.cells_[CellIndex].type->GetNumberOfInputs());
@@ -385,25 +386,11 @@ void evaluteCircuitFaulted(
   }
 }
 
-void EvalEnabler(Simulation &simulation, std::vector<uint64_t> &enabler_evaluation_order, std::vector<Enabler> &enabler, std::vector<std::unique_ptr<uint64_t[]>*> &input_indices, int SimulationIndex) {
-	std::vector<uint64_t> input_values;
-
-  	for (uint64_t en_idx : enabler_evaluation_order){
-  		input_indices = enabler[en_idx].GetInputSignalIndices();
-  		input_values.resize(input_indices.size());
-
-  		for (uint64_t in_idx = 0; in_idx < input_indices.size(); ++in_idx){
-  			input_values[in_idx] = (*(input_indices[in_idx]))[SimulationIndex];
-  		}
-
-  		if (enabler[en_idx].CheckFunctions()){
-  			simulation.glitch_values_[en_idx][SimulationIndex] = enabler[en_idx].EvaluateGlitch(input_values);
-  			simulation.propagation_values_[en_idx][SimulationIndex] = enabler[en_idx].EvaluatePropagation(input_values);
-  		} else{
-  			simulation.glitch_values_[en_idx][SimulationIndex] = 0xffffffffffffffff;
-  			simulation.propagation_values_[en_idx][SimulationIndex] = 0xffffffffffffffff;
-  		}
-  	}
+void EvalEnabler(std::vector<Enabler> &enablers, uint64_t step_idx) {
+  for (Enabler& enabler : enablers) {
+    enabler.EvalGlitch(step_idx);
+    enabler.EvalPropagation(step_idx);
+  }
 }
 
 void InitGroupValues(const Settings &settings, SharedData &shared_data, Sharing &input_sharing,uint64_t input_element_size, uint64_t number_of_groups) {
@@ -744,14 +731,12 @@ Simulation::Simulation(CircuitStruct& circuit, Settings& settings) {
 
 void Hardware::Simulate::All(const CircuitStruct& Circuit,
                              const Settings& settings, SharedData& SharedData,
-                             std::vector<Probe>& extended_probes,
+                             std::vector<const Probe*>& extensions,
                              std::vector<Enabler>& enabler,
-                             std::vector<uint64_t>& enabler_evaluation_order,
                              Simulation& simulation, int SimulationIndex,
                              boost::mt19937& ThreadRng) {
   uint64_t number_of_groups = settings.GetNumberOfGroups();
-  uint64_t bit_index, group_index, input_index, share_index, signal_index,
-      value_index;
+  uint64_t bit_index, group_index, input_index, value_index;
 
   int i;
   int InputIndex;
@@ -770,8 +755,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
   std::vector<uint64_t> temp_signal_values_;
 
   // assigning inputs (fixed/random/etc)
-  boost::uniform_int<uint64_t> ThreadDist(0,
-                                          std::numeric_limits<uint64_t>::max());
+  boost::uniform_int<uint64_t> ThreadDist(0, std::numeric_limits<uint64_t>::max());
   boost::variate_generator<boost::mt19937&, boost::uniform_int<uint64_t>>
       ThreadPrng(ThreadRng, ThreadDist);
 
@@ -948,7 +932,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
             Value = Circuit.cells_[CellIndex].Eval(OutputIndex, input_values);
             if (!simulation.fault_set_.empty()) {
               simulation.fault_set_[0].TryToInduceFaults(
-                  Value, Circuit.cells_[CellIndex].Outputs[OutputIndex],
+                  Value, &Circuit.signals_[Circuit.cells_[CellIndex].Outputs[OutputIndex]],
                   clock_cycle);
             }
             temp_signal_values_[Circuit.cells_[CellIndex]
@@ -1006,7 +990,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
         Value = Circuit.cells_[reg_idx].Eval(OutputIndex, input_values);
         if (!simulation.fault_set_.empty()) {
           simulation.fault_set_[0].TryToInduceFaults(
-              Value, Circuit.cells_[reg_idx].Outputs[OutputIndex], clock_cycle);
+              Value, &Circuit.signals_[Circuit.cells_[reg_idx].Outputs[OutputIndex]], clock_cycle);
         }
 
         if (clock_cycle == 0)
@@ -1117,16 +1101,15 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
     EvaluteCircuitFaultFree(Circuit, simulation, SharedData, input_values, clock_cycle);
 
     // ----------- storing the probe values in simualtion memory
-    while ((probe_index < extended_probes.size()) &&
-           (extended_probes[probe_index].GetCycle() < clock_cycle)) {
+    while ((probe_index < extensions.size()) &&
+           (extensions[probe_index]->GetCycle() < clock_cycle)) {
       ++probe_index;
     }
 
-    while ((probe_index < extended_probes.size()) &&
-           (extended_probes[probe_index].GetCycle() == clock_cycle)) {
+    while ((probe_index < extensions.size()) &&
+           (extensions[probe_index]->GetCycle() == clock_cycle)) {
       simulation.probe_values_[probe_index][SimulationIndex] =
-          SharedData.signal_values_[extended_probes[probe_index]
-                                        .GetSignalIndices()[0]];
+          SharedData.signal_values_[extensions[probe_index]->GetSignals()[0]->id];
       ++probe_index;
     }
 
@@ -1171,7 +1154,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
     }
   }
 
-  EvalEnabler(simulation, enabler_evaluation_order, enabler, input_indices, SimulationIndex);
+  EvalEnabler(enabler, SimulationIndex);
 
   if (settings.IsWaveformSimulation()) {
     Hardware::Simulate::FinalizeVCDfile(
@@ -1192,7 +1175,9 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
         ~simulation.is_simulation_faulty_[SimulationIndex];
   }
 
-  CheckCorrectness(settings, simulation, SharedData, output_sharing, SimulationIndex, output_element_size);
+  if (simulation.fault_set_.empty()) {
+    CheckCorrectness(settings, simulation, SharedData, output_sharing, SimulationIndex, output_element_size);
+  }
 }
 
 void Hardware::Simulate::GenerateVCDfile(const CircuitStruct& Circuit,
@@ -1276,7 +1261,7 @@ void Hardware::Simulate::FinalizeVCDfile(int CycleIndex, int SimulationIndex,
   }
 }
 
-void Hardware::Simulate::SimulateFaultedAndFaultFree2(const Library &library,
+void Hardware::Simulate::SimulateFaultedAndFaultFree2(//const Library &library,
                                                      const CircuitStruct &circuit,
                                                      const Settings &settings,
                                                      SharedData &shared_data,
@@ -1284,7 +1269,7 @@ void Hardware::Simulate::SimulateFaultedAndFaultFree2(const Library &library,
                                                      Simulation &simulation,
                                                      uint64_t SimulationIndex,
                                                      boost::mt19937 &ThreadRng,
-                                                     const std::vector<FaultSet> &fault_sets,
+                                                     //const std::vector<FaultSet> &fault_sets,
                                                      uint64_t thread_index,
                                                      std::vector<std::vector<std::vector<FaultType>>> &fault_type) {
 
@@ -1343,8 +1328,8 @@ void Hardware::Simulate::SimulateFaultedAndFaultFree2(const Library &library,
 
 		// ----------- evaluate the registers
     // NOTE: This writes shared_data -> Do twice for faulted and non-faulted circuit.
-    evaluateRegisterFaultFree(library, circuit, simulation, shared_data, input_values, clock_cycle);
-    evaluateRegisterFaulted(library, circuit, simulation, shared_data_faulted, input_values, clock_cycle, fault_sets,  fault_type);
+    evaluateRegisterFaultFree(circuit, shared_data, input_values, clock_cycle);
+    evaluateRegisterFaulted(circuit, shared_data_faulted, input_values, clock_cycle, fault_type);
 
     // Before here takes quite long
     // std::cout << "[+] Registers are evaluatated!" << std::endl;
@@ -1365,7 +1350,7 @@ void Hardware::Simulate::SimulateFaultedAndFaultFree2(const Library &library,
 
     // After here takes quite long
     EvaluteCircuitFaultFree(circuit, simulation, shared_data, input_values, clock_cycle);
-    evaluteCircuitFaulted(library, circuit, simulation, shared_data_faulted, input_values, clock_cycle, fault_sets,  fault_type);
+    EvaluteCircuitFaulted(circuit, shared_data_faulted, input_values, clock_cycle, fault_type);
 
     // clock signal neg_edge
 		shared_data.signal_values_[simulation.clock_signal_index_] = 0;

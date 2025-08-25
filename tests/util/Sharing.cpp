@@ -34,7 +34,7 @@ double GTestGoodnessOfFit(const std::vector<uint64_t>& dist) {
   g_test_statistic *= 2.0;
 
   boost::math::chi_squared_distribution<> distribution(degrees_of_freedom);
-  double_t p_value =
+  double p_value =
       boost::math::cdf(boost::math::complement(distribution, g_test_statistic));
   return -std::log10(p_value);
 }

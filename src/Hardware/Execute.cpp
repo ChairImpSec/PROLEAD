@@ -33,8 +33,9 @@ void Hardware::Execute(const po::variables_map& vm) {
 
   // TODO: move this somewhere else:
   constexpr uint64_t max_terminal_width{120};
+  constexpr uint64_t normal_terminal_width{100};
   constexpr uint64_t padding{1};
-  Logger logger{padding, max_terminal_width};
+  Logger logger{padding, max_terminal_width, normal_terminal_width};
 
 
 
@@ -59,7 +60,8 @@ void Hardware::Execute(const po::variables_map& vm) {
         settings.fault_injection,
         init_center_probe, // NOTE: Where to start with the evaluation. Note that a current limitation
                            // is that we can only move to higher corrdinates from this start point on.
-        max_size_combination
+        max_size_combination,
+        logger
       };
     }
 
@@ -98,19 +100,18 @@ void Hardware::Execute(const po::variables_map& vm) {
     }
 
   } else {
-    if (settings.IsRelaxedModel()) {
-      std::cout
-          << "Evaluate the circuit under the robust but relaxed probing model!"
-          << std::endl;
-      Hardware::Adversaries<RelaxedProbe> adversary(library, circuit, settings,
-                                                    simulation);
-      adversary.EvaluateRobustProbingSecurity(shared_data);
+    Hardware::Adversaries adversary(library, circuit, settings, simulation, topmodule_name);
+    adversary.Eval(shared_data);
+
+
+    /*if (settings.IsRelaxedModel()) {
+      BOOST_LOG_TRIVIAL(info) << "Evaluate the circuit under the relaxed robust probing model!";
+      //Hardware::Adversaries<RelaxedProbe> adversary(library, circuit, settings, simulation);
+      //adversary.EvaluateRobustProbingSecurity(shared_data);
     } else {
-      std::cout << "Evaluate the circuit under the robust probing model!"
-                << std::endl;
-      Hardware::Adversaries<RobustProbe> adversary(library, circuit, settings,
-                                                  simulation);
-      adversary.EvaluateRobustProbingSecurity(shared_data);
-    }
+      BOOST_LOG_TRIVIAL(info)<< "Evaluate the circuit under the robust probing model!";
+      Hardware::Adversaries adversary(library, circuit, settings, simulation, topmodule_name);
+      //adversary.EvaluateRobustProbingSecurity(shared_data);
+    }*/
   }
 }

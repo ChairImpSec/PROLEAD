@@ -8,6 +8,7 @@
 #include <vector>
 #include <gdstk/library.hpp>
 #include <gdstk/cell.hpp>
+#include <boost/log/trivial.hpp>
 
 using Gates = std::vector<Gate>;
 /**

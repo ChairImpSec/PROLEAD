@@ -17,6 +17,7 @@
 #include <iterator>
 #include "Software/Probing.hpp"
 #include "Util/Util.hpp"
+#include "Util/Logger.hpp"
 
 
 namespace Software

@@ -103,10 +103,10 @@ bool GDSProbe::IsGateHit(const Gate & gate){
 }
 
 std::ostream& operator<<(std::ostream &out, GDSProbe const& probe) {
-  out << probe.outer_border_;
-  out <<  "\t\\\n{";
+  out << "include: {" << probe.outer_border_ << "}";
+  out <<  " exclude: {";
   for(const auto & area : probe.inner_non_effected_area_){
-    out << "\t" << area << std::endl;
+    out << area << ",";
   }
   out << "}";
   return out;

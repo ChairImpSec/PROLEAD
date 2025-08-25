@@ -72,8 +72,6 @@ struct CellStruct {
   uint64_t GetNumberOfProbeExtensions() const;
   void Precomp(std::vector<uint64_t>& vals) const;
   uint64_t Eval(uint64_t idx, const std::vector<uint64_t>& vals) const;
-  uint64_t EvalGlitch(uint64_t idx, const std::vector<uint64_t>& vals) const;
-  uint64_t EvalProp(uint64_t idx, const std::vector<uint64_t>& vals) const;
   TruthTable GenerateSmallEnablers(const std::vector<Expression>& expr_mids,
                                    const Expression& expr);
   void LookupGlitchesSmallTable(TruthTable& table, TruthTable& small_table,
@@ -86,10 +84,19 @@ struct CellStruct {
   void GenerateRelaxedFunctions(const std::vector<Expression>& expr_mids,
                                 const Expression& expr);
   void SetExpressions(bool relaxed);
+
+  std::vector<uint64_t> GetInputs() const {
+    std::vector<uint64_t> inputs;
+    for (uint64_t idx = 0; idx < type->GetNumberOfInputs(); ++idx) {
+      inputs.push_back(this->Inputs[idx]);
+    }
+    return inputs;
+  }
 };
 
 struct SignalStruct {
   char* Name;
+  uint64_t id;
   signal_t Type;
   short Depth;
   int Output;
@@ -100,6 +107,10 @@ struct SignalStruct {
   bool is_analysis_allowed;
   bool is_fault_allowed;
   char Deleted;
+
+  bool operator<(const SignalStruct& other) const;
+  bool operator==(const SignalStruct& other) const;
+  bool operator!=(const SignalStruct& other) const;
 };
 
 /**

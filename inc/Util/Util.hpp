@@ -13,6 +13,8 @@
 #include <boost/math/distributions/non_central_chi_squared.hpp>
 #include <boost/math/tools/roots.hpp>
 #include <cmath>
+#include <chrono>
+#include <ctime>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -119,30 +121,6 @@ void UpdateBucketWithBucket(BucketContainer& bucket,
                             uint64_t number_of_groups);
 
 /**
- * @brief Determines if the sample size is sufficient based on statistical
- * parameters.
- *
- * @details This function calculates whether the given sample size is adequate
- * for detecting an effect size with a specified beta threshold, given the
- * number of groups and entries. It uses a chi-squared distribution to compute
- * the critical value and a non-central chi-squared distribution to evaluate the
- * cumulative distribution function.
- *
- * @param number_of_samples The number of samples in the dataset.
- * @param number_of_groups The number of groups in the dataset.
- * @param number_of_entries The number of entries in the dataset.
- * @param beta_threshold The acceptable probability of a Type II error
- * (false-negative rate).
- * @param effect_size The expected effect size to detect.
- * @return true if the sample size is sufficient to detect the effect size with
- * the given beta threshold, false otherwise.
- */
-bool IsSampleSizeSufficient(uint64_t number_of_samples,
-                            uint64_t number_of_groups,
-                            uint64_t number_of_entries, double_t beta_threshold,
-                            double_t effect_size);
-
-/**
  * @brief Computes the required sample size for a chi-squared test.
  *
  * This function calculates the sample size needed to achieve sufficient
@@ -158,8 +136,8 @@ bool IsSampleSizeSufficient(uint64_t number_of_samples,
  */
 uint64_t ComputeRequiredSampleSize(uint64_t number_of_groups,
                                    uint64_t number_of_entries,
-                                   double_t beta_threshold,
-                                   double_t effect_size);
+                                   double beta_threshold,
+                                   double effect_size);
 
 template <typename BucketContainer>
 class ContingencyTable {
@@ -194,7 +172,7 @@ class ContingencyTable {
 
   uint64_t GetSizeOfKeyInBytes() const;
   uint64_t GetNumberOfEntries() const;
-  double_t GetLog10pValue() const;
+  double GetLog10pValue() const;
 
   void IncrementSpecificCounter(uint64_t key_index, uint64_t group_index);
 
@@ -267,7 +245,7 @@ class ContingencyTable {
    * for each group.
    */
   void SetLog10pValue(uint64_t number_of_groups, uint64_t number_of_simulations,
-                      std::vector<double_t>& group_simulation_ratio);
+                      std::vector<double>& group_simulation_ratio);
 
  //private:
   /**
@@ -286,7 +264,7 @@ class ContingencyTable {
    * contingency table. It is used to assess the statistical significance of the
    * observations in the table.
    */
-  double_t log_10_p_value_;
+  double log_10_p_value_;
 
   /**
    * @brief The container holding the table entries.
@@ -339,9 +317,9 @@ class ContingencyTable {
    * expected frequencies for each group.
    */
   void SetExpectedFrequenciesOfAnEntry(
-      const std::vector<double_t>& group_simulation_ratio,
+      const std::vector<double>& group_simulation_ratio,
       uint64_t number_of_simulations_per_entry,
-      std::vector<double_t>& expected_frequencies) const;
+      std::vector<double>& expected_frequencies) const;
 
   /**
    * @brief Checks if an entry's expected frequency is high enough for direct
@@ -370,8 +348,8 @@ class ContingencyTable {
    * statistical reliability, especially in sparsely-populated tables.
    */
   bool AreExpectedFrequenciesHighEnoughForEvaluation(
-      const std::vector<double_t>& expected_frequencies,
-      double_t pooling_factor) const;
+      const std::vector<double>& expected_frequencies,
+      double pooling_factor) const;
 
   /**
    * @brief Updates the G-test statistic based on observed counters and expected
@@ -383,8 +361,8 @@ class ContingencyTable {
    * by adding contributions from each non-zero counter.
    */
   void UpdateGTestStatistic(uint32_t* counters,
-                            const std::vector<double_t>& expected_frequencies,
-                            double_t& g_test_statistic) const;
+                            const std::vector<double>& expected_frequencies,
+                            double& g_test_statistic) const;
 
   /**
    * @brief Computes the G-test statistic for the contingency table.
@@ -396,9 +374,9 @@ class ContingencyTable {
    * G-test.
    * @return Computed G-test statistic for the contingency table.
    */
-  double_t SetGTestStatistic(uint64_t number_of_groups,
+  double SetGTestStatistic(uint64_t number_of_groups,
                              uint64_t number_of_simulations,
-                             std::vector<double_t>& group_simulation_ratio,
+                             std::vector<double>& group_simulation_ratio,
                              uint64_t& degrees_of_freedom) const;
 
   /**
@@ -417,27 +395,18 @@ class ContingencyTable {
    * @return The negative log base 10 of the p-value corresponding to the
    * provided G-test statistic. Returns 0.0 if degrees of freedom are zero.
    */
-  double_t ComputeLog10pValue(double_t g_test_statistic,
+  double ComputeLog10pValue(double g_test_statistic,
                               uint64_t degrees_of_freedom) const;
 };
 
 
-
 void StartClock(timespec& start);
 double EndClock(timespec& start);
+std::string GetTimestamp();
 void GenerateThreadRng(std::vector<boost::mt19937>& rng,
                        uint64_t number_of_threads);
 void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
                                    std::vector<bool>& bitmask);
 
-uint64_t EstimateMemoryConsumption();
-namespace Util {
-uint64_t PrintMemoryConsumption();
-void PrintHorizontalLine(unsigned int width);
-void PrintRow(std::vector<unsigned int>& width,
-              std::vector<std::string>& elements);
-void GenerateThreadRng(std::vector<boost::mt19937>&, unsigned int);
-void ExtractCombinationFromBitmask(std::vector<unsigned int>& combination,
-                                   std::vector<bool>& bitmask);
+uint64_t GetUsedMemory();
 
-}  // namespace Util

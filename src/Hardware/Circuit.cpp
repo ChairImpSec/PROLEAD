@@ -1,5 +1,17 @@
 #include "Hardware/Circuit.hpp"
 
+bool SignalStruct::operator<(const SignalStruct& other) const {
+  return id < other.id;
+}
+
+bool SignalStruct::operator==(const SignalStruct& other) const {
+  return id == other.id;
+}
+
+bool SignalStruct::operator!=(const SignalStruct& other) const {
+  return id != other.id;
+}
+
 char *safe_strcpy(char *dest, const char *src, size_t size) {
     if (size > 0) {
         *dest = '\0';
@@ -195,8 +207,7 @@ void CellStruct::Precomp(std::vector<uint64_t>& vals) const {
   }
 }
 
-uint64_t CellStruct::Eval(uint64_t idx,
-                          const std::vector<uint64_t>& vals) const {
+uint64_t CellStruct::Eval(uint64_t idx, const std::vector<uint64_t>& vals) const {
   std::vector<uint64_t> vals_with_param;
   vals_with_param.reserve(vals.size() + params_.size());
   for (const std::pair<std::string, uint64_t>& param : params_) {
@@ -205,16 +216,6 @@ uint64_t CellStruct::Eval(uint64_t idx,
 
   vals_with_param.insert(vals_with_param.end(), vals.begin(), vals.end());
   return expr_[idx].Eval(vals_with_param);
-}
-
-uint64_t CellStruct::EvalGlitch(uint64_t idx,
-                                const std::vector<uint64_t>& vals) const {
-  return expr_glitch_ext_[idx].Eval(vals);
-}
-
-uint64_t CellStruct::EvalProp(uint64_t idx,
-                              const std::vector<uint64_t>& vals) const {
-  return expr_probe_prop_[idx].Eval(vals);
 }
 
 TruthTable CellStruct::GenerateSmallEnablers(
@@ -416,7 +417,7 @@ void CellStruct::SetExpressions(bool relaxed) {
   for (const std::string& expr : type->GetExpr()) {
     expr_.emplace_back(expr, primary_signals, params_);
 
-    if (type->GetType() == cell_t::relaxed && relaxed) {
+    if ((type->GetType() == cell_t::relaxed || type->GetType() == cell_t::buffer) && relaxed) {
       bool found = false;
 
       for (uint64_t lib_idx = 0; lib_idx < expr_lib.size(); ++lib_idx) {
@@ -486,6 +487,11 @@ CircuitStruct::CircuitStruct(const std::string& design_file_name,
   }
 
   MakeCircuitDepth(settings.IsRelaxedModel());
+
+  uint64_t ctr = 0;
+  for (SignalStruct& signal : signals_) {
+    signal.id = ctr++;
+  }
 }
 
 void CircuitStruct::MakeCircuitDepth(bool relaxed) {

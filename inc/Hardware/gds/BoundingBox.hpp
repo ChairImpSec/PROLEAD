@@ -7,8 +7,8 @@
  * @brief The BoundingBox class represents a bounding box with minimum and maximum coordinates.
  */
 struct BoundingBox {
-  Coordinate min;
-  Coordinate max;
+  Coordinate min_;
+  Coordinate max_;
 
   BoundingBox(Coordinate min, Coordinate max);
   BoundingBox();

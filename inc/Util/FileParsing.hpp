@@ -15,6 +15,8 @@
 #include <boost/phoenix/object.hpp>
 #include <boost/phoenix/operator.hpp>
 #include <boost/spirit/include/qi.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 #include <cassert>
 #include <cstdint>
 #include <filesystem>
@@ -117,6 +119,15 @@ std::ifstream OpenFile(const std::filesystem::path& path);
  * file cannot be parsed as JSON.
  */
 js::object ParseJsonFile(const std::filesystem::path& path);
+
+/**
+  * @brief Writes a JSON object to a file.
+  * @param path The filesystem path to the file where the JSON object will be
+  * written.
+  * @param json_object The JSON object to be written to the file.
+  * @throws A std::runtime_error if the file cannot be opened for writing.
+  */
+void WriteJsonFile(const std::filesystem::path& path, const boost::property_tree::ptree& content);
 
 /**
  * @brief Checks if the type of a JSON object's value matches the expected type.

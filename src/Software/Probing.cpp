@@ -867,26 +867,3 @@ bool Software::Probing::InDistance(Software::SettingsStruct& Settings, std::vect
 		return 1;
 	}
 }
-
-// **************************************************************************************************************************
-
-uint32_t Software::Probing::MemoryConsumption(){
-    std::ifstream Status("/proc/self/status");
-    std::string Line, Number;
-    uint32_t ram = 0;
-
-    if (Status.is_open()){
-        while (getline(Status,Line)){
-            if (Line.find("VmSize") != std::string::npos){
-                Number = Line.substr(7, Line.length());
-                ram = std::stol(Number.substr(0, Number.length() - 2));
-                break;
-            }
-        }
-        Status.close();
-    }else{
-        throw std::logic_error("Status file not found!");
-    }
-
-    return ram;
-}

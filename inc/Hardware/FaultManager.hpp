@@ -10,12 +10,7 @@
 
 #pragma once
 
-#include "Hardware/Circuit.hpp"
-#include "Hardware/Fault.hpp"
 #include "Hardware/FaultSet.hpp"
-#include "Hardware/StuckAtOneFault.hpp"
-#include "Hardware/StuckAtZeroFault.hpp"
-#include "Hardware/ToggleFault.hpp"
 #include "Util/Settings.hpp"
 #include <memory>
 #include <vector>
@@ -129,37 +124,28 @@ public:
    * @brief Add a new StuckAtZero fault to the manager.
    *
    * @param signal A pointer to the signal, which is faulted.
-   * @param signal_index The index of the signal/the position, which is faulted.
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddStuckAtZeroFault(const SignalStruct& signal,
-                           uint64_t signal_index, uint64_t clock_cycle,
-                           double fault_probability);
+  void AddStuckAtZeroFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability);
 
   /**
    * @brief Add a new StuckAtOne fault to the manager.
    *
    * @param signal A pointer to the signal, which is faulted.
-   * @param signal_index The index of the signal/the position, which is faulted.
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddStuckAtOneFault(const SignalStruct& signal,
-                          uint64_t signal_index, uint64_t clock_cycle,
-                          double fault_probability);
+  void AddStuckAtOneFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability);
 
   /**
    * @brief Add a new Toggle fault to the manager.
    *
    * @param signal A pointer to the signal, which is faulted.
-   * @param signal_index The index of the signal/the position, which is faulted.
    * @param clock_cycle The clock cycle in which the Fault is injected.
    * @param fault_probability The probability with which the fault is induced.
    */
-  void AddToggleFault(const SignalStruct& signal,
-                      uint64_t signal_index, uint64_t clock_cycle,
-                      double fault_probability);
+  void AddToggleFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability);
 
 
   FaultSet SampleRandomFault(std::mt19937 &gen);
@@ -174,7 +160,7 @@ private:
    * @param fault_property Contains the settings which corresponds to injected
    * FaultType.
    */
-  const std::function<void(const SignalStruct&, uint64_t, uint64_t)>
+  const std::function<void(const SignalStruct&, uint64_t)>
   ChoseAddFaultFunction(const FaultProperties &fault_property);
 
   /**
@@ -209,7 +195,7 @@ private:
    * be added.
    */
   uint64_t ComputeAllFaults(
-      const std::function<void(const SignalStruct&, uint64_t, uint64_t)> AddFaultFunction,
+      const std::function<void(const SignalStruct&, uint64_t)> AddFaultFunction,
       const std::function<bool(const std::string &, const std::regex &, const std::regex &)> IncludeStrategy,
       const std::vector<uint64_t>& elements, const uint64_t number_of_elements,
       const uint64_t clock_signal_index, const std::regex &include_element,

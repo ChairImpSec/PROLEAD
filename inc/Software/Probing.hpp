@@ -59,7 +59,6 @@ namespace Software
          * @return false 
          */
         bool InDistance(Software::SettingsStruct& Settings, std::vector<Software::ProbesStruct>& ProbingSet);
-        uint32_t MemoryConsumption();
 
         /**
          * @brief Create a Normal Probe object

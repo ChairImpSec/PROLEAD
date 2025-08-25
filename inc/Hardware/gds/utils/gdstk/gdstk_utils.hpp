@@ -4,6 +4,7 @@
 #include <string>
 #include "gdstk/library.hpp"
 #include "gdstk/reference.hpp"
+#include "boost/log/trivial.hpp"
 
 /**
  * @brief Namespace for utilities related to GDSTK library

@@ -1,7 +1,7 @@
 #include "Hardware/Execute.hpp"
 #include "Software/Execute.hpp"
 #include "Util/ProgramOptions.hpp"
-#include "Hardware/Logger.hpp"
+#include "Util/Logger.hpp"
 
 namespace po = boost::program_options;
 
@@ -9,7 +9,6 @@ namespace po = boost::program_options;
 int main(int argc, char* argv[]) {
   ProgramOptions program_options;
   po::variables_map vm = program_options.Parse(argc, argv);
-
   Logger::InitLogging();
 
   /**

@@ -15,6 +15,11 @@
 #include "Util/Settings.hpp"
 #include "utils/gdstk/gdstk_utils.hpp"
 #include "AttackedSurface.hpp"
+#include "Util/Logger.hpp"
+
+#include <iostream>
+#include <regex>
+#include <format>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -26,18 +31,19 @@ public:
               const std::vector<std::string>& ignore_gate_types,
               FaultInjectionSettings & settings,
               const Coordinate& init_center_probe,
-              size_t max_size_combination);
+              size_t max_size_combination,
+             Logger& logger);
 
   // void scan();
 
 private:
-  std::string path;
-  std::string top_level_name;
-  std::vector<std::string> ignore_gate_types;
-  Blacklist blacklist;
+  std::string path_;
+  std::string top_level_name_;
+  std::vector<std::string> ignore_gate_types_;
+  Blacklist blacklist_;
   FaultInjectionSettings & settings_;
-  Coordinate init_center_probe;
-  size_t max_size_combination;
+  Coordinate init_center_probe_;
+  size_t max_size_combination_;
 
 
   void WriteJsonObjectToFile(boost::property_tree::ptree root);
@@ -51,18 +57,27 @@ private:
 
   std::string CreateRegexFromGateNamesAsString(const std::vector<const Gate *>& gates);
   std::regex CreateRegexFromGateNames(const std::vector<const Gate *>& gates);
+  void ConvertToFIESTAInput();
 
-  std::map<size_t, size_t> GroupByHitCount(std::set<AttackedSurface> attacked_surfaces);
-
-  std::set<AttackedSurface> ComputeAttackedGateSet(const Gates & gates,GDSProbe probe);
+  void ComputeAndSetAttackedGateCombinations();
+  void ComputeAndSetPositionsToHitMap();
+  void ComputeAndSetAverageHitsPerLocation();
 
   void initializeBlacklist();
   void initializeProbe();
-  void scan();
+
+  void PrintDetailsOfAnalyis();
+  void Report();
 
 
-  GDSProbe probe;
-  Gates gates;
-  BoundingBox top_module_bb;
+
+
+  GDSProbe probe_;
+  Gates gates_;
+  BoundingBox top_module_bb_;
+  Logger& logger_;
+  std::set<AttackedSurface> attacked_gate_combinations_;
+  double average_hits_per_location_;
+  std::map<size_t, size_t> postions_to_hits_map_;
 };
 

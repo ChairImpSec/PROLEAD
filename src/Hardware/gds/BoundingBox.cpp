@@ -3,19 +3,19 @@
 /**
  * @brief Constructor for BoundingBox.
  */
-BoundingBox::BoundingBox(Coordinate min, Coordinate max) : min(min), max(max) {}
+BoundingBox::BoundingBox(Coordinate min, Coordinate max) : min_(min), max_(max) {}
 BoundingBox::BoundingBox(){}
 
 
 Coordinate BoundingBox::get_size(){
-  return this->max - this->min;
+  return this->max_ - this->min_;
 }
 
 /**
  * @brief Operator << for BoundingBox.
  */
 std::ostream& operator<<(std::ostream &out, BoundingBox const& bbox) {
-    out << "(" << bbox.min << ", " << bbox.max << ")";
+    out << "(" << bbox.min_ << ", " << bbox.max_ << ")";
     return out;
 }
 

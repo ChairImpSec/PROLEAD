@@ -2,184 +2,84 @@
 
 namespace Hardware {
 
-template <class ExtensionContainer>
-ProbingSet<ExtensionContainer>::ProbingSet() {
+ProbingSet::ProbingSet(const CircuitStruct& circuit, const std::vector<const Probe*>& probes) : probes_(probes){
+  Extend(circuit);
   should_be_removed_ = false;
 };
 
-template ProbingSet<RobustProbe>::ProbingSet();
-template ProbingSet<RelaxedProbe>::ProbingSet();
-
-template <class ExtensionContainer>
-bool ProbingSet<ExtensionContainer>::operator<(
-    const ProbingSet<ExtensionContainer>& other) const {
-  return (probe_extension_indices_ < other.probe_extension_indices_);
+bool ProbingSet::operator<(const ProbingSet& other) const {
+  return (extensions_ < other.extensions_);
 }
 
-template bool ProbingSet<RobustProbe>::operator<(
-    const ProbingSet<RobustProbe>&) const;
-
-template <class ExtensionContainer>
-bool ProbingSet<ExtensionContainer>::operator==(
-    const ProbingSet<ExtensionContainer>& other) const {
-  return (probe_extension_indices_ == other.probe_extension_indices_);
+bool ProbingSet::operator==(const ProbingSet& other) const {
+  return (extensions_ == other.extensions_);
 }
 
-template bool ProbingSet<RobustProbe>::operator==(
-    const ProbingSet<RobustProbe>&) const;
-
-template <class ExtensionContainer>
-bool ProbingSet<ExtensionContainer>::operator!=(
-    const ProbingSet<ExtensionContainer>& other) const {
-  return (probe_extension_indices_ != other.probe_extension_indices_);
+bool ProbingSet::operator!=(const ProbingSet& other) const {
+  return (extensions_ != other.extensions_);
 }
 
-template bool ProbingSet<RobustProbe>::operator!=(
-    const ProbingSet<RobustProbe>&) const;
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::SetProbes(
-    std::vector<Probe*>& probe_addresses,
-    std::vector<uint64_t>& probe_extension_indices) {
-  probe_addresses_ = probe_addresses;
-  probe_extension_indices_ = probe_extension_indices;
+const std::vector<const Probe*>& ProbingSet::GetProbes() const {
+  return probes_;
 }
 
-template void ProbingSet<RobustProbe>::SetProbes(std::vector<Probe*>&,
-                                                 std::vector<uint64_t>&);
-template void ProbingSet<RelaxedProbe>::SetProbes(std::vector<Probe*>&,
-                                                  std::vector<uint64_t>&);
-
-template <class ExtensionContainer>
-std::vector<Probe*> ProbingSet<ExtensionContainer>::GetProbeAddresses() {
-  return probe_addresses_;
-}
-
-template std::vector<Probe*> ProbingSet<RobustProbe>::GetProbeAddresses();
-template std::vector<Probe*> ProbingSet<RelaxedProbe>::GetProbeAddresses();
-
-template <class ExtensionContainer>
-uint64_t ProbingSet<ExtensionContainer>::GetNumberOfProbeAddresses() {
-  return probe_addresses_.size();
-}
-
-template uint64_t ProbingSet<RobustProbe>::GetNumberOfProbeAddresses();
-template uint64_t ProbingSet<RelaxedProbe>::GetNumberOfProbeAddresses();
-
-template <>
-uint64_t ProbingSet<RobustProbe>::GetNumberOfProbeExtensions(
-    std::vector<Propagation<RobustProbe>>&) {
-  return probe_extension_indices_.size();
-}
-
-template <>
-uint64_t ProbingSet<RelaxedProbe>::GetNumberOfProbeExtensions(
-    std::vector<Propagation<RelaxedProbe>>& propagations) {
+uint64_t ProbingSet::GetSizeOfKeyInBits() const {
   uint64_t result = 0;
 
-  for (uint64_t index : probe_extension_indices_) {
-    result += propagations[index].GetNumberOfSignalIndices();
-    result += propagations[index].GetNumberOfEnableIndices();
+  assert(!probes_.empty() && "Error in ProbingSet::GetSizeOfKeyInBits(): No probes!");
+  for (const Probe* probe : probes_) {
+    result += probe->GetNumberOfExtensions();
+    result += probe->GetNumberOfEnablers();
   }
 
-  return result;
-}
-
-template <class ExtensionContainer>
-uint64_t ProbingSet<ExtensionContainer>::GetExtendedProbeIndex(
-    uint64_t extended_probe_index) {
-  try {
-    return probe_extension_indices_[extended_probe_index];
-  } catch (const std::out_of_range& e) {
-    throw std::out_of_range(
-        "Tried to access an invalid extended probe index within a probing set! "
-        "It seems that you found a bug in PROLEAD. Please get in touch with me "
-        "(nicolai.mueller@rub.de) so that we can fix this issue!");
+  if (result) {
+    return result;
+  } else {
+    return extensions_.size();
   }
 }
 
-template uint64_t ProbingSet<RobustProbe>::GetExtendedProbeIndex(uint64_t);
-template uint64_t ProbingSet<RelaxedProbe>::GetExtendedProbeIndex(uint64_t);
-
-template <class ExtensionContainer>
-ExtensionContainer ProbingSet<ExtensionContainer>::GetFirstProbeExtension() {
-  try {
-    return probe_extension_indices_.front();
-  } catch (const std::out_of_range& e) {
-    throw std::out_of_range(
-        "Tried to access the first element of an empty vector! It seems that "
-        "you found a bug in PROLEAD. Please get in touch with me "
-        "(nicolai.mueller@rub.de) so that we can fix this issue!");
-  }
+const Probe* ProbingSet::GetFirstExtension() const {
+  assert(!extensions_.empty() && "Error in ProbingSet::GetFirstExtension(): Empty extensions!");
+  return extensions_.front();
 }
 
-template RobustProbe ProbingSet<RobustProbe>::GetFirstProbeExtension();
-
-template <class ExtensionContainer>
-ExtensionContainer ProbingSet<ExtensionContainer>::GetLastProbeExtension() {
-  try {
-    return probe_extension_indices_.back();
-  } catch (const std::out_of_range& e) {
-    throw std::out_of_range(
-        "Tried to access the last element of an empty vector! It seems that "
-        "you found a bug in PROLEAD. Please get in touch with me "
-        "(nicolai.mueller@rub.de) so that we can fix this issue!");
-  }
+const Probe* ProbingSet::GetLastExtension() const {
+  assert(!extensions_.empty() && "Error in ProbingSet::GetLastExtension(): Empty extensions!");
+  return extensions_.back();
 }
 
-template RobustProbe ProbingSet<RobustProbe>::GetLastProbeExtension();
-
-template <class ExtensionContainer>
-const std::vector<uint64_t>&
-ProbingSet<ExtensionContainer>::GetProbeExtensions() const {
-  return probe_extension_indices_;
+const std::vector<const Probe*>& ProbingSet::GetExtensions() const {
+  return extensions_;
 }
 
-template const std::vector<uint64_t>&
-ProbingSet<RobustProbe>::GetProbeExtensions() const;
-template const std::vector<uint64_t>&
-ProbingSet<RelaxedProbe>::GetProbeExtensions() const;
-
-template <class ExtensionContainer>
-uint64_t ProbingSet<ExtensionContainer>::GetProbeExtension(uint64_t index) {
-  return probe_extension_indices_[index];
+const Probe* ProbingSet::GetExtension(uint64_t idx) const {
+  return extensions_[idx];
 }
 
-template uint64_t ProbingSet<RobustProbe>::GetProbeExtension(uint64_t);
-template uint64_t ProbingSet<RelaxedProbe>::GetProbeExtension(uint64_t);
+uint64_t ProbingSet::GetNumberOfExtensions() const {
+  return extensions_.size();
+}
 
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::MarkAsRemovable() {
+void ProbingSet::MarkAsRemovable() {
   should_be_removed_ = true;
 }
 
-template void ProbingSet<RobustProbe>::MarkAsRemovable();
-
-template <class ExtensionContainer>
-bool ProbingSet<ExtensionContainer>::IsRemovable() {
+bool ProbingSet::IsRemovable() const {
   return should_be_removed_;
 }
 
-template bool ProbingSet<RobustProbe>::IsRemovable();
 
-template <class ExtensionContainer>
-bool ProbingSet<ExtensionContainer>::Includes(
-    ProbingSet<ExtensionContainer>& other,
-    std::vector<Propagation<ExtensionContainer>>& propagations) {
+bool ProbingSet::Includes(const ProbingSet& other) const {
   if (IsRemovable() || other.IsRemovable()) {
     return false;
   } else {
-    if (GetNumberOfProbeExtensions(propagations) <=
-        other.GetNumberOfProbeExtensions(propagations)) {
+    if (GetSizeOfKeyInBits() <= other.GetSizeOfKeyInBits()) {
       return false;
     } else {
-      if ((GetFirstProbeExtension() >= other.GetFirstProbeExtension()) &&
-          (GetLastProbeExtension() <= other.GetLastProbeExtension())) {
-        if (std::includes(probe_extension_indices_.begin(),
-                          probe_extension_indices_.end(),
-                          other.probe_extension_indices_.begin(),
-                          other.probe_extension_indices_.end(),
-                          std::greater<ExtensionContainer>())) {
+      if ((GetFirstExtension() >= other.GetFirstExtension()) &&
+          (GetLastExtension() <= other.GetLastExtension())) {
+        if (std::includes(extensions_.begin(), extensions_.end(), other.GetExtensions().begin(), other.GetExtensions().end())) {
           return true;
         } else {
           return false;
@@ -191,81 +91,60 @@ bool ProbingSet<ExtensionContainer>::Includes(
   }
 }
 
-template bool ProbingSet<RobustProbe>::Includes(
-    ProbingSet<RobustProbe>&, std::vector<Propagation<RobustProbe>>&);
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::Initialize(
-    bool is_in_compact_mode,
-    std::vector<Propagation<ExtensionContainer>>& propagations,
-    uint64_t number_of_groups) {
-  contingency_table_.Initialize(GetNumberOfProbeExtensions(propagations),
-                                number_of_groups, is_in_compact_mode);
+void ProbingSet::Initialize(bool is_in_compact_mode, uint64_t number_of_groups) {
+  contingency_table_.Initialize(GetSizeOfKeyInBits(),  number_of_groups, is_in_compact_mode);
 }
 
-template void ProbingSet<RobustProbe>::Initialize(
-    bool, std::vector<Propagation<RobustProbe>>&, uint64_t);
-template void ProbingSet<RelaxedProbe>::Initialize(
-    bool, std::vector<Propagation<RelaxedProbe>>&, uint64_t);
-
-template <class ExtensionContainer>
-double ProbingSet<ExtensionContainer>::GetGValue() {
+double ProbingSet::GetGValue() const {
   return contingency_table_.GetLog10pValue();
 }
 
-template double ProbingSet<RobustProbe>::GetGValue();
-template double ProbingSet<RelaxedProbe>::GetGValue();
-
-template <class ExtensionContainer>
-uint64_t ProbingSet<ExtensionContainer>::GetNumberOfEntries() {
+uint64_t ProbingSet::GetNumberOfEntries() const {
   return contingency_table_.GetNumberOfEntries();
 }
 
-template uint64_t ProbingSet<RobustProbe>::GetNumberOfEntries();
-template uint64_t ProbingSet<RelaxedProbe>::GetNumberOfEntries();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::DeconstructTable() {
+void ProbingSet::DeconstructTable() {
   contingency_table_.Deconstruct();
 };
 
-template void ProbingSet<RobustProbe>::DeconstructTable();
-template void ProbingSet<RelaxedProbe>::DeconstructTable();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::Deconstruct() {
-  probe_addresses_.clear();
-  probe_extension_indices_.clear();
+void ProbingSet::Deconstruct() {
+  probes_.clear();
+  extensions_.clear();
   DeconstructTable();
 };
 
-template void ProbingSet<RobustProbe>::Deconstruct();
-template void ProbingSet<RelaxedProbe>::Deconstruct();
-
-template <class ExtensionContainer>
-void ProbingSet<ExtensionContainer>::ComputeGTest(
-    uint64_t number_of_groups, uint64_t number_of_simulations,
-    std::vector<double_t>& group_simulation_ratio) {
-  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations,
-                                    group_simulation_ratio);
+void ProbingSet::ComputeGTest(uint64_t number_of_groups, uint64_t number_of_simulations, std::vector<double>& group_simulation_ratio) {
+  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations, group_simulation_ratio);
 }
 
-template void ProbingSet<RobustProbe>::ComputeGTest(uint64_t, uint64_t,
-                                                    std::vector<double_t>&);
-template void ProbingSet<RelaxedProbe>::ComputeGTest(uint64_t, uint64_t,
-                                                     std::vector<double_t>&);
+bool ProbingSet::IsSampleSizeSufficient(uint64_t number_of_samples, const Settings& settings) const {
+  uint64_t degrees_of_freedom = (settings.GetNumberOfGroups() - 1) * (GetNumberOfEntries() - 1);
+  double beta_threshold = settings.side_channel_analysis.beta_threshold;
+  double effect_size = settings.side_channel_analysis.effect_size;
 
-template <class ExtensionContainer>
-std::string ProbingSet<ExtensionContainer>::PrintProbes(
-    CircuitStruct& circuit) {
-  std::string cycle, name, result;
+  if (degrees_of_freedom) {
+    boost::math::chi_squared_distribution<> distribution(degrees_of_freedom);
+    double critical_value = boost::math::quantile(
+        boost::math::complement(distribution, beta_threshold));
+    double non_centrality_parameter =
+        number_of_samples * effect_size * effect_size;
+    boost::math::non_central_chi_squared_distribution<> dist(
+        degrees_of_freedom, non_centrality_parameter);
+    return boost::math::cdf(dist, critical_value) <= beta_threshold;
+  } else {
+    return false;
+  }
+}
 
-  for (Probe* probe : GetProbeAddresses()) {
-    for (uint64_t probe_index : probe->GetSignalIndices()) {
-      name = circuit.signals_[probe_index].Name;
-      cycle = std::to_string(probe->GetCycle());
-      result += name + "(" + cycle + "), ";
-    }
+std::string ProbingSet::PrintProbes(const Settings& settings) const{
+  std::string result;
+  clk_edge_t edge = settings.GetClkEdge();
+
+  assert(edge != clk_edge_t::undef && "Error in PrintProbes(): Clock edge undefined!");
+  assert(!probes_.empty() && "Error in PrintProbes(): probes is empty!");
+
+  for (const Probe* probe : probes_) {
+    result += probe->Print(edge, true) + ", ";
   }
 
   result.pop_back();
@@ -273,574 +152,242 @@ std::string ProbingSet<ExtensionContainer>::PrintProbes(
   return result;
 }
 
-template std::string ProbingSet<RobustProbe>::PrintProbes(CircuitStruct&);
-template std::string ProbingSet<RelaxedProbe>::PrintProbes(CircuitStruct&);
+void ProbingSet::CompactRelaxedTableUpdate(const Settings& settings, const Simulation& simulation) {
+  uint64_t grp_idx, sim_idx, ctr;
+  std::queue<const Probe*> indices;
+  std::vector<const Probe*> extensions;
+  const Probe* probe = nullptr;
+  const Enabler* enabler = nullptr;
+  std::set<const Enabler*> finished_enabler;
 
-template <>
-void ProbingSet<RelaxedProbe>::CompactTableUpdate(
-    const Settings& settings, Simulation& simulation,
-    std::vector<Propagation<RelaxedProbe>>& propagations) {
-  TableBucketVector datasets;
-  uint64_t bit_index, group_index, key_index, probe_index, counter;
-  uint64_t number_of_extended_probes;
-  uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
-  std::queue<uint64_t> indices;
-  std::vector<uint64_t> probe_extension_indices, propagation_indices;
-  uint64_t enable_ctr, enable_bound;
-  RelaxedProbe* probe;
-  RelaxedProbe* new_probe;
-  std::set<uint64_t> considered;
+  uint64_t number_of_simulations =
+      simulation.considered_simulation_indices_.size();
 
-  uint64_t all_enable_size = 0;
-  for (uint64_t probe_extension_index : probe_extension_indices_) {
-    all_enable_size +=
-        propagations[probe_extension_index].GetNumberOfEnableIndices();
-  }
+  for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
+    extensions.clear();
+    sim_idx = simulation.considered_simulation_indices_[idx];
+    grp_idx = simulation.selected_groups_[sim_idx];
+    ctr = 0;
 
-  datasets.resize(simulation.considered_simulation_indices_.size());
-
-  for (uint64_t index = 0;
-       index < simulation.considered_simulation_indices_.size(); ++index) {
-    probe_extension_indices.clear();
-    enable_bound = 0;
-    group_index =
-        simulation
-            .selected_groups_[simulation.considered_simulation_indices_[index]];
-    datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
-    datasets[index].data_ =
-        std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
-    std::memset(datasets[index].data_.get(), 0,
-                sizeof(uint32_t) * settings.GetNumberOfGroups());
-    datasets[index].data_[group_index] = 1;
-    counter = 0;
-
-    for (probe_index = 0; probe_index < probe_extension_indices_.size();
-         ++probe_index) {
-      enable_ctr = enable_bound;
-      considered.clear();
-      indices.push(probe_extension_indices_[probe_index]);
-
-      if (propagations[indices.front()]
-              .GetProbeAddress(0)
-              ->number_of_enable_indices_) {
-        considered.insert(
-            propagations[indices.front()].GetProbeAddress(0)->enable_index_);
-      }
+    for (const Probe* standard_probe : probes_) {
+      indices.push(standard_probe);
+      finished_enabler.clear();
 
       while (!indices.empty()) {
-        probe = propagations[indices.front()].GetProbeAddress(0);
+        probe = indices.front();
+        enabler = probe->GetEnabler();
         indices.pop();
 
-        if (probe->propagation_indices_.empty()) {
-          probe_extension_indices.insert(probe_extension_indices.end(),
-                                         probe->signal_indices_.begin(),
-                                         probe->signal_indices_.end());
+        if (enabler == nullptr) {
+          for (const Probe* extension : probe->GetTransitionExtensions()) {
+            extensions.push_back(extension);
+          }
         } else {
-          if ((simulation.propagation_values_
-                   [probe->enable_index_]
-                   [simulation.considered_simulation_indices_[index] >> 6] >>
-               (simulation.considered_simulation_indices_[index] & 0b111111)) &
-              1) {
-            for (bit_index = 0; bit_index < probe->propagation_indices_.size();
-                 ++bit_index) {
-              key_index = probe->propagation_indices_[bit_index];
-              new_probe = propagations[key_index].GetProbeAddress(0);
-
-              if (new_probe->propagation_indices_.empty()) {
-                probe_extension_indices.insert(
-                    probe_extension_indices.end(),
-                    new_probe->signal_indices_.begin(),
-                    new_probe->signal_indices_.end());
-              } else {
-                if (considered.find(new_probe->enable_index_) ==
-                    considered.end()) {
-                  indices.push(key_index);
-                  considered.insert(new_probe->enable_index_);
-                }
+          if (finished_enabler.find(enabler) == finished_enabler.end()) {      
+            if ((probe->GetBitslicedPropValue(sim_idx >> 6) >> (sim_idx & 0b111111)) & 1) {
+              for (const Probe* extension : probe->GetGlitchExtensions()) {
+                indices.push(extension);
+              }
+            } else {
+              for (const Probe* extension : probe->GetTransitionExtensions()) {
+                extensions.push_back(extension);
               }
             }
 
-            ++counter;
-          } else {
-            probe_extension_indices.insert(probe_extension_indices.end(),
-                                           probe->signal_indices_.begin(),
-                                           probe->signal_indices_.end());
+            finished_enabler.insert(enabler);
           }
-
-          ++enable_ctr;
         }
       }
-
-      enable_bound += propagations[probe_extension_indices_[probe_index]]
-                          .GetNumberOfEnableIndices();
     }
 
-    std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(),
-                                              probe_extension_indices.end()),
-                                  probe_extension_indices.end());
+    std::sort(extensions.begin(), extensions.end());
+    extensions.erase(std::unique(extensions.begin(), extensions.end()), extensions.end());
 
-    number_of_extended_probes = probe_extension_indices.size();
-
-    for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
-      if ((simulation.probe_values_
-               [probe_extension_indices[bit_index]]
-               [simulation.considered_simulation_indices_[index] >> 6] >>
-           (simulation.considered_simulation_indices_[index] & 0b111111)) &
-          1) {
-        ++counter;
+    for (const Probe* extension : extensions) {
+      if (extension->GetBitslicedValue(0, sim_idx >> 6) >>(sim_idx & 0b111111) & 1) {
+        ctr++;          
       }
     }
 
-    contingency_table_.IncrementSpecificCounter(counter, group_index);
+    contingency_table_.IncrementSpecificCounter(ctr, grp_idx);
   }
 }
 
-template <>
-void ProbingSet<RobustProbe>::NormalTableUpdateWithAllSimulations(
-    const Settings& settings, Simulation& simulation,
-    std::vector<Propagation<RobustProbe>>& propagations) {
-  const uint64_t number_of_bits_per_key_block = 8;
-  uint64_t group_index, key_value, probe_index;
+void ProbingSet::NormalRobustTableUpdateWithAllSimulations(const Settings& settings, const Simulation& simulation) {
+  uint64_t grp_idx, sim_idx;
   uint64_t number_of_groups = settings.GetNumberOfGroups();
-  uint64_t number_of_extended_probes = GetNumberOfProbeExtensions(propagations);
-  uint64_t number_of_simulations =
-      simulation.considered_simulation_indices_.size();
-  uint64_t number_of_blocks = number_of_simulations >> 6;
-
-  uint64_t number_of_bits;
+  uint64_t number_of_simulations = simulation.considered_simulation_indices_.size();
   uint64_t number_of_key_blocks = contingency_table_.GetSizeOfKeyInBytes();
-  std::vector<uint64_t> block_values(number_of_bits_per_key_block);
 
   TableBucketVector datasets(number_of_simulations);
-  for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    group_index = simulation.selected_groups_[index];
-    datasets[index].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
-    std::memset(datasets[index].key_.get(), 0, number_of_key_blocks);
-    datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
-    std::memset(datasets[index].data_.get(), 0,
-                sizeof(uint32_t) * number_of_groups);
-    datasets[index].data_[group_index] = 1;
+  for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
+    grp_idx = simulation.selected_groups_[simulation.considered_simulation_indices_[idx]];
+    datasets[idx].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
+    std::memset(datasets[idx].key_.get(), 0, number_of_key_blocks);
+    datasets[idx].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    std::memset(datasets[idx].data_.get(), 0, sizeof(uint32_t) * number_of_groups);
+    datasets[idx].data_[grp_idx] = 1;
   }
 
-  for (uint64_t byte_index = 0; byte_index < number_of_key_blocks;
-       ++byte_index) {
-    number_of_bits =
-        std::min(number_of_bits_per_key_block, number_of_extended_probes);
-    number_of_extended_probes -= number_of_bits;
-
-    for (uint64_t block_index = 0; block_index < number_of_blocks;
-         ++block_index) {
-      for (uint64_t bit_index = 0; bit_index < number_of_bits; ++bit_index) {
-        probe_index = GetProbeExtension(number_of_extended_probes + bit_index);
-        block_values[bit_index] =
-            simulation.probe_values_[probe_index][block_index];
-      }
-
-      for (uint64_t simulation_index = block_index << 6;
-           simulation_index < (block_index + 1) << 6; ++simulation_index) {
-        key_value = 0;
-
-        for (uint64_t bit_index = 0; bit_index < number_of_bits; ++bit_index) {
-          key_value <<= 1;
-          key_value |= block_values[bit_index] & 1;
-          block_values[bit_index] >>= 1;
-        }
-
-        datasets[simulation_index].key_[byte_index] = key_value;
-      }
+  for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {  
+    sim_idx = simulation.considered_simulation_indices_[idx];
+    for (uint64_t ext_idx = 0; ext_idx < extensions_.size(); ++ext_idx) {
+      datasets[idx].key_[ext_idx >> 3] |= ((extensions_[ext_idx]->GetBitslicedValue(0, sim_idx >> 6) 
+        >> (sim_idx & 0b111111)) & 1) << (ext_idx & 0b111);
     }
   }
 
   contingency_table_.UpdateBucket(datasets, number_of_groups);
 }
 
-template <>
-void ProbingSet<RelaxedProbe>::NormalTableUpdateWithAllSimulations(
-    const Settings& settings, Simulation& simulation,
-    std::vector<Propagation<RelaxedProbe>>& propagations) {
-  uint64_t bit_index, group_index, key_index, probe_index, tmp_index;
-  uint64_t number_of_extended_probes;
+void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simulation& simulation) {
+  uint64_t en_idx, grp_idx, key_idx, sim_idx;
   uint64_t number_of_key_blocks = contingency_table_.GetSizeOfKeyInBytes();
   uint64_t number_of_groups = settings.GetNumberOfGroups();
-  std::queue<uint64_t> indices;
-  std::vector<uint64_t> probe_extension_indices;
-  uint64_t enable_ctr, enable_bound;
-  RelaxedProbe* probe;
-  RelaxedProbe* new_probe;
-  std::vector<bool> is_enable_index_done(simulation.number_of_enablers_, false);
+  std::queue<const Probe*> indices;
+  std::vector<const Probe*> extensions;
+  const Probe* probe = nullptr;
+  const Enabler* enabler = nullptr;
+  std::set<const Enabler*> finished_enabler;
 
   uint64_t number_of_simulations =
       simulation.considered_simulation_indices_.size();
 
-  uint64_t number_of_enablers = 0;
-  for (uint64_t probe_extension_index : probe_extension_indices_) {
-    number_of_enablers +=
-        propagations[probe_extension_index].GetNumberOfEnableIndices();
-  }
-
   TableBucketVector datasets(number_of_simulations);
-  for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    group_index = simulation.selected_groups_[index];
-    datasets[index].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
-    std::memset(datasets[index].key_.get(), 0, number_of_key_blocks);
-    datasets[index].data_ = std::make_unique<uint32_t[]>(number_of_groups);
-    std::memset(datasets[index].data_.get(), 0,
+  for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
+    grp_idx = simulation.selected_groups_[simulation.considered_simulation_indices_[idx]];
+    datasets[idx].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
+    std::memset(datasets[idx].key_.get(), 0, number_of_key_blocks);
+    datasets[idx].data_ = std::make_unique<uint32_t[]>(number_of_groups);
+    std::memset(datasets[idx].data_.get(), 0,
                 sizeof(uint32_t) * number_of_groups);
-    datasets[index].data_[group_index] = 1;
+    datasets[idx].data_[grp_idx] = 1;
   }
 
-  for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    enable_bound = 0;
+  for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
+    sim_idx = simulation.considered_simulation_indices_[idx];
+    extensions.clear();
+    en_idx = 0;
 
-    for (probe_index = 0; probe_index < probe_extension_indices_.size();
-         ++probe_index) {
-      probe_extension_indices.clear();
-      std::fill(is_enable_index_done.begin(), is_enable_index_done.end(),
-                false);
-      indices.push(probe_extension_indices_[probe_index]);
+    for (const Probe* standard_probe : probes_) {
+      indices.push(standard_probe);
+      finished_enabler.clear();
 
-      enable_ctr = enable_bound;
-
-      if (propagations[probe_extension_indices_[probe_index]]
-              .GetProbeAddress(0)
-              ->number_of_enable_indices_) {
-        is_enable_index_done[propagations[probe_extension_indices_[probe_index]]
-                                 .GetProbeAddress(0)
-                                 ->enable_index_] = true;
-      }
 
       while (!indices.empty()) {
-        probe = propagations[indices.front()].GetProbeAddress(0);
+        probe = indices.front();
+        enabler = probe->GetEnabler();
         indices.pop();
 
-        if (probe->propagation_indices_.empty()) {
-          probe_extension_indices.insert(probe_extension_indices.end(),
-                                         probe->signal_indices_.begin(),
-                                         probe->signal_indices_.end());
+        if (enabler == nullptr) {
+          for (const Probe* extension : probe->GetTransitionExtensions()) {
+            extensions.push_back(extension);
+          }
         } else {
-          uint64_t simulation_index =
-              simulation.considered_simulation_indices_[index];
+          if (finished_enabler.find(enabler) == finished_enabler.end()) {      
+            if ((probe->GetBitslicedPropValue(sim_idx >> 6) >> (sim_idx & 0b111111)) & 1) {
+              for (const Probe* extension : probe->GetGlitchExtensions()) {
+                indices.push(extension);
+              }
 
-          if ((simulation.propagation_values_[probe->enable_index_]
-                                             [simulation_index >> 6] >>
-               (simulation_index & 0b111111)) &
-              1) {
-            for (bit_index = 0; bit_index < probe->propagation_indices_.size();
-                 ++bit_index) {
-              key_index = probe->propagation_indices_[bit_index];
-              new_probe = propagations[key_index].GetProbeAddress(0);
-
-              if (new_probe->propagation_indices_.empty()) {
-                probe_extension_indices.insert(
-                    probe_extension_indices.end(),
-                    new_probe->signal_indices_.begin(),
-                    new_probe->signal_indices_.end());
-              } else {
-                if (!is_enable_index_done[new_probe->enable_index_]) {
-                  indices.push(key_index);
-                  is_enable_index_done[new_probe->enable_index_] = true;
-                }
+              key_idx = en_idx + finished_enabler.size();
+              datasets[idx].key_[key_idx >> 3] |= 1 << (key_idx & 0b111);
+            } else {
+              for (const Probe* extension : probe->GetTransitionExtensions()) {
+                extensions.push_back(extension);
               }
             }
 
-            tmp_index = enable_ctr >> 3;
-            datasets[index].key_[tmp_index] |= 1 << (enable_ctr & 0b111);
-          } else {
-            probe_extension_indices.insert(probe_extension_indices.end(),
-                                           probe->signal_indices_.begin(),
-                                           probe->signal_indices_.end());
+            finished_enabler.insert(enabler);
           }
-
-          ++enable_ctr;
         }
       }
 
-      enable_bound += propagations[probe_extension_indices_[probe_index]]
-                          .GetNumberOfEnableIndices();
-      std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-      probe_extension_indices.erase(std::unique(probe_extension_indices.begin(),
-                                                probe_extension_indices.end()),
-                                    probe_extension_indices.end());
+      en_idx += probe->GetNumberOfEnablers();
+    }
 
-      number_of_extended_probes = probe_extension_indices.size();
+    std::sort(extensions.begin(), extensions.end());
+    extensions.erase(std::unique(extensions.begin(), extensions.end()), extensions.end());
 
-      for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
-        tmp_index = (bit_index + enable_bound) >> 3;
-        datasets[index].key_[tmp_index] |=
-            ((simulation.probe_values_
-                  [probe_extension_indices[bit_index]]
-                  [simulation.considered_simulation_indices_[index] >> 6] >>
-              (simulation.considered_simulation_indices_[index] & 0b111111)) &
-             1)
-            << ((bit_index + enable_bound) & 0b111);
-      }
-
-      enable_bound += propagations[probe_extension_indices_[probe_index]]
-                          .GetNumberOfSignalIndices();
+    for (uint64_t ext_idx = 0; ext_idx < extensions.size(); ++ext_idx) {
+      key_idx = (ext_idx + en_idx) >> 3;
+      datasets[idx].key_[key_idx] |= ((extensions[ext_idx]->GetBitslicedValue(0, sim_idx >> 6) >>
+        (sim_idx & 0b111111)) & 1) << ((ext_idx + en_idx) & 0b111);
     }
   }
 
   contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
 }
 
-template <>
-void ProbingSet<RobustProbe>::NormalTableUpdate(
-    const Settings& settings, Simulation& simulation,
-    std::vector<Propagation<RobustProbe>>& propagations) {
+void ProbingSet::NormalRobustTableUpdate(const Settings& settings, const Simulation& simulation) {
   uint64_t group_index;
   TableBucketVector datasets;
-  uint64_t number_of_extended_probes = GetNumberOfProbeExtensions(propagations);
+  uint64_t number_of_extended_probes = GetSizeOfKeyInBits();
   uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
-  std::vector<uint64_t> probe_extension_indices = GetProbeExtensions();
-  uint64_t probe_index, tmp_index, value;
+  uint64_t tmp_index, value;
 
   datasets.resize(simulation.considered_simulation_indices_.size());
-  for (uint64_t index = 0;
-       index < simulation.considered_simulation_indices_.size(); ++index) {
-    datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
-    datasets[index].data_ =
-        std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
-    std::memset(datasets[index].data_.get(), 0,
-                sizeof(uint32_t) * settings.GetNumberOfGroups());
+  for (uint64_t idx = 0; idx < simulation.considered_simulation_indices_.size(); ++idx) {
+    datasets[idx].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
+    std::memset(datasets[idx].key_.get(), 0, size_of_key_in_bytes);
+    datasets[idx].data_ = std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
+    std::memset(datasets[idx].data_.get(), 0, sizeof(uint32_t) * settings.GetNumberOfGroups());
 
-    group_index =
-        simulation
-            .selected_groups_[simulation.considered_simulation_indices_[index]];
-    datasets[index].data_[group_index] = 1;
+    group_index = simulation.selected_groups_[simulation.considered_simulation_indices_[idx]];
+    datasets[idx].data_[group_index] = 1;
 
-    for (probe_index = 0; probe_index < number_of_extended_probes;
-         ++probe_index) {
-      value =
-          simulation
-              .probe_values_[probe_extension_indices[probe_index]]
-                            [simulation.considered_simulation_indices_[index] >>
-                             6];
-      tmp_index = probe_index >> 3;
-      datasets[index].key_[tmp_index] <<= 1;
-      datasets[index].key_[tmp_index] |=
-          (value >>
-           (simulation.considered_simulation_indices_[index] & 0b111111)) &
-          1;
+    uint64_t ctr = 0;
+    for (const Probe* probe : extensions_) {
+      value = probe->GetBitslicedValue(0, simulation.considered_simulation_indices_[idx] >> 6);
+      tmp_index = ctr++ >> 3;
+      datasets[idx].key_[tmp_index] <<= 1;
+      datasets[idx].key_[tmp_index] |= 
+        (value >> (simulation.considered_simulation_indices_[idx] & 0b111111)) & 1;
     }
   }
 
   contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
 }
 
-template <>
-void ProbingSet<RelaxedProbe>::NormalTableUpdate(
-    const Settings& settings, Simulation& simulation,
-    std::vector<Propagation<RelaxedProbe>>& propagations) {
-  uint64_t bit_index, group_index, key_index, probe_index, tmp_index;
-  uint64_t number_of_extended_probes;
-  uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
-  std::queue<uint64_t> indices;
-  std::vector<uint64_t> probe_extension_indices, propagation_indices;
-  uint64_t enable_ctr, enable_bound;
-  RelaxedProbe* probe;
-  RelaxedProbe* new_probe;
-  std::vector<bool> is_enable_index_done(simulation.number_of_enablers_, false);
-
-  uint64_t number_of_simulations =
-      simulation.considered_simulation_indices_.size();
-  TableBucketVector datasets(number_of_simulations);
-
-  uint64_t all_enable_size = 0;
-  for (uint64_t probe_extension_index : probe_extension_indices_) {
-    all_enable_size +=
-        propagations[probe_extension_index].GetNumberOfEnableIndices();
-  }
-
-  for (uint64_t index = 0; index < number_of_simulations; ++index) {
-    probe_extension_indices.clear();
-    enable_bound = 0;
-    group_index =
-        simulation
-            .selected_groups_[simulation.considered_simulation_indices_[index]];
-    datasets[index].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    std::memset(datasets[index].key_.get(), 0, size_of_key_in_bytes);
-    datasets[index].data_ =
-        std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
-    std::memset(datasets[index].data_.get(), 0,
-                sizeof(uint32_t) * settings.GetNumberOfGroups());
-    datasets[index].data_[group_index] = 1;
-
-    for (probe_index = 0; probe_index < probe_extension_indices_.size();
-         ++probe_index) {
-      enable_ctr = enable_bound;
-      std::fill(is_enable_index_done.begin(), is_enable_index_done.end(),
-                false);
-      indices.push(probe_extension_indices_[probe_index]);
-
-      if (propagations[indices.front()]
-              .GetProbeAddress(0)
-              ->number_of_enable_indices_) {
-        is_enable_index_done
-            [propagations[indices.front()].GetProbeAddress(0)->enable_index_] =
-                true;
-      }
-
-      while (!indices.empty()) {
-        probe = propagations[indices.front()].GetProbeAddress(0);
-        indices.pop();
-
-        if (probe->propagation_indices_.empty()) {
-          probe_extension_indices.insert(probe_extension_indices.end(),
-                                         probe->signal_indices_.begin(),
-                                         probe->signal_indices_.end());
-        } else {
-          tmp_index = enable_ctr >> 3;
-          datasets[index].key_[tmp_index] <<= 1;
-
-          if ((simulation.propagation_values_
-                   [probe->enable_index_]
-                   [simulation.considered_simulation_indices_[index] >> 6] >>
-               (simulation.considered_simulation_indices_[index] & 0b111111)) &
-              1) {
-            for (bit_index = 0; bit_index < probe->propagation_indices_.size();
-                 ++bit_index) {
-              key_index = probe->propagation_indices_[bit_index];
-              new_probe = propagations[key_index].GetProbeAddress(0);
-
-              if (new_probe->propagation_indices_.empty()) {
-                probe_extension_indices.insert(
-                    probe_extension_indices.end(),
-                    new_probe->signal_indices_.begin(),
-                    new_probe->signal_indices_.end());
-              } else {
-                if (!is_enable_index_done[new_probe->enable_index_]) {
-                  indices.push(key_index);
-                  is_enable_index_done[new_probe->enable_index_] = true;
-                }
-              }
-            }
-
-            tmp_index = enable_ctr >> 3;
-            datasets[index].key_[tmp_index] |= 1;
-          } else {
-            probe_extension_indices.insert(probe_extension_indices.end(),
-                                           probe->signal_indices_.begin(),
-                                           probe->signal_indices_.end());
-          }
-
-          ++enable_ctr;
-        }
-      }
-
-      enable_bound += propagations[probe_extension_indices_[probe_index]]
-                          .GetNumberOfEnableIndices();
-    }
-
-    std::sort(probe_extension_indices.begin(), probe_extension_indices.end());
-    probe_extension_indices.erase(std::unique(probe_extension_indices.begin(),
-                                              probe_extension_indices.end()),
-                                  probe_extension_indices.end());
-
-    number_of_extended_probes = probe_extension_indices.size();
-
-    for (bit_index = 0; bit_index < number_of_extended_probes; ++bit_index) {
-      tmp_index = (bit_index + all_enable_size) >> 3;
-      datasets[index].key_[tmp_index] <<= 1;
-      datasets[index].key_[tmp_index] |=
-          (simulation.probe_values_
-               [probe_extension_indices[bit_index]]
-               [simulation.considered_simulation_indices_[index] >> 6] >>
-           (simulation.considered_simulation_indices_[index] & 0b111111)) &
-          1;
-    }
-  }
-
-  contingency_table_.UpdateBucket(datasets, settings.GetNumberOfGroups());
+uint64_t ProbingSet::GetHighestClockCycle() const {
+  assert(!probes_.empty() && "Error in GetHighestClockCycle(): Probes is empty!");
+  assert(std::is_sorted(probes_.begin(), probes_.end()) &&
+         "Error in GetHighestClockCycle(): Probes not sorted!");
+  return probes_.back()->GetCycle();
 }
 
-template <>
-uint64_t ProbingSet<RobustProbe>::GetHighestClockCycle(
-    std::vector<Propagation<RobustProbe>>&,
-    std::vector<Probe>& probe_extensions) {
-  RobustProbe probe = GetLastProbeExtension();
-  return probe_extensions[probe].GetCycle();
-}
-
-template <>
-uint64_t ProbingSet<RelaxedProbe>::GetHighestClockCycle(
-    std::vector<Propagation<RelaxedProbe>>& propagations,
-    std::vector<Probe>& probe_extensions) {
-  uint64_t clock_cycle, probe_index, result = 0;
-
-  for (uint64_t index : GetProbeExtensions()) {
-    probe_index = propagations[index].GetSignalIndex();
-    clock_cycle = probe_extensions[probe_index].GetCycle();
-
-    if (clock_cycle > result) {
-      result = clock_cycle;
-    }
-  }
-
-  return result;
-}
-
-template <>
-uint64_t ProbingSet<RobustProbe>::GetSizeOfKeyInBytes() {
+uint64_t ProbingSet::GetSizeOfKeyInBytes() {
   return contingency_table_.GetSizeOfKeyInBytes();
 }
 
-template <>
-void ProbingSet<RobustProbe>::IncrementSpecificCounter(uint64_t key_index,
-                                                       uint64_t group_index) {
+void ProbingSet::IncrementSpecificCounter(uint64_t key_index, uint64_t group_index) {
   contingency_table_.IncrementSpecificCounter(key_index, group_index);
 }
 
-template <class ExtensionContainer>
-uint64_t GetIndexOfMostLeakingProbingSet(
-    std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-    std::vector<bool>& bitmask) {
-  uint64_t index = 0, set_index;
-  double g_value, maximum = 0.0;
+void ProbingSet::Extend(const CircuitStruct& circuit) {
+  std::queue<const Probe*> path;
 
-  // Unfortunately not sorted so linear complexity
-  for (set_index = 0; set_index < probing_sets.size(); ++set_index) {
-    g_value = probing_sets[set_index].GetGValue();
-
-    if ((g_value > maximum) && bitmask[set_index]) {
-      maximum = g_value;
-      index = set_index;
-    }
+  for (const Probe* probe : probes_) {
+    path.push(probe);
   }
 
-  return index;
-}
-
-template uint64_t GetIndexOfMostLeakingProbingSet(
-    std::vector<ProbingSet<RobustProbe>>&, std::vector<bool>&);
-template uint64_t GetIndexOfMostLeakingProbingSet(
-    std::vector<ProbingSet<RelaxedProbe>>&, std::vector<bool>&);
-
-template <class ExtensionContainer>
-uint64_t GetNumberOfRequiredTraces(
-    std::vector<ProbingSet<ExtensionContainer>>& probing_sets,
-    const Settings& settings) {
-  uint64_t number_of_entries, maximum = 0;
-
-  // Unfortunately not sorted so linear complexity
-  for (ProbingSet<ExtensionContainer>& it : probing_sets) {
-    number_of_entries = it.GetNumberOfEntries();
-
-    if (number_of_entries > maximum) {
-      maximum = number_of_entries;
+  while (!path.empty()) {
+    const Probe* probe = path.front();
+    if (probe->DoesExtend(circuit)) {
+      for (const Probe* extension : probe->GetGlitchExtensions()) {
+        path.push(extension);
+      }
+    } else {
+      for (const Probe* extension : probe->GetTransitionExtensions()) {
+        extensions_.push_back(extension);
+      }
     }
+
+    path.pop();
   }
 
-  return ComputeRequiredSampleSize(
-      settings.GetNumberOfGroups(), maximum,
-      settings.side_channel_analysis.beta_threshold,
-      settings.side_channel_analysis.effect_size);
+  std::sort(extensions_.begin(), extensions_.end(), [](const Probe* lhs, const Probe* rhs) {return *lhs < *rhs;});
+  extensions_.erase(std::unique(extensions_.begin(), extensions_.end()), extensions_.end());    
 }
 
-template uint64_t GetNumberOfRequiredTraces(
-    std::vector<ProbingSet<RobustProbe>>&, const Settings&);
-template uint64_t GetNumberOfRequiredTraces(
-    std::vector<ProbingSet<RelaxedProbe>>&, const Settings&);
 }  // namespace Hardware

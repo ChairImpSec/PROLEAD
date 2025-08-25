@@ -30,41 +30,31 @@ FaultManager::FaultManager(
     {
 }
 
-void FaultManager::AddStuckAtZeroFault(
-    const SignalStruct& signal, uint64_t signal_index,
-    uint64_t clock_cycle, double fault_probability) {
+void FaultManager::AddStuckAtZeroFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability) {
 
-  auto fault = std::make_unique<StuckAtZeroFault>(&signal, signal_index, clock_cycle, fault_probability);
+  auto fault = std::make_unique<StuckAtZeroFault>(std::vector<const SignalStruct*>{&signal}, clock_cycle, fault_probability);
   stuck_at_zero_faults_.push_back(fault.get());
   faults_at_cycle_[clock_cycle].push_back(fault.get());
   // TODO: should we change the order here? first faults_ than stuck_at_X_faults_?
   faults_.push_back(std::move(fault));
 }
 
-void FaultManager::AddStuckAtOneFault(
-    const SignalStruct& signal, uint64_t signal_index,
-    uint64_t clock_cycle, double fault_probability) {
-
-  auto fault = std::make_unique<StuckAtOneFault>(
-      &signal, signal_index, clock_cycle, fault_probability);
+void FaultManager::AddStuckAtOneFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability) {
+  auto fault = std::make_unique<StuckAtOneFault>(std::vector<const SignalStruct*>{&signal}, clock_cycle, fault_probability);
   stuck_at_one_faults_.push_back(fault.get());
   faults_at_cycle_[clock_cycle].push_back(fault.get());
   faults_.push_back(std::move(fault));
 }
 
-void FaultManager::AddToggleFault(const SignalStruct& signal,
-                                  uint64_t signal_index, uint64_t clock_cycle,
-                                  double fault_probability) {
-
-  auto fault = std::make_unique<ToggleFault>(&signal, signal_index, clock_cycle,
-                                             fault_probability);
+void FaultManager::AddToggleFault(const SignalStruct& signal, uint64_t clock_cycle, double fault_probability) {
+  auto fault = std::make_unique<ToggleFault>(std::vector<const SignalStruct*>{&signal}, clock_cycle, fault_probability);
   toggle_faults_.push_back(fault.get());
   faults_at_cycle_[clock_cycle].push_back(fault.get());
   faults_.push_back(std::move(fault));
 }
 
 uint64_t FaultManager::ComputeAllFaults(
-    const std::function<void(const SignalStruct&, uint64_t, uint64_t)> AddFaultFunction,
+    const std::function<void(const SignalStruct&, uint64_t)> AddFaultFunction,
     const std::function<bool(const std::string &, const std::regex &, const std::regex &)> IncludeStrategy,
     const std::vector<uint64_t>& elements, const uint64_t number_of_elements,
     const uint64_t clock_signal_index, const std::regex &include_elements,
@@ -107,7 +97,7 @@ uint64_t FaultManager::ComputeAllFaults(
           for (auto clock_cycle : this->fault_injection_settings_.clock_cycles) {
 
             // NOTE: the first cycle is prolead internal clock cycle 0!
-            AddFaultFunction(signal, signal_index, (clock_cycle-1));
+            AddFaultFunction(signal, (clock_cycle-1));
           }
 
           ++number_of_added_faults;
@@ -126,7 +116,7 @@ uint64_t FaultManager::ComputeAllFaults(
           for (auto clock_cycle : this->fault_injection_settings_.clock_cycles) {
 
             // NOTE: the first cycle is prolead internal clock cycle 0!
-            AddFaultFunction(signal, signal_index, (clock_cycle-1));
+            AddFaultFunction(signal, (clock_cycle-1));
           }
 
           ++number_of_added_faults;
@@ -144,7 +134,7 @@ bool FaultManager::RedundantFaultLocation() const {
 
   std::map<std::pair<uint64_t, uint64_t>, bool> seenKeys;
   for (const auto& fault: this->faults_) {
-    std::pair<uint64_t, uint64_t> key{fault->GetFaultedSignalIndex(), fault->GetFaultedClockCycle()};
+    std::pair<uint64_t, uint64_t> key{fault->GetSignals()[0]->id, fault->GetCycle()};
     if(seenKeys.find(key) != seenKeys.end()){
       return true;
     }
@@ -172,7 +162,7 @@ void FaultManager::SelectStrategyAndComputeAllFaults(
           "FaultProperties.probability must be in range (0,1)");
     }
 
-    const std::function<void(const SignalStruct&, uint64_t, uint64_t)>
+    const std::function<void(const SignalStruct&, uint64_t)>
         AddFaultFunction({ChoseAddFaultFunction(fault_property)});
     this->max_fault_probability_ = std::max(this->max_fault_probability_, fault_property.probability);
     this->min_fault_probability_ = std::min(this->min_fault_probability_, fault_property.probability);
@@ -269,35 +259,26 @@ double FaultManager::GetMinProbability() const{
   return this->min_fault_probability_;
 }
 
-const std::function<void(const SignalStruct&, uint64_t, uint64_t)>
+const std::function<void(const SignalStruct&, uint64_t)>
 FaultManager::ChoseAddFaultFunction(const FaultProperties& fault_property) {
 
   switch (fault_property.fault_type) {
   case FaultType::stuck_at_0:
-    return [this, &fault_property](const SignalStruct& signal,
-                                   uint64_t signal_index,
-                                   uint64_t clock_signal_index) {
-      AddStuckAtZeroFault(signal, signal_index, clock_signal_index,
-                          fault_property.probability);
+    return [this, &fault_property](const SignalStruct& signal, uint64_t clock_signal_index) {
+      AddStuckAtZeroFault(signal, clock_signal_index, fault_property.probability);
     };
     // AddFault = &FaultManager::AddStuckAtZeroFault; // No Lambda
     break;
 
   case FaultType::stuck_at_1:
-    return [this, &fault_property](const SignalStruct& signal,
-                                   uint64_t signal_index,
-                                   uint64_t clock_signal_index) {
-      AddStuckAtOneFault(signal, signal_index, clock_signal_index,
-                         fault_property.probability);
+    return [this, &fault_property](const SignalStruct& signal, uint64_t clock_signal_index) {
+      AddStuckAtOneFault(signal, clock_signal_index, fault_property.probability);
     };
     break;
 
   case FaultType::toggle:
-    return [this, &fault_property](const SignalStruct& signal,
-                                   uint64_t signal_index,
-                                   uint64_t clock_signal_index) {
-      AddToggleFault(signal, signal_index, clock_signal_index,
-                     fault_property.probability);
+    return [this, &fault_property](const SignalStruct& signal, uint64_t clock_signal_index) {
+      AddToggleFault(signal, clock_signal_index, fault_property.probability);
     };
     break;
 
@@ -341,7 +322,7 @@ FaultSet FaultManager::SampleRandomFault(std::mt19937 &gen){
     // const double probabilities[] = {
     //   fault->GetNotFaultProbability(), fault->GetFaultProbability()
     // };
-    std::bernoulli_distribution dist(fault->GetFaultProbability());
+    std::bernoulli_distribution dist(fault->GetProbability());
     if(dist(gen)){
       fault_set_elements.push_back(fault.get());
       // std::cout << "Cycle: " << fault->GetFaultedClockCycle();

@@ -18,6 +18,9 @@ Gates Blacklist::FilterGates(const gdstk::Library &lib,
 
   Gates gates;
   gdstk::Cell * top_module = lib.get_cell(top_level_name.c_str());
+  if (top_module == NULL) {
+    throw std::runtime_error("No module named " + top_level_name + "found in the given gds file!");
+  }
 
 
   for (size_t i = 0; i < top_module->reference_array.count; ++i) {
@@ -52,7 +55,7 @@ Blacklist operator+(Blacklist lhs, Blacklist & rhs) {
  */
 std::ostream& operator<<(std::ostream &out, Blacklist const& blacklist) {
     for (const auto& element : blacklist.elements) {
-        out << element << std::endl;
+        out << element;
     }
     return out;
 }

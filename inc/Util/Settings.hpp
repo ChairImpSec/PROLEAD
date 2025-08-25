@@ -14,7 +14,6 @@
 #include "Util/CpuCoreSelector.hpp"
 #include "Util/SettingsSchema.hpp"
 #include "Util/Sharing.hpp"
-// #include "Hardware/Fault.hpp"
 #include "Types.hpp"
 
 
@@ -117,7 +116,7 @@ struct CoordinateConf{
 
 struct FaultInjectionSettings {
   FaultType type; // TODO: remove? included in fault_properties
-  CoordinateConf resolution; // TODO: for GDSScanner
+  CoordinateConf resolution = {100, 100}; // TODO: for GDSScanner
   ProbeShape probe;
 
 
