@@ -3,8 +3,6 @@
 
 PROLEAD and FIESTA build a versatile C++ framework for analyzing the security of implementations against side-channel analysis and fault injection attacks. 
 
----
-
 ## Documentation
 All information about the features and use of PROLEAD can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki">Wiki</a>.
 
