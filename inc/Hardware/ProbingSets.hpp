@@ -7,13 +7,13 @@
  *
  * @author Nicolai Müller
  */
-
 #pragma once
 
 #include <algorithm>
 #include <execution>
 #include <memory>
 #include <queue>
+#include <unordered_set>
 
 #include "Hardware/Simulate.hpp"
 #include "Util/Settings.hpp"
@@ -70,8 +70,11 @@ class ProbingSet {
   bool IsSampleSizeSufficient(uint64_t number_of_samples, const Settings& settings) const;
 
   private:
+    uint64_t number_of_enablers_;
+    uint64_t number_of_extensions_; 
     std::vector<const Probe*> probes_;
     std::vector<const Probe*> extensions_;
+    std::vector<Simulator> simulators_;
 
     void Extend(const CircuitStruct& circuit);
 

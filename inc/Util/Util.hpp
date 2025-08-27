@@ -26,6 +26,8 @@
 #include "boost/random.hpp"
 #include <sys/resource.h>
 
+#include "Util/Simulator.hpp"
+
 /**
  * @brief Represents an observation set made by a set of probes.
  *
@@ -87,14 +89,14 @@ using TableBucketVector = std::vector<TableEntry>;
  * count of occurrences.
  *
  * @param observations The bucket (vector) to sort and merge.
- * @param size_of_key_in_bytes The size of the keys in bytes, used for comparing
+ * @param key_size_in_bytes The size of the keys in bytes, used for comparing
  * keys.
  * @param number_of_groups The number of groups, used to determine the length of
  * the `Data` array.
  */
 template <typename BucketContainer>
 void SortAndMergeDuplicates(BucketContainer& observations,
-                            uint64_t size_of_key_in_bytes,
+                            uint64_t key_size_in_bytes,
                             uint64_t number_of_groups);
 
 /**
@@ -110,14 +112,14 @@ void SortAndMergeDuplicates(BucketContainer& observations,
  * @param bucket The vector representing the bucket where data is merged.
  * @param observations The vector containing observations to merge into the
  * bucket. Elements that are merged will be removed.
- * @param size_of_key_in_bytes The size of the key in bytes used for comparison.
+ * @param key_size_in_bytes The size of the key in bytes used for comparison.
  * @param number_of_groups The number of groups of data associated with each
  * key.
  */
 template <typename BucketContainer>
 void UpdateBucketWithBucket(BucketContainer& bucket,
                             BucketContainer& observations,
-                            uint64_t size_of_key_in_bytes,
+                            uint64_t key_size_in_bytes,
                             uint64_t number_of_groups);
 
 /**
@@ -255,7 +257,7 @@ class ContingencyTable {
    * measured in bytes. It is used to perform comparisons of the keys within the
    * table.
    */
-  uint64_t size_of_key_in_bytes_;
+  uint64_t key_size_in_bytes_;
 
   /**
    * @brief The logarithm base 10 of the p-value.
@@ -292,7 +294,7 @@ class ContingencyTable {
    *
    * The sorting is based on the comparison of keys using `std::memcmp` to
    * ensure that the keys are compared correctly according to their byte size
-   * defined by `size_of_key_in_bytes_`.
+   * defined by `key_size_in_bytes_`.
    */
   void SortBucket(uint64_t number_of_entries);
 
@@ -374,10 +376,12 @@ class ContingencyTable {
    * G-test.
    * @return Computed G-test statistic for the contingency table.
    */
-  double SetGTestStatistic(uint64_t number_of_groups,
-                             uint64_t number_of_simulations,
+  double SetGTestStatistic(uint64_t number_of_groups, uint64_t number_of_simulations,
                              std::vector<double>& group_simulation_ratio,
                              uint64_t& degrees_of_freedom) const;
+  double SetGTestStatistic(uint64_t number_of_groups, uint64_t number_of_simulations, 
+    const Simulator& simulator, std::vector<double>& group_simulation_ratio, 
+    uint64_t& degrees_of_freedom) const;
 
   /**
    * @brief Computes the negative log base 10 of the p-value for a given G-test
@@ -395,18 +399,13 @@ class ContingencyTable {
    * @return The negative log base 10 of the p-value corresponding to the
    * provided G-test statistic. Returns 0.0 if degrees of freedom are zero.
    */
-  double ComputeLog10pValue(double g_test_statistic,
-                              uint64_t degrees_of_freedom) const;
+  double ComputeLog10pValue(double g_test_statistic, uint64_t degrees_of_freedom) const;
 };
-
 
 void StartClock(timespec& start);
 double EndClock(timespec& start);
 std::string GetTimestamp();
 void GenerateThreadRng(std::vector<boost::mt19937>& rng,
                        uint64_t number_of_threads);
-void ExtractCombinationFromBitmask(std::vector<uint64_t>& combination,
-                                   std::vector<bool>& bitmask);
-
 uint64_t GetUsedMemory();
 

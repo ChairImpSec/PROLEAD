@@ -7,25 +7,31 @@ Enabler::Enabler(Expression const* glitch_expr, Expression const* propagation_ex
     glitch_output_(glitch_output), propagation_output_(propagation_output) {}
 
 void Enabler::EvalGlitch(uint64_t step_idx) {
-  assert(glitch_expr_ != nullptr && "Error in Enabler::EvalGlitch(): Expression is NULL!");
-  std::vector<uint64_t> inputs;
-  inputs.reserve(inputs_.size());
-  for (const uint64_t* input : inputs_) {
-    inputs.push_back(input[step_idx]);
-  }
+  if (glitch_expr_ == nullptr) {
+    glitch_output_[step_idx] = UINT64_MAX;
+  } else {
+    std::vector<uint64_t> inputs;
+    inputs.reserve(inputs_.size());
+    for (const uint64_t* input : inputs_) {
+      inputs.push_back(input[step_idx]);
+    }
 
-  glitch_output_[step_idx] = glitch_expr_->Eval(inputs);
+    glitch_output_[step_idx] = glitch_expr_->Eval(inputs);
+  }
 }
 
 void Enabler::EvalPropagation(uint64_t step_idx) {
-  assert(propagation_expr_ != nullptr && "Error in Enabler::EvalPropagation(): Expression is NULL!");
-  std::vector<uint64_t> inputs;
-  inputs.reserve(inputs_.size());
-  for (const uint64_t* input : inputs_) {
-    inputs.push_back(input[step_idx]);
-  }
+  if (propagation_expr_ == nullptr) {
+    propagation_output_[step_idx] = UINT64_MAX;
+  } else {
+    std::vector<uint64_t> inputs;
+    inputs.reserve(inputs_.size());
+    for (const uint64_t* input : inputs_) {
+      inputs.push_back(input[step_idx]);
+    }
 
-  propagation_output_[step_idx] = propagation_expr_->Eval(inputs);
+    propagation_output_[step_idx] = propagation_expr_->Eval(inputs);
+  }
 }
 
 uint64_t Enabler::GetPropagationValue(uint64_t step_idx) const {

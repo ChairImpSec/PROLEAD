@@ -8,3 +8,4 @@ enum class FaultAnalysis { none, only_fault_free_simulations, only_faulty_simula
 
 enum class clk_edge_t {undef, rising, falling, both};
 enum class analysis_t {sca, fia};
+enum class sca_notion_t { none, ps, ni, sni, pini, opini };

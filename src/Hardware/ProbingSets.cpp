@@ -24,19 +24,7 @@ const std::vector<const Probe*>& ProbingSet::GetProbes() const {
 }
 
 uint64_t ProbingSet::GetSizeOfKeyInBits() const {
-  uint64_t result = 0;
-
-  assert(!probes_.empty() && "Error in ProbingSet::GetSizeOfKeyInBits(): No probes!");
-  for (const Probe* probe : probes_) {
-    result += probe->GetNumberOfExtensions();
-    result += probe->GetNumberOfEnablers();
-  }
-
-  if (result) {
-    return result;
-  } else {
-    return extensions_.size();
-  }
+  return number_of_extensions_ + number_of_enablers_;
 }
 
 const Probe* ProbingSet::GetFirstExtension() const {
@@ -158,20 +146,20 @@ void ProbingSet::CompactRelaxedTableUpdate(const Settings& settings, const Simul
   std::vector<const Probe*> extensions;
   const Probe* probe = nullptr;
   const Enabler* enabler = nullptr;
-  std::set<const Enabler*> finished_enabler;
+  std::unordered_set<const Enabler*> finished_enabler;
 
   uint64_t number_of_simulations =
       simulation.considered_simulation_indices_.size();
 
   for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
     extensions.clear();
+    finished_enabler.clear();
     sim_idx = simulation.considered_simulation_indices_[idx];
     grp_idx = simulation.selected_groups_[sim_idx];
     ctr = 0;
 
     for (const Probe* standard_probe : probes_) {
       indices.push(standard_probe);
-      finished_enabler.clear();
 
       while (!indices.empty()) {
         probe = indices.front();
@@ -183,7 +171,7 @@ void ProbingSet::CompactRelaxedTableUpdate(const Settings& settings, const Simul
             extensions.push_back(extension);
           }
         } else {
-          if (finished_enabler.find(enabler) == finished_enabler.end()) {      
+          if (finished_enabler.insert(enabler).second) {      
             if ((probe->GetBitslicedPropValue(sim_idx >> 6) >> (sim_idx & 0b111111)) & 1) {
               for (const Probe* extension : probe->GetGlitchExtensions()) {
                 indices.push(extension);
@@ -193,8 +181,6 @@ void ProbingSet::CompactRelaxedTableUpdate(const Settings& settings, const Simul
                 extensions.push_back(extension);
               }
             }
-
-            finished_enabler.insert(enabler);
           }
         }
       }
@@ -248,7 +234,7 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
   std::vector<const Probe*> extensions;
   const Probe* probe = nullptr;
   const Enabler* enabler = nullptr;
-  std::set<const Enabler*> finished_enabler;
+  std::unordered_set<const Enabler*> finished_enabler;
 
   uint64_t number_of_simulations =
       simulation.considered_simulation_indices_.size();
@@ -266,13 +252,12 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
 
   for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
     sim_idx = simulation.considered_simulation_indices_[idx];
-    extensions.clear();
     en_idx = 0;
+    extensions.clear();
+    finished_enabler.clear();
 
     for (const Probe* standard_probe : probes_) {
       indices.push(standard_probe);
-      finished_enabler.clear();
-
 
       while (!indices.empty()) {
         probe = indices.front();
@@ -284,35 +269,31 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
             extensions.push_back(extension);
           }
         } else {
-          if (finished_enabler.find(enabler) == finished_enabler.end()) {      
+          if (finished_enabler.insert(enabler).second) {      
             if ((probe->GetBitslicedPropValue(sim_idx >> 6) >> (sim_idx & 0b111111)) & 1) {
               for (const Probe* extension : probe->GetGlitchExtensions()) {
                 indices.push(extension);
               }
 
-              key_idx = en_idx + finished_enabler.size();
-              datasets[idx].key_[key_idx >> 3] |= 1 << (key_idx & 0b111);
+              datasets[idx].key_[en_idx >> 3] |= 1 << (en_idx & 0b111);
+              en_idx++;
             } else {
               for (const Probe* extension : probe->GetTransitionExtensions()) {
                 extensions.push_back(extension);
               }
             }
-
-            finished_enabler.insert(enabler);
           }
         }
       }
-
-      en_idx += probe->GetNumberOfEnablers();
     }
 
     std::sort(extensions.begin(), extensions.end());
     extensions.erase(std::unique(extensions.begin(), extensions.end()), extensions.end());
 
     for (uint64_t ext_idx = 0; ext_idx < extensions.size(); ++ext_idx) {
-      key_idx = (ext_idx + en_idx) >> 3;
+      key_idx = (ext_idx + number_of_enablers_) >> 3;
       datasets[idx].key_[key_idx] |= ((extensions[ext_idx]->GetBitslicedValue(0, sim_idx >> 6) >>
-        (sim_idx & 0b111111)) & 1) << ((ext_idx + en_idx) & 0b111);
+        (sim_idx & 0b111111)) & 1) << ((ext_idx + number_of_enablers_) & 0b111);
     }
   }
 
@@ -323,13 +304,13 @@ void ProbingSet::NormalRobustTableUpdate(const Settings& settings, const Simulat
   uint64_t group_index;
   TableBucketVector datasets;
   uint64_t number_of_extended_probes = GetSizeOfKeyInBits();
-  uint64_t size_of_key_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
+  uint64_t key_size_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
   uint64_t tmp_index, value;
 
   datasets.resize(simulation.considered_simulation_indices_.size());
   for (uint64_t idx = 0; idx < simulation.considered_simulation_indices_.size(); ++idx) {
-    datasets[idx].key_ = std::make_unique<uint8_t[]>(size_of_key_in_bytes);
-    std::memset(datasets[idx].key_.get(), 0, size_of_key_in_bytes);
+    datasets[idx].key_ = std::make_unique<uint8_t[]>(key_size_in_bytes);
+    std::memset(datasets[idx].key_.get(), 0, key_size_in_bytes);
     datasets[idx].data_ = std::make_unique<uint32_t[]>(settings.GetNumberOfGroups());
     std::memset(datasets[idx].data_.get(), 0, sizeof(uint32_t) * settings.GetNumberOfGroups());
 
@@ -366,16 +347,26 @@ void ProbingSet::IncrementSpecificCounter(uint64_t key_index, uint64_t group_ind
 
 void ProbingSet::Extend(const CircuitStruct& circuit) {
   std::queue<const Probe*> path;
+  std::unordered_set<const Probe*> visited;
+  std::vector<const Enabler*> enablers;
 
   for (const Probe* probe : probes_) {
-    path.push(probe);
+    if (visited.insert(probe).second) {
+      path.push(probe);
+    }
   }
 
   while (!path.empty()) {
     const Probe* probe = path.front();
     if (probe->DoesExtend(circuit)) {
+      if (probe->GetEnabler() != nullptr) {
+        enablers.push_back(probe->GetEnabler());
+      }
+      enablers.push_back(probe->GetEnabler());
       for (const Probe* extension : probe->GetGlitchExtensions()) {
-        path.push(extension);
+        if (visited.insert(extension).second) {
+          path.push(extension);
+        }
       }
     } else {
       for (const Probe* extension : probe->GetTransitionExtensions()) {
@@ -387,7 +378,8 @@ void ProbingSet::Extend(const CircuitStruct& circuit) {
   }
 
   std::sort(extensions_.begin(), extensions_.end(), [](const Probe* lhs, const Probe* rhs) {return *lhs < *rhs;});
-  extensions_.erase(std::unique(extensions_.begin(), extensions_.end()), extensions_.end());    
+  extensions_.erase(std::unique(extensions_.begin(), extensions_.end()), extensions_.end()); 
+  number_of_enablers_ = enablers.size();
+  number_of_extensions_ = extensions_.size();
 }
-
 }  // namespace Hardware

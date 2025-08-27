@@ -89,7 +89,7 @@
             "MUX2_X2",
             "MUX2_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -109,7 +109,7 @@
             "AND4_X2",
             "AND4_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -168,7 +168,7 @@
             "NAND3_X2",
             "NAND3_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -188,7 +188,7 @@
             "NAND4_X2",
             "NAND4_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -228,7 +228,7 @@
             "NOR3_X2",
             "NOR3_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -508,7 +508,7 @@
             "NOR4_X2",
             "NOR4_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -574,7 +574,7 @@
             "OR3_X2",
             "OR3_X4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",

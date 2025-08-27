@@ -1,0 +1,93 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "no"
+  },
+  "simulation": {
+    "groups": [
+      "2'b$$",
+      "2'b11"
+    ],
+    "output_shares": [
+      "x1",
+      "x2"
+    ],
+    "expected_output": [
+      "1'b$",
+      "1'b1"
+    ],
+    "number_of_clock_cycles": 3,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "{a1,b1,a2,b2,a2_bar,b2_bar,r,rst}",
+            "value": "8'h01"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "a1",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "b1",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "r",
+            "value": "1'b$"
+          },
+          {
+            "name": "rst",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "a2",
+            "value": "group_in1[0]"
+          },
+          {
+            "name": "b2",
+            "value": "group_in1[1]"
+          },
+          {
+            "name": "a2_bar",
+            "value": "~group_in1[0]"
+          },
+          {
+            "name": "b2_bar",
+            "value": "~group_in1[1]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 16384,
+    "number_of_simulations_per_step": 1024,
+    "number_of_simulations_per_write": 16384
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "clock_cycles": ["3"],
+    "order": 1,
+    "transitional_leakage": false,
+    "probe_placement":
+    {
+      "include": {
+        "signals": "x2",
+        "paths": "(?!)"
+      },
+      "exclude": {
+        "signals": "(?!)",
+        "paths": "(?!)"
+      }	
+    }
+  }
+}

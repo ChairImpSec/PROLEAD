@@ -1,0 +1,98 @@
+{
+    "placed_probes": [
+        "port_c[1](1)",
+        "port_c[0](1)",
+        "j0(1)",
+        "j1(1)",
+        "port_c[1](2)",
+        "port_c[0](2)",
+        "j0(2)",
+        "j1(2)"
+    ],
+    "extended_probes": [
+        "port_a[1](1)",
+        "port_a[0](1)",
+        "port_b[1](1)",
+        "port_b[0](1)",
+        "port_r[0](1)",
+        "l0(1)",
+        "l1(1)",
+        "port_a[1](2)",
+        "port_a[0](2)",
+        "port_b[1](2)",
+        "port_b[0](2)",
+        "port_r[0](2)",
+        "l0(2)",
+        "l1(2)"
+    ],
+    "extensions": [
+        {
+            "signals": "i0",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i1",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "i2",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i3",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "inv_r",
+            "glitch_extension": [
+                "port_r[0]"
+            ]
+        },
+        {
+            "signals": "port_c[1]",
+            "glitch_extension": [
+                "l1",
+                "i3"
+            ]
+        },
+        {
+            "signals": "port_c[0]",
+            "glitch_extension": [
+                "l0",
+                "i0"
+            ]
+        },
+        {
+            "signals": "r",
+            "glitch_extension": [
+                "inv_r"
+            ]
+        },
+        {
+            "signals": "j0",
+            "glitch_extension": [
+                "i1",
+                "r"
+            ]
+        },
+        {
+            "signals": "j1",
+            "glitch_extension": [
+                "i2",
+                "r"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "placed_probes": [
+        "port_c[1](2)",
+        "port_c[0](2)"
+    ],
+    "extended_probes": [
+        "port_c[1](2)",
+        "port_c[0](2)"
+    ],
+    "extensions": ""
+}

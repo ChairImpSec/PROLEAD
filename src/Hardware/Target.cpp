@@ -73,8 +73,7 @@ std::string Target::Print(clk_edge_t edge, bool with_cycle) const {
   return result;
 }
 
-Probe::Probe(const std::vector<const SignalStruct*>& signals, uint64_t cycle)
-  : Target(signals, cycle), number_of_extensions_on_path_(0), number_of_enablers_on_path_(0) {}
+Probe::Probe(const std::vector<const SignalStruct*>& signals, uint64_t cycle) : Target(signals, cycle) {}
 
 bool Probe::DoesExtend(const CircuitStruct& circuit) const {
   const std::vector<const SignalStruct*>& signals = this->GetSignals();
@@ -107,14 +106,6 @@ const std::vector<const Probe*>& Probe::GetCouplingExtensions() const {
   return coupling_extensions_;
 }
 
-uint64_t Probe::GetNumberOfExtensions() const { 
-  return number_of_extensions_on_path_; 
-}
-
-uint64_t Probe::GetNumberOfEnablers() const { 
-  return number_of_enablers_on_path_; 
-}
-
 void Probe::Extend(const CircuitStruct& circuit, const std::vector<Probe>& probes, const Settings& settings) {
   const std::vector<const SignalStruct*>& signals = GetSignals();
   assert(!signals.empty() && "Error in Probe::Extend(): No probes!");
@@ -129,23 +120,7 @@ void Probe::Extend(const CircuitStruct& circuit, const std::vector<Probe>& probe
         auto it = std::find(probes.begin(), probes.end(), probe);
         if (it != probes.end()) {
           glitch_extensions_.push_back(&(*it));
-          assert((it->number_of_extensions_on_path_ != 0 || !settings.IsRelaxedModel()) &&
-                "Error in Probe::Extend(): Previous probe was not extended!");
-          number_of_extensions_on_path_ += it->GetNumberOfExtensions();
-          number_of_enablers_on_path_ += it->GetNumberOfEnablers();
         }  
-      }
-
-      if (settings.IsRelaxedModel()) {
-        number_of_enablers_on_path_++;
-      }
-    } else {
-      if (settings.IsRelaxedModel()) {
-        if (GetCycle()) {
-          number_of_extensions_on_path_ = 2;
-        } else {
-          number_of_extensions_on_path_ = 1;
-        }
       }
     }
     
@@ -191,6 +166,15 @@ bool Probe::IsPlaced(const CircuitStruct& circuit) const {
     }
   }
 
+  return false;
+}
+
+bool Probe::IsInternal() const {
+  for (const SignalStruct* signal : this->GetSignals()) {
+    if (signal->NumberOfInputs) {
+      return true;
+    }
+  }
   return false;
 }
 

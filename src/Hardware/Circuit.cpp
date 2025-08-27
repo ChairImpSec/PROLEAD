@@ -476,7 +476,6 @@ CircuitStruct::CircuitStruct(const std::string& design_file_name,
   SetIsExtensionAllowed(settings);
   SetIsAnalysisAllowed(settings);
   SetIsFaultAllowed(settings);
-  BOOST_LOG_TRIVIAL(info) << topmodule_name << " is read!";
 
   for (uint64_t idx = 0; idx < cells_.size(); ++idx) {
     if (cells_[idx].type->GetType() != cell_t::sequential) {
@@ -492,6 +491,8 @@ CircuitStruct::CircuitStruct(const std::string& design_file_name,
   for (SignalStruct& signal : signals_) {
     signal.id = ctr++;
   }
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully read design file with topmodule \"" << topmodule_name << "\"!";
 }
 
 void CircuitStruct::MakeCircuitDepth(bool relaxed) {
@@ -1403,8 +1404,6 @@ int CircuitStruct::ReadDesignFile(
   int NumberOfOutputPorts = 0;
   FileBufferStruct FileBuffer;
   struct stat file_status;
-
-  BOOST_LOG_TRIVIAL(info) << "Reading \"" << top_module_name << "\"...";
 
   NumberOfSignals = 0;
   NumberOfOutputs = 0;

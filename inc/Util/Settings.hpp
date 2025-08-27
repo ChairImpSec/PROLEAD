@@ -63,6 +63,8 @@ struct SimulationSettings {
   uint64_t number_of_simulations;
   uint64_t number_of_simulations_per_step;
   uint64_t number_of_simulations_per_write;
+  std::map<std::tuple<uint64_t, uint64_t>, uint64_t> group_mapping;
+  std::map<uint64_t, uint64_t> group_mapping_with_one_share;
   std::vector<std::vector<vlog_bit_t>> groups;
   std::vector<std::vector<std::string>> output_shares;
   std::vector<std::vector<vlog_bit_t>> expected_outputs;
@@ -78,6 +80,7 @@ struct SideChannelAnalysisSettings {
   bool transitional_leakage;
   uint64_t order;
   Analysis variate;
+  sca_notion_t notion;
   uint64_t distance;
   double effect_size;
   double alpha_threshold;
@@ -280,4 +283,5 @@ public:
   void ParseSideChannelAnalysisSettings(const boost::json::object& json_object, const std::string& identifier, SideChannelAnalysisSettings& settings);
   void ParseFaultAdversaries(const boost::json::object& json_object, std::vector<std::vector<FaultProperties>>& adversaries);
   void ParseFaultInjectionSettings(const boost::json::object& json_object, const std::string& identifier, FaultInjectionSettings& settings);
+  void SetAlternativeGroups();
 };

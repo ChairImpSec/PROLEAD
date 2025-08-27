@@ -2,7 +2,6 @@
 
 #include <omp.h>
 
-#include <algorithm>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/math/special_functions/binomial.hpp>
 #include "Hardware/Enabler.hpp"
@@ -48,15 +47,26 @@ class Adversaries {
   const std::vector<Enabler>& GetEnablers() const;
 
   double Eval(std::vector<SharedData>& shared_data);
-
-
-  void SetProbes();  
+ 
 
   private:
     std::vector<Probe> probes_;
+    std::vector<UniqueProbe> unique_probes_;
     std::vector<Enabler> enabler_;
     std::vector<const Probe*> placed_probes_;
     std::vector<const Probe*> extensions_;
+    std::vector<ProbingSet> probing_sets_;
+    FaultManager fault_manager_;
+
+    void SetProbes(); 
+    void SetUniqueProbes();
+    void SetEnablers(); 
+    void SetSimulators();
+    void SetFaults(); 
+
+    uint64_t GetProbingSetColumnSize();
+    void SetConsideredSimulations(
+      std::vector<uint64_t>& number_of_simulations_per_group);
 
     void CompactTableUpdate(uint64_t sim_idx, std::vector<uint64_t>& counters);
     void CompactRobustTest(std::vector<double>& group_simulation_ratio);
@@ -72,86 +82,6 @@ class Adversaries {
     double EvalCombinations(std::vector<SharedData>& shared_data, timespec& start_time, const std::vector<std::vector<bool>>& combinations);
 
 
-  //Printer<ExtensionContainer> printer_;
-
-
-  /**
-   * The list of all standard probes, i.e. all probes that the adversary can
-   * place.
-   */
-  std::vector<Probe> standard_probes_;
-
-  /**
-   * The list of all extended probes, i.e. all probes that can be set by
-   * extending the standard probes.
-   */
-  std::vector<Probe> extended_probes_;
-
-  std::vector<UniqueProbe> unique_probes_;
-
-  /**
-   * The list of all unique probes. Only required in the compact mode.
-   */
-  // std::vector<UniqueProbe> unique_probes_;
-
-  std::vector<ProbingSet> probing_sets_;
-
-  /**
-   * The list of all fault targets, i.e. all possible locations where a fault
-   * injection is allowed.
-   */
-  FaultManager fault_manager_;
-
-  uint64_t GetProbingSetColumnSize();
-
-  void SetSpots(CircuitStruct& circuit);
-
-  /**
-   * To create the standard probes we use the probe-extensions and extend it
-   * with a notion of time. This leads to a list of all standard probes which
-   * are considered.
-   *
-   * @brief Sets all possible standard probes
-   * @author Nicolai Müller
-   */
-  void SetStandardProbes();
-
-  /**
-   * To create a list of extended probes we go thorugh the probe extensions and
-   * consider all extensions extended by a notion of time.
-   * This leads to a list of all extended probes which are considered.
-   *
-   * @brief Sets all possible extended probes
-   * @author Nicolai Müller
-   */
-  void SetExtendedProbes();
-
-  /**
-   *
-   * @brief Sets all possible unique probes
-   * @author Nicolai Müller
-   */
-  void SetUniqueProbes();
-
-  void SetEnablers();
-
-  void SetConsideredSimulations(
-      std::vector<uint64_t>& number_of_simulations_per_group);
-
-  /**
-   * To create a list of unique probes we go thorugh the probe extensions and
-   * and set in which probing sets the extended probe occurrs.
-   *
-   * @brief Sets all unique probes
-   * @author Nicolai Müller
-   */
-  // void SetUniqueProbes();
-
-  /**
-   * @brief Finds all relevant positions for injecting faults
-   * @author Aykan Yüce
-   */
-  void SetFaults();
 
   /**
    * @brief Removes duplicated and strictly-less informative probing sets.

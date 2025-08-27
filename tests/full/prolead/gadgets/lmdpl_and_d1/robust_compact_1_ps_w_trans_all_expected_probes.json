@@ -1,0 +1,316 @@
+{
+    "placed_probes": [
+        "t_out[7](3)",
+        "t_out[6](3)",
+        "t_out[5](3)",
+        "t_out[4](3)",
+        "t_out[3](3)",
+        "t_out[2](3)",
+        "t_out[1](3)",
+        "t_out[0](3)",
+        "mask_table_generator_layer_n5(3)",
+        "mask_table_generator_layer_n3(3)",
+        "mask_table_generator_layer_n1(3)",
+        "reg_n1(3)",
+        "operation_layer_inst_rail_s[3](3)",
+        "operation_layer_inst_rail_s[2](3)",
+        "operation_layer_inst_rail_s[1](3)",
+        "operation_layer_inst_rail_s[0](3)",
+        "operation_layer_inst_rail_bar_s[3](3)",
+        "operation_layer_inst_rail_bar_s[2](3)",
+        "operation_layer_inst_rail_bar_s[1](3)",
+        "operation_layer_inst_rail_bar_s[0](3)",
+        "x2(3)",
+        "x2_bar(3)",
+        "mask_table_generator_layer_n4(3)",
+        "mask_table_generator_layer_n2(3)",
+        "t_in[3](3)",
+        "t_in[0](3)",
+        "reg_N6(3)",
+        "reg_N3(3)",
+        "t_in[7](3)",
+        "t_in[4](3)",
+        "t_in[2](3)",
+        "t_in[1](3)",
+        "reg_N10(3)",
+        "reg_N7(3)",
+        "reg_N5(3)",
+        "reg_N4(3)",
+        "t_in[6](3)",
+        "t_in[5](3)",
+        "reg_N9(3)",
+        "reg_N8(3)"
+    ],
+    "extended_probes": [
+        "rst(2)",
+        "a1(2)",
+        "b1(2)",
+        "a2(2)",
+        "a2_bar(2)",
+        "b2(2)",
+        "b2_bar(2)",
+        "r(2)",
+        "t_out[7](2)",
+        "t_out[6](2)",
+        "t_out[5](2)",
+        "t_out[4](2)",
+        "t_out[3](2)",
+        "t_out[2](2)",
+        "t_out[1](2)",
+        "t_out[0](2)",
+        "rst(3)",
+        "a1(3)",
+        "b1(3)",
+        "a2(3)",
+        "a2_bar(3)",
+        "b2(3)",
+        "b2_bar(3)",
+        "r(3)",
+        "t_out[7](3)",
+        "t_out[6](3)",
+        "t_out[5](3)",
+        "t_out[4](3)",
+        "t_out[3](3)",
+        "t_out[2](3)",
+        "t_out[1](3)",
+        "t_out[0](3)"
+    ],
+    "extensions": [
+        {
+            "signals": "x1",
+            "glitch_extension": [
+                "r"
+            ]
+        },
+        {
+            "signals": "mask_table_generator_layer_n5",
+            "glitch_extension": [
+                "a1",
+                "b1"
+            ]
+        },
+        {
+            "signals": "mask_table_generator_layer_n3",
+            "glitch_extension": [
+                "b1"
+            ]
+        },
+        {
+            "signals": "mask_table_generator_layer_n1",
+            "glitch_extension": [
+                "a1",
+                "b1"
+            ]
+        },
+        {
+            "signals": "reg_n1",
+            "glitch_extension": [
+                "rst"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_s[3]",
+            "glitch_extension": [
+                "a2",
+                "b2",
+                "t_out[7]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_s[2]",
+            "glitch_extension": [
+                "a2_bar",
+                "b2",
+                "t_out[6]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_s[1]",
+            "glitch_extension": [
+                "a2",
+                "b2_bar",
+                "t_out[5]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_s[0]",
+            "glitch_extension": [
+                "a2_bar",
+                "b2_bar",
+                "t_out[4]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_bar_s[3]",
+            "glitch_extension": [
+                "a2",
+                "b2",
+                "t_out[3]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_bar_s[2]",
+            "glitch_extension": [
+                "a2_bar",
+                "b2",
+                "t_out[2]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_bar_s[1]",
+            "glitch_extension": [
+                "a2",
+                "b2_bar",
+                "t_out[1]"
+            ]
+        },
+        {
+            "signals": "operation_layer_inst_rail_bar_s[0]",
+            "glitch_extension": [
+                "a2_bar",
+                "b2_bar",
+                "t_out[0]"
+            ]
+        },
+        {
+            "signals": "x2",
+            "glitch_extension": [
+                "operation_layer_inst_rail_s[3]",
+                "operation_layer_inst_rail_s[2]",
+                "operation_layer_inst_rail_s[1]",
+                "operation_layer_inst_rail_s[0]"
+            ]
+        },
+        {
+            "signals": "x2_bar",
+            "glitch_extension": [
+                "operation_layer_inst_rail_bar_s[3]",
+                "operation_layer_inst_rail_bar_s[2]",
+                "operation_layer_inst_rail_bar_s[1]",
+                "operation_layer_inst_rail_bar_s[0]"
+            ]
+        },
+        {
+            "signals": "mask_table_generator_layer_n4",
+            "glitch_extension": [
+                "a1",
+                "mask_table_generator_layer_n3"
+            ]
+        },
+        {
+            "signals": "mask_table_generator_layer_n2",
+            "glitch_extension": [
+                "a1",
+                "mask_table_generator_layer_n3"
+            ]
+        },
+        {
+            "signals": "t_in[3]",
+            "glitch_extension": [
+                "r",
+                "mask_table_generator_layer_n1"
+            ]
+        },
+        {
+            "signals": "t_in[0]",
+            "glitch_extension": [
+                "r",
+                "mask_table_generator_layer_n5"
+            ]
+        },
+        {
+            "signals": "reg_N6",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[3]"
+            ]
+        },
+        {
+            "signals": "reg_N3",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[0]"
+            ]
+        },
+        {
+            "signals": "t_in[7]",
+            "glitch_extension": [
+                "t_in[3]"
+            ]
+        },
+        {
+            "signals": "t_in[4]",
+            "glitch_extension": [
+                "t_in[0]"
+            ]
+        },
+        {
+            "signals": "t_in[2]",
+            "glitch_extension": [
+                "r",
+                "mask_table_generator_layer_n2"
+            ]
+        },
+        {
+            "signals": "t_in[1]",
+            "glitch_extension": [
+                "r",
+                "mask_table_generator_layer_n4"
+            ]
+        },
+        {
+            "signals": "reg_N10",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[7]"
+            ]
+        },
+        {
+            "signals": "reg_N7",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[4]"
+            ]
+        },
+        {
+            "signals": "reg_N5",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[2]"
+            ]
+        },
+        {
+            "signals": "reg_N4",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[1]"
+            ]
+        },
+        {
+            "signals": "t_in[6]",
+            "glitch_extension": [
+                "t_in[2]"
+            ]
+        },
+        {
+            "signals": "t_in[5]",
+            "glitch_extension": [
+                "t_in[1]"
+            ]
+        },
+        {
+            "signals": "reg_N9",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[6]"
+            ]
+        },
+        {
+            "signals": "reg_N8",
+            "glitch_extension": [
+                "reg_n1",
+                "t_in[5]"
+            ]
+        }
+    ]
+}

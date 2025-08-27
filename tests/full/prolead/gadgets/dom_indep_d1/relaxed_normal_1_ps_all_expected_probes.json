@@ -1,0 +1,104 @@
+{
+    "placed_probes": [
+        "l0(2)",
+        "l1(2)",
+        "i0(2)",
+        "i1(2)",
+        "i2(2)",
+        "i3(2)",
+        "port_c[1](2)",
+        "port_c[0](2)",
+        "j0(2)",
+        "j1(2)"
+    ],
+    "extended_probes": [
+        "port_a[1](1)",
+        "port_a[0](1)",
+        "port_b[1](1)",
+        "port_b[0](1)",
+        "port_r[0](1)",
+        "l0(1)",
+        "l1(1)",
+        "i0(1)",
+        "i1(1)",
+        "i2(1)",
+        "i3(1)",
+        "port_c[1](1)",
+        "port_c[0](1)",
+        "j0(1)",
+        "j1(1)",
+        "port_a[1](2)",
+        "port_a[0](2)",
+        "port_b[1](2)",
+        "port_b[0](2)",
+        "port_r[0](2)",
+        "l0(2)",
+        "l1(2)",
+        "i0(2)",
+        "i1(2)",
+        "i2(2)",
+        "i3(2)",
+        "port_c[1](2)",
+        "port_c[0](2)",
+        "j0(2)",
+        "j1(2)"
+    ],
+    "extensions": [
+        {
+            "signals": "i0",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i1",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "i2",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i3",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "port_c[1]",
+            "glitch_extension": [
+                "l1",
+                "i3"
+            ]
+        },
+        {
+            "signals": "port_c[0]",
+            "glitch_extension": [
+                "l0",
+                "i0"
+            ]
+        },
+        {
+            "signals": "j0",
+            "glitch_extension": [
+                "port_r[0]",
+                "i1"
+            ]
+        },
+        {
+            "signals": "j1",
+            "glitch_extension": [
+                "port_r[0]",
+                "i2"
+            ]
+        }
+    ]
+}

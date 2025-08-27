@@ -40,6 +40,7 @@ namespace SettingNames {
   extern const std::string BETA_THRESHOLD;
   extern const std::string CLOCK_CYCLES;
   extern const std::string DISTANCE;
+  extern const std::string NOTION;
   extern const std::string EFFECT_SIZE;
   extern const std::string EXTENSION_ROUTES;
   extern const std::string OBSERVED_EXTENSIONS;

@@ -334,9 +334,12 @@ void Adversaries::SetUniqueProbes() {
 void Adversaries::SetEnablers() {
   std::queue<const Probe*> path;
   std::vector<const Probe*> enabled_probes;
+  std::unordered_set<const Probe*> visited;
 
   for (const Probe* probe : placed_probes_) {
-    path.push(probe);
+    if (visited.insert(probe).second) {
+      path.push(probe);
+    }
   }
 
   while (!path.empty()) {
@@ -346,7 +349,7 @@ void Adversaries::SetEnablers() {
       BOOST_LOG_TRIVIAL(trace) << "Probe: " 
         << probe->Print(settings_.GetClkEdge(), true) << " requires an enabler.";
       for (const Probe* extension : probe->GetGlitchExtensions()) {
-        if (extension->DoesExtend(circuit_)) {
+        if (extension->DoesExtend(circuit_) && visited.insert(extension).second) {
           path.push(extension);
         }
       }
@@ -358,9 +361,13 @@ void Adversaries::SetEnablers() {
   std::sort(enabled_probes.begin(), enabled_probes.end(), [](const Probe* lhs, const Probe* rhs) { 
     return *lhs < *rhs; 
   });
+
   enabled_probes.erase(std::unique(enabled_probes.begin(), enabled_probes.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), enabled_probes.end());  
     
+  BOOST_LOG_TRIVIAL(info) << "Successfully detected " 
+    << enabled_probes.size() << " probes that are conditionally extended.";
+
   uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;  
   simulation_.propagation_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(enabled_probes.size());
   simulation_.glitch_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(enabled_probes.size());
@@ -434,6 +441,8 @@ void Adversaries::SetEnablers() {
 
     inputs_.clear();
   }
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully specified " << enabler_.size() << " probe-extension conditions.";
 }
 
 void Adversaries::SetFaults() {
@@ -494,6 +503,7 @@ void Adversaries::SetProbes() {
     { return lhs == rhs; }), probes_.end());
 
   assert(!probes_.empty() && "Error in Adversaries::SetProbes(): No probes found!");
+  BOOST_LOG_TRIVIAL(info) << "Successfully placed " << probes_.size() << " possible probes in total.";
 
   for (Probe& probe : probes_) {
     if (std::find(cycles.begin(), cycles.end(), probe.GetCycle() + 1) != cycles.end()) {
@@ -505,11 +515,15 @@ void Adversaries::SetProbes() {
   }
 
   std::queue<const Probe*> path;
+  std::unordered_set<const Probe*> visited;
+
   for (const Probe* probe : placed_probes_) {
-    path.push(probe);
-    if (settings_.IsRelaxedModel() && probe->DoesExtend(circuit_)) {
-      for (const Probe* extension : probe->GetTransitionExtensions()) {
-        extensions_.push_back(extension);
+    if (visited.insert(probe).second) {
+      path.push(probe);
+      if (settings_.IsRelaxedModel() && probe->DoesExtend(circuit_)) {
+        for (const Probe* extension : probe->GetTransitionExtensions()) {
+          extensions_.push_back(extension);
+        }
       }
     }
   }
@@ -518,12 +532,14 @@ void Adversaries::SetProbes() {
     const Probe* probe = path.front();
     if (probe->DoesExtend(circuit_)) {
       for (const Probe* extension : probe->GetGlitchExtensions()) {
-        if (settings_.IsRelaxedModel()) {
-          for (const Probe* trans : extension->GetTransitionExtensions()) {
-            extensions_.push_back(trans);
-          }        
+        if (visited.insert(extension).second) {
+          path.push(extension);
+          if (settings_.IsRelaxedModel()) {
+            for (const Probe* trans : extension->GetTransitionExtensions()) {
+              extensions_.push_back(trans);
+            }
+          }
         }
-        path.push(extension);
       }
     } else {
       for (const Probe* extension : probe->GetTransitionExtensions()) {
@@ -538,6 +554,11 @@ void Adversaries::SetProbes() {
     [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; });
   extensions_.erase(std::unique(extensions_.begin(), extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), extensions_.end()); 
+  BOOST_LOG_TRIVIAL(info) << "Successfully placed " << extensions_.size() << " possible extensions in total.";
+}
+
+void Adversaries::SetSimulators() {
+  std::cout << "To implemnent!" << std::endl;
 }
 
 Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation, const std::string& topmodule_name)
@@ -548,6 +569,10 @@ Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& set
       fault_manager_(FaultManager(settings.fault_injection, circuit)), topmodule_name_(topmodule_name) {
 
   SetProbes(); 
+
+  if (settings_.side_channel_analysis.notion != sca_notion_t::ps) {
+    SetSimulators();
+  }
 
   uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;  
   simulation_.is_simulation_faulty_ = std::make_unique<uint64_t[]>(number_of_steps);
@@ -563,6 +588,7 @@ Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& set
   if (settings_.IsRelaxedModel()) {
     simulation_.constant_zero_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(1);
     simulation_.constant_zero_[0] = std::make_unique<uint64_t[]>(number_of_steps);
+
     SetEnablers();
   }
 
@@ -951,14 +977,17 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
     if (IsInDistance(probes)) {
       probing_sets_.emplace_back(circuit_, probes);
     }
+
     probes.clear();
 
     if (probing_sets_.size() == number_of_sets_per_step) {
+      BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
       ProcessProbingSets();
     }
   }
   
   if (!probing_sets_.empty()) {
+    BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
     ProcessProbingSets();
   }  
 
@@ -973,7 +1002,6 @@ double Adversaries::Eval(std::vector<SharedData>& shared_data) {
   std::vector<std::vector<bool>> combinations;
 
   if (settings_.IsMultivariateEvaluationRequired()) {
-    BOOST_LOG_TRIVIAL(info) << "Initialized multivariate evaluation.";
     n = placed_probes_.size();
     k = std::min(n, settings_.GetTestOrder());
     combinations.reserve(boost::math::binomial_coefficient<double>(n, k));
@@ -988,8 +1016,10 @@ double Adversaries::Eval(std::vector<SharedData>& shared_data) {
     do{
       combinations.push_back(bitmask);
     } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a multivariate" 
+    " evaluation with " << combinations.size() << " probing sets.";
   } else {
-    BOOST_LOG_TRIVIAL(info) << "Initialized univariate evaluation.";
     n = placed_probes_.size() / cycles.size();
     k = std::min(n, settings_.GetTestOrder());
     uint64_t binom = boost::math::binomial_coefficient<double>(n, k);
@@ -1008,6 +1038,9 @@ double Adversaries::Eval(std::vector<SharedData>& shared_data) {
         std::copy(bitmask.begin(), bitmask.end(), combinations[ctr++].begin() + idx * n);
       } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
     }
+
+    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a univariate" 
+    " evaluation with " << combinations.size() << " probing sets.";
   }
 
   return EvalCombinations(shared_data, start_time, combinations);

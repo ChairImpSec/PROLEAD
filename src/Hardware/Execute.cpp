@@ -102,16 +102,5 @@ void Hardware::Execute(const po::variables_map& vm) {
   } else {
     Hardware::Adversaries adversary(library, circuit, settings, simulation, topmodule_name);
     adversary.Eval(shared_data);
-
-
-    /*if (settings.IsRelaxedModel()) {
-      BOOST_LOG_TRIVIAL(info) << "Evaluate the circuit under the relaxed robust probing model!";
-      //Hardware::Adversaries<RelaxedProbe> adversary(library, circuit, settings, simulation);
-      //adversary.EvaluateRobustProbingSecurity(shared_data);
-    } else {
-      BOOST_LOG_TRIVIAL(info)<< "Evaluate the circuit under the robust probing model!";
-      Hardware::Adversaries adversary(library, circuit, settings, simulation, topmodule_name);
-      //adversary.EvaluateRobustProbingSecurity(shared_data);
-    }*/
   }
 }

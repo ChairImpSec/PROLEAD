@@ -268,9 +268,17 @@ void Settings::ParseGroups(const boost::json::object& json_object,
         throw std::invalid_argument(error_context + "Invalid format!");
       }
     }
+  } 
+
+  if (!groups.empty()) {
+    uint64_t expected_size = groups[0].size();
+    for (uint64_t i = 1; i < groups.size(); ++i) {
+      if (groups[i].size() != expected_size) {
+        throw std::invalid_argument(error_context + "All groups must have the same size!");
+      }
+    }
   } else {
-    throw std::runtime_error(error_context + "Key \"" + SettingNames::GROUPS +
-                             "\" not found!");
+    throw std::invalid_argument(error_context + "No groups defined!");
   }
 }
 
@@ -1135,6 +1143,7 @@ void Settings::ParseSideChannelAnalysisSettings(
   settings.alpha_threshold = 5.0;
   settings.beta_threshold = 0.00001;
   settings.variate = Analysis::univariate;
+  settings.notion = sca_notion_t::ps;
   settings.distance = 10;
 
   SetValue(json_object, identifier, sca);
@@ -1179,6 +1188,24 @@ void Settings::ParseSideChannelAnalysisSettings(
     } else {
       throw std::invalid_argument(error_context + "Invalid argument for \"" +
                                   SettingNames::VARIATE + "\"!");
+    }
+  }
+
+  std::string notion_string;
+  if (SetValue(sca, SettingNames::NOTION, notion_string)) {
+    if (notion_string == "ps" || notion_string == "probing security") {
+      settings.notion = sca_notion_t::ps;
+    } else if (notion_string == "ni" || notion_string == "non-interference") {
+      settings.notion = sca_notion_t::ni;
+    } else if (notion_string == "sni" || notion_string == "strong non-interference") {
+      settings.notion = sca_notion_t::sni;
+    } else if (notion_string == "pini" || notion_string == "probe-isolating non-interference") {
+      settings.notion = sca_notion_t::pini;
+    } else if (notion_string == "opini" || notion_string == "o-pini" ||
+               notion_string == "output probe-isolating non-interference") {
+      settings.notion = sca_notion_t::opini;
+    } else {
+      throw std::invalid_argument(error_context + "Invalid argument for \"" + SettingNames::NOTION + "\"!");
     }
   }
 
@@ -1670,6 +1697,137 @@ bool Settings::IsDistanceSmallEnough(uint64_t distance) const {
   return is_distance_small_enough && is_no_unallowed_univariate_set;
 }
 
+void Settings::SetAlternativeGroups() {
+  if (!GetNumberOfGroups()) {
+    std::vector<std::tuple<uint64_t, uint64_t>> group_indices;
+    std::vector<uint64_t> unshared_group_indices;
+
+    for (const std::vector<InputAssignment>& inputs : simulation.input_sequence) {
+      for (const InputAssignment& input : inputs) {
+        if (input.share_index_) {
+          for (uint64_t grp_idx : input.group_indices_) {
+            group_indices.push_back(std::make_tuple(input.share_index_, grp_idx)); 
+          }
+        } else {
+          if (!input.group_indices_.empty()) {
+            for (uint64_t grp_idx : input.group_indices_) {
+              unshared_group_indices.push_back(grp_idx);
+            }
+          }
+        }
+      } 
+    }
+
+    if (side_channel_analysis.notion == sca_notion_t::ps) {
+      std::sort(group_indices.begin(), group_indices.end(),
+                [](const std::tuple<uint64_t, uint64_t>& lhs,
+                   const std::tuple<uint64_t, uint64_t>& rhs) {
+                  return std::get<1>(lhs) < std::get<1>(rhs) ||
+                         (std::get<1>(lhs) == std::get<1>(rhs) &&
+                          std::get<0>(lhs) < std::get<0>(rhs));
+                });
+
+      group_indices.erase(
+          std::unique(group_indices.begin(), group_indices.end(),
+                      [](const std::tuple<uint64_t, uint64_t>& lhs,
+                         const std::tuple<uint64_t, uint64_t>& rhs) {
+                        return std::get<1>(lhs) == std::get<1>(rhs);
+                      }), group_indices.end());
+    } else {
+      std::sort(unshared_group_indices.begin(), unshared_group_indices.end());
+      unshared_group_indices.erase(std::unique(unshared_group_indices.begin(), 
+      unshared_group_indices.end()),unshared_group_indices.end());
+
+      unshared_group_indices.erase(
+        std::remove_if(unshared_group_indices.begin(), unshared_group_indices.end(),
+          [&group_indices](uint64_t grp_idx) {
+            return std::any_of(group_indices.begin(), group_indices.end(),
+              [grp_idx](const std::tuple<uint64_t, uint64_t>& tuple) {
+                return std::get<1>(tuple) == grp_idx && std::get<0>(tuple) > 0;
+              });
+            }), unshared_group_indices.end());
+
+      std::vector<std::tuple<uint64_t, uint64_t>> full_group_indices;
+      uint64_t grp_idx, share_idx;
+
+      for (const std::tuple<uint64_t, uint64_t>& tuple : group_indices) {
+        share_idx = std::get<0>(tuple);
+        grp_idx = std::get<1>(tuple);
+        for (int64_t idx = share_idx - 1; idx >= 0; --idx) {
+          full_group_indices.push_back(std::make_tuple(idx, grp_idx));
+        }
+      }
+
+      std::sort(full_group_indices.begin(), full_group_indices.end(),
+                [](const std::tuple<uint64_t, uint64_t>& lhs,
+                   const std::tuple<uint64_t, uint64_t>& rhs) {
+                  return std::get<0>(lhs) < std::get<0>(rhs) ||
+                         (std::get<0>(lhs) == std::get<0>(rhs) &&
+                          std::get<1>(lhs) < std::get<1>(rhs));
+                });
+
+      for (uint64_t idx = 0; idx < full_group_indices.size() + unshared_group_indices.size(); ++idx) {
+        if (idx < full_group_indices.size()) {
+          simulation.group_mapping[full_group_indices[idx]] = idx;
+        } else {
+          simulation.group_mapping_with_one_share[unshared_group_indices[idx - full_group_indices.size()]] = idx;
+        }
+      }
+    }
+
+    uint64_t coeff_size_in_bits = std::log2l(input_finite_field.base);
+    uint64_t input_size_in_bits = coeff_size_in_bits * input_finite_field.exponent;
+    uint64_t grp_size_in_bits = group_indices.size();
+    uint64_t number_of_inputs = grp_size_in_bits / input_size_in_bits;
+
+    std::vector<vlog_bit_t> grp(grp_size_in_bits, vlog_bit_t::zero);
+
+    auto next_group = [&grp]() {
+      for (vlog_bit_t& bit : grp) {
+        if (bit == vlog_bit_t::zero) {
+          bit = vlog_bit_t::one;
+          return true;
+        } else {
+          bit = vlog_bit_t::zero;
+        }
+      }
+      return false;
+    };
+
+    uint64_t poly_idx, coeff_idx;
+
+    do {
+      std::vector<std::vector<uint64_t>> polys(
+        number_of_inputs, std::vector<uint64_t>(input_finite_field.exponent, 0));
+
+      for (uint64_t idx = 0; idx < grp_size_in_bits; ++idx) {
+        if (grp[idx] == vlog_bit_t::one) {
+          poly_idx = idx / number_of_inputs;
+          coeff_idx = (idx / coeff_size_in_bits) % input_finite_field.exponent;
+          polys[poly_idx][coeff_idx] |= 1 << (idx % coeff_size_in_bits);
+        }
+      }
+
+      if (std::all_of(polys.begin(), polys.end(), [this](const std::vector<uint64_t>& poly) {
+        for (uint64_t coeff : poly) {
+          if (coeff >= input_finite_field.base) {
+            return false;
+          }
+        }
+
+        return true;
+      })) {
+        simulation.groups.push_back(grp);
+      }
+    } while (next_group());
+  } else {
+    if (side_channel_analysis.notion != sca_notion_t::ps) {
+      throw std::invalid_argument("Error while setting the groups: "
+        "Specifying the groups is only valid for analyzing probing security!");
+    }
+  }
+}
+
 Settings::Settings(const boost::json::object& config_file,
                    bool is_target_hardware)
     : is_target_hardware_(is_target_hardware) {
@@ -1688,4 +1846,5 @@ Settings::Settings(const boost::json::object& config_file,
       config_file, SettingNames::SIDE_CHANNEL_ANALYSIS, side_channel_analysis);
   ParseFaultInjectionSettings(config_file, SettingNames::FAULT_INJECTION,
                               fault_injection);
+  SetAlternativeGroups();                            
 }

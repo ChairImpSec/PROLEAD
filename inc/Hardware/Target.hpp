@@ -2,16 +2,6 @@
 
 #include "Hardware/Enabler.hpp"
 
-using RobustProbe = uint64_t;
-
-struct RelaxedProbe {
-  uint64_t enable_index_;
-  uint64_t number_of_enable_indices_;
-  uint64_t number_of_signal_indices_;
-  std::vector<uint64_t> signal_indices_;
-  std::vector<uint64_t> propagation_indices_;
-};
-
 class Target {
   public: 
     Target(const std::vector<const SignalStruct*>& signals, uint64_t cycle);
@@ -34,6 +24,7 @@ class Probe : public Target {
     Probe(const std::vector<const SignalStruct*>& signals, uint64_t cycle);
     
     bool IsPlaced(const CircuitStruct& circuit) const;
+    bool IsInternal() const;
     bool DoesExtend(const CircuitStruct& circuit) const;
     const std::vector<const Probe*>& GetGlitchExtensions() const;
     const std::vector<const Probe*>& GetTransitionExtensions() const;
@@ -42,15 +33,11 @@ class Probe : public Target {
     void Extend(const CircuitStruct& circuit, const std::vector<Probe>& probes, const Settings& settings);
     const Enabler* GetEnabler() const;
     void SetEnabler(const Enabler& enabler);
-    uint64_t GetNumberOfExtensions() const;
-    uint64_t GetNumberOfEnablers() const;
     uint64_t GetBitslicedValue(uint64_t signal_idx, uint64_t step_idx) const;
     void SetBitslicedValues(const std::vector<std::unique_ptr<uint64_t[]>*>& values);
     uint64_t GetBitslicedPropValue(uint64_t step_idx) const;
 
   private:
-    uint64_t number_of_extensions_on_path_;
-    uint64_t number_of_enablers_on_path_;
     std::vector<std::unique_ptr<uint64_t[]>*> values_;
     std::vector<const Probe*> glitch_extensions_;
     std::vector<const Probe*> transition_extensions_;

@@ -44,6 +44,7 @@ const std::string SettingNames::ALPHA_THRESHOLD = "alpha_threshold";
 const std::string SettingNames::BETA_THRESHOLD = "beta_threshold";
 const std::string SettingNames::CLOCK_CYCLES = "clock_cycles";
 const std::string SettingNames::DISTANCE = "distance";
+const std::string SettingNames::NOTION = "notion";
 const std::string SettingNames::EFFECT_SIZE = "effect_size";
 const std::string SettingNames::EXTENSION_ROUTES = "extension_routes";
 const std::string SettingNames::OBSERVED_EXTENSIONS = "observed_extensions";
@@ -173,6 +174,7 @@ JsonSchema side_channel_analysis_schema(
                  JsonSchema("include", "object",
                             {JsonSchema("paths", "string"),
                              JsonSchema("signals", "string")})}),
+     JsonSchema(SettingNames::NOTION, "string"),
      JsonSchema(SettingNames::OBSERVED_EXTENSIONS, "object",
                 {JsonSchema("exclude", "object",
                             {JsonSchema("paths", "string"),
