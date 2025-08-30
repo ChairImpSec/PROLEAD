@@ -1,36 +1,6 @@
-Successfully parsed the settings file at "config.json".
-Successfully validated the settings file at "config.json".
-Successfully opened the library file at "../../../../../../../libs/nang45.json".
-Successfully read the library with name "nang45".
-Successfully parsed 35 cells from the library.
-Successfully found buffer cell with identifier "BUF_X1" and others.
-"circuit"...done
-Successfully matched 18 fresh mask signals (for rising edge) [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].
-Evaluate the circuit under the robust probing model!
-115 different spots to probe detected!
-Generate univariate probing sets...1150 probing sets generated...done!
-Remove duplicated probing sets...890 probing sets remain...done!
-Remove strictly less informative probing sets...Setting univariate case...done! 738 probing sets remain!
--------------------------------------------------------------------------------------------------------------------------------------
-| #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
--------------------------------------------------------------------------------------------------------------------------------------
-|             1150 |             1860 |           738 |                       6 |                      26 |               14.439024 |
--------------------------------------------------------------------------------------------------------------------------------------
-
-Evaluate security under the robust probing model!
-----------------------------------------------------------------------------------------------------------------------------------------
-|      Elapsed Time |      Required Ram |  Processed Simulations | Probing Set with highest Information Leakage |  -log10(p) |  Status |
-----------------------------------------------------------------------------------------------------------------------------------------
-|         1.458344s |        3.886388GB |        128000 / 428055 |                    [inverter_gf24_ExD[2](8)] |   2.766978 |    OKAY |
-|         2.859969s |        4.205508GB |        256000 / 589540 |                                 [QxDO[0](9)] |   4.056076 |    OKAY |
-|         4.275644s |        4.417028GB |        384000 / 706987 |                         [InverterInxD[1](3)] |   2.682871 |    OKAY |
-|         5.819149s |        4.858924GB |        512000 / 801614 |                         [InverterInxD[1](6)] |   2.173837 |    OKAY |
-|         7.387066s |        6.070704GB |        640000 / 881903 |                       [mult_msb_FFxDN[9](4)] |   2.275426 |    OKAY |
-|         8.970953s |        6.651448GB |        768000 / 951742 |                       [mult_msb_FFxDN[9](6)] |   2.627389 |    OKAY |
-|        10.622357s |        7.155420GB |       896000 / 1013819 |                                 [QxDO[9](8)] |   1.860317 |    OKAY |
-|        12.327664s |        7.559616GB |      1024000 / 1069554 |                      [mult_lsb_FFxDN[9](10)] |   2.383822 |    OKAY |
-|        14.063216s |        7.920760GB |      1152000 / 1120553 |          [inverter_gf24_a_mul_e_FFxDN[3](8)] |   2.324863 |    OKAY |
-|        15.900569s |        8.413876GB |      1280000 / 1167242 |                      [mult_lsb_FFxDN[11](7)] |   2.929044 |    OKAY |
-|        17.712218s |        8.717940GB |      1408000 / 1210286 |                      [mult_lsb_FFxDN[4](10)] |   2.220476 |    OKAY |
-|        19.523997s |        9.245872GB |      1536000 / 1250170 |                      [mult_lsb_FFxDN[11](7)] |   2.971132 |    OKAY |
-Evaluation done in 19.5259 seconds!
+[2025-08-27 14:55:08] Successfully validated the settings file.
+[2025-08-27 14:55:08] Successfully read the library with name "nang45".
+[2025-08-27 14:55:08] Successfully parsed 35 cells from the library.
+[2025-08-27 14:55:08] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2025-08-27 14:55:08] Successfully read design file with topmodule "circuit"!
+[2025-08-27 14:55:08] Successfully matched 18 fresh mask signals (for rising edge) [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].

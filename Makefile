@@ -41,7 +41,7 @@ EXCLUDED_FILES := test/obj_test/tests/full/prolead_sw/aes_rp_d1_ccode/aes_rp_d1_
 # Compiler options
 INCLUDE_PYTHON3=`pkg-config --cflags python3-embed`
 C_BENCHMARK_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
-C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -DNDEBUG -g  -std=c11 $(INCLUDE_PYTHON3)
+C_RELEASE_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -DNDEBUG -g -std=c11 $(INCLUDE_PYTHON3)
 C_DEBUG_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -g -O2 -fsanitize=address -std=c11 $(INCLUDE_PYTHON3)
 C_TEST_FLAGS     = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -fno-omit-frame-pointer -std=c11 $(INCLUDE_PYTHON3)
 
