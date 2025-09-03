@@ -253,8 +253,8 @@ void WriteJsonFile(const std::filesystem::path& path, const boost::property_tree
   } catch (std::exception &e) {
     throw std::runtime_error("Error while writing to the JSON file located at path: "
       "\"" + path.string() + "\": " + e.what());
-  } 
-}  
+  }
+}
 
 void CheckValueType(const js::object& json_object, const std::string& key,
                     js::kind expected_type) {

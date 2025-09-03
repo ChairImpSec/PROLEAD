@@ -1,13 +1,15 @@
 { pkgs ? import <nixpkgs> {} }:
 
 
-let gdstk = pkgs.callPackage ./gdstk.nix { }; in pkgs.mkShell {
+pkgs.mkShell {
   name = "prolead-dev";
 
   nativeBuildInputs = with pkgs; [
     pkg-config
     gnumake
     gcc
+    meson
+    ninja
   ];
   buildInputs = with pkgs; [
     (boost186.override {
@@ -22,10 +24,9 @@ let gdstk = pkgs.callPackage ./gdstk.nix { }; in pkgs.mkShell {
     # ---- gdstk----
     qhull
     zlib
-    clipper
-    gdstk
+    # clipper
   ];
 
   shellHook=''
-    export PROLEAD="$(pwd)/release/PROLEAD" && export PROLEAD_LIB="$(pwd)/libs"'';
+    export PROLEAD="$(pwd)/build/prolead" && export PROLEAD_LIB="$(pwd)/libs"'';
 }
