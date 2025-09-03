@@ -110,11 +110,12 @@ JsonSchema fault_injection_schema(
                                                          "string")})}),
                       JsonSchema(SettingNames::FIESTA_FAULT_PROBABILITY,
                                  "double"),
-                      JsonSchema(SettingNames::FAULT_TYPE, "string"),
                       JsonSchema(SettingNames::FIESTA_TARGET_LOGIC_GATES,
                                  "bool"),
                       JsonSchema(SettingNames::FIESTA_TARGET_STORAGE_GATES,
-                                 "bool")})})})}),
+                                 "bool"),
+                      JsonSchema(SettingNames::FAULT_TYPE, "string")
+          })})})}),
      JsonSchema(SettingNames::FAULTED_CLOCK_CYCLES, "array"),
      JsonSchema(SettingNames::FIESTA_CONFIDENCE_LEVEL, "double"),
      JsonSchema(
