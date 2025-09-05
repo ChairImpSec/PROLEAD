@@ -24,7 +24,7 @@ class ProbingSet {
  public:
   ContingencyTable<TableBucketVector> contingency_table_;
 
-  ProbingSet(const CircuitStruct& circuit, const std::vector<const Probe*>& probes);
+  ProbingSet(const CircuitStruct& circuit, const Settings& settings, const std::vector<const Probe*>& probes);
 
   bool operator<(const ProbingSet& other) const;
   bool operator==(const ProbingSet& other) const;
@@ -77,6 +77,7 @@ class ProbingSet {
     std::vector<Simulator> simulators_;
 
     void Extend(const CircuitStruct& circuit);
+    void SetSimulators(const Settings& settings);
 
     bool should_be_removed_;
 };

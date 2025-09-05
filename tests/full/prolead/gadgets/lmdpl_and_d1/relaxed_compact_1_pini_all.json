@@ -1,12 +1,13 @@
 {
   "performance": {
     "max_number_of_threads": "half",
-    "minimize_probing_sets": "no"
+    "minimize_probing_sets": "no",
+    "compact_distributions": true
   },
   "simulation": {
     "output_shares": [
       "x1",
-      "x2"
+      "{x2,x2_bar}"
     ],
     "number_of_clock_cycles": 3,
     "input_sequence": [
@@ -68,19 +69,8 @@
   },
   "side_channel_analysis": {
     "clock_cycles": ["3"],
+    "notion": "pini",
     "order": 1,
-    "notion": "ni",
-    "transitional_leakage": true,
-    "probe_placement":
-    {
-      "include": {
-        "signals": "x2",
-        "paths": "(?!)"
-      },
-      "exclude": {
-        "signals": "(?!)",
-        "paths": "(?!)"
-      }	
-    }
+    "relaxed_model": true
   }
 }

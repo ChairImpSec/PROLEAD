@@ -61,7 +61,6 @@ class Adversaries {
     void SetProbes(); 
     void SetUniqueProbes();
     void SetEnablers(); 
-    void SetSimulators();
     void SetFaults(); 
 
     uint64_t GetProbingSetColumnSize();

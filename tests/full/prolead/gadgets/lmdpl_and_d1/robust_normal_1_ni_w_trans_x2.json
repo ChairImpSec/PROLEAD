@@ -4,10 +4,6 @@
     "minimize_probing_sets": "no"
   },
   "simulation": {
-    "output_shares": [
-      "x1",
-      "x2"
-    ],
     "number_of_clock_cycles": 3,
     "input_sequence": [
       {

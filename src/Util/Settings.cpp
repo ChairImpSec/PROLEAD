@@ -44,6 +44,7 @@ void Settings::ParseArrayOfTriStateBitVectors(
           if (bit_width == 0 || bit_width == values.back().size()) {
             bit_width = values.back().size();
           } else {
+
             throw std::invalid_argument(error_context + "Size mismatch in \"" +
                                         value_string + "\"!");
           }
@@ -277,8 +278,6 @@ void Settings::ParseGroups(const boost::json::object& json_object,
         throw std::invalid_argument(error_context + "All groups must have the same size!");
       }
     }
-  } else {
-    throw std::invalid_argument(error_context + "No groups defined!");
   }
 }
 
@@ -691,18 +690,11 @@ void Settings::ParseOutputShares(
   if (SetValue(json_object, SettingNames::OUTPUT_SHARES, json_array)) {
     SignalNameGrammar grammar;
     std::string signal_name;
-    uint64_t bit_width = 0;
 
     for (auto& value : json_array) {
       if (value.is_string()) {
         signal_name = value.as_string().c_str();
         output_shares.push_back(grammar.Parse(signal_name));
-        if (bit_width == 0 || bit_width == output_shares.back().size()) {
-          bit_width = output_shares.back().size();
-        } else {
-          throw std::invalid_argument(error_context + "Size mismatch in \"" +
-                                      signal_name + "\"!");
-        }
       } else {
         throw std::invalid_argument(error_context + "Invalid format!");
       }
@@ -974,7 +966,7 @@ void Settings::ParseSimulationSettings(const boost::json::object& json_object,
     ParseOutputShares(simulation_object, settings.output_shares);
     ParseArrayOfTriStateBitVectors(
         simulation_object, SettingNames::EXPECTED_OUTPUT,
-        settings.groups.size(), settings.output_shares.size(), true,
+        settings.groups.size(), false, true,
         settings.expected_outputs);
     ParseInputSequence(simulation_object, settings.input_sequence);
     ParseSignalNameValuePair(simulation_object,
@@ -1506,6 +1498,30 @@ uint64_t Settings::GetNumberOfBitsPerGroup() const {
   return simulation.groups[0].size();
 }
 
+const std::map<std::tuple<uint64_t, uint64_t>, uint64_t>& Settings::GetMapping() const {
+  return simulation.group_mapping;
+}
+
+uint64_t Settings::GetGroupMapping(uint64_t share_idx, uint64_t bit_idx) const {
+  assert(IsInGroupMapping(share_idx, bit_idx) && "Error in Settings::GetGroupMapping(): "
+  " The provided share and bit index are not in the group mapping.");
+  return simulation.group_mapping.at(std::make_tuple(share_idx, bit_idx));
+}
+
+bool Settings::IsInGroupMapping(uint64_t share_idx, uint64_t bit_idx) const {
+  return simulation.group_mapping.find(std::make_tuple(share_idx, bit_idx)) !=
+         simulation.group_mapping.end();
+}
+
+uint64_t Settings::GetGroupMappingWithOneShare(uint64_t bit_idx) const {
+  assert(simulation.group_mapping_with_one_share.find(bit_idx) !=
+    simulation.group_mapping_with_one_share.end() &&
+      "Error in Settings::GetGroupMappingWithOneShare(): "
+        " The provided bit index is not in the group mapping with one share.");
+  return simulation.group_mapping_with_one_share.at(bit_idx);
+}
+
+
 vlog_bit_t Settings::GetGroupBit(uint64_t group_index,
                                  uint64_t bit_index) const {
   return simulation.groups[group_index][bit_index];
@@ -1747,18 +1763,18 @@ void Settings::SetAlternativeGroups() {
               });
             }), unshared_group_indices.end());
 
-      std::vector<std::tuple<uint64_t, uint64_t>> full_group_indices;
+      std::vector<std::tuple<uint64_t, uint64_t>> full_group_indices = group_indices;
       uint64_t grp_idx, share_idx;
 
-      for (const std::tuple<uint64_t, uint64_t>& tuple : group_indices) {
+      for (const std::tuple<uint64_t, uint64_t>& tuple : full_group_indices) {
         share_idx = std::get<0>(tuple);
         grp_idx = std::get<1>(tuple);
-        for (int64_t idx = share_idx - 1; idx >= 0; --idx) {
-          full_group_indices.push_back(std::make_tuple(idx, grp_idx));
+        for (int64_t idx = share_idx; idx >= 0; --idx) {
+          group_indices.push_back(std::make_tuple(idx, grp_idx));
         }
       }
 
-      std::sort(full_group_indices.begin(), full_group_indices.end(),
+      std::sort(group_indices.begin(), group_indices.end(),
                 [](const std::tuple<uint64_t, uint64_t>& lhs,
                    const std::tuple<uint64_t, uint64_t>& rhs) {
                   return std::get<0>(lhs) < std::get<0>(rhs) ||
@@ -1766,11 +1782,19 @@ void Settings::SetAlternativeGroups() {
                           std::get<1>(lhs) < std::get<1>(rhs));
                 });
 
-      for (uint64_t idx = 0; idx < full_group_indices.size() + unshared_group_indices.size(); ++idx) {
-        if (idx < full_group_indices.size()) {
-          simulation.group_mapping[full_group_indices[idx]] = idx;
+      group_indices.erase(
+          std::unique(group_indices.begin(), group_indices.end(), 
+                      [](const std::tuple<uint64_t, uint64_t>& lhs,
+                         const std::tuple<uint64_t, uint64_t>& rhs) {
+                        return std::get<0>(lhs) == std::get<0>(rhs) &&
+                               std::get<1>(lhs) == std::get<1>(rhs);
+                      }), group_indices.end());          
+
+      for (uint64_t idx = 0; idx < group_indices.size() + unshared_group_indices.size(); ++idx) {
+        if (idx < group_indices.size()) {
+          simulation.group_mapping[group_indices[idx]] = idx;
         } else {
-          simulation.group_mapping_with_one_share[unshared_group_indices[idx - full_group_indices.size()]] = idx;
+          simulation.group_mapping_with_one_share[unshared_group_indices[idx - group_indices.size()]] = idx;
         }
       }
     }
@@ -1820,6 +1844,8 @@ void Settings::SetAlternativeGroups() {
         simulation.groups.push_back(grp);
       }
     } while (next_group());
+    
+    BOOST_LOG_TRIVIAL(info) << "Successfully generated " << simulation.groups.size() << " groups.";
   } else {
     if (side_channel_analysis.notion != sca_notion_t::ps) {
       throw std::invalid_argument("Error while setting the groups: "

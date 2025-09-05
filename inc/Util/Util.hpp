@@ -22,6 +22,8 @@
 #include <utility>
 #include <vector>
 
+#include <bitset>
+
 #include "boost/generator_iterator.hpp"
 #include "boost/random.hpp"
 #include <sys/resource.h>
@@ -156,6 +158,8 @@ class ContingencyTable {
    */
   ContingencyTable() = default;
 
+  void Print(uint64_t number_of_groups) const;
+
   /**
    * @brief Initializes the ContingencyTable for a specific type of bucket
    * container.
@@ -247,7 +251,7 @@ class ContingencyTable {
    * for each group.
    */
   void SetLog10pValue(uint64_t number_of_groups, uint64_t number_of_simulations,
-                      std::vector<double>& group_simulation_ratio);
+    const std::vector<Simulator>& simulators, std::vector<double>& group_simulation_ratio);
 
  //private:
   /**
@@ -408,4 +412,5 @@ std::string GetTimestamp();
 void GenerateThreadRng(std::vector<boost::mt19937>& rng,
                        uint64_t number_of_threads);
 uint64_t GetUsedMemory();
+bool Next(std::vector<bool>& bitmask);
 

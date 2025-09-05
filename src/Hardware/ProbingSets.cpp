@@ -2,8 +2,14 @@
 
 namespace Hardware {
 
-ProbingSet::ProbingSet(const CircuitStruct& circuit, const std::vector<const Probe*>& probes) : probes_(probes){
+ProbingSet::ProbingSet(const CircuitStruct& circuit, const Settings& settings, 
+  const std::vector<const Probe*>& probes) : probes_(probes){
   Extend(circuit);
+
+  if (settings.side_channel_analysis.notion != sca_notion_t::ps) {
+    SetSimulators(settings);
+  }
+
   should_be_removed_ = false;
 };
 
@@ -102,7 +108,7 @@ void ProbingSet::Deconstruct() {
 };
 
 void ProbingSet::ComputeGTest(uint64_t number_of_groups, uint64_t number_of_simulations, std::vector<double>& group_simulation_ratio) {
-  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations, group_simulation_ratio);
+  contingency_table_.SetLog10pValue(number_of_groups, number_of_simulations, simulators_, group_simulation_ratio);
 }
 
 bool ProbingSet::IsSampleSizeSufficient(uint64_t number_of_samples, const Settings& settings) const {
@@ -362,7 +368,6 @@ void ProbingSet::Extend(const CircuitStruct& circuit) {
       if (probe->GetEnabler() != nullptr) {
         enablers.push_back(probe->GetEnabler());
       }
-      enablers.push_back(probe->GetEnabler());
       for (const Probe* extension : probe->GetGlitchExtensions()) {
         if (visited.insert(extension).second) {
           path.push(extension);
@@ -382,4 +387,104 @@ void ProbingSet::Extend(const CircuitStruct& circuit) {
   number_of_enablers_ = enablers.size();
   number_of_extensions_ = extensions_.size();
 }
+
+void ProbingSet::SetSimulators(const Settings& settings) {
+  uint64_t upper_bound;
+  if (settings.side_channel_analysis.notion == sca_notion_t::ni) {
+    upper_bound = settings.GetTestOrder();
+  } else if (settings.side_channel_analysis.notion == sca_notion_t::sni || 
+             settings.side_channel_analysis.notion == sca_notion_t::pini) {
+    upper_bound = std::count_if(probes_.begin(), probes_.end(),
+      [](const Probe* probe) { return probe->IsInternal(); });
+  } else {
+    throw std::logic_error("Error in ProbingSet::SetSimulators(): Invalid security notion!");
+  }
+
+  uint64_t input_size_in_bits = std::ceil(std::log2l(settings.input_finite_field.base)) 
+                                                   * settings.input_finite_field.exponent;
+  uint64_t group_size_in_bits = settings.GetNumberOfBitsPerGroup();
+  uint64_t number_of_inputs = group_size_in_bits / input_size_in_bits;
+  std::vector<bool> bitmask(number_of_inputs, false);
+  std::vector<uint64_t> share_count_per_input(number_of_inputs);
+  std::vector<uint64_t> enabled_input_share_indices;
+  std::vector<uint64_t> output_share_indices, input_share_indices;
+
+  if (settings.side_channel_analysis.notion == sca_notion_t::pini) {
+    std::map<std::string, uint64_t> signal_name_to_share_index;
+    for (uint64_t share_idx = 0; share_idx < settings.GetNumberOfOutputShares(); ++share_idx) {
+      for (uint64_t bit_idx = 0; bit_idx < settings.GetNumberOfBitsPerOutputShare(); ++bit_idx) {
+        std::string signal_name = settings.GetOutputShareName(share_idx, bit_idx);
+        signal_name_to_share_index[signal_name] = share_idx;
+      }
+    }
+
+    for (const Probe* probe : probes_) {
+      if (!probe->IsInternal()) {
+        for (const SignalStruct* signal : probe->GetSignals()) {
+          std::string signal_name = signal->Name;
+          auto it = signal_name_to_share_index.find(signal_name);
+          if (it != signal_name_to_share_index.end()) {
+            output_share_indices.push_back(it->second);
+          }
+        }
+      }
+    }
+
+    std::sort(output_share_indices.begin(), output_share_indices.end());
+    output_share_indices.erase(std::unique(output_share_indices.begin(), 
+      output_share_indices.end()), output_share_indices.end()); 
+  }
+
+  do {
+    std::fill(share_count_per_input.begin(), share_count_per_input.end(), 0);
+  
+    bool valid_simulator = false;
+    if (settings.side_channel_analysis.notion == sca_notion_t::pini) {
+      for (const auto& elem : settings.GetMapping()) {
+        uint64_t share_idx = std::get<0>(elem.first);
+        uint64_t group_idx = elem.second;
+
+        if (bitmask[group_idx]) {
+          enabled_input_share_indices.push_back(group_idx);
+          input_share_indices.push_back(share_idx);
+        }
+
+        if (std::find(output_share_indices.begin(), output_share_indices.end(), share_idx) != output_share_indices.end()) {
+          enabled_input_share_indices.push_back(group_idx);
+        }
+      }
+
+      std::sort(input_share_indices.begin(), input_share_indices.end());
+      input_share_indices.erase(std::unique(input_share_indices.begin(), 
+        input_share_indices.end()), input_share_indices.end());
+      valid_simulator = input_share_indices.size() <= upper_bound;   
+    } else {
+      for (const auto& elem : settings.GetMapping()) {
+        uint64_t value_idx = std::get<1>(elem.first);
+        uint64_t group_idx = elem.second;
+
+        if (bitmask[group_idx]) {
+          enabled_input_share_indices.push_back(group_idx);
+          ++share_count_per_input[value_idx];
+        }
+      }
+
+      valid_simulator = std::all_of(share_count_per_input.begin(), share_count_per_input.end(), 
+        [upper_bound](uint64_t ctr) { return ctr <= upper_bound; });
+    }
+
+    if (valid_simulator) {
+      std::sort(enabled_input_share_indices.begin(), enabled_input_share_indices.end());
+      enabled_input_share_indices.erase(std::unique(enabled_input_share_indices.begin(), 
+        enabled_input_share_indices.end()), enabled_input_share_indices.end());
+      simulators_.emplace_back(enabled_input_share_indices, std::vector<uint64_t>());
+    }
+    enabled_input_share_indices.clear();
+    input_share_indices.clear();
+  } while (Next(bitmask));
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully set " << simulators_.size() 
+    << " simulators for probing set " << PrintProbes(settings) << ".";
+}
+
 }  // namespace Hardware

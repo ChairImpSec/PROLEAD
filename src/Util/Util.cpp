@@ -107,6 +107,19 @@ void ContingencyTable<TableBucketVector>::Initialize(uint64_t number_of_probes,
 }
 
 template <>
+void ContingencyTable<TableBucketVector>::Print(uint64_t number_of_groups) const {
+  std::cout << "bucket: " << std::endl;
+  for (const TableEntry& entry : bucket_) {
+    std::cout << "key: " << std::bitset<8>(entry.key_[0]) << ", data: ";
+
+    for (uint64_t i = 0; i < number_of_groups; ++i) {
+      std::cout << entry.data_[i] << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+template <>
 void ContingencyTable<TableBucketVector>::Deconstruct() {
   bucket_.shrink_to_fit();
   bucket_.clear();
@@ -301,90 +314,109 @@ template <>
 double ContingencyTable<TableBucketVector>::SetGTestStatistic(
   uint64_t number_of_groups, uint64_t number_of_simulations, const Simulator& simulator, 
     std::vector<double>& group_simulation_ratio, uint64_t& degrees_of_freedom) const {
-  uint64_t number_of_tables = simulator.GetNumberOfTables();
-  uint64_t number_of_groups_per_table = number_of_groups / number_of_tables;
+  
+  uint64_t number_of_entries = bucket_.size();
+  uint64_t number_of_tables = simulator.GetNumberOfTables();    
+  uint64_t number_of_groups_per_table = number_of_groups / number_of_tables;  
 
   std::vector<std::vector<uint64_t>> groups_per_table(number_of_tables);
   for (std::vector<uint64_t>& table : groups_per_table) {
     table.reserve(number_of_groups_per_table);
   }
 
-  std::vector<double> number_of_sims_per_table(number_of_tables, 0.0);
   for (uint64_t grp_idx = 0; grp_idx < number_of_groups; ++grp_idx) {
     uint64_t idx = simulator.GetGrpIdx(grp_idx);
     groups_per_table[idx].push_back(grp_idx);
-    number_of_sims_per_table[idx] += group_simulation_ratio[grp_idx];
   }
 
-  TableBucketVector sim_bucket(bucket_.size());
-  std::vector<uint8_t> sim_key(key_size_in_bytes_);
-  for (uint64_t idx = 0; idx < bucket_.size(); ++idx) {
-    sim_bucket[idx].key_ = std::make_unique_for_overwrite<uint8_t[]>(key_size_in_bytes_);
-    sim_bucket[idx].data_ = std::make_unique_for_overwrite<uint32_t[]>(number_of_groups);
-    sim_key = simulator.GetKeyIdx(bucket_[idx].key_.get(), key_size_in_bytes_);
-
-    std::copy(sim_key.begin(), sim_key.end(), sim_bucket[idx].key_.get());
-    std::copy(bucket_[idx].data_.get(), bucket_[idx].data_.get() 
-      + number_of_groups, sim_bucket[idx].data_.get());
-  }
-
-  std::vector<double> g_test_statistic(number_of_tables, 0.0);
-  std::vector<uint64_t> number_of_sims_per_entry(number_of_tables);
-  std::vector<uint64_t> number_of_entries_per_table(number_of_tables, 0.0);
-  std::vector<std::vector<double>> expected_frequencies(
-      number_of_tables, std::vector<double>(number_of_groups_per_table, 0.0));
-
-  for (const TableEntry& entry : sim_bucket) {
-    std::fill(number_of_sims_per_entry.begin(), number_of_sims_per_entry.end(), 0);
-    for (uint64_t idx = 0; idx < number_of_tables; ++idx) {
-      for (uint64_t grp_idx : groups_per_table[idx]) {
-        number_of_sims_per_entry[idx] += entry.data_[grp_idx];
-      }
-    }
-
-    for (uint64_t idx = 0; idx < number_of_tables; ++idx) {
-      bool non_empty_entry = false;
-      for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
-        uint64_t global_grp_idx = groups_per_table[idx][grp_idx];
-
-        expected_frequencies[idx][grp_idx] = number_of_sims_per_entry[idx] * 
-          (group_simulation_ratio[global_grp_idx] / number_of_sims_per_table[idx]);
-
-        if (entry.data_[global_grp_idx]) {
-          double portion = entry.data_[global_grp_idx] / expected_frequencies[idx][grp_idx];
-          double product = entry.data_[global_grp_idx] * std::log(portion);
-          g_test_statistic[idx] += product;
-          non_empty_entry = true;
-        }
-      }
-
-      if (non_empty_entry) {
-        ++number_of_entries_per_table[idx];
-      }
-    }
-  }
-
-  SortAndMergeDuplicates(sim_bucket, key_size_in_bytes_, number_of_groups);
-
-  double max_log_10_p_value = 0.0;
-  double log_10_p_value = 0.0;
+  uint64_t number_of_sims_per_entry, number_of_entries_in_pooled_table;
+  double g_test_statistic, pooling_factor, portion, product, table_sim_ratio;
+  double log_10_p_value, max_log_10_p_value = 0.0;
+  std::vector<uint32_t> counters_of_pooled_entry(number_of_groups_per_table);
+  std::vector<double> expected_freq_of_table(number_of_groups_per_table);
+  std::vector<double> group_sim_ratio_of_table(number_of_groups_per_table);
 
   for (uint64_t idx = 0; idx < number_of_tables; ++idx) {
-    g_test_statistic[idx] *= 2;
+    std::fill(counters_of_pooled_entry.begin(), counters_of_pooled_entry.end(), 0);
+    std::fill(group_sim_ratio_of_table.begin(), group_sim_ratio_of_table.end(), 0.0);
+    std::fill(expected_freq_of_table.begin(), expected_freq_of_table.end(), 0.0);
+    number_of_entries_in_pooled_table = 0;
+    table_sim_ratio = 0.0;
+    g_test_statistic = 0.0;
 
-    if (g_test_statistic[idx] < 0.0) {
-      g_test_statistic[idx] = 0.0;
+    // Calculate the total simulation ratio for the current table
+    for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+      table_sim_ratio += group_simulation_ratio[groups_per_table[idx][grp_idx]];
     }
 
-    if (number_of_entries_per_table[idx]) {
-      degrees_of_freedom = (number_of_groups_per_table - 1) *
-                           (number_of_entries_per_table[idx] - 1);
+    pooling_factor = (number_of_simulations * table_sim_ratio) / number_of_entries;
+
+    // Normalize group simulation ratios for the current table
+    for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+      group_sim_ratio_of_table[grp_idx] = 
+        group_simulation_ratio[groups_per_table[idx][grp_idx]] / table_sim_ratio;
+    }
+
+    for (uint64_t entry_idx = 0; entry_idx < number_of_entries; ++entry_idx) {
+      number_of_sims_per_entry = 0;
+      for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+        number_of_sims_per_entry += bucket_[entry_idx].data_[groups_per_table[idx][grp_idx]];
+      }
+
+      SetExpectedFrequenciesOfAnEntry(group_sim_ratio_of_table, 
+        number_of_sims_per_entry, expected_freq_of_table);
+
+      if (AreExpectedFrequenciesHighEnoughForEvaluation(expected_freq_of_table, pooling_factor)) {
+        for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+          uint64_t value = bucket_[entry_idx].data_[groups_per_table[idx][grp_idx]];
+          if (value) {
+            portion = value / expected_freq_of_table[grp_idx];
+            product = value * std::log(portion);
+            g_test_statistic += product;
+          }
+        }
+
+        ++number_of_entries_in_pooled_table;
+      } else {
+        for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+          counters_of_pooled_entry[grp_idx] += bucket_[entry_idx].data_[groups_per_table[idx][grp_idx]];
+        }
+      }
+    }
+
+    uint64_t number_of_sims_in_pooled_entry = 0;
+    for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+      number_of_sims_in_pooled_entry += counters_of_pooled_entry[grp_idx];
+    }
+
+    if (number_of_sims_in_pooled_entry) {
+      SetExpectedFrequenciesOfAnEntry(group_sim_ratio_of_table, 
+        number_of_sims_in_pooled_entry, expected_freq_of_table);
+
+      for (uint64_t grp_idx = 0; grp_idx < number_of_groups_per_table; ++grp_idx) {
+        if (counters_of_pooled_entry[grp_idx]) {
+          portion = counters_of_pooled_entry[grp_idx] / expected_freq_of_table[grp_idx];
+          product = counters_of_pooled_entry[grp_idx] * std::log(portion);
+          g_test_statistic += product;
+        }
+      }
+      ++number_of_entries_in_pooled_table;
+    }
+
+    g_test_statistic *= 2;
+
+    if (number_of_entries_in_pooled_table) {
+      degrees_of_freedom = (number_of_groups_per_table - 1) * (number_of_entries_in_pooled_table - 1);
     } else {
       degrees_of_freedom = 0;
     }
 
+    if (g_test_statistic < 0.0) {
+      g_test_statistic = 0.0;
+    }
+
     log_10_p_value =
-        ComputeLog10pValue(g_test_statistic[idx], degrees_of_freedom);
+        ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
 
     if (log_10_p_value > max_log_10_p_value) {
       max_log_10_p_value = log_10_p_value;
@@ -434,15 +466,30 @@ void ContingencyTable<TableBucketVector>::SetLog10pValue(uint64_t number_of_grou
 template <>
 void ContingencyTable<TableBucketVector>::SetLog10pValue(
     uint64_t number_of_groups, uint64_t number_of_simulations,
-    std::vector<double>& group_simulation_ratio) {
+    const std::vector<Simulator>& simulators, std::vector<double>& group_simulation_ratio) {
   uint64_t degrees_of_freedom;
   uint64_t number_of_entries = bucket_.size();
-
+  
   if (number_of_entries != 1) {
-    double g_test_statistic =
-        SetGTestStatistic(number_of_groups, number_of_simulations,
-                          group_simulation_ratio, degrees_of_freedom);
-    log_10_p_value_ = ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
+    if (simulators.empty()) {
+      double g_test_statistic =
+          SetGTestStatistic(number_of_groups, number_of_simulations,
+                            group_simulation_ratio, degrees_of_freedom);
+      log_10_p_value_ = ComputeLog10pValue(g_test_statistic, degrees_of_freedom);
+    } else {
+      double log_10_p_value;  
+      double min_log_10_p_value = std::numeric_limits<double_t>::infinity();
+      for (const Simulator& simulator : simulators) {
+        log_10_p_value = SetGTestStatistic(number_of_groups, number_of_simulations, 
+          simulator, group_simulation_ratio, degrees_of_freedom);
+
+        if (min_log_10_p_value > log_10_p_value) {
+          min_log_10_p_value = log_10_p_value;
+        }
+      }
+
+      log_10_p_value_ = min_log_10_p_value;
+    }
   } else {
     log_10_p_value_ = 0.0;
   }
@@ -486,4 +533,16 @@ uint64_t GetUsedMemory() {
 #else
   return ru.ru_maxrss;
 #endif
+}
+
+bool Next(std::vector<bool>& bitmask) {
+  for (std::vector<bool>::reference is_set : bitmask) {
+    if (!is_set) {
+      is_set = true;
+      return true;
+    } else {
+      is_set = false;
+    }
+  }
+  return false;
 }

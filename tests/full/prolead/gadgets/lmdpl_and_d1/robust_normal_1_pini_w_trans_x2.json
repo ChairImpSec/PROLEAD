@@ -6,7 +6,7 @@
   "simulation": {
     "output_shares": [
       "x1",
-      "x2"
+      "{x2,x2_bar}"
     ],
     "number_of_clock_cycles": 3,
     "input_sequence": [
@@ -68,8 +68,8 @@
   },
   "side_channel_analysis": {
     "clock_cycles": ["3"],
+    "notion": "pini",
     "order": 1,
-    "notion": "ni",
     "transitional_leakage": true,
     "probe_placement":
     {

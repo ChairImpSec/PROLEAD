@@ -80,7 +80,8 @@ bool Probe::DoesExtend(const CircuitStruct& circuit) const {
   assert(!signals.empty() && "Error in Probe::DoesExtend(): No signals in probe!");
   for (const SignalStruct* signal : signals) {
     const CellStruct& cell = circuit.cells_[signal->Output];
-    if (!signal->is_extension_allowed || (signal->Output == -1) || (cell.type->GetType() == cell_t::sequential)) {
+    if (!signal->is_extension_allowed || (signal->Output == -1) || 
+      (cell.type->GetType() == cell_t::sequential) || (cell.type->GetNumberOfInputs() == 0)) {
       return false;
     }
   }

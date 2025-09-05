@@ -64,56 +64,121 @@ bool CheckLmdplAndD1(bool expected_leakage) {
   }  
 
   std::filesystem::remove(leakage_report_name);
-  return true;
+  
+  if (expected_leakage) {
+    return false;
+  } else {
+    return true;
+  }
 }
 
 BOOST_AUTO_TEST_SUITE(test_lmdpl_and_d1)
 
 BOOST_AUTO_TEST_CASE(t1, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
   *utf::label("probing security") *utf::label("compact mode") *utf::label("relaxed")) {
-  RunLmdplAndD1("relaxed_compact_1_ps_all.json", "relaxed_compact_1_ps_all_expected_probes.json");
+  RunLmdplAndD1("relaxed_compact_1_ps_all.json", "relaxed_compact_1_all_expected_probes.json");
   BOOST_CHECK(CheckLmdplAndD1(false));
 }
 
-BOOST_AUTO_TEST_CASE(t2, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d2")
-  *utf::label("probing security") *utf::label("compact mode") *utf::label("relaxed")) {
-  RunLmdplAndD1("relaxed_compact_2_ps_x2_t_in0.json", "relaxed_compact_2_ps_x2_t_in0_expected_probes.json");
-  BOOST_CHECK(CheckLmdplAndD1(true));
+BOOST_AUTO_TEST_CASE(t2, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("non-interference") *utf::label("compact mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_compact_1_ni_all.json", "relaxed_compact_1_all_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(false));
 }
 
 BOOST_AUTO_TEST_CASE(t3, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
-  *utf::label("probing security") *utf::label("normal mode") *utf::label("relaxed")) {
-  RunLmdplAndD1("relaxed_normal_1_ps_all.json", "relaxed_normal_1_ps_all_expected_probes.json");
+  *utf::label("strong non-interference") *utf::label("compact mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_compact_1_sni_all.json", "relaxed_compact_1_all_expected_probes.json");
   BOOST_CHECK(CheckLmdplAndD1(false));
 }
 
-BOOST_AUTO_TEST_CASE(t4, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d2")
-  *utf::label("probing security") *utf::label("normal mode") *utf::label("relaxed")) {
-  RunLmdplAndD1("relaxed_normal_2_ps_x2_t_in0.json", "relaxed_normal_2_ps_x2_t_in0_expected_probes.json");
+BOOST_AUTO_TEST_CASE(t4, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("probe-isolating non-interference") *utf::label("compact mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_compact_1_pini_all.json", "relaxed_compact_1_all_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(false));
+}
+
+BOOST_AUTO_TEST_CASE(t5, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d2")
+  *utf::label("probing security") *utf::label("compact mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_compact_2_ps_x2_t_in0.json", "relaxed_compact_2_x2_t_in0_expected_probes.json");
   BOOST_CHECK(CheckLmdplAndD1(true));
 }
 
-BOOST_AUTO_TEST_CASE(t5, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
-  *utf::label("probing security") *utf::label("compact mode") *utf::label("robust")) {
-  RunLmdplAndD1("robust_compact_1_ps_w_trans_all.json", "robust_compact_1_ps_w_trans_all_expected_probes.json");
-  BOOST_CHECK(CheckLmdplAndD1(false));
-}
-
 BOOST_AUTO_TEST_CASE(t6, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
-  *utf::label("probing security") *utf::label("compact mode") *utf::label("robust")) {
-  RunLmdplAndD1("robust_compact_1_ps_wo_trans_all.json", "robust_compact_1_ps_wo_trans_all_expected_probes.json");
+  *utf::label("probing security") *utf::label("normal mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_normal_1_ps_all.json", "relaxed_normal_1_all_expected_probes.json");
   BOOST_CHECK(CheckLmdplAndD1(false));
 }
 
 BOOST_AUTO_TEST_CASE(t7, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
-  *utf::label("probing security") *utf::label("normal mode") *utf::label("robust")) {
-  RunLmdplAndD1("robust_normal_1_ps_w_trans_x2.json", "robust_normal_1_ps_w_trans_x2_expected_probes.json");
-  BOOST_CHECK(CheckLmdplAndD1(true));
+  *utf::label("non-interference") *utf::label("normal mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_normal_1_ni_all.json", "relaxed_normal_1_all_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(false));
 }
 
 BOOST_AUTO_TEST_CASE(t8, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("strong non-interference") *utf::label("normal mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_normal_1_sni_all.json", "relaxed_normal_1_all_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(false));
+}
+
+BOOST_AUTO_TEST_CASE(t9, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("probe-isolating non-interference") *utf::label("normal mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_normal_1_sni_all.json", "relaxed_normal_1_all_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(false));
+}
+
+BOOST_AUTO_TEST_CASE(t10, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d2")
+  *utf::label("probing security") *utf::label("normal mode") *utf::label("relaxed")) {
+  RunLmdplAndD1("relaxed_normal_2_ps_x2_t_in0.json", "relaxed_normal_2_x2_t_in0_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t11, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
   *utf::label("probing security") *utf::label("normal mode") *utf::label("robust")) {
-  RunLmdplAndD1("robust_normal_1_ps_wo_trans_x2.json", "robust_normal_1_ps_wo_trans_x2_expected_probes.json");
+  RunLmdplAndD1("robust_normal_1_ps_w_trans_x2.json", "robust_normal_1_w_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t12, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_ni_w_trans_x2.json", "robust_normal_1_w_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t13, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("strong non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_sni_w_trans_x2.json", "robust_normal_1_w_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t14, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("probe-isolating non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_pini_w_trans_x2.json", "robust_normal_1_w_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t15, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("probing security") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_ps_wo_trans_x2.json", "robust_normal_1_wo_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t16, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_ni_wo_trans_x2.json", "robust_normal_1_wo_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t17, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("strong non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_sni_wo_trans_x2.json", "robust_normal_1_wo_trans_x2_expected_probes.json");
+  BOOST_CHECK(CheckLmdplAndD1(true));
+}
+
+BOOST_AUTO_TEST_CASE(t18, *utf::label("lmdpl_and_d1") *utf::label("lmdpl") *utf::label("d1")
+  *utf::label("probe-isplating non-interference") *utf::label("normal mode") *utf::label("robust")) {
+  RunLmdplAndD1("robust_normal_1_pini_wo_trans_x2.json", "robust_normal_1_wo_trans_x2_expected_probes.json");
   BOOST_CHECK(CheckLmdplAndD1(true));
 }
 

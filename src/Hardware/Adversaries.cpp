@@ -53,6 +53,20 @@ void Adversaries::PrintLeakageReport(uint64_t fault_idx, uint64_t step_idx) cons
     std::min(probing_sets_.size(), settings_.GetNumberOfEntriesInReport());
   report.put("timestamp", GetTimestamp());
 
+  if (settings_.side_channel_analysis.notion == sca_notion_t::ps) {
+    report.put("notion", "Probing Security");
+  } else if (settings_.side_channel_analysis.notion == sca_notion_t::ni) {
+    report.put("notion", "Non-Interference");
+  } else if (settings_.side_channel_analysis.notion == sca_notion_t::sni) {
+    report.put("notion", "Strong Non-Interference");
+  } else if (settings_.side_channel_analysis.notion == sca_notion_t::pini) {
+    report.put("notion", "Probe-Isolating Non-Interference");
+  } else if (settings_.side_channel_analysis.notion == sca_notion_t::opini) {
+    report.put("notion", "Output Probe-Isolating Non-Interference");
+  } else {
+    throw std::runtime_error("Error in Adversaries::PrintLeakageReport(): Unknown SCA notion!");
+  }
+
   if (!simulation_.fault_set_.empty()) {
     for (uint64_t idx = 0; idx < simulation_.fault_set_[0].GetNumberOfFaultsInSet(); ++idx) {
       boost::property_tree::ptree pt;
@@ -557,10 +571,6 @@ void Adversaries::SetProbes() {
   BOOST_LOG_TRIVIAL(info) << "Successfully placed " << extensions_.size() << " possible extensions in total.";
 }
 
-void Adversaries::SetSimulators() {
-  std::cout << "To implemnent!" << std::endl;
-}
-
 Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation, const std::string& topmodule_name)
     : library_(library),
       circuit_(circuit),
@@ -569,10 +579,6 @@ Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& set
       fault_manager_(FaultManager(settings.fault_injection, circuit)), topmodule_name_(topmodule_name) {
 
   SetProbes(); 
-
-  if (settings_.side_channel_analysis.notion != sca_notion_t::ps) {
-    SetSimulators();
-  }
 
   uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;  
   simulation_.is_simulation_faulty_ = std::make_unique<uint64_t[]>(number_of_steps);
@@ -975,7 +981,7 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
     }
 
     if (IsInDistance(probes)) {
-      probing_sets_.emplace_back(circuit_, probes);
+      probing_sets_.emplace_back(circuit_, settings_, probes);
     }
 
     probes.clear();

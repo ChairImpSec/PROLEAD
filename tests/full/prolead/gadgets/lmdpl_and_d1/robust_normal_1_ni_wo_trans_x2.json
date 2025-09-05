@@ -4,10 +4,6 @@
     "minimize_probing_sets": "no"
   },
   "simulation": {
-    "output_shares": [
-      "x1",
-      "x2"
-    ],
     "number_of_clock_cycles": 3,
     "input_sequence": [
       {
@@ -70,7 +66,7 @@
     "clock_cycles": ["3"],
     "order": 1,
     "notion": "ni",
-    "transitional_leakage": true,
+    "transitional_leakage": false,
     "probe_placement":
     {
       "include": {

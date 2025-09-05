@@ -542,12 +542,10 @@ void CheckFunctionalCorrectness(const Settings &settings, const Simulation &simu
   }
 }
 
-
-
 void CheckCorrectness(const Settings &settings, const Simulation &simulation, const SharedData& shared_data, Sharing &output_sharing, int SimulationIndex, uint64_t output_element_size) {
   uint64_t number_of_output_shares = simulation.output_share_signal_indices_.size();
 
-  if (number_of_output_shares) {
+  if (number_of_output_shares && !simulation.expected_unshared_output_values_.empty() ) {
     uint64_t number_of_group_values = simulation.output_share_signal_indices_[0].size();
     std::vector<std::vector<uint64_t>> bitsliced_shared_output_value(number_of_output_shares, std::vector<uint64_t>(output_element_size));
     std::vector<uint64_t> bitsliced_output_value;
@@ -832,24 +830,37 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
 
   std::vector<uint64_t> bitsliced_element(input_element_size);
 
-  for (auto& shared_value : SharedData.selected_group_values) {
-    std::fill(bitsliced_element.begin(), bitsliced_element.end(), 0);
-    for (bit_index = 0; bit_index < input_element_size; ++bit_index) {
-      for (group_index = 0; group_index < number_of_groups; ++group_index) {
-        bitsliced_element[bit_index] |=
-            SharedData
-                .group_values_[group_index][shared_value.first[bit_index]] &
-            Select[group_index];
+  if (settings.side_channel_analysis.notion == sca_notion_t::ps) { // Mode for probing security set unshared x
+    for (auto& shared_value : SharedData.selected_group_values) {
+      std::fill(bitsliced_element.begin(), bitsliced_element.end(), 0);
+      for (bit_index = 0; bit_index < input_element_size; ++bit_index) {
+        for (group_index = 0; group_index < number_of_groups; ++group_index){
+          bitsliced_element[bit_index] |= SharedData.group_values_[group_index][shared_value.first[bit_index]] & Select[group_index];
+        }
+      }
+
+      if (shared_value.second.size() > 1){
+        shared_value.second = input_sharing.EncodeBitsliced(bitsliced_element, shared_value.second.size(), settings.input_finite_field.is_additive);
+      } else{
+        shared_value.second[0] = bitsliced_element;
       }
     }
+  } else { // Mode for composability set Sh(x)
+    for (auto& shared_value : SharedData.selected_group_values) {
+      for (value_index = 0; value_index < shared_value.second.size(); ++value_index) {
+        std::fill(shared_value.second[value_index].begin(), shared_value.second[value_index].end(), 0);
 
-    if (shared_value.second.size() > 1) {
-      shared_value.second = input_sharing.EncodeBitsliced(
-          bitsliced_element, shared_value.second.size(),
-          settings.input_finite_field.is_additive);
-    } else {
-      shared_value.second[0] = bitsliced_element;
-    }
+        for (bit_index = 0; bit_index < input_element_size; ++bit_index) {
+          for (group_index = 0; group_index < number_of_groups; ++group_index){
+            if (settings.IsInGroupMapping(value_index, shared_value.first[bit_index])) {
+              shared_value.second[value_index][bit_index] |= SharedData.group_values_[group_index][settings.GetGroupMapping(value_index, shared_value.first[bit_index])] & Select[group_index];
+            }else{
+              shared_value.second[value_index][bit_index] |= SharedData.group_values_[group_index][settings.GetGroupMappingWithOneShare(shared_value.first[bit_index])] & Select[group_index];
+            }
+          }
+        }				
+      }
+    }		
   }
 
   NumberOfWaitedClockCycles = -1;
