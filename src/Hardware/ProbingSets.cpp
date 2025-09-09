@@ -9,8 +9,6 @@ ProbingSet::ProbingSet(const CircuitStruct& circuit, const Settings& settings,
   if (settings.side_channel_analysis.notion != sca_notion_t::ps) {
     SetSimulators(settings);
   }
-
-  should_be_removed_ = false;
 };
 
 bool ProbingSet::operator<(const ProbingSet& other) const {
@@ -33,56 +31,8 @@ uint64_t ProbingSet::GetSizeOfKeyInBits() const {
   return number_of_extensions_ + number_of_enablers_;
 }
 
-const Probe* ProbingSet::GetFirstExtension() const {
-  assert(!extensions_.empty() && "Error in ProbingSet::GetFirstExtension(): Empty extensions!");
-  return extensions_.front();
-}
-
-const Probe* ProbingSet::GetLastExtension() const {
-  assert(!extensions_.empty() && "Error in ProbingSet::GetLastExtension(): Empty extensions!");
-  return extensions_.back();
-}
-
 const std::vector<const Probe*>& ProbingSet::GetExtensions() const {
   return extensions_;
-}
-
-const Probe* ProbingSet::GetExtension(uint64_t idx) const {
-  return extensions_[idx];
-}
-
-uint64_t ProbingSet::GetNumberOfExtensions() const {
-  return extensions_.size();
-}
-
-void ProbingSet::MarkAsRemovable() {
-  should_be_removed_ = true;
-}
-
-bool ProbingSet::IsRemovable() const {
-  return should_be_removed_;
-}
-
-
-bool ProbingSet::Includes(const ProbingSet& other) const {
-  if (IsRemovable() || other.IsRemovable()) {
-    return false;
-  } else {
-    if (GetSizeOfKeyInBits() <= other.GetSizeOfKeyInBits()) {
-      return false;
-    } else {
-      if ((GetFirstExtension() >= other.GetFirstExtension()) &&
-          (GetLastExtension() <= other.GetLastExtension())) {
-        if (std::includes(extensions_.begin(), extensions_.end(), other.GetExtensions().begin(), other.GetExtensions().end())) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
-  }
 }
 
 void ProbingSet::Initialize(bool is_in_compact_mode, uint64_t number_of_groups) {
@@ -146,7 +96,7 @@ std::string ProbingSet::PrintProbes(const Settings& settings) const{
   return result;
 }
 
-void ProbingSet::CompactRelaxedTableUpdate(const Settings& settings, const Simulation& simulation) {
+void ProbingSet::CompactRelaxedTableUpdate(const Simulation& simulation) {
   uint64_t grp_idx, sim_idx, ctr;
   std::queue<const Probe*> indices;
   std::vector<const Probe*> extensions;
@@ -309,7 +259,6 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
 void ProbingSet::NormalRobustTableUpdate(const Settings& settings, const Simulation& simulation) {
   uint64_t group_index;
   TableBucketVector datasets;
-  uint64_t number_of_extended_probes = GetSizeOfKeyInBits();
   uint64_t key_size_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
   uint64_t tmp_index, value;
 

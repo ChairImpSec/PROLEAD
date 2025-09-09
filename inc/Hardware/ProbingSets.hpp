@@ -2,10 +2,10 @@
  * @file ProbingSets.hpp
  * @brief Declaration of the ProbingSet class.
  *
- * @version 0.0.3
- * @date 2025-08-08
+ * @version 0.0.4
+ * @date 2025-09-09
  *
- * @author Nicolai Müller
+ * @author Nicolai MÃ¼ller
  */
 #pragma once
 
@@ -30,18 +30,9 @@ class ProbingSet {
   bool operator==(const ProbingSet& other) const;
   bool operator!=(const ProbingSet& other) const;
 
-  const std::vector<const Probe*>& GetProbes() const;
   uint64_t GetSizeOfKeyInBits() const;
-
-  const Probe* GetFirstExtension() const;
-  const Probe* GetLastExtension() const;
-  const Probe* GetExtension(uint64_t idx) const;
+  const std::vector<const Probe*>& GetProbes() const;
   const std::vector<const Probe*>& GetExtensions() const;
-  uint64_t GetNumberOfExtensions() const;
-
-  void MarkAsRemovable();
-  bool IsRemovable() const;
-  bool Includes(const ProbingSet& other) const;
 
   void Initialize(bool is_in_compact_mode, uint64_t number_of_groups);
 
@@ -52,11 +43,10 @@ class ProbingSet {
 
   uint64_t GetNumberOfEntries() const;
 
-  void CompactRelaxedTableUpdate(const Settings& settings, const Simulation& simulation);
+  void CompactRelaxedTableUpdate(const Simulation& simulation);
   void NormalRobustTableUpdate(const Settings& settings, const Simulation& simulation);
   void NormalRelaxedTableUpdate(const Settings& settings, const Simulation& simulation);
   void NormalRobustTableUpdateWithAllSimulations(const Settings& settings, const Simulation& simulation);
-
 
   std::string PrintProbes(const Settings& settings) const;
 
@@ -78,8 +68,5 @@ class ProbingSet {
 
     void Extend(const CircuitStruct& circuit);
     void SetSimulators(const Settings& settings);
-
-    bool should_be_removed_;
 };
-
 }  // namespace Hardware

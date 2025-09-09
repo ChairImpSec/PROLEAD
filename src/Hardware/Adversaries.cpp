@@ -571,12 +571,10 @@ void Adversaries::SetProbes() {
   BOOST_LOG_TRIVIAL(info) << "Successfully placed " << extensions_.size() << " possible extensions in total.";
 }
 
-Adversaries::Adversaries(Library& library, CircuitStruct& circuit, Settings& settings, Simulation& simulation, const std::string& topmodule_name)
-    : library_(library),
-      circuit_(circuit),
-      settings_(settings),
-      simulation_(simulation),
-      fault_manager_(FaultManager(settings.fault_injection, circuit)), topmodule_name_(topmodule_name) {
+Adversaries::Adversaries(Library& library, CircuitStruct& circuit, 
+  Settings& settings, Simulation& simulation, const std::string& topmodule_name)
+    : topmodule_name_(topmodule_name), library_(library), circuit_(circuit), settings_(settings),
+      simulation_(simulation), fault_manager_(FaultManager(settings.fault_injection, circuit)) {
 
   SetProbes(); 
 
@@ -628,7 +626,7 @@ void Adversaries::CompactTableUpdate(uint64_t sim_idx, std::vector<uint64_t>& co
 void Adversaries::CompactRelaxedTest(std::vector<double>& group_simulation_ratio) {
   #pragma omp parallel for schedule(guided)
   for (ProbingSet& probing_set : probing_sets_) {
-    probing_set.CompactRelaxedTableUpdate(settings_, simulation_);
+    probing_set.CompactRelaxedTableUpdate(simulation_);
     probing_set.ComputeGTest(settings_.GetNumberOfGroups(), 
       simulation_.number_of_processed_simulations, group_simulation_ratio);
   }
@@ -949,14 +947,39 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
   uint64_t step_idx = 0;
   auto ProcessProbingSets = [&]() {
     if (settings_.GetMinimization() != Minimization::none) {
+      uint64_t number_of_probing_sets = probing_sets_.size();
       std::sort(probing_sets_.begin(), probing_sets_.end(),
         [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
       probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
         [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs == rhs; }), probing_sets_.end());
+      BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. " 
+        << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";  
     }
 
     if (settings_.GetMinimization() == Minimization::aggressive) {
-      BOOST_LOG_TRIVIAL(info) << "Aggressive minimization of probing sets.";
+      if (!settings_.IsRelaxedModel()) {
+        uint64_t number_of_probing_sets = probing_sets_.size();
+        probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(), 
+          [this](const ProbingSet& probing_set) { 
+            for (const ProbingSet& other_set : probing_sets_) {
+              if (probing_set != other_set) {
+                if (std::includes(other_set.GetExtensions().begin(), other_set.GetExtensions().end(),
+                  probing_set.GetExtensions().begin(), probing_set.GetExtensions().end())) {
+                  return true;
+                }
+              }
+            }
+
+            return false; 
+          }), probing_sets_.end());
+
+        BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. " 
+          << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";  
+      } else {
+        BOOST_LOG_TRIVIAL(warning) << "Warning: Aggressive minimization " 
+          "is not supported in the robust but relaxed probing model!";
+      }
+  
     }
 
     leakage_per_run = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
