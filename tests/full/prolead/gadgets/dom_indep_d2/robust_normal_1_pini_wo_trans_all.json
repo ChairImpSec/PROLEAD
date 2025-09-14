@@ -1,0 +1,61 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "no"
+  },
+  "simulation": {
+    "output_shares": [
+      "port_c[0]",
+      "port_c[1]",
+      "port_c[2]"
+    ],
+    "number_of_clock_cycles": 3,
+    "always_random_inputs": [
+      "port_r[2:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "port_a[0]",
+            "value": "group_in0[0]"
+          },
+          {
+            "name": "port_b[0]",
+            "value": "group_in0[1]"
+          },
+          {
+            "name": "port_a[1]",
+            "value": "group_in1[0]"
+          },
+          {
+            "name": "port_b[1]",
+            "value": "group_in1[1]"
+          },
+          {
+            "name": "port_a[2]",
+            "value": "group_in2[0]"
+          },
+          {
+            "name": "port_b[2]",
+            "value": "group_in2[1]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 65536,
+    "number_of_simulations_per_step": 16384,
+    "number_of_simulations_per_write": 65536
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "notion": "pini",
+    "transitional_leakage": false,
+    "clock_cycles": [
+      "2"
+    ]
+  }
+}

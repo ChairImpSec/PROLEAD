@@ -1,0 +1,197 @@
+{
+    "placed_probes": [
+        "l0(2)",
+        "l1(2)",
+        "l2(2)",
+        "l3(2)",
+        "l4(2)",
+        "l5(2)",
+        "i0(2)",
+        "i1(2)",
+        "i2(2)",
+        "i3(2)",
+        "i4(2)",
+        "i5(2)",
+        "i6(2)",
+        "i7(2)",
+        "i8(2)",
+        "p0(2)",
+        "p1(2)",
+        "p2(2)",
+        "port_c[2](2)",
+        "port_c[1](2)",
+        "port_c[0](2)",
+        "j0(2)",
+        "j1(2)",
+        "j2(2)",
+        "j3(2)",
+        "j4(2)",
+        "j5(2)"
+    ],
+    "extended_probes": [
+        "port_a[2](2)",
+        "port_a[1](2)",
+        "port_a[0](2)",
+        "port_b[2](2)",
+        "port_b[1](2)",
+        "port_b[0](2)",
+        "port_r[2](2)",
+        "port_r[1](2)",
+        "port_r[0](2)",
+        "l0(2)",
+        "l1(2)",
+        "l2(2)",
+        "l3(2)",
+        "l4(2)",
+        "l5(2)"
+    ],
+    "extensions": [
+        {
+            "signals": "i0",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i1",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "i2",
+            "glitch_extension": [
+                "port_a[0]",
+                "port_b[2]"
+            ]
+        },
+        {
+            "signals": "i3",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i4",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "i5",
+            "glitch_extension": [
+                "port_a[1]",
+                "port_b[2]"
+            ]
+        },
+        {
+            "signals": "i6",
+            "glitch_extension": [
+                "port_a[2]",
+                "port_b[0]"
+            ]
+        },
+        {
+            "signals": "i7",
+            "glitch_extension": [
+                "port_a[2]",
+                "port_b[1]"
+            ]
+        },
+        {
+            "signals": "i8",
+            "glitch_extension": [
+                "port_a[2]",
+                "port_b[2]"
+            ]
+        },
+        {
+            "signals": "p0",
+            "glitch_extension": [
+                "l0",
+                "l1"
+            ]
+        },
+        {
+            "signals": "p1",
+            "glitch_extension": [
+                "l2",
+                "l3"
+            ]
+        },
+        {
+            "signals": "p2",
+            "glitch_extension": [
+                "l4",
+                "l5"
+            ]
+        },
+        {
+            "signals": "port_c[2]",
+            "glitch_extension": [
+                "i8",
+                "p2"
+            ]
+        },
+        {
+            "signals": "port_c[1]",
+            "glitch_extension": [
+                "i4",
+                "p1"
+            ]
+        },
+        {
+            "signals": "port_c[0]",
+            "glitch_extension": [
+                "i0",
+                "p0"
+            ]
+        },
+        {
+            "signals": "j0",
+            "glitch_extension": [
+                "port_r[0]",
+                "i1"
+            ]
+        },
+        {
+            "signals": "j1",
+            "glitch_extension": [
+                "port_r[1]",
+                "i2"
+            ]
+        },
+        {
+            "signals": "j2",
+            "glitch_extension": [
+                "port_r[0]",
+                "i3"
+            ]
+        },
+        {
+            "signals": "j3",
+            "glitch_extension": [
+                "port_r[2]",
+                "i5"
+            ]
+        },
+        {
+            "signals": "j4",
+            "glitch_extension": [
+                "port_r[1]",
+                "i6"
+            ]
+        },
+        {
+            "signals": "j5",
+            "glitch_extension": [
+                "port_r[2]",
+                "i7"
+            ]
+        }
+    ]
+}

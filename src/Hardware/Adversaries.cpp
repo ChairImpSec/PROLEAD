@@ -234,35 +234,37 @@ void Adversaries::PrintEvaluationBody(const std::vector<TableCell>& header,
   Logger logger(1, 120, 100);
   TableCell time_cell = logger.GetTimeCell(EndClock(start_time), strlen("Elapsed Time"));
   TableCell memory_cell = logger.GetMemoryCell(GetUsedMemory(), strlen("Used Memory"));
-
   std::string processed_simulations = std::to_string(simulation_.number_of_processed_simulations) + " / " +
     std::to_string(GetNumberOfRequiredTraces());
+
+  std::vector<TableCell> body{
+    {time_cell.content_, header[0].width_},
+    {memory_cell.content_, header[1].width_},
+    {processed_simulations, header[2].width_}
+  };
 
   ProbingSet const* probing_set = GetMostLeakingSet(bitmask);
   double p_value = 0.0;
   double max_p_value = 0.0;
-  std::string most_leaking_probes;
+
   if (probing_set != nullptr) {
     p_value = probing_set->GetGValue();
     max_p_value = std::max(p_value, max_p_value_deleted);
   
     if (p_value > max_p_value_deleted) {
-      most_leaking_probes = probing_set->PrintProbes(settings_);
+      body.push_back({probing_set->PrintProbes(settings_), header[3].width_});
     } else {
-      most_leaking_probes = printed_probing_set_deleted;
+      body.push_back({printed_probing_set_deleted, header[3].width_});
     }
+
+    body.push_back({std::to_string(max_p_value), header[4].width_});
+    body.push_back({(max_p_value < 5.0) ? "OKAY" : "LEAKAGE", header[5].width_});
+  } else {
+    uint64_t width = header[3].width_ + header[4].width_ + header[5].width_;
+    std::string stars = std::string((width - 22) / 2, '*');
+    std::string warning = stars + " More Simulations Required! *" + stars;
+    body.push_back({warning, width});
   }
-
-  std::string status = (max_p_value < 5.0) ? "OKAY" : "LEAKAGE";
-
-  std::vector<TableCell> body{
-    {time_cell.content_, header[0].width_},
-    {memory_cell.content_, header[1].width_},
-    {processed_simulations, header[2].width_},
-    {most_leaking_probes, header[3].width_},
-    {std::to_string(max_p_value), header[4].width_},
-    {status, header[5].width_}
-  };
 
   logger.PrintRow(body);
 }
@@ -786,7 +788,7 @@ void Adversaries::EvalProbingSets(std::vector<SharedData>& shared_data, timespec
     {"Elapsed Time", time_cell.width_},
     {"Used Memory", memory_cell.width_},
     {"#Simulations", processed_simulations.size()},
-    {"Probing Set with highest Information Leakage", this->GetProbingSetColumnSize()},
+    {"Probing Set with Highest Information Leakage", this->GetProbingSetColumnSize()},
     {"-log10(p)", strlen("999.999999")},
     {"Status", strlen("LEAKAGE")}
   };
