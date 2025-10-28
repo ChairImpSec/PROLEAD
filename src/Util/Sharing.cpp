@@ -82,7 +82,7 @@ std::vector<std::vector<uint64_t>> Sharing::EncodeBitsliced(
 
       for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_; ++bit_idx) {
         coeff <<= 1;
-        coeff |= (bitsliced_poly[idx] >> (63 - sim_idx)) & 1;
+        coeff |= (bitsliced_poly[idx] >> sim_idx) & 1;
         --idx;
       }
 
@@ -192,7 +192,7 @@ std::vector<uint64_t> Sharing::DecodeBitsliced(
              ++bit_idx) {
           coeff <<= 1;
           coeff |=
-              (bitsliced_shared_poly[share_idx][idx] >> (63 - sim_idx)) & 1;
+              (bitsliced_shared_poly[share_idx][idx] >> sim_idx) & 1;
           --idx;
         }
 
