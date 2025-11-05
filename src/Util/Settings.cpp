@@ -1521,6 +1521,9 @@ uint64_t Settings::GetGroupMappingWithOneShare(uint64_t bit_idx) const {
   return simulation.group_mapping_with_one_share.at(bit_idx);
 }
 
+uint64_t Settings::GetGroupMappingWithOneShareSize() const {
+  return simulation.group_mapping_with_one_share.size();
+}
 
 vlog_bit_t Settings::GetGroupBit(uint64_t group_index,
                                  uint64_t bit_index) const {
@@ -1734,6 +1737,19 @@ void Settings::SetAlternativeGroups() {
       } 
     }
 
+    std::sort(unshared_group_indices.begin(), unshared_group_indices.end());
+    unshared_group_indices.erase(std::unique(unshared_group_indices.begin(), 
+    unshared_group_indices.end()),unshared_group_indices.end());
+
+    unshared_group_indices.erase(
+      std::remove_if(unshared_group_indices.begin(), unshared_group_indices.end(),
+        [&group_indices](uint64_t grp_idx) {
+          return std::any_of(group_indices.begin(), group_indices.end(),
+            [grp_idx](const std::tuple<uint64_t, uint64_t>& tuple) {
+              return std::get<1>(tuple) == grp_idx && std::get<0>(tuple) > 0;
+            });
+          }), unshared_group_indices.end());
+
     if (side_channel_analysis.notion == sca_notion_t::ps) {
       std::sort(group_indices.begin(), group_indices.end(),
                 [](const std::tuple<uint64_t, uint64_t>& lhs,
@@ -1750,19 +1766,6 @@ void Settings::SetAlternativeGroups() {
                         return std::get<1>(lhs) == std::get<1>(rhs);
                       }), group_indices.end());
     } else {
-      std::sort(unshared_group_indices.begin(), unshared_group_indices.end());
-      unshared_group_indices.erase(std::unique(unshared_group_indices.begin(), 
-      unshared_group_indices.end()),unshared_group_indices.end());
-
-      unshared_group_indices.erase(
-        std::remove_if(unshared_group_indices.begin(), unshared_group_indices.end(),
-          [&group_indices](uint64_t grp_idx) {
-            return std::any_of(group_indices.begin(), group_indices.end(),
-              [grp_idx](const std::tuple<uint64_t, uint64_t>& tuple) {
-                return std::get<1>(tuple) == grp_idx && std::get<0>(tuple) > 0;
-              });
-            }), unshared_group_indices.end());
-
       std::vector<std::tuple<uint64_t, uint64_t>> full_group_indices = group_indices;
       uint64_t grp_idx, share_idx;
 
@@ -1789,13 +1792,13 @@ void Settings::SetAlternativeGroups() {
                         return std::get<0>(lhs) == std::get<0>(rhs) &&
                                std::get<1>(lhs) == std::get<1>(rhs);
                       }), group_indices.end());          
+    }
 
-      for (uint64_t idx = 0; idx < group_indices.size() + unshared_group_indices.size(); ++idx) {
-        if (idx < group_indices.size()) {
-          simulation.group_mapping[group_indices[idx]] = idx;
-        } else {
-          simulation.group_mapping_with_one_share[unshared_group_indices[idx - group_indices.size()]] = idx;
-        }
+    for (uint64_t idx = 0; idx < group_indices.size() + unshared_group_indices.size(); ++idx) {
+      if (idx < group_indices.size()) {
+        simulation.group_mapping[group_indices[idx]] = idx;
+      } else {
+        simulation.group_mapping_with_one_share[unshared_group_indices[idx - group_indices.size()]] = idx;
       }
     }
 

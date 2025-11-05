@@ -775,7 +775,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
 
   if (settings.input_finite_field.base == 2) {
     for (group_index = 0; group_index < number_of_groups; ++group_index) {
-      for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() /
+      for (value_index = 0; value_index < SharedData.group_values_[group_index].size() /
                                               input_element_size;
            value_index++) {
         random_bitsliced_polynomial =
@@ -788,7 +788,7 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
     }
   } else {
     for (group_index = 0; group_index < number_of_groups; ++group_index) {
-      for (value_index = 0; value_index < settings.GetNumberOfBitsPerGroup() /
+      for (value_index = 0; value_index < SharedData.group_values_[group_index].size() /
                                               input_element_size;
            value_index++) {
         random_bitsliced_polynomial =

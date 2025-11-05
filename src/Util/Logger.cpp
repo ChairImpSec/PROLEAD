@@ -29,10 +29,10 @@ TableCell Logger::GetMemoryCell(uint64_t mem_in_kb, uint64_t width){
   constexpr std::uint64_t BYTES_PER_MB = 1'000'000ULL;
 
   std::uint64_t tb = bytes / BYTES_PER_TB;
-  bytes          %= BYTES_PER_TB;
+  bytes %= BYTES_PER_TB;
 
   std::uint64_t gb = bytes / BYTES_PER_GB;
-  bytes          %= BYTES_PER_GB;
+  bytes %= BYTES_PER_GB;
 
   std::uint64_t mb = bytes / BYTES_PER_MB;
 

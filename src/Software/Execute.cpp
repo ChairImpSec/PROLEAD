@@ -12,9 +12,6 @@ void Software::Execute(const po::variables_map& vm){
     boost::json::object config_file = ValidateJson(config_file_name);
 
     Settings settings2(config_file, false);
-
-    std::cout << "Start Software Leakage Evaluation" << std::endl << std::endl;
     Software::Prepare::All(vm, probes, settings, settings2, SharedData, GlobalHelper, GlobalThreadSimulations);
     Software::Analyze::All(settings, SharedData, GlobalHelper, GlobalThreadSimulations);
-    std::cout << "done!" << std::endl;
 }

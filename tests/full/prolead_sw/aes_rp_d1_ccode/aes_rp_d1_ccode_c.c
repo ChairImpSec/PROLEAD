@@ -1,4 +1,46 @@
 #include <stdint.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <errno.h>
+
+/****************************************************************************************************
+*       Declare missing libc function                                                               *
+*****************************************************************************************************/
+
+caddr_t _sbrk(int incr) {
+    static char heap[1024]; // small heap, adjust size if needed
+    static char *brk = heap;
+    char *prev = brk;
+
+    if (brk + incr > heap + sizeof(heap)) {
+        errno = ENOMEM;
+        return (caddr_t) -1;
+    }
+
+    brk += incr;
+    return (caddr_t) prev;
+}
+
+int _write(int file, char *ptr, int len) {
+    return len;
+}
+
+int _read(int file, char *ptr, int len) {
+    return 0;
+}
+
+int _close(int file) {
+    return -1;
+}
+
+int _lseek(int file, int ptr, int dir) {
+    return 0;
+}
+
+void _exit(int status) {
+    while (1) {}
+}
 
 /****************************************************************************************************
 *       Declare here all your inputs for the emulator (need to be the same number and need to have  *

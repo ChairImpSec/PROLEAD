@@ -1,7 +1,7 @@
 #include <boost/program_options.hpp>
 #include <boost/test/unit_test.hpp>
 #include <cstdint>
-#include <cstdio>  // For std::remove
+#include <filesystem>
 
 #include "Software/Analyze.hpp"
 #include "Software/Prepare.hpp"
@@ -84,24 +84,18 @@ struct TestFixture {
   }
 
   ~TestFixture() {
-    std::remove(vm["binary"].as<std::string>().c_str());
-    std::remove(vm["mapfile"].as<std::string>().c_str());
-    std::remove(vm["asmfile"].as<std::string>().c_str());
-    const std::vector<std::string> files = {"code_section.ARM.exidx",
-                                            "code_section.bss",
-                                            "code_section.data",
-                                            "code_section.eh_frame",
-                                            "code_section.fini",
-                                            "code_section.fini_array",
-                                            "code_section.init",
-                                            "code_section.init_array",
-                                            "code_section.init_array.00000",
-                                            "code_section.randomness",
-                                            "code_section.text",
-                                            "code_section.text.startup"};
+    std::error_code ec;
+    std::regex file_pattern("code_section.*|.*\\.o");
+    std::filesystem::remove(vm["binary"].as<std::string>().c_str(), ec);
+    std::filesystem::remove(vm["mapfile"].as<std::string>().c_str(), ec);
+    std::filesystem::remove(vm["asmfile"].as<std::string>().c_str(), ec);
 
-    for (const std::string& file : files) {
-      std::remove((result_folder_path + file).c_str());
+    for (const auto& dir_entry : std::filesystem::directory_iterator(result_folder_path)) {
+      if (dir_entry.is_regular_file()) {
+        if (std::regex_match(dir_entry.path().filename().string(), file_pattern)) {
+          std::filesystem::remove(dir_entry.path(), ec);
+        }
+      }
     }
   }
 };

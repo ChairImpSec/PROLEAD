@@ -246,6 +246,7 @@ public:
   uint64_t GetGroupMapping(uint64_t share_idx, uint64_t bit_idx) const;
   bool IsInGroupMapping(uint64_t share_idx, uint64_t bit_idx) const;
   uint64_t GetGroupMappingWithOneShare(uint64_t bit_idx) const; 
+  uint64_t GetGroupMappingWithOneShareSize() const;
 
   uint64_t GetNumberOfSignalValuePairs(uint64_t index) const;
   uint64_t GetSignalLengthPerAssignment(uint64_t clock_index, uint64_t assignment_index) const;

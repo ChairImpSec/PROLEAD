@@ -47,9 +47,6 @@ double Software::Analyze::ProbingSecurity(Software::SettingsStruct& Settings,  s
     }
 
     StartClock(begin);
-
-    std::cout << "Start software evaluation..." << std::endl;
-
     omp_set_num_threads(Settings.Max_no_of_Threads);
 
     Operators::GenerateThreadRng(ThreadRng, Settings.Max_no_of_Threads + 1);

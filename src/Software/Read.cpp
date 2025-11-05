@@ -514,16 +514,39 @@ void Software::Read::SettingsFile(Software::SettingsStruct& settings, Settings& 
 void Software::Read::BinaryFile(const po::variables_map& vm, Software::SettingsStruct& settings){
 	if(settings.externalMake == "0") {
 		std::vector<std::string> design_files = vm["designfile"].as<std::vector<std::string>>();
-		std::string design_file_names = design_files[0];
 
-		for (uint64_t idx = 1; idx < design_files.size(); ++idx) {
-			design_file_names += " " + design_files[idx];
+		std::string compile, line, obj_files, obj_file;
+		for (const std::string &design_file : design_files) {
+			if (std::filesystem::exists(design_file)) {
+				bool isKeil = false;
+				obj_file = design_file.substr(0, design_file.rfind('.')) + ".o";
+
+				if (design_file.find(".c") == std::string::npos && design_file.find(".cpp") == std::string::npos) {
+					std::ifstream asm_file(design_file);
+					while (std::getline(asm_file, line)) {	
+						if (line.find("AREA") != std::string::npos || line.find("EXPORT") != std::string::npos) {
+							isKeil = true;
+							break;
+						}
+					}
+				}
+
+				if (isKeil) {
+					compile = "armasm " + settings.compilerFlags + " -o " + obj_file + " " + design_file;
+				} else {
+					compile = "arm-none-eabi-gcc " + settings.compilerFlags + " -c " + design_file + " -o " + obj_file;
+				}
+				
+				boost::process::system(compile);
+				obj_files += obj_file + " ";
+			} else {				
+				throw std::invalid_argument("Error in Read::BinaryFile(): " + design_file + " not found!");
+			}
 		}
 
-    	const std::string build_arm_binary = "arm-none-eabi-gcc " + settings.compilerFlags + " -Wl,-T" + vm["linkerfile"].as<std::string>() +
-                          " -Wl,-Map," + vm["mapfile"].as<std::string>() + " -o " + vm["binary"].as<std::string>() + " " + design_file_names;
-
-		boost::process::system(build_arm_binary);
+		const std::string link = "arm-none-eabi-gcc " + settings.compilerFlags + " -Wl,-T" + vm["linkerfile"].as<std::string>() +
+						  " -Wl,-Map," + vm["mapfile"].as<std::string>() + " -o " + vm["binary"].as<std::string>() + " " + obj_files;
+		boost::process::system(link);
 		std::cout << "Successfully created binary file at " << vm["binary"].as<std::string>() << std::endl;
 	}
 

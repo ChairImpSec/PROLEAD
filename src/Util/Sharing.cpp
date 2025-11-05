@@ -78,14 +78,12 @@ std::vector<std::vector<uint64_t>> Sharing::EncodeBitsliced(
 
     for (uint64_t coeff_idx = 0; coeff_idx < extension_degree_; ++coeff_idx) {
       coeff = 0;
-      idx = (coeff_idx + 1) * size_coefficients_bits_ - 1;
+      idx = coeff_idx * size_coefficients_bits_;
 
       for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_; ++bit_idx) {
-        coeff <<= 1;
-        coeff |= (bitsliced_poly[idx] >> sim_idx) & 1;
-        --idx;
+        coeff |= ((bitsliced_poly[idx + bit_idx] >> sim_idx) & 1) << bit_idx;
       }
-
+      
       assert(coeff < prime_base_ &&
              "Error while encoding a bitsliced polynomial. The unshared input "
              "polynomial is not in the field!");
@@ -128,16 +126,11 @@ std::vector<std::vector<uint64_t>> Sharing::EncodeBitsliced(
       assert(IsInField(shared_poly[share_idx]) &&
              "Error while encoding a bitsliced polynomial. One of the shared "
              "output polynomials is not in the field!");
+      
       idx = 0;
-
       for (uint64_t coeff_idx = 0; coeff_idx < extension_degree_; ++coeff_idx) {
-        for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_;
-             ++bit_idx) {
-          bitsliced_shared_poly[share_idx][idx] <<= 1;
-          bitsliced_shared_poly[share_idx][idx] |=
-              shared_poly[share_idx][coeff_idx] & 1;
-          shared_poly[share_idx][coeff_idx] >>= 1;
-          ++idx;
+        for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_; ++bit_idx) {
+          bitsliced_shared_poly[share_idx][idx++] |= ((shared_poly[share_idx][coeff_idx] >> bit_idx) & 1) << sim_idx;
         }
       }
     }
@@ -186,14 +179,10 @@ std::vector<uint64_t> Sharing::DecodeBitsliced(
 
       for (uint64_t coeff_idx = 0; coeff_idx < extension_degree_; ++coeff_idx) {
         coeff = 0;
-        idx = (coeff_idx + 1) * size_coefficients_bits_ - 1;
+        idx = coeff_idx * size_coefficients_bits_;
 
-        for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_;
-             ++bit_idx) {
-          coeff <<= 1;
-          coeff |=
-              (bitsliced_shared_poly[share_idx][idx] >> sim_idx) & 1;
-          --idx;
+        for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_; ++bit_idx) {
+          coeff |= ((bitsliced_shared_poly[share_idx][idx + bit_idx] >> sim_idx) & 1) << bit_idx;
         }
 
         fmpz_mod_poly_set_coeff_ui(fmpz_poly_, coeff_idx, coeff, ctx_fmpz_mod_);
@@ -221,10 +210,7 @@ std::vector<uint64_t> Sharing::DecodeBitsliced(
     idx = 0;
     for (uint64_t coeff_idx = 0; coeff_idx < extension_degree_; ++coeff_idx) {
       for (uint64_t bit_idx = 0; bit_idx < size_coefficients_bits_; ++bit_idx) {
-        bitsliced_poly[idx] <<= 1;
-        bitsliced_poly[idx] |= result[coeff_idx] & 1;
-        result[coeff_idx] >>= 1;
-        ++idx;
+        bitsliced_poly[idx++] |= ((result[coeff_idx] >> bit_idx) & 1) << sim_idx;
       }
     }
   }
@@ -291,33 +277,34 @@ void Sharing::SampleRandomPolynomial(fq_t& random_polynomial_fq) {
 }
 
 std::vector<uint64_t> Sharing::SampleRandomBitslicedPolynomial() {
-  uint64_t index, bit_index, bit_width = length_of_elements_in_bits_;
-  std::vector<uint64_t> bitsliced_polynomial(bit_width);
+  std::vector<uint64_t> bs_poly(length_of_elements_in_bits_, 0);
   boost::dynamic_bitset<> bitset;
-  Polynomial polynomial(extension_degree_);
+  Polynomial poly(extension_degree_);
 
-  for (index = 0; index < 64; ++index) {
-    fq_t polynomial_fq;
-    fq_init(polynomial_fq, ctx_fq_);
-    SampleRandomPolynomial(polynomial_fq);
-    ConvertFqToPolynomial(polynomial_fq, polynomial);
-    bitset = ConvertPolynomialToBitset(polynomial);
+  for (uint64_t sim_idx = 0; sim_idx < 64; ++sim_idx) {
+    fq_t poly_fq;
+    fq_init(poly_fq, ctx_fq_);
+    SampleRandomPolynomial(poly_fq);
+    ConvertFqToPolynomial(poly_fq, poly);
+    bitset = ConvertPolynomialToBitset(poly);
 
-    for (bit_index = 0; bit_index < bit_width; ++bit_index) {
-      bitsliced_polynomial[bit_index] <<= 1;
-      bitsliced_polynomial[bit_index] |= bitset[bit_index];
+    for (uint64_t bit_idx = 0; bit_idx < length_of_elements_in_bits_; ++bit_idx) {
+      /* Use bitset.test(bit_idx) to safely extract a single bit as 0 or 1. 
+        Directly shifting bitset[bit_idx] (a proxy reference) can cause 
+        incorrect results, since boost::dynamic_bitset stores bits in 64-bit 
+        blocks and may convert the whole block instead of one bit. */
+      bs_poly[bit_idx] |= (static_cast<uint64_t>(bitset.test(bit_idx)) << sim_idx);
     }
 
-    fq_clear(polynomial_fq, ctx_fq_);
+    fq_clear(poly_fq, ctx_fq_);
   }
 
-  return bitsliced_polynomial;
+  return bs_poly;
 }
 
 std::vector<uint64_t> Sharing::SampleBooleanRandomBitslicedPolynomial() {
-  std::vector<uint64_t> bitsliced_polynomial(length_of_elements_in_bits_,
-                                             gen_());
-  return bitsliced_polynomial;
+  std::vector<uint64_t> bs_poly(length_of_elements_in_bits_, gen_());
+  return bs_poly;
 }
 
 bool Sharing::IsInField(const Polynomial& polynomial) const {

@@ -7,7 +7,7 @@ SharedData::SharedData(const CircuitStruct& circuit, const Settings& settings)
       register_values_(circuit.NumberOfRegValues),
       group_values_(
           settings.GetNumberOfGroups(),
-          std::vector<uint64_t>(settings.GetNumberOfBitsPerGroup(), 0)) {
+          std::vector<uint64_t>(settings.GetNumberOfBitsPerGroup() + settings.GetGroupMappingWithOneShareSize(), 0)) {
   uint64_t cycle_index, input_index, value_index, bitmask = 1;
   std::string signal_name;
 
