@@ -1,29 +1,32 @@
-# prolead.nix
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   pkg-config,
   gnumake,
   boost186,
   flint,
+  python310,
   python312,
+  withPython ? python310,
+  gdstk ? null,
   catch2,
   gcc-arm-embedded,
+  srcHash ? "sha256-LIqxlFaAeHrORV93vavuy0wWemEIJpb7HBuaLMfzzT8=",
 }:
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "prolead";
-  version = "v3.1.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "ChairImpSec";
     repo = "PROLEAD";
-    rev = "v3.1.0";
-    sha256 = "sha256-LIqxlFaAeHrORV93vavuy0wWemEIJpb7HBuaLMfzzT8=";
+    rev = "v${version}";
+    hash = srcHash;
   };
 
   # Required for building
-  nativeBuildInputs =  [
+  nativeBuildInputs = [
     pkg-config
     gnumake
   ];
@@ -35,12 +38,13 @@ stdenv.mkDerivation {
   buildInputs = [
     (boost186.override {
       enablePython = true;
-      python = python312;
+      python = withPython;
     })
     flint
-    python312
+    withPython
     gcc-arm-embedded
-  ];
+  ]
+  ++ (lib.optional (gdstk != null) gdstk);
 
   installPhase = ''
     runHook preInstall
@@ -48,4 +52,13 @@ stdenv.mkDerivation {
     cp release/PROLEAD $out/bin
     runHook postInstall
   '';
+
+  meta = {
+    description = "PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}FIESTA - Fault Injection Evaluation with Statistical Analysis";
+    homepage = "https://github.com/ChairImpSec/PROLEAD";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
+    mainProgram = "prolead";
+    platforms = lib.platforms.all;
+  };
 }
