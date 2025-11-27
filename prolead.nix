@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ChairImpSec/PROLEAD";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ];
-    mainProgram = "prolead";
+    mainProgram = "PROLEAD";
     platforms = lib.platforms.all;
   };
 }
