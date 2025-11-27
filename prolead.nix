@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}\u{3000}FIESTA - Fault Injection Evaluation with Statistical Analysis";
+    description = "PROLEAD - A Probing-Based Leakage Detection Tool for Hardware and Software + FIESTA - Fault Injection Evaluation with Statistical Analysis";
     homepage = "https://github.com/ChairImpSec/PROLEAD";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ];
