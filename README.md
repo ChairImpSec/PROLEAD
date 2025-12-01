@@ -6,6 +6,15 @@ PROLEAD and FIESTA build a versatile C++ framework for analyzing the security of
 ## Documentation
 All information about the features and use of PROLEAD can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki">Wiki</a>.
 
+## Running
+```
+# Prolead 3.1.0
+nix run github:ChairImpSec/PROLEAD#prolead_31
+
+# Prolead master branch
+nix run github:ChairImpSec/PROLEAD
+```
+
 ## Examples
 Some selected examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/tree/main/examples">examples</a> folder. More information regarding the examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Examples">Wiki</a>. We will provide more examples soon.
 

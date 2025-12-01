@@ -1,7 +1,8 @@
-{ pkgs ? import <nixpkgs> {} }:
-
-
-let gdstk = pkgs.callPackage ./gdstk.nix { }; in pkgs.mkShell {
+{
+  pkgs ? import <nixpkgs> { },
+  gdstk ? pkgs.callPackage ./gdstk.nix { },
+}:
+pkgs.mkShell {
   name = "prolead-dev";
 
   nativeBuildInputs = with pkgs; [
@@ -26,6 +27,5 @@ let gdstk = pkgs.callPackage ./gdstk.nix { }; in pkgs.mkShell {
     gdstk
   ];
 
-  shellHook=''
-    export PROLEAD="$(pwd)/release/PROLEAD" && export PROLEAD_LIB="$(pwd)/libs"'';
+  shellHook = ''export PROLEAD="$(pwd)/release/PROLEAD" && export PROLEAD_LIB="$(pwd)/libs"'';
 }
