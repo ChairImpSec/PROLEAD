@@ -15,6 +15,9 @@ nix run github:ChairImpSec/PROLEAD#prolead_31
 nix run github:ChairImpSec/PROLEAD
 ```
 
+> [!NOTE]
+> To run the default config and the provided examples, it is required to clone prolead and enter the cloned directory before executing the aforementioned commands.
+
 ## Examples
 Some selected examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/tree/main/examples">examples</a> folder. More information regarding the examples can be found in the <a href="https://github.com/ChairImpSec/PROLEAD/wiki/Examples">Wiki</a>. We will provide more examples soon.
 
