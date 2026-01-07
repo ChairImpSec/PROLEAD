@@ -28,8 +28,8 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    export PROLEAD_RELEASE="$(pwd)/release/"
-    export PROLEAD_LIB="$(pwd)/libs"
-    alias prolead="$(pwd)/release/PROLEAD"
+      export PROLEAD_RELEASE="$(pwd)/release"
+      export PROLEAD_LIB="$(pwd)/libs"
+      export PROLEAD="$(pwd)/release/PROLEAD"
   '';
 }
