@@ -27,5 +27,9 @@ pkgs.mkShell {
     gdstk
   ];
 
-  shellHook = ''export PROLEAD="$(pwd)/release/PROLEAD" && export PROLEAD_LIB="$(pwd)/libs"'';
+  shellHook = ''
+    export PROLEAD_RELEASE="$(pwd)/release/"
+    export PROLEAD_LIB="$(pwd)/libs"
+    alias prolead="$(pwd)/release/PROLEAD"
+  '';
 }
