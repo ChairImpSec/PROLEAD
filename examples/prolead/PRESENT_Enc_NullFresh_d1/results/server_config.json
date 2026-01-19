@@ -1,0 +1,261 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "trivial"
+  },
+  "simulation": {
+    "groups": [
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'h0000000000000000"
+    ],
+    "number_of_clock_cycles": 551,
+    "output_shares": [
+      "dataOut1[3:0]",
+      "dataOut2[3:0]"
+    ],
+    "expected_output": [
+      "4'h$",
+      "4'h5"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "4'h0"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "4'h0"
+          },
+          {
+            "name": "key[3:0]",
+            "value": "4'h0"
+          },
+          {
+            "name": "nReset",
+            "value": "1'b0"
+          }
+        ],
+        "hold_for_cycles": 5
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[3:0]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[3:0]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[7:4]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[7:4]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[11:8]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[11:8]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[15:12]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[15:12]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[19:16]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[19:16]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[23:20]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[23:20]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[27:24]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[27:24]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[31:28]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[31:28]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[35:32]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[35:32]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[39:36]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[39:36]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[43:40]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[43:40]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[47:44]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[47:44]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[51:48]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[51:48]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[55:52]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[55:52]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[59:56]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[59:56]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "group_in0[63:60]"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "group_in1[63:60]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "dataIn1[3:0]",
+            "value": "4'h0"
+          },
+          {
+            "name": "dataIn2[3:0]",
+            "value": "4'h0"
+          },
+          {
+            "name": "nReset",
+            "value": "1'b1"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 65536,
+    "number_of_simulations_per_step": 8192
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  }
+}

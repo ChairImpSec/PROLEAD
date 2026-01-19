@@ -1,0 +1,75 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "trivial"
+  },
+  "simulation": {
+    "groups": [
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'h0123456789abcdef"
+    ],
+    "number_of_clock_cycles": 15,
+    "output_shares": [
+      "c0[63:0]",
+      "c1[63:0]"
+    ],
+    "expected_output": [
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'hae25ad3ca8fa9ccf"
+    ],
+    "always_random_inputs": [
+      "r[127:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "p0[63:0]",
+            "value": "group_in0[63:0]"
+          },
+          {
+            "name": "p1[63:0]",
+            "value": "group_in1[63:0]"
+          },        
+          {
+            "name": "k[127:0]",
+            "value": "128'h0000000000000000fedcba9876543210"
+          },
+          {
+            "name": "rst",
+            "value": "1'b1"
+          },
+          {
+            "name": "en",
+            "value": "1'b0"
+          },          
+          {
+            "name": "enc",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "rst",
+            "value": "1'b0"
+          },
+          {
+            "name": "en",
+            "value": "1'b1"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1536000,
+    "number_of_simulations_per_step": 128000
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  }
+}

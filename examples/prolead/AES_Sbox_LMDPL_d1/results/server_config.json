@@ -1,0 +1,84 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "no"
+  },
+  "simulation": {
+    "groups": [
+      "8'h$$",
+      "8'h12"
+    ],
+    "number_of_clock_cycles": 3,
+    "output_shares": [
+      "Y_s0[7:0]",
+      "Y_s1[7:0]"
+    ],
+    "expected_output": [
+      "8'h$$",
+      "8'hC9"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "X_s0[7:0]",
+            "value": "8'h00"
+          },
+          {
+            "name": "X_s1[7:0]",
+            "value": "8'h00"
+          },
+          {
+            "name": "X_s1_bar[7:0]",
+            "value": "8'h00"
+          },
+          {
+            "name": "Fresh[33:0]",
+            "value": "34'b0000000000000000000000000000000000"
+          },
+          {
+            "name": "reset",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "X_s0[7:0]",
+            "value": "group_in0[7:0]"
+          },
+          {
+            "name": "Fresh[33:0]",
+            "value": "34'b$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+          },
+          {
+            "name": "reset",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "X_s1[7:0]",
+            "value": "group_in1[7:0]"
+          },
+          {
+            "name": "X_s1_bar[7:0]",
+            "value": "~group_in1[7:0]"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1536000,
+    "number_of_simulations_per_step": 128000
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "relaxed_model": true
+  }
+}

@@ -1,0 +1,406 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "groups": [
+      "256'h00000000000000000000000000000000$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
+      "256'h0000000000000000000000000000000000000000000000000000000000000000"
+    ],
+    "number_of_clock_cycles": 50,
+    "always_random_inputs": [
+      "randomS2[15:0]",
+      "randomS3[7:0]",
+      "randomS4[15:0]",
+      "randomS5[31:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "PTxDI[15:0]",
+            "value": "16'h0000"
+          },
+          {
+            "name": "KxDI[15:0]",
+            "value": "16'h0000"
+          },
+          {
+            "name": "RstxBI",
+            "value": "1'b0"
+          },
+          {
+            "name": "StartxSI",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[15:0]",
+            "value": "16'h0000"
+          },
+          {
+            "name": "KxDI[15:0]",
+            "value": "16'h0000"
+          },
+          {
+            "name": "RstxBI",
+            "value": "1'b1"
+          },
+          {
+            "name": "StartxSI",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[7:0]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[7:0]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[135:128]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[135:128]"
+          },
+          {
+            "name": "StartxSI",
+            "value": "1'b0"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[15:8]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[15:8]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[143:136]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[143:136]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[23:16]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[23:16]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[151:144]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[151:144]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[31:24]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[31:24]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[159:152]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[159:152]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[39:32]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[39:32]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[167:160]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[167:160]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[47:40]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[47:40]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[175:168]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[175:168]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[55:48]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[55:48]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[183:176]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[183:176]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[63:56]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[63:56]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[191:184]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[191:184]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[71:64]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[71:64]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[199:192]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[199:192]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[79:72]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[79:72]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[207:200]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[207:200]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[87:80]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[87:80]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[215:208]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[215:208]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[95:88]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[95:88]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[223:216]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[223:216]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[103:96]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[103:96]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[231:224]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[231:224]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[111:104]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[111:104]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[239:232]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[239:232]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[119:112]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[119:112]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[247:240]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[247:240]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[7:0]",
+            "value": "group_in0[127:120]"
+          },
+          {
+            "name": "PTxDI[15:8]",
+            "value": "group_in1[127:120]"
+          },
+          {
+            "name": "KxDI[7:0]",
+            "value": "group_in0[255:248]"
+          },
+          {
+            "name": "KxDI[15:8]",
+            "value": "group_in1[255:248]"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "PTxDI[23:0]",
+            "value": "24'h000000"
+          },
+          {
+            "name": "KxDI[23:0]",
+            "value": "24'h000000"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1536000,
+    "number_of_simulations_per_step": 128000
+  },
+  "hardware": {
+    "clock_signal_name": "ClkxCI"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": true
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "trivial",
+    "compact_distributions": true
+  },
+  "simulation": {
+    "groups": [
+      "25'b$$$$$$$$$$$$$$$$$$$$$$$$$",
+      "25'b0000000000000000000000000"
+    ],
+    "output_shares": [
+      "OutData[24:0]",
+      "OutData[49:25]",
+      "OutData[74:50]"
+    ],
+    "expected_output": [
+      "25'b$$$$$$$$$$$$$$$$$$$$$$$$$",
+      "25'b0000011100100110001001010"
+    ],
+    "number_of_clock_cycles": 13,
+    "always_random_inputs": [
+      "FreshRand[74:0]"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "InData[24:0]",
+            "value": "group_in0[24:0]"
+          },
+          {
+            "name": "InData[49:25]",
+            "value": "group_in1[24:0]"
+          },
+          {
+            "name": "InData[74:50]",
+            "value": "group_in2[24:0]"
+          },          
+          {
+            "name": "Reset",
+            "value": "1'b1"
+          }
+        ]
+      },
+      {
+        "signals": [
+          {
+            "name": "InData[24:0]",
+            "value": "25'b0000000000000000000000000"
+          },
+          {
+            "name": "InData[49:25]",
+            "value": "25'b0000000000000000000000000"
+          },
+                    {
+            "name": "InData[74:50]",
+            "value": "25'b0000000000000000000000000"
+          },
+          {
+            "name": "Reset",
+            "value": "1'b0"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 100000000,
+    "number_of_simulations_per_step": 1000000
+  },
+  "hardware": {
+    "clock_signal_name": "Clock"
+  },
+  "side_channel_analysis": {
+    "order": 2,
+    "transitional_leakage": true
+  }
+}

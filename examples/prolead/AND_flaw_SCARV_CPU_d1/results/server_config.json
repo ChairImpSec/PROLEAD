@@ -1,0 +1,71 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive"
+  },
+  "simulation": {
+    "groups": [
+      "2'b00",
+      "2'b01",
+      "2'b10",
+      "2'b11"
+    ],
+    "number_of_clock_cycles": 10,
+    "always_random_inputs": [
+    ],
+    "output_shares": [
+      "qx[0:0]",
+      "qy[0:0]"
+    ],
+    "expected_output": [
+      "1'b0",
+      "1'b0",
+      "1'b0",
+      "1'b1"
+    ],
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "z0[0:0]",
+            "value": "1'b$"
+          },
+          {
+            "name": "z1[0:0]",
+            "value": "1'b$"
+
+          },
+          {
+            "name": "ax[0:0]",
+            "value": "group_in0[0:0]"
+          },
+          {
+            "name": "ay[0:0]",
+            "value": "group_in0[1:1]"
+          },
+          {
+            "name": "bx[0:0]",
+            "value": "group_in1[0:0]"
+          },
+          {
+            "name": "by[0:0]",
+            "value": "group_in1[1:1]"
+          },
+          {
+            "name": "clk_en",
+            "value": "1'b1"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1536000,
+    "number_of_simulations_per_step": 128000
+  },
+  "hardware": {
+    "clock_signal_name": "g_clk"
+  },
+  "side_channel_analysis": {
+    "order": 1,
+    "transitional_leakage": false
+  }
+}

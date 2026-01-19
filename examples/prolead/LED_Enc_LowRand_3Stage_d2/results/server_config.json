@@ -1,0 +1,95 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "trivial",
+    "number_of_probing_sets_per_step": 250000
+  },
+  "simulation": {
+    "groups": [
+      "256'h$$$$$$$$$$$$$$$$00000000000000000000000000000000$$$$$$$$$$$$$$$$",
+      "256'h$$$$$$$$$$$$$$$$000000000000000000000000000000000000000000000000"
+    ],
+    "output_shares": [
+      "Ciphertext0[63:0]",
+      "Ciphertext1[63:0]",
+      "Ciphertext2[63:0]"
+    ],
+    "expected_output": [
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'h3DECB2A0850CDBA1"
+    ],
+    "number_of_clock_cycles": 145,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "Plaintext0[63:0]",
+            "value": "group_in0[63:0]"
+          },
+          {
+            "name": "Plaintext1[63:0]",
+            "value": "group_in1[63:0]"
+          },
+          {
+            "name": "Plaintext2[63:0]",
+            "value": "group_in2[63:0]"
+          },
+          {
+            "name": "Key0[127:0]",
+            "value": "group_in0[191:64]"
+          },
+          {
+            "name": "Key1[127:0]",
+            "value": "group_in1[191:64]"
+          },
+          {
+            "name": "Key2[127:0]",
+            "value": "group_in2[191:64]"
+          },
+          {
+            "name": "r[71:0]",
+            "value": "72'b$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+          },
+          {
+            "name": "rst",
+            "value": "1'b1"
+          }
+        ]
+      },
+           {
+        "signals": [
+          {
+            "name": "Plaintext0[63:0]",
+            "value": "group_in0[255:192]"
+          },
+          {
+            "name": "Plaintext1[63:0]",
+            "value": "group_in1[255:192]"
+          },
+          {
+            "name": "Plaintext2[63:0]",
+            "value": "group_in2[255:192]"
+          },
+          {
+            "name": "r[71:0]",
+            "value": "72'b$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+          },
+          {
+            "name": "rst",
+            "value": "1'b0"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 65536,
+    "number_of_simulations_per_step": 4096
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 2,
+    "variate": "multivariate",
+    "clock_cycles": ["14", "15"]
+  }
+}

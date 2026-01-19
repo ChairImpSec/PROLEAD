@@ -1,6 +1,0 @@
-[2025-08-27 14:55:08] Successfully validated the settings file.
-[2025-08-27 14:55:08] Successfully read the library with name "nang45".
-[2025-08-27 14:55:08] Successfully parsed 35 cells from the library.
-[2025-08-27 14:55:08] Successfully found buffer cell with identifier "BUF_X1" and others.
-[2025-08-27 14:55:08] Successfully read design file with topmodule "circuit"!
-[2025-08-27 14:55:08] Successfully matched 18 fresh mask signals (for rising edge) [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].
