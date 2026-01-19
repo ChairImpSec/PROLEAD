@@ -2,10 +2,10 @@
  * @file ProbingSets.hpp
  * @brief Declaration of the ProbingSet class.
  *
- * @version 0.0.4
- * @date 2025-09-09
+ * @version 0.0.3
+ * @date 2025-08-08
  *
- * @author Nicolai MÃ¼ller
+ * @author Nicolai Müller
  */
 #pragma once
 

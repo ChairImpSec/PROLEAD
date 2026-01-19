@@ -184,7 +184,7 @@ void ProbingSet::NormalRobustTableUpdateWithAllSimulations(const Settings& setti
 
 void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simulation& simulation) {
   uint64_t en_idx, grp_idx, key_idx, sim_idx;
-  uint64_t number_of_key_blocks = contingency_table_.GetSizeOfKeyInBytes();
+  uint64_t key_size_in_bytes = contingency_table_.GetSizeOfKeyInBytes();
   uint64_t number_of_groups = settings.GetNumberOfGroups();
   std::queue<const Probe*> indices;
   std::vector<const Probe*> extensions;
@@ -198,8 +198,10 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
   TableBucketVector datasets(number_of_simulations);
   for (uint64_t idx = 0; idx < number_of_simulations; ++idx) {
     grp_idx = simulation.selected_groups_[simulation.considered_simulation_indices_[idx]];
-    datasets[idx].key_ = std::make_unique<uint8_t[]>(number_of_key_blocks);
-    std::memset(datasets[idx].key_.get(), 0, number_of_key_blocks);
+    assert(grp_idx < number_of_groups && "Error in NormalRelaxedTableUpdate(): Group index out of range!");
+
+    datasets[idx].key_ = std::make_unique<uint8_t[]>(key_size_in_bytes);
+    std::memset(datasets[idx].key_.get(), 0, key_size_in_bytes);
     datasets[idx].data_ = std::make_unique<uint32_t[]>(number_of_groups);
     std::memset(datasets[idx].data_.get(), 0,
                 sizeof(uint32_t) * number_of_groups);
@@ -242,6 +244,7 @@ void ProbingSet::NormalRelaxedTableUpdate(const Settings& settings, const Simula
         }
       }
     }
+
 
     std::sort(extensions.begin(), extensions.end());
     extensions.erase(std::unique(extensions.begin(), extensions.end()), extensions.end());
@@ -303,7 +306,7 @@ void ProbingSet::IncrementSpecificCounter(uint64_t key_index, uint64_t group_ind
 void ProbingSet::Extend(const CircuitStruct& circuit) {
   std::queue<const Probe*> path;
   std::unordered_set<const Probe*> visited;
-  std::vector<const Enabler*> enablers;
+  number_of_enablers_ = 0;
 
   for (const Probe* probe : probes_) {
     if (visited.insert(probe).second) {
@@ -314,26 +317,34 @@ void ProbingSet::Extend(const CircuitStruct& circuit) {
   while (!path.empty()) {
     const Probe* probe = path.front();
     if (probe->DoesExtend(circuit)) {
-      if (probe->GetEnabler() != nullptr) {
-        enablers.push_back(probe->GetEnabler());
-      }
       for (const Probe* extension : probe->GetGlitchExtensions()) {
         if (visited.insert(extension).second) {
           path.push(extension);
         }
       }
-    } else {
+    }
+    path.pop();
+  }
+
+  for (const Probe* probe : visited) {
+    if (!probe->DoesExtend(circuit)) {
+      if (probe->GetEnabler() != nullptr) {
+        number_of_enablers_++;
+      }
+    }
+  }
+
+  bool model_is_relaxed = number_of_enablers_ != 0;
+  for (const Probe* probe : visited) {
+    if (!probe->DoesExtend(circuit) || model_is_relaxed) {
       for (const Probe* extension : probe->GetTransitionExtensions()) {
         extensions_.push_back(extension);
       }
     }
-
-    path.pop();
   }
 
   std::sort(extensions_.begin(), extensions_.end(), [](const Probe* lhs, const Probe* rhs) {return *lhs < *rhs;});
   extensions_.erase(std::unique(extensions_.begin(), extensions_.end()), extensions_.end()); 
-  number_of_enablers_ = enablers.size();
   number_of_extensions_ = extensions_.size();
 }
 

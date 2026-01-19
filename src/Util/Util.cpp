@@ -7,7 +7,7 @@ void SortAndMergeDuplicates(TableBucketVector& observations,
     [key_size_in_bytes](const TableEntry& lhs, const TableEntry& rhs) {
       return std::memcmp(lhs.key_.get(), rhs.key_.get(), key_size_in_bytes) < 0;
     });
-
+  
   auto it = std::unique(observations.begin(), observations.end(),
     [key_size_in_bytes, number_of_groups](TableEntry& lhs, TableEntry& rhs) {
       if (std::memcmp(lhs.key_.get(), rhs.key_.get(), key_size_in_bytes) == 0) {
@@ -516,13 +516,12 @@ std::string GetTimestamp() {
 
 void GenerateThreadRng(std::vector<boost::mt19937>& thread_rng,
                        uint64_t number_of_threads) {
-  uint64_t seed;
+    std::random_device rd;
 
-  for (uint64_t idx = 0; idx < number_of_threads; ++idx) {
-    seed = rand();
-    boost::mt19937 rng(seed);
-    thread_rng[idx] = rng;
-  }
+    for (uint64_t idx = 0; idx < number_of_threads; ++idx) {
+        std::seed_seq seq{rd(), rd(), rd(), rd(), rd(), rd(), rd(), rd()};
+        thread_rng[idx].seed(seq);
+    }
 }
 
 uint64_t GetUsedMemory() {

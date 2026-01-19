@@ -1,4 +1,5 @@
 #include "Hardware/Adversaries.hpp"
+#include <cassert>
 
 namespace Hardware {
 void Adversaries::PrintProbeReport() const {
@@ -32,7 +33,7 @@ void Adversaries::PrintProbeReport() const {
     if (!probes_[idx].GetGlitchExtensions().empty()) {
       boost::property_tree::ptree pt, ext, exts;
       pt.put("signals", probes_[idx].Print(settings_.GetClkEdge(), false));
-    
+
       for (const Probe* extension : probes_[idx].GetGlitchExtensions()) {
         ext.put("", extension->Print(settings_.GetClkEdge(), false));
         exts.push_back(std::make_pair("", ext));
@@ -43,7 +44,7 @@ void Adversaries::PrintProbeReport() const {
     }
   }
   report.add_child("extensions", probes);
-  std::string file_name = simulation_.result_folder_name_ + "/prolead_" + topmodule_name_ + "_probes.json"; 
+  std::string file_name = simulation_.result_folder_name_ + "/prolead_" + topmodule_name_ + "_probes.json";
   write_json(file_name, report);
 }
 
@@ -104,8 +105,8 @@ void Adversaries::PrintLeakageReport(uint64_t fault_idx, uint64_t step_idx) cons
       pt.put("", extension->Print(settings_.GetClkEdge(), true));
       probes.push_back(std::make_pair("", pt));
     }
-      
-    set.add_child("extensions", probes);    
+
+    set.add_child("extensions", probes);
     set.put("-log10(p)", probing_set->GetGValue());
     return set;
   };
@@ -145,9 +146,9 @@ void Adversaries::PrintLeakageReport(uint64_t fault_idx, uint64_t step_idx) cons
     report.add_child("most_leaking_probing_sets_in_total", sets);
   }
 
-  std::string file_name = simulation_.result_folder_name_ + "/prolead_" + 
-    topmodule_name_ + "_" + std::to_string(fault_idx) + "_" + std::to_string(step_idx) + "_" + 
-    std::to_string(simulation_.number_of_processed_simulations) + "_leakages.json"; 
+  std::string file_name = simulation_.result_folder_name_ + "/prolead_" +
+    topmodule_name_ + "_" + std::to_string(fault_idx) + "_" + std::to_string(step_idx) + "_" +
+    std::to_string(simulation_.number_of_processed_simulations) + "_leakages.json";
   write_json(file_name, report);
 }
 
@@ -172,7 +173,7 @@ uint64_t Adversaries::GetNumberOfRequiredTraces() const {
 }
 
 void Adversaries::PrintSummary() {
-  assert(!probing_sets_.empty() && "Error in Adversaries::PrintSummary(): No probing sets found!");  
+  assert(!probing_sets_.empty() && "Error in Adversaries::PrintSummary(): No probing sets found!");
   uint64_t mini = UINT64_MAX;
   uint64_t maxi = 0;
   uint64_t key_size_in_bits = 0;
@@ -183,7 +184,7 @@ void Adversaries::PrintSummary() {
     diff = key_size_in_bits - avrg;
     avrg += diff / ++ctr;
 
-    if (key_size_in_bits < mini) { mini = key_size_in_bits; } 
+    if (key_size_in_bits < mini) { mini = key_size_in_bits; }
     if (key_size_in_bits > maxi) { maxi = key_size_in_bits; }
   }
 
@@ -250,7 +251,7 @@ void Adversaries::PrintEvaluationBody(const std::vector<TableCell>& header,
   if (probing_set != nullptr) {
     p_value = probing_set->GetGValue();
     max_p_value = std::max(p_value, max_p_value_deleted);
-  
+
     if (p_value > max_p_value_deleted) {
       body.push_back({probing_set->PrintProbes(settings_), header[3].width_});
     } else {
@@ -325,6 +326,7 @@ uint64_t Adversaries::GetNumberOfSpots() {
 }
 
 const Enabler& Adversaries::GetEnabler(uint64_t index) const {
+  assert(index < enabler_.size() && "Error in Adversaries::GetEnabler(): Index out of boundes!");
   return enabler_[index];
 }
 
@@ -362,7 +364,7 @@ void Adversaries::SetEnablers() {
     const Probe* probe = path.front();
     if (probe->DoesExtend(circuit_)) {
       enabled_probes.push_back(const_cast<Probe*>(probe));
-      BOOST_LOG_TRIVIAL(trace) << "Probe: " 
+      BOOST_LOG_TRIVIAL(trace) << "Probe: "
         << probe->Print(settings_.GetClkEdge(), true) << " requires an enabler.";
       for (const Probe* extension : probe->GetGlitchExtensions()) {
         if (extension->DoesExtend(circuit_) && visited.insert(extension).second) {
@@ -374,17 +376,17 @@ void Adversaries::SetEnablers() {
     path.pop();
   }
 
-  std::sort(enabled_probes.begin(), enabled_probes.end(), [](const Probe* lhs, const Probe* rhs) { 
-    return *lhs < *rhs; 
+  std::sort(enabled_probes.begin(), enabled_probes.end(), [](const Probe* lhs, const Probe* rhs) {
+    return *lhs < *rhs;
   });
 
   enabled_probes.erase(std::unique(enabled_probes.begin(), enabled_probes.end(),
-    [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), enabled_probes.end());  
-    
-  BOOST_LOG_TRIVIAL(info) << "Successfully detected " 
+    [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), enabled_probes.end());
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully detected "
     << enabled_probes.size() << " probes that are conditionally extended.";
 
-  uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;  
+  uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;
   simulation_.propagation_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(enabled_probes.size());
   simulation_.glitch_values_ = std::make_unique<std::unique_ptr<uint64_t[]>[]>(enabled_probes.size());
   for (uint64_t idx = 0; idx < enabled_probes.size(); ++idx) {
@@ -392,7 +394,7 @@ void Adversaries::SetEnablers() {
     simulation_.glitch_values_[idx] = std::make_unique<uint64_t[]>(number_of_steps);
   }
 
-  auto FindProbe = [&](const SignalStruct& searched_signal, uint64_t searched_cycle, 
+  auto FindProbe = [&](const SignalStruct& searched_signal, uint64_t searched_cycle,
     const std::vector<const Probe*>& probes) -> uint64_t {
       Probe ext({&searched_signal}, searched_cycle);
       auto input_it = std::lower_bound(probes.begin(), probes.end(), ext,
@@ -406,8 +408,8 @@ void Adversaries::SetEnablers() {
 
   for (const Probe* probe : enabled_probes) {
     assert(!extensions_.empty() && "Error in Adversaries::SetEnablers(): No extensions found!");
-    assert(std::is_sorted(extensions_.begin(), extensions_.end(), 
-      [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; }) && 
+    assert(std::is_sorted(extensions_.begin(), extensions_.end(),
+      [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; }) &&
         "Error in Adversaries::SetEnablers(): Extensions are not sorted!");
 
     const SignalStruct& signal = *probe->GetSignals()[0];
@@ -417,7 +419,7 @@ void Adversaries::SetEnablers() {
 
     for (uint64_t idx = 0; idx < number_of_inputs; ++idx) {
       SignalStruct input_signal = circuit_.signals_[cell.Inputs[idx]];
-      
+
       while ((input_signal.Output != -1) && (!input_signal.Deleted)) {
         const CellStruct& input_cell = circuit_.cells_[input_signal.Output];
         if (input_cell.type->GetType() == cell_t::buffer) {
@@ -428,7 +430,7 @@ void Adversaries::SetEnablers() {
       }
 
       if (cycle) {
-        inputs_.push_back(simulation_.probe_values_[FindProbe(input_signal, cycle - 1, extensions_)].get());  
+        inputs_.push_back(simulation_.probe_values_[FindProbe(input_signal, cycle - 1, extensions_)].get());
       } else {
         inputs_.push_back(simulation_.constant_zero_[0].get());
       }
@@ -443,19 +445,20 @@ void Adversaries::SetEnablers() {
     }
 
     for (uint64_t idx = 0; idx < cell.type->GetNumberOfOutputs(); ++idx) {
+      assert(cell.Outputs[idx] >= 0 && "Error in Adversaries::SetEnabler(): cell.Outputs < 0!");
       if ((uint64_t)cell.Outputs[idx] == signal.id) {
         uint64_t find_idx = FindProbe(signal, cycle, enabled_probes);
-        enabler_.emplace_back(&cell.expr_glitch_ext_[idx], &cell.expr_probe_prop_[idx], inputs_, 
+        enabler_.emplace_back(&cell.expr_glitch_ext_[idx], &cell.expr_probe_prop_[idx], inputs_,
           simulation_.glitch_values_[find_idx].get(), simulation_.propagation_values_[find_idx].get());
         break;
       }
     }
 
-    for (uint64_t idx = 0; idx < enabled_probes.size(); ++idx) {
-      const_cast<Probe*>(enabled_probes[idx])->SetEnabler(enabler_[idx]);
-    }
-
     inputs_.clear();
+  }
+
+  for (uint64_t idx = 0; idx < enabled_probes.size(); ++idx) {
+    const_cast<Probe*>(enabled_probes[idx])->SetEnabler(enabler_[idx]);
   }
 
   BOOST_LOG_TRIVIAL(info) << "Successfully specified " << enabler_.size() << " probe-extension conditions.";
@@ -515,20 +518,26 @@ void Adversaries::SetProbes() {
   }
 
   std::sort(probes_.begin(), probes_.end(), [](const Probe& lhs, const Probe& rhs) { return lhs < rhs; });
-  probes_.erase(std::unique(probes_.begin(), probes_.end(), [](const Probe& lhs, const Probe& rhs) 
+  probes_.erase(std::unique(probes_.begin(), probes_.end(), [](const Probe& lhs, const Probe& rhs)
     { return lhs == rhs; }), probes_.end());
 
   assert(!probes_.empty() && "Error in Adversaries::SetProbes(): No probes found!");
-  BOOST_LOG_TRIVIAL(info) << "Successfully placed " << probes_.size() << " possible probes in total.";
+  BOOST_LOG_TRIVIAL(info) << "Successfully detected " << probes_.size() << " possible probes in total.";
 
+  auto it = cycles.begin();
   for (Probe& probe : probes_) {
-    if (std::find(cycles.begin(), cycles.end(), probe.GetCycle() + 1) != cycles.end()) {
+    while (it != cycles.end() && *it < probe.GetCycle() + 1) { ++it; }
+    if (it == cycles.end()) { break; }
+    if (*it == probe.GetCycle() + 1) {
       probe.Extend(circuit_, probes_, settings_);
       if (probe.IsPlaced(circuit_)) {
         placed_probes_.push_back(&probe);
       }
     }
   }
+
+  BOOST_LOG_TRIVIAL(info) << "Successfully extended " << placed_probes_.size() << " placable probes in total.";
+
 
   std::queue<const Probe*> path;
   std::unordered_set<const Probe*> visited;
@@ -569,18 +578,18 @@ void Adversaries::SetProbes() {
   std::sort(extensions_.begin(), extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; });
   extensions_.erase(std::unique(extensions_.begin(), extensions_.end(),
-    [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), extensions_.end()); 
+    [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), extensions_.end());
   BOOST_LOG_TRIVIAL(info) << "Successfully placed " << extensions_.size() << " possible extensions in total.";
 }
 
-Adversaries::Adversaries(Library& library, CircuitStruct& circuit, 
+Adversaries::Adversaries(Library& library, CircuitStruct& circuit,
   Settings& settings, Simulation& simulation, const std::string& topmodule_name)
     : topmodule_name_(topmodule_name), library_(library), circuit_(circuit), settings_(settings),
       simulation_(simulation), fault_manager_(FaultManager(settings.fault_injection, circuit)) {
 
-  SetProbes(); 
+  SetProbes();
 
-  uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;  
+  uint64_t number_of_steps = settings_.GetNumberOfSimulationsPerStep() >> 6;
   simulation_.is_simulation_faulty_ = std::make_unique<uint64_t[]>(number_of_steps);
   for (uint64_t idx = 0; idx < number_of_steps; ++idx) {
     simulation_.is_simulation_faulty_[idx] = 0;
@@ -629,7 +638,7 @@ void Adversaries::CompactRelaxedTest(std::vector<double>& group_simulation_ratio
   #pragma omp parallel for schedule(guided)
   for (ProbingSet& probing_set : probing_sets_) {
     probing_set.CompactRelaxedTableUpdate(simulation_);
-    probing_set.ComputeGTest(settings_.GetNumberOfGroups(), 
+    probing_set.ComputeGTest(settings_.GetNumberOfGroups(),
       simulation_.number_of_processed_simulations, group_simulation_ratio);
   }
 }
@@ -657,10 +666,10 @@ void Adversaries::CompactRobustTest(std::vector<double>& group_simulation_ratio)
 
 void Adversaries::NormalTest(std::vector<double>& group_simulation_ratio) {
   bool is_relaxed = settings_.IsRelaxedModel();
-  bool all_simulations = (simulation_.considered_simulation_indices_.size() == 
+  bool all_simulations = (simulation_.considered_simulation_indices_.size() ==
     settings_.GetNumberOfSimulationsPerStep());
 
-  std::function<void(ProbingSet&)> TableUpdate;  
+  std::function<void(ProbingSet&)> TableUpdate;
 
   if (is_relaxed) {
     TableUpdate = [this](ProbingSet& probing_set) {
@@ -681,7 +690,7 @@ void Adversaries::NormalTest(std::vector<double>& group_simulation_ratio) {
   #pragma omp parallel for schedule(guided)
   for (ProbingSet& probing_set : probing_sets_) {
     TableUpdate(probing_set);
-    probing_set.ComputeGTest(settings_.GetNumberOfGroups(), 
+    probing_set.ComputeGTest(settings_.GetNumberOfGroups(),
       simulation_.number_of_processed_simulations, group_simulation_ratio);
   }
 }
@@ -693,36 +702,36 @@ void Adversaries::Test(
       CompactRelaxedTest(group_simulation_ratio);
     } else {
       CompactRobustTest(group_simulation_ratio);
-    } 
+    }
   } else {
     NormalTest(group_simulation_ratio);
   }
 }
 
-void Adversaries::RemoveProbingSetsWithEnoughTraces(uint64_t number_of_simulations, 
+void Adversaries::RemoveProbingSetsWithEnoughTraces(uint64_t number_of_simulations,
   double& maximum_g_value_deleted, std::string& printed_probing_set_deleted) {
   probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(), [&](auto& elem) {
-    if (elem.IsSampleSizeSufficient(number_of_simulations, settings_)) {          
+    if (elem.IsSampleSizeSufficient(number_of_simulations, settings_)) {
       double g_value = elem.GetGValue();
       if (g_value > maximum_g_value_deleted) {
         maximum_g_value_deleted = g_value;
         printed_probing_set_deleted = elem.PrintProbes(settings_);
       }
-                
+
       elem.Deconstruct();
       return true;
     }
-    
+
     return false;
   }), probing_sets_.end());
 }
-  
+
 void Adversaries::SetConsideredSimulations(std::vector<uint64_t>& number_of_simulations_per_group) {
   uint64_t sim_idx, number_of_batches = settings_.GetNumberOfSimulationsPerStep() >> 6;
   FaultAnalysis type = settings_.fault_injection.analysis;
   assert(type != FaultAnalysis::none && "Error in Adversaries::SetConsideredSimulations(): "
     "Fault analysis type is none!");
-    
+
   if (type == FaultAnalysis::both) {
     simulation_.number_of_processed_simulations += settings_.GetNumberOfSimulationsPerStep();
     for (sim_idx = 0; sim_idx < settings_.GetNumberOfSimulationsPerStep(); ++sim_idx) {
@@ -746,7 +755,7 @@ void Adversaries::SetConsideredSimulations(std::vector<uint64_t>& number_of_simu
       throw std::runtime_error("Error in Adversaries::SetConsideredSimulations(): "
         "No considered simulations found. This indicates a mismatch between the "
         "fault analysis type setting and the available simulations. Ensure that "
-        "you aren't configured to consider only fault-free simulations when all " 
+        "you aren't configured to consider only fault-free simulations when all "
         "simulations are faulty, or vice versa.");
     }
   }
@@ -803,12 +812,12 @@ void Adversaries::EvalProbingSets(std::vector<SharedData>& shared_data, timespec
     #pragma omp parallel for schedule(guided) private(thread_idx)
     for (uint64_t sim_idx = 0; sim_idx < (settings_.GetNumberOfSimulationsPerStep() >> 6); ++sim_idx) {
       thread_idx = omp_get_thread_num();
-      Hardware::Simulate::All(circuit_, settings_, shared_data[thread_idx], 
+      Hardware::Simulate::All(circuit_, settings_, shared_data[thread_idx],
         extensions_, enabler_, simulation_, sim_idx, thread_rng[thread_idx]);
     }
 
     SetConsideredSimulations(number_of_simulations_per_group);
-    std::transform(number_of_simulations_per_group.begin(), number_of_simulations_per_group.end(), 
+    std::transform(number_of_simulations_per_group.begin(), number_of_simulations_per_group.end(),
       group_simulation_ratio.begin(), [this](uint64_t x) {
         return static_cast<double>(x) / static_cast<double>(this->simulation_.number_of_processed_simulations);
       }
@@ -825,8 +834,8 @@ void Adversaries::EvalProbingSets(std::vector<SharedData>& shared_data, timespec
       }
     }
 
-    if (settings_.IsRemoveFullProbingSets()) { 
-      RemoveProbingSetsWithEnoughTraces(simulation_.number_of_processed_simulations, 
+    if (settings_.IsRemoveFullProbingSets()) {
+      RemoveProbingSetsWithEnoughTraces(simulation_.number_of_processed_simulations,
         maximum_leakage_deleted, printed_probing_set_deleted);
 
       if (probing_sets_.empty()) {
@@ -898,7 +907,7 @@ double Adversaries::EvalProbingSetsUnderFaults(std::vector<SharedData>& shared_d
           double step_leakage = GetMaximumLeakage();
           if (step_leakage > maximum_leakage) {
             maximum_leakage = step_leakage;
-          } 
+          }
 
           #pragma omp parallel for schedule(guided)
           for (ProbingSet& probing_set : probing_sets_) {
@@ -935,7 +944,7 @@ bool Adversaries::IsInDistance(const std::vector<const Probe*>& probes) const {
 
   std::sort(cycles.begin(), cycles.end());
   uint64_t diff = cycles.back() - cycles.front();
-  assert((settings_.GetVariate() != Analysis::univariate || diff == 0) && 
+  assert((settings_.GetVariate() != Analysis::univariate || diff == 0) &&
     "Error in Adversaries::IsInDistance: Multivariate set in univariate analysis!");
   return (diff <= settings_.GetDistance());
 }
@@ -954,15 +963,15 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
         [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
       probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
         [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs == rhs; }), probing_sets_.end());
-      BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. " 
-        << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";  
+      BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. "
+        << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";
     }
 
     if (settings_.GetMinimization() == Minimization::aggressive) {
       if (!settings_.IsRelaxedModel()) {
         uint64_t number_of_probing_sets = probing_sets_.size();
-        probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(), 
-          [this](const ProbingSet& probing_set) { 
+        probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(),
+          [this](const ProbingSet& probing_set) {
             for (const ProbingSet& other_set : probing_sets_) {
               if (probing_set != other_set) {
                 if (std::includes(other_set.GetExtensions().begin(), other_set.GetExtensions().end(),
@@ -972,16 +981,16 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
               }
             }
 
-            return false; 
+            return false;
           }), probing_sets_.end());
 
-        BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. " 
-          << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";  
+        BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. "
+          << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
       } else {
-        BOOST_LOG_TRIVIAL(warning) << "Warning: Aggressive minimization " 
+        BOOST_LOG_TRIVIAL(warning) << "Warning: Aggressive minimization "
           "is not supported in the robust but relaxed probing model!";
       }
-  
+
     }
 
     leakage_per_run = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
@@ -997,7 +1006,7 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
 
     probing_sets_.clear();
   };
-    
+
   for (const std::vector<bool>& bitmask : combinations) {
     for (uint64_t idx = 0; idx < bitmask.size(); ++idx) {
       if (bitmask[idx]) {
@@ -1016,11 +1025,11 @@ double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, times
       ProcessProbingSets();
     }
   }
-  
+
   if (!probing_sets_.empty()) {
     BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
     ProcessProbingSets();
-  }  
+  }
 
   return maximum_leakage;
 }
@@ -1048,7 +1057,7 @@ double Adversaries::Eval(std::vector<SharedData>& shared_data) {
       combinations.push_back(bitmask);
     } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
 
-    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a multivariate" 
+    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a multivariate"
     " evaluation with " << combinations.size() << " probing sets.";
   } else {
     n = placed_probes_.size() / cycles.size();
@@ -1070,7 +1079,7 @@ double Adversaries::Eval(std::vector<SharedData>& shared_data) {
       } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
     }
 
-    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a univariate" 
+    BOOST_LOG_TRIVIAL(info) << "Successfully initialized a univariate"
     " evaluation with " << combinations.size() << " probing sets.";
   }
 

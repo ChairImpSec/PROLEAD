@@ -79,10 +79,13 @@ bool Probe::DoesExtend(const CircuitStruct& circuit) const {
   const std::vector<const SignalStruct*>& signals = this->GetSignals();
   assert(!signals.empty() && "Error in Probe::DoesExtend(): No signals in probe!");
   for (const SignalStruct* signal : signals) {
-    const CellStruct& cell = circuit.cells_[signal->Output];
-    if (!signal->is_extension_allowed || (signal->Output == -1) || 
-      (cell.type->GetType() == cell_t::sequential) || (cell.type->GetNumberOfInputs() == 0)) {
+    if (!signal->is_extension_allowed || (signal->Output == -1)){
       return false;
+    } else {
+      const CellStruct& cell = circuit.cells_[signal->Output];
+      if ((cell.type->GetType() == cell_t::sequential) || (cell.type->GetNumberOfInputs() == 0)) {
+        return false;
+      }
     }
   }
 
@@ -112,40 +115,43 @@ void Probe::Extend(const CircuitStruct& circuit, const std::vector<Probe>& probe
   assert(!signals.empty() && "Error in Probe::Extend(): No probes!");
   assert(std::is_sorted(probes.begin(), probes.end()) && "Error in Probe::Extend(): Probes not sorted!");
 
+  auto AddProbeIfExists = [&](const Probe& key, std::vector<const Probe*>& target) {
+    auto it = std::lower_bound(probes.begin(), probes.end(), key);
+    // Some probes don't exist as they are not meaningful
+    // (e.g., probes on constants and the clock signal).
+    if (it != probes.end() && *it == key) {
+      target.push_back(&*it);
+    }
+  };
+
+  transition_extensions_.push_back(this);
+
   for (const SignalStruct* signal : signals) {
-    const CellStruct& cell = circuit.cells_[signal->Output];
-    if (signal->is_extension_allowed && (signal->Output != -1) && (cell.type->GetType() != cell_t::sequential)) {
-      for (uint64_t in_idx : cell.GetInputs()) {
-        const SignalStruct& input = circuit.signals_[in_idx];
-        Probe probe({&input}, GetCycle());
-        auto it = std::find(probes.begin(), probes.end(), probe);
-        if (it != probes.end()) {
-          glitch_extensions_.push_back(&(*it));
-        }  
+    if (signal->is_extension_allowed && (signal->Output != -1)){
+      const CellStruct& cell = circuit.cells_[signal->Output];
+
+      if (cell.type->GetType() != cell_t::sequential) {
+        for (uint64_t in_idx : cell.GetInputs()) {
+          const SignalStruct& input = circuit.signals_[in_idx];
+          Probe key({&input}, GetCycle());
+          AddProbeIfExists(key, glitch_extensions_);
+        }
       }
     }
-    
-    transition_extensions_.push_back(this);
 
     if ((settings.IsRelaxedModel() || settings.IsTransitionalLeakage()) && GetCycle()) {
-      Probe probe(GetSignals(), GetCycle() - 1);
-      auto it = std::find(probes.begin(), probes.end(), probe);
-      if (it == probes.end()) {
-        throw std::out_of_range("Error in Probe::Extend(): Probe \"" + 
-          probe.Print(settings.GetClkEdge(), true)  + "\" not found!");
-      } else {
-        transition_extensions_.push_back(&(*it));
-      }
+      Probe key(GetSignals(), GetCycle() - 1);
+      AddProbeIfExists(key, transition_extensions_);
     }
   }
 
   std::sort(glitch_extensions_.begin(), glitch_extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; });
-  glitch_extensions_.erase(std::unique(glitch_extensions_.begin(), glitch_extensions_.end(), 
+  glitch_extensions_.erase(std::unique(glitch_extensions_.begin(), glitch_extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), glitch_extensions_.end());
   std::sort(transition_extensions_.begin(), transition_extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs < *rhs; });
-  transition_extensions_.erase(std::unique(transition_extensions_.begin(), transition_extensions_.end(), 
+  transition_extensions_.erase(std::unique(transition_extensions_.begin(), transition_extensions_.end(),
     [](const Probe* lhs, const Probe* rhs) { return *lhs == *rhs; }), transition_extensions_.end());
 }
 
@@ -179,8 +185,8 @@ bool Probe::IsInternal() const {
   return false;
 }
 
-void Probe::SetEnabler(const Enabler& enabler) { 
-  enabler_ = &enabler; 
+void Probe::SetEnabler(const Enabler& enabler) {
+  enabler_ = &enabler;
 }
 
 const Enabler* Probe::GetEnabler() const {
@@ -191,8 +197,8 @@ uint64_t Probe::GetBitslicedValue(uint64_t signal_idx, uint64_t step_idx) const 
   return (*values_[signal_idx])[step_idx];
 }
 
-uint64_t Probe::GetBitslicedPropValue(uint64_t step_idx) const { 
-  return enabler_->GetPropagationValue(step_idx); 
+uint64_t Probe::GetBitslicedPropValue(uint64_t step_idx) const {
+  return enabler_->GetPropagationValue(step_idx);
 }
 
 void Probe::SetBitslicedValues(const std::vector<std::unique_ptr<uint64_t[]>*>& values) {
@@ -212,12 +218,12 @@ const std::vector<uint64_t>& UniqueProbe::GetProbingSetIndices() const {
 Fault::Fault(const std::vector<const SignalStruct*>& signals, uint64_t cycle, double pr, FaultType type)
     : Target(signals, cycle), probability_(pr), type_(type) {}
 
-double Fault::GetProbability() const { 
-	return this->probability_; 
+double Fault::GetProbability() const {
+	return this->probability_;
 }
 
-FaultType Fault::GetType() const { 
-	return this->type_; 
+FaultType Fault::GetType() const {
+	return this->type_;
 }
 
 bool Fault::IsFaulty(const std::vector<const SignalStruct*>& signals, uint64_t cycle) const {

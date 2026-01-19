@@ -305,10 +305,12 @@ void EvaluteCircuitFaultFree(const CircuitStruct &circuit, Simulation &simulatio
       idx = circuit.CellsInDepth[depth_idx][cell_idx];
 
       if (!circuit.cells_[idx].type->IsLatch()) {
-        input_values.resize(circuit.cells_[idx].type->GetNumberOfInputs());
+        if (circuit.cells_[idx].type->GetNumberOfInputs()) {
+          input_values.resize(circuit.cells_[idx].type->GetNumberOfInputs());
 
-        for (uint64_t in_idx = 0; in_idx < circuit.cells_[idx].type->GetNumberOfInputs(); ++in_idx){
-          input_values[in_idx] = shared_data.signal_values_[circuit.cells_[idx].Inputs[in_idx]];
+          for (uint64_t in_idx = 0; in_idx < circuit.cells_[idx].type->GetNumberOfInputs(); ++in_idx){
+            input_values[in_idx] = shared_data.signal_values_[circuit.cells_[idx].Inputs[in_idx]];
+          }
         }
       } else {
         input_values.resize(circuit.cells_[idx].type->GetNumberOfInputs() + circuit.cells_[idx].type->GetNumberOfOutputs());
@@ -858,9 +860,9 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
               shared_value.second[value_index][bit_index] |= SharedData.group_values_[group_index][settings.GetGroupMappingWithOneShare(shared_value.first[bit_index])] & Select[group_index];
             }
           }
-        }				
+        }
       }
-    }		
+    }
   }
 
   NumberOfWaitedClockCycles = -1;
@@ -1000,17 +1002,20 @@ void Hardware::Simulate::All(const CircuitStruct& Circuit,
            OutputIndex++) {
         Value = Circuit.cells_[reg_idx].Eval(OutputIndex, input_values);
         if (!simulation.fault_set_.empty()) {
-          simulation.fault_set_[0].TryToInduceFaults(
-              Value, &Circuit.signals_[Circuit.cells_[reg_idx].Outputs[OutputIndex]], clock_cycle);
+          if(Circuit.cells_[reg_idx].Outputs[OutputIndex] != -1){
+            simulation.fault_set_[0].TryToInduceFaults(
+                Value, &Circuit.signals_[Circuit.cells_[reg_idx].Outputs[OutputIndex]], clock_cycle);
+          }
         }
 
-        if (clock_cycle == 0)
+        if (clock_cycle == 0) {
           SharedData.register_values_[Circuit.cells_[reg_idx]
                                           .RegValueIndexes[OutputIndex]] = 0;
-        else
+        } else {
           SharedData.register_values_[Circuit.cells_[reg_idx]
                                           .RegValueIndexes[OutputIndex]] =
               Value;
+        }
       }
     }
 
