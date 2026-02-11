@@ -78,9 +78,8 @@ class Adversaries {
     void EvalProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t fault_idx, uint64_t step_idx);
     void RemoveProbingSetsWithEnoughTraces(uint64_t number_of_simulations, double& maximum_g_value_deleted, std::string& printed_probing_set_deleted);
     double EvalProbingSetsUnderFaults(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx);
-    double EvalCombinations(std::vector<SharedData>& shared_data, timespec& start_time, const std::vector<std::vector<bool>>& combinations);
-
-
+    double PrepareProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t n, uint64_t number_of_sets_per_step, uint64_t number_of_cycles);
+    double ProcessProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx);
 
   /**
    * @brief Removes duplicated and strictly-less informative probing sets.

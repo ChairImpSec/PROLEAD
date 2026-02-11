@@ -109,7 +109,8 @@ std::vector<vlog_bit_t> VlogConstGrammar::ParseDec(uint64_t width_in_bits,
 
 std::vector<vlog_bit_t> VlogConstGrammar::ParseHex(uint64_t width_in_bits,
                                                    std::string value) {
-  uint64_t decoded_hex_val, char_width_in_bits;
+  uint64_t decoded_hex_val = 0;
+  uint64_t char_width_in_bits;
   std::vector<vlog_bit_t> parsed;
 
   for (unsigned char hex_char : value) {
@@ -202,6 +203,7 @@ std::vector<vlog_bit_t> VlogConstGrammar::Parse(std::string& vlog_const) {
   std::string::iterator end = vlog_const.end();
   std::vector<vlog_bit_t> parsed;
 
+  BOOST_LOG_TRIVIAL(trace) << "Parse constant \"" << vlog_const << "\".";
   if (!qi::phrase_parse(begin, end, *this, qi::space, parsed)) {
     throw std::invalid_argument("Error while parsing the Verilog constant: \"" +
                                 vlog_const + "\". Invalid syntax!");

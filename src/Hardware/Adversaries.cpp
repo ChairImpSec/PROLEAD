@@ -68,6 +68,20 @@ void Adversaries::PrintLeakageReport(uint64_t fault_idx, uint64_t step_idx) cons
     throw std::runtime_error("Error in Adversaries::PrintLeakageReport(): Unknown SCA notion!");
   }
 
+  report.put("number_of_simulations", simulation_.number_of_processed_simulations);
+  uint64_t number_of_leaking_sets = 0, number_of_non_leaking_sets = 0;
+  for (const ProbingSet& probing_set : probing_sets_) {
+    if (probing_set.GetGValue() >= 5.0) {
+      ++number_of_leaking_sets;
+    } else {
+      ++number_of_non_leaking_sets;
+    }
+  }
+
+  report.put("total_number_of_probing_sets", probing_sets_.size());
+  report.put("number_of_leaking_probing_sets", number_of_leaking_sets);
+  report.put("number_of_non_leaking_probing_sets", number_of_non_leaking_sets);
+
   if (!simulation_.fault_set_.empty()) {
     for (uint64_t idx = 0; idx < simulation_.fault_set_[0].GetNumberOfFaultsInSet(); ++idx) {
       boost::property_tree::ptree pt;
@@ -524,12 +538,20 @@ void Adversaries::SetProbes() {
   assert(!probes_.empty() && "Error in Adversaries::SetProbes(): No probes found!");
   BOOST_LOG_TRIVIAL(info) << "Successfully detected " << probes_.size() << " possible probes in total.";
 
+  // We precompute a map from Probe to Probe* to speed up the extension process.
+  // Otherwise, for every extension, we would need to search for the corresponding Probe*
+  // in the probes_ vector, which would be very inefficient.
+  std::map<Probe, const Probe*> probe_map;
+  for (uint64_t idx = 0; idx < probes_.size(); ++idx) {
+    probe_map[probes_[idx]] = &probes_[idx];
+  }
+
   auto it = cycles.begin();
   for (Probe& probe : probes_) {
     while (it != cycles.end() && *it < probe.GetCycle() + 1) { ++it; }
     if (it == cycles.end()) { break; }
     if (*it == probe.GetCycle() + 1) {
-      probe.Extend(circuit_, probes_, settings_);
+      probe.Extend(circuit_, probe_map, settings_);
       if (probe.IsPlaced(circuit_)) {
         placed_probes_.push_back(&probe);
       }
@@ -537,7 +559,6 @@ void Adversaries::SetProbes() {
   }
 
   BOOST_LOG_TRIVIAL(info) << "Successfully extended " << placed_probes_.size() << " placable probes in total.";
-
 
   std::queue<const Probe*> path;
   std::unordered_set<const Probe*> visited;
@@ -781,7 +802,6 @@ void Adversaries::EvalProbingSets(std::vector<SharedData>& shared_data, timespec
   std::string report_path = simulation_.result_folder_name_ + "/report.json";
 
   uint64_t thread_idx, number_of_threads = settings_.GetNumberOfThreads();
-  omp_set_num_threads(number_of_threads);
   std::vector<boost::mt19937> thread_rng(number_of_threads);
   GenerateThreadRng(thread_rng, number_of_threads);
 
@@ -949,140 +969,276 @@ bool Adversaries::IsInDistance(const std::vector<const Probe*>& probes) const {
   return (diff <= settings_.GetDistance());
 }
 
-double Adversaries::EvalCombinations(std::vector<SharedData>& shared_data, timespec& start_time, const std::vector<std::vector<bool>>& combinations) {
-  double leakage_per_run, maximum_leakage = 0.0;
-  uint64_t number_of_sets_per_step = std::min(combinations.size(), settings_.GetNumberOfProbingSetsPerStep());
-  std::vector<const Probe*> probes;
-  probes.reserve(settings_.GetTestOrder());
+double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx) {
+  if (settings_.GetMinimization() != Minimization::none) {
+    uint64_t number_of_probing_sets = probing_sets_.size();
+    std::sort(probing_sets_.begin(), probing_sets_.end(),
+      [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
+    probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
+      [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs == rhs; }), probing_sets_.end());
+    BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. "
+      << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";
+  }
 
-  uint64_t step_idx = 0;
-  auto ProcessProbingSets = [&]() {
-    if (settings_.GetMinimization() != Minimization::none) {
+  if (settings_.GetMinimization() == Minimization::aggressive) {
+    if (!settings_.IsRelaxedModel()) {
       uint64_t number_of_probing_sets = probing_sets_.size();
-      std::sort(probing_sets_.begin(), probing_sets_.end(),
-        [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
-      probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
-        [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs == rhs; }), probing_sets_.end());
-      BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. "
-        << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";
-    }
+      std::vector<bool> remove(number_of_probing_sets, false);  
 
-    if (settings_.GetMinimization() == Minimization::aggressive) {
-      if (!settings_.IsRelaxedModel()) {
-        uint64_t number_of_probing_sets = probing_sets_.size();
-        probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(),
-          [this](const ProbingSet& probing_set) {
-            for (const ProbingSet& other_set : probing_sets_) {
-              if (probing_set != other_set) {
-                if (std::includes(other_set.GetExtensions().begin(), other_set.GetExtensions().end(),
-                  probing_set.GetExtensions().begin(), probing_set.GetExtensions().end())) {
-                  return true;
-                }
-              }
+      if (settings_.IsMultivariateEvaluationRequired()) {
+        std::sort(probing_sets_.begin(), probing_sets_.end(),
+          [](const ProbingSet& lhs, const ProbingSet& rhs) { 
+            return lhs.GetExtensions().size() > rhs.GetExtensions().size(); 
+          });
+
+        #pragma omp parallel for schedule(dynamic)
+        for (uint64_t idx = 0; idx < number_of_probing_sets; ++idx) {
+          if (remove[idx]) continue;
+          const std::vector<const Probe*>& rhs = probing_sets_[idx].GetExtensions();
+
+          // Only compare against larger probing sets to save time
+          for (uint64_t jdx = 0; jdx < idx; ++jdx) { 
+            if (remove[jdx]) continue;
+            const std::vector<const Probe*>& lhs = probing_sets_[jdx].GetExtensions();
+            if (std::includes(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) {
+              remove[idx] = true;
+              break;
+            }
+          }
+        }
+      } else {
+        // In the univariate case, we further improve efficiency by 
+        // comparing only sets with probes place in the same clock cycle
+        std::sort(probing_sets_.begin(), probing_sets_.end(),
+          [](const ProbingSet& lhs, const ProbingSet& rhs) { 
+            const std::vector<const Probe*>& lhs_ext = lhs.GetExtensions();
+            const std::vector<const Probe*>& rhs_ext = rhs.GetExtensions();
+
+            assert(!lhs_ext.empty() && "Error in Adversaries::ProcessProbingSets(): "
+              "lhs_ext is an empty set of extensions.");
+            assert(!rhs_ext.empty() && "Error in Adversaries::ProcessProbingSets(): "
+              "rhs_ext is an empty set of extensions."); 
+            
+            // Compare with the cycle of the first extension since then probing sets
+            // on the first cycle (without transition) are in the same cycle group 
+            // as probing sets in the first cycle with transition to cycle zero
+            uint64_t lhs_cycle = lhs_ext.front()->GetCycle();
+            uint64_t rhs_cycle = rhs_ext.front()->GetCycle();  
+              
+            if (lhs_cycle != rhs_cycle) {
+              return lhs_cycle < rhs_cycle;
             }
 
-            return false;
-          }), probing_sets_.end());
+            return lhs_ext.size() > rhs_ext.size(); 
+          }
+        );
 
-        BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. "
-          << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
-      } else {
-        BOOST_LOG_TRIVIAL(warning) << "Warning: Aggressive minimization "
-          "is not supported in the robust but relaxed probing model!";
+        std::vector<std::pair<uint64_t, uint64_t>> cycle_groups;
+        uint64_t start = 0;
+        while (start < probing_sets_.size()) {
+          uint64_t cycle = probing_sets_[start].GetExtensions().front()->GetCycle();
+          uint64_t end = start + 1;
+          while (end < probing_sets_.size() && 
+            probing_sets_[end].GetExtensions().front()->GetCycle() == cycle) { ++end; }
+          cycle_groups.emplace_back(start, end);
+          start = end;
+        }
+
+        for (auto [begin, end] : cycle_groups) {
+          // We convert the extension set for every probing set into a bitmask
+          // in order to avoid std::include which increases performance
+          std::unordered_set<const Probe*> visited;
+          for (uint64_t idx = begin; idx < end; ++idx) {
+            for (const Probe* probe : probing_sets_[idx].GetExtensions()) {
+              visited.insert(probe);
+            }
+          }
+
+          std::map<const Probe*, uint64_t> bitmask_map;
+          uint64_t ctr = 0;
+          for (const Probe* probe : visited) {
+            bitmask_map[probe] = ctr++;
+          }
+
+          uint64_t bitmask_words = (ctr + 63) / 64;  
+          std::vector<std::vector<uint64_t>> bitmasks(end - begin, 
+            std::vector<uint64_t>(bitmask_words,0ULL));
+
+          #pragma omp parallel for schedule(static)
+          for (uint64_t idx = begin; idx < end; ++idx) {
+            auto& bitmask = bitmasks[idx - begin];
+            const auto& extensions = probing_sets_[idx].GetExtensions();
+
+            for (const Probe* probe : extensions) {
+              uint64_t bit = bitmask_map.at(probe);
+              uint64_t word = bit >> 6;      
+              uint64_t offset = bit & 63;   
+              bitmask[word] |= (1ULL << offset);
+            }
+          }
+
+          #pragma omp parallel for schedule(dynamic)
+          for (uint64_t idx = begin; idx < end; ++idx) {
+            if (remove[idx]) { continue; }
+            const auto& rhs_mask = bitmasks[idx - begin];
+
+            // Only compare against earlier sets with the same cycle
+            for (uint64_t jdx = begin; jdx < idx; ++jdx) {
+              if (remove[jdx]) { continue; }
+              const auto& lhs_mask = bitmasks[jdx - begin];
+              bool is_subset = true;
+              for (uint64_t word_idx = 0; word_idx < bitmask_words; ++word_idx) {
+                if ((lhs_mask[word_idx] & rhs_mask[word_idx]) != rhs_mask[word_idx]) {
+                  is_subset = false;
+                  break;
+                }
+              }
+
+              if (is_subset) {
+                remove[idx] = true;
+                break;
+              }
+            }
+          }
+        }
+      }
+    
+      uint64_t ctr = 0;
+      for (uint64_t idx = 0; idx < number_of_probing_sets; ++idx) {
+        if (!remove[idx]) {
+          std::swap(probing_sets_[ctr++], probing_sets_[idx]);
+        }
       }
 
+      probing_sets_.erase(probing_sets_.begin() + ctr, probing_sets_.end());
+      std::sort(probing_sets_.begin(), probing_sets_.end(),
+        [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
+
+      BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. "
+        << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
+    } else {
+      BOOST_LOG_TRIVIAL(warning) << "\033[38;5;13mwarning:\033[0m Aggressive minimization isn't supported "
+        "in the robust but relaxed probing model and will be ignored!";
     }
+  }
 
-    leakage_per_run = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
+  double maximum_leakage = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
 
-    if (leakage_per_run > maximum_leakage) {
-      maximum_leakage = leakage_per_run;
+  #pragma omp parallel for schedule(guided)
+  for (ProbingSet& probing_set : probing_sets_) {
+    probing_set.Deconstruct();
+  }
+
+  probing_sets_.clear();
+  return maximum_leakage;
+}
+
+double Adversaries::PrepareProbingSets(std::vector<SharedData>& shared_data, 
+  timespec& start_time, uint64_t n, uint64_t number_of_sets_per_step, uint64_t number_of_cycles) {
+
+  uint64_t number_of_probes_per_set = std::min(n, settings_.GetTestOrder());
+  std::vector<const Probe*> probes(number_of_probes_per_set);
+  probing_sets_.reserve(number_of_probes_per_set);
+
+  // We made the probing sets based on a set of probe indices in probes_. 
+  // This turned out to be more efficient than using bitmasks and std::prev_permutation(). 
+  std::vector<uint64_t> probe_indices(number_of_probes_per_set);
+
+  // The only drawback is that we need a custom implementation of the previous 
+  // permutation algorithm that works on a vector of indices instead of a bitmask.
+  auto next_combination = [k = number_of_probes_per_set](std::vector<uint64_t>& indices, uint64_t n) {
+    for (int idx = static_cast<int>(k) - 1; idx >= 0; --idx) {
+      if (indices[idx] < n - (k - idx)) {
+        ++indices[idx];
+        for (uint64_t jdx = idx + 1; jdx < k; ++jdx) {
+          indices[jdx] = indices[jdx - 1] + 1;
+        }
+        return true;
+      }
     }
-
-    #pragma omp parallel for schedule(guided)
-    for (ProbingSet& probing_set : probing_sets_) {
-      probing_set.Deconstruct();
-    }
-
-    probing_sets_.clear();
+    return false;
   };
 
-  for (const std::vector<bool>& bitmask : combinations) {
-    for (uint64_t idx = 0; idx < bitmask.size(); ++idx) {
-      if (bitmask[idx]) {
-        probes.push_back(placed_probes_[idx]);
+  uint64_t step_idx = 0;
+  double leakage_per_step, maximum_leakage = 0.0;
+
+  // The distance check is only required in multivate analyses
+  // so we avoid it in the univariate cases to increase performance
+  if (settings_.GetVariate() == Analysis::univariate) {
+    for (uint64_t idx = 0; idx < number_of_cycles; ++idx) {
+      std::iota(probe_indices.begin(), probe_indices.end(), idx * n);
+
+      // It's important to process probing sets on the fly to avoid
+      // memory overflow when the number of probing sets is high.
+      do{
+        for (uint64_t probe_idx = 0; probe_idx < probe_indices.size(); ++probe_idx) {
+          probes[probe_idx] = placed_probes_[probe_indices[probe_idx]];
+        }
+
+        probing_sets_.emplace_back(circuit_, settings_, probes);
+
+        if (__builtin_expect(probing_sets_.size() == number_of_sets_per_step, 0)) {
+          BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
+          leakage_per_step = ProcessProbingSets(shared_data, start_time, step_idx++);
+          maximum_leakage = std::max(maximum_leakage, leakage_per_step);
+        }
+      } while (next_combination(probe_indices, (idx + 1) * n));
+    }
+  } else {
+    std::iota(probe_indices.begin(), probe_indices.end(), 0);
+    
+    // It's important to process probing sets on the fly to avoid
+    // memory overflow when the number of probing sets is high.
+    do{
+      for (uint64_t probe_idx = 0; probe_idx < probe_indices.size(); ++probe_idx) {
+        probes[probe_idx] = placed_probes_[probe_indices[probe_idx]];
       }
-    }
 
-    if (IsInDistance(probes)) {
-      probing_sets_.emplace_back(circuit_, settings_, probes);
-    }
+      if (IsInDistance(probes)) {
+        probing_sets_.emplace_back(circuit_, settings_, probes);
+      }
 
-    probes.clear();
-
-    if (probing_sets_.size() == number_of_sets_per_step) {
-      BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
-      ProcessProbingSets();
-    }
+      if (__builtin_expect(probing_sets_.size() == number_of_sets_per_step, 0)) {
+        BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
+        leakage_per_step = ProcessProbingSets(shared_data, start_time, step_idx++);
+        maximum_leakage = std::max(maximum_leakage, leakage_per_step);
+      }
+    } while (next_combination(probe_indices, n));
   }
 
   if (!probing_sets_.empty()) {
     BOOST_LOG_TRIVIAL(info) << "Successfully set a batch of " << probing_sets_.size() << " probing sets.";
-    ProcessProbingSets();
+    leakage_per_step = ProcessProbingSets(shared_data, start_time, step_idx++);
+    maximum_leakage = std::max(maximum_leakage, leakage_per_step);
   }
 
   return maximum_leakage;
-}
+};
 
 double Adversaries::Eval(std::vector<SharedData>& shared_data) {
   struct timespec start_time;
   StartClock(start_time);
-  std::vector<uint64_t> cycles = settings_.side_channel_analysis.clock_cycles;
-  uint64_t n, k;
-  std::vector<std::vector<bool>> combinations;
+  uint64_t number_of_cycles = settings_.side_channel_analysis.clock_cycles.size();
+  uint64_t n, k, binom;
+  uint64_t number_of_threads = settings_.GetNumberOfThreads();
+  omp_set_num_threads(number_of_threads);
 
   if (settings_.IsMultivariateEvaluationRequired()) {
     n = placed_probes_.size();
     k = std::min(n, settings_.GetTestOrder());
-    combinations.reserve(boost::math::binomial_coefficient<double>(n, k));
-    std::vector<bool> bitmask(n, false);
-
-    if (settings_.GetTestOrder() > n) {
-      std::fill(bitmask.begin(), bitmask.end(), true);
-    } else {
-      std::fill(bitmask.begin(), bitmask.begin() + settings_.GetTestOrder(), true);
-    }
-
-    do{
-      combinations.push_back(bitmask);
-    } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
-
+    binom = boost::math::binomial_coefficient<double>(n, k);
+    uint64_t number_of_sets_per_step = std::min(binom, settings_.GetNumberOfProbingSetsPerStep());
     BOOST_LOG_TRIVIAL(info) << "Successfully initialized a multivariate"
-    " evaluation with " << combinations.size() << " probing sets.";
+    " evaluation with " << binom << " probing sets.";
+    return PrepareProbingSets(shared_data, start_time, n, number_of_sets_per_step, 1);
   } else {
-    n = placed_probes_.size() / cycles.size();
+    n = placed_probes_.size() / number_of_cycles;
     k = std::min(n, settings_.GetTestOrder());
-    uint64_t binom = boost::math::binomial_coefficient<double>(n, k);
-    combinations.resize(cycles.size() * binom, std::vector<bool>(placed_probes_.size(), false));
-    std::vector<bool> bitmask(n, false);
-
-    uint64_t ctr = 0;
-    for (uint64_t idx = 0; idx < cycles.size(); ++idx) {
-      if (settings_.GetTestOrder() > n) {
-        std::fill(bitmask.begin(), bitmask.end(), true);
-      } else {
-        std::fill(bitmask.begin(), bitmask.begin() + settings_.GetTestOrder(), true);
-      }
-
-      do {
-        std::copy(bitmask.begin(), bitmask.end(), combinations[ctr++].begin() + idx * n);
-      } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
-    }
-
+    binom = boost::math::binomial_coefficient<double>(n, k);
+    uint64_t number_of_sets_per_step = std::min(number_of_cycles * binom, settings_.GetNumberOfProbingSetsPerStep());
     BOOST_LOG_TRIVIAL(info) << "Successfully initialized a univariate"
-    " evaluation with " << combinations.size() << " probing sets.";
+    " evaluation with " << number_of_cycles * binom << " probing sets.";
+    return PrepareProbingSets(shared_data, start_time, n, number_of_sets_per_step, number_of_cycles);
   }
-
-  return EvalCombinations(shared_data, start_time, combinations);
 }
 }  // namespace Hardware

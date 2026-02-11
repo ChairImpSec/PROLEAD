@@ -11,6 +11,7 @@
 
 #include <boost/phoenix/phoenix.hpp>    // For e.g. _val
 #include <boost/spirit/include/qi.hpp>  // For e.g. lit
+#include <boost/log/trivial.hpp>
 #include <cmath>                        // For log2
 
 namespace qi = boost::spirit::qi;

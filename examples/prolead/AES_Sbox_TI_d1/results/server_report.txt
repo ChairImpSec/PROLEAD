@@ -1,0 +1,32 @@
+[2026-01-08 11:26:06] Successfully validated the settings file.
+[2026-01-08 11:26:06] Successfully read the library with name "nang45".
+[2026-01-08 11:26:06] Successfully parsed 35 cells from the library.
+[2026-01-08 11:26:06] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-08 11:26:06] Successfully read design file with topmodule "circuit"!
+[2026-01-08 11:26:06] Successfully matched 52 fresh mask signals (for rising edge) [{PRNGQ[0]}, {PRNGQ[1]}, {PRNGQ[2]}, {PRNGQ[3]}, {PRNGQ[4]}, {PRNGQ[5]}, {PRNGQ[6]}, {PRNGQ[7]}, {PRNGQ[8]}, {PRNGQ[9]}, {PRNGQ[10]}, {PRNGQ[11]}, {PRNGQ[12]}, {PRNGQ[13]}, {PRNGQ[14]}, {PRNGQ[15]}, {PRNGQ[16]}, {PRNGQ[17]}, {PRNGQ[18]}, {PRNGQ[19]}, {PRNGQ[20]}, {PRNGQ[21]}, {PRNGQ[22]}, {PRNGQ[23]}, {PRNGQ[24]}, {PRNGQ[25]}, {PRNGQ[26]}, {PRNGQ[27]}, {PRNGQ[28]}, {PRNGQ[29]}, {PRNGQ[30]}, {PRNGQ[31]}, {PRNGQ[32]}, {PRNGQ[33]}, {PRNGQ[34]}, {PRNGQ[35]}, {PRNGQ[36]}, {PRNGQ[37]}, {PRNGQ[38]}, {PRNGQ[39]}, {PRNGQ[40]}, {PRNGQ[41]}, {PRNGQ[42]}, {PRNGQ[43]}, {PRNGQ[44]}, {PRNGQ[45]}, {PRNGQ[46]}, {PRNGQ[47]}, {PRNGQ[48]}, {PRNGQ[49]}, {PRNGQ[50]}, {PRNGQ[51]}].
+[2026-01-08 11:26:06] Successfully placed 18190 possible probes in total.
+[2026-01-08 11:26:14] Successfully placed 2500 possible extensions in total.
+[2026-01-08 11:26:14] Successfully initialized a univariate evaluation with 1470 probing sets.
+[2026-01-08 11:26:14] Successfully set a batch of 1470 probing sets.
+[2026-01-08 11:26:14] Successfully applied trivial minimization. 30 duplicated probing sets removed.
+[2026-01-08 11:26:14] Successfully applied aggressive minimization. 198 covered probing sets removed.
+[2026-01-08 11:26:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 11:26:14] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-08 11:26:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 11:26:14] |             1470 |             2500 |          1242 |                       2 |                      44 |               17.507246 |
+[2026-01-08 11:26:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 11:26:14] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 11:26:14] | Elapsed Time |        Used Memory |          #Simulations | Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-08 11:26:14] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 11:26:18] |   0-00:00:04 |   0TB    4GB 864MB |       128000 / 438816 |                                     Q[16](4) |   2.963673 |    OKAY |
+[2026-01-08 11:26:22] |   0-00:00:09 |   0TB    8GB 601MB |       256000 / 617591 |                                  Zh_f3[9](5) |   2.529847 |    OKAY |
+[2026-01-08 11:26:27] |   0-00:00:13 |   0TB   11GB 910MB |       384000 / 754767 |                                      Q[1](8) |   2.904046 |    OKAY |
+[2026-01-08 11:26:31] |   0-00:00:18 |   0TB   14GB 651MB |       512000 / 870411 |                                   pl_L[3](4) |   2.756660 |    OKAY |
+[2026-01-08 11:26:36] |   0-00:00:23 |   0TB   17GB 451MB |       640000 / 972293 |                                   pl_L[0](6) |   2.719623 |    OKAY |
+[2026-01-08 11:26:42] |   0-00:00:28 |   0TB   20GB 283MB |      768000 / 1064403 |                                   pl_L[3](9) |   2.740124 |    OKAY |
+[2026-01-08 11:26:46] |   0-00:00:33 |   0TB   23GB 025MB |      896000 / 1149106 |                                  ph_L[3](10) |   2.434093 |    OKAY |
+[2026-01-08 11:26:52] |   0-00:00:38 |   0TB   25GB 550MB |     1024000 / 1227945 |                                   ph_H[2](4) |   3.166510 |    OKAY |
+[2026-01-08 11:26:57] |   0-00:00:43 |   0TB   28GB 297MB |     1152000 / 1301992 |                                   pl_H[2](5) |   2.817426 |    OKAY |
+[2026-01-08 11:27:02] |   0-00:00:48 |   0TB   30GB 874MB |     1280000 / 1372027 |                                   muld[6](2) |   2.661486 |    OKAY |
+[2026-01-08 11:27:08] |   0-00:00:54 |   0TB   33GB 369MB |     1408000 / 1438638 |                                   ph_L[0](6) |   2.467827 |    OKAY |
+[2026-01-08 11:27:13] |   0-00:01:00 |   0TB   35GB 887MB |     1536000 / 1502286 |                                   ph_L[1](9) |   1.945588 |    OKAY |

@@ -1,8 +1,7 @@
 {
   "performance": {
     "max_number_of_threads": "half",
-    "minimize_probing_sets": "trivial",
-    "number_of_probing_sets_per_step": 250000
+    "minimize_probing_sets": "trivial"
   },
   "simulation": {
     "groups": [

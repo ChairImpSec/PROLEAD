@@ -1,0 +1,31 @@
+[2026-01-08 10:33:52] Successfully validated the settings file.
+[2026-01-08 10:33:52] Successfully read the library with name "nang45".
+[2026-01-08 10:33:52] Successfully parsed 35 cells from the library.
+[2026-01-08 10:33:52] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-08 10:33:53] Successfully read design file with topmodule "circuit"!
+[2026-01-08 10:33:53] Successfully placed 10623 possible probes in total.
+[2026-01-08 10:33:55] Successfully placed 10623 possible extensions in total.
+[2026-01-08 10:33:55] Successfully detected 9630 probes that are conditionally extended.
+[2026-01-08 10:33:57] Successfully specified 9630 probe-extension conditions.
+[2026-01-08 10:33:57] Successfully initialized a univariate evaluation with 10446 probing sets.
+[2026-01-08 10:33:58] Successfully set a batch of 10446 probing sets.
+[2026-01-08 10:33:58] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 10:33:58] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-08 10:33:58] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 10:33:58] |            10446 |            10623 |         10446 |                       1 |                    2510 |              369.116408 |
+[2026-01-08 10:33:58] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 10:33:58] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 10:33:58] | Elapsed Time |        Used Memory |          #Simulations | Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-08 10:33:58] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-08 10:35:59] |   0-00:02:02 |   0TB    2GB 715MB |        128000 / 21824 |          top_AND_M57_U1_nonlinearInst_n64(3) |   3.174697 |    OKAY |
+[2026-01-08 10:38:01] |   0-00:04:04 |   0TB    2GB 876MB |        256000 / 22212 |                 top_XOR_S1_U1_xorInst_n12(2) |   3.929253 |    OKAY |
+[2026-01-08 10:40:02] |   0-00:06:06 |   0TB    2GB 925MB |        384000 / 22450 |                       top_XOR_T24_U1_w[1](3) |   5.353931 | LEAKAGE |
+[2026-01-08 10:42:04] |   0-00:08:08 |   0TB    2GB 925MB |        512000 / 22637 |                        top_XOR_M3_U1_w[2](3) |   4.729939 |    OKAY |
+[2026-01-08 10:44:05] |   0-00:10:09 |   0TB    2GB 930MB |        640000 / 22637 |                        top_XOR_M3_U1_w[2](3) |   4.818508 |    OKAY |
+[2026-01-08 10:46:06] |   0-00:12:09 |   0TB    2GB 953MB |        768000 / 22637 |                        top_XOR_M3_U1_w[2](3) |   4.750657 |    OKAY |
+[2026-01-08 10:48:07] |   0-00:14:11 |   0TB    2GB 954MB |        896000 / 22776 |                        top_XOR_M3_U1_w[2](3) |   3.724954 |    OKAY |
+[2026-01-08 10:50:09] |   0-00:16:12 |   0TB    2GB 954MB |       1024000 / 22823 |                top_XOR_M18_U1_xorInst_n10(2) |   4.179064 |    OKAY |
+[2026-01-08 10:52:10] |   0-00:18:13 |   0TB    2GB 954MB |       1152000 / 22869 |                top_XOR_M18_U1_xorInst_n10(2) |   4.457838 |    OKAY |
+[2026-01-08 10:54:11] |   0-00:20:14 |   0TB    2GB 969MB |       1280000 / 23006 |                top_XOR_M18_U1_xorInst_n10(2) |   4.616812 |    OKAY |
+[2026-01-08 10:56:12] |   0-00:22:15 |   0TB    2GB 982MB |       1408000 / 23142 |                                   top_L19(3) |   3.533897 |    OKAY |
+[2026-01-08 10:58:13] |   0-00:24:16 |   0TB    2GB 989MB |       1536000 / 23142 |                                   top_L19(3) |   4.445517 |    OKAY |

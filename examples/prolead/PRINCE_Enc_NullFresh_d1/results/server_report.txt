@@ -1,0 +1,26 @@
+[2025-12-31 13:19:12] Successfully validated the settings file.
+[2025-12-31 13:19:12] Successfully read the library with name "nang45".
+[2025-12-31 13:19:12] Successfully parsed 35 cells from the library.
+[2025-12-31 13:19:12] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2025-12-31 13:19:13] Successfully read design file with topmodule "circuit"!
+[2025-12-31 13:19:13] Successfully placed 158525 possible probes in total.
+[2025-12-31 13:20:46] Successfully placed 21000 possible extensions in total.
+[2025-12-31 13:20:47] Successfully initialized a univariate evaluation with 33025 probing sets.
+[2025-12-31 13:20:49] Successfully set a batch of 33025 probing sets.
+[2025-12-31 13:20:49] Successfully applied trivial minimization. 22525 duplicated probing sets removed.
+[2025-12-31 13:20:49] -------------------------------------------------------------------------------------------------------------------------------------
+[2025-12-31 13:20:49] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2025-12-31 13:20:49] -------------------------------------------------------------------------------------------------------------------------------------
+[2025-12-31 13:20:49] |            33025 |            21000 |         10500 |                       3 |                      32 |               16.816667 |
+[2025-12-31 13:20:49] -------------------------------------------------------------------------------------------------------------------------------------
+[2025-12-31 13:20:49] -----------------------------------------------------------------------------------------------------------------------------------------------
+[2025-12-31 13:20:49] | Elapsed Time |        Used Memory |        #Simulations |               Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2025-12-31 13:20:49] -----------------------------------------------------------------------------------------------------------------------------------------------
+[2025-12-31 13:20:49] |   0-00:00:03 |   0TB    1GB 775MB |       8192 / 116238 |        prince_rounds_sub_sBoxCombined_PRINCE_14_g_s[1](21) |   4.777200 |    OKAY |
+[2025-12-31 13:20:50] |   0-00:00:04 |   0TB    2GB 890MB |      16384 / 161240 |                        prince_rounds_mul_result_s1[14](20) |   3.676079 |    OKAY |
+[2025-12-31 13:20:51] |   0-00:00:04 |   0TB    3GB 840MB |      24576 / 195632 |                        prince_rounds_mul_result_s1[60](14) |  10.459937 | LEAKAGE |
+[2025-12-31 13:20:51] |   0-00:00:05 |   0TB    4GB 698MB |      32768 / 224469 |                        prince_rounds_mul_result_s1[60](14) |  19.594132 | LEAKAGE |
+[2025-12-31 13:20:52] |   0-00:00:06 |   0TB    5GB 500MB |      40960 / 249827 |                        prince_rounds_mul_result_s1[60](14) |  30.196314 | LEAKAGE |
+[2025-12-31 13:20:53] |   0-00:00:06 |   0TB    6GB 212MB |      49152 / 272665 |                        prince_rounds_mul_result_s1[60](14) |  42.561150 | LEAKAGE |
+[2025-12-31 13:20:54] |   0-00:00:07 |   0TB    6GB 898MB |      57344 / 293528 |                        prince_rounds_mul_result_s1[60](14) |  61.692542 | LEAKAGE |
+[2025-12-31 13:20:54] |   0-00:00:08 |   0TB    7GB 552MB |      65536 / 312879 |                        prince_rounds_mul_result_s1[60](14) |  78.830098 | LEAKAGE |

@@ -1,0 +1,31 @@
+[2026-01-19 19:57:17] Successfully validated the settings file.
+[2026-01-19 19:57:17] Successfully read the library with name "nang45".
+[2026-01-19 19:57:17] Successfully parsed 35 cells from the library.
+[2026-01-19 19:57:17] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-19 19:57:17] Successfully read design file with topmodule "circuit"!
+[2026-01-19 19:57:17] Successfully matched 25 fresh mask signals (for rising edge) [{FreshRand[0]}, {FreshRand[1]}, {FreshRand[2]}, {FreshRand[3]}, {FreshRand[4]}, {FreshRand[5]}, {FreshRand[6]}, {FreshRand[7]}, {FreshRand[8]}, {FreshRand[9]}, {FreshRand[10]}, {FreshRand[11]}, {FreshRand[12]}, {FreshRand[13]}, {FreshRand[14]}, {FreshRand[15]}, {FreshRand[16]}, {FreshRand[17]}, {FreshRand[18]}, {FreshRand[19]}, {FreshRand[20]}, {FreshRand[21]}, {FreshRand[22]}, {FreshRand[23]}, {FreshRand[24]}].
+[2026-01-19 19:57:17] Successfully detected 13260 possible probes in total.
+[2026-01-19 19:57:18] Successfully extended 1430 placable probes in total.
+[2026-01-19 19:57:18] Successfully placed 2496 possible extensions in total.
+[2026-01-19 19:57:18] Successfully initialized a univariate evaluation with 1430 probing sets.
+[2026-01-19 19:57:18] Successfully set a batch of 1430 probing sets.
+[2026-01-19 19:57:18] Successfully applied trivial minimization. 104 duplicated probing sets removed.
+[2026-01-19 19:57:18] Successfully applied aggressive minimization. 174 covered probing sets removed.
+[2026-01-19 19:57:18] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 19:57:18] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-19 19:57:18] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 19:57:18] |             1430 |             2496 |          1152 |                      14 |                     136 |              112.395833 |
+[2026-01-19 19:57:18] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 19:57:18] ----------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 19:57:18] | Elapsed Time |        Used Memory |           #Simulations |           Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-19 19:57:18] ----------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 19:57:22] |   0-00:00:04 |   0TB    0GB 384MB |        1000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[0](2) |  10.121668 | LEAKAGE |
+[2026-01-19 19:57:25] |   0-00:00:08 |   0TB    0GB 384MB |        2000000 / 20807 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[14](2) |  18.664215 | LEAKAGE |
+[2026-01-19 19:57:29] |   0-00:00:11 |   0TB    0GB 384MB |        3000000 / 20807 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[18](2) |  36.338799 | LEAKAGE |
+[2026-01-19 19:57:33] |   0-00:00:15 |   0TB    0GB 384MB |        4000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[3](2) |  52.378675 | LEAKAGE |
+[2026-01-19 19:57:36] |   0-00:00:19 |   0TB    0GB 384MB |        5000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[3](2) |  65.301914 | LEAKAGE |
+[2026-01-19 19:57:40] |   0-00:00:22 |   0TB    0GB 384MB |        6000000 / 20807 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[13](2) |  85.544773 | LEAKAGE |
+[2026-01-19 19:57:44] |   0-00:00:26 |   0TB    0GB 384MB |        7000000 / 20807 |  all_mux_linear_3__MUX_theta_state_inst_StateIn[14](2) |  95.029061 | LEAKAGE |
+[2026-01-19 19:57:47] |   0-00:00:29 |   0TB    0GB 384MB |        8000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[3](2) | 110.803037 | LEAKAGE |
+[2026-01-19 19:57:51] |   0-00:00:33 |   0TB    0GB 384MB |        9000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[3](2) | 127.922980 | LEAKAGE |
+[2026-01-19 19:57:54] |   0-00:00:37 |   0TB    0GB 384MB |       10000000 / 20807 |   all_mux_linear_3__MUX_theta_state_inst_StateIn[4](2) | 144.483773 | LEAKAGE |

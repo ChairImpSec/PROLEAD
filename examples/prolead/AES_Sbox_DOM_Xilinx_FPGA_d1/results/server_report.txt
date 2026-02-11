@@ -1,0 +1,22 @@
+[2026-01-19 22:08:52] Successfully validated the settings file.
+[2026-01-19 22:08:52] Successfully read the library with name "xilinx_fpga".
+[2026-01-19 22:08:52] Successfully parsed 13 cells from the library.
+[2026-01-19 22:08:52] Successfully found buffer cell with identifier "IBUF" and others.
+[2026-01-19 22:08:52] Successfully read design file with topmodule "circuit"!
+[2026-01-19 22:08:52] Successfully matched 18 fresh mask signals (for rising edge) [{\Zmul1xDI[0][0]}, {\Zmul1xDI[0][1]}, {\Zmul1xDI[0][2]}, {\Zmul1xDI[0][3]}, {\Zmul2xDI[0][0]}, {\Zmul2xDI[0][1]}, {\Zmul2xDI[0][2]}, {\Zmul2xDI[0][3]}, {\Zmul3xDI[0][0]}, {\Zmul3xDI[0][1]}, {\Zmul3xDI[0][2]}, {\Zmul3xDI[0][3]}, {\Zinv1xDI[0][0]}, {\Zinv1xDI[0][1]}, {\Zinv2xDI[0][0]}, {\Zinv2xDI[0][1]}, {\Zinv3xDI[0][0]}, {\Zinv3xDI[0][1]}].
+[2026-01-19 22:08:52] Successfully detected 9890 possible probes in total.
+[2026-01-19 22:08:53] Successfully extended 1980 placable probes in total.
+[2026-01-19 22:08:53] Successfully placed 2260 possible extensions in total.
+[2026-01-19 22:08:53] Successfully initialized a univariate evaluation with 1980 probing sets.
+[2026-01-19 22:08:53] Successfully set a batch of 1980 probing sets.
+[2026-01-19 22:08:53] Successfully applied trivial minimization. 260 duplicated probing sets removed.
+[2026-01-19 22:08:53] Successfully applied aggressive minimization. 316 covered probing sets removed.
+[2026-01-19 22:08:53] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 22:08:53] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-19 22:08:53] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 22:08:53] |             1980 |             2260 |          1404 |                       2 |                      26 |                7.589744 |
+[2026-01-19 22:08:53] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 22:08:53] -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 22:08:53] | Elapsed Time |        Used Memory |          #Simulations |                                                                   Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-19 22:08:53] -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 22:08:55] |   0-00:00:02 |   0TB    1GB 205MB |       128000 / 428076 |                                                        \masked_variant_pipelined_8_staged.Y1_3xDP_reg[0][2](6) |   2.284722 |    OKAY |

@@ -110,17 +110,16 @@ const std::vector<const Probe*>& Probe::GetCouplingExtensions() const {
   return coupling_extensions_;
 }
 
-void Probe::Extend(const CircuitStruct& circuit, const std::vector<Probe>& probes, const Settings& settings) {
+void Probe::Extend(const CircuitStruct& circuit, const std::map<Probe, const Probe*>& probe_map, const Settings& settings) {
   const std::vector<const SignalStruct*>& signals = GetSignals();
   assert(!signals.empty() && "Error in Probe::Extend(): No probes!");
-  assert(std::is_sorted(probes.begin(), probes.end()) && "Error in Probe::Extend(): Probes not sorted!");
 
   auto AddProbeIfExists = [&](const Probe& key, std::vector<const Probe*>& target) {
-    auto it = std::lower_bound(probes.begin(), probes.end(), key);
+    auto it = probe_map.find(key);
     // Some probes don't exist as they are not meaningful
     // (e.g., probes on constants and the clock signal).
-    if (it != probes.end() && *it == key) {
-      target.push_back(&*it);
+    if (it != probe_map.end()) {
+      target.push_back(it->second);
     }
   };
 

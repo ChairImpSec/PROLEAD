@@ -30,7 +30,7 @@ class Probe : public Target {
     const std::vector<const Probe*>& GetTransitionExtensions() const;
     const std::vector<const Probe*>& GetCouplingExtensions() const;
 
-    void Extend(const CircuitStruct& circuit, const std::vector<Probe>& probes, const Settings& settings);
+    void Extend(const CircuitStruct& circuit, const std::map<Probe, const Probe*>& probe_map, const Settings& settings);
     const Enabler* GetEnabler() const;
     void SetEnabler(const Enabler& enabler);
     uint64_t GetBitslicedValue(uint64_t signal_idx, uint64_t step_idx) const;

@@ -1,0 +1,31 @@
+[2026-01-01 17:20:35] Successfully validated the settings file.
+[2026-01-01 17:20:35] Successfully read the library with name "nang45".
+[2026-01-01 17:20:35] Successfully parsed 35 cells from the library.
+[2026-01-01 17:20:35] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-01 17:20:35] Successfully read design file with topmodule "circuit"!
+[2026-01-01 17:20:37] Successfully placed 1676766 possible probes in total.
+[2026-01-02 05:01:35] Successfully placed 567294 possible extensions in total.
+[2026-01-02 05:01:44] Successfully initialized a univariate evaluation with 266994 probing sets.
+[2026-01-02 05:03:43] Successfully set a batch of 266994 probing sets.
+[2026-01-02 05:03:43] Successfully applied trivial minimization. 0 duplicated probing sets removed.
+[2026-01-02 05:34:30] Successfully applied aggressive minimization. 4304 covered probing sets removed.
+[2026-01-02 05:34:30] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 05:34:30] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-02 05:34:30] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 05:34:30] |           266994 |           567294 |        262690 |                       2 |                      30 |               14.170124 |
+[2026-01-02 05:34:30] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 05:34:30] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 05:34:30] | Elapsed Time |        Used Memory |          #Simulations | Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-02 05:34:30] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 05:40:41] |   0-00:39:01 |   0TB   42GB 969MB |       128000 / 223626 |                    DataOutReg2_gff_n262(512) |   4.494135 |    OKAY |
+[2026-01-02 05:48:44] |   0-00:47:04 |   0TB   47GB 259MB |       256000 / 225561 |                  md1FF_state_gff_10_n29(438) |   6.344720 | LEAKAGE |
+[2026-01-02 05:57:27] |   0-00:55:47 |   0TB   48GB 393MB |       384000 / 225568 |                   md1FF_state_gff_2_n31(436) |   5.717047 | LEAKAGE |
+[2026-01-02 06:06:09] |   0-01:04:29 |   0TB   48GB 619MB |       512000 / 225568 |                   md1FF_state_gff_1_n29(492) |   6.083488 | LEAKAGE |
+[2026-01-02 06:15:05] |   0-01:13:25 |   0TB   48GB 623MB |       640000 / 225568 |                 stateFF_state_gff_5_n31(467) |   4.764035 |    OKAY |
+[2026-01-02 06:23:47] |   0-01:22:07 |   0TB   48GB 623MB |       768000 / 225568 |                 stateFF_state_gff_8_n29(340) |   5.200968 | LEAKAGE |
+[2026-01-02 06:32:31] |   0-01:30:51 |   0TB   48GB 623MB |       896000 / 225568 |                    DataOutReg2_gff_n259(267) |   5.232235 | LEAKAGE |
+[2026-01-02 06:41:14] |   0-01:39:34 |   0TB   48GB 623MB |      1024000 / 225568 |                   md1FF_state_gff_13_n32(51) |   5.639031 | LEAKAGE |
+[2026-01-02 06:49:55] |   0-01:48:15 |   0TB   48GB 623MB |      1152000 / 225568 |                   md1FF_state_gff_5_n32(359) |   6.214632 | LEAKAGE |
+[2026-01-02 06:58:37] |   0-01:56:57 |   0TB   48GB 623MB |      1280000 / 225568 |                 stateFF_state_gff_1_n27(233) |   6.174305 | LEAKAGE |
+[2026-01-02 07:07:18] |   0-02:05:38 |   0TB   48GB 623MB |      1408000 / 225568 |                 stateFF_state_gff_1_n27(233) |   7.230932 | LEAKAGE |
+[2026-01-02 07:16:06] |   0-02:14:26 |   0TB   48GB 623MB |      1536000 / 225568 |                   md1FF_state_gff_5_n32(422) |   6.889475 | LEAKAGE |

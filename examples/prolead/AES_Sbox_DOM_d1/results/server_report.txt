@@ -1,0 +1,32 @@
+[2026-01-02 19:57:27] Successfully validated the settings file.
+[2026-01-02 19:57:27] Successfully read the library with name "nang45".
+[2026-01-02 19:57:27] Successfully parsed 35 cells from the library.
+[2026-01-02 19:57:27] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-02 19:57:27] Successfully read design file with topmodule "circuit"!
+[2026-01-02 19:57:27] Successfully matched 18 fresh mask signals (for rising edge) [{Zmul1xDI[0]}, {Zmul1xDI[1]}, {Zmul1xDI[2]}, {Zmul1xDI[3]}, {Zmul2xDI[0]}, {Zmul2xDI[1]}, {Zmul2xDI[2]}, {Zmul2xDI[3]}, {Zmul3xDI[0]}, {Zmul3xDI[1]}, {Zmul3xDI[2]}, {Zmul3xDI[3]}, {Zinv1xDI[0]}, {Zinv1xDI[1]}, {Zinv2xDI[0]}, {Zinv2xDI[1]}, {Zinv3xDI[0]}, {Zinv3xDI[1]}].
+[2026-01-02 19:57:27] Successfully placed 8480 possible probes in total.
+[2026-01-02 19:57:27] Successfully placed 2580 possible extensions in total.
+[2026-01-02 19:57:27] Successfully initialized a univariate evaluation with 1870 probing sets.
+[2026-01-02 19:57:27] Successfully set a batch of 1870 probing sets.
+[2026-01-02 19:57:27] Successfully applied trivial minimization. 260 duplicated probing sets removed.
+[2026-01-02 19:57:27] Successfully applied aggressive minimization. 224 covered probing sets removed.
+[2026-01-02 19:57:27] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:57:27] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-02 19:57:27] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:57:27] |             1870 |             2580 |          1386 |                       2 |                      26 |                8.623377 |
+[2026-01-02 19:57:27] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:57:27] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:57:27] | Elapsed Time |        Used Memory |          #Simulations | Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-02 19:57:27] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:57:29] |   0-00:00:02 |   0TB    1GB 324MB |       128000 / 428057 |                                   QxDO[2](7) |   2.998956 |    OKAY |
+[2026-01-02 19:57:31] |   0-00:00:04 |   0TB    2GB 171MB |       256000 / 589622 |                     inverter_gf24_AxDP[1](8) |   3.341172 |    OKAY |
+[2026-01-02 19:57:34] |   0-00:00:06 |   0TB    2GB 801MB |       384000 / 707052 |                     inverter_gf24_AxDP[1](7) |   2.578901 |    OKAY |
+[2026-01-02 19:57:36] |   0-00:00:09 |   0TB    3GB 422MB |       512000 / 801818 |            inverter_gf24_b_mul_e_FFxDN[2](2) |   2.887641 |    OKAY |
+[2026-01-02 19:57:38] |   0-00:00:11 |   0TB    4GB 051MB |       640000 / 881900 |                        mult_lsb_FFxDN[12](9) |   2.824208 |    OKAY |
+[2026-01-02 19:57:41] |   0-00:00:13 |   0TB    4GB 648MB |       768000 / 951813 |            inverter_gf24_b_mul_e_FFxDN[2](2) |   2.863889 |    OKAY |
+[2026-01-02 19:57:43] |   0-00:00:16 |   0TB    5GB 239MB |      896000 / 1013924 |                         mult_msb_FFxDN[9](7) |   2.733385 |    OKAY |
+[2026-01-02 19:57:46] |   0-00:00:19 |   0TB    5GB 755MB |     1024000 / 1069575 |                         mult_msb_FFxDN[8](7) |   3.719693 |    OKAY |
+[2026-01-02 19:57:49] |   0-00:00:21 |   0TB    6GB 252MB |     1152000 / 1120408 |                        mult_lsb_FFxDN[12](9) |   3.303751 |    OKAY |
+[2026-01-02 19:57:51] |   0-00:00:24 |   0TB    6GB 816MB |     1280000 / 1167046 |                                   QxDO[9](8) |   2.543437 |    OKAY |
+[2026-01-02 19:57:54] |   0-00:00:27 |   0TB    7GB 209MB |     1408000 / 1210078 |                                  QxDO[8](10) |   2.858908 |    OKAY |
+[2026-01-02 19:57:57] |   0-00:00:29 |   0TB    7GB 721MB |     1536000 / 1250117 |                                  QxDO[8](10) |   2.970852 |    OKAY |

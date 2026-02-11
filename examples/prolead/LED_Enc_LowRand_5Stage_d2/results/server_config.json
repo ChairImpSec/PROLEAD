@@ -1,0 +1,78 @@
+{
+  "performance": {
+    "max_number_of_threads": "half",
+    "minimize_probing_sets": "aggressive",
+    "number_of_probing_sets_per_step": 676866
+  },
+  "simulation": {
+    "groups": [
+      "192'h00000000000000000000000000000000$$$$$$$$$$$$$$$$",
+      "192'h000000000000000000000000000000000000000000000000"
+    ],
+    "output_shares": [
+      "Ciphertext0[63:0]",
+      "Ciphertext1[63:0]",
+      "Ciphertext2[63:0]"
+    ],
+    "expected_output": [
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'h3DECB2A0850CDBA1"
+    ],
+    "number_of_clock_cycles": 241,
+    "input_sequence": [
+      {
+        "signals": [
+          {
+            "name": "Plaintext0[63:0]",
+            "value": "group_in0[63:0]"
+          },
+          {
+            "name": "Plaintext1[63:0]",
+            "value": "group_in1[63:0]"
+          },
+          {
+            "name": "Plaintext2[63:0]",
+            "value": "group_in2[63:0]"
+          },
+          {
+            "name": "Key0[127:0]",
+            "value": "group_in0[191:64]"
+          },
+          {
+            "name": "Key1[127:0]",
+            "value": "group_in1[191:64]"
+          },
+          {
+            "name": "Key2[127:0]",
+            "value": "group_in2[191:64]"
+          },
+          {
+            "name": "r[23:0]",
+            "value": "24'h$$$$$$"
+          },
+          {
+            "name": "rst",
+            "value": "1'b1"
+          }
+        ],
+        "hold_for_cycles": 5
+      },
+      {
+        "signals": [ 
+          {
+            "name": "rst",
+            "value": "1'b0"
+          }
+        ]
+      }
+    ],
+    "number_of_simulations": 1536000,
+    "number_of_simulations_per_step": 128000
+  },
+  "hardware": {
+    "clock_signal_name": "clk"
+  },
+  "side_channel_analysis": {
+    "order": 2
+  }
+}

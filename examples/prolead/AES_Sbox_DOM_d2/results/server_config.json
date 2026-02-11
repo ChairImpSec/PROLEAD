@@ -54,6 +54,6 @@
   "side_channel_analysis": {
     "order": 2,
     "clock_cycles": ["10"],
-    "transitional_leakage": true
+    "transitional_leakage": false
   }
 }

@@ -417,51 +417,62 @@ void CellStruct::SetExpressions(bool relaxed) {
   for (const std::string& expr : type->GetExpr()) {
     expr_.emplace_back(expr, primary_signals, params_);
 
-    if ((type->GetType() == cell_t::relaxed || type->GetType() == cell_t::buffer) && relaxed) {
-      bool found = false;
+    if (relaxed) {
+      if (type->GetType() == cell_t::relaxed || type->GetType() == cell_t::buffer) {
+        bool found = false;
 
-      for (uint64_t lib_idx = 0; lib_idx < expr_lib.size(); ++lib_idx) {
-        uint64_t number_of_inputs = primary_signals.size();
-        if (number_of_inputs == expr_lib[lib_idx].second.size()) {
-          bool equal = true;
+        for (uint64_t lib_idx = 0; lib_idx < expr_lib.size(); ++lib_idx) {
+          uint64_t number_of_inputs = primary_signals.size();
+          if (number_of_inputs == expr_lib[lib_idx].second.size()) {
+            bool equal = true;
 
-          for (uint64_t in_idx = 0; in_idx < (1ULL << number_of_inputs);
-               ++in_idx) {
-            std::vector<uint64_t> vals(number_of_inputs, 0);
+            for (uint64_t in_idx = 0; in_idx < (1ULL << number_of_inputs);
+                ++in_idx) {
+              std::vector<uint64_t> vals(number_of_inputs, 0);
 
-            for (uint64_t tmp_idx = 0; tmp_idx < number_of_inputs; ++tmp_idx) {
-              vals[tmp_idx] = (in_idx & (1 << tmp_idx)) != 0;
+              for (uint64_t tmp_idx = 0; tmp_idx < number_of_inputs; ++tmp_idx) {
+                vals[tmp_idx] = (in_idx & (1 << tmp_idx)) != 0;
+              }
+
+              vals.reserve(vals.size() + expr_mids_.size());
+              for (const Expression& expr_mid : expr_mids_) {
+                vals.push_back(expr_mid.Eval(vals));
+              }
+
+              Expression tmp_expr(expr_lib[lib_idx].first,
+                                  expr_lib[lib_idx].second, params_);
+
+              if (expr_.back().Eval(vals) != tmp_expr.Eval(vals)) {
+                equal = false;
+                break;
+              }
             }
 
-            vals.reserve(vals.size() + expr_mids_.size());
-            for (const Expression& expr_mid : expr_mids_) {
-              vals.push_back(expr_mid.Eval(vals));
-            }
-
-            Expression tmp_expr(expr_lib[lib_idx].first,
-                                expr_lib[lib_idx].second, params_);
-
-            if (expr_.back().Eval(vals) != tmp_expr.Eval(vals)) {
-              equal = false;
+            if (equal) {
+              expr_glitch_ext_.emplace_back(expr_glitch_ext_lib[lib_idx].first,
+                                            expr_glitch_ext_lib[lib_idx].second,
+                                            params_);
+              expr_probe_prop_.emplace_back(expr_probe_prop_lib[lib_idx].first,
+                                            expr_probe_prop_lib[lib_idx].second,
+                                            params_);
+              found = true;
               break;
             }
           }
-
-          if (equal) {
-            expr_glitch_ext_.emplace_back(expr_glitch_ext_lib[lib_idx].first,
-                                          expr_glitch_ext_lib[lib_idx].second,
-                                          params_);
-            expr_probe_prop_.emplace_back(expr_probe_prop_lib[lib_idx].first,
-                                          expr_probe_prop_lib[lib_idx].second,
-                                          params_);
-            found = true;
-            break;
-          }
         }
-      }
 
-      if (!found) {
-        GenerateRelaxedFunctions(expr_mids_, expr_.back());
+        if (!found) {
+          GenerateRelaxedFunctions(expr_mids_, expr_.back());
+        }
+      } else {
+        if (type->GetType() != cell_t::sequential) {
+          BOOST_LOG_TRIVIAL(warning) << "\033[38;5;13mwarning:\033[0m Gate " << Name << " (" 
+            << type->GetIdentifiers()[0] << ", ...) isn't specified as \"relaxed_gate\" in the library!\n"
+            "PROLEAD assumes that probes on its outputs always extend to all its inputs and that "
+            "all output signals are glitchy!" << std::endl; 
+          expr_glitch_ext_.emplace_back("1", primary_signals, params_);
+          expr_probe_prop_.emplace_back("1", primary_signals, params_);  
+        }
       }
     }
   }

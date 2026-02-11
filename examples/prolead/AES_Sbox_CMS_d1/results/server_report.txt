@@ -1,0 +1,32 @@
+[2026-01-02 19:54:30] Successfully validated the settings file.
+[2026-01-02 19:54:30] Successfully read the library with name "nang45".
+[2026-01-02 19:54:30] Successfully parsed 35 cells from the library.
+[2026-01-02 19:54:30] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-02 19:54:30] Successfully read design file with topmodule "circuit"!
+[2026-01-02 19:54:30] Successfully matched 72 fresh mask signals (for rising edge) [{randomS2[0]}, {randomS2[1]}, {randomS2[2]}, {randomS2[3]}, {randomS2[4]}, {randomS2[5]}, {randomS2[6]}, {randomS2[7]}, {randomS2[8]}, {randomS2[9]}, {randomS2[10]}, {randomS2[11]}, {randomS2[12]}, {randomS2[13]}, {randomS2[14]}, {randomS2[15]}, {randomS3[0]}, {randomS3[1]}, {randomS3[2]}, {randomS3[3]}, {randomS3[4]}, {randomS3[5]}, {randomS3[6]}, {randomS3[7]}, {randomS4[0]}, {randomS4[1]}, {randomS4[2]}, {randomS4[3]}, {randomS4[4]}, {randomS4[5]}, {randomS4[6]}, {randomS4[7]}, {randomS4[8]}, {randomS4[9]}, {randomS4[10]}, {randomS4[11]}, {randomS4[12]}, {randomS4[13]}, {randomS4[14]}, {randomS4[15]}, {randomS5[0]}, {randomS5[1]}, {randomS5[2]}, {randomS5[3]}, {randomS5[4]}, {randomS5[5]}, {randomS5[6]}, {randomS5[7]}, {randomS5[8]}, {randomS5[9]}, {randomS5[10]}, {randomS5[11]}, {randomS5[12]}, {randomS5[13]}, {randomS5[14]}, {randomS5[15]}, {randomS5[16]}, {randomS5[17]}, {randomS5[18]}, {randomS5[19]}, {randomS5[20]}, {randomS5[21]}, {randomS5[22]}, {randomS5[23]}, {randomS5[24]}, {randomS5[25]}, {randomS5[26]}, {randomS5[27]}, {randomS5[28]}, {randomS5[29]}, {randomS5[30]}, {randomS5[31]}].
+[2026-01-02 19:54:30] Successfully placed 9220 possible probes in total.
+[2026-01-02 19:54:31] Successfully placed 2460 possible extensions in total.
+[2026-01-02 19:54:31] Successfully initialized a univariate evaluation with 1580 probing sets.
+[2026-01-02 19:54:31] Successfully set a batch of 1580 probing sets.
+[2026-01-02 19:54:31] Successfully applied trivial minimization. 0 duplicated probing sets removed.
+[2026-01-02 19:54:31] Successfully applied aggressive minimization. 212 covered probing sets removed.
+[2026-01-02 19:54:31] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:54:31] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-02 19:54:31] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:54:31] |             1580 |             2460 |          1368 |                       2 |                      30 |               12.473684 |
+[2026-01-02 19:54:31] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:54:31] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:54:31] | Elapsed Time |        Used Memory |          #Simulations | Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-02 19:54:31] -----------------------------------------------------------------------------------------------------------------------------------
+[2026-01-02 19:54:33] |   0-00:00:02 |   0TB    4GB 008MB |       128000 / 438652 |                              stage6Out[8](9) |   2.765481 |    OKAY |
+[2026-01-02 19:54:36] |   0-00:00:05 |   0TB    7GB 292MB |       256000 / 617080 |                           s2_refreshed[1](2) |   3.760957 |    OKAY |
+[2026-01-02 19:54:38] |   0-00:00:07 |   0TB    9GB 986MB |       384000 / 753777 |                           s2_refreshed[1](6) |   2.891957 |    OKAY |
+[2026-01-02 19:54:41] |   0-00:00:10 |   0TB   12GB 570MB |       512000 / 868843 |                           s4_refreshed[1](9) |   2.973089 |    OKAY |
+[2026-01-02 19:54:44] |   0-00:00:13 |   0TB   15GB 008MB |       640000 / 970102 |                          s5_refreshed[29](2) |   2.928462 |    OKAY |
+[2026-01-02 19:54:46] |   0-00:00:16 |   0TB   17GB 301MB |      768000 / 1061505 |                          s5_refreshed[29](2) |   4.075307 |    OKAY |
+[2026-01-02 19:54:49] |   0-00:00:19 |   0TB   19GB 470MB |      896000 / 1145449 |                           s3_refreshed[7](2) |   3.704083 |    OKAY |
+[2026-01-02 19:54:52] |   0-00:00:22 |   0TB   21GB 687MB |     1024000 / 1223452 |                           s3_refreshed[7](2) |   4.436651 |    OKAY |
+[2026-01-02 19:54:55] |   0-00:00:25 |   0TB   23GB 766MB |     1152000 / 1296609 |                          s4_refreshed[1](10) |   3.595042 |    OKAY |
+[2026-01-02 19:54:58] |   0-00:00:28 |   0TB   25GB 978MB |     1280000 / 1365680 |                          s4_refreshed[1](10) |   3.943306 |    OKAY |
+[2026-01-02 19:55:02] |   0-00:00:31 |   0TB   27GB 998MB |     1408000 / 1431286 |                          s4_refreshed[1](10) |   3.360916 |    OKAY |
+[2026-01-02 19:55:05] |   0-00:00:34 |   0TB   29GB 883MB |     1536000 / 1493919 |                           s2_refreshed[7](2) |   2.758333 |    OKAY |

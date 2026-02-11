@@ -1,0 +1,32 @@
+[2026-01-19 15:08:26] Successfully validated the settings file.
+[2026-01-19 15:08:26] Successfully read the library with name "nang45".
+[2026-01-19 15:08:26] Successfully parsed 35 cells from the library.
+[2026-01-19 15:08:26] Successfully found buffer cell with identifier "BUF_X1" and others.
+[2026-01-19 15:08:27] Successfully read design file with topmodule "circuit"!
+[2026-01-19 15:08:27] Successfully detected 138171 possible probes in total.
+[2026-01-19 15:11:08] Successfully extended 20790 placable probes in total.
+[2026-01-19 15:11:08] Successfully placed 27720 possible extensions in total.
+[2026-01-19 15:11:09] Successfully initialized a univariate evaluation with 20790 probing sets.
+[2026-01-19 15:11:09] Successfully set a batch of 20790 probing sets.
+[2026-01-19 15:11:09] Successfully applied trivial minimization. 9504 duplicated probing sets removed.
+[2026-01-19 15:11:14] Successfully applied aggressive minimization. 3062 covered probing sets removed.
+[2026-01-19 15:11:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 15:11:14] | #Standard Probes | #Extended Probes | #Probing Sets | Minimum #Probes per Set | Maximum #Probes per Set | Average #Probes per Set |
+[2026-01-19 15:11:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 15:11:14] |            20790 |            27720 |          8224 |                       8 |                     122 |               45.618677 |
+[2026-01-19 15:11:14] -------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 15:11:14] -------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 15:11:14] | Elapsed Time |        Used Memory |          #Simulations |         Probing Set with Highest Information Leakage |  -log10(p) |  Status |
+[2026-01-19 15:11:14] -------------------------------------------------------------------------------------------------------------------------------------------
+[2026-01-19 15:11:32] |   0-00:00:23 |   0TB   32GB 708MB |       128000 / 438816 |  Midori_rounds_roundResult_Reg2_SFF_21_SFFInst_N3(7) |   3.419100 |    OKAY |
+[2026-01-19 15:11:51] |   0-00:00:42 |   0TB   60GB 826MB |       256000 / 617591 | Midori_rounds_roundResult_Reg2_SFF_46_SFFInst_N3(27) |   4.062865 |    OKAY |
+[2026-01-19 15:12:13] |   0-00:01:05 |   0TB   87GB 217MB |       384000 / 754767 |  Midori_rounds_roundResult_Reg2_SFF_52_SFFInst_N3(2) |   3.885025 |    OKAY |
+[2026-01-19 15:12:35] |   0-00:01:26 |   0TB  112GB 907MB |       512000 / 870409 | Midori_rounds_roundResult_Reg2_SFF_20_SFFInst_N3(24) |   3.568571 |    OKAY |
+[2026-01-19 15:12:58] |   0-00:01:49 |   0TB  138GB 416MB |       640000 / 972291 |  Midori_rounds_roundResult_Reg2_SFF_2_SFFInst_N3(27) |   3.856617 |    OKAY |
+[2026-01-19 15:13:22] |   0-00:02:13 |   0TB  161GB 763MB |      768000 / 1064399 | Midori_rounds_roundResult_Reg2_SFF_48_SFFInst_N3(33) |   4.976380 |    OKAY |
+[2026-01-19 15:13:47] |   0-00:02:38 |   0TB  185GB 925MB |      896000 / 1149099 |            Midori_rounds_sub_sBox_PRINCE_13_e[2](29) |   4.159390 |    OKAY |
+[2026-01-19 15:14:12] |   0-00:03:03 |   0TB  209GB 484MB |     1024000 / 1227937 |            Midori_rounds_sub_sBox_PRINCE_14_g[7](31) |   3.663679 |    OKAY |
+[2026-01-19 15:14:39] |   0-00:03:30 |   0TB  233GB 489MB |     1152000 / 1301982 |            Midori_rounds_sub_sBox_PRINCE_14_g[7](31) |   4.452912 |    OKAY |
+[2026-01-19 15:15:07] |   0-00:03:58 |   0TB  256GB 549MB |     1280000 / 1372015 |            Midori_rounds_sub_sBox_PRINCE_14_g[7](31) |   4.482254 |    OKAY |
+[2026-01-19 15:15:36] |   0-00:04:27 |   0TB  276GB 560MB |     1408000 / 1438625 |             Midori_rounds_sub_sBox_PRINCE_1_g[6](26) |   4.133262 |    OKAY |
+[2026-01-19 15:16:06] |   0-00:04:58 |   0TB  297GB 056MB |     1536000 / 1502269 |  Midori_rounds_roundResult_Reg2_SFF_32_SFFInst_N3(5) |   4.349509 |    OKAY |

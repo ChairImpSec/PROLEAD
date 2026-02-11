@@ -1,0 +1,1 @@
+./../../../../../../../../release/PROLEAD -l ../../../../../../../../libs/nang45.json -n nang45 -d ../../../gate/design.v -m circuit -c config.json 2>&1 | tee Report.dat
