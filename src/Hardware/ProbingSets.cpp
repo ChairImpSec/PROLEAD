@@ -345,6 +345,20 @@ void ProbingSet::Extend(const CircuitStruct& circuit) {
 
   std::sort(extensions_.begin(), extensions_.end(), [](const Probe* lhs, const Probe* rhs) {return *lhs < *rhs;});
   extensions_.erase(std::unique(extensions_.begin(), extensions_.end()), extensions_.end()); 
+
+  /**
+  * @brief Remove probes that are not allowed to be probed from the extensions. 
+  * This is specified by the "observed_extensions" settings in the config file.
+  * @see https://github.com/ChairImpSec/PROLEAD/wiki/observed_extensions 
+  * for the wiki page of the "observed_extensions" setting.
+  */
+  extensions_.erase(std::remove_if(extensions_.begin(), extensions_.end(), [](const Probe* probe) {
+    const auto& signals = probe->GetSignals();
+    return std::any_of(signals.begin(), signals.end(), [](const SignalStruct* signal) { 
+      return !signal->is_analysis_allowed; 
+    });
+  }), extensions_.end());
+
   number_of_extensions_ = extensions_.size();
 }
 

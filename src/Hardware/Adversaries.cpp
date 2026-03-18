@@ -970,14 +970,18 @@ bool Adversaries::IsInDistance(const std::vector<const Probe*>& probes) const {
 }
 
 double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx) {
+  uint64_t number_of_probing_sets = probing_sets_.size();
+
+  // Due to the "observed_extensions" setting, some probing
+  // sets might not extend to any probe. We can remove them.
+  probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(),
+  [](const ProbingSet& probing_set) { return probing_set.GetExtensions().empty(); }), probing_sets_.end());
+  
   if (settings_.GetMinimization() != Minimization::none) {
-    uint64_t number_of_probing_sets = probing_sets_.size();
     std::sort(probing_sets_.begin(), probing_sets_.end(),
       [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
     probing_sets_.erase(std::unique(probing_sets_.begin(), probing_sets_.end(),
       [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs == rhs; }), probing_sets_.end());
-    BOOST_LOG_TRIVIAL(info) << "Successfully applied trivial minimization. "
-      << number_of_probing_sets - probing_sets_.size() << " duplicated probing sets removed.";
   }
 
   if (settings_.GetMinimization() == Minimization::aggressive) {
@@ -1113,15 +1117,14 @@ double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, tim
       probing_sets_.erase(probing_sets_.begin() + ctr, probing_sets_.end());
       std::sort(probing_sets_.begin(), probing_sets_.end(),
         [](const ProbingSet& lhs, const ProbingSet& rhs) { return lhs < rhs; });
-
-      BOOST_LOG_TRIVIAL(info) << "Successfully applied aggressive minimization. "
-        << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
     } else {
       BOOST_LOG_TRIVIAL(warning) << "\033[38;5;13mwarning:\033[0m Aggressive minimization isn't supported "
         "in the robust but relaxed probing model and will be ignored!";
     }
   }
 
+  BOOST_LOG_TRIVIAL(info) << "Successfully applied probing set minimization. "
+    << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
   double maximum_leakage = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
 
   #pragma omp parallel for schedule(guided)

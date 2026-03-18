@@ -129,7 +129,7 @@
           "aliases": [
             "NOT"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -145,7 +145,7 @@
           "aliases": [
             "Mux2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "S",
             "A",

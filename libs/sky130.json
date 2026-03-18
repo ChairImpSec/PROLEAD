@@ -11,7 +11,7 @@
             "sky130_fd_sc_hd__o2bb2a_2",
             "sky130_fd_sc_hd__o2bb2a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1_N",
             "A2_N",
@@ -33,7 +33,7 @@
             "sky130_fd_sc_hd__and4_2",
             "sky130_fd_sc_hd__and4_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -55,7 +55,7 @@
             "sky130_fd_sc_hd__a31oi",
             "sky130_fd_sc_hd__a31oi_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -132,11 +132,11 @@
             "sky130_fd_sc_hd__dlrbp_1",
             "sky130_fd_sc_hd__dlrbp_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "RESET_B",
             "D",
-            "GATE"
+            "relaxed_gate"
           ],
           "outputs": [
             "Q",
@@ -155,7 +155,7 @@
             "sky130_fd_sc_hd__mux2i_4",
             "sky130_fd_sc_hd__mux2i_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A0",
             "A1",
@@ -176,7 +176,7 @@
             "sky130_fd_sc_hd__a221o_2",
             "sky130_fd_sc_hd__a221o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -199,7 +199,7 @@
             "sky130_fd_sc_hd__dlrtn_4",
             "sky130_fd_sc_hd__dlrtn_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "RESET_B",
             "D",
@@ -220,7 +220,7 @@
             "sky130_fd_sc_hd__o31ai",
             "sky130_fd_sc_hd__o31ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -242,7 +242,7 @@
             "sky130_fd_sc_hd__a2111o",
             "sky130_fd_sc_hd__a2111o_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -265,7 +265,7 @@
             "sky130_fd_sc_hd__a41oi",
             "sky130_fd_sc_hd__a41oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -288,7 +288,7 @@
             "sky130_fd_sc_hd__a211o_2",
             "sky130_fd_sc_hd__a211o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -310,7 +310,7 @@
             "sky130_fd_sc_hd__and3b_2",
             "sky130_fd_sc_hd__and3b_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B",
@@ -331,7 +331,7 @@
             "sky130_fd_sc_hd__fa_2",
             "sky130_fd_sc_hd__fa_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -354,7 +354,7 @@
             "sky130_fd_sc_hd__or4b_2",
             "sky130_fd_sc_hd__or4b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -375,7 +375,7 @@
             "sky130_fd_sc_hd__dlrbn",
             "sky130_fd_sc_hd__dlrbn_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "RESET_B",
             "D",
@@ -397,7 +397,7 @@
             "sky130_fd_sc_hd__dlxbn_1",
             "sky130_fd_sc_hd__dlxbn"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "D",
             "GATE_N"
@@ -420,7 +420,7 @@
             "sky130_fd_sc_hd__o311ai_2",
             "sky130_fd_sc_hd__o311ai_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -443,7 +443,7 @@
             "sky130_fd_sc_hd__a21oi_2",
             "sky130_fd_sc_hd__a21oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -464,7 +464,7 @@
             "sky130_fd_sc_hd__and2b_2",
             "sky130_fd_sc_hd__and2b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B"
@@ -484,7 +484,7 @@
             "sky130_fd_sc_hd__xnor2_2",
             "sky130_fd_sc_hd__xnor2_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -504,7 +504,7 @@
             "sky130_fd_sc_hd__nor3b",
             "sky130_fd_sc_hd__nor3b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -548,7 +548,7 @@
             "sky130_fd_sc_hd__o21ba_1",
             "sky130_fd_sc_hd__o21ba"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -571,7 +571,7 @@
             "sky130_fd_sc_hd__clkinv_8",
             "sky130_fd_sc_hd__clkinv_16"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -591,7 +591,7 @@
             "sky130_fd_sc_hd__xor2_4"
       
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -611,7 +611,7 @@
             "sky130_fd_sc_hd__and3_2",
             "sky130_fd_sc_hd__and3_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -630,7 +630,7 @@
             "sky130_fd_sc_hd__lpflow_inputiso1n",
             "sky130_fd_sc_hd__lpflow_inputiso1n_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "SLEEP_B"
@@ -650,7 +650,7 @@
             "sky130_fd_sc_hd__xnor3",
             "sky130_fd_sc_hd__xnor3_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -675,7 +675,7 @@
             "sky130_fd_sc_hd__inv_12",
             "sky130_fd_sc_hd__inv_16"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -694,7 +694,7 @@
             "sky130_fd_sc_hd__or3b_2",
             "sky130_fd_sc_hd__or3b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -714,7 +714,7 @@
             "sky130_fd_sc_hd__clkinvlp_2",
             "sky130_fd_sc_hd__clkinvlp_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -733,7 +733,7 @@
             "sky130_fd_sc_hd__o2bb2ai_1",
             "sky130_fd_sc_hd__o2bb2ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1_N",
             "A2_N",
@@ -755,7 +755,7 @@
             "sky130_fd_sc_hd__a311o_2",
             "sky130_fd_sc_hd__a311o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -778,7 +778,7 @@
             "sky130_fd_sc_hd__a22oi_2",
             "sky130_fd_sc_hd__a22oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -800,7 +800,7 @@
             "sky130_fd_sc_hd__o32ai_2",
             "sky130_fd_sc_hd__o32ai"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -821,7 +821,7 @@
             "sky130_fd_sc_hd__lpflow_isobufsrckapwr_16",
             "sky130_fd_sc_hd__lpflow_isobufsrckapwr"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "SLEEP",
             "A"
@@ -842,7 +842,7 @@
             "sky130_fd_sc_hd__mux2_2",
             "sky130_fd_sc_hd__mux2_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A0",
             "A1",
@@ -863,7 +863,7 @@
             "sky130_fd_sc_hd__ha",
             "sky130_fd_sc_hd__ha_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -885,7 +885,7 @@
             "sky130_fd_sc_hd__a32oi",
             "sky130_fd_sc_hd__a32oi_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -909,7 +909,7 @@
             "sky130_fd_sc_hd__nand2_4",
             "sky130_fd_sc_hd__nand2_8"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -929,7 +929,7 @@
             "sky130_fd_sc_hd__o21a_1",
             "sky130_fd_sc_hd__o21a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -950,7 +950,7 @@
             "sky130_fd_sc_hd__nor2b_2",
             "sky130_fd_sc_hd__nor2b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B_N"
@@ -970,7 +970,7 @@
             "sky130_fd_sc_hd__xor3",
             "sky130_fd_sc_hd__xor3_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -992,7 +992,7 @@
             "sky130_fd_sc_hd__a2111oi_4",
             "sky130_fd_sc_hd__a2111oi_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1015,7 +1015,7 @@
             "sky130_fd_sc_hd__nand4_2",
             "sky130_fd_sc_hd__nand4_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1038,7 +1038,7 @@
             "sky130_fd_sc_hd__and2_2",
             "sky130_fd_sc_hd__and2_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -1058,7 +1058,7 @@
             "sky130_fd_sc_hd__o211a_2",
             "sky130_fd_sc_hd__o211a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1082,7 +1082,7 @@
             "sky130_fd_sc_hd__lpflow_clkinvkapwr_4",
             "sky130_fd_sc_hd__lpflow_clkinvkapwr_8"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -1101,7 +1101,7 @@
             "sky130_fd_sc_hd__o221ai",
             "sky130_fd_sc_hd__o221ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1124,7 +1124,7 @@
             "sky130_fd_sc_hd__a32o_2",
             "sky130_fd_sc_hd__a32o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1148,7 +1148,7 @@
             "sky130_fd_sc_hd__a21boi_2",
             "sky130_fd_sc_hd__a21boi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1192,7 +1192,7 @@
             "sky130_fd_sc_hd__o2111a_1",
             "sky130_fd_sc_hd__o2111a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1216,7 +1216,7 @@
             "sky130_fd_sc_hd__o21ai_2",
             "sky130_fd_sc_hd__o21ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1237,7 +1237,7 @@
             "sky130_fd_sc_hd__and4bb_4",
             "sky130_fd_sc_hd__and4bb"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B_N",
@@ -1259,7 +1259,7 @@
             "sky130_fd_sc_hd__o2111ai_4",
             "sky130_fd_sc_hd__o2111ai_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1282,7 +1282,7 @@
             "sky130_fd_sc_hd__o32a_4",
             "sky130_fd_sc_hd__o32a_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1303,7 +1303,7 @@
             "sky130_fd_sc_hd__dlymetal6s2s_1",
             "sky130_fd_sc_hd__dlymetal6s2s"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -1322,7 +1322,7 @@
             "sky130_fd_sc_hd__nand2b_2",
             "sky130_fd_sc_hd__nand2b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B"
@@ -1342,7 +1342,7 @@
             "sky130_fd_sc_hd__o22a_2",
             "sky130_fd_sc_hd__o22a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1364,7 +1364,7 @@
             "sky130_fd_sc_hd__o31a_2",
             "sky130_fd_sc_hd__o31a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1386,7 +1386,7 @@
             "sky130_fd_sc_hd__a41o",
             "sky130_fd_sc_hd__a41o_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1409,7 +1409,7 @@
             "sky130_fd_sc_hd__nor4b_1",
             "sky130_fd_sc_hd__nor4b"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1431,7 +1431,7 @@
             "sky130_fd_sc_hd__nand3_2",
             "sky130_fd_sc_hd__nand3_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1452,7 +1452,7 @@
             "sky130_fd_sc_hd__o311a_2",
             "sky130_fd_sc_hd__o311a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1475,7 +1475,7 @@
             "sky130_fd_sc_hd__nand3b_2",
             "sky130_fd_sc_hd__nand3b_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B",
@@ -1496,7 +1496,7 @@
             "sky130_fd_sc_hd__or4bb_1",
             "sky130_fd_sc_hd__or4bb_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1518,7 +1518,7 @@
             "sky130_fd_sc_hd__or2b",
             "sky130_fd_sc_hd__or2b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B_N"
@@ -1538,7 +1538,7 @@
             "sky130_fd_sc_hd__nor3_4",
             "sky130_fd_sc_hd__nor3_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1557,7 +1557,7 @@
             "sky130_fd_sc_hd__dlymetal6s6s_1",
             "sky130_fd_sc_hd__dlymetal6s6s"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -1577,7 +1577,7 @@
             "sky130_fd_sc_hd__nor2_4",
             "sky130_fd_sc_hd__nor2_8"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -1597,7 +1597,7 @@
             "sky130_fd_sc_hd__o221a_2",
             "sky130_fd_sc_hd__o221a_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1618,7 +1618,7 @@
             "sky130_fd_sc_hd__lpflow_inputiso0n_1",
             "sky130_fd_sc_hd__lpflow_inputiso0n"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "SLEEP_B"
@@ -1638,7 +1638,7 @@
             "sky130_fd_sc_hd__nor4bb_4",
             "sky130_fd_sc_hd__nor4bb_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1660,7 +1660,7 @@
             "sky130_fd_sc_hd__mux4_2",
             "sky130_fd_sc_hd__mux4_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A0",
             "A1",
@@ -1685,7 +1685,7 @@
             "sky130_fd_sc_hd__or2_2",
             "sky130_fd_sc_hd__or2_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B"
@@ -1705,7 +1705,7 @@
             "sky130_fd_sc_hd__nand4bb_4",
             "sky130_fd_sc_hd__nand4bb_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B_N",
@@ -1727,7 +1727,7 @@
             "sky130_fd_sc_hd__and4b_2",
             "sky130_fd_sc_hd__and4b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B",
@@ -1772,7 +1772,7 @@
             "sky130_fd_sc_hd__a21bo_2",
             "sky130_fd_sc_hd__a21bo_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1793,7 +1793,7 @@
             "sky130_fd_sc_hd__or4_2",
             "sky130_fd_sc_hd__or4_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1815,7 +1815,7 @@
             "sky130_fd_sc_hd__o211ai_2",
             "sky130_fd_sc_hd__o211ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -1835,7 +1835,7 @@
             "sky130_fd_sc_hd__fahcin",
             "sky130_fd_sc_hd__fahcin_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1857,7 +1857,7 @@
             "sky130_fd_sc_hd__bufinv_8",
             "sky130_fd_sc_hd__bufinv_16" 
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -1874,7 +1874,7 @@
             "sky130_fd_sc_hd__fah",
             "sky130_fd_sc_hd__fah_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1899,7 +1899,7 @@
             "sky130_fd_sc_hd__lpflow_isobufsrc_1",
             "sky130_fd_sc_hd__lpflow_isobufsrc_16"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "SLEEP",
             "A"
@@ -1917,7 +1917,7 @@
             "sky130_fd_sc_hd__fahcon_1",
             "sky130_fd_sc_hd__fahcon"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -1963,7 +1963,7 @@
             "sky130_fd_sc_hd__a21o_2",
             "sky130_fd_sc_hd__a21o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2008,7 +2008,7 @@
             "sky130_fd_sc_hd__maj3_2",
             "sky130_fd_sc_hd__maj3_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -2029,7 +2029,7 @@
             "sky130_fd_sc_hd__a221oi_2",
             "sky130_fd_sc_hd__a221oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2052,7 +2052,7 @@
             "sky130_fd_sc_hd__a2bb2o_2",
             "sky130_fd_sc_hd__a2bb2o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1_N",
             "A2_N",
@@ -2072,7 +2072,7 @@
             "sky130_fd_sc_hd__lpflow_inputiso1p_1",
             "sky130_fd_sc_hd__lpflow_inputiso1p"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "SLEEP"
@@ -2112,10 +2112,10 @@
             "sky130_fd_sc_hd__dlxbp_1",
             "sky130_fd_sc_hd__dlxbp"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "D",
-            "GATE"
+            "relaxed_gate"
           ],
           "outputs": [
             "Q",
@@ -2134,7 +2134,7 @@
             "sky130_fd_sc_hd__o41a_2",
             "sky130_fd_sc_hd__o41a_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2155,7 +2155,7 @@
             "sky130_fd_sc_hd__a222oi_1",
             "sky130_fd_sc_hd__a222oi"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2177,7 +2177,7 @@
             "sky130_fd_sc_hd__dlymetal6s4s_1",
             "sky130_fd_sc_hd__dlymetal6s4s"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A"
           ],
@@ -2196,7 +2196,7 @@
             "sky130_fd_sc_hd__a311oi_2",
             "sky130_fd_sc_hd__a311oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2219,7 +2219,7 @@
             "sky130_fd_sc_hd__nand4b_2",
             "sky130_fd_sc_hd__nand4b_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A_N",
             "B",
@@ -2241,11 +2241,11 @@
             "sky130_fd_sc_hd__dlrtp",
             "sky130_fd_sc_hd__dlrtp_2"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "RESET_B",
             "D",
-            "GATE"
+            "relaxed_gate"
           ],
           "outputs": [
             "Q"
@@ -2262,7 +2262,7 @@
             "sky130_fd_sc_hd__a211oi_2",
             "sky130_fd_sc_hd__a211oi_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2284,7 +2284,7 @@
             "sky130_fd_sc_hd__dlxtn",
             "sky130_fd_sc_hd__dlxtn_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "D",
             "GATE_N"
@@ -2304,7 +2304,7 @@
             "sky130_fd_sc_hd__o41ai_2",
             "sky130_fd_sc_hd__o41ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2327,7 +2327,7 @@
             "sky130_fd_sc_hd__o21bai_2",
             "sky130_fd_sc_hd__o21bai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2348,7 +2348,7 @@
             "sky130_fd_sc_hd__a22o_2",
             "sky130_fd_sc_hd__a22o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2370,7 +2370,7 @@
             "sky130_fd_sc_hd__a2bb2oi_4",
             "sky130_fd_sc_hd__a2bb2oi"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1_N",
             "A2_N",
@@ -2415,7 +2415,7 @@
             "sky130_fd_sc_hd__o22ai_2",
             "sky130_fd_sc_hd__o22ai_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2435,7 +2435,7 @@
             "sky130_fd_sc_hd__conb",
             "sky130_fd_sc_hd__conb_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [],
           "outputs": [
             "HI",
@@ -2454,7 +2454,7 @@
             "sky130_fd_sc_hd__a31o_2",
             "sky130_fd_sc_hd__a31o_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A1",
             "A2",
@@ -2476,7 +2476,7 @@
             "sky130_fd_sc_hd__nor4_2",
             "sky130_fd_sc_hd__nor4_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",
@@ -2496,10 +2496,10 @@
             "sky130_fd_sc_hd__dlxtp",
             "sky130_fd_sc_hd__dlxtp_1"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "D",
-            "GATE"
+            "relaxed_gate"
           ],
           "outputs": [
             "Q"
@@ -2516,7 +2516,7 @@
             "sky130_fd_sc_hd__or3_2",
             "sky130_fd_sc_hd__or3_4"
           ],
-          "type": "gate",
+          "type": "relaxed_gate",
           "inputs": [
             "A",
             "B",

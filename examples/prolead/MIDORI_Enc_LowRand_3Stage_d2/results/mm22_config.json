@@ -1,14 +1,13 @@
 {
+  "$schema": "../../../../prolead_config.schema.json",
   "performance": {
-    "$schema": "../../../../prolead_config.schema.json",
     "max_number_of_threads": "half",
-    "minimize_probing_sets": "aggressive",
-    "number_of_probing_sets_per_step": 5516980
+    "minimize_probing_sets": "aggressive"
   },
   "simulation": {
     "groups": [
-      "192'h$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",
-      "192'h687ded3b3c85b3f35b1009863e2a8cbf42c20fd3b586879e"
+      "64'h$$$$$$$$$$$$$$$$",
+      "64'h42c20fd3b586879e"
     ],
     "output_shares": [
       "output1[63:0]",
@@ -37,15 +36,15 @@
           },
           {
             "name": "Key1[127:0]",
-            "value": "group_in0[191:64]"
+            "value": "128'h687ded3b3c85b3f35b1009863e2a8cbf"
           },
           {
             "name": "Key2[127:0]",
-            "value": "group_in1[191:64]"
+            "value": "128'h00000000000000000000000000000000"
           },
           {
             "name": "Key3[127:0]",
-            "value": "group_in2[191:64]"
+            "value": "128'h00000000000000000000000000000000"
           },
           {
             "name": "r[71:0]",
@@ -71,13 +70,23 @@
         ]
       }
     ],
-    "number_of_simulations": 1536000,
-    "number_of_simulations_per_step": 128000
+    "number_of_simulations": 1015808,
+    "number_of_simulations_per_step": 16384
   },
   "hardware": {
     "clock_signal_name": "clk"
   },
   "side_channel_analysis": {
-    "order": 2
+    "order": 2,
+    "transitional_leakage": false,
+    "clock_cycles": ["3"],
+    "observed_extensions": {
+      "include": {
+        "signals": ".*"
+      },
+      "exclude": {
+        "signals": "^Key.*|^controller.*|reset|enc_dec|^round_Signal.*"
+      }
+    }
   }
 }

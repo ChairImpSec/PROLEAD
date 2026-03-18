@@ -1,4 +1,5 @@
 #include "Util/SettingsSchema.hpp"
+const std::string SettingNames::SCHEMA = "$schema";
 const std::string SettingNames::ANALYSIS_STRATEGY = "analysis_strategy";
 
 const std::string SettingNames::FAULT_INJECTION = "fault_injection";
@@ -237,7 +238,8 @@ JsonSchema software_schema(SettingNames::SOFTWARE, "object",
 
 JsonSchema settings_schema(
     "", "object",
-    {JsonSchema(SettingNames::ANALYSIS_STRATEGY, "string"),
+    {JsonSchema(SettingNames::SCHEMA, "string"),
+     JsonSchema(SettingNames::ANALYSIS_STRATEGY, "string"),
      fault_injection_schema, hardware_schema, input_finite_field_schema,
      output_finite_field_schema, performance_schema,
      side_channel_analysis_schema, simulation_schema, software_schema});

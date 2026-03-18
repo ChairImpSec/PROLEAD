@@ -3,6 +3,8 @@
 #include "Util/FileParsing.hpp"
 
 namespace SettingNames {
+
+  extern const std::string SCHEMA;
   extern const std::string ANALYSIS_STRATEGY;
 
   extern const std::string FAULT_INJECTION;

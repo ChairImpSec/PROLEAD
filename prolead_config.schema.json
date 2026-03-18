@@ -1,0 +1,390 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "prolead_config.schema.json",
+  "title": "PROLEAD configuration",
+  "description": "Configuration file for a PROLEAD run",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["simulation", "hardware", "side_channel_analysis"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional JSON schema reference."
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "compact_distributions": {
+          "type": "boolean",
+          "markdownDescription": "**Compact distributions**\n\nControls whether PROLEAD compresses the observations made by the probing sets. Enabling this option can significantly reduce memory usage and speed up the evaluation, especially for higher-order analyses, at the cost of decreased accurracy. It is possible that PROLEAD oversees leakage due to the compression.\n\n**Options:**\n- `true` — Enable compact distribution representation (default: false).\n- `false` — Use standard distribution representation.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/compact_distributions."
+        },
+        "max_number_of_threads": {
+          "markdownDescription": "**Maximum number of threads**\n\nControls how many CPU threads PROLEAD may use. This setting allows you to balance performance and system load.\n\n *Note:* Parameters are either keywords or positive integers.\n\n**Options:**\n- `all` — Use all available logical CPU cores.\n- `half` — Use half of the available logical CPU cores.\n- `third` — Use one third of the available logical CPU cores.\n- `quarter` — Use one quarter of the available logical CPU cores. \n- `<integer>` — A positive integer specifying the exact number of threads to use. If you specify a number larger than the available CPU cores, PROLEAD automatically clamps it to the system maximum.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/max_number_of_threads.",
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["all", "half", "third", "quarter"]
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "minimize_probing_sets": {
+          "type": "string",
+          "enum": ["no", "trivial", "aggressive"],
+          "markdownDescription": "**Minimize probing sets**\n\nControls how aggressively PROLEAD reduces the number of candidate probing sets before the leakage evaluation.\n\n *Note:* This option is only available when `side_channel_analysis.relaxed_model` is `false`.\n\n**Options:**\n- `no` — No minimization. PROLEAD evaluates all probing sets exactly as generated (no preprocessing overhead, highest evaluation cost).\n- `trivial` — Removes only trivially redundant probing sets (small preprocessing overhead, reduced evaluation cost). Recommended default.\n- `aggressive` — Applies full minimization heuristics to eliminate as many redundant sets as possible (potentially large preprocessing overhead, lowest evaluation cost).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/minimize_probing_sets."
+        },
+        "number_of_entries_in_report": {
+          "type": "integer",
+          "minimum": 0,
+          "markdownDescription": "**Number of entries in report**\n\nControls how many entries are included in the report.\n\n**Options:**\n- `<integer>` — Include the specified number of entries (default zero).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_entries_in_report."
+        },
+        "number_of_probing_sets_per_step": {
+          "type": "integer",
+          "minimum": 0,
+          "markdownDescription": "**Number of probing sets per step**\n\nControls how many probing sets are evaluated per step.\n\n **Options:**\n-`<integer>` — Evaluate the specified number of probing sets per step. By default, all probing sets are evaluated in one step. This setting is particular useful if evaluating all probing sets simultaneously in one step consumes too much memory. Hence, PROLEAD can evaluate the probing sets seuqntially which reduces the memory requirements at the cost of runtime.\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_probing_sets_per_step."
+        },
+        "remove_full_probing_sets": {
+          "type": "boolean",
+          "markdownDescription": "**Remove full probing sets**\n\nControls whether PROLEAD removes probing sets from the evaluation if their required number of simulations is reached.\n\n*Note:* PROLEAD estimates the number of required simulations for every probing set depending on the `effect_size` setting. See: https://github.com/ChairImpSec/PROLEAD/wiki/effect_size.\n\n**Options:**\n- `true` — Remove full probing sets (default: false).\n- `false` — Do not remove full probing sets.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/remove_full_probing_sets."
+        }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["number_of_clock_cycles", "input_sequence", "number_of_simulations"],
+      "properties": {
+        "always_random_inputs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "markdownDescription": "**Always random inputs**\n\nControls which primary inputs are assigned to a uniform random value every clock cycle. This is useful to model fresh random bits in masking schemes.\n\n *Note:* Primary inputs which are specified as `always_random_inputs` must not be specified by the `input_sequence`.\n\n**Options:**\n- `<array>` — An array of strings, each representing a signal name as it appears in the design file(s). For example, `port_r[0]` specifies the least significant bit of the `port_r` while `port_r[3:0]` specifies the four least significant bits of the `port_r` input port.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/always_random_inputs."
+        },
+        "end_condition": {
+          "type": "array",
+          "minItems": 1,
+          "markdownDescription": "**Signals**\n\nControls the conditions for terminating the simulation. Each entry specifies a signal name and the value it should reach. The simulation terminates if all specified signals reached their value.\n\n**Options:**\n- `<array>` — An array of objects, each representing a condition with:\n  - `name` — The signal name as it appears in the design file(s).\n  - `value` — The value reached by the signal, given as a Verilog constant (e.g. `1'b0`, `4'hf`).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/end_condition.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "value"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "markdownDescription": "**Name**\n\nThe signal name as it appears in the design file(s). This should be a primary output signal.\n\n**Options:**\n- `<string>` — A string representing the name of an output port. For example, `port_c[0]` specifies the least significant bit of the `port_c` input port while `port_c[3:0]` specifies the four least significant bits of the `port_c` output port. You can also specify concatenations of signals using curly braces, e.g. `{port_c[0], port_c[1]}`.\n\nFor details, see the PROLEAD documentation."
+              },
+              "value": {
+                "type": "string",
+                "markdownDescription": "**Value**\n\nThe value that a signal should reach.\n\n**Options:**\n- `<string>` — A string representing the value reached by the signal, given either as a Verilog constant (e.g. `1'b0`, `4'hf`).\n\nFor details, see the PROLEAD documentation."
+              }
+            }
+          }
+        },
+        "expected_output": {
+          "type": "array",
+          "markdownDescription": "**Expected output**\n\nControls the expected unshared output for each entry of `groups`. PROLEAD uses this information to automatically verify whether the simulation behaves as expected. If the simulated output does not match the expected value, PROLEAD reports an error.\n\n *Note:* To use this setting, you must sepcify `output_shares`.\n\n**Options:**\n- `<array>` — An array of strings, each specifying the expected output value for a group entry in Verilog constant syntax. Use `$` to indicate a random value (don’t care).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/expected_output.",
+          "items": { "type": "string" }
+        },
+        "groups": {
+          "type": "array",
+          "items": { "type": "string" },
+          "markdownDescription": "**Groups**\n\nControls the groups from which PROLEAD picks its (unshared) simulation inputs. PROLEAD randomly selects a group whose unshared value serves as the input source of the simulation. \n\n**Options:**\n- `<array>` — An array of strings, each representing a group in Verilog syntax. For example: \"8'h00\" defines the zero byte while \"2'b$$\" specifies two uniform random bits.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/groups."
+        },
+        "input_sequence": {
+          "type": "array",
+          "minItems": 1,
+          "markdownDescription": "**Input sequence**\n\nControls the input stimulus of the simulations. PROLEAD initializes a simulation by this sequence and continues the simulation until the end condition is reached.\n\n**Options:**\n- `<array>` — An array of objects, each representing the changes in primary inputs for one clock cycle. You must specify every primary input signal for the first clock cycle. Afterwards all signals are kept constant unless you specify signal transitions.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/input_sequence.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["signals"],
+            "properties": {
+              "signals": {
+                "type": "array",
+                "minItems": 1,
+                "markdownDescription": "**Signals**\n\nControls the state of primary inputs for one clock cycle. Each entry specifies a signal name and its value for the current clock cycle. You must specify every primary input signal for the first clock cycle. Afterwards, all signals are kept constant unless you specify signal transitions.\n\n**Options:**\n- `<array>` — An array of objects, each representing a signal assignment with:\n  - `name` — The signal name as it appears in the design file(s).\n  - `value` — The value assigned to the signal, given either as a Verilog constant (e.g. `1'b0`, `4'hf`) or as a group reference (e.g. `group_in0[3:0]`, `group_in1[7:4]`).\n\nFor details, see the PROLEAD documentation.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["name", "value"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "markdownDescription": "**Name**\n\nThe signal name as it appears in the design file(s). This should be a primary input signal.\n\n**Options:**\n- `<string>` — A string representing the name of an input port. For example, `port_a[0]` specifies the least significant bit of the `port_a` input port while `port_b[3:0]` specifies the four least significant bits of the `port_b` input port. You can also specify concatenations of signals using curly braces, e.g. `{port_a[0], port_b[1]}`.\n\nFor details, see the PROLEAD documentation."
+                    },
+                    "value": {
+                      "type": "string",
+                      "markdownDescription": "**Value**\n\nThe value assigned to the signal.\n\n**Options:**\n- `<string>` — A string representing the value assigned to the signal, given either as a Verilog constant (e.g. `1'b0`, `4'hf`) or as a group reference (e.g. `group_in0[3:0]`, `group_in1[7:4]`).\n\nFor details, see the PROLEAD documentation."
+                    }
+                  }
+                }
+              },
+              "hold_for_cycles": {
+                "type": "integer",
+                "minimum": 1,
+                "markdownDescription": "**Hold for cycles**\n\nControls how many clock cycles the specified signal values are held. By default, the signal values are held for one clock cycle and then kept constant until the next specified transition.\n\n**Options:**\n- `<integer>` — A positive integer specifying how many clock cycles the specified signal values are held. For example, if you specify `hold_for_cycles: 3`, the signal values are held for three clock cycles before they are kept constant.\n\nFor details, see the PROLEAD documentation."
+              }
+            }
+          }
+        },
+        "number_of_clock_cycles": {
+          "type": "integer",
+          "minimum": 1,
+          "markdownDescription": "**Number of clock cycles**\n\nControls the number of clock cycles PROLEAD simulates before checking the `end_condition` for the first time.\n\n**Options**\n- `<integer>` — A positive integer specifying how many clock cycles PROLEAD should simulate.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_clock_cycles."
+        },
+        "number_of_simulations": {
+          "type": "integer",
+          "minimum": 64,
+          "multipleOf": 64,
+          "markdownDescription": "**Number of simulations**\n\nControls how many simulations PROLEAD runs. PROLEAD simulates the design multiple times with different random inputs to collect enough data for the leakage assessment.\n\n**Options:**\n- `<integer>` — A positive integer specifying how many simulations PROLEAD should run. Increasing the number of simulations allows PROLEAD to detect smaller leakage, but it also increases the runtime. Must be a multiple of 64.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_simulations."
+        },
+        "number_of_simulations_per_step": {
+          "type": "integer",
+          "minimum": 64,
+          "multipleOf": 64,
+          "markdownDescription": "**Simulations per step**\n\nControls how many simulations are executed before the next partial result is computed.\n\n**Options:**\n- `<integer>` — A positive integer specifying the number of simulations per step. A higher value increases memory consumption but decreases runtime. Must be a multiple of 64 and a divisor of `number_of_simulations`.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_simulations_per_step."
+        },
+
+        "number_of_simulations_per_write": {
+          "type": "integer",
+          "minimum": 64,
+          "multipleOf": 64,
+          "markdownDescription": "**Simulations per step**\n\nControls how many simulations are executed before PROLEAD writes a report file.\n\n**Options:**\n- `<integer>` — A positive integer specifying the number of simulations per report write. A higher value decreases runtime as less reports must be written. Must be a multiple of 64 and 'number_of_simulations_per_step' as well as a divisor of `number_of_simulations`.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/number_of_simulations_per_write."
+        },
+
+        "output_shares": {
+          "type": "array",
+          "markdownDescription": "**Output shares**\n\nSignal names (or concatenations) that together form the shared output, one entry per share.\n\n**Options:**\n- `<array>` — An array of strings, each representing one share of the shared output by signal names as they appear in the design file(s). For example, `port_y[0]` specifies the least significant bit of the `port_y` while `port_y[3:0]` specifies the four least significant bits of the `port_y` input port.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/output_shares.",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "waveform_simulation": {
+          "type": "boolean",
+          "markdownDescription": "**Waveform simulation**\n\nControls whether PROLEAD writes VCD waveform files for the simulated traces. Enabling this option allows you to visually inspect the simulated waveforms using a VCD viewer, which can be helpful for debugging and understanding the behavior of the design. However, it also increases disk space usage and increases runtime. We strongly recommend to enable this settings only if `number_of_simulations` is sufficiently small as PROLEAD writes a VCD file for every simulation it performs.\n\n**Options:**\n- `true` — Enable waveform generation (default: false).\n- `false` — Disable waveform generation.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/waveform_simulation."
+        }
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clock_signal_name"],
+      "properties": {
+        "clock_signal_name": {
+          "type": "string",
+          "markdownDescription": "**Clock signal name**\n\nControls the name of the clock signal in the design.\n\n**Options:**\n- `<string>` — A string representing the name of the clock signal as it appears in the design file(s).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/clock_signal_name"
+        }
+      }
+    },
+    "software": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location_of_cipher"],
+      "properties": {
+        "compiler_flags": {
+          "type": "string",
+          "markdownDescription": "**Compiler flags**\n\nControls the flags passed to the compiler during PROLEAD's internal build process.\n\n**Options:**\n- `<string>` — A string representing the compiler flags.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/compiler_flags"
+        },
+        "location_of_cipher": {
+          "type": "string",
+          "markdownDescription": "**Location of cipher**\n\nControls the name of the function that calls the `cipher` function.\n\n**Options:**\n- `<string>` — A string representing the location of the cipher as it appears in the design file(s).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/location_of_cipher"
+        },
+        "pipeline_stages": {
+          "type": "integer",
+          "minimum": 0,
+          "markdownDescription": "**Pipeline stages**\n\nControls the number of pipeline stages in the simulated design. This is relevant for microarchitectural leakage caused by pipeline forwarding effects.\n\n**Options:**\n- `<integer>` — A non-negative integer specifying the number of pipeline stages, e.g. 6 for ARM Cortex-M7\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/pipeline_stages"
+        }
+      }
+    },
+    "side_channel_analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "clock_cycles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "markdownDescription": "**Clock cycles**\n\nControls the clock cycles for which PROLEAD evaluates the leakage.\n\n**Options:**\n- `<array>` — An array of strings, each representing a clock cycle or a range of clock cycles to evaluate. For example, `2` specifies the second clock cycle while `3-5` specifies the third to fifth clock cycle (inclusive).\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/clock_cycles"
+        },
+        "distance": {
+          "type": "integer",
+          "minimum": 1,
+          "markdownDescription": "**Distance**\n\nControls the time distance between probes in the probing sets that PROLEAD evaluates. This further restricts the evaluation space for multivariate adversaries.\n\n**Note:** Specify this setting only if `variate` is not `univariate`. See: https://github.com/ChairImpSec/PROLEAD/wiki/variate.\n\n**Options:**\n- `<integer>` — A positive integer specifying the distance between probes. Higher distances allow PROLEAD to detect more complex leakage but also significantly increase the runtime.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/distance"
+        },
+        "effect_size": {
+          "type": "number",
+          "largerThan": 0.0,
+          "markdownDescription": "**Effect size**\n\nControls the effect size that PROLEAD uses to estimate the required number of simulations. Effects with a larger effect size are detected with high probability after this number of simulations.\n\n**Options:**\n- `<double>` — A positive double specifying the effect size. Lower values require more simulations to ensure detection of smaller leakage.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/effect_size"
+        },
+        "notion": {
+          "type": "string",
+          "enum": ["ps", "ni", "sni", "pini"],
+          "markdownDescription": "**Notion**\n\nControls the security notion that PROLEAD verifies.\n\n**Options:**\n- `ps` — Probing-security.\n- `ni` — Non-interference.\n- `sni` — Strong non-interference.\n- `pini` — Probe-isolating non-interference.\n\nFor details, see the PROLEAD documentation."
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "markdownDescription": "**Order**\n\nControls the order of the side-channel analysis, i.e. the number of probes in the probing sets that PROLEAD evaluates.\n\n**Options:**\n- `<integer>` — A positive integer specifying the order of the side-channel analysis. Higher orders allow PROLEAD to detect more complex leakage but also significantly increase the runtime.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/order"
+        },
+        "transitional_leakage": {
+          "type": "boolean",
+          "markdownDescription": "**Transitional leakage**\n\nControls whether PROLEAD considers transitional leakage in the analysis. Enabling this option allows PROLEAD to detect leakage that occurs during signal transitions, which can be crucial for identifying vulnerabilities in certain designs. However, it also increases the complexity of the analysis and may lead to longer runtimes.\n\n**Options:**\n- `true` — Consider transitional leakage (default: false).\n- `false` — Ignore transitional leakage.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/transitional_leakage"
+        },
+        "variate": {
+          "type": "string",
+          "enum": ["univariate", "exclusive_multivariate", "multivariate"],
+          "markdownDescription": "**Variate**\n\nControls the type of variate used in the side-channel analysis.\n\n*Note:* For multivariate analyses, we recommend specifying the `distance` setting. See: https://github.com/ChairImpSec/PROLEAD/wiki/distance.\n\n**Options:**\n- `univariate` — All probes in a set are placed during the same clock cycle. Equivalent to `multivariate` with `distance` zero. This is recommendet as the overhead of multivariate analyses is high.\n- `exclusive_multivariate` — Never place all probes of a set during the same clock cycle.\n- `multivariate` — No restrictions. A combination of `univariate` and `exclusive_multivariate`.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/variate"
+        },
+        "probe_placement": {
+          "type": "object",
+          "markdownDescription": "**Probe placement**\n\nControls the locations where PROLEAD places probes. This allows to exclude unnecessary signals, e.g. control signals, from the analysis and to precisely search for leakage of particular interest.\n\n**Options:**\n- `<object>` — An object with `include` and `exclude` properties, each specifying regular expressions for signals as they appear in the design file(s). Probes are placed on signals whose names match with regular expressions in `include` while signals with names that match with regular expressions in `exclude` are ignored when placing probes. If `include` is specified first, PROLEAD initially adds all signals that match the given regular expressions. It then removes from this set any signals that match the `exclude` expressions. Conversely, if `exclude` is specified first, PROLEAD first removes all matching signals and then re‑adds any signals that match the `include` expressions.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/probe_placement.",
+          "required": ["include", "exclude"],
+          "properties": {
+            "include": {
+              "type": "object",
+              "markdownDescription": "**Include**\n\nRegular expressions specifying the signals on which PROLEAD places probes.\n\n**Options:**\n- `<object>` — An object with a `signals` and `path` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Include signals**\n\nSpecifies the signals on which probes should be placed. \n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals on which a probe should be placed. For example, `.*` specifies that a probe should be placed on every signal while `(?!)` that a probe should be placed on no signal.\n\nFor details, see the PROLEAD documentation." 
+                },
+                "paths": {
+                  "type": "string",
+                  "markdownDescription": "**Include paths**\n\nSpecifies paths on whose signals probes should be placed. If such a regular expression matches a signal, PROLEAD places probes on all signals that combinationally contribute to the matching signal, i.e. glitch-extension.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all paths on which probes should be placed. For example, `.*` specifies every path as suited for probe placement while `(?!)` specifies no path.\n\nFor details, see the PROLEAD documentation."
+                }
+              }
+            },
+            "exclude": {
+              "type": "object",
+              "markdownDescription": "**Exclude**\n\nA regular expression specifying the signals on which PROLEAD shouldn't place probes.\n\n**Options:**\n- `<object>` — An object with a `signals` and `path` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude signals**\n\nSpecifies the signals on which probes shouldn't be placed.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals on which a probe shouldn't be placed. For example, `.*` specifies that a probe shouldn't be placed on every signal while `(?!)` that a probe shouldn't be placed on no signal.\n\nFor details, see the PROLEAD documentation." 
+                },
+                "paths": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude paths**\n\nSpecifies paths on whose signals probes shouldn't be placed. If such a regular expression matches a signal, PROLEAD doesn't place probes on all signals that combinationally contribute to the matching signal, i.e. glitch-extension.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all paths on which probes shouldn't be placed. For example, `.*` specifies every path to be ignored while `(?!)` specifies no path.\n\nFor details, see the PROLEAD documentation." 
+                }
+              }
+            }
+          }
+        },
+        "extension_routes": {
+          "type": "object",
+          "markdownDescription": "**Extension routes**\n\nControls the extension of probes through combinational logic. This allows to stop the glitch-extension to search for leakage of particular interest.\n\n**Options:**\n- `<object>` — An object with `include` and `exclude` properties, each specifying regular expressions for signals as they appear in the design file(s). Probes are glitch-extended through all signals whose names match with regular expressions in `include` while the extension stops at signals with names that match with regular expressions in `exclude`. If `include` is specified first, PROLEAD initially adds all signals that match the given regular expressions. It then removes from this set any signals that match the `exclude` expressions. Conversely, if `exclude` is specified first, PROLEAD first removes all matching signals and then re‑adds any signals that match the `include` expressions.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/extension_routes.",
+          "required": ["include", "exclude"],
+          "properties": {
+            "include": {
+              "type": "object",
+              "markdownDescription": "**Include**\n\nRegular expressions specifying the signals through which PROLEAD extends probes.\n\n**Options:**\n- `<object>` — An object with a `signals` and `paths` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Include signals**\n\nSpecifies the signals through which probes should be extended. \n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals through which a probe should be extended. For example, `.*` specifies that a probe should be extended always while `(?!)` specifies that a probe should be never extended.\n\nFor details, see the PROLEAD documentation." 
+                },
+                "paths": {
+                  "type": "string",
+                  "markdownDescription": "**Include paths**\n\nSpecifies paths through which probes should be extended. If such a regular expression matches a signal, PROLEAD extends probes through all signals that combinationally contribute to the matching signal, i.e. glitch-extension.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all paths through which probes should be extended. For example, `.*` specifies every path as suited for probe-extension while `(?!)` specifies no path.\n\nFor details, see the PROLEAD documentation."
+                }
+              }
+            },
+            "exclude": {
+              "type": "object",
+              "markdownDescription": "**Exclude**\n\nA regular expression specifying the signals at which probe-extension stopps.\n\n**Options:**\n- `<object>` — An object with a `signals` and `paths` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude signals**\n\nSpecifies the signals at which probe-extension stopps.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals on which the probe-extension should stop. For example, `.*` specifies that probe-extension should stop at every signal while `(?!)` specifies that the probe-extension should never stop.\n\nFor details, see the PROLEAD documentation." 
+                },
+                "paths": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude paths**\n\nSpecifies paths at which probe-extension stopps. If such a regular expression matches a signal, PROLEAD stopps probe-extension on all signals that combinationally contribute to the matching signal, i.e. glitch-extension.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all paths at which probe-extension should stop. For example, `.*` specifies that probe-extension should stop at every path while `(?!)` specifies that the probe-extension should never stop.\n\nFor details, see the PROLEAD documentation." 
+                }
+              }
+            }
+          }
+        },
+        "observed_extensions": {
+          "type": "object",
+          "markdownDescription": "**Observed extensions**\n\nControls the signals in the observation set. This allows to ignore the observations made by irrelevant signals.\n\n**Options:**\n- `<object>` — An object with `include` and `exclude` properties, each specifying regular expressions for signals as they appear in the design file(s). Probes are on signals whose names match with regular expressions in `include` are considered during analysis while probes on signals with names that match with regular expressions in `exclude` are ignored. If `include` is specified first, PROLEAD initially adds all signals that match the given regular expressions. It then removes from this set any signals that match the `exclude` expressions. Conversely, if `exclude` is specified first, PROLEAD first removes all matching signals and then re‑adds any signals that match the `include` expressions.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/observed_extensions.",
+          "required": ["include", "exclude"],
+          "properties": {
+            "include": {
+              "type": "object",
+              "markdownDescription": "**Include**\n\nRegular expressions specifying the signals which PROLEAD consideres during analysis.\n\n**Options:**\n- `<object>` — An object with a `signals` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Include signals**\n\nSpecifies the signals which PROLEAD consideres during analysis. \n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals which PROLEAD consideres during analysis. For example, `.*` specifies that all probes are considered while `(?!)` specifies that all probes are ignored.\n\nFor details, see the PROLEAD documentation." 
+                }
+              }
+            },
+            "exclude": {
+              "type": "object",
+              "markdownDescription": "**Exclude**\n\nA regular expression specifying the signals PROLEAD ignores during analysis.\n\n**Options:**\n- `<object>` — An object with a `signals` property specifying regular expressions that match with signal names as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude signals**\n\nSpecifies the signals which PROLEAD ignores during analysis.\n\n**Options:**\n- `<string>` — A string representing a regular expression matching all signals which PROLEAD ignores during analysis. For example, `.*` specifies that all probes are ignored while `(?!)` specifies that all probes are considered.\n\nFor details, see the PROLEAD documentation." 
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "fault_injection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "fault_locations": {
+          "type": "object",
+          "markdownDescription": "**Fault locations**\n\nControls the locations where PROLEAD injects faults during the simulation. This allows you to assess security against combined adversaries.\n\n**Options:**\n- `<object>` — An object with `include` and `exclude` properties, each specifying regex patterns for fault locations as they appear in the design file(s). Signal names that match with regex pattern in `include` are possible fault locations while signal names that match with regex in `exclude` are ignored. If `include` is specified first, PROLEAD initially adds all signals that match the given regular expressions. It then removes from this set any signals that match the `exclude` expressions. Conversely, if `exclude` is specified first, PROLEAD first removes all matching signals and then re‑adds any signals that match the `include` expressions.\n\nFor details, see the PROLEAD documentation: https://github.com/ChairImpSec/PROLEAD/wiki/fault_locations.",
+          "required": ["include", "exclude"],
+          "properties": {
+            "include": {
+              "type": "object",
+              "markdownDescription": "**Include**\n\nA regex pattern specifying the fault locations to include. PROLEAD injects faults into these locations during the simulation.\n\n**Options:**\n- `<object>` — An object with a `signals` property specifying a regex pattern for fault locations as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": ["signals"],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Include signals**\n\nSpecifies the signals that should be included in the fault injection. PROLEAD injects faults into these signals during the simulation.\n\n**Options:**\n- `<string>` — A string representing of a regex matching all signals that should be possible fault locations. For example, `.*` specifies every signal as a possible fault location while `(?!)` specifies no signal.\n\nFor details, see the PROLEAD documentation." 
+                }
+              }
+            },
+            "exclude": {
+              "type": "object",
+              "markdownDescription": "**Exclude**\n\nA regex pattern specifying the fault locations to exclude. PROLEAD ignores these locations during the simulation, even if they match with the `include` pattern.\n\n**Options:**\n- `<object>` — An object with a `signals` property specifying a regex pattern for fault locations as they appear in the design file(s).\n\nFor details, see the PROLEAD documentation",
+              "additionalProperties": false,
+              "required": ["signals"],
+              "properties": {
+                "signals": {
+                  "type": "string",
+                  "markdownDescription": "**Exclude signals**\n\nSpecifies the signals that should be excluded from the fault injection. PROLEAD ignores these signals during the simulation, even if they match with the `include` pattern.\n\n**Options:**\n- `<string>` — A string representing of a regex matching all signals that should be ignored as fault locations. For example, `.*` specifies every signal to be ignored while `(?!)` specifies no signal.\n\nFor details, see the PROLEAD documentation." 
+                } 
+              }
+            }
+          }
+        }    
+      }
+    }
+  }
+}
