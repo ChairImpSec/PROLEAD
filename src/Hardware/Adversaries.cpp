@@ -963,10 +963,10 @@ bool Adversaries::IsInDistance(const std::vector<const Probe*>& probes) const {
   }
 
   std::sort(cycles.begin(), cycles.end());
-  uint64_t diff = cycles.back() - cycles.front();
-  assert((settings_.GetVariate() != Analysis::univariate || diff == 0) &&
+  uint64_t distance = cycles.back() - cycles.front();
+  assert((settings_.GetVariate() != Analysis::univariate || distance == 0) &&
     "Error in Adversaries::IsInDistance: Multivariate set in univariate analysis!");
-  return (diff <= settings_.GetDistance());
+  return settings_.IsDistanceSmallEnough(distance);
 }
 
 double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx) {
@@ -1127,12 +1127,8 @@ double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, tim
     << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
   double maximum_leakage = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
 
-  #pragma omp parallel for schedule(guided)
-  for (ProbingSet& probing_set : probing_sets_) {
-    probing_set.Deconstruct();
-  }
-
-  probing_sets_.clear();
+  // clear() keeps capacity; swap forces capacity release.
+  std::vector<ProbingSet>().swap(probing_sets_);
   return maximum_leakage;
 }
 
