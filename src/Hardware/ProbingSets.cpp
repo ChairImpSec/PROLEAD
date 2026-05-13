@@ -12,6 +12,13 @@ ProbingSet::ProbingSet(const CircuitStruct& circuit, const Settings& settings,
 };
 
 bool ProbingSet::operator<(const ProbingSet& other) const {
+  const size_t this_size = extensions_.size();
+  const size_t other_size = other.extensions_.size();
+
+  if (this_size != other_size) {
+    return this_size < other_size;
+  }
+
   return (extensions_ < other.extensions_);
 }
 

@@ -963,19 +963,19 @@ bool Adversaries::IsInDistance(const std::vector<const Probe*>& probes) const {
   }
 
   std::sort(cycles.begin(), cycles.end());
-  uint64_t distance = cycles.back() - cycles.front();
-  assert((settings_.GetVariate() != Analysis::univariate || distance == 0) &&
+  uint64_t diff = cycles.back() - cycles.front();
+  assert((settings_.GetVariate() != Analysis::univariate || diff == 0) &&
     "Error in Adversaries::IsInDistance: Multivariate set in univariate analysis!");
-  return settings_.IsDistanceSmallEnough(distance);
+  return (diff <= settings_.GetDistance());
 }
 
 double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, timespec& start_time, uint64_t step_idx) {
-  uint64_t number_of_probing_sets = probing_sets_.size();
+  const size_t initial_number_of_probing_sets = probing_sets_.size();
 
-  // Due to the "observed_extensions" setting, some probing
-  // sets might not extend to any probe. We can remove them.
-  probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(),
-  [](const ProbingSet& probing_set) { return probing_set.GetExtensions().empty(); }), probing_sets_.end());
+  // Due to the "observed_extensions" setting, some probing sets might not extend to any probe. We can remove them.
+  probing_sets_.erase(std::remove_if(probing_sets_.begin(), probing_sets_.end(), [](const ProbingSet& probing_set) { 
+    return probing_set.GetExtensions().empty(); 
+  }), probing_sets_.end());
   
   if (settings_.GetMinimization() != Minimization::none) {
     std::sort(probing_sets_.begin(), probing_sets_.end(),
@@ -986,130 +986,53 @@ double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, tim
 
   if (settings_.GetMinimization() == Minimization::aggressive) {
     if (!settings_.IsRelaxedModel()) {
-      uint64_t number_of_probing_sets = probing_sets_.size();
-      std::vector<bool> remove(number_of_probing_sets, false);  
+      const size_t number_of_probing_sets = probing_sets_.size();
 
-      if (settings_.IsMultivariateEvaluationRequired()) {
-        std::sort(probing_sets_.begin(), probing_sets_.end(),
-          [](const ProbingSet& lhs, const ProbingSet& rhs) { 
-            return lhs.GetExtensions().size() > rhs.GetExtensions().size(); 
-          });
+      // uint8_t is more efficient than bool due to memory alignment
+      std::vector<uint8_t> should_be_removed(number_of_probing_sets, 0);  
 
-        #pragma omp parallel for schedule(dynamic)
-        for (uint64_t idx = 0; idx < number_of_probing_sets; ++idx) {
-          if (remove[idx]) continue;
-          const std::vector<const Probe*>& rhs = probing_sets_[idx].GetExtensions();
+      std::unordered_map<const Probe*, std::vector<uint64_t>> probe_to_set_indices;
+      probe_to_set_indices.reserve(extensions_.size());
 
-          // Only compare against larger probing sets to save time
-          for (uint64_t jdx = 0; jdx < idx; ++jdx) { 
-            if (remove[jdx]) continue;
-            const std::vector<const Probe*>& lhs = probing_sets_[jdx].GetExtensions();
-            if (std::includes(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) {
-              remove[idx] = true;
-              break;
-            }
-          }
-        }
-      } else {
-        // In the univariate case, we further improve efficiency by 
-        // comparing only sets with probes place in the same clock cycle
-        std::sort(probing_sets_.begin(), probing_sets_.end(),
-          [](const ProbingSet& lhs, const ProbingSet& rhs) { 
-            const std::vector<const Probe*>& lhs_ext = lhs.GetExtensions();
-            const std::vector<const Probe*>& rhs_ext = rhs.GetExtensions();
+      std::vector<uint64_t> number_of_found_probes_per_set(number_of_probing_sets, 0);
+      std::vector<uint64_t> accessed_sets_via_idx;
 
-            assert(!lhs_ext.empty() && "Error in Adversaries::ProcessProbingSets(): "
-              "lhs_ext is an empty set of extensions.");
-            assert(!rhs_ext.empty() && "Error in Adversaries::ProcessProbingSets(): "
-              "rhs_ext is an empty set of extensions."); 
-            
-            // Compare with the cycle of the first extension since then probing sets
-            // on the first cycle (without transition) are in the same cycle group 
-            // as probing sets in the first cycle with transition to cycle zero
-            uint64_t lhs_cycle = lhs_ext.front()->GetCycle();
-            uint64_t rhs_cycle = rhs_ext.front()->GetCycle();  
-              
-            if (lhs_cycle != rhs_cycle) {
-              return lhs_cycle < rhs_cycle;
-            }
+      for (size_t idx = 0; idx < number_of_probing_sets; ++idx) {
+        if (!should_be_removed[idx]) {
+          for (const Probe* probe : probing_sets_[idx].GetExtensions()) {
+            auto it = probe_to_set_indices.find(probe);
 
-            return lhs_ext.size() > rhs_ext.size(); 
-          }
-        );
-
-        std::vector<std::pair<uint64_t, uint64_t>> cycle_groups;
-        uint64_t start = 0;
-        while (start < probing_sets_.size()) {
-          uint64_t cycle = probing_sets_[start].GetExtensions().front()->GetCycle();
-          uint64_t end = start + 1;
-          while (end < probing_sets_.size() && 
-            probing_sets_[end].GetExtensions().front()->GetCycle() == cycle) { ++end; }
-          cycle_groups.emplace_back(start, end);
-          start = end;
-        }
-
-        for (auto [begin, end] : cycle_groups) {
-          // We convert the extension set for every probing set into a bitmask
-          // in order to avoid std::include which increases performance
-          std::unordered_set<const Probe*> visited;
-          for (uint64_t idx = begin; idx < end; ++idx) {
-            for (const Probe* probe : probing_sets_[idx].GetExtensions()) {
-              visited.insert(probe);
-            }
-          }
-
-          std::map<const Probe*, uint64_t> bitmask_map;
-          uint64_t ctr = 0;
-          for (const Probe* probe : visited) {
-            bitmask_map[probe] = ctr++;
-          }
-
-          uint64_t bitmask_words = (ctr + 63) / 64;  
-          std::vector<std::vector<uint64_t>> bitmasks(end - begin, 
-            std::vector<uint64_t>(bitmask_words,0ULL));
-
-          #pragma omp parallel for schedule(static)
-          for (uint64_t idx = begin; idx < end; ++idx) {
-            auto& bitmask = bitmasks[idx - begin];
-            const auto& extensions = probing_sets_[idx].GetExtensions();
-
-            for (const Probe* probe : extensions) {
-              uint64_t bit = bitmask_map.at(probe);
-              uint64_t word = bit >> 6;      
-              uint64_t offset = bit & 63;   
-              bitmask[word] |= (1ULL << offset);
-            }
-          }
-
-          #pragma omp parallel for schedule(dynamic)
-          for (uint64_t idx = begin; idx < end; ++idx) {
-            if (remove[idx]) { continue; }
-            const auto& rhs_mask = bitmasks[idx - begin];
-
-            // Only compare against earlier sets with the same cycle
-            for (uint64_t jdx = begin; jdx < idx; ++jdx) {
-              if (remove[jdx]) { continue; }
-              const auto& lhs_mask = bitmasks[jdx - begin];
-              bool is_subset = true;
-              for (uint64_t word_idx = 0; word_idx < bitmask_words; ++word_idx) {
-                if ((lhs_mask[word_idx] & rhs_mask[word_idx]) != rhs_mask[word_idx]) {
-                  is_subset = false;
-                  break;
+            if (it != probe_to_set_indices.end()) {
+              for (const uint64_t& set_idx : it->second) {
+                // if the set is already removed, it can be ignored
+                if (!should_be_removed[set_idx]) {
+                  if (number_of_found_probes_per_set[set_idx] == 0) {
+                    accessed_sets_via_idx.push_back(set_idx);
+                  }
+                  ++number_of_found_probes_per_set[set_idx];
                 }
               }
-
-              if (is_subset) {
-                remove[idx] = true;
-                break;
-              }
             }
+            probe_to_set_indices[probe].push_back(idx); 
           }
+
+          for (const uint64_t& set_idx : accessed_sets_via_idx) {
+            // the set at set_idx is a subset of the current set, thus the set at set_idx is redundant
+            if (number_of_found_probes_per_set[set_idx] == probing_sets_[set_idx].GetExtensions().size()) {
+              should_be_removed[set_idx] = 1;
+            }
+
+            // efficient reset without clearing the whole vector
+            number_of_found_probes_per_set[set_idx] = 0; 
+          }
+
+          accessed_sets_via_idx.clear();
         }
       }
-    
+
       uint64_t ctr = 0;
       for (uint64_t idx = 0; idx < number_of_probing_sets; ++idx) {
-        if (!remove[idx]) {
+        if (!should_be_removed[idx]) {
           std::swap(probing_sets_[ctr++], probing_sets_[idx]);
         }
       }
@@ -1124,11 +1047,15 @@ double Adversaries::ProcessProbingSets(std::vector<SharedData>& shared_data, tim
   }
 
   BOOST_LOG_TRIVIAL(info) << "Successfully applied probing set minimization. "
-    << number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
+    << initial_number_of_probing_sets - probing_sets_.size() << " covered probing sets removed.";
   double maximum_leakage = EvalProbingSetsUnderFaults(shared_data, start_time, step_idx++);
 
-  // clear() keeps capacity; swap forces capacity release.
-  std::vector<ProbingSet>().swap(probing_sets_);
+  #pragma omp parallel for schedule(guided)
+  for (ProbingSet& probing_set : probing_sets_) {
+    probing_set.Deconstruct();
+  }
+
+  probing_sets_.clear();
   return maximum_leakage;
 }
 
