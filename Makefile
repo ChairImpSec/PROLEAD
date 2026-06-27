@@ -54,7 +54,7 @@ CXX_TEST_FLAGS   = -Wall -Wextra -Wshadow -pedantic -fopenmp -O3 -g -DBOOST_LOG_
 # Linker options. Add libraries you want to link against here.
 LINK_PYTHON3=`pkg-config --libs python3-embed`
 LINK_FLINT = -lflint -lmpfr -lgmp -lm
-LINK_BOOST = -lboost_log -lboost_log_setup -lboost_thread -lboost_system -lpthread -lboost_filesystem -lboost_program_options -lboost_python312
+LINK_BOOST = -lboost_log -lboost_log_setup -lboost_thread -lboost_system -lpthread -lboost_filesystem -lboost_program_options -lboost_python$(shell python3 -c 'import sys; print("%d%d" % sys.version_info[:2])')
 # LINK_BOOST = -lboost_filesystem -lboost_program_options -lboost_python312
 LINK_GDSTK = -lgdstk -lclipper -lqhull_r -lz
 BENCHMARK_LINK_FLAGS = -L$(LIB_DIR) -fopenmp -ldl $(LINK_PYTHON3) $(LINK_FLINT) $(LINK_BOOST) $(LINK_GDSTK)
