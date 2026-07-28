@@ -245,7 +245,7 @@
                         "AOI22_X2",
                         "AOI22_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -266,7 +266,7 @@
                         "MUX2_X2",
                         "MUX2_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B",
@@ -286,7 +286,7 @@
                         "AND4_X2",
                         "AND4_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -345,7 +345,7 @@
                         "NAND3_X2",
                         "NAND3_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -365,7 +365,7 @@
                         "NAND4_X2",
                         "NAND4_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -405,7 +405,7 @@
                         "NOR3_X2",
                         "NOR3_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -425,7 +425,7 @@
                         "AOI211_X2",
                         "AOI211_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B",
@@ -446,7 +446,7 @@
                         "AOI221_X2",
                         "AOI221_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B1",
@@ -468,7 +468,7 @@
                         "OAI211_X2",
                         "OAI211_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B",
@@ -560,7 +560,7 @@
                         "OAI21_X2",
                         "OAI21_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B1",
@@ -580,7 +580,7 @@
                         "AOI21_X2",
                         "AOI21_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B1",
@@ -600,7 +600,7 @@
                         "OAI33_X2",
                         "OAI33_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -664,7 +664,7 @@
                         "OAI22_X2",
                         "OAI22_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -685,7 +685,7 @@
                         "NOR4_X2",
                         "NOR4_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -706,7 +706,7 @@
                         "OAI221_X2",
                         "OAI221_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A",
                         "B1",
@@ -728,7 +728,7 @@
                         "AOI222_X2",
                         "AOI222_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -751,7 +751,7 @@
                         "OR3_X2",
                         "OR3_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
@@ -791,7 +791,7 @@
                         "OAI222_X2",
                         "OAI222_X4"
                     ],
-                    "type": "gate",
+                    "type": "relaxed_gate",
                     "inputs": [
                         "A1",
                         "A2",
